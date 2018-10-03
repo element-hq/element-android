@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
@@ -15,7 +16,20 @@ class NetworkModule() : Module {
 
     override fun invoke(): ModuleDefinition = module {
 
-        single { OkHttpClient.Builder().build() }
+        single {
+            AccessTokenInterceptor(get())
+        }
+
+        single {
+            HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+        }
+
+        single {
+            OkHttpClient.Builder()
+                    .addInterceptor(get() as AccessTokenInterceptor)
+                    .addInterceptor(get() as HttpLoggingInterceptor)
+                    .build()
+        }
 
         single { Moshi.Builder().add(KotlinJsonAdapterFactory()).build() }
 
@@ -26,5 +40,7 @@ class NetworkModule() : Module {
         single {
             CoroutineCallAdapterFactory() as CallAdapter.Factory
         }
+
+
     }.invoke()
 }
