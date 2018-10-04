@@ -10,7 +10,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/matrix-sdk-android" />
-            <option value="$PROJECT_DIR$/matrix-sdk-core" />
             <option value="$PROJECT_DIR$/matrix-sdk-rx" />
           </set>
         </option>

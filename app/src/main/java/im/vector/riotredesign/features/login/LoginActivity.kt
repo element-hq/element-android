@@ -3,22 +3,21 @@ package im.vector.riotredesign.features.login
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import im.vector.matrix.android.thread.MainThreadExecutor
-import im.vector.matrix.core.api.Matrix
-import im.vector.matrix.core.api.MatrixCallback
-import im.vector.matrix.core.api.MatrixOptions
-import im.vector.matrix.core.api.failure.Failure
-import im.vector.matrix.core.api.login.data.Credentials
-import im.vector.matrix.core.api.login.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.login.data.Credentials
+import im.vector.matrix.android.api.login.data.HomeServerConnectionConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.features.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
+import org.koin.android.ext.android.inject
 
 class LoginActivity : RiotActivity() {
 
-    private val matrixOptions = MatrixOptions(mainExecutor = MainThreadExecutor())
-    private val matrix = Matrix(matrixOptions)
+    private val matrix by inject<Matrix>()
+
     private val homeServerConnectionConfig = HomeServerConnectionConfig("https://matrix.org/")
     private val session = matrix.createSession(homeServerConnectionConfig)
     private val authenticator = session.authenticator()
