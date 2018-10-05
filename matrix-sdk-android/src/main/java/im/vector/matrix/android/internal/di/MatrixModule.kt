@@ -1,11 +1,11 @@
 package im.vector.matrix.android.internal.di
 
 import im.vector.matrix.android.api.MatrixOptions
-import im.vector.matrix.android.api.login.CredentialsStore
-import im.vector.matrix.android.api.login.data.Credentials
-import im.vector.matrix.android.api.login.data.MyObjectBox
-import im.vector.matrix.android.internal.MatrixCoroutineDispatchers
-import im.vector.matrix.android.internal.login.db.ObjectBoxCredentialsStore
+import im.vector.matrix.android.api.auth.CredentialsStore
+import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.auth.data.MyObjectBox
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.auth.db.ObjectBoxCredentialsStore
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import kotlinx.coroutines.Dispatchers

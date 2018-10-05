@@ -1,9 +1,9 @@
 package im.vector.matrix.android.internal
 
 import im.vector.matrix.android.api.Session
-import im.vector.matrix.android.api.login.Authenticator
-import im.vector.matrix.android.api.login.data.HomeServerConnectionConfig
-import im.vector.matrix.android.internal.login.LoginModule
+import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.internal.auth.LoginModule
 import org.koin.core.scope.Scope
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.StandAloneContext

@@ -6,8 +6,8 @@ import android.widget.Toast
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.login.data.Credentials
-import im.vector.matrix.android.api.login.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.features.home.HomeActivity

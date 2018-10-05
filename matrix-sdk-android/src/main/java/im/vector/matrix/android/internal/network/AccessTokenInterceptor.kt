@@ -1,6 +1,6 @@
 package im.vector.matrix.android.internal.network
 
-import im.vector.matrix.android.api.login.CredentialsStore
+import im.vector.matrix.android.api.auth.CredentialsStore
 import okhttp3.Interceptor
 import okhttp3.Response
 

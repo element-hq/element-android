@@ -2,7 +2,6 @@ package im.vector.matrix.android.internal.di
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,7 +31,7 @@ class NetworkModule() : Module {
                     .build()
         }
 
-        single { Moshi.Builder().add(KotlinJsonAdapterFactory()).build() }
+        single { Moshi.Builder().build() }
 
         single {
             MoshiConverterFactory.create(get()) as Converter.Factory

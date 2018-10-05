@@ -4,6 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
 
 ext.support_version = '28.0.0'
+ext.moshi_version = '1.7.0'
 
 buildscript {
 
@@ -55,8 +56,11 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.squareup.okio:okio:1.15.0'
-    implementation 'com.squareup.moshi:moshi-kotlin:1.7.0'
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.7.0'
+
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+    implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
 
     // Paging
     implementation "android.arch.paging:runtime:1.0.1"
