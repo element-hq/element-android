@@ -10,9 +10,12 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import retrofit2.CallAdapter
 import retrofit2.Converter
+import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
-class NetworkModule() : Module {
+class NetworkModule : Module {
 
     override fun invoke(): ModuleDefinition = module {
 
@@ -21,17 +24,23 @@ class NetworkModule() : Module {
         }
 
         single {
-            HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+            val logger = HttpLoggingInterceptor.Logger { message -> Timber.v(message) }
+            HttpLoggingInterceptor(logger).apply { level = HttpLoggingInterceptor.Level.BODY }
         }
 
         single {
             OkHttpClient.Builder()
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(get() as AccessTokenInterceptor)
                     .addInterceptor(get() as HttpLoggingInterceptor)
                     .build()
         }
 
-        single { Moshi.Builder().build() }
+        single {
+            Moshi.Builder().build()
+        }
 
         single {
             MoshiConverterFactory.create(get()) as Converter.Factory
@@ -41,6 +50,12 @@ class NetworkModule() : Module {
             CoroutineCallAdapterFactory() as CallAdapter.Factory
         }
 
+        factory {
+            Retrofit.Builder()
+                    .client(get())
+                    .addConverterFactory(get())
+                    .addCallAdapterFactory(get())
+        }
 
     }.invoke()
 }

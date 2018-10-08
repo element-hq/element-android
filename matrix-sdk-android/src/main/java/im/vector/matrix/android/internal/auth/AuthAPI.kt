@@ -1,6 +1,6 @@
 package im.vector.matrix.android.internal.auth
 
-import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.internal.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.network.NetworkConstants
 import kotlinx.coroutines.Deferred
@@ -11,7 +11,7 @@ import retrofit2.http.POST
 /**
  * The login REST API.
  */
-interface LoginApi {
+interface AuthAPI {
 
     /**
      * Pass params to the server for the current login phase.

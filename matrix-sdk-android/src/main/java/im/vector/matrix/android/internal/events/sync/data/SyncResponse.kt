@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.events.sync.data
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 // SyncResponse represents the request response for server sync v2.
@@ -9,36 +10,36 @@ data class SyncResponse(
         /**
          * The user private data.
          */
-        val accountData: Map<String, Any> = emptyMap(),
+        @Json(name = "account_data") val accountData: Map<String, Any>? = emptyMap(),
 
         /**
          * The opaque token for the end.
          */
-        val nextBatch: String? = null,
+        @Json(name = "next_batch") val nextBatch: String? = null,
 
         /**
          * The updates to the presence status of other users.
          */
-        val presence: PresenceSyncResponse? = null,
+        @Json(name = "presence") val presence: PresenceSyncResponse? = null,
 
         /*
          * Data directly sent to one of user's devices.
          */
-        val toDevice: ToDeviceSyncResponse? = null,
+        @Json(name = "to_device") val toDevice: ToDeviceSyncResponse? = null,
 
         /**
          * List of rooms.
          */
-        val rooms: RoomsSyncResponse? = null,
+        @Json(name = "rooms") val rooms: RoomsSyncResponse? = null,
 
         /**
          * Devices list update
          */
-        val deviceLists: DeviceListResponse? = null,
+        @Json(name = "device_lists") val deviceLists: DeviceListResponse? = null,
 
         /**
          * One time keys management
          */
-        val deviceOneTimeKeysCount: DeviceOneTimeKeysCountSyncResponse? = null
+        @Json(name = "device_one_time_keys_count") val deviceOneTimeKeysCount: DeviceOneTimeKeysCountSyncResponse? = null
 
 )

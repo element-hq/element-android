@@ -40,5 +40,4 @@ enum class EventType {
     @Json(name ="m.room.related_groups") STATE_RELATED_GROUPS,
     @Json(name ="m.room.pinned_events") STATE_PINNED_EVENT
 
-
 }

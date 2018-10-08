@@ -57,10 +57,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.squareup.okio:okio:1.15.0'
 
-    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
-
 
     // Paging
     implementation "android.arch.paging:runtime:1.0.1"
@@ -68,6 +66,10 @@ dependencies {
     // DI
     implementation "org.koin:koin-core:$koin_version"
     implementation "org.koin:koin-core-ext:$koin_version"
+
+    // Logging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
