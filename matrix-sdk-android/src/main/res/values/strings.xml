@@ -1,3 +1,87 @@
 <resources>
-    <string name="app_name">matrix-sdk-android</string>
+    <string name="matrix_sdk_app_name">Matrix Android SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s sent an image.</string>
+    <string name="summary_user_sent_sticker">%1$s sent a sticker.</string>
+
+    <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
+    <string name="notice_room_invite">%1$s invited %2$s</string>
+    <string name="notice_room_invite_you">%1$s invited you</string>
+    <string name="notice_room_join">%1$s joined</string>
+    <string name="notice_room_leave">%1$s left</string>
+    <string name="notice_room_reject">%1$s rejected the invitation</string>
+    <string name="notice_room_kick">%1$s kicked %2$s</string>
+    <string name="notice_room_unban">%1$s unbanned %2$s</string>
+    <string name="notice_room_ban">%1$s banned %2$s</string>
+    <string name="notice_room_withdraw">%1$s withdrew %2$s\'s invitation</string>
+    <string name="notice_avatar_url_changed">%1$s changed their avatar</string>
+    <string name="notice_display_name_set">%1$s set their display name to %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s changed their display name from %2$s to %3$s</string>
+    <string name="notice_display_name_removed">%1$s removed their display name (%2$s)</string>
+    <string name="notice_topic_changed">%1$s changed the topic to: %2$s</string>
+    <string name="notice_room_name_changed">%1$s changed the room name to: %2$s</string>
+    <string name="notice_placed_video_call">%s placed a video call.</string>
+    <string name="notice_placed_voice_call">%s placed a voice call.</string>
+    <string name="notice_answered_call">%s answered the call.</string>
+    <string name="notice_ended_call">%s ended the call.</string>
+    <string name="notice_made_future_room_visibility">%1$s made future room history visible to %2$s</string>
+    <string name="notice_room_visibility_invited">all room members, from the point they are invited.</string>
+    <string name="notice_room_visibility_joined">all room members, from the point they joined.</string>
+    <string name="notice_room_visibility_shared">all room members.</string>
+    <string name="notice_room_visibility_world_readable">anyone.</string>
+    <string name="notice_room_visibility_unknown">unknown (%s).</string>
+    <string name="notice_end_to_end">%1$s turned on end-to-end encryption (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s requested a VoIP conference</string>
+    <string name="notice_voip_started">VoIP conference started</string>
+    <string name="notice_voip_finished">VoIP conference finished</string>
+
+    <string name="notice_avatar_changed_too">(avatar was changed too)</string>
+    <string name="notice_room_name_removed">%1$s removed the room name</string>
+    <string name="notice_room_topic_removed">%1$s removed the room topic</string>
+    <string name="notice_event_redacted">redacted %1$s </string>
+    <string name="notice_event_redacted_by"> by %1$s</string>
+    <string name="notice_event_redacted_reason">  [reason: %1$s]</string>
+    <string name="notice_profile_change_redacted">%1$s updated their profile %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s sent an invitation to %2$s to join the room</string>
+    <string name="notice_room_third_party_registered_invite">%1$s accepted the invitation for %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
+
+    <!-- Messages -->
+    <string name="message_reply_to_prefix">In reply to</string>
+
+    <!-- Room Screen -->
+    <string name="could_not_redact">Could not redact</string>
+    <string name="unable_to_send_message">Unable to send message</string>
+
+    <string name="message_failed_to_upload">Failed to upload image</string>
+
+    <!-- general errors -->
+    <string name="network_error">Network error</string>
+    <string name="matrix_error">Matrix error</string>
+
+    <!-- Home Screen -->
+
+    <!-- Last seen time -->
+
+    <!-- call events -->
+
+    <!-- room error messages -->
+    <string name="room_error_join_failed_empty_room">It is not currently possible to re-join an empty room.</string>
+
+    <string name="encrypted_message">Encrypted message</string>
+
+    <!-- medium friendly name -->
+    <string name="medium_email">Email address</string>
+    <string name="medium_phone_number">Phone number</string>
+
+    <!-- Reply to -->
+    <string name="reply_to_an_image">sent an image.</string>
+    <string name="reply_to_a_video">sent a video.</string>
+    <string name="reply_to_an_audio_file">sent an audio file.</string>
+    <string name="reply_to_a_file">sent a file.</string>
+
 </resources>

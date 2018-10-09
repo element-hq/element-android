@@ -1,7 +1,7 @@
 package im.vector.matrix.android.internal.session
 
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.di.SessionModule
 import im.vector.matrix.android.internal.events.sync.SyncModule
 import im.vector.matrix.android.internal.events.sync.Synchronizer

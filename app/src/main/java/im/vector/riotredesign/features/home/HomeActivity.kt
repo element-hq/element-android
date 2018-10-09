@@ -44,7 +44,6 @@ class HomeActivity : RiotActivity() {
         })
     }
 
-
     companion object {
 
         fun newIntent(context: Context): Intent {

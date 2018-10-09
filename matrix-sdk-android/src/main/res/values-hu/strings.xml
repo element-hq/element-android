@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s küldött egy képet.</string>
+
+    <string name="notice_room_invite_no_invitee">%s meghívója</string>
+    <string name="notice_room_invite">%1$s meghívta %2$s -t</string>
+    <string name="notice_room_invite_you">%1$s meghívott</string>
+    <string name="notice_room_join">%1$s csatlakozott</string>
+    <string name="notice_room_leave">%1$s kilépett</string>
+    <string name="notice_room_reject">%1$s elutasította a meghívást</string>
+    <string name="notice_room_kick">%1$s kidobta %2$s -t</string>
+    <string name="notice_room_unban">%1$s feloldotta tiltását %2$s -nak/nek</string>
+    <string name="notice_room_ban">%1$s kitiltotta %2$s -t</string>
+    <string name="notice_room_withdraw">%1$s visszavonta %2$s\'s meghívását</string>
+    <string name="notice_avatar_url_changed">%1$s megváltoztatták a felhasználó képüket</string>
+    <string name="notice_display_name_set">%1$s megváltoztatták a megjelenő nevüket erre: %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s megváltoztatták a megjelenő nevüket erről %2$s erre %3$s</string>
+    <string name="notice_display_name_removed">%1$s eltávolították a megjelenő nevüket (%2$s)</string>
+    <string name="notice_topic_changed">%1$s megváltoztatta a témát erre: %2$s</string>
+    <string name="notice_room_name_changed">%1$s megváltoztatta a szoba nevét erre: %2$s</string>
+    <string name="notice_placed_video_call">%s videóhívást kezdeményezett.</string>
+    <string name="notice_placed_voice_call">%s hanghívást kezdeményezett.</string>
+    <string name="notice_answered_call">%s elfogadta a hívást.</string>
+    <string name="notice_ended_call">%s befejezte a hívást.</string>
+    <string name="notice_made_future_room_visibility">%1$s láthatóvá tette a jövőbeli előzményeket %2$s számára</string>
+    <string name="notice_room_visibility_invited">az összes szoba tag, onnantól, hogy meg lettek hívva.</string>
+    <string name="notice_room_visibility_joined">az összes szoba tag, onnantól, hogy csatlakoztak.</string>
+    <string name="notice_room_visibility_shared">az összes szoba tag.</string>
+    <string name="notice_room_visibility_world_readable">bárki.</string>
+    <string name="notice_room_visibility_unknown">ismeretlen (%s).</string>
+    <string name="notice_end_to_end">%1$s bekapcsolta a végtől végig titkosítást (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s hanghívás konferenciát kérelmezett</string>
+    <string name="notice_voip_started">Hanghívás konferencia elindult</string>
+    <string name="notice_voip_finished">Hanghívás konferencia befejeződött</string>
+
+    <string name="notice_avatar_changed_too">(profilképp is meg lett változtatva)</string>
+    <string name="notice_room_name_removed">%1$s eltávolította a szoba nevét</string>
+    <string name="notice_room_topic_removed">%1$s eltávolította a szoba témáját</string>
+    <string name="notice_event_redacted">"szerkesztett %1$s "</string>
+    <string name="notice_event_redacted_by">" %1$s által"</string>
+    <string name="notice_event_redacted_reason">" [ok: %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s megváltoztatták a profiljukat %2$s</string>
+    <string name="notice_room_third_party_invite">"%1$s meghívót küldött %2$s -nak/-nek  hogy csatlakozzon a szobához"</string>
+    <string name="notice_room_third_party_registered_invite">%1$s elfogadta a meghívót a %2$s -hoz</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Visszafejtés sikertelen: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">A küldő eszköze nem küldte el a kulcsokat ehhez az üzenethez.</string>
+
+    <string name="could_not_redact">Szerkesztés sikertelen</string>
+    <string name="unable_to_send_message">Üzenet küldése sikertelen</string>
+
+    <string name="message_failed_to_upload">Kép feltöltése sikertelen</string>
+
+    <string name="network_error">Hálózat hiba</string>
+    <string name="matrix_error">Matrix hiba</string>
+
+    <string name="room_error_join_failed_empty_room">Jelenleg nem lehetséges újracsatlakozni egy üres szobába.</string>
+
+    <string name="encrypted_message">Titkosított üzenet</string>
+
+    <string name="medium_email">Email cím</string>
+    <string name="medium_phone_number">Telefonszám</string>
+
+<string name="summary_user_sent_sticker">%1$s küldött egy matricát.</string>
+
+    <string name="message_reply_to_prefix">Válasz erre:</string>
+
+    <string name="reply_to_an_image">kép elküldve.</string>
+    <string name="reply_to_a_video">videó elküldve.</string>
+    <string name="reply_to_an_audio_file">hangfájl elküldve.</string>
+    <string name="reply_to_a_file">fájl elküldve.</string>
+
+</resources>

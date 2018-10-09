@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 
 class SyncModule : Module {
 
-    override fun invoke(): ModuleDefinition = module {
+    override fun invoke(): ModuleDefinition = module(override = true) {
 
         scope(DefaultSession.SCOPE) {
             val retrofit: Retrofit = get()

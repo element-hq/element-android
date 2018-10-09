@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="summary_user_sent_image">%1$s sendis bildon.</string>
+    <string name="summary_user_sent_sticker">%1$s sendis glumarkon.</string>
+
+    <string name="notice_room_invite_no_invitee">invito de %s</string>
+    <string name="notice_room_invite">%1$s invitis %2$s</string>
+    <string name="notice_room_invite_you">%1$s invitis vin</string>
+    <string name="notice_room_join">%1$s alvenis</string>
+    <string name="notice_room_leave">%1$s foriris</string>
+    <string name="notice_room_reject">%1$s malakceptis la inviton</string>
+    <string name="notice_room_kick">%1$s forpelis %2$s</string>
+    <string name="notice_room_unban">%1$s malforbaris %2$s</string>
+    <string name="notice_room_ban">%1$s forbaris %2$s</string>
+    <string name="notice_room_withdraw">%1$s malinvitis %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s ŝanĝis sian profilbildon</string>
+    </resources>

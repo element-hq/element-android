@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s sendi mynd.</string>
+    <string name="summary_user_sent_sticker">%1$s sendi límmerki.</string>
+
+    <string name="notice_room_invite_no_invitee">%s sendi boð um þátttöku</string>
+    <string name="notice_room_invite">%1$s bauð %2$s</string>
+    <string name="notice_room_invite_you">%1$s bauð þér</string>
+    <string name="notice_room_join">%1$s gekk í hópinn</string>
+    <string name="notice_room_leave">%1$s hætti</string>
+    <string name="notice_room_reject">%1$s hafnaði boðinu</string>
+    <string name="notice_room_kick">%1$s sparkaði %2$s</string>
+    <string name="notice_room_unban">%1$s afbannaði %2$s</string>
+    <string name="notice_room_ban">%1$s bannaði %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s breyttu auðkennismynd sinni</string>
+    <string name="notice_room_visibility_invited">allir meðlimir spjallrásar, síðan þeim var boðið.</string>
+    <string name="notice_room_visibility_joined">allir meðlimir spjallrásar, síðan þeir skráðu sig.</string>
+    <string name="notice_room_visibility_shared">allir meðlimir spjallrásar.</string>
+    <string name="notice_room_visibility_world_readable">hver sem er.</string>
+    <string name="notice_room_visibility_unknown">óþekktur (%s).</string>
+    <string name="notice_voip_started">VoIP-símafundur hafinn</string>
+    <string name="notice_voip_finished">VoIP-símafundi lokið</string>
+
+    <string name="notice_avatar_changed_too">(einnig var skipt um auðkennismynd)</string>
+    <string name="notice_event_redacted_by">" af %1$s"</string>
+    <string name="notice_event_redacted_reason">" [ástæða: %1$s]"</string>
+    <string name="notice_crypto_unable_to_decrypt">** Mistókst að afkóða: %s **</string>
+    <string name="message_reply_to_prefix">Sem svar til</string>
+
+    <string name="unable_to_send_message">Gat ekki sent skilaboð</string>
+
+    <string name="message_failed_to_upload">Gat ekki sent inn mynd</string>
+
+    <string name="network_error">Villa í netkerfi</string>
+    <string name="matrix_error">Villa í Matrix</string>
+
+    <string name="encrypted_message">Dulrituð skilaboð</string>
+
+    <string name="medium_email">Tölvupóstfang</string>
+    <string name="medium_phone_number">Símanúmer</string>
+
+<string name="notice_room_withdraw">%1$s tók til baka boð frá %2$s</string>
+    <string name="notice_display_name_set">%1$s setti birtingarnafn sitt sem %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s breytti birtingarnafni sínu úr %2$s í %3$s</string>
+    <string name="notice_display_name_removed">%1$s fjarlægði birtingarnafn sitt (%2$s)</string>
+    <string name="notice_topic_changed">%1$s breytti umræðuefninu í: %2$s</string>
+    <string name="notice_room_name_changed">%1$s breytti heiti spjallrásarinnar í: %2$s</string>
+    <string name="notice_placed_video_call">%s hringdi myndsamtal.</string>
+    <string name="notice_placed_voice_call">%s hringdi raddsamtal.</string>
+    <string name="notice_answered_call">%s svaraði símtalinu.</string>
+    <string name="notice_ended_call">%s lauk símtalinu.</string>
+    <string name="notice_end_to_end">%1$s kveikti á enda-í-enda dulritun (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s bað um VoIP-símafund</string>
+    <string name="notice_room_name_removed">%1$s fjarlægði heiti spjallrásar</string>
+    <string name="notice_room_topic_removed">%1$s fjarlægði umfjöllunarefni spjallrásar</string>
+    <string name="notice_made_future_room_visibility">%1$s gerði ferilskrá spjallrásar héðan í frá sýnilega fyrir %2$s</string>
+    <string name="notice_event_redacted">"ritstýrði %1$s "</string>
+    <string name="notice_profile_change_redacted">%1$s uppfærði notandasniðið sitt %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s sendi boð til %2$s um þátttöku í spjallrásinni</string>
+    <string name="notice_room_third_party_registered_invite">%1$s samþykkti boð um að taka þátt í %2$s</string>
+
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Tæki sendandans hefur ekki sent okkur dulritunarlyklana fyrir þessi skilaboð.</string>
+
+    <string name="could_not_redact">Gat ekki ritstýrt</string>
+    <string name="room_error_join_failed_empty_room">Ekki er í augnablikinu hægt að taka aftur þátt í spjallrás sem er tóm.</string>
+
+    </resources>

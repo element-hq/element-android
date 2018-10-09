@@ -1,2 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.vector.matrix.android" />
+    package="im.vector.matrix.android" >
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+</manifest>

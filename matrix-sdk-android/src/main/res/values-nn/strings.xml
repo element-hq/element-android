@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="encrypted_message">Kryptert melding</string>
+
+    <string name="matrix_sdk_app_name">Matrix-Android-SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s sende eit bilete.</string>
+    <string name="summary_user_sent_sticker">%1$s sende eit klistremerke.</string>
+
+    <string name="notice_room_invite_no_invitee">%s si innbyding</string>
+    <string name="notice_room_invite">%1$s baud %2$s inn</string>
+    <string name="notice_room_invite_you">%1$s baud deg inn</string>
+    <string name="notice_room_join">%1$s kom inn</string>
+    <string name="notice_room_leave">%1$s fór ut</string>
+    <string name="notice_room_reject">%1$s sa nei til innbydinga</string>
+    <string name="notice_room_kick">%1$s sparka %2$s</string>
+    <string name="notice_room_unban">%1$s slapp %2$s inn att</string>
+    <string name="notice_room_ban">%1$s stengde %2$s ute</string>
+    <string name="notice_room_withdraw">%1$s tok attende %2$s si innbyding</string>
+    <string name="notice_avatar_url_changed">%1$s endra avataren sin</string>
+    <string name="notice_display_name_set">%1$s sette visingsnamnet sitt som %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s endra visingsnamnet sitt frå %2$s til %3$s</string>
+    <string name="notice_display_name_removed">%1$s fjerna visingsnamnet sitt (%2$s)</string>
+    <string name="notice_topic_changed">%1$s endra emnet til: %2$s</string>
+    <string name="notice_room_name_changed">%1$s endra romnamnet til: %2$s</string>
+    <string name="notice_placed_video_call">%s starta ei videosamtale.</string>
+    <string name="notice_placed_voice_call">%s starta ei røystsamtale.</string>
+    <string name="notice_answered_call">%s tok røret.</string>
+    <string name="notice_ended_call">%s la på røret.</string>
+    <string name="notice_made_future_room_visibility">%1$s gjorde den framtidige romhistoria synleg for %2$s</string>
+    <string name="notice_room_visibility_invited">alle rommedlemer, frå då dei vart bodne inn.</string>
+    <string name="notice_room_visibility_joined">alle rommedlemer, frå då dei kom inn.</string>
+    <string name="notice_room_visibility_shared">alle rommedlemer.</string>
+    <string name="notice_room_visibility_world_readable">kven som helst.</string>
+    <string name="notice_room_visibility_unknown">ukjend (%s).</string>
+    <string name="notice_end_to_end">%1$s skrudde ende-til-ende-enkryptering på (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s bad om ei VoIP-gruppesamtale</string>
+    <string name="notice_voip_started">VoIP-gruppesamtala er starta</string>
+    <string name="notice_voip_finished">VoIP-gruppesamtala er ferdig</string>
+
+    <string name="notice_avatar_changed_too">(avataren vart endra òg)</string>
+    <string name="notice_room_name_removed">%1$s fjerna romnamnet</string>
+    <string name="notice_room_topic_removed">%1$s fjerna romemnet</string>
+    <string name="notice_event_redacted">"gjorde om på %1$s "</string>
+    <string name="notice_event_redacted_by">" av %1$s"</string>
+    <string name="notice_event_redacted_reason">" [grunnlag: %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s oppdaterte profilbiletet sitt %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s baud %2$s inn i rommet</string>
+    <string name="notice_room_third_party_registered_invite">%1$s sa ja til innbydinga til %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Klarte ikkje dekryptere: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Avsendareininga har ikkje sendt oss nyklane for denne meldinga.</string>
+
+    <string name="message_reply_to_prefix">Som svar til</string>
+
+    <string name="could_not_redact">Kunne ikkje gjera om</string>
+    <string name="unable_to_send_message">Klarte ikkje å senda meldinga</string>
+
+    <string name="message_failed_to_upload">Fekk ikkje til å lasta biletet opp</string>
+
+    <string name="network_error">Noko gjekk gale med nettverket</string>
+    <string name="matrix_error">Noko gjekk gale med Matrix</string>
+
+    <string name="room_error_join_failed_empty_room">Det er førebels ikkje mogeleg å fara inn att i eit tomt rom.</string>
+
+    <string name="medium_email">Epostadresse</string>
+    <string name="medium_phone_number">Telefonnummer</string>
+
+    <string name="reply_to_an_image">sende eit bilete.</string>
+    <string name="reply_to_a_video">sende ein video.</string>
+    <string name="reply_to_an_audio_file">sende ein ljodfil.</string>
+    <string name="reply_to_a_file">sende ei fil.</string>
+
+</resources>

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s ha inviato un\'immagine.</string>
+
+    <string name="notice_room_invite_no_invitee">Invito di %s</string>
+    <string name="notice_room_invite">%1$s ha invitato %2$s</string>
+    <string name="notice_room_invite_you">%1$s ti ha invitato</string>
+    <string name="notice_room_join">%1$s è entrato</string>
+    <string name="notice_room_leave">%1$s è uscito</string>
+    <string name="notice_room_reject">%1$s ha rifiutato l\'invito</string>
+    <string name="notice_room_kick">%1$s ha buttato fuori %2$s</string>
+    <string name="notice_room_unban">%1$s ha tolto il bando a %2$s</string>
+    <string name="notice_room_ban">%1$s ha bandito %2$s</string>
+    <string name="notice_room_withdraw">%1$s ha revocato l\'invito per %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s ha modificato il suo avatar</string>
+    <string name="notice_display_name_set">%1$s hanno cambiato il nome visualizzato con %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s ha cambiato il nome visualizzato da %2$s a %3$s</string>
+    <string name="notice_display_name_removed">%1$s ha rimosso il nome visibile (%2$s)</string>
+    <string name="notice_topic_changed">%1$s ha cambiato l\'argomento con: %2$s</string>
+    <string name="notice_room_name_changed">%1$s ha cambiato il nome della stanza con: %2$s</string>
+    <string name="notice_placed_video_call">%s ha iniziato una chiamata video.</string>
+    <string name="notice_placed_voice_call">%s ha iniziato una chiamata vocale.</string>
+    <string name="notice_answered_call">%s ha risposto alla chiamata.</string>
+    <string name="notice_ended_call">%s ha terminato la chiamata.</string>
+    <string name="notice_made_future_room_visibility">%1$s ha reso la futura cronologia della stanza visibile a %2$s</string>
+    <string name="notice_room_visibility_invited">tutti i membri della stanza, dal momento del loro invito.</string>
+    <string name="notice_room_visibility_joined">tutti i membri della stanza, dal momento in cui sono entrati.</string>
+    <string name="notice_room_visibility_shared">tutti i membri della stanza.</string>
+    <string name="notice_room_visibility_world_readable">chiunque.</string>
+    <string name="notice_room_visibility_unknown">sconosciuto (%s).</string>
+    <string name="notice_end_to_end">%1$s ha attivato la crittografia end-to-end (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s ha richiesto una conferenza VoIP</string>
+    <string name="notice_voip_started">Conferenza VoIP iniziata</string>
+    <string name="notice_voip_finished">Conferenza VoIP terminata</string>
+
+    <string name="notice_avatar_changed_too">(anche l\'avatar è cambiato)</string>
+    <string name="notice_room_name_removed">%1$s ha rimosso il nome della stanza</string>
+    <string name="notice_room_topic_removed">%1$s ha rimosso l\'argomento della stanza</string>
+    <string name="notice_event_redacted_by">" da %1$s"</string>
+    <string name="notice_event_redacted_reason">" [motivo: %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s ha aggiornato il profilo %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s ha mandato un invito a %2$s per unirsi alla stanza</string>
+    <string name="notice_room_third_party_registered_invite">%1$s ha accettato l\'invito per %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Impossibile decriptare: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Il dispositivo del mittente non ci ha inviato le chiavi per questo messaggio.</string>
+
+    <string name="could_not_redact">Impossibile revisionare</string>
+    <string name="unable_to_send_message">Impossibile inviare il messaggio</string>
+
+    <string name="message_failed_to_upload">Invio dell\'immagine fallito</string>
+
+    <string name="network_error">Errore di rete</string>
+    <string name="matrix_error">Errore di Matrix</string>
+
+    <string name="room_error_join_failed_empty_room">Al momento non è possibile rientrare in una stanza vuota.</string>
+
+    <string name="encrypted_message">Messaggio criptato</string>
+
+    <string name="medium_email">Indirizzo email</string>
+    <string name="medium_phone_number">Numero di telefono</string>
+
+<string name="notice_event_redacted">"revisionato %1$s "</string>
+    <string name="summary_user_sent_sticker">%1$s ha inviato un adesivo.</string>
+
+    <string name="message_reply_to_prefix">In risposta a</string>
+
+    <string name="reply_to_an_image">inviata un\'immagine.</string>
+    <string name="reply_to_a_video">inviato un video.</string>
+    <string name="reply_to_an_audio_file">inviato un file audio.</string>
+    <string name="reply_to_a_file">inviato un file.</string>
+
+</resources>

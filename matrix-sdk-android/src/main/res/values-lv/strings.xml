@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s nosūtīja attēlu.</string>
+
+    <string name="notice_room_invite_no_invitee">%s\'s uzaicinājums</string>
+    <string name="notice_room_invite">%1$s uzaicināja %2$s</string>
+    <string name="notice_room_invite_you">%1$s uzaicināja tevi</string>
+    <string name="notice_room_join">%1$s pievienojās</string>
+    <string name="notice_room_leave">%1$s atstāja</string>
+    <string name="notice_room_reject">%1$s noraidīja uzaicinājumu</string>
+    <string name="notice_room_kick">%1$s \"izspēra\" ārā %2$s</string>
+    <string name="notice_room_unban">%1$s atbanoja (atcēla pieejas liegumu) %2$s</string>
+    <string name="notice_room_ban">%1$s liedza pieeju (banoja) %2$s</string>
+    <string name="notice_room_withdraw">%1$s atsauca %2$s uzaicinājumu</string>
+    <string name="notice_avatar_url_changed">%1$s nomainīja profila attēlu</string>
+    <string name="notice_display_name_set">%1$s uzstādīja redzamo vārdu uz %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s nomainīja redzamo vārdu no %2$s uz %3$s</string>
+    <string name="notice_display_name_removed">%1$s dzēsa savu redzamo vārdu (%2$s)</string>
+    <string name="notice_topic_changed">%1$s nomainīja tēmas nosaukumu uz: %2$s</string>
+    <string name="notice_room_name_changed">%1$s nomainīja istabas nosaukumu uz: %2$s</string>
+    <string name="notice_placed_video_call">%s veica video zvanu.</string>
+    <string name="notice_placed_voice_call">%s veica audio zvanu.</string>
+    <string name="notice_answered_call">%s atbildēja zvanam.</string>
+    <string name="notice_ended_call">%s beidza zvanu.</string>
+    <string name="notice_made_future_room_visibility">%1$s padarīja istabas nākamo ziņu vēsturi redzamu  %2$s</string>
+    <string name="notice_room_visibility_invited">visi istabas biedri no brīža, kad tika uzaicināti.</string>
+    <string name="notice_room_visibility_joined">visi istabas biedri no brīža, kad tika pievienojušies.</string>
+    <string name="notice_room_visibility_shared">visi istabas biedri.</string>
+    <string name="notice_room_visibility_world_readable">ikviens.</string>
+    <string name="notice_room_visibility_unknown">nezināms (%s).</string>
+    <string name="notice_end_to_end">%1$s ieslēdza ierīce-ierīce šifrēšanu (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s vēlas VoIP konferenci</string>
+    <string name="notice_voip_started">VoIP konference sākusies</string>
+    <string name="notice_voip_finished">VoIP konference ir beigusies</string>
+
+    <string name="notice_avatar_changed_too">(arī profila attēls mainījās)</string>
+    <string name="notice_room_name_removed">%1$s dzēsa istabas nosaukumu</string>
+    <string name="notice_room_topic_removed">%1$s dzēsa istabas tēmas nosaukumu</string>
+    <string name="notice_event_redacted">"rediģēts %1$s "</string>
+    <string name="notice_event_redacted_by">" no %1$s"</string>
+    <string name="notice_event_redacted_reason">" [iemesls: %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s atjaunoja profila informāciju %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s nosūtīja uzaicinājumu %2$s pievienoties istabai</string>
+    <string name="notice_room_third_party_registered_invite">%1$s apstiprināja uzaicinājumu priekš %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Nav iespējams atkodēt: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Sūtītāja ierīce mums nenosūtīja atslēgas priekš šīs ziņas.</string>
+
+    <string name="could_not_redact">Nevarēja rediģēt</string>
+    <string name="unable_to_send_message">Nav iespējams nosūtīt ziņu</string>
+
+    <string name="message_failed_to_upload">Neizdevās augšuplādēt attēlu</string>
+
+    <string name="network_error">Tīkla kļūda</string>
+    <string name="matrix_error">Matrix kļūda</string>
+
+    <string name="room_error_join_failed_empty_room">Šobrīd nav iespējams atkārtoti pievienoties tukšai istabai.</string>
+
+    <string name="encrypted_message">Šifrēta ziņa</string>
+
+    <string name="medium_email">Epasta adrese</string>
+    <string name="medium_phone_number">Telefona numurs</string>
+
+</resources>

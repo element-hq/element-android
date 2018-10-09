@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s ha enviat una imatge.</string>
+
+    <string name="notice_room_leave">%1s ha sortit</string>
+    <string name="notice_room_join">%1s ha entrat</string>
+    <string name="medium_phone_number">Número de telèfon</string>
+
+<string name="medium_email">Correu electrònic</string>
+    <string name="encrypted_message">Missatge encriptat</string>
+
+    <string name="notice_room_invite_no_invitee">la invitació de %s</string>
+    <string name="notice_room_invite">%1$s ha convidat a %2$s</string>
+    <string name="notice_room_invite_you">%1$s vos ha convidat</string>
+    <string name="notice_room_reject">%1$s ha rebutjat la invitació</string>
+    <string name="notice_room_kick">%1$s ha fet fora a %2$s</string>
+    <string name="matrix_sdk_app_name">Android SDK de Matrix</string>
+
+    <string name="notice_display_name_changed_from">%1$s ha canviat el seu nom visible de %2$s a %3$s</string>
+    <string name="notice_display_name_removed">%1$s ha eliminat el seu nom visible (%2$s)</string>
+    <string name="notice_topic_changed">%1$s ha canviat el tema a: %2$s</string>
+    <string name="notice_room_name_changed">%1$s ha canviat el nom de la sala a: %2$s</string>
+    <string name="notice_answered_call">%s ha contestat la trucada.</string>
+    <string name="notice_ended_call">%s ha finalitzat la trucada.</string>
+    <string name="notice_room_visibility_invited">tots el membres de la sala, des del punt en què són convidats.</string>
+    <string name="notice_room_visibility_shared">tots els membres de la sala.</string>
+    <string name="notice_room_visibility_unknown">desconegut (%s).</string>
+    <string name="notice_end_to_end">%1$s ha activat l\'encriptació d\'extrem a extrem (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s ha sol·licitat una conferència VoIP</string>
+    <string name="notice_room_unban">%1$s ha readmès a %2$s</string>
+    <string name="notice_room_ban">%1$s ha expulsat a %2$s</string>
+    <string name="notice_room_withdraw">%1$s ha retirat la invitació de %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s ha canviat el seu avatar</string>
+    <string name="notice_made_future_room_visibility">%1$s ha permès a %2$s veure l\'historial que es generi a partir d\'ara</string>
+    <string name="notice_room_visibility_joined">tots els membres de la sala des del punt en què hi entrin.</string>
+    <string name="notice_room_visibility_world_readable">qualsevol.</string>
+    <string name="notice_voip_started">S\'ha iniciat la conferència VoIP</string>
+    <string name="notice_voip_finished">S\'ha finalitzat la conferència VoIP</string>
+
+    <string name="notice_avatar_changed_too">(s\'ha canviat també l\'avatar)</string>
+    <string name="notice_room_name_removed">%1$s ha eliminat el nom de la sala</string>
+    <string name="notice_room_topic_removed">%1$s ha eliminat el tema de la sala</string>
+    <string name="notice_event_redacted">"ha redactat %1$s "</string>
+    <string name="notice_event_redacted_by">" per %1$s"</string>
+    <string name="notice_event_redacted_reason">" [raó: %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s ha actualitzat el seu perfil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s ha enviat una invitació a l\'usuari %2$s per a entrar a la sala</string>
+    <string name="notice_room_third_party_registered_invite">%1$s ha acceptat la invitació de l\'usuari %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** No s\'ha pogut desencriptar: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">El dispositiu del remitent no ha enviat les claus per aquest missatge.</string>
+
+    <string name="could_not_redact">No s\'ha pogut redactar</string>
+    <string name="unable_to_send_message">No s\'ha pogut enviar el missatge</string>
+
+    <string name="message_failed_to_upload">No s\'ha pogut pujar la imatge</string>
+
+    <string name="network_error">S\'ha produït un error de xarxa</string>
+    <string name="matrix_error">S\'ha produït un error de Matrix</string>
+
+    <string name="room_error_join_failed_empty_room">Actualment no es pot tornar a entrar a una sala buida.</string>
+
+    <string name="notice_display_name_set">%1$s a canviat el seu nom visible a %2$s</string>
+    <string name="notice_placed_video_call">%s ha iniciat una trucada de vídeo.</string>
+    <string name="notice_placed_voice_call">%s ha iniciat una trucada de veu.</string>
+    </resources>

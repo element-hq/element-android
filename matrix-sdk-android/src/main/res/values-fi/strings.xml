@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="summary_user_sent_image">%1$s lähetti kuvan.</string>
+
+    <string name="notice_room_invite_no_invitee">%s:n kutsu</string>
+    <string name="notice_room_invite">%1$s kutsui %2$s</string>
+    <string name="notice_room_invite_you">%1$s kutsui sinut</string>
+    <string name="notice_room_join">%1$s liittyi</string>
+    <string name="notice_room_leave">%1$s poistui</string>
+    <string name="notice_room_reject">%1$s hylkäsi kutsun</string>
+    <string name="notice_room_kick">%1$s poisti käyttäjän %2$s</string>
+    <string name="notice_room_unban">%1$s poisti porttikiellon käyttäjältä %2$s</string>
+    <string name="notice_room_ban">%1$s antoi porttikiellon käyttäjälle %2$s</string>
+    <string name="notice_room_withdraw">%1$s veti takaisin kutsun käyttäjälle %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s vaihtoi profiilikuvaa</string>
+    <string name="notice_display_name_set">%1$s asetti näyttönimekseen %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s muutti näyttönimensä %2$s -&gt; %3$s</string>
+    <string name="notice_display_name_removed">%1$s poisti näyttönimensä (%2$s)</string>
+    <string name="notice_topic_changed">%1$s muutti aiheeksi %2$s</string>
+    <string name="notice_room_name_changed">%1$s muutti huoneen nimeksi %2$s</string>
+    <string name="notice_placed_video_call">%s soitti videopuhelun.</string>
+    <string name="notice_placed_voice_call">%s soitti puhelun.</string>
+    <string name="notice_answered_call">%s vastasi puheluun.</string>
+    <string name="notice_ended_call">%s lopetti puhelun.</string>
+    <string name="notice_made_future_room_visibility">%1$s muutti tulevan huonehistorian näkyväksi käyttäjälle %2$s</string>
+    <string name="notice_room_visibility_invited">kaikki jäsenet, heidän kutsuistaan asti.</string>
+    <string name="notice_room_visibility_joined">kaikki jäsenet, heidän liittymisestään asti.</string>
+    <string name="notice_room_visibility_shared">kaikki huoneen jäsenet.</string>
+    <string name="notice_room_visibility_world_readable">kaikki.</string>
+    <string name="notice_room_visibility_unknown">tuntematon (%s).</string>
+    <string name="notice_end_to_end">%1$s kytki päälle päästä päähän-salauksen (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s lähetti VoIP konferenssi-pyynnön</string>
+    <string name="notice_voip_started">VoIP konferenssi alkoi</string>
+    <string name="notice_voip_finished">VoIP konferenssi loppui</string>
+
+    <string name="notice_avatar_changed_too">(profiilikuva muuttui myös)</string>
+    <string name="notice_room_name_removed">%1$s poisti huoneen nimen</string>
+    <string name="notice_room_topic_removed">%1$s poisti huoneen aiheen</string>
+    <string name="notice_event_redacted_reason">" [syy: %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s päivitti profiilinsa %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s lähetti liittymiskutsun käyttäjälle %2$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s hyväksyi kutsun käyttäjän %2$s puolesta</string>
+    <string name="notice_crypto_unable_to_decrypt">** Salauksen purku epäonnistui: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Lähettäjän laite ei ole lähettänyt avaimia tähän viestiin.</string>
+
+    <string name="unable_to_send_message">Viestin lähetys epäonnistui</string>
+
+    <string name="message_failed_to_upload">Kuvan lataaminen epäonnistui</string>
+
+    <string name="network_error">Verkkovirhe</string>
+    <string name="matrix_error">Matrix virhe</string>
+
+    <string name="room_error_join_failed_empty_room">Tällä hetkellä ei ole mahdollista liittyä uudelleen tyhjään huoneeseen.</string>
+
+    <string name="encrypted_message">Salattu viesti</string>
+
+    <string name="medium_email">Sähköpostiosoite</string>
+    <string name="medium_phone_number">Puhelinnumero</string>
+
+<string name="matrix_sdk_app_name">Matrix Android SDK</string>
+
+    <string name="notice_event_redacted_by">" käyttäjän %1$s toimesta"</string>
+    <string name="could_not_redact">Takaisinveto epäonnistui</string>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="notice_event_redacted">"veti takaisin %1$s "</string>
+    </resources>

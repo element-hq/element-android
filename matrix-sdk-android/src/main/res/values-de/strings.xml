@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="matrix_sdk_app_name">Matrix-Android-SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s hat ein Bild gesendet.</string>
+
+    <string name="notice_room_invite_no_invitee">%s\'s Einladung</string>
+    <string name="notice_room_invite">%1$s hat %2$s eingeladen</string>
+    <string name="notice_room_invite_you">%1$s hat dich eingeladen</string>
+    <string name="notice_room_join">%1$s hat den Raum betreten</string>
+    <string name="notice_room_leave">%1$s hat den Raum verlassen</string>
+    <string name="notice_room_reject">%1$s hat die Einladung abgelehnt</string>
+    <string name="notice_room_kick">%1$s hat %2$s gekickt</string>
+    <string name="notice_room_unban">%1$s hat die Verbannung von %2$s aufgehoben</string>
+    <string name="notice_room_ban">%1$s hat %2$s verbannt</string>
+    <string name="notice_room_withdraw">%1$s hat die Einladung für %2$s zurückgezogen</string>
+    <string name="notice_avatar_url_changed">%1$s hat das Profilbild geändert</string>
+    <string name="notice_display_name_set">%1$s hat den Anzeigenamen geändert in %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s hat den Anzeigenamen von %2$s auf %3$s geändert</string>
+    <string name="notice_display_name_removed">%1$s hat den Anzeigenamen gelöscht (%2$s)</string>
+    <string name="notice_topic_changed">%1$s hat das Raumthema geändert auf: %2$s</string>
+    <string name="notice_room_name_changed">%1$s hat den Raumnamen geändert in: %2$s</string>
+    <string name="notice_placed_video_call">%s hat einen Videoanruf durchgeführt.</string>
+    <string name="notice_placed_voice_call">%s hat einen Sprachanruf getätigt.</string>
+    <string name="notice_answered_call">%s hat den Anruf angenommen.</string>
+    <string name="notice_ended_call">%s hat den Anruf beendet.</string>
+    <string name="notice_made_future_room_visibility">%1$s hat den zukünftigen Chatverlauf sichtbar gemacht für %2$s</string>
+    <string name="notice_room_visibility_invited">Alle Mitglieder (ab dem Zeitpunkt, an dem sie eingeladen wurden).</string>
+    <string name="notice_room_visibility_joined">Alle Mitglieder (ab dem Zeitpunkt, an dem sie den Raum betreten haben).</string>
+    <string name="notice_room_visibility_shared">alle Raum-Mitglieder.</string>
+    <string name="notice_room_visibility_world_readable">Jeder.</string>
+    <string name="notice_room_visibility_unknown">Unbekannt (%s).</string>
+    <string name="notice_end_to_end">%1$s hat die Ende-zu-Ende-Verschlüsselung aktiviert (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s möchte eine VoIP-Konferenz beginnen</string>
+    <string name="notice_voip_started">VoIP-Konferenz gestartet</string>
+    <string name="notice_voip_finished">VoIP-Konferenz beendet</string>
+
+    <string name="notice_avatar_changed_too">(Profilbild wurde ebenfalls geändert)</string>
+    <string name="notice_room_name_removed">%1$s hat den Raumnamen entfernt</string>
+    <string name="notice_room_topic_removed">%1$s hat das Raum-Thema entfernt</string>
+    <string name="notice_event_redacted">"Verborgen %1$s "</string>
+    <string name="notice_event_redacted_by"> durch %1$s</string>
+    <string name="notice_event_redacted_reason">  [Grund: %1$s]</string>
+    <string name="notice_profile_change_redacted">%1$s hat das Benutzerprofil aktualisiert %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s hat eine Einladung an %2$s gesendet</string>
+    <string name="notice_room_third_party_registered_invite">%1$s hat die Einladung für %2$s akzeptiert</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Nicht entschlüsselbar: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Das absendende Gerät hat uns keine Schlüssel für diese Nachricht übermittelt.</string>
+
+    <!-- Room Screen -->
+    <string name="could_not_redact">Entfernen nicht möglich</string>
+    <string name="unable_to_send_message">Nachricht kann nicht gesendet werden</string>
+
+    <string name="message_failed_to_upload">Bild konnte nicht hochgeladen werden</string>
+
+    <!-- general errors -->
+    <string name="network_error">Netzwerk-Fehler</string>
+    <string name="matrix_error">Matrix-Fehler</string>
+
+    <!-- Home Screen -->
+
+    <!-- Last seen time -->
+
+    <!-- call events -->
+
+    <!-- room error messages -->
+    <string name="room_error_join_failed_empty_room">Es ist aktuell nicht möglich, einen leeren Raum erneut zu betreten.</string>
+
+    <string name="encrypted_message">Verschlüsselte Nachricht</string>
+
+    <!-- medium friendly name -->
+    <string name="medium_email">E-Mail-Adresse</string>
+    <string name="medium_phone_number">Telefonnummer</string>
+
+<string name="summary_user_sent_sticker">%1$s sandte einen Sticker.</string>
+
+    <string name="message_reply_to_prefix">Als Antwort auf</string>
+
+    <string name="reply_to_an_image">sandte ein Bild.</string>
+    <string name="reply_to_a_video">sandte ein Video.</string>
+    <string name="reply_to_an_audio_file">sandte eine Audio-Datei.</string>
+    <string name="reply_to_a_file">sandte eine Datei.</string>
+
+</resources>

@@ -1,9 +1,13 @@
 package im.vector.matrix.android.api.failure
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-data class MatrixError(@Json(name = "errcode") val code: String,
-                       @Json(name = "error") val message: String) {
+@JsonClass(generateAdapter = true)
+data class MatrixError(
+        @Json(name = "errcode") val code: String,
+        @Json(name = "error") val message: String
+) {
 
     companion object {
         const val FORBIDDEN = "M_FORBIDDEN"

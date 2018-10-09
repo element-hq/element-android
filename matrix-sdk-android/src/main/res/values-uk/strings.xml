@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s відправив зображення.</string>
+
+    <string name="notice_room_invite_no_invitee">%s запрошення</string>
+    <string name="notice_room_invite">%1$s запросив(ла) %2$s</string>
+    <string name="encrypted_message">Закодоване повідомлення</string>
+
+    </resources>

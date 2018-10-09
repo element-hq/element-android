@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="matrix_sdk_app_name">SDK Matrix Android</string>
+
+    <string name="summary_message">%1$s : %2$s</string>
+    <string name="summary_user_sent_image">%1$s a envoyé une image.</string>
+
+    <string name="notice_room_invite_no_invitee">invitation de %s</string>
+    <string name="notice_room_invite">%1$s a invité %2$s</string>
+    <string name="notice_room_invite_you">%1$s vous a invité</string>
+    <string name="notice_room_join">%1$s a rejoint la discussion</string>
+    <string name="notice_room_leave">%1$s est parti</string>
+    <string name="notice_room_reject">%1$s a rejeté l\'invitation</string>
+    <string name="notice_room_kick">%1$s a exclu %2$s</string>
+    <string name="notice_room_unban">%1$s a révoqué le bannissement de %2$s</string>
+    <string name="notice_room_ban">%1$s a banni %2$s</string>
+    <string name="notice_room_withdraw">%1$s a annulé l\'invitation de %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s a changé d\'avatar</string>
+    <string name="notice_display_name_set">%1$s a réglé son nom affiché en %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s a modifié son nom affiché %2$s en %3$s</string>
+    <string name="notice_display_name_removed">%1$s a supprimé son nom affiché (%2$s)</string>
+    <string name="notice_topic_changed">%1$s a changé le sujet en : %2$s</string>
+    <string name="notice_room_name_changed">%1$s a changé le nom du salon en : %2$s</string>
+    <string name="notice_placed_video_call">%s a passé un appel vidéo.</string>
+    <string name="notice_placed_voice_call">%s a passé un appel vocal.</string>
+    <string name="notice_answered_call">%s a répondu à l\'appel.</string>
+    <string name="notice_ended_call">%s a raccroché.</string>
+    <string name="notice_made_future_room_visibility">%1$s a rendu l\'historique futur du salon visible pour %2$s</string>
+    <string name="notice_room_visibility_invited">tous les membres du salon, depuis qu\'ils ont été invités.</string>
+    <string name="notice_room_visibility_joined">tous les membres du salon, depuis qu\'ils l\'ont rejoint.</string>
+    <string name="notice_room_visibility_shared">tous les membres du salon.</string>
+    <string name="notice_room_visibility_world_readable">n\'importe qui.</string>
+    <string name="notice_room_visibility_unknown">inconnu (%s).</string>
+    <string name="notice_end_to_end">%1$s a activé le chiffrement de bout en bout (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s a demandé une téléconférence VoIP</string>
+    <string name="notice_voip_started">Téléconférence VoIP démarrée</string>
+    <string name="notice_voip_finished">Téléconférence VoIP terminée</string>
+
+    <string name="notice_avatar_changed_too">(l\'avatar a aussi changé)</string>
+    <string name="notice_room_name_removed">%1$s a supprimé le nom du salon</string>
+    <string name="notice_room_topic_removed">%1$s a supprimé le sujet du salon</string>
+    <string name="notice_event_redacted">"a effacé %1$s "</string>
+    <string name="notice_event_redacted_by">" de %1$s"</string>
+    <string name="notice_event_redacted_reason">" [motif : %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s a mis à jour son profil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s a envoyé une invitation à %2$s pour rejoindre le salon</string>
+    <string name="notice_room_third_party_registered_invite">%1$s a accepté l\'invitation pour %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Déchiffrement impossible : %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">L\'appareil de l\'expéditeur ne nous a pas envoyé les clés pour ce message.</string>
+
+    <string name="could_not_redact">Effacement impossible</string>
+    <string name="unable_to_send_message">Envoi du message impossible</string>
+
+    <string name="message_failed_to_upload">L\'envoi de l\'image a échoué</string>
+
+    <string name="network_error">Erreur de réseau</string>
+    <string name="matrix_error">Erreur de Matrix</string>
+
+    <string name="room_error_join_failed_empty_room">Il est impossible pour le moment de revenir dans un salon vide.</string>
+
+    <string name="encrypted_message">Message chiffré</string>
+
+    <string name="medium_email">Adresse e-mail</string>
+    <string name="medium_phone_number">Numéro de téléphone</string>
+
+<string name="summary_user_sent_sticker">%1$s a envoyé un sticker.</string>
+
+    <string name="message_reply_to_prefix">En réponse à</string>
+
+    <string name="reply_to_an_image">a envoyé une image.</string>
+    <string name="reply_to_a_video">a envoyé une vidéo.</string>
+    <string name="reply_to_an_audio_file">a envoyé un fichier audio.</string>
+    <string name="reply_to_a_file">a envoyé un fichier.</string>
+
+</resources>

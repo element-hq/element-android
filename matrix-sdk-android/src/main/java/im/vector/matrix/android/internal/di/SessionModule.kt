@@ -9,7 +9,7 @@ import retrofit2.Retrofit
 
 class SessionModule(private val connectionConfig: HomeServerConnectionConfig) : Module {
 
-    override fun invoke(): ModuleDefinition = module {
+    override fun invoke(): ModuleDefinition = module(override = true) {
         scope(DefaultSession.SCOPE) {
             val retrofitBuilder = get() as Retrofit.Builder
             retrofitBuilder

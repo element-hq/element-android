@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s sendte et billede.</string>
+
+    <string name="notice_room_invite_no_invitee">%ss invitation</string>
+    <string name="notice_room_invite">%1$s inviterede %2$s</string>
+    <string name="notice_room_invite_you">%1$s inviterede dig</string>
+    <string name="notice_room_join">%1$s forbandt</string>
+    <string name="notice_room_leave">%1$s forlod rummet</string>
+    <string name="notice_room_reject">%1$s afviste invitationen</string>
+    <string name="notice_room_kick">%1$s kickede %2$s</string>
+    <string name="notice_room_unban">%1$s unbannede %2$s</string>
+    <string name="notice_room_ban">%1$s bannede %2$s</string>
+    <string name="notice_room_withdraw">%1$s trak %2$ss invitation tilbage</string>
+    <string name="notice_avatar_url_changed">%1$s skiftede sin avatar</string>
+    <string name="notice_display_name_set">%1$s satte sit viste navn til %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s ændrede sit viste navn fra %2$s til %3$s</string>
+    <string name="notice_display_name_removed">%1$s fjernede sit viste navn (%2$s)</string>
+    <string name="notice_topic_changed">%1$s ændrede emnet til: %2$s</string>
+    <string name="notice_room_name_changed">%1$s ændrede rumnavnet til: %2$s</string>
+    <string name="notice_placed_video_call">%s startede et videoopkald.</string>
+    <string name="notice_placed_voice_call">%s startede et stemmeopkald.</string>
+    <string name="notice_answered_call">%s svarede opkaldet.</string>
+    <string name="notice_ended_call">%s stoppede opkaldet.</string>
+    <string name="notice_made_future_room_visibility">%1$s gjorde den fremtidige rum historik synlig for %2$s</string>
+    <string name="notice_room_visibility_invited">alle medlemmer af rummet, fra det tidspunkt de er inviteret.</string>
+    <string name="notice_room_visibility_joined">alle medlemmer af rummet, fra det tidspunkt de er forbundede.</string>
+    <string name="notice_room_visibility_shared">Alle medlemmer af rummet.</string>
+    <string name="notice_room_visibility_world_readable">alle.</string>
+    <string name="notice_room_visibility_unknown">ukendt (%s).</string>
+    <string name="notice_end_to_end">%1$s slog ende-til-ende kryptering til (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s forespurgte en VoIP konference</string>
+    <string name="notice_voip_started">VoIP konference startet</string>
+    <string name="notice_voip_finished">VoIP konference afsluttet</string>
+
+    <string name="notice_avatar_changed_too">(avatar blev også ændret)</string>
+    <string name="notice_room_name_removed">%1$s fjernede navnet på rummet</string>
+    <string name="notice_room_topic_removed">%1$s fjernede emnet for rummet</string>
+    <string name="notice_event_redacted">"hemmeligholdte %1$s "</string>
+    <string name="notice_event_redacted_by">" af %1$s"</string>
+    <string name="notice_event_redacted_reason">" [årsag: %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s opdaterede sin profil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s inviterede %2$s til rummet</string>
+    <string name="notice_room_third_party_registered_invite">%1$s accepterede invitationen til %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Kunne ikke dekryptere: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Afsenderens enhed har ikke sendt os nøglerne til denne besked.</string>
+
+    <string name="could_not_redact">Kunne ikke hemmeligholde</string>
+    <string name="unable_to_send_message">Kunne ikke sende besked</string>
+
+    <string name="message_failed_to_upload">Kunne ikke uploade billede</string>
+
+    <string name="network_error">Netværks fejl</string>
+    <string name="matrix_error">Matrix fejl</string>
+
+    <string name="room_error_join_failed_empty_room">Det er i øjeblikket ikke muligt at genforbinde til et tomt rum.</string>
+
+    <string name="encrypted_message">Krypteret besked</string>
+
+    <string name="medium_email">mailadresse</string>
+    <string name="medium_phone_number">Telefonnummer</string>
+
+</resources>

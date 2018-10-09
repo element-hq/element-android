@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s изпрати снимка.</string>
+
+    <string name="notice_room_invite_no_invitee">Поканата на %s</string>
+    <string name="notice_room_invite">%1$s покани %2$s</string>
+    <string name="notice_room_invite_you">%1$s Ви покани</string>
+    <string name="notice_room_join">%1$s се присъедини</string>
+    <string name="notice_room_leave">%1$s напусна</string>
+    <string name="notice_room_reject">%1$s отхвърли поканата</string>
+    <string name="notice_room_kick">%1$s изгони %2$s</string>
+    <string name="notice_room_unban">%1$s отблокира %2$s</string>
+    <string name="notice_room_ban">%1$s блокира %2$s</string>
+    <string name="notice_room_withdraw">%1$s оттегли поканата си за %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s смени своята профилна снимка</string>
+    <string name="notice_display_name_set">%1$s си сложи име %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s смени своето име от %2$s на %3$s</string>
+    <string name="notice_display_name_removed">%1$s премахна своето име (%2$s)</string>
+    <string name="notice_topic_changed">%1$s смени темата на: %2$s</string>
+    <string name="notice_room_name_changed">%1$s смени името на стаята на: %2$s</string>
+    <string name="notice_placed_video_call">%s започна видео разговор.</string>
+    <string name="notice_placed_voice_call">%s започна гласов разговор.</string>
+    <string name="notice_answered_call">%s отговори на повикването.</string>
+    <string name="notice_ended_call">%s прекрати разговора.</string>
+    <string name="notice_made_future_room_visibility">%1$s направи бъдещата история на стаята видима за %2$s</string>
+    <string name="notice_room_visibility_invited">всички членове, от момента на поканването им в нея.</string>
+    <string name="notice_room_visibility_joined">всички членове, от момента на присъединяването им в нея.</string>
+    <string name="notice_room_visibility_shared">всички членове в нея.</string>
+    <string name="notice_room_visibility_world_readable">всеки.</string>
+    <string name="notice_room_visibility_unknown">непозната (%s).</string>
+    <string name="notice_end_to_end">%1$s включи шифроване от край до край (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s заяви VoIP групов разговор</string>
+    <string name="notice_voip_started">Започна VoIP групов разговор</string>
+    <string name="notice_voip_finished">Груповият разговор приключи</string>
+
+    <string name="notice_avatar_changed_too">(профилната снимка също беше сменена)</string>
+    <string name="notice_room_name_removed">%1$s премахна името на стаята</string>
+    <string name="notice_room_topic_removed">%1$s премахна темата на стаята</string>
+    <string name="notice_event_redacted">"изтрито %1$s "</string>
+    <string name="notice_event_redacted_by">" от %1$s"</string>
+    <string name="notice_event_redacted_reason">" [причина: %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s обнови своя профил %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s изпрати покана на %2$s да се присъедини към стаята</string>
+    <string name="notice_room_third_party_registered_invite">%1$s прие поканата за %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Неуспешно разшифроване: %s **</string>
+    <string name="could_not_redact">Неуспешно премахване</string>
+    <string name="unable_to_send_message">Неуспешно изпращане на съобщението</string>
+
+    <string name="message_failed_to_upload">Неуспешно качване на снимката</string>
+
+    <string name="network_error">Грешка в мрежата</string>
+    <string name="matrix_error">Matrix грешка</string>
+
+    <string name="room_error_join_failed_empty_room">В момента не е възможно да се присъедините отново към празна стая.</string>
+
+    <string name="encrypted_message">Шифровано съобщение</string>
+
+    <string name="medium_email">Имейл адрес</string>
+    <string name="medium_phone_number">Телефонен номер</string>
+
+<string name="notice_crypto_error_unkwown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>
+
+    <string name="summary_user_sent_sticker">%1$s изпрати стикер.</string>
+
+    <string name="message_reply_to_prefix">В отговор на</string>
+
+    <string name="reply_to_an_image">изпрати снимка.</string>
+    <string name="reply_to_a_video">изпрати видео.</string>
+    <string name="reply_to_an_audio_file">изпрати аудио файл.</string>
+    <string name="reply_to_a_file">изпрати файл.</string>
+
+</resources>
