@@ -18,7 +18,10 @@ package im.vector.matrix.android.internal.legacy.rest.client;
 
 import android.text.TextUtils;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import java.util.List;
+import java.util.Map;
+
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.ProfileApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
@@ -34,18 +37,11 @@ import im.vector.matrix.android.internal.legacy.rest.model.RequestPhoneNumberVal
 import im.vector.matrix.android.internal.legacy.rest.model.RequestPhoneNumberValidationResponse;
 import im.vector.matrix.android.internal.legacy.rest.model.ThreePidCreds;
 import im.vector.matrix.android.internal.legacy.rest.model.User;
-import im.vector.matrix.android.internal.legacy.rest.model.login.Credentials;
-import im.vector.matrix.android.internal.legacy.rest.model.login.TokenRefreshParams;
-import im.vector.matrix.android.internal.legacy.rest.model.login.TokenRefreshResponse;
 import im.vector.matrix.android.internal.legacy.rest.model.pid.AccountThreePidsResponse;
 import im.vector.matrix.android.internal.legacy.rest.model.pid.AddThreePidsParams;
 import im.vector.matrix.android.internal.legacy.rest.model.pid.DeleteThreePidParams;
 import im.vector.matrix.android.internal.legacy.rest.model.pid.ThirdPartyIdentifier;
 import im.vector.matrix.android.internal.legacy.rest.model.pid.ThreePid;
-
-import java.util.List;
-import java.util.Map;
-
 import retrofit2.Response;
 
 /**
@@ -57,8 +53,8 @@ public class ProfileRestClient extends RestClient<ProfileApi> {
     /**
      * {@inheritDoc}
      */
-    public ProfileRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, ProfileApi.class, "", false);
+    public ProfileRestClient(SessionParams sessionParams) {
+        super(sessionParams, ProfileApi.class, "", false);
     }
 
     /**
@@ -102,7 +98,7 @@ public class ProfileRestClient extends RestClient<ProfileApi> {
 
         // don't retry if the network comes back
         // let the user chooses what he want to do
-        mApi.displayname(mCredentials.userId, user)
+        mApi.displayname(mCredentials.getUserId(), user)
                 .enqueue(new RestAdapterCallback<Void>(description, mUnsentEventsManager, callback, new RestAdapterCallback.RequestRetryCallBack() {
                     @Override
                     public void onRetry() {
@@ -150,7 +146,7 @@ public class ProfileRestClient extends RestClient<ProfileApi> {
         User user = new User();
         user.setAvatarUrl(newUrl);
 
-        mApi.avatarUrl(mCredentials.userId, user)
+        mApi.avatarUrl(mCredentials.getUserId(), user)
                 .enqueue(new RestAdapterCallback<Void>(description, mUnsentEventsManager, callback, new RestAdapterCallback.RequestRetryCallBack() {
                     @Override
                     public void onRetry() {
@@ -289,31 +285,6 @@ public class ProfileRestClient extends RestClient<ProfileApi> {
     }
 
     /**
-     * Refresh access/refresh tokens, using the current refresh token.
-     *
-     * @param callback the callback success and failure callback
-     */
-    public void refreshTokens(final ApiCallback<Credentials> callback) {
-        final String description = "refreshTokens";
-
-        TokenRefreshParams params = new TokenRefreshParams();
-        params.refresh_token = mCredentials.refreshToken;
-
-        mApi.tokenrefresh(params)
-                .enqueue(new RestAdapterCallback<TokenRefreshResponse>(description, mUnsentEventsManager, callback, null) {
-                    @Override
-                    public void success(TokenRefreshResponse tokenreponse, Response response) {
-                        onEventSent();
-                        mCredentials.refreshToken = tokenreponse.refresh_token;
-                        mCredentials.accessToken = tokenreponse.access_token;
-                        if (null != callback) {
-                            callback.onSuccess(mCredentials);
-                        }
-                    }
-                });
-    }
-
-    /**
      * List all 3PIDs linked to the Matrix user account.
      *
      * @param callback the asynchronous callback called with the response
@@ -447,14 +418,14 @@ public class ProfileRestClient extends RestClient<ProfileApi> {
 
         AddThreePidsParams params = new AddThreePidsParams();
         params.three_pid_creds = new ThreePidCreds();
-
         String identityServerHost = mHsConfig.getIdentityServerUri().toString();
-        if (identityServerHost.startsWith("http://")) {
-            identityServerHost = identityServerHost.substring("http://".length());
-        } else if (identityServerHost.startsWith("https://")) {
-            identityServerHost = identityServerHost.substring("https://".length());
+        if (identityServerHost != null) {
+            if (identityServerHost.startsWith("http://")) {
+                identityServerHost = identityServerHost.substring("http://".length());
+            } else if (identityServerHost.startsWith("https://")) {
+                identityServerHost = identityServerHost.substring("https://".length());
+            }
         }
-
         params.three_pid_creds.id_server = identityServerHost;
         params.three_pid_creds.sid = pid.sid;
         params.three_pid_creds.client_secret = pid.clientSecret;

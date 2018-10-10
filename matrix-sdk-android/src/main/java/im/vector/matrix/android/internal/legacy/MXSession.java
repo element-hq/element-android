@@ -30,8 +30,24 @@ import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 
-import im.vector.matrix.android.BuildConfig;
-import im.vector.matrix.android.R;
+import org.matrix.olm.OlmManager;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.call.MXCallsManager;
 import im.vector.matrix.android.internal.legacy.crypto.MXCrypto;
 import im.vector.matrix.android.internal.legacy.crypto.MXCryptoConfig;
@@ -79,7 +95,6 @@ import im.vector.matrix.android.internal.legacy.rest.model.Versions;
 import im.vector.matrix.android.internal.legacy.rest.model.bingrules.BingRule;
 import im.vector.matrix.android.internal.legacy.rest.model.filter.FilterBody;
 import im.vector.matrix.android.internal.legacy.rest.model.filter.FilterResponse;
-import im.vector.matrix.android.internal.legacy.rest.model.login.Credentials;
 import im.vector.matrix.android.internal.legacy.rest.model.login.LoginFlow;
 import im.vector.matrix.android.internal.legacy.rest.model.login.RegistrationFlowResponse;
 import im.vector.matrix.android.internal.legacy.rest.model.message.MediaMessage;
@@ -101,21 +116,6 @@ import im.vector.matrix.android.internal.legacy.util.JsonUtils;
 import im.vector.matrix.android.internal.legacy.util.Log;
 import im.vector.matrix.android.internal.legacy.util.UnsentEventsManager;
 import im.vector.matrix.android.internal.legacy.util.VersionsUtil;
-import org.matrix.olm.OlmManager;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * Class that represents one user's session with a particular home server.
@@ -192,38 +192,38 @@ public class MXSession {
     /**
      * Create a basic session for direct API calls.
      *
-     * @param hsConfig the home server connection config
+     * @param sessionParams the session connection data
      */
-    private MXSession(HomeServerConnectionConfig hsConfig) {
-        mCredentials = hsConfig.getCredentials();
-        mHsConfig = hsConfig;
+    private MXSession(final SessionParams sessionParams) {
+        mCredentials = sessionParams.getCredentials();
+        mHsConfig = sessionParams.getHomeServerConnectionConfig();
 
-        mEventsRestClient = new EventsRestClient(hsConfig);
-        mProfileRestClient = new ProfileRestClient(hsConfig);
-        mPresenceRestClient = new PresenceRestClient(hsConfig);
-        mRoomsRestClient = new RoomsRestClient(hsConfig);
-        mPushRulesRestClient = new PushRulesRestClient(hsConfig);
-        mPushersRestClient = new PushersRestClient(hsConfig);
-        mThirdPidRestClient = new ThirdPidRestClient(hsConfig);
-        mCallRestClient = new CallRestClient(hsConfig);
-        mAccountDataRestClient = new AccountDataRestClient(hsConfig);
-        mCryptoRestClient = new CryptoRestClient(hsConfig);
-        mLoginRestClient = new LoginRestClient(hsConfig);
-        mGroupsRestClient = new GroupsRestClient(hsConfig);
-        mMediaScanRestClient = new MediaScanRestClient(hsConfig);
-        mFilterRestClient = new FilterRestClient(hsConfig);
+        mEventsRestClient = new EventsRestClient(sessionParams);
+        mProfileRestClient = new ProfileRestClient(sessionParams);
+        mPresenceRestClient = new PresenceRestClient(sessionParams);
+        mRoomsRestClient = new RoomsRestClient(sessionParams);
+        mPushRulesRestClient = new PushRulesRestClient(sessionParams);
+        mPushersRestClient = new PushersRestClient(sessionParams);
+        mThirdPidRestClient = new ThirdPidRestClient(sessionParams);
+        mCallRestClient = new CallRestClient(sessionParams);
+        mAccountDataRestClient = new AccountDataRestClient(sessionParams);
+        mCryptoRestClient = new CryptoRestClient(sessionParams);
+        mLoginRestClient = new LoginRestClient(sessionParams);
+        mGroupsRestClient = new GroupsRestClient(sessionParams);
+        mMediaScanRestClient = new MediaScanRestClient(sessionParams);
+        mFilterRestClient = new FilterRestClient(sessionParams);
     }
 
     /**
      * Create a user session with a data handler.
      * Private, please use the MxSession.Builder now
      *
-     * @param hsConfig    the home server connection config
-     * @param dataHandler the data handler
-     * @param appContext  the application context
+     * @param sessionParams the session connection data
+     * @param dataHandler   the data handler
+     * @param appContext    the application context
      */
-    private MXSession(HomeServerConnectionConfig hsConfig, MXDataHandler dataHandler, Context appContext) {
-        this(hsConfig);
+    private MXSession(final SessionParams sessionParams, MXDataHandler dataHandler, Context appContext) {
+        this(sessionParams);
         mDataHandler = dataHandler;
 
         mDataHandler.getStore().addMXStoreListener(new MXStoreListener() {
@@ -300,7 +300,7 @@ public class MXSession {
 
         mUnsentEventsManager = new UnsentEventsManager(mNetworkConnectivityReceiver, mDataHandler);
 
-        mContentManager = new ContentManager(hsConfig, mUnsentEventsManager);
+        mContentManager = new ContentManager(mHsConfig, mCredentials, mUnsentEventsManager);
 
         //
         mCallsManager = new MXCallsManager(this, mAppContent);
@@ -321,8 +321,8 @@ public class MXSession {
         mGroupsRestClient.setUnsentEventsManager(mUnsentEventsManager);
 
         // return the default cache manager
-        mLatestChatMessageCache = new MXLatestChatMessageCache(mCredentials.userId);
-        mMediasCache = new MXMediasCache(mContentManager, mNetworkConnectivityReceiver, mCredentials.userId, appContext);
+        mLatestChatMessageCache = new MXLatestChatMessageCache(mCredentials.getUserId());
+        mMediasCache = new MXMediasCache(mContentManager, mNetworkConnectivityReceiver, mCredentials.getUserId(), appContext);
         mDataHandler.setMediasCache(mMediasCache);
 
         mMediaScanRestClient.setMxStore(mDataHandler.getStore());
@@ -380,9 +380,9 @@ public class MXSession {
     }
 
     /**
-     * Get the user credentials.
+     * Get the user getCredentials.
      *
-     * @return the credentials
+     * @return the getCredentials
      */
     public Credentials getCredentials() {
         checkIfAlive();
@@ -842,7 +842,7 @@ public class MXSession {
                 mEventsThread.setFailureCallback(mFailureCallback);
             }
 
-            if (mCredentials.accessToken != null && !mEventsThread.isAlive()) {
+            if (mCredentials.getAccessToken() != null && !mEventsThread.isAlive()) {
                 // GA issue
                 try {
                     mEventsThread.start();
@@ -858,35 +858,6 @@ public class MXSession {
                 }
             }
         }
-    }
-
-    /**
-     * Refresh the access token
-     */
-    public void refreshToken() {
-        checkIfAlive();
-
-        mProfileRestClient.refreshTokens(new ApiCallback<Credentials>() {
-            @Override
-            public void onSuccess(Credentials info) {
-                Log.d(LOG_TAG, "refreshToken : succeeds.");
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                Log.e(LOG_TAG, "refreshToken : onNetworkError " + e.getMessage(), e);
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                Log.e(LOG_TAG, "refreshToken : onMatrixError " + e.getMessage());
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                Log.e(LOG_TAG, "refreshToken : onMatrixError " + e.getMessage(), e);
-            }
-        });
     }
 
     /**
@@ -1246,7 +1217,7 @@ public class MXSession {
 
             params.addCryptoAlgorithm(algorithm);
             params.setDirectMessage();
-            params.addParticipantIds(mHsConfig, Arrays.asList(aParticipantUserId));
+            params.addParticipantIds(mHsConfig, mCredentials, Arrays.asList(aParticipantUserId));
 
             createRoom(params, aCreateRoomCallBack);
         }
@@ -2436,7 +2407,7 @@ public class MXSession {
                     DeleteDeviceParams params = new DeleteDeviceParams();
                     params.auth = new DeleteDeviceAuth();
                     params.auth.session = registrationFlowResponse.session;
-                    params.auth.user = mCredentials.userId;
+                    params.auth.user = mCredentials.getUserId();
                     params.auth.password = password;
 
                     Log.d(LOG_TAG, "## deleteDevice() : supported stages " + stages);
@@ -2512,10 +2483,12 @@ public class MXSession {
      * ========================================================================================== */
 
     public static class Builder {
-        private MXSession mxSession;
 
-        public Builder(HomeServerConnectionConfig hsConfig, MXDataHandler dataHandler, Context context) {
-            mxSession = new MXSession(hsConfig, dataHandler, context);
+        private MXSession mxSession;
+        private SessionParams sessionParams;
+
+        public Builder(SessionParams sessionParams, MXDataHandler dataHandler, Context context) {
+            mxSession = new MXSession(sessionParams, dataHandler, context);
         }
 
         public Builder withFileEncryption(boolean enableFileEncryption) {
@@ -2538,9 +2511,8 @@ public class MXSession {
                 try {
                     HomeServerConnectionConfig alteredHsConfig = new HomeServerConnectionConfig.Builder()
                             .withHomeServerUri(Uri.parse(pushServerUrl))
-                            .withCredentials(mxSession.mHsConfig.getCredentials())
                             .build();
-                    pushersRestClient = new PushersRestClient(alteredHsConfig);
+                    pushersRestClient = new PushersRestClient(new SessionParams(sessionParams.getCredentials(), alteredHsConfig));
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## withPushServerUrl() failed " + e.getMessage(), e);
                 }
@@ -2562,7 +2534,6 @@ public class MXSession {
          */
         public Builder withMetricsListener(@Nullable MetricsListener metricsListener) {
             mxSession.mMetricsListener = metricsListener;
-
             return this;
         }
 

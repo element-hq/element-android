@@ -1,43 +1,42 @@
 package im.vector.matrix.android.api.events
 
-import com.squareup.moshi.Json
 
+object EventType {
 
-enum class EventType {
-
-    @Json(name ="m.presence") PRESENCE,
-    @Json(name ="m.room.message") MESSAGE,
-    @Json(name ="m.sticker") STICKER,
-    @Json(name ="m.room.encrypted") ENCRYPTED,
-    @Json(name ="m.room.encryption") ENCRYPTION,
-    @Json(name ="m.room.message.feedback") FEEDBACK,
-    @Json(name ="m.typing") TYPING,
-    @Json(name ="m.room.redaction") REDACTION,
-    @Json(name ="m.receipt") RECEIPT,
-    @Json(name ="m.tag") TAG,
-    @Json(name ="m.room_key") ROOM_KEY,
-    @Json(name ="m.fully_read") FULLY_READ,
-    @Json(name ="m.room.plumbing") PLUMBING,
-    @Json(name ="m.room.bot.options") BOT_OPTIONS,
-    @Json(name ="m.room_key_request") KEY_REQUEST,
-    @Json(name ="m.forwarded_room_key") FORWARDED_ROOM_KEY,
-    @Json(name ="org.matrix.room.preview_urls") PREVIEW_URLS,
+    const val PRESENCE = "m.presence"
+    const val MESSAGE = "m.room.message"
+    const val STICKER = "m.sticker"
+    const val ENCRYPTED = "m.room.encrypted"
+    const val ENCRYPTION = "m.room.encryption"
+    const val FEEDBACK = "m.room.message.feedback"
+    const val TYPING = "m.typing"
+    const val REDACTION = "m.room.redaction"
+    const val RECEIPT = "m.receipt"
+    const val TAG = "m.tag"
+    const val ROOM_KEY = "m.room_key"
+    const val FULLY_READ = "m.fully_read"
+    const val PLUMBING = "m.room.plumbing"
+    const val BOT_OPTIONS = "m.room.bot.options"
+    const val KEY_REQUEST = "m.room_key_request"
+    const val FORWARDED_ROOM_KEY = "m.forwarded_room_key"
+    const val PREVIEW_URLS = "org.matrix.room.preview_urls"
 
     // State Events
-    @Json(name ="m.room.name") STATE_ROOM_NAME,
-    @Json(name ="m.room.topic") STATE_ROOM_TOPIC,
-    @Json(name ="m.room.avatar") STATE_ROOM_AVATAR,
-    @Json(name ="m.room.member") STATE_ROOM_MEMBER,
-    @Json(name ="m.room.third_party_invite") STATE_ROOM_THIRD_PARTY_INVITE,
-    @Json(name ="m.room.create") STATE_ROOM_CREATE,
-    @Json(name ="m.room.join_rules")  STATE_ROOM_JOIN_RULES,
-    @Json(name ="m.room.guest_access") STATE_ROOM_GUEST_ACCESS,
-    @Json(name ="m.room.power_levels") STATE_ROOM_POWER_LEVELS,
-    @Json(name ="m.room.aliases") STATE_ROOM_ALIASES,
-    @Json(name ="m.room.tombstone") STATE_ROOM_TOMBSTONE,
-    @Json(name ="m.room.canonical_alias")  STATE_CANONICAL_ALIAS,
-    @Json(name ="m.room.history_visibility") STATE_HISTORY_VISIBILITY,
-    @Json(name ="m.room.related_groups") STATE_RELATED_GROUPS,
-    @Json(name ="m.room.pinned_events") STATE_PINNED_EVENT
+
+    const val STATE_ROOM_NAME = "m.room.name"
+    const val STATE_ROOM_TOPIC = "m.room.topic"
+    const val STATE_ROOM_AVATAR = "m.room.avatar"
+    const val STATE_ROOM_MEMBER = "m.room.member"
+    const val STATE_ROOM_THIRD_PARTY_INVITE = "m.room.third_party_invite"
+    const val STATE_ROOM_CREATE = "m.room.create"
+    const val STATE_ROOM_JOIN_RULES = "m.room.join_rules"
+    const val STATE_ROOM_GUEST_ACCESS = "m.room.guest_access"
+    const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
+    const val STATE_ROOM_ALIASES = "m.room.aliases"
+    const val STATE_ROOM_TOMBSTONE = "m.room.tombstone"
+    const val STATE_CANONICAL_ALIAS = "m.room.canonical_alias"
+    const val STATE_HISTORY_VISIBILITY = "m.room.history_visibility"
+    const val STATE_RELATED_GROUPS = "m.room.related_groups"
+    const val STATE_PINNED_EVENT = "m.room.pinned_events"
 
 }

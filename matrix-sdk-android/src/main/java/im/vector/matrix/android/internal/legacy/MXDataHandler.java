@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
+import im.vector.matrix.android.internal.auth.data.Credentials;
 import im.vector.matrix.android.internal.legacy.call.MXCallsManager;
 import im.vector.matrix.android.internal.legacy.crypto.MXCrypto;
 import im.vector.matrix.android.internal.legacy.crypto.MXCryptoError;
@@ -62,13 +63,12 @@ import im.vector.matrix.android.internal.legacy.rest.model.bingrules.BingRule;
 import im.vector.matrix.android.internal.legacy.rest.model.bingrules.PushRuleSet;
 import im.vector.matrix.android.internal.legacy.rest.model.bingrules.PushRulesResponse;
 import im.vector.matrix.android.internal.legacy.rest.model.group.InvitedGroupSync;
-import im.vector.matrix.android.internal.legacy.rest.model.login.Credentials;
 import im.vector.matrix.android.internal.legacy.rest.model.sync.InvitedRoomSync;
 import im.vector.matrix.android.internal.legacy.rest.model.sync.SyncResponse;
-import im.vector.matrix.android.internal.legacy.ssl.UnrecognizedCertificateException;
 import im.vector.matrix.android.internal.legacy.util.BingRulesManager;
 import im.vector.matrix.android.internal.legacy.util.JsonUtils;
 import im.vector.matrix.android.internal.legacy.util.Log;
+import im.vector.matrix.android.internal.network.ssl.UnrecognizedCertificateException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -173,7 +173,7 @@ public class MXDataHandler {
      * Default constructor.
      *
      * @param store       the data storage implementation.
-     * @param credentials the credentials
+     * @param credentials the getCredentials
      */
     public MXDataHandler(IMXStore store, Credentials credentials) {
         mStore = store;
@@ -208,8 +208,12 @@ public class MXDataHandler {
         mMetricsListener = metricsListener;
     }
 
+    public GroupsManager getGroupsManager() {
+        return mGroupsManager;
+    }
+
     /**
-     * @return the credentials
+     * @return the getCredentials
      */
     public Credentials getCredentials() {
         return mCredentials;
@@ -426,7 +430,7 @@ public class MXDataHandler {
         // MyUser is initialized as late as possible to have a better chance at having the info in storage,
         // which should be the case if this is called after the initial sync
         if (mMyUser == null) {
-            mMyUser = new MyUser(store.getUser(mCredentials.userId));
+            mMyUser = new MyUser(store.getUser(mCredentials.getUserId()));
             mMyUser.setDataHandler(this);
 
             // assume the profile is not yet initialized
@@ -441,7 +445,7 @@ public class MXDataHandler {
             }
 
             // Handle the case where the user is null by loading the user information from the server
-            mMyUser.user_id = mCredentials.userId;
+            mMyUser.user_id = mCredentials.getUserId();
         } else if (null != store) {
             // assume the profile is not yet initialized
             if ((null == store.displayName()) && (null != mMyUser.displayname)) {
@@ -634,7 +638,7 @@ public class MXDataHandler {
      */
     public String getUserId() {
         if (isAlive()) {
-            return mCredentials.userId;
+            return mCredentials.getUserId();
         } else {
             return "dummy";
         }
@@ -934,7 +938,7 @@ public class MXDataHandler {
 
                 RoomSummary summary = mStore.getSummary(event.roomId);
                 if (null == summary) {
-                    summary = new RoomSummary(null, lastEvent, beforeLiveRoomState, mCredentials.userId);
+                    summary = new RoomSummary(null, lastEvent, beforeLiveRoomState, mCredentials.getUserId());
                 } else {
                     summary.setLatestReceivedEvent(lastEvent, beforeLiveRoomState);
                 }
@@ -1069,7 +1073,7 @@ public class MXDataHandler {
      * @param events the account data events list.
      * @return the ignored users list. null means that there is no defined user ids list.
      */
-    private List<String> ignoredUsers(List<Map<String, Object>> events) {
+    public List<String> ignoredUsers(List<Map<String, Object>> events) {
         List<String> ignoredUsers = null;
 
         if (0 != events.size()) {
@@ -1212,7 +1216,7 @@ public class MXDataHandler {
             user.setLatestPresenceTs(System.currentTimeMillis());
 
             // check if the current user has been updated
-            if (mCredentials.userId.equals(user.user_id)) {
+            if (mCredentials.getUserId().equals(user.user_id)) {
                 // always use the up-to-date information
                 getMyUser().displayname = user.displayname;
                 getMyUser().avatar_url = user.getAvatarUrl();
@@ -1420,7 +1424,7 @@ public class MXDataHandler {
 
                     if (hasChanged) {
                         // Update account data to add new direct chat room(s)
-                        mAccountDataRestClient.setAccountData(mCredentials.userId, AccountDataRestClient.ACCOUNT_DATA_TYPE_DIRECT_MESSAGES,
+                        mAccountDataRestClient.setAccountData(mCredentials.getUserId(), AccountDataRestClient.ACCOUNT_DATA_TYPE_DIRECT_MESSAGES,
                                 updatedDirectChatRoomsDict, new ApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
@@ -1530,10 +1534,6 @@ public class MXDataHandler {
                 for (Event presenceEvent : syncResponse.presence.events) {
                     handlePresenceEvent(presenceEvent);
                 }
-            }
-
-            if (null != mCrypto) {
-                mCrypto.onSyncCompleted(syncResponse, fromToken, isCatchingUp);
             }
 
             IMXStore store = getStore();
@@ -1890,7 +1890,7 @@ public class MXDataHandler {
     /**
      * Start the crypto
      */
-    private void startCrypto(final boolean isInitialSync) {
+    public void startCrypto(final boolean isInitialSync) {
         if ((null != getCrypto()) && !getCrypto().isStarted() && !getCrypto().isStarting()) {
             getCrypto().setNetworkConnectivityReceiver(mNetworkConnectivityReceiver);
             getCrypto().start(isInitialSync, new ApiCallback<Void>() {

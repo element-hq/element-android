@@ -23,25 +23,6 @@ import android.os.HandlerThread;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
-import im.vector.matrix.android.internal.legacy.data.Room;
-import im.vector.matrix.android.internal.legacy.data.RoomAccountData;
-import im.vector.matrix.android.internal.legacy.data.RoomState;
-import im.vector.matrix.android.internal.legacy.data.RoomSummary;
-import im.vector.matrix.android.internal.legacy.data.timeline.EventTimeline;
-import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
-import im.vector.matrix.android.internal.legacy.rest.model.Event;
-import im.vector.matrix.android.internal.legacy.rest.model.ReceiptData;
-import im.vector.matrix.android.internal.legacy.rest.model.RoomMember;
-import im.vector.matrix.android.internal.legacy.rest.model.TokensChunkEvents;
-import im.vector.matrix.android.internal.legacy.rest.model.User;
-import im.vector.matrix.android.internal.legacy.rest.model.group.Group;
-import im.vector.matrix.android.internal.legacy.rest.model.pid.ThirdPartyIdentifier;
-import im.vector.matrix.android.internal.legacy.util.CompatUtil;
-import im.vector.matrix.android.internal.legacy.util.ContentUtils;
-import im.vector.matrix.android.internal.legacy.util.Log;
-import im.vector.matrix.android.internal.legacy.util.MXOsHandler;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -59,6 +40,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.internal.legacy.data.Room;
+import im.vector.matrix.android.internal.legacy.data.RoomAccountData;
+import im.vector.matrix.android.internal.legacy.data.RoomState;
+import im.vector.matrix.android.internal.legacy.data.RoomSummary;
+import im.vector.matrix.android.internal.legacy.data.timeline.EventTimeline;
+import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
+import im.vector.matrix.android.internal.legacy.rest.model.Event;
+import im.vector.matrix.android.internal.legacy.rest.model.ReceiptData;
+import im.vector.matrix.android.internal.legacy.rest.model.RoomMember;
+import im.vector.matrix.android.internal.legacy.rest.model.TokensChunkEvents;
+import im.vector.matrix.android.internal.legacy.rest.model.User;
+import im.vector.matrix.android.internal.legacy.rest.model.group.Group;
+import im.vector.matrix.android.internal.legacy.rest.model.pid.ThirdPartyIdentifier;
+import im.vector.matrix.android.internal.legacy.util.CompatUtil;
+import im.vector.matrix.android.internal.legacy.util.ContentUtils;
+import im.vector.matrix.android.internal.legacy.util.Log;
+import im.vector.matrix.android.internal.legacy.util.MXOsHandler;
 
 /**
  * An in-file IMXStore.
@@ -217,21 +217,21 @@ public class MXFileStore extends MXMemoryStore {
     /**
      * Constructor
      *
-     * @param hsConfig             the expected credentials
+     * @param credentials          the expected getCredentials
      * @param enableFileEncryption set to true to enable file encryption.
      * @param context              the context.
      */
-    public MXFileStore(HomeServerConnectionConfig hsConfig, boolean enableFileEncryption, Context context) {
+    public MXFileStore(Credentials credentials, boolean enableFileEncryption, Context context) {
         setContext(context);
 
         mEnableFileEncryption = enableFileEncryption;
 
         mIsReady = false;
-        mCredentials = hsConfig.getCredentials();
+        mCredentials = credentials;
 
-        mHandlerThread = new HandlerThread("MXFileStoreBackgroundThread_" + mCredentials.userId, Thread.MIN_PRIORITY);
+        mHandlerThread = new HandlerThread("MXFileStoreBackgroundThread_" + mCredentials.getUserId(), Thread.MIN_PRIORITY);
 
-        createDirTree(mCredentials.userId);
+        createDirTree(mCredentials.getUserId());
 
         // updated data
         mRoomsToCommitForMessages = new HashSet<>();
@@ -260,8 +260,8 @@ public class MXFileStore extends MXMemoryStore {
             mFileStoreHandler = new MXOsHandler(mHandlerThread.getLooper());
 
             mMetadata = new MXFileStoreMetaData();
-            mMetadata.mUserId = mCredentials.userId;
-            mMetadata.mAccessToken = mCredentials.accessToken;
+            mMetadata.mUserId = mCredentials.getUserId();
+            mMetadata.mAccessToken = mCredentials.getAccessToken();
             mMetadata.mVersion = MXFILE_VERSION;
             mMetaDataHasChanged = true;
             saveMetaData();
@@ -360,8 +360,8 @@ public class MXFileStore extends MXMemoryStore {
 
                                 String errorDescription = null;
                                 boolean succeed = (mMetadata.mVersion == MXFILE_VERSION)
-                                        && TextUtils.equals(mMetadata.mUserId, mCredentials.userId)
-                                        && TextUtils.equals(mMetadata.mAccessToken, mCredentials.accessToken);
+                                        && TextUtils.equals(mMetadata.mUserId, mCredentials.getUserId())
+                                        && TextUtils.equals(mMetadata.mAccessToken, mCredentials.getAccessToken());
 
                                 if (!succeed) {
                                     errorDescription = "Invalid store content";
@@ -437,7 +437,7 @@ public class MXFileStore extends MXMemoryStore {
                                             if (null == room) {
                                                 succeed = false;
                                                 Log.e(LOG_TAG, "loadSummaries : the room " + roomId + " does not exist");
-                                            } else if (null == room.getMember(mCredentials.userId)) {
+                                            } else if (null == room.getMember(mCredentials.getUserId())) {
                                                 //succeed = false;
                                                 Log.e(LOG_TAG, "loadSummaries) : a summary exists for the roomId "
                                                         + roomId + " but the user is not anymore a member");
@@ -482,8 +482,8 @@ public class MXFileStore extends MXMemoryStore {
                                     // mMetadata should only be null at file store loading
                                     if (null == mMetadata) {
                                         mMetadata = new MXFileStoreMetaData();
-                                        mMetadata.mUserId = mCredentials.userId;
-                                        mMetadata.mAccessToken = mCredentials.accessToken;
+                                        mMetadata.mUserId = mCredentials.getUserId();
+                                        mMetadata.mAccessToken = mCredentials.getAccessToken();
                                         mMetaDataHasChanged = true;
                                     } else {
                                         mMetadata.mEventStreamToken = null;
@@ -515,7 +515,7 @@ public class MXFileStore extends MXMemoryStore {
 
                                 // post processing
                                 Log.d(LOG_TAG, "## open() : post processing.");
-                                dispatchPostProcess(mCredentials.userId);
+                                dispatchPostProcess(mCredentials.getUserId());
                                 mIsPostProcessingDone = true;
 
                                 synchronized (this) {
@@ -525,7 +525,7 @@ public class MXFileStore extends MXMemoryStore {
 
                                 if (!succeed && !mIsNewStorage) {
                                     Log.e(LOG_TAG, "The store is corrupted.");
-                                    dispatchOnStoreCorrupted(mCredentials.userId, errorDescription);
+                                    dispatchOnStoreCorrupted(mCredentials.getUserId(), errorDescription);
                                 } else {
                                     // extract the room states
                                     mRoomReceiptsToLoad.addAll(listFiles(mStoreRoomsMessagesReceiptsFolderFile.list()));
@@ -535,7 +535,7 @@ public class MXFileStore extends MXMemoryStore {
                                     }
 
                                     Log.d(LOG_TAG, "The store is opened.");
-                                    dispatchOnStoreReady(mCredentials.userId);
+                                    dispatchOnStoreReady(mCredentials.getUserId());
 
                                     // load the following items with delay
                                     // theses items are not required to be ready
@@ -567,12 +567,12 @@ public class MXFileStore extends MXMemoryStore {
                                 } else {
                                     if (!mIsPostProcessingDone) {
                                         Log.e(LOG_TAG, "## open() : is ready but the post processing was not yet done.");
-                                        dispatchPostProcess(mCredentials.userId);
+                                        dispatchPostProcess(mCredentials.getUserId());
                                         mIsPostProcessingDone = true;
                                     } else {
                                         Log.e(LOG_TAG, "## open() when ready : the post processing is already done.");
                                     }
-                                    dispatchOnStoreReady(mCredentials.userId);
+                                    dispatchOnStoreReady(mCredentials.getUserId());
                                     mPreloadTime = System.currentTimeMillis() - fLoadTimeT0;
                                     if (mMetricsListener != null) {
                                         mMetricsListener.onStorePreloaded(mPreloadTime);
@@ -662,7 +662,7 @@ public class MXFileStore extends MXMemoryStore {
         try {
             ContentUtils.deleteDirectory(mStoreFolderFile);
             if (init) {
-                createDirTree(mCredentials.userId);
+                createDirTree(mCredentials.getUserId());
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "deleteAllData failed " + e.getMessage(), e);
@@ -790,7 +790,7 @@ public class MXFileStore extends MXMemoryStore {
 
     @Override
     public void storeUser(User user) {
-        if (!TextUtils.equals(mCredentials.userId, user.user_id)) {
+        if (!TextUtils.equals(mCredentials.getUserId(), user.user_id)) {
             mUserIdsToCommit.add(user.user_id);
         }
         super.storeUser(user);

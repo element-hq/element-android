@@ -22,16 +22,6 @@ import android.content.Context;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import im.vector.matrix.android.internal.legacy.crypto.IncomingRoomKeyRequest;
-import im.vector.matrix.android.internal.legacy.crypto.OutgoingRoomKeyRequest;
-import im.vector.matrix.android.internal.legacy.crypto.data.MXDeviceInfo;
-import im.vector.matrix.android.internal.legacy.crypto.data.MXOlmInboundGroupSession;
-import im.vector.matrix.android.internal.legacy.crypto.data.MXOlmInboundGroupSession2;
-import im.vector.matrix.android.internal.legacy.crypto.data.MXUsersDevicesMap;
-import im.vector.matrix.android.internal.legacy.rest.model.login.Credentials;
-import im.vector.matrix.android.internal.legacy.util.CompatUtil;
-import im.vector.matrix.android.internal.legacy.util.ContentUtils;
-import im.vector.matrix.android.internal.legacy.util.Log;
 import org.matrix.olm.OlmAccount;
 import org.matrix.olm.OlmSession;
 
@@ -50,6 +40,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.internal.legacy.crypto.IncomingRoomKeyRequest;
+import im.vector.matrix.android.internal.legacy.crypto.OutgoingRoomKeyRequest;
+import im.vector.matrix.android.internal.legacy.crypto.data.MXDeviceInfo;
+import im.vector.matrix.android.internal.legacy.crypto.data.MXOlmInboundGroupSession;
+import im.vector.matrix.android.internal.legacy.crypto.data.MXOlmInboundGroupSession2;
+import im.vector.matrix.android.internal.legacy.crypto.data.MXUsersDevicesMap;
+import im.vector.matrix.android.internal.legacy.util.CompatUtil;
+import im.vector.matrix.android.internal.legacy.util.ContentUtils;
+import im.vector.matrix.android.internal.legacy.util.Log;
 
 /**
  * the crypto data store
@@ -91,7 +92,7 @@ public class MXFileCryptoStore implements IMXCryptoStore {
     private static final String MXFILE_CRYPTO_STORE_INCOMING_ROOM_KEY_REQUESTS_FILE = "incomingRoomKeyRequests";
     private static final String MXFILE_CRYPTO_STORE_INCOMING_ROOM_KEY_REQUESTS_FILE_TMP = "incomingRoomKeyRequests.tmp";
 
-    // The credentials used for this store
+    // The getCredentials used for this store
     private Credentials mCredentials;
 
     // Meta data about the store
@@ -182,7 +183,7 @@ public class MXFileCryptoStore implements IMXCryptoStore {
     public void initWithCredentials(Context context, Credentials credentials) {
         mCredentials = credentials;
 
-        mStoreFile = new File(new File(context.getApplicationContext().getFilesDir(), MXFILE_CRYPTO_STORE_FOLDER), mCredentials.userId);
+        mStoreFile = new File(new File(context.getApplicationContext().getFilesDir(), MXFILE_CRYPTO_STORE_FOLDER), mCredentials.getUserId());
 
         mMetaDataFile = new File(mStoreFile, MXFILE_CRYPTO_STORE_METADATA_FILE);
         mMetaDataFileTmp = new File(mStoreFile, MXFILE_CRYPTO_STORE_METADATA_FILE_TMP);
@@ -217,11 +218,8 @@ public class MXFileCryptoStore implements IMXCryptoStore {
         mIncomingRoomKeyRequestsFileTmp = new File(mStoreFile, MXFILE_CRYPTO_STORE_INCOMING_ROOM_KEY_REQUESTS_FILE_TMP);
 
         // Build default metadata
-        if ((null == mMetaData)
-                && (null != credentials.homeServer)
-                && (null != credentials.userId)
-                && (null != credentials.accessToken)) {
-            mMetaData = new MXFileCryptoStoreMetaData2(mCredentials.userId, mCredentials.deviceId, MXFILE_CRYPTO_VERSION);
+        if (mMetaData == null) {
+            mMetaData = new MXFileCryptoStoreMetaData2(mCredentials.getUserId(), mCredentials.getDeviceId(), MXFILE_CRYPTO_VERSION);
         }
 
         mUsersDevicesInfoMap = new MXUsersDevicesMap<>();
@@ -243,7 +241,7 @@ public class MXFileCryptoStore implements IMXCryptoStore {
 
             if (null != mMetaData) {
                 result = TextUtils.isEmpty(mMetaData.mDeviceId)
-                        || TextUtils.equals(mCredentials.deviceId, mMetaData.mDeviceId);
+                        || TextUtils.equals(mCredentials.getDeviceId(), mMetaData.mDeviceId);
             }
         }
 
@@ -284,11 +282,11 @@ public class MXFileCryptoStore implements IMXCryptoStore {
                 Log.e(LOG_TAG, "## open() : New MXFileCryptoStore version detected");
                 resetData();
             }
-            // Check credentials
-            // The device id may not have been provided in credentials.
+            // Check getCredentials
+            // The device id may not have been provided in getCredentials.
             // Check it only if provided, else trust the stored one.
-            else if (!TextUtils.equals(mMetaData.mUserId, mCredentials.userId)
-                    || ((null != mCredentials.deviceId) && !TextUtils.equals(mCredentials.deviceId, mMetaData.mDeviceId))) {
+            else if (!TextUtils.equals(mMetaData.mUserId, mCredentials.getUserId())
+                    || ((null != mCredentials.getDeviceId()) && !TextUtils.equals(mCredentials.getDeviceId(), mMetaData.mDeviceId))) {
                 Log.e(LOG_TAG, "## open() : Credentials do not match");
                 resetData();
             }
@@ -298,12 +296,9 @@ public class MXFileCryptoStore implements IMXCryptoStore {
                 preloadCryptoData();
             }
 
-            // Else, if credentials is valid, create and store it
-            if ((null == mMetaData)
-                    && (null != mCredentials.homeServer)
-                    && (null != mCredentials.userId)
-                    && (null != mCredentials.accessToken)) {
-                mMetaData = new MXFileCryptoStoreMetaData2(mCredentials.userId, mCredentials.deviceId, MXFILE_CRYPTO_VERSION);
+            // Else, if getCredentials is valid, create and store it
+            if (mMetaData == null){
+                mMetaData = new MXFileCryptoStoreMetaData2(mCredentials.getUserId(), mCredentials.getDeviceId(), MXFILE_CRYPTO_VERSION);
                 mIsReady = true;
                 // flush the metadata
                 saveMetaData();

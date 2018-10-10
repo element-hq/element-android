@@ -2,10 +2,10 @@ package im.vector.matrix.android.internal.auth
 
 import android.content.Context
 import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.api.auth.CredentialsStore
-import im.vector.matrix.android.internal.auth.data.Credentials
-import im.vector.matrix.android.internal.auth.data.MyObjectBox
-import im.vector.matrix.android.internal.auth.db.ObjectBoxCredentialsStore
+import im.vector.matrix.android.api.auth.SessionParamsStore
+import im.vector.matrix.android.internal.auth.db.ObjectBoxSessionParams
+import im.vector.matrix.android.internal.auth.db.ObjectBoxSessionParamsMapper
+import im.vector.matrix.android.internal.auth.db.ObjectBoxSessionParamsStore
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import org.koin.dsl.context.ModuleDefinition
@@ -26,13 +26,14 @@ class AuthModule(private val context: Context) : Module {
             MyObjectBox.builder().androidContext(context).build()
         }
 
+
         single {
             val boxStore = get(name = AUTH_BOX_STORE) as BoxStore
-            boxStore.boxFor(Credentials::class.java) as Box<Credentials>
+            boxStore.boxFor(ObjectBoxSessionParams::class.java) as Box<ObjectBoxSessionParams>
         }
 
         single {
-            ObjectBoxCredentialsStore(get()) as CredentialsStore
+            ObjectBoxSessionParamsStore(ObjectBoxSessionParamsMapper((get())), get()) as SessionParamsStore
         }
 
     }.invoke()

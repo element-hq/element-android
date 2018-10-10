@@ -51,7 +51,7 @@ class TimelineEventSaver {
 
     public void storeEvent(@NonNull final Event event) {
         final MXDataHandler dataHandler = mRoom.getDataHandler();
-        final String myUserId = dataHandler.getCredentials().userId;
+        final String myUserId = dataHandler.getCredentials().getUserId();
 
         // create dummy read receipt for any incoming event
         // to avoid not synchronized read receipt and event

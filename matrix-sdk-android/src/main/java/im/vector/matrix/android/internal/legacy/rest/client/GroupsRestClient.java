@@ -17,13 +17,18 @@
  */
 package im.vector.matrix.android.internal.legacy.rest.client;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.GroupsApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
 import im.vector.matrix.android.internal.legacy.rest.callback.RestAdapterCallback;
 import im.vector.matrix.android.internal.legacy.rest.callback.SimpleApiCallback;
-import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
 import im.vector.matrix.android.internal.legacy.rest.model.group.AcceptGroupInvitationParams;
 import im.vector.matrix.android.internal.legacy.rest.model.group.AddGroupParams;
 import im.vector.matrix.android.internal.legacy.rest.model.group.CreateGroupParams;
@@ -39,13 +44,6 @@ import im.vector.matrix.android.internal.legacy.rest.model.group.GroupSummary;
 import im.vector.matrix.android.internal.legacy.rest.model.group.GroupUsers;
 import im.vector.matrix.android.internal.legacy.rest.model.group.LeaveGroupParams;
 import im.vector.matrix.android.internal.legacy.rest.model.group.UpdatePubliciseParams;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import retrofit2.Response;
 
 /**
@@ -56,8 +54,8 @@ public class GroupsRestClient extends RestClient<GroupsApi> {
     /**
      * {@inheritDoc}
      */
-    public GroupsRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, GroupsApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
+    public GroupsRestClient(SessionParams sessionParams) {
+        super(sessionParams, GroupsApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
     }
 
     protected GroupsRestClient(GroupsApi api) {

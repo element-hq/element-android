@@ -16,7 +16,7 @@
  */
 package im.vector.matrix.android.internal.legacy.rest.client;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.FilterApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
@@ -24,21 +24,21 @@ import im.vector.matrix.android.internal.legacy.rest.callback.RestAdapterCallbac
 import im.vector.matrix.android.internal.legacy.rest.model.filter.FilterBody;
 import im.vector.matrix.android.internal.legacy.rest.model.filter.FilterResponse;
 
-public class FilterRestClient extends RestClient<FilterApi>{
+public class FilterRestClient extends RestClient<FilterApi> {
 
     /**
      * {@inheritDoc}
      */
-    public FilterRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, FilterApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
+    public FilterRestClient(SessionParams sessionParams) {
+        super(sessionParams, FilterApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
     }
 
     /**
      * Uploads a FilterBody to homeserver
      *
-     * @param userId   the user id
+     * @param userId     the user id
      * @param filterBody FilterBody which should be send to server
-     * @param callback on success callback containing a String with populated filterId
+     * @param callback   on success callback containing a String with populated filterId
      */
     public void uploadFilter(final String userId, final FilterBody filterBody, final ApiCallback<FilterResponse> callback) {
         final String description = "uploadFilter userId : " + userId + " filter : " + filterBody;

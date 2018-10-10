@@ -18,7 +18,11 @@ package im.vector.matrix.android.internal.legacy.rest.client;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import org.matrix.olm.OlmException;
+import org.matrix.olm.OlmPkEncryption;
+import org.matrix.olm.OlmPkMessage;
+
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.data.store.IMXStore;
 import im.vector.matrix.android.internal.legacy.rest.api.MediaScanApi;
@@ -32,10 +36,6 @@ import im.vector.matrix.android.internal.legacy.rest.model.MediaScanPublicKeyRes
 import im.vector.matrix.android.internal.legacy.rest.model.MediaScanResult;
 import im.vector.matrix.android.internal.legacy.rest.model.crypto.EncryptedBodyFileInfo;
 import im.vector.matrix.android.internal.legacy.util.JsonUtils;
-import org.matrix.olm.OlmException;
-import org.matrix.olm.OlmPkEncryption;
-import org.matrix.olm.OlmPkMessage;
-
 import retrofit2.Call;
 
 /**
@@ -49,8 +49,8 @@ public class MediaScanRestClient extends RestClient<MediaScanApi> {
     /**
      * {@inheritDoc}
      */
-    public MediaScanRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, MediaScanApi.class, RestClient.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE, false, EndPointServer.ANTIVIRUS_SERVER);
+    public MediaScanRestClient(SessionParams sessionParams) {
+        super(sessionParams, MediaScanApi.class, RestClient.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE, false, EndPointServer.ANTIVIRUS_SERVER);
     }
 
     /**

@@ -19,7 +19,7 @@ package im.vector.matrix.android.internal.legacy.rest.client;
 
 import android.text.TextUtils;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.EventsApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
@@ -62,8 +62,8 @@ public class EventsRestClient extends RestClient<EventsApi> {
     /**
      * {@inheritDoc}
      */
-    public EventsRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, EventsApi.class, "", false);
+    public EventsRestClient(SessionParams sessionParams) {
+        super(sessionParams, EventsApi.class, "", false);
     }
 
     protected EventsRestClient(EventsApi api) {

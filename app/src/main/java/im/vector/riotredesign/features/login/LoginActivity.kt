@@ -5,9 +5,9 @@ import android.view.View
 import android.widget.Toast
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.features.home.HomeActivity
@@ -17,7 +17,6 @@ import org.koin.android.ext.android.inject
 class LoginActivity : RiotActivity() {
 
     private val matrix by inject<Matrix>()
-    private val homeServerConnectionConfig = HomeServerConnectionConfig("https://matrix.org/")
     private val authenticator = matrix.authenticator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +29,11 @@ class LoginActivity : RiotActivity() {
         val login = loginField.text.trim().toString()
         val password = passwordField.text.trim().toString()
         progressBar.visibility = View.VISIBLE
+        val homeServerConnectionConfig = HomeServerConnectionConfig.Builder()
+                .withHomeServerUri("https://matrix.org/")
+                .withIdentityServerUri("https://vector.im")
+                .build()
+
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session?) {
                 matrix.currentSession = data

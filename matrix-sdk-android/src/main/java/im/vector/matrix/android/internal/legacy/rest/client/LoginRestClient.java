@@ -23,23 +23,22 @@ import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import java.util.List;
+import java.util.UUID;
+
+import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.LoginApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
 import im.vector.matrix.android.internal.legacy.rest.callback.RestAdapterCallback;
 import im.vector.matrix.android.internal.legacy.rest.model.Versions;
-import im.vector.matrix.android.internal.legacy.rest.model.login.Credentials;
 import im.vector.matrix.android.internal.legacy.rest.model.login.LoginFlow;
 import im.vector.matrix.android.internal.legacy.rest.model.login.LoginFlowResponse;
 import im.vector.matrix.android.internal.legacy.rest.model.login.LoginParams;
 import im.vector.matrix.android.internal.legacy.rest.model.login.PasswordLoginParams;
 import im.vector.matrix.android.internal.legacy.rest.model.login.RegistrationParams;
 import im.vector.matrix.android.internal.legacy.rest.model.login.TokenLoginParams;
-
-import java.util.List;
-import java.util.UUID;
-
 import retrofit2.Response;
 
 /**
@@ -59,10 +58,10 @@ public class LoginRestClient extends RestClient<LoginApi> {
     /**
      * Public constructor.
      *
-     * @param hsConfig the home server connection config
+     * @param sessionParams the session connection data
      */
-    public LoginRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, LoginApi.class, "", false);
+    public LoginRestClient(SessionParams sessionParams) {
+        super(sessionParams, LoginApi.class, "", false);
     }
 
     /**

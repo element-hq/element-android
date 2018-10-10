@@ -22,15 +22,6 @@ import android.util.Pair;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import im.vector.matrix.android.internal.legacy.RestClient;
-import im.vector.matrix.android.internal.legacy.listeners.IMXMediaUploadListener;
-import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
-import im.vector.matrix.android.internal.legacy.rest.model.ContentResponse;
-import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
-import im.vector.matrix.android.internal.legacy.ssl.CertUtil;
-import im.vector.matrix.android.internal.legacy.util.ContentManager;
-import im.vector.matrix.android.internal.legacy.util.JsonUtils;
-import im.vector.matrix.android.internal.legacy.util.Log;
 
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -50,6 +41,16 @@ import java.util.TimerTask;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
+
+import im.vector.matrix.android.internal.legacy.RestClient;
+import im.vector.matrix.android.internal.legacy.listeners.IMXMediaUploadListener;
+import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
+import im.vector.matrix.android.internal.legacy.rest.model.ContentResponse;
+import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
+import im.vector.matrix.android.internal.legacy.util.ContentManager;
+import im.vector.matrix.android.internal.legacy.util.JsonUtils;
+import im.vector.matrix.android.internal.legacy.util.Log;
+import im.vector.matrix.android.internal.network.ssl.CertUtil;
 
 /**
  * Private AsyncTask used to upload files.
@@ -282,7 +283,7 @@ public class MXMediaUploadWorkerTask extends AsyncTask<Void, Void, String> {
 
         String serverResponse = null;
 
-        String urlString = mContentManager.getHsConfig().getHomeserverUri().toString() + ContentManager.URI_PREFIX_CONTENT_API + "upload";
+        String urlString = mContentManager.getHsConfig().getHomeServerUri().toString() + ContentManager.URI_PREFIX_CONTENT_API + "upload";
 
         if (null != mFilename) {
             try {
@@ -300,7 +301,7 @@ public class MXMediaUploadWorkerTask extends AsyncTask<Void, Void, String> {
             if (RestClient.getUserAgent() != null) {
                 conn.setRequestProperty("User-Agent", RestClient.getUserAgent());
             }
-            conn.setRequestProperty("Authorization", "Bearer " + mContentManager.getHsConfig().getCredentials().accessToken);
+            conn.setRequestProperty("Authorization", "Bearer " + mContentManager.getCredentials().getAccessToken());
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.setUseCaches(false);
@@ -310,9 +311,9 @@ public class MXMediaUploadWorkerTask extends AsyncTask<Void, Void, String> {
                 // Add SSL Socket factory.
                 HttpsURLConnection sslConn = (HttpsURLConnection) conn;
                 try {
-                    Pair<SSLSocketFactory, X509TrustManager> pair = CertUtil.newPinnedSSLSocketFactory(mContentManager.getHsConfig());
+                    Pair<SSLSocketFactory, X509TrustManager> pair = CertUtil.INSTANCE.newPinnedSSLSocketFactory(mContentManager.getHsConfig());
                     sslConn.setSSLSocketFactory(pair.first);
-                    sslConn.setHostnameVerifier(CertUtil.newHostnameVerifier(mContentManager.getHsConfig()));
+                    sslConn.setHostnameVerifier(CertUtil.INSTANCE.newHostnameVerifier(mContentManager.getHsConfig()));
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "sslConn " + e.getMessage(), e);
                 }

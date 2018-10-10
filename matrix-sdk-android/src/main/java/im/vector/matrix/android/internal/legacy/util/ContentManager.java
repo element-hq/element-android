@@ -19,7 +19,8 @@ package im.vector.matrix.android.internal.legacy.util;
 
 import android.support.annotation.Nullable;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.auth.data.Credentials;
 import im.vector.matrix.android.internal.legacy.RestClient;
 
 /**
@@ -39,6 +40,7 @@ public class ContentManager {
 
     // HS config
     private final HomeServerConnectionConfig mHsConfig;
+    private final Credentials mCredentials;
 
     // the unsent events Manager
     private final UnsentEventsManager mUnsentEventsManager;
@@ -53,8 +55,9 @@ public class ContentManager {
      * @param hsConfig            the HomeserverConnectionConfig to use
      * @param unsentEventsManager the unsent events manager
      */
-    public ContentManager(HomeServerConnectionConfig hsConfig, UnsentEventsManager unsentEventsManager) {
+    public ContentManager(HomeServerConnectionConfig hsConfig, Credentials credentials, UnsentEventsManager unsentEventsManager) {
         mHsConfig = hsConfig;
+        mCredentials = credentials;
         mUnsentEventsManager = unsentEventsManager;
         // The AV scanner is disabled by default
         configureAntiVirusScanner(false);
@@ -73,7 +76,7 @@ public class ContentManager {
         if (isEnabled) {
             mDownloadUrlPrefix = mHsConfig.getAntiVirusServerUri().toString() + "/" + RestClient.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE;
         } else {
-            mDownloadUrlPrefix = mHsConfig.getHomeserverUri().toString() + URI_PREFIX_CONTENT_API;
+            mDownloadUrlPrefix = mHsConfig.getHomeServerUri().toString() + URI_PREFIX_CONTENT_API;
         }
     }
 
@@ -86,6 +89,13 @@ public class ContentManager {
      */
     public HomeServerConnectionConfig getHsConfig() {
         return mHsConfig;
+    }
+
+    /**
+     * @return the getCredentials.
+     */
+    public Credentials getCredentials() {
+        return mCredentials;
     }
 
     /**
@@ -210,7 +220,7 @@ public class ContentManager {
             // Caution: identicon has no thumbnail path.
             if (mediaServerAndId.startsWith(MATRIX_CONTENT_IDENTICON_PREFIX)) {
                 // identicon url still go to the media repo since they don’t need virus scanning
-                url = mHsConfig.getHomeserverUri().toString() + URI_PREFIX_CONTENT_API;
+                url = mHsConfig.getHomeServerUri().toString() + URI_PREFIX_CONTENT_API;
             } else {
                 // Use the current download url prefix to take into account a potential antivirus scanner
                 url = mDownloadUrlPrefix + "thumbnail/";

@@ -2,11 +2,11 @@ package im.vector.matrix.android.internal.events.sync.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.legacy.rest.model.group.GroupsSyncResponse
 
 // SyncResponse represents the request response for server sync v2.
 @JsonClass(generateAdapter = true)
 data class SyncResponse(
-
         /**
          * The user private data.
          */
@@ -40,6 +40,13 @@ data class SyncResponse(
         /**
          * One time keys management
          */
-        @Json(name = "device_one_time_keys_count") val deviceOneTimeKeysCount: DeviceOneTimeKeysCountSyncResponse? = null
+        @Json(name = "device_one_time_keys_count") val deviceOneTimeKeysCount: DeviceOneTimeKeysCountSyncResponse? = null,
+
+
+        /**
+         * List of groups.
+         */
+        @Json(name = "groups") val groups: GroupsSyncResponse? = null
+
 
 )

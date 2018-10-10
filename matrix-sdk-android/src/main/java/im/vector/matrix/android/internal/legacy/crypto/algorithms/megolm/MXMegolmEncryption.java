@@ -22,6 +22,12 @@ import android.text.TextUtils;
 
 import com.google.gson.JsonElement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import im.vector.matrix.android.internal.legacy.MXSession;
 import im.vector.matrix.android.internal.legacy.crypto.MXCrypto;
 import im.vector.matrix.android.internal.legacy.crypto.MXCryptoAlgorithms;
@@ -38,12 +44,6 @@ import im.vector.matrix.android.internal.legacy.rest.model.Event;
 import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
 import im.vector.matrix.android.internal.legacy.util.JsonUtils;
 import im.vector.matrix.android.internal.legacy.util.Log;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MXMegolmEncryption implements IMXEncrypting {
     private static final String LOG_TAG = MXMegolmEncryption.class.getSimpleName();
@@ -76,7 +76,7 @@ public class MXMegolmEncryption implements IMXEncrypting {
         mCrypto = matrixSession.getCrypto();
 
         mRoomId = roomId;
-        mDeviceId = matrixSession.getCredentials().deviceId;
+        mDeviceId = matrixSession.getCredentials().getDeviceId();
 
         // Default rotation periods
         // TODO: Make it configurable via parameters

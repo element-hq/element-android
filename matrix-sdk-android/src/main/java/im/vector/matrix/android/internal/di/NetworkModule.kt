@@ -1,7 +1,6 @@
 package im.vector.matrix.android.internal.di
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.squareup.moshi.Moshi
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,7 +24,7 @@ class NetworkModule : Module {
 
         single {
             val logger = HttpLoggingInterceptor.Logger { message -> Timber.v(message) }
-            HttpLoggingInterceptor(logger).apply { level = HttpLoggingInterceptor.Level.BODY }
+            HttpLoggingInterceptor(logger).apply { level = HttpLoggingInterceptor.Level.BASIC }
         }
 
         single {
@@ -39,7 +38,7 @@ class NetworkModule : Module {
         }
 
         single {
-            Moshi.Builder().build()
+            MoshiProvider.providesMoshi()
         }
 
         single {

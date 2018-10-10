@@ -17,7 +17,14 @@
  */
 package im.vector.matrix.android.internal.legacy.rest.client;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.ThirdPidApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
@@ -27,14 +34,6 @@ import im.vector.matrix.android.internal.legacy.rest.model.BulkLookupResponse;
 import im.vector.matrix.android.internal.legacy.rest.model.HttpError;
 import im.vector.matrix.android.internal.legacy.rest.model.HttpException;
 import im.vector.matrix.android.internal.legacy.rest.model.pid.PidResponse;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,8 +45,8 @@ public class ThirdPidRestClient extends RestClient<ThirdPidApi> {
     /**
      * {@inheritDoc}
      */
-    public ThirdPidRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, ThirdPidApi.class, URI_API_PREFIX_IDENTITY, false, true);
+    public ThirdPidRestClient(SessionParams sessionParams) {
+        super(sessionParams, ThirdPidApi.class, URI_API_PREFIX_IDENTITY, false, true);
     }
 
     /**

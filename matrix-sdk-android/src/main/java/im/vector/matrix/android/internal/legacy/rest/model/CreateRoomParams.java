@@ -22,18 +22,19 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
-import im.vector.matrix.android.internal.legacy.MXPatterns;
-import im.vector.matrix.android.internal.legacy.data.RoomState;
-import im.vector.matrix.android.internal.legacy.rest.model.pid.Invite3Pid;
-import im.vector.matrix.android.internal.legacy.rest.model.pid.ThreePid;
-import im.vector.matrix.android.internal.legacy.util.JsonUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.internal.legacy.MXPatterns;
+import im.vector.matrix.android.internal.legacy.data.RoomState;
+import im.vector.matrix.android.internal.legacy.rest.model.pid.Invite3Pid;
+import im.vector.matrix.android.internal.legacy.rest.model.pid.ThreePid;
+import im.vector.matrix.android.internal.legacy.util.JsonUtils;
 
 public class CreateRoomParams {
 
@@ -225,7 +226,7 @@ public class CreateRoomParams {
      *
      * @param ids the participant ids to add.
      */
-    public void addParticipantIds(HomeServerConnectionConfig hsConfig, List<String> ids) {
+    public void addParticipantIds(HomeServerConnectionConfig homeServerConnectionConfig, Credentials credentials, List<String> ids) {
         for (String id : ids) {
             if (android.util.Patterns.EMAIL_ADDRESS.matcher(id).matches()) {
                 if (null == invite3pids) {
@@ -233,14 +234,14 @@ public class CreateRoomParams {
                 }
 
                 Invite3Pid pid = new Invite3Pid();
-                pid.id_server = hsConfig.getIdentityServerUri().getHost();
+                pid.id_server = homeServerConnectionConfig.getIdentityServerUri().getHost();
                 pid.medium = ThreePid.MEDIUM_EMAIL;
                 pid.address = id;
 
                 invite3pids.add(pid);
             } else if (MXPatterns.isUserId(id)) {
                 // do not invite oneself
-                if (!TextUtils.equals(hsConfig.getCredentials().userId, id)) {
+                if (!TextUtils.equals(credentials.getUserId(), id)) {
                     if (null == invitedUserIds) {
                         invitedUserIds = new ArrayList<>();
                     }

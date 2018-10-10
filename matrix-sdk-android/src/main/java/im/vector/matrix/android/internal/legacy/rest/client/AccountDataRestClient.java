@@ -16,14 +16,14 @@
  */
 package im.vector.matrix.android.internal.legacy.rest.client;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import java.util.HashMap;
+import java.util.Map;
+
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.AccountDataApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
 import im.vector.matrix.android.internal.legacy.rest.callback.RestAdapterCallback;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class AccountDataRestClient extends RestClient<AccountDataApi> {
     /**
@@ -43,8 +43,8 @@ public class AccountDataRestClient extends RestClient<AccountDataApi> {
     /**
      * {@inheritDoc}
      */
-    public AccountDataRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, AccountDataApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
+    public AccountDataRestClient(SessionParams sessionParams) {
+        super(sessionParams, AccountDataApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
     }
 
     /**
@@ -62,11 +62,11 @@ public class AccountDataRestClient extends RestClient<AccountDataApi> {
 
         mApi.setAccountData(userId, type, params)
                 .enqueue(new RestAdapterCallback<Void>(description, mUnsentEventsManager, callback, new RestAdapterCallback.RequestRetryCallBack() {
-            @Override
-            public void onRetry() {
-                setAccountData(userId, type, params, callback);
-            }
-        }));
+                    @Override
+                    public void onRetry() {
+                        setAccountData(userId, type, params, callback);
+                    }
+                }));
     }
 
     /**
@@ -82,11 +82,11 @@ public class AccountDataRestClient extends RestClient<AccountDataApi> {
 
         mApi.openIdToken(userId, new HashMap<>())
                 .enqueue(new RestAdapterCallback<Map<Object, Object>>(description, mUnsentEventsManager, callback,
-                new RestAdapterCallback.RequestRetryCallBack() {
-            @Override
-            public void onRetry() {
-                openIdToken(userId, callback);
-            }
-        }));
+                        new RestAdapterCallback.RequestRetryCallBack() {
+                            @Override
+                            public void onRetry() {
+                                openIdToken(userId, callback);
+                            }
+                        }));
     }
 }

@@ -15,6 +15,10 @@ class MatrixModule(private val options: MatrixOptions) : Module {
     override fun invoke(): ModuleDefinition = module {
 
         single {
+            options.context
+        }
+
+        single {
             MatrixCoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.IO, main = options.mainExecutor.asCoroutineDispatcher())
         }
     }.invoke()

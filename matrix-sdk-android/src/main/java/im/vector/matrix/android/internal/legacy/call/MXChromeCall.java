@@ -631,7 +631,7 @@ public class MXChromeCall extends MXCall {
                         }
 
                         if (addIt) {
-                            Event event = new Event(eventType, content, mSession.getCredentials().userId, mCallSignalingRoom.getRoomId());
+                            Event event = new Event(eventType, content, mSession.getCredentials().getUserId(), mCallSignalingRoom.getRoomId());
 
                             if (null != event) {
                                 // receive an hangup -> close the window asap

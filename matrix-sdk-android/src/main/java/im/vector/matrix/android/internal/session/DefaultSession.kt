@@ -1,7 +1,7 @@
 package im.vector.matrix.android.internal.session
 
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.internal.auth.data.SessionParams
 import im.vector.matrix.android.internal.di.SessionModule
 import im.vector.matrix.android.internal.events.sync.SyncModule
 import im.vector.matrix.android.internal.events.sync.Synchronizer
@@ -11,13 +11,13 @@ import org.koin.standalone.StandAloneContext
 import org.koin.standalone.getKoin
 import org.koin.standalone.inject
 
-class DefaultSession(homeServerConnectionConfig: HomeServerConnectionConfig) : Session, KoinComponent {
+class DefaultSession(sessionParams: SessionParams) : Session, KoinComponent {
 
     private val synchronizer by inject<Synchronizer>()
     private val scope: Scope
 
     init {
-        val sessionModule = SessionModule(homeServerConnectionConfig)
+        val sessionModule = SessionModule(sessionParams)
         val syncModule = SyncModule()
         StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule))
         scope = getKoin().createScope(SCOPE)

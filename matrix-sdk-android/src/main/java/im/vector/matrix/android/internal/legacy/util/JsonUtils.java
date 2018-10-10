@@ -26,6 +26,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeSet;
+
 import im.vector.matrix.android.internal.legacy.rest.json.BooleanDeserializer;
 import im.vector.matrix.android.internal.legacy.rest.json.ConditionDeserializer;
 import im.vector.matrix.android.internal.legacy.rest.json.MatrixFieldNamingStrategy;
@@ -58,11 +64,6 @@ import im.vector.matrix.android.internal.legacy.rest.model.message.StickerJsonMe
 import im.vector.matrix.android.internal.legacy.rest.model.message.StickerMessage;
 import im.vector.matrix.android.internal.legacy.rest.model.message.VideoMessage;
 import im.vector.matrix.android.internal.legacy.rest.model.pid.RoomThirdPartyInvite;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
-import java.util.Map;
-import java.util.TreeSet;
 
 /**
  * Static methods for converting json into objects.
@@ -520,6 +521,16 @@ public class JsonUtils {
     public static JsonObject toJson(Event event) {
         try {
             return (JsonObject) gson.toJsonTree(event);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## toJson failed " + e.getMessage(), e);
+        }
+
+        return new JsonObject();
+    }
+
+    public static JsonObject toJson(Map<String, Object> data) {
+        try {
+            return (JsonObject) gson.toJsonTree(data);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## toJson failed " + e.getMessage(), e);
         }

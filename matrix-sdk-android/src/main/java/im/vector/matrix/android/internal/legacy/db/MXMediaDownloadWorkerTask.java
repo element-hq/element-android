@@ -32,23 +32,6 @@ import android.widget.ImageView;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
-import im.vector.matrix.android.internal.legacy.RestClient;
-import im.vector.matrix.android.internal.legacy.crypto.MXEncryptedAttachments;
-import im.vector.matrix.android.internal.legacy.listeners.IMXMediaDownloadListener;
-import im.vector.matrix.android.internal.legacy.network.NetworkConnectivityReceiver;
-import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
-import im.vector.matrix.android.internal.legacy.rest.callback.SimpleApiCallback;
-import im.vector.matrix.android.internal.legacy.rest.client.MediaScanRestClient;
-import im.vector.matrix.android.internal.legacy.rest.model.EncryptedMediaScanBody;
-import im.vector.matrix.android.internal.legacy.rest.model.EncryptedMediaScanEncryptedBody;
-import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
-import im.vector.matrix.android.internal.legacy.rest.model.crypto.EncryptedBodyFileInfo;
-import im.vector.matrix.android.internal.legacy.rest.model.crypto.EncryptedFileInfo;
-import im.vector.matrix.android.internal.legacy.ssl.CertUtil;
-import im.vector.matrix.android.internal.legacy.util.ImageUtils;
-import im.vector.matrix.android.internal.legacy.util.JsonUtils;
-import im.vector.matrix.android.internal.legacy.util.Log;
 import org.matrix.olm.OlmPkEncryption;
 import org.matrix.olm.OlmPkMessage;
 
@@ -77,6 +60,24 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
+
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.legacy.RestClient;
+import im.vector.matrix.android.internal.legacy.crypto.MXEncryptedAttachments;
+import im.vector.matrix.android.internal.legacy.listeners.IMXMediaDownloadListener;
+import im.vector.matrix.android.internal.legacy.network.NetworkConnectivityReceiver;
+import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
+import im.vector.matrix.android.internal.legacy.rest.callback.SimpleApiCallback;
+import im.vector.matrix.android.internal.legacy.rest.client.MediaScanRestClient;
+import im.vector.matrix.android.internal.legacy.rest.model.EncryptedMediaScanBody;
+import im.vector.matrix.android.internal.legacy.rest.model.EncryptedMediaScanEncryptedBody;
+import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
+import im.vector.matrix.android.internal.legacy.rest.model.crypto.EncryptedBodyFileInfo;
+import im.vector.matrix.android.internal.legacy.rest.model.crypto.EncryptedFileInfo;
+import im.vector.matrix.android.internal.legacy.util.ImageUtils;
+import im.vector.matrix.android.internal.legacy.util.JsonUtils;
+import im.vector.matrix.android.internal.legacy.util.Log;
+import im.vector.matrix.android.internal.network.ssl.CertUtil;
 
 /**
  * This class manages the media downloading in background.
@@ -746,9 +747,9 @@ class MXMediaDownloadWorkerTask extends AsyncTask<Void, Void, JsonElement> {
                     // Add SSL Socket factory.
                     HttpsURLConnection sslConn = (HttpsURLConnection) connection;
                     try {
-                        Pair<SSLSocketFactory, X509TrustManager> pair = CertUtil.newPinnedSSLSocketFactory(mHsConfig);
+                        Pair<SSLSocketFactory, X509TrustManager> pair = CertUtil.INSTANCE.newPinnedSSLSocketFactory(mHsConfig);
                         sslConn.setSSLSocketFactory(pair.first);
-                        sslConn.setHostnameVerifier(CertUtil.newHostnameVerifier(mHsConfig));
+                        sslConn.setHostnameVerifier(CertUtil.INSTANCE.newHostnameVerifier(mHsConfig));
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "doInBackground SSL exception " + e.getMessage(), e);
                     }

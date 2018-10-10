@@ -16,7 +16,7 @@
  */
 package im.vector.matrix.android.internal.legacy.rest.client;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.PresenceApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
@@ -31,8 +31,8 @@ public class PresenceRestClient extends RestClient<PresenceApi> {
     /**
      * {@inheritDoc}
      */
-    public PresenceRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, PresenceApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
+    public PresenceRestClient(SessionParams sessionParams) {
+        super(sessionParams, PresenceApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
     }
 
     /**

@@ -23,7 +23,7 @@ import im.vector.matrix.android.internal.legacy.rest.model.ThreePidCreds;
  */
 public class AddThreePidsParams {
 
-    // the 3rd party id credentials
+    // the 3rd party id getCredentials
     public ThreePidCreds three_pid_creds;
 
     // true when the email has been binded.

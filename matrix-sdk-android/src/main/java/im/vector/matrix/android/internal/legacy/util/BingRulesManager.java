@@ -146,7 +146,7 @@ public class BingRulesManager {
     public BingRulesManager(MXSession session, NetworkConnectivityReceiver networkConnectivityReceiver) {
         mSession = session;
         mApiClient = session.getBingRulesApiClient();
-        mMyUserId = session.getCredentials().userId;
+        mMyUserId = session.getCredentials().getUserId();
         mDataHandler = session.getDataHandler();
 
         mNetworkListener = new IMXNetworkEventListener() {

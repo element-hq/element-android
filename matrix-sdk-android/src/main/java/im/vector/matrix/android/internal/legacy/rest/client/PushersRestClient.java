@@ -17,15 +17,15 @@
 
 package im.vector.matrix.android.internal.legacy.rest.client;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import java.util.HashMap;
+
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.data.Pusher;
 import im.vector.matrix.android.internal.legacy.rest.api.PushersApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
 import im.vector.matrix.android.internal.legacy.rest.callback.RestAdapterCallback;
 import im.vector.matrix.android.internal.legacy.rest.model.PushersResponse;
-
-import java.util.HashMap;
 
 /**
  * REST client for the Pushers API.
@@ -36,8 +36,8 @@ public class PushersRestClient extends RestClient<PushersApi> {
     private static final String PUSHER_KIND_HTTP = "http";
     private static final String DATA_KEY_HTTP_URL = "url";
 
-    public PushersRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, PushersApi.class, RestClient.URI_API_PREFIX_PATH_R0, true);
+    public PushersRestClient(SessionParams sessionParams) {
+        super(sessionParams, PushersApi.class, RestClient.URI_API_PREFIX_PATH_R0, true);
     }
 
     /**

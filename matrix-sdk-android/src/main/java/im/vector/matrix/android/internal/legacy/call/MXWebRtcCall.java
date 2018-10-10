@@ -374,7 +374,7 @@ public class MXWebRtcCall extends MXCall {
         offerContent.addProperty("type", sessionDescription.type.canonicalForm());
         inviteContent.add("offer", offerContent);
 
-        Event event = new Event(Event.EVENT_TYPE_CALL_INVITE, inviteContent, mSession.getCredentials().userId, mCallSignalingRoom.getRoomId());
+        Event event = new Event(Event.EVENT_TYPE_CALL_INVITE, inviteContent, mSession.getCredentials().getUserId(), mCallSignalingRoom.getRoomId());
 
         mPendingEvents.add(event);
 
@@ -434,7 +434,7 @@ public class MXWebRtcCall extends MXCall {
         offerContent.addProperty("type", sessionDescription.type.canonicalForm());
         answerContent.add("answer", offerContent);
 
-        Event event = new Event(Event.EVENT_TYPE_CALL_ANSWER, answerContent, mSession.getCredentials().userId, mCallSignalingRoom.getRoomId());
+        Event event = new Event(Event.EVENT_TYPE_CALL_ANSWER, answerContent, mSession.getCredentials().getUserId(), mCallSignalingRoom.getRoomId());
         mPendingEvents.add(event);
         sendNextEvent();
 
@@ -737,7 +737,7 @@ public class MXWebRtcCall extends MXCall {
                                     }
 
                                     if (addIt) {
-                                        Event event = new Event(Event.EVENT_TYPE_CALL_CANDIDATES, content, mSession.getCredentials().userId,
+                                        Event event = new Event(Event.EVENT_TYPE_CALL_CANDIDATES, content, mSession.getCredentials().getUserId(),
                                                 mCallSignalingRoom.getRoomId());
 
                                         mPendingEvents.add(event);

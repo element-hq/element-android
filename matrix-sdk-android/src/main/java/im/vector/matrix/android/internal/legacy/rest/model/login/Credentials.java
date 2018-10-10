@@ -21,7 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * The user's credentials.
+ * The user's getCredentials.
  */
 public class Credentials {
     public String userId;

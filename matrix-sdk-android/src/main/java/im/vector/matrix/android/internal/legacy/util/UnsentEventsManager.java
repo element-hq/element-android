@@ -20,15 +20,6 @@ package im.vector.matrix.android.internal.legacy.util;
 import android.content.Context;
 import android.text.TextUtils;
 
-import im.vector.matrix.android.internal.legacy.MXDataHandler;
-import im.vector.matrix.android.internal.legacy.listeners.IMXNetworkEventListener;
-import im.vector.matrix.android.internal.legacy.network.NetworkConnectivityReceiver;
-import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
-import im.vector.matrix.android.internal.legacy.rest.callback.RestAdapterCallback;
-import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
-import im.vector.matrix.android.internal.legacy.ssl.CertUtil;
-import im.vector.matrix.android.internal.legacy.ssl.UnrecognizedCertificateException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +29,14 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import im.vector.matrix.android.internal.legacy.MXDataHandler;
+import im.vector.matrix.android.internal.legacy.listeners.IMXNetworkEventListener;
+import im.vector.matrix.android.internal.legacy.network.NetworkConnectivityReceiver;
+import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
+import im.vector.matrix.android.internal.legacy.rest.callback.RestAdapterCallback;
+import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
+import im.vector.matrix.android.internal.network.ssl.CertUtil;
+import im.vector.matrix.android.internal.network.ssl.UnrecognizedCertificateException;
 import retrofit2.Response;
 
 /**
@@ -405,8 +404,7 @@ public class UnsentEventsManager {
                 }
 
                 if (null != exception) {
-                    UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(exception);
-
+                    UnrecognizedCertificateException unrecCertEx = CertUtil.INSTANCE.getCertificateException(exception);
                     if (null != unrecCertEx) {
                         Log.e(LOG_TAG, "## onEventSendingFailed() : SSL issue detected");
                         mDataHandler.onSSLCertificateError(unrecCertEx);

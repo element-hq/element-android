@@ -19,6 +19,11 @@ package im.vector.matrix.android.internal.legacy.data.timeline;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import im.vector.matrix.android.internal.legacy.MXDataHandler;
 import im.vector.matrix.android.internal.legacy.data.MyUser;
 import im.vector.matrix.android.internal.legacy.data.Room;
@@ -31,11 +36,6 @@ import im.vector.matrix.android.internal.legacy.rest.model.RoomMember;
 import im.vector.matrix.android.internal.legacy.util.EventDisplay;
 import im.vector.matrix.android.internal.legacy.util.JsonUtils;
 import im.vector.matrix.android.internal.legacy.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is responsible for handling live event
@@ -203,7 +203,7 @@ class TimelineLiveEventHandler {
                                     @NonNull Event event,
                                     final boolean checkRedactedStateEvent) {
         boolean shouldBeSaved = false;
-        String myUserId = dataHandler.getCredentials().userId;
+        String myUserId = dataHandler.getCredentials().getUserId();
 
         if (Event.EVENT_TYPE_REDACTION.equals(event.getType())) {
             if (event.getRedactedEventId() != null) {

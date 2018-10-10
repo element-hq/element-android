@@ -16,7 +16,7 @@
  */
 package im.vector.matrix.android.internal.legacy.rest.client;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.PushRulesApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
@@ -29,8 +29,8 @@ public class PushRulesRestClient extends RestClient<PushRulesApi> {
     /**
      * {@inheritDoc}
      */
-    public PushRulesRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, PushRulesApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
+    public PushRulesRestClient(SessionParams sessionParams) {
+        super(sessionParams, PushRulesApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
     }
 
     /**

@@ -207,17 +207,17 @@ public class MXCrypto {
         mRoomEncryptors = new HashMap<>();
         mRoomDecryptors = new HashMap<>();
 
-        String deviceId = mSession.getCredentials().deviceId;
+        String deviceId = mSession.getCredentials().getDeviceId();
         // deviceId should always be defined
         boolean refreshDevicesList = !TextUtils.isEmpty(deviceId);
 
         if (TextUtils.isEmpty(deviceId)) {
             // use the stored one
-            mSession.getCredentials().deviceId = deviceId = mCryptoStore.getDeviceId();
+            deviceId = mCryptoStore.getDeviceId();
         }
 
         if (TextUtils.isEmpty(deviceId)) {
-            mSession.getCredentials().deviceId = deviceId = UUID.randomUUID().toString();
+            deviceId = UUID.randomUUID().toString();
             Log.d(LOG_TAG, "Warning: No device id in MXCredentials. An id was created. Think of storing it");
             mCryptoStore.storeDeviceId(deviceId);
         }
@@ -230,11 +230,11 @@ public class MXCrypto {
         Map<String, String> keys = new HashMap<>();
 
         if (!TextUtils.isEmpty(mOlmDevice.getDeviceEd25519Key())) {
-            keys.put("ed25519:" + mSession.getCredentials().deviceId, mOlmDevice.getDeviceEd25519Key());
+            keys.put("ed25519:" + mSession.getCredentials().getDeviceId(), mOlmDevice.getDeviceEd25519Key());
         }
 
         if (!TextUtils.isEmpty(mOlmDevice.getDeviceCurve25519Key())) {
-            keys.put("curve25519:" + mSession.getCredentials().deviceId, mOlmDevice.getDeviceCurve25519Key());
+            keys.put("curve25519:" + mSession.getCredentials().getDeviceId(), mOlmDevice.getDeviceCurve25519Key());
         }
 
         mMyDevice.keys = keys;
@@ -441,7 +441,7 @@ public class MXCrypto {
                                 if (!hasBeenReleased()) {
                                     Log.d(LOG_TAG, "###########################################################");
                                     Log.d(LOG_TAG, "uploadDeviceKeys done for " + mSession.getMyUserId());
-                                    Log.d(LOG_TAG, "  - device id  : " + mSession.getCredentials().deviceId);
+                                    Log.d(LOG_TAG, "  - device id  : " + mSession.getCredentials().getDeviceId());
                                     Log.d(LOG_TAG, "  - ed25519    : " + mOlmDevice.getDeviceEd25519Key());
                                     Log.d(LOG_TAG, "  - curve25519 : " + mOlmDevice.getDeviceCurve25519Key());
                                     Log.d(LOG_TAG, "  - oneTimeKeys: " + mLastPublishedOneTimeKeys);     // They are
@@ -600,17 +600,17 @@ public class MXCrypto {
      * @param fromToken    the start sync token
      * @param isCatchingUp true if there is a catch-up in progress.
      */
-    public void onSyncCompleted(final SyncResponse syncResponse, final String fromToken, final boolean isCatchingUp) {
+    public void onSyncCompleted(final im.vector.matrix.android.internal.events.sync.data.SyncResponse syncResponse, final String fromToken, final boolean isCatchingUp) {
         getEncryptingThreadHandler().post(new Runnable() {
             @Override
             public void run() {
-                if (null != syncResponse.deviceLists) {
-                    getDeviceList().handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left);
+                if (null != syncResponse.getDeviceLists()) {
+                    getDeviceList().handleDeviceListsChanges(syncResponse.getDeviceLists().getChanged(), syncResponse.getDeviceLists().getLeft());
                 }
 
-                if (null != syncResponse.deviceOneTimeKeysCount) {
-                    int currentCount = (null != syncResponse.deviceOneTimeKeysCount.signed_curve25519) ?
-                            syncResponse.deviceOneTimeKeysCount.signed_curve25519 : 0;
+                if (null != syncResponse.getDeviceOneTimeKeysCount()) {
+                    int currentCount = (null != syncResponse.getDeviceOneTimeKeysCount().getSignedCurve25519()) ?
+                            syncResponse.getDeviceOneTimeKeysCount().getSignedCurve25519() : 0;
                     updateOneTimeKeyCount(currentCount);
                 }
 
@@ -1470,7 +1470,7 @@ public class MXCrypto {
         Map<String, Object> payloadJson = new HashMap<>(payloadFields);
 
         payloadJson.put("sender", mSession.getMyUserId());
-        payloadJson.put("sender_device", mSession.getCredentials().deviceId);
+        payloadJson.put("sender_device", mSession.getCredentials().getDeviceId());
 
         // Include the Ed25519 key so that the recipient knows what
         // device this message came from.

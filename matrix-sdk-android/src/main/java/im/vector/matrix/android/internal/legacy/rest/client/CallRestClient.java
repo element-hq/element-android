@@ -17,7 +17,7 @@ package im.vector.matrix.android.internal.legacy.rest.client;
 
 import com.google.gson.JsonObject;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.CallRulesApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
@@ -28,8 +28,8 @@ public class CallRestClient extends RestClient<CallRulesApi> {
     /**
      * {@inheritDoc}
      */
-    public CallRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, CallRulesApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
+    public CallRestClient(SessionParams sessionParams) {
+        super(sessionParams, CallRulesApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
     }
 
     public void getTurnServer(final ApiCallback<JsonObject> callback) {

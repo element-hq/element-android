@@ -24,7 +24,10 @@ import android.text.TextUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import java.util.HashMap;
+import java.util.Map;
+
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.data.RoomState;
 import im.vector.matrix.android.internal.legacy.data.timeline.EventTimeline;
@@ -52,14 +55,10 @@ import im.vector.matrix.android.internal.legacy.rest.model.filter.RoomEventFilte
 import im.vector.matrix.android.internal.legacy.rest.model.message.Message;
 import im.vector.matrix.android.internal.legacy.rest.model.sync.RoomResponse;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Class used to make requests to the rooms API.
  */
 public class RoomsRestClient extends RestClient<RoomsApi> {
-    private static final String LOG_TAG = RoomsRestClient.class.getSimpleName();
 
     public static final int DEFAULT_MESSAGES_PAGINATION_LIMIT = 30;
 
@@ -70,8 +69,8 @@ public class RoomsRestClient extends RestClient<RoomsApi> {
     /**
      * {@inheritDoc}
      */
-    public RoomsRestClient(HomeServerConnectionConfig hsConfig) {
-        super(hsConfig, RoomsApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
+    public RoomsRestClient(SessionParams sessionParams) {
+        super(sessionParams, RoomsApi.class, RestClient.URI_API_PREFIX_PATH_R0, false);
     }
 
     /**
@@ -857,7 +856,7 @@ public class RoomsRestClient extends RestClient<RoomsApi> {
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("order", order);
 
-        mApi.addTag(mCredentials.userId, roomId, tag, hashMap)
+        mApi.addTag(mCredentials.getUserId(), roomId, tag, hashMap)
                 .enqueue(new RestAdapterCallback<Void>(description, mUnsentEventsManager, callback, new RestAdapterCallback.RequestRetryCallBack() {
                     @Override
                     public void onRetry() {
@@ -876,7 +875,7 @@ public class RoomsRestClient extends RestClient<RoomsApi> {
     public void removeTag(final String roomId, final String tag, final ApiCallback<Void> callback) {
         final String description = "removeTag : roomId " + roomId + " - tag " + tag;
 
-        mApi.removeTag(mCredentials.userId, roomId, tag)
+        mApi.removeTag(mCredentials.getUserId(), roomId, tag)
                 .enqueue(new RestAdapterCallback<Void>(description, mUnsentEventsManager, callback, new RestAdapterCallback.RequestRetryCallBack() {
                     @Override
                     public void onRetry() {
@@ -898,7 +897,7 @@ public class RoomsRestClient extends RestClient<RoomsApi> {
         Map<String, Object> params = new HashMap<>();
         params.put(AccountDataRestClient.ACCOUNT_DATA_KEY_URL_PREVIEW_DISABLE, !status);
 
-        mApi.updateAccountData(mCredentials.userId, roomId, Event.EVENT_TYPE_URL_PREVIEW, params)
+        mApi.updateAccountData(mCredentials.getUserId(), roomId, Event.EVENT_TYPE_URL_PREVIEW, params)
                 .enqueue(new RestAdapterCallback<Void>(description, mUnsentEventsManager, callback, new RestAdapterCallback.RequestRetryCallBack() {
                     @Override
                     public void onRetry() {

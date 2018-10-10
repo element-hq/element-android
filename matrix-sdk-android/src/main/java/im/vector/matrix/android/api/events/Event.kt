@@ -1,7 +1,9 @@
 package im.vector.matrix.android.api.events
 
+import com.google.gson.JsonObject
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.legacy.util.JsonUtils
 
 @JsonClass(generateAdapter = true)
 data class Event(
@@ -14,4 +16,14 @@ data class Event(
         @Json(name = "state_key") val stateKey: String? = null,
         @Json(name = "room_id") val roomId: String? = null,
         @Json(name = "unsigned_data") val unsignedData: UnsignedData? = null
-)
+){
+
+    fun contentAsJsonObject(): JsonObject? {
+        return JsonUtils.toJson(content)
+    }
+
+
+
+}
+
+

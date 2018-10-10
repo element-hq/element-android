@@ -18,11 +18,11 @@ package im.vector.matrix.android.internal.legacy.data.cryptostore;
 
 import android.content.Context;
 
+import im.vector.matrix.android.internal.auth.data.Credentials;
 import im.vector.matrix.android.internal.legacy.crypto.IncomingRoomKeyRequest;
 import im.vector.matrix.android.internal.legacy.crypto.OutgoingRoomKeyRequest;
 import im.vector.matrix.android.internal.legacy.crypto.data.MXDeviceInfo;
 import im.vector.matrix.android.internal.legacy.crypto.data.MXOlmInboundGroupSession2;
-import im.vector.matrix.android.internal.legacy.rest.model.login.Credentials;
 import org.matrix.olm.OlmAccount;
 import org.matrix.olm.OlmSession;
 
@@ -35,10 +35,10 @@ import java.util.Set;
  */
 public interface IMXCryptoStore {
     /**
-     * Init a crypto store for the passed credentials.
+     * Init a crypto store for the passed getCredentials.
      *
      * @param context     the application context
-     * @param credentials the credentials of the account.
+     * @param credentials the getCredentials of the account.
      */
     void initWithCredentials(Context context, Credentials credentials);
 
@@ -55,7 +55,7 @@ public interface IMXCryptoStore {
     boolean hasData();
 
     /**
-     * Delete the crypto store for the passed credentials.
+     * Delete the crypto store for the passed getCredentials.
      */
     void deleteStore();
 

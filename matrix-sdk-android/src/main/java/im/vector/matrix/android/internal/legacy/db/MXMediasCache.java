@@ -31,7 +31,18 @@ import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 
-import im.vector.matrix.android.internal.legacy.HomeServerConnectionConfig;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.RejectedExecutionException;
+
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
 import im.vector.matrix.android.internal.legacy.crypto.MXEncryptedAttachments;
 import im.vector.matrix.android.internal.legacy.listeners.IMXMediaDownloadListener;
 import im.vector.matrix.android.internal.legacy.listeners.IMXMediaUploadListener;
@@ -45,17 +56,6 @@ import im.vector.matrix.android.internal.legacy.util.ContentManager;
 import im.vector.matrix.android.internal.legacy.util.ContentUtils;
 import im.vector.matrix.android.internal.legacy.util.Log;
 import im.vector.matrix.android.internal.legacy.util.MXOsHandler;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.RejectedExecutionException;
 
 public class MXMediasCache {
 

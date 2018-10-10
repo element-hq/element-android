@@ -36,15 +36,16 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
 import im.vector.matrix.android.BuildConfig;
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
+import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.internal.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.listeners.IMXNetworkEventListener;
 import im.vector.matrix.android.internal.legacy.network.NetworkConnectivityReceiver;
 import im.vector.matrix.android.internal.legacy.rest.client.MXRestExecutorService;
-import im.vector.matrix.android.internal.legacy.rest.model.login.Credentials;
-import im.vector.matrix.android.internal.legacy.ssl.CertUtil;
 import im.vector.matrix.android.internal.legacy.util.JsonUtils;
-import im.vector.matrix.android.internal.legacy.util.Log;
 import im.vector.matrix.android.internal.legacy.util.PolymorphicRequestBodyConverter;
 import im.vector.matrix.android.internal.legacy.util.UnsentEventsManager;
+import im.vector.matrix.android.internal.network.ssl.CertUtil;
 import okhttp3.Dispatcher;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -53,12 +54,12 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import timber.log.Timber;
 
 /**
  * Class for making Matrix API calls.
  */
 public class RestClient<T> {
-    private static final String LOG_TAG = RestClient.class.getSimpleName();
 
     public static final String URI_API_PREFIX_PATH_MEDIA_R0 = "_matrix/media/r0/";
     public static final String URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE = "_matrix/media_proxy/unstable/";
@@ -103,38 +104,37 @@ public class RestClient<T> {
     // http client
     private OkHttpClient mOkHttpClient = new OkHttpClient();
 
-    public RestClient(HomeServerConnectionConfig hsConfig, Class<T> type, String uriPrefix, boolean withNullSerialization) {
-        this(hsConfig, type, uriPrefix, withNullSerialization, EndPointServer.HOME_SERVER);
+    public RestClient(SessionParams sessionParams, Class<T> type, String uriPrefix, boolean withNullSerialization) {
+        this(sessionParams, type, uriPrefix, withNullSerialization, EndPointServer.HOME_SERVER);
     }
 
     /**
      * Public constructor.
      *
-     * @param hsConfig              the home server configuration.
+     * @param sessionParams         the session data
      * @param type                  the REST type
      * @param uriPrefix             the URL request prefix
      * @param withNullSerialization true to serialise class member with null value
      * @param useIdentityServer     true to use the identity server URL as base request
      */
-    public RestClient(HomeServerConnectionConfig hsConfig, Class<T> type, String uriPrefix, boolean withNullSerialization, boolean useIdentityServer) {
-        this(hsConfig, type, uriPrefix, withNullSerialization, useIdentityServer ? EndPointServer.IDENTITY_SERVER : EndPointServer.HOME_SERVER);
+    public RestClient(SessionParams sessionParams, Class<T> type, String uriPrefix, boolean withNullSerialization, boolean useIdentityServer) {
+        this(sessionParams, type, uriPrefix, withNullSerialization, useIdentityServer ? EndPointServer.IDENTITY_SERVER : EndPointServer.HOME_SERVER);
     }
 
     /**
      * Public constructor.
      *
-     * @param hsConfig              the home server configuration.
+     * @param sessionParams         the session data
      * @param type                  the REST type
      * @param uriPrefix             the URL request prefix
      * @param withNullSerialization true to serialise class member with null value
      * @param endPointServer        tell which server is used to define the base url
      */
-    public RestClient(HomeServerConnectionConfig hsConfig, Class<T> type, String uriPrefix, boolean withNullSerialization, EndPointServer endPointServer) {
+    public RestClient(SessionParams sessionParams, Class<T> type, String uriPrefix, boolean withNullSerialization, EndPointServer endPointServer) {
         // The JSON -> object mapper
         gson = JsonUtils.getGson(withNullSerialization);
-
-        mHsConfig = hsConfig;
-        mCredentials = hsConfig.getCredentials();
+        mHsConfig = sessionParams.getHomeServerConnectionConfig();
+        mCredentials = sessionParams.getCredentials();
 
         Interceptor authentInterceptor = new Interceptor() {
 
@@ -146,12 +146,10 @@ public class RestClient<T> {
                     // set a custom user agent
                     newRequestBuilder.addHeader("User-Agent", sUserAgent);
                 }
-
                 // Add the access token to all requests if it is set
-                if ((mCredentials != null) && (mCredentials.accessToken != null)) {
-                    newRequestBuilder.addHeader("Authorization", "Bearer " + mCredentials.accessToken);
+                if (mCredentials != null) {
+                    newRequestBuilder.addHeader("Authorization", "Bearer " + mCredentials.getAccessToken());
                 }
-
                 request = newRequestBuilder.build();
 
                 return chain.proceed(request);
@@ -191,17 +189,15 @@ public class RestClient<T> {
         }
 
         try {
-            Pair<SSLSocketFactory, X509TrustManager> pair = CertUtil.newPinnedSSLSocketFactory(hsConfig);
+            Pair<SSLSocketFactory, X509TrustManager> pair = CertUtil.INSTANCE.newPinnedSSLSocketFactory(mHsConfig);
             okHttpClientBuilder.sslSocketFactory(pair.first, pair.second);
-            okHttpClientBuilder.hostnameVerifier(CertUtil.newHostnameVerifier(hsConfig));
-            okHttpClientBuilder.connectionSpecs(CertUtil.newConnectionSpecs(hsConfig));
+            okHttpClientBuilder.hostnameVerifier(CertUtil.INSTANCE.newHostnameVerifier(mHsConfig));
+            okHttpClientBuilder.connectionSpecs(CertUtil.INSTANCE.newConnectionSpecs(mHsConfig));
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## RestClient() setSslSocketFactory failed" + e.getMessage(), e);
+            Timber.e("## RestClient() setSslSocketFactory failed" + e.getMessage(), e);
         }
-
         mOkHttpClient = okHttpClientBuilder.build();
-        final String endPoint = makeEndpoint(hsConfig, uriPrefix, endPointServer);
-
+        final String endPoint = makeEndpoint(mHsConfig, uriPrefix, endPointServer);
         // Rest adapter for turning API interfaces into actual REST-calling objects
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(endPoint)
@@ -226,8 +222,11 @@ public class RestClient<T> {
                 break;
             case HOME_SERVER:
             default:
-                baseUrl = hsConfig.getHomeserverUri().toString();
+                baseUrl = hsConfig.getHomeServerUri().toString();
 
+        }
+        if (baseUrl == null) {
+            throw new IllegalArgumentException("Base url shouldn't be null");
         }
         baseUrl = sanitizeBaseUrl(baseUrl);
         String dynamicPath = sanitizeDynamicPath(uriPrefix);
@@ -270,7 +269,7 @@ public class RestClient<T> {
                 PackageInfo pkgInfo = pm.getPackageInfo(appContext.getApplicationContext().getPackageName(), 0);
                 appVersion = pkgInfo.versionName;
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## initUserAgent() : failed " + e.getMessage(), e);
+                Timber.e("## initUserAgent() : failed " + e.getMessage(), e);
             }
         }
 
@@ -321,12 +320,12 @@ public class RestClient<T> {
                     .readTimeout((int) (READ_TIMEOUT_MS * factor), TimeUnit.MILLISECONDS)
                     .writeTimeout((int) (WRITE_TIMEOUT_MS * factor), TimeUnit.MILLISECONDS);
 
-            Log.d(LOG_TAG, "## refreshConnectionTimeout()  : update setConnectTimeout to " + (CONNECTION_TIMEOUT_MS * factor) + " ms");
-            Log.d(LOG_TAG, "## refreshConnectionTimeout()  : update setReadTimeout to " + (READ_TIMEOUT_MS * factor) + " ms");
-            Log.d(LOG_TAG, "## refreshConnectionTimeout()  : update setWriteTimeout to " + (WRITE_TIMEOUT_MS * factor) + " ms");
+            Timber.d("## refreshConnectionTimeout()  : update setConnectTimeout to " + (CONNECTION_TIMEOUT_MS * factor) + " ms");
+            Timber.d("## refreshConnectionTimeout()  : update setReadTimeout to " + (READ_TIMEOUT_MS * factor) + " ms");
+            Timber.d("## refreshConnectionTimeout()  : update setWriteTimeout to " + (WRITE_TIMEOUT_MS * factor) + " ms");
         } else {
             builder.connectTimeout(1, TimeUnit.MILLISECONDS);
-            Log.d(LOG_TAG, "## refreshConnectionTimeout()  : update the requests timeout to 1 ms");
+            Timber.d("## refreshConnectionTimeout()  : update the requests timeout to 1 ms");
         }
 
         // FIXME It has no effect to the rest client
@@ -373,25 +372,25 @@ public class RestClient<T> {
         networkConnectivityReceiver.addEventListener(new IMXNetworkEventListener() {
             @Override
             public void onNetworkConnectionUpdate(boolean isConnected) {
-                Log.d(LOG_TAG, "## setUnsentEventsManager()  : update the requests timeout to " + (isConnected ? CONNECTION_TIMEOUT_MS : 1) + " ms");
+                Timber.d("## setUnsentEventsManager()  : update the requests timeout to " + (isConnected ? CONNECTION_TIMEOUT_MS : 1) + " ms");
                 refreshConnectionTimeout(networkConnectivityReceiver);
             }
         });
     }
 
     /**
-     * Get the user's credentials. Typically for saving them somewhere persistent.
+     * Get the user's getCredentials. Typically for saving them somewhere persistent.
      *
-     * @return the user credentials
+     * @return the user getCredentials
      */
     public Credentials getCredentials() {
         return mCredentials;
     }
 
     /**
-     * Provide the user's credentials. To be called after login or registration.
+     * Provide the user's getCredentials. To be called after login or registration.
      *
-     * @param credentials the user credentials
+     * @param credentials the user getCredentials
      */
     public void setCredentials(Credentials credentials) {
         mCredentials = credentials;

@@ -3,9 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
 
-ext.support_version = '28.0.0'
-ext.moshi_version = '1.7.0'
-
 buildscript {
 
     repositories {
@@ -43,6 +40,11 @@ android {
 }
 
 dependencies {
+
+    def arrow_version = "0.7.3"
+    def support_version = '28.0.0'
+    def moshi_version = '1.7.0'
+
     implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -64,6 +66,8 @@ dependencies {
 
     // Paging
     implementation "android.arch.paging:runtime:1.0.1"
+
+    implementation "io.arrow-kt:arrow-core:$arrow_version"
 
     // DI
     implementation "org.koin:koin-core:$koin_version"

@@ -16,7 +16,7 @@
 package im.vector.matrix.android.internal.legacy.rest.model;
 
 /**
- * 3 pid credentials
+ * 3 pid getCredentials
  */
 public class ThreePidCreds {
 

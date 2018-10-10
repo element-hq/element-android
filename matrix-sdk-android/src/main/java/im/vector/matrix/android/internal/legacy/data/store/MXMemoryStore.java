@@ -24,6 +24,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import im.vector.matrix.android.internal.auth.data.Credentials;
 import im.vector.matrix.android.internal.legacy.MXDataHandler;
 import im.vector.matrix.android.internal.legacy.data.Room;
 import im.vector.matrix.android.internal.legacy.data.RoomAccountData;
@@ -38,7 +39,6 @@ import im.vector.matrix.android.internal.legacy.rest.model.RoomMember;
 import im.vector.matrix.android.internal.legacy.rest.model.TokensChunkEvents;
 import im.vector.matrix.android.internal.legacy.rest.model.User;
 import im.vector.matrix.android.internal.legacy.rest.model.group.Group;
-import im.vector.matrix.android.internal.legacy.rest.model.login.Credentials;
 import im.vector.matrix.android.internal.legacy.rest.model.pid.ThirdPartyIdentifier;
 import im.vector.matrix.android.internal.legacy.util.Log;
 
@@ -149,7 +149,7 @@ public class MXMemoryStore implements IMXStore {
     /**
      * Default constructor
      *
-     * @param credentials the expected credentials
+     * @param credentials the expected getCredentials
      * @param context     the context
      */
     public MXMemoryStore(Credentials credentials, Context context) {
@@ -245,7 +245,7 @@ public class MXMemoryStore implements IMXStore {
      */
     @Override
     public void setCorrupted(String reason) {
-        dispatchOnStoreCorrupted(mCredentials.userId, reason);
+        dispatchOnStoreCorrupted(mCredentials.getUserId(), reason);
     }
 
     /**
@@ -607,7 +607,7 @@ public class MXMemoryStore implements IMXStore {
      */
     @Override
     public int eventsCountAfter(String roomId, String eventId) {
-        return eventsAfter(roomId, eventId, mCredentials.userId, null).size();
+        return eventsAfter(roomId, eventId, mCredentials.getUserId(), null).size();
     }
 
     @Override
@@ -1155,7 +1155,7 @@ public class MXMemoryStore implements IMXStore {
 
         synchronized (mReceiptsByRoomIdLock) {
             if (mReceiptsByRoomId.containsKey(roomId)) {
-                String myUserID = mCredentials.userId;
+                String myUserID = mCredentials.getUserId();
 
                 Map<String, ReceiptData> receiptsByUserId = mReceiptsByRoomId.get(roomId);
                 // copy the user id list to avoid having update while looping
@@ -1237,7 +1237,7 @@ public class MXMemoryStore implements IMXStore {
             }
 
             // check if the read receipt is not for an already read message
-            if (TextUtils.equals(receipt.userId, mCredentials.userId)) {
+            if (TextUtils.equals(receipt.userId, mCredentials.getUserId())) {
                 synchronized (mReceiptsByRoomIdLock) {
                     LinkedHashMap<String, Event> eventsMap = mRoomEvents.get(roomId);
 
@@ -1334,7 +1334,7 @@ public class MXMemoryStore implements IMXStore {
                     for (int index = 0; index < events.size(); index++) {
                         Event event = events.get(index);
 
-                        if (TextUtils.equals(event.getSender(), mCredentials.userId) || TextUtils.equals(event.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                        if (TextUtils.equals(event.getSender(), mCredentials.getUserId()) || TextUtils.equals(event.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
                             events.remove(index);
                             index--;
                         }
@@ -1402,10 +1402,10 @@ public class MXMemoryStore implements IMXStore {
             if (mReceiptsByRoomId.containsKey(roomId)) {
                 Map<String, ReceiptData> receiptsByUserId = mReceiptsByRoomId.get(roomId);
 
-                if (receiptsByUserId.containsKey(mCredentials.userId)) {
-                    ReceiptData data = receiptsByUserId.get(mCredentials.userId);
+                if (receiptsByUserId.containsKey(mCredentials.getUserId())) {
+                    ReceiptData data = receiptsByUserId.get(mCredentials.getUserId());
 
-                    res = eventsAfter(roomId, data.eventId, mCredentials.userId, types);
+                    res = eventsAfter(roomId, data.eventId, mCredentials.getUserId(), types);
                 }
             }
         }
@@ -1479,7 +1479,7 @@ public class MXMemoryStore implements IMXStore {
         List<IMXStoreListener> listeners = getListeners();
 
         for (IMXStoreListener listener : listeners) {
-            listener.onStoreOOM(mCredentials.userId, e.getMessage());
+            listener.onStoreOOM(mCredentials.getUserId(), e.getMessage());
         }
     }
 

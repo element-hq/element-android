@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 
 class Synchronizer(private val syncAPI: SyncAPI,
                    private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                   private val jsonMapper: Moshi) {
+                   private val jsonMapper: Moshi,
+                   private val syncResponseHandler: SyncResponseHandler) {
 
     fun synchronize(callback: MatrixCallback<SyncResponse>): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
@@ -27,8 +28,11 @@ class Synchronizer(private val syncAPI: SyncAPI,
                 apiCall = syncAPI.sync(params)
                 moshi = jsonMapper
                 dispatcher = coroutineDispatchers.io
+            }.map {
+                syncResponseHandler.handleResponse(it, null, false)
+                it
             }
-            syncResponse.either({ callback.onFailure(it) }, { callback.onSuccess(it) })
+            syncResponse.bimap({ callback.onFailure(it) }, { callback.onSuccess(it) })
         }
         return CancelableCoroutine(job)
     }

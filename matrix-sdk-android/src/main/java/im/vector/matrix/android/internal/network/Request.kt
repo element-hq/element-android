@@ -1,9 +1,9 @@
 package im.vector.matrix.android.internal.network
 
+import arrow.core.Either
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
-import im.vector.matrix.android.internal.util.Either
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.withContext
@@ -21,7 +21,7 @@ class Request<DATA> {
 
     suspend fun execute(): Either<Failure, DATA?> = withContext(dispatcher) {
         return@withContext try {
-            
+
             val response = apiCall.await()
             if (response.isSuccessful) {
                 val result = response.body()

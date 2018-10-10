@@ -26,19 +26,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import im.vector.matrix.android.internal.legacy.MXSession;
-import im.vector.matrix.android.internal.legacy.data.Room;
-import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
-import im.vector.matrix.android.internal.legacy.rest.model.Event;
-import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
-import im.vector.matrix.android.internal.legacy.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Timer;
+
+import im.vector.matrix.android.internal.legacy.MXSession;
+import im.vector.matrix.android.internal.legacy.data.Room;
+import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;
+import im.vector.matrix.android.internal.legacy.rest.model.Event;
+import im.vector.matrix.android.internal.legacy.rest.model.MatrixError;
+import im.vector.matrix.android.internal.legacy.util.Log;
 
 /**
  * This class is the default implementation
@@ -657,7 +657,7 @@ public class MXCall implements IMXCall {
             hangupContent.add("reason", new JsonPrimitive(reason));
         }
 
-        Event event = new Event(Event.EVENT_TYPE_CALL_HANGUP, hangupContent, mSession.getCredentials().userId, mCallSignalingRoom.getRoomId());
+        Event event = new Event(Event.EVENT_TYPE_CALL_HANGUP, hangupContent, mSession.getCredentials().getUserId(), mCallSignalingRoom.getRoomId());
 
         // local notification to indicate the end of call
         mUIThreadHandler.post(new Runnable() {
