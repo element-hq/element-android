@@ -20,7 +20,7 @@ class DefaultSession(sessionParams: SessionParams) : Session, KoinComponent {
         val sessionModule = SessionModule(sessionParams)
         val syncModule = SyncModule()
         StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule))
-        scope = getKoin().createScope(SCOPE)
+        scope = getKoin().getOrCreateScope(SCOPE)
     }
 
     override fun synchronizer(): Synchronizer {

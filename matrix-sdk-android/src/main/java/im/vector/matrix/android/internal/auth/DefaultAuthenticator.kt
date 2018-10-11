@@ -25,6 +25,17 @@ class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
                            private val coroutineDispatchers: MatrixCoroutineDispatchers,
                            private val sessionParamsStore: SessionParamsStore) : Authenticator {
 
+    override fun hasActiveSessions(): Boolean {
+        return sessionParamsStore.get() != null
+    }
+
+    override fun getLastActiveSession(): Session? {
+        val sessionParams = sessionParamsStore.get()
+        return sessionParams?.let {
+            DefaultSession(it)
+        }
+    }
+
     override fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig, login: String, password: String, callback: MatrixCallback<Session>): Cancelable {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 

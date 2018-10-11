@@ -23,6 +23,7 @@ class LoginActivity : RiotActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         authenticateButton.setOnClickListener { authenticate() }
+        checkActiveSessions()
     }
 
     private fun authenticate() {
@@ -46,6 +47,13 @@ class LoginActivity : RiotActivity() {
                 Toast.makeText(this@LoginActivity, "Authenticate failure: $failure", Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun checkActiveSessions() {
+        if (authenticator.hasActiveSessions()) {
+            matrix.currentSession = authenticator.getLastActiveSession()
+            goToHomeScreen()
+        }
     }
 
     private fun goToHomeScreen() {
