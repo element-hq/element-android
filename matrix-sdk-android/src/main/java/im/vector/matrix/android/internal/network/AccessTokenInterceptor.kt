@@ -1,6 +1,6 @@
 package im.vector.matrix.android.internal.network
 
-import im.vector.matrix.android.api.auth.SessionParamsStore
+import im.vector.matrix.android.internal.auth.SessionParamsStore
 import okhttp3.Interceptor
 import okhttp3.Response
 

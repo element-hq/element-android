@@ -1,4 +1,4 @@
-package im.vector.matrix.android.api.auth
+package im.vector.matrix.android.internal.auth
 
 import im.vector.matrix.android.internal.auth.data.SessionParams
 

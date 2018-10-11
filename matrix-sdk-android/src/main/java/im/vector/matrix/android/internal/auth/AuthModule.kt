@@ -2,7 +2,6 @@ package im.vector.matrix.android.internal.auth
 
 import android.content.Context
 import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.api.auth.SessionParamsStore
 import im.vector.matrix.android.internal.auth.db.ObjectBoxSessionParams
 import im.vector.matrix.android.internal.auth.db.ObjectBoxSessionParamsMapper
 import im.vector.matrix.android.internal.auth.db.ObjectBoxSessionParamsStore

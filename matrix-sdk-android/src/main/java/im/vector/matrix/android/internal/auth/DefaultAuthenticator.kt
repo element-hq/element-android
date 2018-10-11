@@ -4,7 +4,6 @@ import arrow.core.leftIfNull
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.api.auth.SessionParamsStore
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
