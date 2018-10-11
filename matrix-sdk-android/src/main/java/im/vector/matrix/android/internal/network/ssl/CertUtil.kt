@@ -141,7 +141,7 @@ object CertUtil {
                 try {
                     tf = TrustManagerFactory.getInstance("PKIX")
                 } catch (e: Exception) {
-                    Timber.e("## newPinnedSSLSocketFactory() : TrustManagerFactory.getInstance failed " + e.message, e)
+                    Timber.e(e, "## newPinnedSSLSocketFactory() : TrustManagerFactory.getInstance failed " + e.message)
                 }
 
                 // it doesn't exist, use the default one.
@@ -149,7 +149,7 @@ object CertUtil {
                     try {
                         tf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
                     } catch (e: Exception) {
-                        Timber.e("## addRule : onBingRuleUpdateFailure failed " + e.message, e)
+                        Timber.e(e, "## addRule : onBingRuleUpdateFailure failed " + e.message)
                     }
 
                 }
@@ -197,7 +197,7 @@ object CertUtil {
 
         return HostnameVerifier { hostname, session ->
             if (defaultVerifier.verify(hostname, session)) return@HostnameVerifier true
-            if (trustedFingerprints == null || trustedFingerprints.size == 0) return@HostnameVerifier false
+            if (trustedFingerprints.isEmpty()) return@HostnameVerifier false
 
             // If remote cert matches an allowed fingerprint, just accept it.
             try {

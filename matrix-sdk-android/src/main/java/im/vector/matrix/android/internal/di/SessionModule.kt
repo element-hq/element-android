@@ -13,10 +13,11 @@ import retrofit2.Retrofit
 class SessionModule(private val sessionParams: SessionParams) : Module {
 
     override fun invoke(): ModuleDefinition = module(override = true) {
+
         scope(DefaultSession.SCOPE) {
             val retrofitBuilder = get() as Retrofit.Builder
             retrofitBuilder
-                    .baseUrl(sessionParams.homeServerConnectionConfig?.homeServerUri.toString())
+                    .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
                     .build()
         }
 
@@ -24,6 +25,8 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
             val store = MXFileStore(sessionParams.credentials, false, get())
             val dataHandler = MXDataHandler(store, sessionParams.credentials)
             MXSession.Builder(sessionParams, dataHandler, get()).build()
+            store.setDataHandler(dataHandler)
+            dataHandler
         }
 
     }.invoke()

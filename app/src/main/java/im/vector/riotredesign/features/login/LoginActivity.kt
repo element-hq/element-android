@@ -32,6 +32,7 @@ class LoginActivity : RiotActivity() {
         val homeServerConnectionConfig = HomeServerConnectionConfig.Builder()
                 .withHomeServerUri("https://matrix.org/")
                 .withIdentityServerUri("https://vector.im")
+                .withAntiVirusServerUri("https://matrix.org/")
                 .build()
 
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {

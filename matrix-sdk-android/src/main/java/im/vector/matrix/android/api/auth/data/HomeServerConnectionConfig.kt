@@ -43,7 +43,7 @@ data class HomeServerConnectionConfig(
          */
         fun withHomeServerUri(hsUri: Uri): Builder {
             if (hsUri.scheme != "http" && hsUri.scheme != "https") {
-                throw RuntimeException("Invalid home server URI: " + hsUri!!)
+                throw RuntimeException("Invalid home server URI: " + hsUri)
             }
             // remove trailing /
             homeServerUri = if (hsUri.toString().endsWith("/")) {
@@ -148,6 +148,10 @@ data class HomeServerConnectionConfig(
             return this
         }
 
+        fun withAntiVirusServerUri(antivirusServerUriString: String?): Builder {
+            return withAntiVirusServerUri(antivirusServerUriString?.let { Uri.parse(it) })
+        }
+
         /**
          * Update the anti-virus server URI.
          *
@@ -211,7 +215,18 @@ data class HomeServerConnectionConfig(
          * @return the [HomeServerConnectionConfig]
          */
         fun build(): HomeServerConnectionConfig {
-            return HomeServerConnectionConfig(homeServerUri, identityServerUri, antiVirusServerUri, allowedFingerprints, shouldPin, tlsVersions, tlsCipherSuites, shouldAcceptTlsExtensions, allowHttpExtension, forceUsageTlsVersions)
+            return HomeServerConnectionConfig(
+                    homeServerUri,
+                    identityServerUri,
+                    antiVirusServerUri,
+                    allowedFingerprints,
+                    shouldPin,
+                    tlsVersions,
+                    tlsCipherSuites,
+                    shouldAcceptTlsExtensions,
+                    allowHttpExtension,
+                    forceUsageTlsVersions
+            )
         }
 
     }

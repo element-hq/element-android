@@ -74,9 +74,9 @@ public class ContentManager {
     public void configureAntiVirusScanner(boolean isEnabled) {
         mIsAvScannerEnabled = isEnabled;
         if (isEnabled) {
-            mDownloadUrlPrefix = mHsConfig.getAntiVirusServerUri().toString() + "/" + RestClient.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE;
+            mDownloadUrlPrefix = mHsConfig.getAntiVirusServerUri() + "/" + RestClient.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE;
         } else {
-            mDownloadUrlPrefix = mHsConfig.getHomeServerUri().toString() + URI_PREFIX_CONTENT_API;
+            mDownloadUrlPrefix = mHsConfig.getHomeServerUri() + URI_PREFIX_CONTENT_API;
         }
     }
 

@@ -16,7 +16,7 @@ class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncResponseHandler(get(), get())
+            SyncResponseHandler(get())
         }
 
         scope(DefaultSession.SCOPE) {

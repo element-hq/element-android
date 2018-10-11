@@ -22,9 +22,9 @@ import kotlin.collections.emptyList
 import kotlin.collections.isNotEmpty
 import kotlin.collections.set
 
-class SyncResponseHandler(private val dataHandler: MXDataHandler,
-                          private val store: IMXStore) {
+class SyncResponseHandler(private val dataHandler: MXDataHandler) {
 
+    private val store = dataHandler.store
     private val leftRoomsStore = MXMemoryStore()
     private var isStartingCryptoWithInitialSync = false
     private var areLeftRoomsSynced = false

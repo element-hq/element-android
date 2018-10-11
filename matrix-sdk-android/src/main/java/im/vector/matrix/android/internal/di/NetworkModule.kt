@@ -1,7 +1,9 @@
 package im.vector.matrix.android.internal.di
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.squareup.moshi.Moshi
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
+import im.vector.matrix.android.internal.network.parsing.UriMoshiAdapter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.context.ModuleDefinition
@@ -38,7 +40,7 @@ class NetworkModule : Module {
         }
 
         single {
-            MoshiProvider.providesMoshi()
+            Moshi.Builder().add(UriMoshiAdapter()).build()
         }
 
         single {
