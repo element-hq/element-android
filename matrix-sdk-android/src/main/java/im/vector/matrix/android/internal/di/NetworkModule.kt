@@ -40,7 +40,7 @@ class NetworkModule : Module {
         }
 
         single {
-            Moshi.Builder().add(UriMoshiAdapter()).build()
+            MoshiProvider.providesMoshi()
         }
 
         single {

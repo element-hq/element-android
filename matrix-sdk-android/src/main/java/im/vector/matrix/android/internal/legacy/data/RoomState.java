@@ -379,7 +379,7 @@ public class RoomState implements Externalizable {
      * @param callback the asynchronous callback.
      */
     public void getStateEvents(IMXStore store, final Set<String> types, final ApiCallback<List<Event>> callback) {
-        if (null != store) {
+       /* if (null != store) {
             final List<Event> stateEvents = new ArrayList<>();
 
             Collection<List<Event>> currentStateEvents = mStateEvents.values();
@@ -409,7 +409,7 @@ public class RoomState implements Externalizable {
                     callback.onSuccess(filteredStateEvents);
                 }
             });
-        }
+        }*/
     }
 
     /**
@@ -937,7 +937,7 @@ public class RoomState implements Externalizable {
                         member.mSender = event.getSender();
 
                         if ((null != store) && (direction == EventTimeline.Direction.FORWARDS)) {
-                            store.storeRoomStateEvent(roomId, event);
+                            //store.storeRoomStateEvent(roomId, event);
                         }
 
                         RoomMember currentMember = getMember(userId);
@@ -998,7 +998,7 @@ public class RoomState implements Externalizable {
                     thirdPartyInvite.token = event.stateKey;
 
                     if ((direction == EventTimeline.Direction.FORWARDS) && (null != store)) {
-                        store.storeRoomStateEvent(roomId, event);
+                        //store.storeRoomStateEvent(roomId, event);
                     }
 
                     if (!TextUtils.isEmpty(thirdPartyInvite.token)) {

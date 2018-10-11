@@ -1,7 +1,10 @@
 package im.vector.matrix.android.api.events
 
+import com.google.gson.JsonObject
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.legacy.util.JsonUtils
 
 @JsonClass(generateAdapter = true)
 data class Event(
@@ -14,6 +17,33 @@ data class Event(
         @Json(name = "state_key") val stateKey: String? = null,
         @Json(name = "room_id") val roomId: String? = null,
         @Json(name = "unsigned_data") val unsignedData: UnsignedData? = null
-)
+) {
+
+    val contentAsJsonObject: JsonObject by lazy {
+        val gson = JsonUtils.getGson(true)
+        gson.toJsonTree(content).asJsonObject
+    }
+
+    val prevContentAsJsonObject: JsonObject by lazy {
+        val gson = JsonUtils.getGson(true)
+        gson.toJsonTree(prevContent).asJsonObject
+    }
+
+    inline fun <reified T> content(): T? {
+        return toModel(content)
+    }
+
+    inline fun <reified T> prevContent(): T? {
+        return toModel(prevContent)
+    }
+
+    inline fun <reified T> toModel(data: Map<String, Any>?): T? {
+        val moshi = MoshiProvider.providesMoshi()
+        val moshiAdapter = moshi.adapter(T::class.java)
+        return moshiAdapter.fromJsonValue(data)
+    }
+
+
+}
 
 
