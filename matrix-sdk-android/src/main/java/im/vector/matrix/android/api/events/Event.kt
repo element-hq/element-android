@@ -15,16 +15,16 @@ data class Event(
         @Json(name = "origin_server_ts") val originServerTs: Long? = null,
         @Json(name = "sender") val sender: String? = null,
         @Json(name = "state_key") val stateKey: String? = null,
-        @Json(name = "room_id") val roomId: String? = null,
+        @Json(name = "room_id") var roomId: String? = null,
         @Json(name = "unsigned_data") val unsignedData: UnsignedData? = null
 ) {
 
-    val contentAsJsonObject: JsonObject by lazy {
+    val contentAsJsonObject: JsonObject? by lazy {
         val gson = JsonUtils.getGson(true)
         gson.toJsonTree(content).asJsonObject
     }
 
-    val prevContentAsJsonObject: JsonObject by lazy {
+    val prevContentAsJsonObject: JsonObject? by lazy {
         val gson = JsonUtils.getGson(true)
         gson.toJsonTree(prevContent).asJsonObject
     }
@@ -43,6 +43,12 @@ data class Event(
         return moshiAdapter.fromJsonValue(data)
     }
 
+    val isCallEvent: Boolean by lazy {
+        EventType.CALL_INVITE == type
+                || EventType.CALL_CANDIDATES == type
+                || EventType.CALL_ANSWER == type
+                || EventType.CALL_HANGUP == type
+    }
 
 }
 

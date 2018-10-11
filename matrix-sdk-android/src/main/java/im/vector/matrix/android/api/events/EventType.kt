@@ -39,4 +39,11 @@ object EventType {
     const val STATE_RELATED_GROUPS = "m.room.related_groups"
     const val STATE_PINNED_EVENT = "m.room.pinned_events"
 
+    // Call Events
+
+    const val CALL_INVITE = "m.call.invite"
+    const val CALL_CANDIDATES = "m.call.candidates"
+    const val CALL_ANSWER = "m.call.answer"
+    const val CALL_HANGUP = "m.call.hangup"
+
 }
