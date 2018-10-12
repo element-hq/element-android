@@ -8,21 +8,14 @@ import im.vector.matrix.android.internal.legacy.data.Room
 import im.vector.matrix.android.internal.legacy.data.store.IMXStore
 import im.vector.matrix.android.internal.legacy.data.store.MXMemoryStore
 import im.vector.matrix.android.internal.legacy.rest.client.AccountDataRestClient
-import im.vector.matrix.android.internal.legacy.rest.model.RoomMember
 import im.vector.matrix.android.internal.legacy.rest.model.bingrules.PushRulesResponse
 import im.vector.matrix.android.internal.legacy.util.JsonUtils
 import timber.log.Timber
-import java.util.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
-import kotlin.collections.emptyList
-import kotlin.collections.isNotEmpty
-import kotlin.collections.set
 
-class SyncResponseHandler(private val dataHandler: MXDataHandler) {
+class SyncResponseHandler(
+        private val roomSyncHandler: RoomSyncHandler,
+        private val dataHandler: MXDataHandler
+) {
 
     private val store = dataHandler.store
     private val leftRoomsStore = MXMemoryStore()
@@ -34,6 +27,13 @@ class SyncResponseHandler(private val dataHandler: MXDataHandler) {
             return
         }
         Timber.v("Handle sync response")
+
+        if (syncResponse.rooms != null) {
+            // joined rooms events
+            roomSyncHandler.handleJoinedRooms(syncResponse.rooms.join)
+        }
+
+        /*
         val isInitialSync = null == fromToken
         var isEmptyResponse = true
 
@@ -50,21 +50,8 @@ class SyncResponseHandler(private val dataHandler: MXDataHandler) {
             manageAccountData(syncResponse.accountData, isInitialSync)
         }
 
-        // sanity check
+
         if (syncResponse.rooms != null) {
-            // joined rooms events
-            if (syncResponse.rooms.join.isNotEmpty()) {
-                val roomIds = syncResponse.rooms.join.keys
-                // Handle first joined rooms
-                for (roomId in roomIds) {
-                    if (null != leftRoomsStore.getRoom(roomId)) {
-                        leftRoomsStore.deleteRoom(roomId)
-                    }
-                    // TODO handle joined room
-                    //getRoom(roomId).handleJoinedRoomSync(syncResponse.rooms.join[roomId], isInitialSync)
-                }
-                isEmptyResponse = false
-            }
 
             // invited room management
             if (syncResponse.rooms.invite.isNotEmpty()) {
@@ -117,131 +104,137 @@ class SyncResponseHandler(private val dataHandler: MXDataHandler) {
                             }
                         }
                     }
-
-                }
-
-                isEmptyResponse = false
-
-                if (hasChanged) {
-                    // Update account data to add new direct chat room(s)
-                    /* mAccountDataRestClient.setAccountData(mCredentials.userId, AccountDataRestClient.ACCOUNT_DATA_TYPE_DIRECT_MESSAGES,
-                             updatedDirectChatRoomsDict, object : ApiCallback<Void> {
-                         override fun onSuccess(info: Void) {
-                         }
-
-                         override fun onNetworkError(e: Exception) {
-                             // TODO: we should try again.
-                         }
-
-                         override fun onMatrixError(e: MatrixError) {
-                         }
-
-                         override fun onUnexpectedError(e: Exception) {
-                         }
-                     })*/
                 }
             }
 
-            // left room management
-            // it should be done at the end but it seems there is a server issue
-            // when inviting after leaving a room, the room is defined in the both leave & invite rooms list.
-            if (syncResponse.rooms.leave.isNotEmpty()) {
-                val roomIds = syncResponse.rooms.leave.keys
-                for (roomId in roomIds) {
-                    // RoomSync leftRoomSync = syncResponse.rooms.leave.get(roomId);
+            isEmptyResponse = false
 
-                    // Presently we remove the existing room from the rooms list.
-                    // FIXME SYNC V2 Archive/Display the left rooms!
-                    // For that create 'handleArchivedRoomSync' method
+            if (hasChanged) {
+                // Update account data to add new direct chat room(s)
+                /* mAccountDataRestClient.setAccountData(mCredentials.userId, AccountDataRestClient.ACCOUNT_DATA_TYPE_DIRECT_MESSAGES,
+                         updatedDirectChatRoomsDict, object : ApiCallback<Void> {
+                     override fun onSuccess(info: Void) {
+                     }
 
-                    var membership = RoomMember.MEMBERSHIP_LEAVE
-                    val room = getRoom(roomId)
+                     override fun onNetworkError(e: Exception) {
+                         // TODO: we should try again.
+                     }
 
-                    // Retrieve existing room
-                    // The room will then be able to notify its listeners.
-                    // TODO handle
-                    // room.handleJoinedRoomSync(syncResponse.rooms.leave[roomId], isInitialSync)
+                     override fun onMatrixError(e: MatrixError) {
+                     }
 
-                    val member = room.getMember(dataHandler.userId)
-                    if (null != member) {
-                        membership = member.membership
-                    }
-                    if (!TextUtils.equals(membership, RoomMember.MEMBERSHIP_KICK) && !TextUtils.equals(membership, RoomMember.MEMBERSHIP_BAN)) {
-                        // ensure that the room data are properly deleted
-                        store.deleteRoom(roomId)
-                        dataHandler.onLeaveRoom(roomId)
-                    } else {
-                        dataHandler.onRoomKick(roomId)
-                    }
-                    // don't add to the left rooms if the user has been kicked / banned
-                    if (areLeftRoomsSynced && TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE)) {
-                        val leftRoom = getRoom(leftRoomsStore, roomId, true)
-                        //Todo handle
-                        //leftRoom.handleJoinedRoomSync(syncResponse.rooms.leave[roomId], isInitialSync)
-                    }
-                }
-                isEmptyResponse = false
+                     override fun onUnexpectedError(e: Exception) {
+                     }
+                 })*/
             }
         }
 
-        // groups
-        if (null != syncResponse.groups) {
+        // left room management
+        // it should be done at the end but it seems there is a server issue
+        // when inviting after leaving a room, the room is defined in the both leave & invite rooms list.
+        if (syncResponse.rooms.leave.isNotEmpty()) {
+            val roomIds = syncResponse.rooms.leave.keys
+            for (roomId in roomIds) {
+                // RoomSync leftRoomSync = syncResponse.rooms.leave.get(roomId);
+
+                // Presently we remove the existing room from the rooms list.
+                // FIXME SYNC V2 Archive/Display the left rooms!
+                // For that create 'handleArchivedRoomSync' method
+
+                var membership = RoomMember.MEMBERSHIP_LEAVE
+                val room = getRoom(roomId)
+
+                // Retrieve existing room
+                // The room will then be able to notify its listeners.
+                // TODO handle
+                // room.handleJoinedRoomSync(syncResponse.rooms.leave[roomId], isInitialSync)
+
+                val member = room.getMember(dataHandler.userId)
+                if (null != member) {
+                    membership = member.membership
+                }
+                if (!TextUtils.equals(membership, RoomMember.MEMBERSHIP_KICK) && !TextUtils.equals(membership, RoomMember.MEMBERSHIP_BAN)) {
+                    // ensure that the room data are properly deleted
+                    store.deleteRoom(roomId)
+                    dataHandler.onLeaveRoom(roomId)
+                } else {
+                    dataHandler.onRoomKick(roomId)
+                }
+                // don't add to the left rooms if the user has been kicked / banned
+                if (areLeftRoomsSynced && TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE)) {
+                    val leftRoom = getRoom(leftRoomsStore, roomId, true)
+                    //Todo handle
+                    //leftRoom.handleJoinedRoomSync(syncResponse.rooms.leave[roomId], isInitialSync)
+                }
+            }
+            isEmptyResponse = false
+        }
+    }
+
+    // groups
+    if (null != syncResponse.groups)
+    {
+        // Handle invited groups
+        if (null != syncResponse.groups.invite && !syncResponse.groups.invite.isEmpty()) {
             // Handle invited groups
-            if (null != syncResponse.groups.invite && !syncResponse.groups.invite.isEmpty()) {
-                // Handle invited groups
-                for (groupId in syncResponse.groups.invite.keys) {
-                    val invitedGroupSync = syncResponse.groups.invite[groupId]
-                    dataHandler.groupsManager.onNewGroupInvitation(groupId, invitedGroupSync?.profile, invitedGroupSync?.inviter, !isInitialSync)
-                }
+            for (groupId in syncResponse.groups.invite.keys) {
+                val invitedGroupSync = syncResponse.groups.invite[groupId]
+                dataHandler.groupsManager.onNewGroupInvitation(groupId, invitedGroupSync?.profile, invitedGroupSync?.inviter, !isInitialSync)
             }
+        }
 
+        // Handle joined groups
+        if (null != syncResponse.groups.join && !syncResponse.groups.join.isEmpty()) {
+            for (groupId in syncResponse.groups.join.keys) {
+                dataHandler.groupsManager.onJoinGroup(groupId, !isInitialSync)
+            }
+        }
+        // Handle left groups
+        if (null != syncResponse.groups.leave && !syncResponse.groups.leave.isEmpty()) {
             // Handle joined groups
-            if (null != syncResponse.groups.join && !syncResponse.groups.join.isEmpty()) {
-                for (groupId in syncResponse.groups.join.keys) {
-                    dataHandler.groupsManager.onJoinGroup(groupId, !isInitialSync)
-                }
-            }
-            // Handle left groups
-            if (null != syncResponse.groups.leave && !syncResponse.groups.leave.isEmpty()) {
-                // Handle joined groups
-                for (groupId in syncResponse.groups.leave.keys) {
-                    dataHandler.groupsManager.onLeaveGroup(groupId, !isInitialSync)
-                }
+            for (groupId in syncResponse.groups.leave.keys) {
+                dataHandler.groupsManager.onLeaveGroup(groupId, !isInitialSync)
             }
         }
+    }
 
-        // Handle presence of other users
-        if (syncResponse.presence?.events != null) {
-            for (presenceEvent in syncResponse.presence.events) {
-                handlePresenceEvent(presenceEvent)
-            }
+    // Handle presence of other users
+    if (syncResponse.presence?.events != null)
+    {
+        for (presenceEvent in syncResponse.presence.events) {
+            handlePresenceEvent(presenceEvent)
         }
-        dataHandler.crypto?.onSyncCompleted(syncResponse, fromToken, isCatchingUp)
-        if (!isEmptyResponse) {
-            store.eventStreamToken = syncResponse.nextBatch
-            store.commit()
-        }
+    }
+    dataHandler.crypto?.onSyncCompleted(syncResponse, fromToken, isCatchingUp)
+    if (!isEmptyResponse)
+    {
+        store.eventStreamToken = syncResponse.nextBatch
+        store.commit()
+    }
 
-        if (isInitialSync) {
-            if (!isCatchingUp) {
-                dataHandler.startCrypto(true)
-            } else {
-                // the events thread sends a dummy initial sync event
-                // when the application is restarted.
-                isStartingCryptoWithInitialSync = !isEmptyResponse
-            }
-
-            dataHandler.onInitialSyncComplete(syncResponse?.nextBatch)
+    if (isInitialSync)
+    {
+        if (!isCatchingUp) {
+            dataHandler.startCrypto(true)
         } else {
-
-            if (!isCatchingUp) {
-                dataHandler.startCrypto(isStartingCryptoWithInitialSync)
-            }
-
-            dataHandler.onLiveEventsChunkProcessed(fromToken, syncResponse.nextBatch)
-            dataHandler.callsManager?.checkPendingIncomingCalls()
-
+            // the events thread sends a dummy initial sync event
+            // when the application is restarted.
+            isStartingCryptoWithInitialSync = !isEmptyResponse
         }
+
+        dataHandler.onInitialSyncComplete(syncResponse?.nextBatch)
+    } else
+    {
+
+        if (!isCatchingUp) {
+            dataHandler.startCrypto(isStartingCryptoWithInitialSync)
+        }
+
+        dataHandler.onLiveEventsChunkProcessed(fromToken, syncResponse.nextBatch)
+        dataHandler.callsManager?.checkPendingIncomingCalls()
+
+    }
+    */
     }
 
     private fun manageAccountData(accountData: Map<String, Any>, isInitialSync: Boolean) {

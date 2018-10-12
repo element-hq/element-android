@@ -11,7 +11,7 @@ data class RoomSyncTimeline(
         /**
          * List of events (array of Event).
          */
-        val events: List<Event>? = null,
+        val events: List<Event> = emptyList(),
 
         /**
          * Boolean which tells whether there are more events on the server

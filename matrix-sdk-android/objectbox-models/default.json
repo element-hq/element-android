@@ -54,11 +54,93 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "8:1761107158737061066",
+      "lastPropertyId": "3:787896491046945850",
+      "name": "RoomEntity",
+      "properties": [
+        {
+          "id": "1:7021996505563941556",
+          "name": "id"
+        },
+        {
+          "id": "2:1269026517652311997",
+          "name": "membership"
+        },
+        {
+          "id": "3:787896491046945850",
+          "name": "roomId"
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:5345919940124619772",
+          "name": "chunks"
+        }
+      ]
+    },
+    {
+      "id": "9:6019404356061358330",
+      "lastPropertyId": "3:3869954049926012588",
+      "name": "ChunkEntity",
+      "properties": [
+        {
+          "id": "1:3461196015528391821",
+          "name": "id"
+        },
+        {
+          "id": "2:4852790652764050720",
+          "name": "prevToken"
+        },
+        {
+          "id": "3:3869954049926012588",
+          "name": "nextToken"
+        }
+      ],
+      "relations": [
+        {
+          "id": "2:5944867505344991328",
+          "name": "events"
+        }
+      ]
+    },
+    {
+      "id": "10:7579750767964019860",
+      "lastPropertyId": "6:6069780711726222192",
+      "name": "EventEntity",
+      "properties": [
+        {
+          "id": "1:3170318841756889053",
+          "name": "id"
+        },
+        {
+          "id": "2:6651269605038929561",
+          "name": "type"
+        },
+        {
+          "id": "3:470436998712759552",
+          "name": "content"
+        },
+        {
+          "id": "4:1820638541606769650",
+          "name": "eventId"
+        },
+        {
+          "id": "5:4423270757987421556",
+          "name": "prevContent"
+        },
+        {
+          "id": "6:6069780711726222192",
+          "name": "stateKey"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "7:6920598293865885979",
+  "lastEntityId": "10:7579750767964019860",
   "lastIndexId": "4:1616715309690181473",
-  "lastRelationId": "0:0",
+  "lastRelationId": "2:5944867505344991328",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
