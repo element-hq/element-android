@@ -1,7 +1,7 @@
 package im.vector.matrix.android.internal.auth
 
+import arrow.core.Either
 import arrow.core.leftIfNull
-import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
@@ -17,10 +17,10 @@ import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 
 class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
-                           private val jsonMapper: Moshi,
                            private val coroutineDispatchers: MatrixCoroutineDispatchers,
                            private val sessionParamsStore: SessionParamsStore) : Authenticator {
 
@@ -35,28 +35,37 @@ class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
         }
     }
 
-    override fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig, login: String, password: String, callback: MatrixCallback<Session>): Cancelable {
-        val authAPI = buildAuthAPI(homeServerConnectionConfig)
+    override fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
+                              login: String,
+                              password: String,
+                              callback: MatrixCallback<Session>): Cancelable {
 
         val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val loginParams = PasswordLoginParams.userIdentifier(login, password, "Mobile")
-            executeRequest<Credentials> {
-                apiCall = authAPI.login(loginParams)
-                moshi = jsonMapper
-                dispatcher = coroutineDispatchers.io
-            }.leftIfNull {
-                Failure.Unknown(IllegalArgumentException("Credentials shouldn't not be null"))
-            }.map {
-                val sessionParams = SessionParams(it, homeServerConnectionConfig)
-                sessionParamsStore.save(sessionParams)
-                sessionParams
-            }.map {
-                DefaultSession(it)
-            }.bimap(
-                    { callback.onFailure(it) }, { callback.onSuccess(it) }
-            )
+            val sessionOrFailure = authenticate(homeServerConnectionConfig, login, password)
+            sessionOrFailure.bimap({ callback.onFailure(it) }, { callback.onSuccess(it) })
         }
         return CancelableCoroutine(job)
+
+    }
+
+    private suspend fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
+                                     login: String,
+                                     password: String): Either<Failure, Session> = withContext(coroutineDispatchers.io) {
+
+        val authAPI = buildAuthAPI(homeServerConnectionConfig)
+        val loginParams = PasswordLoginParams.userIdentifier(login, password, "Mobile")
+        executeRequest<Credentials> {
+            apiCall = authAPI.login(loginParams)
+        }.leftIfNull {
+            Failure.Unknown(IllegalArgumentException("Credentials shouldn't not be null"))
+        }.map {
+            val sessionParams = SessionParams(it, homeServerConnectionConfig)
+            sessionParamsStore.save(sessionParams)
+            sessionParams
+        }.map {
+            DefaultSession(it)
+        }
+
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

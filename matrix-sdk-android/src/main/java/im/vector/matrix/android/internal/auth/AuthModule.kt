@@ -18,7 +18,7 @@ class AuthModule(private val context: Context) : Module {
     override fun invoke(): ModuleDefinition = module {
 
         single {
-            DefaultAuthenticator(get(), get(), get(), get()) as Authenticator
+            DefaultAuthenticator(get(), get(), get()) as Authenticator
         }
 
         single(name = AUTH_BOX_STORE) {

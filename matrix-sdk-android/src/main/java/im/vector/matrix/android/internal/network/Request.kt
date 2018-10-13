@@ -4,9 +4,9 @@ import arrow.core.Either
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
-import kotlinx.coroutines.CoroutineDispatcher
+import im.vector.matrix.android.internal.di.MoshiProvider
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.coroutineScope
 import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.IOException
@@ -15,13 +15,11 @@ suspend inline fun <DATA> executeRequest(block: Request<DATA>.() -> Unit) = Requ
 
 class Request<DATA> {
 
+    var moshi: Moshi = MoshiProvider.providesMoshi()
     lateinit var apiCall: Deferred<Response<DATA>>
-    lateinit var moshi: Moshi
-    lateinit var dispatcher: CoroutineDispatcher
 
-    suspend fun execute(): Either<Failure, DATA?> = withContext(dispatcher) {
-        return@withContext try {
-
+    suspend fun execute(): Either<Failure, DATA?> = coroutineScope {
+        try {
             val response = apiCall.await()
             if (response.isSuccessful) {
                 val result = response.body()

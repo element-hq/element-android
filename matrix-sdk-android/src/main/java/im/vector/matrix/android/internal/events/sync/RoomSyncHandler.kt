@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.events.sync
 
+import im.vector.matrix.android.api.events.Event
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -23,8 +24,8 @@ class RoomSyncHandler(
             return
         }
         val roomEntities = ArrayList<RoomEntity>()
-        roomSyncByRoom.forEach { roomId, roomSync ->
-            val roomEntity = handleJoinedRoom(roomId, roomSync)
+        roomSyncByRoom.forEach {
+            val roomEntity = handleJoinedRoom(it.key, it.value)
             roomEntities.add(roomEntity)
         }
         roomBox.put(roomEntities)
@@ -40,22 +41,27 @@ class RoomSyncHandler(
         }
         roomEntity.membership = RoomEntity.Membership.JOINED
         if (roomSync.timeline != null) {
-            val chunkEntity = ChunkEntity()
-            chunkEntity.prevToken = roomSync.timeline.prevBatch
-            roomSync.timeline.events
-                    .map { event -> EventMapper.map(event) }
-                    .forEach { chunkEntity.events.add(it) }
+            val chunkEntity = eventListToChunk(roomSync.timeline.events, roomSync.timeline.prevBatch)
             roomEntity.chunks.add(chunkEntity)
         }
 
         if (roomSync.state != null) {
-            val chunkEntity = ChunkEntity()
-            roomSync.state.events
-                    .map { event -> EventMapper.map(event) }
-                    .forEach { chunkEntity.events.add(it) }
+            val chunkEntity = eventListToChunk(roomSync.state.events)
             roomEntity.chunks.add(chunkEntity)
         }
         return roomEntity
+    }
+
+    private fun eventListToChunk(eventList: List<Event>,
+                                 prevToken: String? = null,
+                                 nextToken: String? = null): ChunkEntity {
+        val chunkEntity = ChunkEntity()
+        chunkEntity.prevToken = prevToken
+        chunkEntity.nextToken = nextToken
+        eventList
+                .map { event -> EventMapper.map(event) }
+                .forEach { chunkEntity.events.add(it) }
+        return chunkEntity
     }
 
 }

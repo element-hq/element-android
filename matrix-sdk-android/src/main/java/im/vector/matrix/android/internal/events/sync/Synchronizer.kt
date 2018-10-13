@@ -1,6 +1,5 @@
 package im.vector.matrix.android.internal.events.sync
 
-import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.events.sync.data.SyncResponse
@@ -11,30 +10,32 @@ import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Synchronizer(private val syncAPI: SyncAPI,
                    private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                   private val jsonMapper: Moshi,
                    private val syncResponseHandler: SyncResponseHandler) {
 
     fun synchronize(callback: MatrixCallback<SyncResponse>): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val params = HashMap<String, String>()
-            val filterBody = FilterBody()
-            FilterUtil.enableLazyLoading(filterBody, true)
-            params["timeout"] = "0"
-            params["filter"] = filterBody.toJSONString()
-            val syncResponse = executeRequest<SyncResponse> {
-                apiCall = syncAPI.sync(params)
-                moshi = jsonMapper
-                dispatcher = coroutineDispatchers.io
-            }.map {
-                syncResponseHandler.handleResponse(it, null, false)
-                it
-            }
-            syncResponse.bimap({ callback.onFailure(it) }, { callback.onSuccess(it) })
+            val syncOrFailure = synchronize()
+            syncOrFailure.bimap({ callback.onFailure(it) }, { callback.onSuccess(it) })
         }
         return CancelableCoroutine(job)
+    }
+
+    private suspend fun synchronize() = withContext(coroutineDispatchers.io) {
+        val params = HashMap<String, String>()
+        val filterBody = FilterBody()
+        FilterUtil.enableLazyLoading(filterBody, true)
+        params["timeout"] = "0"
+        params["filter"] = filterBody.toJSONString()
+        executeRequest<SyncResponse> {
+            apiCall = syncAPI.sync(params)
+        }.map {
+            syncResponseHandler.handleResponse(it, null, false)
+            it
+        }
     }
 
 }

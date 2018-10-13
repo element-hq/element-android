@@ -4,7 +4,6 @@ import android.content.Context
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.thread.MainThreadExecutor
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.di.MatrixModule
 import im.vector.matrix.android.internal.di.NetworkModule
@@ -13,7 +12,6 @@ import org.koin.standalone.StandAloneContext.loadKoinModules
 import org.koin.standalone.inject
 import timber.log.Timber
 import timber.log.Timber.DebugTree
-import java.util.concurrent.Executor
 
 
 class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
@@ -38,5 +36,4 @@ class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
 
 }
 
-data class MatrixOptions(val context: Context,
-                         val mainExecutor: Executor = MainThreadExecutor())
+data class MatrixOptions(val context: Context)

@@ -24,7 +24,7 @@ class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            Synchronizer(get(), get(), get(), get())
+            Synchronizer(get(), get(), get())
         }
 
     }.invoke()
