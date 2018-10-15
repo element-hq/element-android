@@ -3,64 +3,114 @@ package im.vector.matrix.android.internal.events.sync
 import im.vector.matrix.android.api.events.Event
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.getForId
+import im.vector.matrix.android.internal.events.sync.data.InvitedRoomSync
 import im.vector.matrix.android.internal.events.sync.data.RoomSync
-import io.objectbox.Box
-import io.objectbox.BoxStore
+import io.realm.Realm
+import io.realm.RealmConfiguration
 
 
-class RoomSyncHandler(
-        boxStore: BoxStore
-) {
+class RoomSyncHandler(private val realmConfiguration: RealmConfiguration) {
 
-    private val eventBox: Box<EventEntity> = boxStore.boxFor(EventEntity::class.java)
-    private val chunkBox: Box<ChunkEntity> = boxStore.boxFor(ChunkEntity::class.java)
-    private val roomBox: Box<RoomEntity> = boxStore.boxFor(RoomEntity::class.java)
-
-    fun handleJoinedRooms(roomSyncByRoom: Map<String, RoomSync>?) {
-        if (roomSyncByRoom == null) {
-            return
-        }
-        val roomEntities = ArrayList<RoomEntity>()
-        roomSyncByRoom.forEach {
-            val roomEntity = handleJoinedRoom(it.key, it.value)
-            roomEntities.add(roomEntity)
-        }
-        roomBox.put(roomEntities)
+    sealed class HandlingStrategy {
+        data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
+        data class INVITED(val data: Map<String, InvitedRoomSync>) : HandlingStrategy()
+        data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    private fun handleJoinedRoom(roomId: String, roomSync: RoomSync): RoomEntity {
-        val roomEntity = RoomEntity.getForId(roomBox, roomId) ?: RoomEntity().apply { this.roomId = roomId }
-        if (roomEntity.membership == RoomEntity.Membership.INVITED) {
-            roomEntity.chunks
-                    .map { it.events }
-                    .forEach { eventBox.remove(it) }
-            chunkBox.remove(roomEntity.chunks)
+    fun handleRoomSync(handlingStrategy: HandlingStrategy) {
+        val realm = Realm.getInstance(realmConfiguration)
+        realm.executeTransaction { realmInstance ->
+            val roomEntities = when (handlingStrategy) {
+                is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
+                is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
+                is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
+            }
+            realmInstance.insertOrUpdate(roomEntities)
         }
-        roomEntity.membership = RoomEntity.Membership.JOINED
-        if (roomSync.timeline != null) {
-            val chunkEntity = eventListToChunk(roomSync.timeline.events, roomSync.timeline.prevBatch)
-            roomEntity.chunks.add(chunkEntity)
+        realm.close()
+    }
+
+
+    // PRIVATE METHODS *****************************************************************************
+
+    private fun handleJoinedRoom(realm: Realm,
+                                 roomId: String,
+                                 roomSync: RoomSync): RoomEntity {
+
+        val roomEntity = RoomEntity.getForId(realm, roomId)
+                         ?: RoomEntity().apply { this.roomId = roomId }
+
+        if (roomEntity.membership == RoomEntity.Membership.INVITED) {
+            roomEntity.chunks.deleteAllFromRealm()
         }
 
-        if (roomSync.state != null) {
-            val chunkEntity = eventListToChunk(roomSync.state.events)
-            roomEntity.chunks.add(chunkEntity)
+        roomEntity.membership = RoomEntity.Membership.JOINED
+        if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
+            val chunkEntity = eventListToChunk(realm, roomId, roomSync.state.events)
+            if (!roomEntity.chunks.contains(chunkEntity)) {
+                roomEntity.chunks.add(chunkEntity)
+            }
+        }
+        if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
+            val chunkEntity = eventListToChunk(realm, roomId, roomSync.timeline.events, roomSync.timeline.prevToken, isLimited = roomSync.timeline.limited)
+            if (!roomEntity.chunks.contains(chunkEntity)) {
+                roomEntity.chunks.add(chunkEntity)
+            }
         }
         return roomEntity
     }
 
-    private fun eventListToChunk(eventList: List<Event>,
+    private fun handleInvitedRoom(realm: Realm,
+                                  roomId: String,
+                                  roomSync:
+                                  InvitedRoomSync): RoomEntity {
+        val roomEntity = RoomEntity()
+        roomEntity.roomId = roomId
+        roomEntity.membership = RoomEntity.Membership.INVITED
+        if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
+            val chunkEntity = eventListToChunk(realm, roomId, roomSync.inviteState.events)
+            if (!roomEntity.chunks.contains(chunkEntity)) {
+                roomEntity.chunks.add(chunkEntity)
+            }
+        }
+        return roomEntity
+    }
+
+    // TODO : handle it
+    private fun handleLeftRoom(roomId: String,
+                               roomSync: RoomSync): RoomEntity {
+        return RoomEntity().apply {
+            this.roomId = roomId
+            this.membership = RoomEntity.Membership.LEFT
+        }
+    }
+
+    private fun eventListToChunk(realm: Realm,
+                                 roomId: String,
+                                 eventList: List<Event>,
                                  prevToken: String? = null,
-                                 nextToken: String? = null): ChunkEntity {
-        val chunkEntity = ChunkEntity()
+                                 nextToken: String? = null,
+                                 isLimited: Boolean = true): ChunkEntity {
+
+        val chunkEntity = if (!isLimited) {
+            realm.where(ChunkEntity::class.java).equalTo("room.roomId", roomId).isNull("nextToken").and().isNotNull("prevToken").findAll().lastOrNull()
+        } else {
+            realm.where(ChunkEntity::class.java).`in`("events.eventId", eventList.map { it.eventId }.toTypedArray()).findFirst()
+        } ?: ChunkEntity()
+
         chunkEntity.prevToken = prevToken
         chunkEntity.nextToken = nextToken
-        eventList
-                .map { event -> EventMapper.map(event) }
-                .forEach { chunkEntity.events.add(it) }
+        chunkEntity.isLimited = isLimited
+        eventList.forEach { event ->
+            val eventEntity = EventMapper.map(event).let {
+                realm.copyToRealmOrUpdate(it)
+            }
+            if (!chunkEntity.events.contains(eventEntity)) {
+                chunkEntity.events.add(eventEntity)
+            }
+        }
         return chunkEntity
     }
 

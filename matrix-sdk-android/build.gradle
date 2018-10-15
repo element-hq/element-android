@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.objectbox'
+apply plugin: 'realm-android'
 
 buildscript {
 
@@ -9,7 +9,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "io.objectbox:objectbox-gradle-plugin:2.2.0"
+        classpath "io.realm:realm-gradle-plugin:5.7.0"
     }
 }
 

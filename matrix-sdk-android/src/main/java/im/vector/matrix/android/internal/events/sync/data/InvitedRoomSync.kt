@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.events.sync.data
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 // InvitedRoomSync represents a room invitation during server sync v2.
@@ -28,5 +29,5 @@ data class InvitedRoomSync(
          * and one from the archived 'state'. If the client joins the room then the current state will be given as a delta against the
          * archived 'state' not the 'invite_state'.
          */
-        val inviteState: RoomInviteState? = null
+        @Json(name = "invite_state") val inviteState: RoomInviteState? = null
 )

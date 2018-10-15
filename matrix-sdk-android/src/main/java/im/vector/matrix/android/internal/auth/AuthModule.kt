@@ -1,19 +1,14 @@
 package im.vector.matrix.android.internal.auth
 
-import android.content.Context
 import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.internal.auth.db.ObjectBoxSessionParams
-import im.vector.matrix.android.internal.auth.db.ObjectBoxSessionParamsMapper
-import im.vector.matrix.android.internal.auth.db.ObjectBoxSessionParamsStore
-import io.objectbox.Box
-import io.objectbox.BoxStore
+import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
+import im.vector.matrix.android.internal.auth.db.SessionParamsMapper
+import io.realm.RealmConfiguration
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 
-private const val AUTH_BOX_STORE = "AUTH_BOX_STORE"
-
-class AuthModule(private val context: Context) : Module {
+class AuthModule : Module {
 
     override fun invoke(): ModuleDefinition = module {
 
@@ -21,18 +16,10 @@ class AuthModule(private val context: Context) : Module {
             DefaultAuthenticator(get(), get(), get()) as Authenticator
         }
 
-        single(name = AUTH_BOX_STORE) {
-            MyObjectBox.builder().androidContext(context).build()
-        }
-
-
         single {
-            val boxStore = get(name = AUTH_BOX_STORE) as BoxStore
-            boxStore.boxFor(ObjectBoxSessionParams::class.java) as Box<ObjectBoxSessionParams>
-        }
-
-        single {
-            ObjectBoxSessionParamsStore(ObjectBoxSessionParamsMapper((get())), get()) as SessionParamsStore
+            val mapper = SessionParamsMapper((get()))
+            val realmConfiguration = RealmConfiguration.Builder().name("matrix-sdk-auth").deleteRealmIfMigrationNeeded().build()
+            RealmSessionParamsStore(mapper, realmConfiguration) as SessionParamsStore
         }
 
     }.invoke()

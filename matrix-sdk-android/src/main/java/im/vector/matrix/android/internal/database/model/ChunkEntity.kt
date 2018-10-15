@@ -1,13 +1,18 @@
 package im.vector.matrix.android.internal.database.model
 
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
-import io.objectbox.relation.ToMany
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.RealmResults
+import io.realm.annotations.LinkingObjects
 
-@Entity
-class ChunkEntity {
-    @Id var id: Long = 0
-    var prevToken: String? = null
-    var nextToken: String? = null
-    lateinit var events: ToMany<EventEntity>
+open class ChunkEntity(var prevToken: String? = null,
+                       var nextToken: String? = null,
+                       var isLimited: Boolean = true,
+                       var events: RealmList<EventEntity> = RealmList()
+) : RealmObject() {
+
+    @LinkingObjects("chunks")
+    val room: RealmResults<RoomEntity>? = null
+
+    companion object
 }

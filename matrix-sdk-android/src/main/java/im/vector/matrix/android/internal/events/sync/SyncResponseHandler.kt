@@ -30,7 +30,9 @@ class SyncResponseHandler(
 
         if (syncResponse.rooms != null) {
             // joined rooms events
-            roomSyncHandler.handleJoinedRooms(syncResponse.rooms.join)
+            roomSyncHandler.handleRoomSync(RoomSyncHandler.HandlingStrategy.JOINED(syncResponse.rooms.join))
+            roomSyncHandler.handleRoomSync(RoomSyncHandler.HandlingStrategy.INVITED(syncResponse.rooms.invite))
+            roomSyncHandler.handleRoomSync(RoomSyncHandler.HandlingStrategy.LEFT(syncResponse.rooms.leave))
         }
 
         /*

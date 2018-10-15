@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.events.sync.data
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 // RoomSync represents the response for a room during server sync v2.
@@ -23,26 +24,26 @@ data class RoomSync(
         /**
          * The state updates for the room.
          */
-        val state: RoomSyncState? = null,
+        @Json(name = "state") val state: RoomSyncState? = null,
 
         /**
          * The timeline of messages and state changes in the room.
          */
-        val timeline: RoomSyncTimeline? = null,
+        @Json(name = "timeline") val timeline: RoomSyncTimeline? = null,
 
         /**
          * The ephemeral events in the room that aren't recorded in the timeline or state of the room (e.g. typing, receipts).
          */
-        val ephemeral: RoomSyncEphemeral? = null,
+        @Json(name = "ephemeral") val ephemeral: RoomSyncEphemeral? = null,
 
         /**
          * The account data events for the room (e.g. tags).
          */
-        val accountData: RoomSyncAccountData? = null,
+        @Json(name = "account_data") val accountData: RoomSyncAccountData? = null,
 
         /**
          * The notification counts for the room.
          */
-        val unreadNotifications: RoomSyncUnreadNotifications? = null
+        @Json(name = "unread_notifications") val unreadNotifications: RoomSyncUnreadNotifications? = null
 
 )

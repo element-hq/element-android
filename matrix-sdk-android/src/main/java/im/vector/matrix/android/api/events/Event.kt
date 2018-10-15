@@ -9,7 +9,7 @@ import im.vector.matrix.android.internal.legacy.util.JsonUtils
 @JsonClass(generateAdapter = true)
 data class Event(
         @Json(name = "type") val type: String,
-        @Json(name = "event_id") val eventId: String? = null,
+        @Json(name = "event_id") val eventId: String?,
         @Json(name = "content") val content: Map<String, Any>? = null,
         @Json(name = "prev_content") val prevContent: Map<String, Any>? = null,
         @Json(name = "origin_server_ts") val originServerTs: Long? = null,
@@ -45,9 +45,9 @@ data class Event(
 
     val isCallEvent: Boolean by lazy {
         EventType.CALL_INVITE == type
-                || EventType.CALL_CANDIDATES == type
-                || EventType.CALL_ANSWER == type
-                || EventType.CALL_HANGUP == type
+        || EventType.CALL_CANDIDATES == type
+        || EventType.CALL_ANSWER == type
+        || EventType.CALL_HANGUP == type
     }
 
 }

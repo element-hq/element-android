@@ -1,14 +1,18 @@
 package im.vector.matrix.android.internal.database.model
 
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
+import io.realm.RealmObject
+import io.realm.RealmResults
+import io.realm.annotations.LinkingObjects
+import io.realm.annotations.PrimaryKey
 
-@Entity
-class EventEntity {
-    @Id var id: Long = 0
-    lateinit var type: String
-    lateinit var content: String
-    var eventId: String? = null
-    var prevContent: String? = null
-    var stateKey: String? = null
+open class EventEntity(@PrimaryKey var eventId: String = "",
+                       var type: String = "",
+                       var content: String = "",
+                       var prevContent: String? = null,
+                       var stateKey: String? = null
+) : RealmObject() {
+
+    @LinkingObjects("events")
+    val chunk: RealmResults<ChunkEntity>? = null
+
 }

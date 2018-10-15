@@ -2,6 +2,7 @@ package im.vector.matrix.android.internal.session
 
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.internal.database.RealmInstanceHolder
 import im.vector.matrix.android.internal.di.SessionModule
 import im.vector.matrix.android.internal.events.sync.SyncModule
 import im.vector.matrix.android.internal.events.sync.Synchronizer
@@ -13,6 +14,7 @@ import org.koin.standalone.inject
 
 class DefaultSession(sessionParams: SessionParams) : Session, KoinComponent {
 
+    private val realmInstanceHolder by inject<RealmInstanceHolder>()
     private val synchronizer by inject<Synchronizer>()
     private val scope: Scope
 
@@ -27,7 +29,12 @@ class DefaultSession(sessionParams: SessionParams) : Session, KoinComponent {
         return synchronizer
     }
 
+    override fun realmInstanceHolder(): RealmInstanceHolder {
+        return realmInstanceHolder
+    }
+
     override fun close() {
+        realmInstanceHolder.realm.close()
         scope.close()
     }
 

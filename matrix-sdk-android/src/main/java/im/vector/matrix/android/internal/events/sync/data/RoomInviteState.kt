@@ -16,6 +16,7 @@
 package im.vector.matrix.android.internal.events.sync.data
 
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.events.Event
 
@@ -26,5 +27,5 @@ data class RoomInviteState(
         /**
          * List of state events (array of MXEvent).
          */
-        val events: List<Event> = emptyList()
+        @Json(name = "events") val events: List<Event> = emptyList()
 )

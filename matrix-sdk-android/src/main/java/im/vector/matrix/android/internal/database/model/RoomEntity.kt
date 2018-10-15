@@ -1,18 +1,20 @@
 package im.vector.matrix.android.internal.database.model
 
-import io.objectbox.annotation.Convert
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
-import io.objectbox.converter.PropertyConverter
-import io.objectbox.relation.ToMany
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.Ignore
+import io.realm.annotations.PrimaryKey
+import kotlin.properties.Delegates
 
-@Entity
-class RoomEntity {
-    @Id var id: Long = 0
-    @Convert(converter = MembershipConverter::class, dbType = String::class)
-    var membership: Membership = Membership.NONE
-    lateinit var roomId: String
-    lateinit var chunks: ToMany<ChunkEntity>
+open class RoomEntity : RealmObject() {
+
+    @PrimaryKey var roomId: String = ""
+    var chunks: RealmList<ChunkEntity> = RealmList()
+    private var membershipStr: String = Membership.NONE.name
+
+    @delegate:Ignore var membership: Membership by Delegates.observable(Membership.valueOf(membershipStr)) { _, _, newValue ->
+        membershipStr = newValue.name
+    }
 
     companion object;
 
@@ -24,14 +26,3 @@ class RoomEntity {
     }
 }
 
-class MembershipConverter : PropertyConverter<RoomEntity.Membership, String> {
-
-    override fun convertToDatabaseValue(entityProperty: RoomEntity.Membership?): String? {
-        return entityProperty?.name
-    }
-
-    override fun convertToEntityProperty(databaseValue: String?): RoomEntity.Membership? {
-        return databaseValue?.let { RoomEntity.Membership.valueOf(databaseValue) }
-    }
-
-}

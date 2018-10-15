@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.events.sync.data
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 // RoomsSyncResponse represents the rooms list in server sync v2 response.
@@ -23,15 +24,15 @@ data class RoomsSyncResponse(
         /**
          * Joined rooms: keys are rooms ids.
          */
-        val join: Map<String, RoomSync> = emptyMap(),
+        @Json(name = "join") val join: Map<String, RoomSync> = emptyMap(),
 
         /**
          * Invitations. The rooms that the user has been invited to: keys are rooms ids.
          */
-        val invite: Map<String, InvitedRoomSync> = emptyMap(),
+        @Json(name = "invite") val invite: Map<String, InvitedRoomSync> = emptyMap(),
 
         /**
          * Left rooms. The rooms that the user has left or been banned from: keys are rooms ids.
          */
-        val leave: Map<String, RoomSync> = emptyMap()
+        @Json(name = "leave") val leave: Map<String, RoomSync> = emptyMap()
 )

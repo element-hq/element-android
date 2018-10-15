@@ -1,6 +1,7 @@
 package im.vector.matrix.android.internal.events.sync.data
 
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.events.Event
 
@@ -10,5 +11,5 @@ data class RoomSyncEphemeral(
         /**
          * List of ephemeral events (array of Event).
          */
-        val events: List<Event>? = null
+        @Json(name = "events") val events: List<Event>? = null
 )

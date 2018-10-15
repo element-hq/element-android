@@ -5,24 +5,24 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.internal.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.SessionParams
 
-class ObjectBoxSessionParamsMapper(moshi: Moshi) {
+class SessionParamsMapper(moshi: Moshi) {
 
     private val credentialsAdapter = moshi.adapter(Credentials::class.java)
     private val homeServerConnectionConfigAdapter = moshi.adapter(HomeServerConnectionConfig::class.java)
 
-    fun map(objectBoxSessionParams: ObjectBoxSessionParams?): SessionParams? {
-        if (objectBoxSessionParams == null) {
+    fun map(entity: SessionParamsEntity?): SessionParams? {
+        if (entity == null) {
             return null
         }
-        val credentials = credentialsAdapter.fromJson(objectBoxSessionParams.credentialsJson)
-        val homeServerConnectionConfig = homeServerConnectionConfigAdapter.fromJson(objectBoxSessionParams.homeServerConnectionConfigJson)
+        val credentials = credentialsAdapter.fromJson(entity.credentialsJson)
+        val homeServerConnectionConfig = homeServerConnectionConfigAdapter.fromJson(entity.homeServerConnectionConfigJson)
         if (credentials == null || homeServerConnectionConfig == null) {
             return null
         }
         return SessionParams(credentials, homeServerConnectionConfig)
     }
 
-    fun map(sessionParams: SessionParams?): ObjectBoxSessionParams? {
+    fun map(sessionParams: SessionParams?): SessionParamsEntity? {
         if (sessionParams == null) {
             return null
         }
@@ -31,7 +31,7 @@ class ObjectBoxSessionParamsMapper(moshi: Moshi) {
         if (credentialsJson == null || homeServerConnectionConfigJson == null) {
             return null
         }
-        return ObjectBoxSessionParams(credentialsJson, homeServerConnectionConfigJson)
+        return SessionParamsEntity(credentialsJson, homeServerConnectionConfigJson)
     }
 
 

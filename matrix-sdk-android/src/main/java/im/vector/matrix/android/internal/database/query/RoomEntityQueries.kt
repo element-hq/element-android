@@ -1,21 +1,18 @@
 package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity_
-import io.objectbox.Box
+import io.realm.Realm
 
-fun RoomEntity.Companion.getForId(roomBox: Box<RoomEntity>, roomId: String): RoomEntity? {
-    return roomBox
-            .query()
-            .equal(RoomEntity_.roomId, roomId)
-            .build()
-            .findUnique()
+fun RoomEntity.Companion.getForId(realm: Realm, roomId: String): RoomEntity? {
+    return realm.where<RoomEntity>(RoomEntity::class.java)
+            .equalTo("roomId", roomId)
+            .findFirst()
 }
 
-fun RoomEntity.Companion.getAll(roomBox: Box<RoomEntity>, membership: RoomEntity.Membership? = null): List<RoomEntity> {
-    val query = roomBox.query()
+fun RoomEntity.Companion.getAll(realm: Realm, membership: RoomEntity.Membership? = null): List<RoomEntity> {
+    val query = realm.where(RoomEntity::class.java)
     if (membership != null) {
-        query.filter { it.membership == membership }
+        query.equalTo("membership", membership.name)
     }
-    return query.build().find()
+    return query.findAll()
 }
