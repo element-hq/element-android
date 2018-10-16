@@ -1,10 +1,12 @@
 package im.vector.matrix.android.internal.events.sync
 
 import im.vector.matrix.android.api.events.Event
-import im.vector.matrix.android.internal.database.mapper.EventMapper
+import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.getChunkIncludingEvents
 import im.vector.matrix.android.internal.database.query.getForId
+import im.vector.matrix.android.internal.database.query.getLastChunkFromRoom
 import im.vector.matrix.android.internal.events.sync.data.InvitedRoomSync
 import im.vector.matrix.android.internal.events.sync.data.RoomSync
 import io.realm.Realm
@@ -39,8 +41,7 @@ class RoomSyncHandler(private val realmConfiguration: RealmConfiguration) {
                                  roomId: String,
                                  roomSync: RoomSync): RoomEntity {
 
-        val roomEntity = RoomEntity.getForId(realm, roomId)
-                         ?: RoomEntity().apply { this.roomId = roomId }
+        val roomEntity = RoomEntity.getForId(realm, roomId) ?: RoomEntity(roomId)
 
         if (roomEntity.membership == RoomEntity.Membership.INVITED) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -95,16 +96,16 @@ class RoomSyncHandler(private val realmConfiguration: RealmConfiguration) {
                                  isLimited: Boolean = true): ChunkEntity {
 
         val chunkEntity = if (!isLimited) {
-            realm.where(ChunkEntity::class.java).equalTo("room.roomId", roomId).isNull("nextToken").and().isNotNull("prevToken").findAll().lastOrNull()
+            ChunkEntity.getLastChunkFromRoom(realm, roomId)
         } else {
-            realm.where(ChunkEntity::class.java).`in`("events.eventId", eventList.map { it.eventId }.toTypedArray()).findFirst()
-        } ?: ChunkEntity()
+            val eventIds = eventList.filter { it.eventId != null }.map { it.eventId!! }
+            ChunkEntity.getChunkIncludingEvents(realm, eventIds)
+        } ?: ChunkEntity().apply { this.prevToken = prevToken }
 
-        chunkEntity.prevToken = prevToken
         chunkEntity.nextToken = nextToken
         chunkEntity.isLimited = isLimited
         eventList.forEach { event ->
-            val eventEntity = EventMapper.map(event).let {
+            val eventEntity = event.asEntity().let {
                 realm.copyToRealmOrUpdate(it)
             }
             if (!chunkEntity.events.contains(eventEntity)) {

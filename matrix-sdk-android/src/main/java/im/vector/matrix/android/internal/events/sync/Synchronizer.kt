@@ -2,6 +2,7 @@ package im.vector.matrix.android.internal.events.sync
 
 import arrow.core.Either
 import arrow.core.flatMap
+import arrow.core.leftIfNull
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
@@ -42,6 +43,8 @@ class Synchronizer(private val syncAPI: SyncAPI,
         params["filter"] = filterBody.toJSONString()
         executeRequest<SyncResponse> {
             apiCall = syncAPI.sync(params)
+        }.leftIfNull {
+            Failure.Unknown(RuntimeException("Sync response shouln't be null"))
         }.flatMap {
             token = it?.nextBatch
             try {

@@ -1,11 +1,12 @@
 package im.vector.matrix.android.internal.di
 
 import im.vector.matrix.android.internal.auth.data.SessionParams
-import im.vector.matrix.android.internal.database.RealmInstanceHolder
+import im.vector.matrix.android.internal.database.SessionRealmHolder
 import im.vector.matrix.android.internal.legacy.MXDataHandler
 import im.vector.matrix.android.internal.legacy.MXSession
 import im.vector.matrix.android.internal.legacy.data.store.MXFileStore
 import im.vector.matrix.android.internal.session.DefaultSession
+import im.vector.matrix.android.internal.session.RoomSummaryObserver
 import io.realm.RealmConfiguration
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
@@ -21,7 +22,7 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-           RealmInstanceHolder(get())
+            SessionRealmHolder(get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -29,6 +30,10 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
             retrofitBuilder
                     .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
                     .build()
+        }
+
+        scope(DefaultSession.SCOPE) {
+            RoomSummaryObserver(get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

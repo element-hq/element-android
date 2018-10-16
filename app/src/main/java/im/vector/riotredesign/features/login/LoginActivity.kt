@@ -22,8 +22,8 @@ class LoginActivity : RiotActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        authenticateButton.setOnClickListener { authenticate() }
         checkActiveSessions()
+        authenticateButton.setOnClickListener { authenticate() }
     }
 
     private fun authenticate() {
@@ -37,9 +37,8 @@ class LoginActivity : RiotActivity() {
                 .build()
 
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
-            override fun onSuccess(data: Session?) {
-                matrix.currentSession = data
-                goToHomeScreen()
+            override fun onSuccess(data: Session) {
+                openSessionAndGoToHome(data)
             }
 
             override fun onFailure(failure: Failure) {
@@ -51,12 +50,16 @@ class LoginActivity : RiotActivity() {
 
     private fun checkActiveSessions() {
         if (authenticator.hasActiveSessions()) {
-            matrix.currentSession = authenticator.getLastActiveSession()
-            goToHomeScreen()
+            val session = authenticator.getLastActiveSession()
+            session?.let {
+                openSessionAndGoToHome(it)
+            }
         }
     }
 
-    private fun goToHomeScreen() {
+    private fun openSessionAndGoToHome(session: Session) {
+        matrix.currentSession = session
+        session.open()
         val intent = HomeActivity.newIntent(this)
         startActivity(intent)
         finish()

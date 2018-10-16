@@ -32,7 +32,7 @@ class Request<DATA> {
         } catch (e: Exception) {
             when (e) {
                 is IOException -> Either.Left(Failure.NetworkConnection)
-                else -> Either.Left(Failure.Unknown(e))
+                else           -> Either.Left(Failure.Unknown(e))
             }
         }
     }

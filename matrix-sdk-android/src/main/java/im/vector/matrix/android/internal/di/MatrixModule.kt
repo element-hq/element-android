@@ -3,7 +3,6 @@ package im.vector.matrix.android.internal.di
 import im.vector.matrix.android.api.MatrixOptions
 import im.vector.matrix.android.api.thread.MainThreadExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import io.realm.Realm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.asCoroutineDispatcher
