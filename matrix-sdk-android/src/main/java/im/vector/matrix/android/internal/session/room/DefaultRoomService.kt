@@ -29,7 +29,7 @@ class DefaultRoomService(private val realmConfiguration: RealmConfiguration,
         return room
     }
 
-    override fun observeAllRooms(): LiveData<List<Room>> {
+    override fun rooms(): LiveData<List<Room>> {
         val roomResults = RoomEntity.getAll(mainThreadRealm.instance).findAllAsync()
         return RealmLiveData(roomResults) { DefaultRoom(it.roomId) }
     }

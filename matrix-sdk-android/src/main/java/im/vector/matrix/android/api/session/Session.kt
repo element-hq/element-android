@@ -13,9 +13,4 @@ interface Session : RoomService {
     @MainThread
     fun close()
 
-    fun syncThread(): SyncThread
-
-    // Visible for testing request directly. Will be deleted
-    fun realmHolder(): SessionRealmHolder
-
 }

@@ -47,15 +47,6 @@ class DefaultSession(private val sessionParams: SessionParams
         syncThread.start()
     }
 
-    override fun realmHolder(): SessionRealmHolder {
-        assert(isOpen)
-        return realmInstanceHolder
-    }
-
-    override fun syncThread(): SyncThread {
-        assert(isOpen)
-        return syncThread
-    }
 
     @MainThread
     override fun close() {
@@ -78,8 +69,8 @@ class DefaultSession(private val sessionParams: SessionParams
         return roomService.getAllRooms()
     }
 
-    override fun observeAllRooms(): LiveData<List<Room>> {
-        return roomService.observeAllRooms()
+    override fun rooms(): LiveData<List<Room>> {
+        return roomService.rooms()
     }
 
     // Private methods *****************************************************************************
