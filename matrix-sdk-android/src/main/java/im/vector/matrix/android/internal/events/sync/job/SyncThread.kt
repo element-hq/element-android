@@ -7,6 +7,7 @@ import im.vector.matrix.android.internal.events.sync.SyncRequest
 import im.vector.matrix.android.internal.events.sync.SyncTokenStore
 import im.vector.matrix.android.internal.events.sync.data.SyncResponse
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
@@ -14,8 +15,9 @@ private const val RETRY_WAIT_TIME_MS = 10_000L
 
 class SyncThread(private val syncRequest: SyncRequest,
                  private val networkConnectivityChecker: NetworkConnectivityChecker,
-                 private val syncTokenStore: SyncTokenStore
-) : Thread(), NetworkConnectivityChecker.Listener {
+                 private val syncTokenStore: SyncTokenStore,
+                 private val backgroundDetectionObserver: BackgroundDetectionObserver
+) : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     enum class State {
         IDLE,
@@ -63,8 +65,9 @@ class SyncThread(private val syncRequest: SyncRequest,
 
     override fun run() {
         Timber.v("Start syncing...")
-        state = State.RUNNING
         networkConnectivityChecker.register(this)
+        backgroundDetectionObserver.register(this)
+        state = State.RUNNING
         while (state != State.KILLING) {
             if (!networkConnectivityChecker.isConnected() || state == State.PAUSED) {
                 Timber.v("Waiting...")
@@ -94,6 +97,7 @@ class SyncThread(private val syncRequest: SyncRequest,
         }
         Timber.v("Sync killed")
         state = State.KILLED
+        backgroundDetectionObserver.unregister(this)
         networkConnectivityChecker.unregister(this)
     }
 
@@ -102,6 +106,15 @@ class SyncThread(private val syncRequest: SyncRequest,
             lock.notify()
         }
     }
+
+    override fun onMoveToForeground() {
+        restart()
+    }
+
+    override fun onMoveToBackground() {
+        pause()
+    }
+
 
 }
 

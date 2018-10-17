@@ -34,7 +34,7 @@ class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncThread(get(), get(), get())
+            SyncThread(get(), get(), get(), get())
         }
 
 
