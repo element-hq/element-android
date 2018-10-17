@@ -46,7 +46,7 @@ class SyncRequest(private val syncAPI: SyncAPI,
             Failure.Unknown(RuntimeException("Sync response shouln't be null"))
         }.flatMap {
             try {
-                syncResponseHandler.handleResponse(it, null, false)
+                syncResponseHandler.handleResponse(it, token, false)
                 Either.right(it)
             } catch (exception: Exception) {
                 Either.Left(Failure.Unknown(exception))

@@ -30,7 +30,11 @@ class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncThread(get(), get())
+            SyncTokenStore(get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            SyncThread(get(), get(), get())
         }
 
 
