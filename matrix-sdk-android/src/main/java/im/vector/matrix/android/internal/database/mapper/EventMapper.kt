@@ -1,10 +1,10 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import com.squareup.moshi.Types
-import im.vector.matrix.android.api.events.Event
-import im.vector.matrix.android.api.events.UnsignedData
+import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.api.session.events.model.Event
 
 
 object EventMapper {

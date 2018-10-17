@@ -1,13 +1,16 @@
 package im.vector.matrix.android.internal.session
 
+import android.arch.lifecycle.LiveData
 import android.os.Looper
 import android.support.annotation.MainThread
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.auth.data.SessionParams
 import im.vector.matrix.android.internal.database.SessionRealmHolder
-import im.vector.matrix.android.internal.di.SessionModule
-import im.vector.matrix.android.internal.events.sync.SyncModule
-import im.vector.matrix.android.internal.events.sync.job.SyncThread
+import im.vector.matrix.android.internal.session.room.RoomSummaryObserver
+import im.vector.matrix.android.internal.session.sync.SyncModule
+import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import org.koin.core.scope.Scope
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.StandAloneContext
@@ -15,7 +18,8 @@ import org.koin.standalone.getKoin
 import org.koin.standalone.inject
 
 
-class DefaultSession(private val sessionParams: SessionParams) : Session, KoinComponent {
+class DefaultSession(private val sessionParams: SessionParams
+) : Session, KoinComponent, RoomService {
 
     companion object {
         const val SCOPE: String = "session"
@@ -25,6 +29,7 @@ class DefaultSession(private val sessionParams: SessionParams) : Session, KoinCo
 
     private val realmInstanceHolder by inject<SessionRealmHolder>()
     private val roomSummaryObserver by inject<RoomSummaryObserver>()
+    private val roomService by inject<RoomService>()
     private val syncThread by inject<SyncThread>()
     private var isOpen = false
 
@@ -61,6 +66,20 @@ class DefaultSession(private val sessionParams: SessionParams) : Session, KoinCo
         realmInstanceHolder.close()
         scope.close()
         isOpen = false
+    }
+
+    // ROOM SERVICE
+
+    override fun getRoom(roomId: String): Room? {
+        return roomService.getRoom(roomId)
+    }
+
+    override fun getAllRooms(): List<Room> {
+        return roomService.getAllRooms()
+    }
+
+    override fun observeAllRooms(): LiveData<List<Room>> {
+        return roomService.observeAllRooms()
     }
 
     // Private methods *****************************************************************************

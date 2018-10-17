@@ -54,7 +54,6 @@ import im.vector.matrix.android.internal.legacy.rest.model.crypto.KeysUploadResp
 import im.vector.matrix.android.internal.legacy.rest.model.crypto.RoomKeyContent;
 import im.vector.matrix.android.internal.legacy.rest.model.crypto.RoomKeyRequest;
 import im.vector.matrix.android.internal.legacy.rest.model.crypto.RoomKeyRequestBody;
-import im.vector.matrix.android.internal.legacy.rest.model.sync.SyncResponse;
 import im.vector.matrix.android.internal.legacy.util.JsonUtils;
 import im.vector.matrix.android.internal.legacy.util.Log;
 
@@ -600,7 +599,7 @@ public class MXCrypto {
      * @param fromToken    the start sync token
      * @param isCatchingUp true if there is a catch-up in progress.
      */
-    public void onSyncCompleted(final im.vector.matrix.android.internal.events.sync.data.SyncResponse syncResponse, final String fromToken, final boolean isCatchingUp) {
+    public void onSyncCompleted(final im.vector.matrix.android.internal.session.sync.model.SyncResponse syncResponse, final String fromToken, final boolean isCatchingUp) {
         getEncryptingThreadHandler().post(new Runnable() {
             @Override
             public void run() {

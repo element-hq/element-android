@@ -430,7 +430,7 @@ public interface IMXStore {
      * @param roomId the room id
      * @param event  the event
      */
-    void storeRoomStateEvent(String roomId, im.vector.matrix.android.api.events.Event event);
+    void storeRoomStateEvent(String roomId, im.vector.matrix.android.api.session.events.model.Event event);
 
     /**
      * Retrieve the room state creation events
@@ -438,7 +438,7 @@ public interface IMXStore {
      * @param roomId   the room id
      * @param callback the asynchronous callback
      */
-    void getRoomStateEvents(String roomId, ApiCallback<List<im.vector.matrix.android.api.events.Event>> callback);
+    void getRoomStateEvents(String roomId, ApiCallback<List<im.vector.matrix.android.api.session.events.model.Event>> callback);
 
     /**
      * Return the list of latest unsent events.

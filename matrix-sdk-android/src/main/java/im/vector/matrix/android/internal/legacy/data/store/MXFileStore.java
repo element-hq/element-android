@@ -1369,7 +1369,7 @@ public class MXFileStore extends MXMemoryStore {
     private Map<String, List<Event>> mPendingRoomStateEvents = new HashMap<>();
 
     @Override
-    public void storeRoomStateEvent(final String roomId, final im.vector.matrix.android.api.events.Event event) {
+    public void storeRoomStateEvent(final String roomId, final im.vector.matrix.android.api.session.events.model.Event event) {
         /*boolean isAlreadyLoaded = true;
 
         synchronized (mRoomStateEventsByRoomId) {
@@ -1477,7 +1477,7 @@ public class MXFileStore extends MXMemoryStore {
     }
 
     @Override
-    public void getRoomStateEvents(final String roomId, final ApiCallback<List<im.vector.matrix.android.api.events.Event>> callback) {
+    public void getRoomStateEvents(final String roomId, final ApiCallback<List<im.vector.matrix.android.api.session.events.model.Event>> callback) {
         boolean isAlreadyLoaded = true;
 
         /*synchronized (mRoomStateEventsByRoomId) {

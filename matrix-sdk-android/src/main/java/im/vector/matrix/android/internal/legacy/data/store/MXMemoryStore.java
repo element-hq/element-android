@@ -871,7 +871,7 @@ public class MXMemoryStore implements IMXStore {
     }
 
     @Override
-    public void storeRoomStateEvent(String roomId, im.vector.matrix.android.api.events.Event event) {
+    public void storeRoomStateEvent(String roomId, im.vector.matrix.android.api.session.events.model.Event event) {
         /*synchronized (mRoomStateEventsByRoomId) {
             Map<String, Event> events = mRoomStateEventsByRoomId.get(roomId);
 
@@ -888,8 +888,8 @@ public class MXMemoryStore implements IMXStore {
     }
 
     @Override
-    public void getRoomStateEvents(final String roomId, final ApiCallback<List<im.vector.matrix.android.api.events.Event>> callback) {
-        final List<im.vector.matrix.android.api.events.Event> events = new ArrayList<>();
+    public void getRoomStateEvents(final String roomId, final ApiCallback<List<im.vector.matrix.android.api.session.events.model.Event>> callback) {
+        final List<im.vector.matrix.android.api.session.events.model.Event> events = new ArrayList<>();
 
         /*synchronized (mRoomStateEventsByRoomId) {
             if (mRoomStateEventsByRoomId.containsKey(roomId)) {
