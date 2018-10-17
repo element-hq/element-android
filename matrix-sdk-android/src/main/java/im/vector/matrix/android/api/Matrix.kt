@@ -1,7 +1,7 @@
 package im.vector.matrix.android.api
 
 import android.content.Context
-import im.vector.matrix.android.BuildConfig
+import com.evernote.android.job.JobManager
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.auth.AuthModule
@@ -11,8 +11,6 @@ import io.realm.Realm
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.StandAloneContext.loadKoinModules
 import org.koin.standalone.inject
-import timber.log.Timber
-import timber.log.Timber.DebugTree
 
 
 class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
@@ -23,13 +21,11 @@ class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
 
     init {
         Realm.init(matrixOptions.context)
+        JobManager.create(matrixOptions.context)
         val matrixModule = MatrixModule(matrixOptions)
         val networkModule = NetworkModule()
         val authModule = AuthModule()
         loadKoinModules(listOf(matrixModule, networkModule, authModule))
-        if (BuildConfig.DEBUG) {
-            Timber.plant(DebugTree())
-        }
     }
 
     fun authenticator(): Authenticator {

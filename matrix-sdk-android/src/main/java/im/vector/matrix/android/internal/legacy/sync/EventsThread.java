@@ -228,7 +228,7 @@ public class EventsThread extends Thread {
     }
 
     /**
-     * Pause the thread. It will resume where it left off when unpause()d.
+     * Pause the thread. It will resume where it left off when pickUp()d.
      */
     public void pause() {
         Log.d(LOG_TAG, "pause()");
@@ -264,10 +264,10 @@ public class EventsThread extends Thread {
      * Unpause the thread if it had previously been paused. If not, this does nothing.
      */
     public void unpause() {
-        Log.d(LOG_TAG, "## unpause() : thread state " + getState());
+        Log.d(LOG_TAG, "## pickUp() : thread state " + getState());
 
         if (State.WAITING == getState()) {
-            Log.d(LOG_TAG, "## unpause() : the thread was paused so resume it.");
+            Log.d(LOG_TAG, "## pickUp() : the thread was paused so resume it.");
 
             mPaused = false;
             synchronized (mSyncObject) {

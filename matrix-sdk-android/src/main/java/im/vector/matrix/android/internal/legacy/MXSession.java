@@ -1075,7 +1075,7 @@ public class MXSession {
         }
 
         if (null != mEventsThread) {
-            Log.d(LOG_TAG, "## resumeEventStream() : unpause");
+            Log.d(LOG_TAG, "## resumeEventStream() : pickUp");
             mEventsThread.unpause();
         } else {
             Log.e(LOG_TAG, "resumeEventStream : mEventsThread is null");

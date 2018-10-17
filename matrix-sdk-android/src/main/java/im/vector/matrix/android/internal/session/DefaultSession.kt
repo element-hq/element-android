@@ -7,12 +7,13 @@ import im.vector.matrix.android.internal.auth.data.SessionParams
 import im.vector.matrix.android.internal.database.SessionRealmHolder
 import im.vector.matrix.android.internal.di.SessionModule
 import im.vector.matrix.android.internal.events.sync.SyncModule
-import im.vector.matrix.android.internal.events.sync.Synchronizer
+import im.vector.matrix.android.internal.events.sync.job.SyncThread
 import org.koin.core.scope.Scope
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.StandAloneContext
 import org.koin.standalone.getKoin
 import org.koin.standalone.inject
+
 
 class DefaultSession(private val sessionParams: SessionParams) : Session, KoinComponent {
 
@@ -23,9 +24,8 @@ class DefaultSession(private val sessionParams: SessionParams) : Session, KoinCo
     private lateinit var scope: Scope
 
     private val realmInstanceHolder by inject<SessionRealmHolder>()
-    private val synchronizer by inject<Synchronizer>()
     private val roomSummaryObserver by inject<RoomSummaryObserver>()
-
+    private val syncThread by inject<SyncThread>()
     private var isOpen = false
 
     @MainThread
@@ -39,11 +39,7 @@ class DefaultSession(private val sessionParams: SessionParams) : Session, KoinCo
         scope = getKoin().getOrCreateScope(SCOPE)
         realmInstanceHolder.open()
         roomSummaryObserver.start()
-    }
-
-    override fun synchronizer(): Synchronizer {
-        assert(isOpen)
-        return synchronizer
+        syncThread.start()
     }
 
     override fun realmHolder(): SessionRealmHolder {
@@ -51,15 +47,23 @@ class DefaultSession(private val sessionParams: SessionParams) : Session, KoinCo
         return realmInstanceHolder
     }
 
+    override fun syncThread(): SyncThread {
+        assert(isOpen)
+        return syncThread
+    }
+
     @MainThread
     override fun close() {
         checkIsMainThread()
         assert(isOpen)
+        syncThread.kill()
         roomSummaryObserver.dispose()
         realmInstanceHolder.close()
         scope.close()
         isOpen = false
     }
+
+    // Private methods *****************************************************************************
 
     private fun checkIsMainThread() {
         if (Looper.myLooper() != Looper.getMainLooper()) {

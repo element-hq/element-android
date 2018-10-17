@@ -2,6 +2,7 @@ package im.vector.matrix.android.internal.di
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.context.ModuleDefinition
@@ -47,6 +48,10 @@ class NetworkModule : Module {
 
         single {
             CoroutineCallAdapterFactory() as CallAdapter.Factory
+        }
+
+        single {
+            NetworkConnectivityChecker(get())
         }
 
         factory {

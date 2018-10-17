@@ -15,7 +15,7 @@ object EventMapper {
 
     internal fun map(event: Event): EventEntity {
         val eventEntity = EventEntity()
-        eventEntity.eventId = event.eventId!!
+        eventEntity.eventId = event.eventId ?: ""
         eventEntity.content = adapter.toJson(event.content)
         eventEntity.prevContent = adapter.toJson(event.prevContent)
         eventEntity.stateKey = event.stateKey

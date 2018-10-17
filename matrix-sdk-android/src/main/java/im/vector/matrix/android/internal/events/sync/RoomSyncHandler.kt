@@ -104,6 +104,7 @@ class RoomSyncHandler(private val realmConfiguration: RealmConfiguration) {
 
         chunkEntity.nextToken = nextToken
         chunkEntity.isLimited = isLimited
+
         eventList.forEach { event ->
             val eventEntity = event.asEntity().let {
                 realm.copyToRealmOrUpdate(it)

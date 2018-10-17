@@ -16,28 +16,27 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Synchronizer(private val syncAPI: SyncAPI,
-                   private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                   private val syncResponseHandler: SyncResponseHandler) {
+class SyncRequest(private val syncAPI: SyncAPI,
+                  private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                  private val syncResponseHandler: SyncResponseHandler) {
 
-    private var token: String? = null
 
-    fun synchronize(callback: MatrixCallback<SyncResponse>): Cancelable {
+    fun execute(token: String?, callback: MatrixCallback<SyncResponse>): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val syncOrFailure = synchronize()
+            val syncOrFailure = execute(token)
             syncOrFailure.bimap({ callback.onFailure(it) }, { callback.onSuccess(it) })
         }
         return CancelableCoroutine(job)
     }
 
-    private suspend fun synchronize() = withContext(coroutineDispatchers.io) {
+    private suspend fun execute(token: String?) = withContext(coroutineDispatchers.io) {
         val params = HashMap<String, String>()
         val filterBody = FilterBody()
         FilterUtil.enableLazyLoading(filterBody, true)
         var timeout = 0
         if (token != null) {
             params["since"] = token as String
-            timeout = 30
+            timeout = 30000
         }
         params["timeout"] = timeout.toString()
         params["filter"] = filterBody.toJSONString()
@@ -46,7 +45,6 @@ class Synchronizer(private val syncAPI: SyncAPI,
         }.leftIfNull {
             Failure.Unknown(RuntimeException("Sync response shouln't be null"))
         }.flatMap {
-            token = it?.nextBatch
             try {
                 syncResponseHandler.handleResponse(it, null, false)
                 Either.right(it)
