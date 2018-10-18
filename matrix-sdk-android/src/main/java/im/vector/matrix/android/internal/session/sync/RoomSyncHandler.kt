@@ -2,12 +2,13 @@ package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.internal.database.DBConstants
 import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.getChunkIncludingEvents
-import im.vector.matrix.android.internal.database.query.getForId
-import im.vector.matrix.android.internal.database.query.getLastChunkFromRoom
+import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
+import im.vector.matrix.android.internal.database.query.findLastFromRoom
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
 import io.realm.Realm
@@ -22,7 +23,7 @@ class RoomSyncHandler(private val monarchy: Monarchy) {
     }
 
     fun handleRoomSync(handlingStrategy: HandlingStrategy) {
-        monarchy.writeAsync { realm ->
+        monarchy.runTransactionSync { realm ->
             val roomEntities = when (handlingStrategy) {
                 is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
                 is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
@@ -39,7 +40,7 @@ class RoomSyncHandler(private val monarchy: Monarchy) {
                                  roomId: String,
                                  roomSync: RoomSync): RoomEntity {
 
-        val roomEntity = RoomEntity.getForId(realm, roomId) ?: RoomEntity(roomId)
+        val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: RoomEntity(roomId)
 
         if (roomEntity.membership == RoomEntity.Membership.INVITED) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -47,7 +48,7 @@ class RoomSyncHandler(private val monarchy: Monarchy) {
 
         roomEntity.membership = RoomEntity.Membership.JOINED
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
-            val chunkEntity = eventListToChunk(realm, roomId, roomSync.state.events)
+            val chunkEntity = eventListToChunk(realm, roomId, roomSync.state.events, DBConstants.STATE_EVENTS_CHUNK_TOKEN, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
             if (!roomEntity.chunks.contains(chunkEntity)) {
                 roomEntity.chunks.add(chunkEntity)
             }
@@ -94,10 +95,10 @@ class RoomSyncHandler(private val monarchy: Monarchy) {
                                  isLimited: Boolean = true): ChunkEntity {
 
         val chunkEntity = if (!isLimited) {
-            ChunkEntity.getLastChunkFromRoom(realm, roomId)
+            ChunkEntity.findLastFromRoom(realm, roomId)
         } else {
             val eventIds = eventList.filter { it.eventId != null }.map { it.eventId!! }
-            ChunkEntity.getChunkIncludingEvents(realm, eventIds)
+            ChunkEntity.findAllIncludingEvents(realm, eventIds).firstOrNull()
         } ?: ChunkEntity().apply { this.prevToken = prevToken }
 
         chunkEntity.nextToken = nextToken

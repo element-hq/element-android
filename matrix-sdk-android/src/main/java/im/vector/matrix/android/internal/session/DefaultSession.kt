@@ -7,6 +7,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.room.RoomSummaryObserver
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
@@ -37,7 +38,8 @@ class DefaultSession(private val sessionParams: SessionParams) : Session, KoinCo
         isOpen = true
         val sessionModule = SessionModule(sessionParams)
         val syncModule = SyncModule()
-        StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule))
+        val roomModule = RoomModule()
+        StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule, roomModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         roomSummaryObserver.start()
         syncThread.start()
