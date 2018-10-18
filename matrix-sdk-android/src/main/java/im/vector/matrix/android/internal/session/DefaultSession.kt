@@ -7,7 +7,6 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.auth.data.SessionParams
-import im.vector.matrix.android.internal.database.SessionRealmHolder
 import im.vector.matrix.android.internal.session.room.RoomSummaryObserver
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
@@ -18,8 +17,7 @@ import org.koin.standalone.getKoin
 import org.koin.standalone.inject
 
 
-class DefaultSession(private val sessionParams: SessionParams
-) : Session, KoinComponent, RoomService {
+class DefaultSession(private val sessionParams: SessionParams) : Session, KoinComponent, RoomService {
 
     companion object {
         const val SCOPE: String = "session"
@@ -27,7 +25,6 @@ class DefaultSession(private val sessionParams: SessionParams
 
     private lateinit var scope: Scope
 
-    private val realmInstanceHolder by inject<SessionRealmHolder>()
     private val roomSummaryObserver by inject<RoomSummaryObserver>()
     private val roomService by inject<RoomService>()
     private val syncThread by inject<SyncThread>()
@@ -42,7 +39,6 @@ class DefaultSession(private val sessionParams: SessionParams
         val syncModule = SyncModule()
         StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule))
         scope = getKoin().getOrCreateScope(SCOPE)
-        realmInstanceHolder.open()
         roomSummaryObserver.start()
         syncThread.start()
     }
@@ -54,7 +50,6 @@ class DefaultSession(private val sessionParams: SessionParams
         assert(isOpen)
         syncThread.kill()
         roomSummaryObserver.dispose()
-        realmInstanceHolder.close()
         scope.close()
         isOpen = false
     }

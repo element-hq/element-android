@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.session.sync
 
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -10,10 +11,9 @@ import im.vector.matrix.android.internal.database.query.getLastChunkFromRoom
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
 import io.realm.Realm
-import io.realm.RealmConfiguration
 
 
-class RoomSyncHandler(private val realmConfiguration: RealmConfiguration) {
+class RoomSyncHandler(private val monarchy: Monarchy) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -22,16 +22,14 @@ class RoomSyncHandler(private val realmConfiguration: RealmConfiguration) {
     }
 
     fun handleRoomSync(handlingStrategy: HandlingStrategy) {
-        val realm = Realm.getInstance(realmConfiguration)
-        realm.executeTransaction { realmInstance ->
+        monarchy.writeAsync { realm ->
             val roomEntities = when (handlingStrategy) {
                 is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
                 is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
                 is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
             }
-            realmInstance.insertOrUpdate(roomEntities)
+            realm.insertOrUpdate(roomEntities)
         }
-        realm.close()
     }
 
 

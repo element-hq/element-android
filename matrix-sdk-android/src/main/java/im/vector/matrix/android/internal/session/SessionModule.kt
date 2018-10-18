@@ -1,8 +1,8 @@
 package im.vector.matrix.android.internal.session
 
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.auth.data.SessionParams
-import im.vector.matrix.android.internal.database.SessionRealmHolder
 import im.vector.matrix.android.internal.legacy.MXDataHandler
 import im.vector.matrix.android.internal.legacy.MXSession
 import im.vector.matrix.android.internal.legacy.data.store.MXFileStore
@@ -23,7 +23,7 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            SessionRealmHolder(get())
+            Monarchy.Builder().setRealmConfiguration(get()).build()
         }
 
         scope(DefaultSession.SCOPE) {
@@ -34,11 +34,11 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSummaryObserver(get(), get(), get())
+            RoomSummaryObserver(get())
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultRoomService(get(), get()) as RoomService
+            DefaultRoomService(get()) as RoomService
         }
 
         scope(DefaultSession.SCOPE) {

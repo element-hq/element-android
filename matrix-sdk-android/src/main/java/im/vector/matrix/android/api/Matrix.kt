@@ -2,13 +2,13 @@ package im.vector.matrix.android.api
 
 import android.arch.lifecycle.ProcessLifecycleOwner
 import android.content.Context
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.di.MatrixModule
 import im.vector.matrix.android.internal.di.NetworkModule
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
-import io.realm.Realm
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.StandAloneContext.loadKoinModules
 import org.koin.standalone.inject
@@ -22,7 +22,7 @@ class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
     var currentSession: Session? = null
 
     init {
-        Realm.init(matrixOptions.context)
+        Monarchy.init(matrixOptions.context)
         val matrixModule = MatrixModule(matrixOptions)
         val networkModule = NetworkModule()
         val authModule = AuthModule()
