@@ -5,7 +5,9 @@ import im.vector.matrix.android.internal.network.parsing.UriMoshiAdapter
 
 object MoshiProvider {
 
-    private val moshi: Moshi = Moshi.Builder().add(UriMoshiAdapter()).build()
+    private val moshi: Moshi = Moshi.Builder()
+            .add(UriMoshiAdapter())
+            .build()
 
     fun providesMoshi(): Moshi {
         return moshi

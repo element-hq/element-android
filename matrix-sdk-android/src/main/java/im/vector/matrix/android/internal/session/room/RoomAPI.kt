@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.session.room
 
+import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.model.TokenChunkEvent
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
@@ -18,12 +19,13 @@ interface RoomAPI {
      * @param limit  the maximum number of messages to retrieve. Optional.
      * @param filter A JSON RoomEventFilter to filter returned events with. Optional.
      */
-    @GET("rooms/{roomId}/messages")
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/messages")
     fun getRoomMessagesFrom(@Path("roomId") roomId: String,
                             @Query("from") from: String,
                             @Query("dir") dir: String,
                             @Query("limit") limit: Int,
-                            @Query("filter") filter: String?): Deferred<Response<TokenChunkEvent>>
+                            @Query("filter") filter: String?
+    ): Deferred<Response<TokenChunkEvent>>
 
 
 }

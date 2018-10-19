@@ -10,3 +10,7 @@ fun AppCompatActivity.addFragment(fragment: Fragment, frameId: Int) {
 fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
     supportFragmentManager.inTransaction { replace(frameId, fragment) }
 }
+
+fun AppCompatActivity.addFragmentToBackstack(fragment: Fragment, frameId: Int, tag: String? = null) {
+    supportFragmentManager.inTransaction { replace(frameId, fragment).addToBackStack(tag) }
+}

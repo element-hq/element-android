@@ -17,3 +17,11 @@ fun Fragment.addChildFragment(fragment: Fragment, frameId: Int) {
 fun Fragment.replaceChildFragment(fragment: Fragment, frameId: Int) {
     childFragmentManager.inTransaction { replace(frameId, fragment) }
 }
+
+fun Fragment.addFragmentToBackstack(fragment: Fragment, frameId: Int, tag: String? = null) {
+    fragmentManager?.inTransaction { replace(frameId, fragment).addToBackStack(tag) }
+}
+
+fun Fragment.addChildFragmentToBackstack(fragment: Fragment, frameId: Int, tag: String? = null) {
+    childFragmentManager.inTransaction { replace(frameId, fragment).addToBackStack(tag) }
+}

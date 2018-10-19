@@ -6,14 +6,15 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.matrix.android.api.session.events.model.Event
 
 class TimelineEventController : PagedListEpoxyController<Event>(
-        modelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+        modelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler(),
+        diffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
 
     override fun buildItemModel(currentPosition: Int, item: Event?): EpoxyModel<*> {
         return if (item == null) {
             LoadingItemModel_().id(-currentPosition)
         } else {
-            TimelineEventItem(item.eventId ?: "$currentPosition").id(currentPosition)
+            TimelineEventItem(item.toString()).id(currentPosition)
         }
     }
 

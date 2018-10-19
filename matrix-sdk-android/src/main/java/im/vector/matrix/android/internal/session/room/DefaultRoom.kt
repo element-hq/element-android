@@ -8,7 +8,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.timeline.PaginationRequest
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
@@ -26,15 +25,17 @@ data class DefaultRoom(
 
     override fun liveTimeline(): LiveData<PagedList<Event>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            val lastChunk = ChunkEntity.where(realm, roomId).findAll().last(null)
-            if (lastChunk == null) {
-                EventEntity.where(realm, roomId)
-            } else {
-                EventEntity.where(realm, lastChunk)
-            }
+            ChunkEntity.where(realm, roomId).findAll().last(null).let { it?.events }?.where()
         }
         val domainSourceFactory = realmDataSourceFactory.map { EventMapper.map(it) }
-        val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, 20).setBoundaryCallback(boundaryCallback)
+
+        val pagedListConfig = PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setPageSize(10)
+                .setPrefetchDistance(5)
+                .build()
+
+        val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
     }
 

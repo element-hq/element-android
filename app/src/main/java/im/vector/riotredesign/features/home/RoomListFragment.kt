@@ -2,13 +2,14 @@ package im.vector.riotredesign.features.home
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.replaceFragment
+import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.RiotFragment
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.koin.android.ext.android.inject
@@ -43,7 +44,7 @@ class RoomListFragment : RiotFragment(), RoomController.Callback {
 
     override fun onRoomSelected(room: Room) {
         val detailFragment = RoomDetailFragment.newInstance(room.roomId)
-        replaceFragment(detailFragment, R.id.homeFragmentContainer)
+        addFragmentToBackstack(detailFragment, R.id.homeFragmentContainer)
     }
 
 
