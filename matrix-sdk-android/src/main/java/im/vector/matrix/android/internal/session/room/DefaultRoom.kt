@@ -24,7 +24,7 @@ data class DefaultRoom(
     private val monarchy by inject<Monarchy>()
     private val boundaryCallback = TimelineBoundaryCallback(paginationRequest, roomId, monarchy, Executors.newSingleThreadExecutor())
 
-    fun events(): LiveData<PagedList<Event>> {
+    override fun liveTimeline(): LiveData<PagedList<Event>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             val lastChunk = ChunkEntity.where(realm, roomId).findAll().last()
             EventEntity.where(realm, lastChunk)
