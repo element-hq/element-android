@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.RiotFragment
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.koin.android.ext.android.inject
@@ -42,7 +42,8 @@ class RoomListFragment : RiotFragment(), RoomController.Callback {
     }
 
     override fun onRoomSelected(room: Room) {
-        Toast.makeText(context, "Room ${room.roomId} clicked", Toast.LENGTH_SHORT).show()
+        val detailFragment = RoomDetailFragment.newInstance(room.roomId)
+        replaceFragment(detailFragment, R.id.homeFragmentContainer)
     }
 
 

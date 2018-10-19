@@ -11,11 +11,11 @@ fun EventEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<EventE
             .equalTo("chunk.room.roomId", roomId)
 }
 
-fun EventEntity.Companion.where(realm: Realm, chunk: ChunkEntity?): RealmQuery<EventEntity> {
+fun EventEntity.Companion.where(realm: Realm, chunk: ChunkEntity): RealmQuery<EventEntity> {
     return realm.where(EventEntity::class.java)
-            .equalTo("chunk.prevToken", chunk?.prevToken)
+            .equalTo("chunk.prevToken", chunk.prevToken)
             .and()
-            .equalTo("chunk.nextToken", chunk?.nextToken)
+            .equalTo("chunk.nextToken", chunk.nextToken)
 }
 
 fun RealmResults<EventEntity>.getLast(type: String? = null): EventEntity? {

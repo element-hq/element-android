@@ -1,4 +1,4 @@
-package im.vector.riotredesign.core.helpers
+package im.vector.riotredesign.core.epoxy
 
 import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
