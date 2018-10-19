@@ -26,7 +26,7 @@ data class DefaultRoom(
 
     override fun liveTimeline(): LiveData<PagedList<Event>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            val lastChunk = ChunkEntity.where(realm, roomId).findAll().last()
+            val lastChunk = ChunkEntity.where(realm, roomId).findAll().last(null)
             if (lastChunk == null) {
                 EventEntity.where(realm, roomId)
             } else {

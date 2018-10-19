@@ -8,6 +8,6 @@ interface RoomService {
 
     fun getAllRooms(): List<Room>
 
-    fun rooms(): LiveData<List<Room>>
+    fun liveRooms(): LiveData<List<Room>>
 
 }

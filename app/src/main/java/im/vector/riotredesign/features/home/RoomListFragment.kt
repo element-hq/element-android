@@ -34,7 +34,7 @@ class RoomListFragment : RiotFragment(), RoomController.Callback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         epoxyRecyclerView.setController(roomController)
-        currentSession.rooms().observe(this, Observer<List<Room>> { renderRooms(it) })
+        currentSession.liveRooms().observe(this, Observer<List<Room>> { renderRooms(it) })
     }
 
     private fun renderRooms(rooms: List<Room>?) {

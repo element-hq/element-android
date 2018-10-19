@@ -66,8 +66,8 @@ class DefaultSession(private val sessionParams: SessionParams) : Session, KoinCo
         return roomService.getAllRooms()
     }
 
-    override fun rooms(): LiveData<List<Room>> {
-        return roomService.rooms()
+    override fun liveRooms(): LiveData<List<Room>> {
+        return roomService.liveRooms()
     }
 
     // Private methods *****************************************************************************

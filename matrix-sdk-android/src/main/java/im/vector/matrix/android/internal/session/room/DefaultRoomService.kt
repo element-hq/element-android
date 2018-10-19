@@ -25,7 +25,7 @@ class DefaultRoomService(private val monarchy: Monarchy) : RoomService {
         return room
     }
 
-    override fun rooms(): LiveData<List<Room>> {
+    override fun liveRooms(): LiveData<List<Room>> {
         return monarchy.findAllMappedWithChanges(
                 { realm -> RoomEntity.where(realm) },
                 { DefaultRoom(it.roomId) }

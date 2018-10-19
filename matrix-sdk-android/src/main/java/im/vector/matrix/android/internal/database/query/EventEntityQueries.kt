@@ -23,5 +23,5 @@ fun RealmResults<EventEntity>.getLast(type: String? = null): EventEntity? {
     if (type != null) {
         query = query.equalTo("type", type)
     }
-    return query.findAll().sort("age").last()
+    return query.findAll().sort("age").last(null)
 }

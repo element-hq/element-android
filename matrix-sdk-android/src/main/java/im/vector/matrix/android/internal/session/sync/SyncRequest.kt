@@ -6,10 +6,10 @@ import arrow.core.leftIfNull
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.legacy.rest.model.filter.FilterBody
 import im.vector.matrix.android.internal.legacy.util.FilterUtil
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
@@ -22,7 +22,7 @@ class SyncRequest(private val syncAPI: SyncAPI,
 
 
     fun execute(token: String?, callback: MatrixCallback<SyncResponse>): Cancelable {
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
+        val job = GlobalScope.launch {
             val syncOrFailure = execute(token)
             syncOrFailure.bimap({ callback.onFailure(it) }, { callback.onSuccess(it) })
         }
@@ -35,7 +35,7 @@ class SyncRequest(private val syncAPI: SyncAPI,
         FilterUtil.enableLazyLoading(filterBody, true)
         var timeout = 0
         if (token != null) {
-            params["since"] = token as String
+            params["since"] = token
             timeout = 30000
         }
         params["timeout"] = timeout.toString()

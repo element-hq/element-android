@@ -34,7 +34,7 @@ fun ChunkEntity.Companion.findLastFromRoom(realm: Realm, roomId: String): ChunkE
             .and()
             .isNull("nextToken")
             .findAll()
-            .last()
+            .last(null)
 }
 
 fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds: List<String>): RealmResults<ChunkEntity> {
