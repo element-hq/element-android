@@ -14,10 +14,10 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.utils.FragmentArgumentDelegate
-import kotlinx.android.synthetic.main.fragment_room_list.*
+import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 
-class RoomDetailFragment : RiotFragment() {
+class RoomDetailFragment : RiotFragment(), TimelineAdapter.Callback {
 
     companion object {
 
@@ -31,7 +31,7 @@ class RoomDetailFragment : RiotFragment() {
     private val matrix by inject<Matrix>()
     private val currentSession = matrix.currentSession!!
     private var roomId by FragmentArgumentDelegate<String>()
-    private val timelineController = TimelineEventController()
+    private val adapter = TimelineAdapter(this)
     private lateinit var room: Room
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,14 +46,27 @@ class RoomDetailFragment : RiotFragment() {
     }
 
     private fun renderEvents(events: PagedList<Event>?) {
-        timelineController.submitList(events)
+        adapter.submitList(events)
     }
 
     private fun setupRecyclerView() {
-        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        linearLayoutManager.stackFromEnd = true
-        epoxyRecyclerView.layoutManager = linearLayoutManager
-        epoxyRecyclerView.setController(timelineController)
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (layoutManager.findLastCompletelyVisibleItemPosition() == positionStart - itemCount) {
+                    layoutManager.scrollToPosition(adapter.itemCount - 1)
+                }
+            }
+        })
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
+    }
+
+    override fun onEventsListChanged(oldList: List<Event>?, newList: List<Event>?) {
+        if (oldList == null && newList != null) {
+            recyclerView.scrollToPosition(newList.size - 1)
+        }
     }
 
 

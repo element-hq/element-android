@@ -7,7 +7,10 @@ import io.realm.RealmQuery
 import io.realm.RealmResults
 
 fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ChunkEntity> {
-    return realm.where(ChunkEntity::class.java).equalTo("room.roomId", roomId)
+    return realm.where(ChunkEntity::class.java)
+            .equalTo("room.roomId", roomId)
+            .notEqualTo("prevToken", DBConstants.STATE_EVENTS_CHUNK_TOKEN)
+            .notEqualTo("nextToken", DBConstants.STATE_EVENTS_CHUNK_TOKEN)
 }
 
 fun ChunkEntity.Companion.findWithPrevToken(realm: Realm, roomId: String, prevToken: String?): ChunkEntity? {

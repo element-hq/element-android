@@ -25,13 +25,19 @@ data class DefaultRoom(
 
     override fun liveTimeline(): LiveData<PagedList<Event>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            ChunkEntity.where(realm, roomId).findAll().last(null).let { it?.events }?.where()
+            ChunkEntity.where(realm, roomId)
+                    .findAll()
+                    .last(null)
+                    ?.let { it.events }
+                    ?.where()
+                    ?.sort("originServerTs")
         }
         val domainSourceFactory = realmDataSourceFactory.map { EventMapper.map(it) }
 
         val pagedListConfig = PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
                 .setPageSize(10)
+                .setInitialLoadSizeHint(30)
                 .setPrefetchDistance(5)
                 .build()
 

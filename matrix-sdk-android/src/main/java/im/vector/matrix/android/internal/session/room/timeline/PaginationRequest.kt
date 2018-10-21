@@ -9,7 +9,6 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.findWithNextToken
@@ -87,34 +86,30 @@ class PaginationRequest(private val roomAPI: RoomAPI,
                 ChunkEntity()
             }
 
-
-            val eventsToAdd = ArrayList<EventEntity>()
-
             currentChunk.prevToken = chunkEvent.prevToken
             mergedEvents.forEach { event ->
                 val eventEntity = event.asEntity().let {
                     realm.copyToRealmOrUpdate(it)
                 }
                 if (!currentChunk.events.contains(eventEntity)) {
-                    eventsToAdd.add(0, eventEntity)
+                    currentChunk.events.add(0, eventEntity)
                 }
             }
 
             if (prevChunk != null) {
-                eventsToAdd.addAll(0, prevChunk.events)
+                currentChunk.events.addAll(prevChunk.events)
                 roomEntity.chunks.remove(prevChunk)
 
             } else if (hasOverlapped) {
                 chunksOverlapped.forEach { chunk ->
                     chunk.events.forEach { event ->
                         if (!currentChunk.events.contains(event)) {
-                            eventsToAdd.add(0, event)
+                            currentChunk.events.add(0, event)
                         }
                     }
                     roomEntity.chunks.remove(chunk)
                 }
             }
-            currentChunk.events.addAll(0, eventsToAdd)
             if (!roomEntity.chunks.contains(currentChunk)) {
                 roomEntity.chunks.add(currentChunk)
             }

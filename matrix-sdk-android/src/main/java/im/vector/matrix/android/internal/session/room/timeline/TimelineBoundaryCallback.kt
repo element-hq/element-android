@@ -26,7 +26,15 @@ class TimelineBoundaryCallback(private val paginationRequest: PaginationRequest,
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: Event) {
-        //Todo handle forward pagination
+        helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
+            monarchy.doWithRealm { realm ->
+                if (itemAtEnd.eventId == null) {
+                    return@doWithRealm
+                }
+                val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(itemAtEnd.eventId)).firstOrNull()
+                paginationRequest.execute(roomId, chunkEntity?.nextToken, PaginationDirection.FORWARDS, callback = createCallback(it))
+            }
+        }
     }
 
     override fun onItemAtFrontLoaded(itemAtFront: Event) {
@@ -39,7 +47,6 @@ class TimelineBoundaryCallback(private val paginationRequest: PaginationRequest,
                 paginationRequest.execute(roomId, chunkEntity?.prevToken, PaginationDirection.BACKWARDS, callback = createCallback(it))
             }
         }
-
     }
 
     private fun createCallback(pagingRequestCallback: PagingRequestHelper.Request.Callback) = object : MatrixCallback<TokenChunkEvent> {

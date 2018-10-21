@@ -6,7 +6,6 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.matrix.android.api.session.events.model.Event
 
 class TimelineEventController : PagedListEpoxyController<Event>(
-        modelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         diffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
 
