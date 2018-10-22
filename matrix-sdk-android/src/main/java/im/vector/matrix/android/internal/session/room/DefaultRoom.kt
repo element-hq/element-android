@@ -11,6 +11,7 @@ import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.timeline.PaginationRequest
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
+import io.realm.Sort
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import java.util.concurrent.Executors
@@ -28,17 +29,16 @@ data class DefaultRoom(
             ChunkEntity.where(realm, roomId)
                     .findAll()
                     .last(null)
-                    ?.let { it.events }
-                    ?.where()
-                    ?.sort("originServerTs")
+                    ?.let {
+                        it.events.where().sort("originServerTs", Sort.DESCENDING)
+                    }
         }
         val domainSourceFactory = realmDataSourceFactory.map { EventMapper.map(it) }
 
         val pagedListConfig = PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
                 .setPageSize(10)
-                .setInitialLoadSizeHint(30)
-                .setPrefetchDistance(5)
+                .setPrefetchDistance(10)
                 .build()
 
         val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)

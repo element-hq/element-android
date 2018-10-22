@@ -33,7 +33,7 @@ fun ChunkEntity.Companion.findWithNextToken(realm: Realm, roomId: String, nextTo
             .findFirst()
 }
 
-fun ChunkEntity.Companion.findLastFromRoom(realm: Realm, roomId: String): ChunkEntity? {
+fun ChunkEntity.Companion.findLastLiveChunkFromRoom(realm: Realm, roomId: String): ChunkEntity? {
     return where(realm, roomId)
             .and()
             .isNull("nextToken")

@@ -14,8 +14,8 @@ import im.vector.riotredesign.R
  * Created by francois on 14/05/2018.
  */
 
-class TimelineAdapter(private val callback: Callback? = null)
-    : PagedListAdapter<Event, TimelineAdapter.ViewHolder>(EventDiffUtilCallback()) {
+class TimelineEventAdapter(private val callback: Callback? = null)
+    : PagedListAdapter<Event, TimelineEventAdapter.ViewHolder>(EventDiffUtilCallback()) {
 
 
     private var currentList: List<Event>? = null

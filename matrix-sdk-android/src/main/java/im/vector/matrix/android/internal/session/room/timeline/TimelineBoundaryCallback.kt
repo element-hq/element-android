@@ -32,7 +32,7 @@ class TimelineBoundaryCallback(private val paginationRequest: PaginationRequest,
                     return@doWithRealm
                 }
                 val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(itemAtEnd.eventId)).firstOrNull()
-                paginationRequest.execute(roomId, chunkEntity?.nextToken, PaginationDirection.FORWARDS, callback = createCallback(it))
+                paginationRequest.execute(roomId, chunkEntity?.prevToken, PaginationDirection.BACKWARDS, callback = createCallback(it))
             }
         }
     }
@@ -44,7 +44,7 @@ class TimelineBoundaryCallback(private val paginationRequest: PaginationRequest,
                     return@doWithRealm
                 }
                 val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(itemAtFront.eventId)).firstOrNull()
-                paginationRequest.execute(roomId, chunkEntity?.prevToken, PaginationDirection.BACKWARDS, callback = createCallback(it))
+                paginationRequest.execute(roomId, chunkEntity?.nextToken, PaginationDirection.FORWARDS, callback = createCallback(it))
             }
         }
     }

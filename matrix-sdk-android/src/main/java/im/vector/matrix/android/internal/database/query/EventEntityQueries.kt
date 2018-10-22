@@ -5,6 +5,7 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
+import io.realm.Sort
 
 fun EventEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<EventEntity> {
     return realm.where(EventEntity::class.java)
@@ -23,9 +24,9 @@ fun EventEntity.Companion.where(realm: Realm, chunk: ChunkEntity?): RealmQuery<E
 }
 
 fun RealmResults<EventEntity>.getLast(type: String? = null): EventEntity? {
-    var query = this.where()
+    var query = this.where().sort("originServerTs", Sort.DESCENDING)
     if (type != null) {
         query = query.equalTo("type", type)
     }
-    return query.findAll().last(null)
+    return query.findFirst()
 }

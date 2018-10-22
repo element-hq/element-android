@@ -7,7 +7,7 @@ import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
-import im.vector.matrix.android.internal.database.query.findLastFromRoom
+import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
@@ -95,14 +95,13 @@ class RoomSyncHandler(private val monarchy: Monarchy) {
                                  isLimited: Boolean = true): ChunkEntity {
 
         val chunkEntity = if (!isLimited) {
-            ChunkEntity.findLastFromRoom(realm, roomId)
+            ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
         } else {
             val eventIds = eventList.filter { it.eventId != null }.map { it.eventId!! }
             ChunkEntity.findAllIncludingEvents(realm, eventIds).firstOrNull()
         } ?: ChunkEntity().apply { this.prevToken = prevToken }
 
         chunkEntity.nextToken = nextToken
-        chunkEntity.isLimited = isLimited
 
         eventList.forEach { event ->
             val eventEntity = event.asEntity().let {
