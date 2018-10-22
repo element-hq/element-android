@@ -4,9 +4,11 @@ import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInterceptor
+import im.vector.matrix.android.api.session.events.interceptor.MessageEventInterceptor
+import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.internal.database.mapper.EventMapper
+import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.timeline.PaginationRequest
@@ -23,8 +25,13 @@ data class DefaultRoom(
     private val paginationRequest by inject<PaginationRequest>()
     private val monarchy by inject<Monarchy>()
     private val boundaryCallback = TimelineBoundaryCallback(paginationRequest, roomId, monarchy, Executors.newSingleThreadExecutor())
+    private val eventInterceptors = ArrayList<EnrichedEventInterceptor>()
 
-    override fun liveTimeline(): LiveData<PagedList<Event>> {
+    init {
+        eventInterceptors.add(MessageEventInterceptor(monarchy))
+    }
+
+    override fun liveTimeline(): LiveData<PagedList<EnrichedEvent>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             ChunkEntity.where(realm, roomId)
                     .findAll()
@@ -33,7 +40,18 @@ data class DefaultRoom(
                         it.events.where().sort("originServerTs", Sort.DESCENDING)
                     }
         }
-        val domainSourceFactory = realmDataSourceFactory.map { EventMapper.map(it) }
+        val domainSourceFactory = realmDataSourceFactory
+                .map { it.asDomain() }
+                .map { event ->
+                    val enrichedEvent = EnrichedEvent(event)
+                    eventInterceptors
+                            .filter {
+                                it.canEnrich(enrichedEvent)
+                            }.forEach {
+                                it.enrich(roomId, enrichedEvent)
+                            }
+                    enrichedEvent
+                }
 
         val pagedListConfig = PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
@@ -44,6 +62,5 @@ data class DefaultRoom(
         val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
     }
-
 
 }

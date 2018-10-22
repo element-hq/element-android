@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
@@ -46,7 +46,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
         room.liveTimeline().observe(this, Observer { renderEvents(it) })
     }
 
-    private fun renderEvents(events: PagedList<Event>?) {
+    private fun renderEvents(events: PagedList<EnrichedEvent>?) {
         timelineAdapter.submitList(events)
     }
 
@@ -65,7 +65,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
         //recyclerView.setController(timelineEventController)
     }
 
-    override fun onEventsListChanged(oldList: List<Event>?, newList: List<Event>?) {
+    override fun onEventsListChanged(oldList: List<EnrichedEvent>?, newList: List<EnrichedEvent>?) {
         if (oldList == null && newList != null) {
             recyclerView.scrollToPosition(0)
         }

@@ -1,14 +1,18 @@
 package im.vector.riotredesign.features.home
 
 import android.support.v7.util.DiffUtil
-import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 
-class EventDiffUtilCallback : DiffUtil.ItemCallback<Event>() {
-    override fun areItemsTheSame(p0: Event, p1: Event): Boolean {
-        return p0.eventId == p1.eventId
+class EventDiffUtilCallback : DiffUtil.ItemCallback<EnrichedEvent>() {
+    override fun areItemsTheSame(p0: EnrichedEvent, p1: EnrichedEvent): Boolean {
+        return p0.core.eventId == p1.core.eventId
     }
 
-    override fun areContentsTheSame(p0: Event, p1: Event): Boolean {
-        return p0 == p1
+    override fun areContentsTheSame(p0: EnrichedEvent, p1: EnrichedEvent): Boolean {
+        return p0.core == p1.core
+               && p0.getMetaEvents()
+                       .zip(p1.getMetaEvents()) { a, b ->
+                           a.eventId == b.eventId
+                       }.none { !it }
     }
 }

@@ -8,7 +8,7 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.getLast
+import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
 import io.realm.RealmResults
 import java.util.concurrent.atomic.AtomicBoolean
@@ -49,10 +49,9 @@ internal class RoomSummaryObserver(private val monarchy: Monarchy) {
 
     private fun manageRoom(roomId: String) {
         monarchy.writeAsync { realm ->
-            val roomEvents = EventEntity.where(realm, roomId).findAll()
-            val lastNameEvent = roomEvents.getLast(EventType.STATE_ROOM_NAME)?.asDomain()
-            val lastTopicEvent = roomEvents.getLast(EventType.STATE_ROOM_TOPIC)?.asDomain()
-            val lastMessageEvent = roomEvents.getLast(EventType.MESSAGE)
+            val lastNameEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_NAME).last()?.asDomain()
+            val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()
+            val lastMessageEvent = EventEntity.where(realm, roomId, EventType.MESSAGE).last()
 
             val roomSummary = realm.copyToRealmOrUpdate(RoomSummaryEntity(roomId))
             roomSummary.displayName = lastNameEvent?.content<RoomNameContent>()?.name

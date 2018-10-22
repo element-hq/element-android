@@ -13,7 +13,7 @@ class TimelineEventController : PagedListEpoxyController<Event>(
         return if (item == null) {
             LoadingItemModel_().id(-currentPosition)
         } else {
-            TimelineEventItem(item.toString()).id(currentPosition)
+            TimelineEventItem(item.toString()).id(item.eventId)
         }
     }
 

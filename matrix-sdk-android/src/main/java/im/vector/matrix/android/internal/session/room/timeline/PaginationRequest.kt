@@ -7,7 +7,6 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.DBConstants
 import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
@@ -20,6 +19,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.model.PaginationDirection
 import im.vector.matrix.android.internal.session.room.model.TokenChunkEvent
+import im.vector.matrix.android.internal.session.sync.StateEventsChunkHandler
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
@@ -89,19 +89,9 @@ class PaginationRequest(private val roomAPI: RoomAPI,
             currentChunk.prevToken = chunkEvent.prevToken
 
 
-            val stateEventsChunk = ChunkEntity.findWithNextToken(realm, roomId, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
-                                   ?: ChunkEntity().apply {
-                                       this.prevToken = DBConstants.STATE_EVENTS_CHUNK_TOKEN
-                                       this.nextToken = DBConstants.STATE_EVENTS_CHUNK_TOKEN
-                                   }
-
-            chunkEvent.stateEvents.forEach { stateEvent ->
-                val eventEntity = stateEvent.asEntity().let {
-                    realm.copyToRealmOrUpdate(it)
-                }
-                if (!stateEventsChunk.events.contains(eventEntity)) {
-                    stateEventsChunk.events.add(0, eventEntity)
-                }
+            val stateEventsChunk = StateEventsChunkHandler().handle(realm, roomId, chunkEvent.stateEvents)
+            if (!roomEntity.chunks.contains(stateEventsChunk)) {
+                roomEntity.chunks.add(stateEventsChunk)
             }
 
             chunkEvent.chunk.forEach { event ->
