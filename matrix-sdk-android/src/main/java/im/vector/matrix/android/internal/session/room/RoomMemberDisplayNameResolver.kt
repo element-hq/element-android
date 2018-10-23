@@ -9,7 +9,7 @@ class RoomMemberDisplayNameResolver {
         var displayName = currentMember?.displayName
         // Get the user display name from the member list of the room
         // Do not consider null display name
-        
+
         if (currentMember != null && !currentMember.displayName.isNullOrEmpty()) {
             val hasNameCollision = members
                     .filterValues { it != currentMember && it.displayName == currentMember.displayName }

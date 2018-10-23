@@ -1,7 +1,7 @@
 package im.vector.matrix.android.internal.session.sync
 
-import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.DefaultSession
+import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
@@ -22,7 +22,7 @@ class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncResponseHandler(get(), get())
+            SyncResponseHandler(get())
         }
 
         scope(DefaultSession.SCOPE) {

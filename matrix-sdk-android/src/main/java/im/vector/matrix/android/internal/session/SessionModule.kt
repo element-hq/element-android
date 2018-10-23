@@ -3,9 +3,6 @@ package im.vector.matrix.android.internal.session
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.auth.data.SessionParams
-import im.vector.matrix.android.internal.legacy.MXDataHandler
-import im.vector.matrix.android.internal.legacy.MXSession
-import im.vector.matrix.android.internal.legacy.data.store.MXFileStore
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
 import im.vector.matrix.android.internal.session.room.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.RoomMemberDisplayNameResolver
@@ -49,14 +46,6 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
 
         scope(DefaultSession.SCOPE) {
             DefaultRoomService(get()) as RoomService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            val store = MXFileStore(sessionParams.credentials, false, get())
-            val dataHandler = MXDataHandler(store, sessionParams.credentials)
-            MXSession.Builder(sessionParams, dataHandler, get()).build()
-            store.setDataHandler(dataHandler)
-            dataHandler
         }
 
     }.invoke()
