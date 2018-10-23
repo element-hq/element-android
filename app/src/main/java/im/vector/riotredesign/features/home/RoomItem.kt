@@ -5,7 +5,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
 
 data class RoomItem(
-        val title: String,
+        val title: CharSequence,
         val listener: (() -> Unit)? = null
 ) : KotlinModel(R.layout.item_room) {
 

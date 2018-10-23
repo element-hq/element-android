@@ -1,6 +1,6 @@
 package im.vector.matrix.android.api.session.events.model
 
-data class EnrichedEvent(val core: Event) {
+data class EnrichedEvent(val root: Event) {
 
     private val metaEventsByType = HashMap<String, ArrayList<Event>>()
 

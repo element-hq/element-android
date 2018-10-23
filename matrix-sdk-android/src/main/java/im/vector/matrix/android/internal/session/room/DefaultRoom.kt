@@ -5,12 +5,14 @@ import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInterceptor
-import im.vector.matrix.android.api.session.events.interceptor.MessageEventInterceptor
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.events.interceptor.MessageEventInterceptor
 import im.vector.matrix.android.internal.session.room.timeline.PaginationRequest
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
 import io.realm.Sort
@@ -19,7 +21,8 @@ import org.koin.standalone.inject
 import java.util.concurrent.Executors
 
 data class DefaultRoom(
-        override val roomId: String
+        override val roomId: String,
+        override val myMembership: MyMembership
 ) : Room, KoinComponent {
 
     private val paginationRequest by inject<PaginationRequest>()
@@ -62,5 +65,11 @@ data class DefaultRoom(
         val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
     }
+
+    override fun getNumberOfJoinedMembers(): Int {
+        val roomSummary = monarchy.fetchAllCopiedSync { realm -> RoomSummaryEntity.where(realm, roomId) }.firstOrNull()
+        return roomSummary?.joinedMembersCount ?: 0
+    }
+
 
 }

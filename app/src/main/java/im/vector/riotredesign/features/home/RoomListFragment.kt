@@ -2,19 +2,18 @@ package im.vector.riotredesign.features.home
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.RiotFragment
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.koin.android.ext.android.inject
 
-class RoomListFragment : RiotFragment(), RoomController.Callback {
+class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
 
     companion object {
 
@@ -26,7 +25,7 @@ class RoomListFragment : RiotFragment(), RoomController.Callback {
 
     private val matrix by inject<Matrix>()
     private val currentSession = matrix.currentSession!!
-    private val roomController = RoomController(this)
+    private lateinit var roomController: RoomSummaryController
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_room_list, container, false)
@@ -34,15 +33,16 @@ class RoomListFragment : RiotFragment(), RoomController.Callback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        roomController = RoomSummaryController(this)
         epoxyRecyclerView.setController(roomController)
-        currentSession.liveRooms().observe(this, Observer<List<Room>> { renderRooms(it) })
+        currentSession.liveRoomSummaries().observe(this, Observer<List<RoomSummary>> { renderRooms(it) })
     }
 
-    private fun renderRooms(rooms: List<Room>?) {
+    private fun renderRooms(rooms: List<RoomSummary>?) {
         roomController.setData(rooms)
     }
 
-    override fun onRoomSelected(room: Room) {
+    override fun onRoomSelected(room: RoomSummary) {
         val detailFragment = RoomDetailFragment.newInstance(room.roomId)
         addFragmentToBackstack(detailFragment, R.id.homeFragmentContainer)
     }

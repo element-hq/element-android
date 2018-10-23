@@ -55,9 +55,10 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
         layoutManager.stackFromEnd = true
         timelineAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (layoutManager.findFirstVisibleItemPosition() == 0) {
+                /*if (layoutManager.findFirstVisibleItemPosition() == 0) {
                     layoutManager.scrollToPosition(0)
                 }
+                */
             }
         })
         recyclerView.layoutManager = layoutManager

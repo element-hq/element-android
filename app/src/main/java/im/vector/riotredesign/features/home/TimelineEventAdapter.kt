@@ -38,10 +38,10 @@ class TimelineEventAdapter(private val callback: Callback? = null)
         val titleView = view.findViewById<TextView>(R.id.titleView)!!
 
         fun bind(event: EnrichedEvent?) {
-            if (event == null || event.core.type != EventType.MESSAGE) {
+            if (event == null) {
                 titleView.text = null
-            } else {
-                val messageContent = event.core.content<MessageContent>()
+            } else if (event.root.type == EventType.MESSAGE) {
+                val messageContent = event.root.content<MessageContent>()
                 val roomMember = event.getMetaEvents(EventType.STATE_ROOM_MEMBER).firstOrNull()?.content<RoomMember>()
                 if (messageContent == null || roomMember == null) {
                     titleView.text = null
@@ -49,6 +49,8 @@ class TimelineEventAdapter(private val callback: Callback? = null)
                     val text = "${roomMember.displayName} : ${messageContent.body}"
                     titleView.text = text
                 }
+            } else {
+                titleView.text = event.root.toString()
             }
         }
     }

@@ -7,7 +7,9 @@ import im.vector.matrix.android.internal.legacy.MXDataHandler
 import im.vector.matrix.android.internal.legacy.MXSession
 import im.vector.matrix.android.internal.legacy.data.store.MXFileStore
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
-import im.vector.matrix.android.internal.session.room.RoomSummaryObserver
+import im.vector.matrix.android.internal.session.room.RoomDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.RoomMemberDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import io.realm.RealmConfiguration
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
@@ -34,7 +36,15 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSummaryObserver(get())
+            RoomMemberDisplayNameResolver()
+        }
+
+        scope(DefaultSession.SCOPE) {
+            RoomDisplayNameResolver(get(), get(), sessionParams)
+        }
+
+        scope(DefaultSession.SCOPE) {
+            RoomSummaryUpdater(get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

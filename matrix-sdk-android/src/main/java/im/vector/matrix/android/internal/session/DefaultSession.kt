@@ -6,9 +6,10 @@ import android.support.annotation.MainThread
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.internal.auth.data.SessionParams
 import im.vector.matrix.android.internal.session.room.RoomModule
-import im.vector.matrix.android.internal.session.room.RoomSummaryObserver
+import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import org.koin.core.scope.Scope
@@ -18,7 +19,7 @@ import org.koin.standalone.getKoin
 import org.koin.standalone.inject
 
 
-class DefaultSession(private val sessionParams: SessionParams) : Session, KoinComponent, RoomService {
+class DefaultSession(override val sessionParams: SessionParams) : Session, KoinComponent, RoomService {
 
     companion object {
         const val SCOPE: String = "session"
@@ -26,7 +27,7 @@ class DefaultSession(private val sessionParams: SessionParams) : Session, KoinCo
 
     private lateinit var scope: Scope
 
-    private val roomSummaryObserver by inject<RoomSummaryObserver>()
+    private val roomSummaryObserver by inject<RoomSummaryUpdater>()
     private val roomService by inject<RoomService>()
     private val syncThread by inject<SyncThread>()
     private var isOpen = false
@@ -68,6 +69,10 @@ class DefaultSession(private val sessionParams: SessionParams) : Session, KoinCo
 
     override fun liveRooms(): LiveData<List<Room>> {
         return roomService.liveRooms()
+    }
+
+    override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
+        return roomService.liveRoomSummaries()
     }
 
     // Private methods *****************************************************************************
