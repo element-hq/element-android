@@ -12,7 +12,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
-import io.realm.RealmResults
+import io.realm.Realm
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -42,39 +42,38 @@ internal class RoomSummaryUpdater(private val monarchy: Monarchy,
         if (changeSet == null) {
             return
         }
-        manageRoomResults(changeSet.realmResults, changeSet.orderedCollectionChangeSet.changes)
-        manageRoomResults(changeSet.realmResults, changeSet.orderedCollectionChangeSet.insertions)
+        val rooms = changeSet.realmResults.map { it.asDomain() }
+        val indexesToUpdate = changeSet.orderedCollectionChangeSet.changes + changeSet.orderedCollectionChangeSet.insertions
+        monarchy.writeAsync { realm ->
+            manageRoomList(realm, rooms, indexesToUpdate)
+        }
     }
 
 
-    private fun manageRoomResults(rooms: RealmResults<RoomEntity>, indexes: IntArray) {
+    private fun manageRoomList(realm: Realm, rooms: List<Room>, indexes: IntArray) {
         indexes.forEach {
-            val room = rooms[it]?.asDomain()
+            val room = rooms[it]
             try {
-                manageRoom(room)
+                manageRoom(realm, room)
             } catch (e: Exception) {
                 Timber.e(e, "An error occured when updating room summaries")
             }
         }
     }
 
-    private fun manageRoom(room: Room?) {
+    private fun manageRoom(realm: Realm, room: Room?) {
         if (room == null) {
             return
         }
+        val roomSummary = RoomSummaryEntity.where(realm, room.roomId).findFirst()
+                ?: RoomSummaryEntity(room.roomId)
 
+        val lastMessageEvent = EventEntity.where(realm, room.roomId, EventType.MESSAGE).last()
+        val lastTopicEvent = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()
 
-        monarchy.writeAsync { realm ->
-            val roomSummary = RoomSummaryEntity.where(realm, room.roomId).findFirst()
-                              ?: RoomSummaryEntity(room.roomId)
-
-            val lastMessageEvent = EventEntity.where(realm, room.roomId, EventType.MESSAGE).last()
-            val lastTopicEvent = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()
-
-            roomSummary.displayName = roomDisplayNameResolver.resolve(context, room).toString()
-            roomSummary.topic = lastTopicEvent?.content<RoomTopicContent>()?.topic
-            roomSummary.lastMessage = lastMessageEvent
-        }
+        roomSummary.displayName = roomDisplayNameResolver.resolve(context, room).toString()
+        roomSummary.topic = lastTopicEvent?.content<RoomTopicContent>()?.topic
+        roomSummary.lastMessage = lastMessageEvent
     }
 
 }

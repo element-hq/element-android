@@ -3,7 +3,7 @@ package im.vector.matrix.android.internal.session.sync
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import timber.log.Timber
 
-class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler) {
+internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler) {
 
     fun handleResponse(syncResponse: SyncResponse?, fromToken: String?, isCatchingUp: Boolean) {
         if (syncResponse == null) {

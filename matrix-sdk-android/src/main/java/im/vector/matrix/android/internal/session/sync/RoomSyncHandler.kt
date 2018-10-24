@@ -2,6 +2,7 @@ package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -12,11 +13,14 @@ import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoo
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
+import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import io.realm.Realm
 
 
-class RoomSyncHandler(private val monarchy: Monarchy) {
+internal class RoomSyncHandler(private val monarchy: Monarchy,
+                               private val stateEventsChunkHandler: StateEventsChunkHandler,
+                               private val readReceiptHandler: ReadReceiptHandler) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -27,14 +31,21 @@ class RoomSyncHandler(private val monarchy: Monarchy) {
     fun handleRoomSync(handlingStrategy: HandlingStrategy) {
         monarchy.runTransactionSync { realm ->
             val roomEntities = when (handlingStrategy) {
-                is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
+                is HandlingStrategy.JOINED -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
                 is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
-                is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
+                is HandlingStrategy.LEFT -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
             }
             realm.insertOrUpdate(roomEntities)
         }
-    }
 
+        if (handlingStrategy is HandlingStrategy.JOINED) {
+            monarchy.runTransactionSync { realm ->
+                handlingStrategy.data.forEach { (roomId, roomSync) ->
+                    handleEphemeral(realm, roomId, roomSync.ephemeral)
+                }
+            }
+        }
+    }
 
     // PRIVATE METHODS *****************************************************************************
 
@@ -55,7 +66,7 @@ class RoomSyncHandler(private val monarchy: Monarchy) {
             handleRoomSummary(realm, roomId, roomSync.summary)
         }
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
-            val chunkEntity = StateEventsChunkHandler().handle(realm, roomId, roomSync.state.events)
+            val chunkEntity = stateEventsChunkHandler.handle(realm, roomId, roomSync.state.events)
             if (!roomEntity.chunks.contains(chunkEntity)) {
                 roomEntity.chunks.add(chunkEntity)
             }
@@ -99,7 +110,7 @@ class RoomSyncHandler(private val monarchy: Monarchy) {
                                   roomSummary: RoomSyncSummary) {
 
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: RoomSummaryEntity(roomId)
+                ?: RoomSummaryEntity(roomId)
 
         if (roomSummary.heroes.isNotEmpty()) {
             roomSummaryEntity.heroes.clear()
@@ -139,6 +150,18 @@ class RoomSyncHandler(private val monarchy: Monarchy) {
             }
         }
         return chunkEntity
+    }
+
+    private fun handleEphemeral(realm: Realm,
+                                roomId: String,
+                                ephemeral: RoomSyncEphemeral?) {
+        if (ephemeral == null || ephemeral.events.isNullOrEmpty()) {
+            return
+        }
+        ephemeral.events
+                .filter { it.type == EventType.RECEIPT }
+                .map { it.content<ReadReceiptContent>() }
+                .flatMap { readReceiptHandler.handle(realm, roomId, it) }
     }
 
 }

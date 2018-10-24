@@ -16,9 +16,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SyncRequest(private val syncAPI: SyncAPI,
-                  private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                  private val syncResponseHandler: SyncResponseHandler) {
+internal class SyncRequest(private val syncAPI: SyncAPI,
+                           private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                           private val syncResponseHandler: SyncResponseHandler) {
 
 
     fun execute(token: String?, callback: MatrixCallback<SyncResponse>): Cancelable {

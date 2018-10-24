@@ -23,7 +23,7 @@ class DefaultRoomService(private val monarchy: Monarchy) : RoomService {
     override fun getRoom(roomId: String): Room? {
         var room: Room? = null
         monarchy.doWithRealm { realm ->
-            room = RoomEntity.where(realm, roomId).findFirst()?.let { it.asDomain() }
+            room = RoomEntity.where(realm, roomId).findFirst()?.asDomain()
         }
         return room
     }

@@ -13,10 +13,11 @@ open class RoomEntity(@PrimaryKey var roomId: String = "",
 
     private var membershipStr: String = MyMembership.NONE.name
 
-    @delegate:Ignore var membership: MyMembership by Delegates.observable(MyMembership.valueOf(membershipStr)) { _, _, newValue ->
+    @delegate:Ignore
+    var membership: MyMembership by Delegates.observable(MyMembership.valueOf(membershipStr)) { _, _, newValue ->
         membershipStr = newValue.name
     }
 
-    companion object;
+    companion object
 }
 

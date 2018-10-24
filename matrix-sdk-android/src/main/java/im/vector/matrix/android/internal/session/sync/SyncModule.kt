@@ -18,7 +18,15 @@ class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSyncHandler(get())
+            StateEventsChunkHandler()
+        }
+
+        scope(DefaultSession.SCOPE) {
+            ReadReceiptHandler()
+        }
+
+        scope(DefaultSession.SCOPE) {
+            RoomSyncHandler(get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -36,7 +44,6 @@ class SyncModule : Module {
         scope(DefaultSession.SCOPE) {
             SyncThread(get(), get(), get(), get())
         }
-
 
     }.invoke()
 }

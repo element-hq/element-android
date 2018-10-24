@@ -3,20 +3,20 @@ package im.vector.matrix.android.internal.session.sync.job
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncRequest
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
-import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
 
-class SyncThread(private val syncRequest: SyncRequest,
-                 private val networkConnectivityChecker: NetworkConnectivityChecker,
-                 private val syncTokenStore: SyncTokenStore,
-                 private val backgroundDetectionObserver: BackgroundDetectionObserver
+internal class SyncThread(private val syncRequest: SyncRequest,
+                          private val networkConnectivityChecker: NetworkConnectivityChecker,
+                          private val syncTokenStore: SyncTokenStore,
+                          private val backgroundDetectionObserver: BackgroundDetectionObserver
 ) : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     enum class State {

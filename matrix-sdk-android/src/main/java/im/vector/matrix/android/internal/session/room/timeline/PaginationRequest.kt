@@ -28,7 +28,8 @@ import kotlinx.coroutines.withContext
 
 class PaginationRequest(private val roomAPI: RoomAPI,
                         private val monarchy: Monarchy,
-                        private val coroutineDispatchers: MatrixCoroutineDispatchers) {
+                        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                        private val stateEventsChunkHandler: StateEventsChunkHandler) {
 
     fun execute(roomId: String,
                 from: String?,
@@ -69,37 +70,32 @@ class PaginationRequest(private val roomAPI: RoomAPI,
         }
     }
 
-    private fun insertInDb(chunkEvent: TokenChunkEvent, roomId: String) {
+    private fun insertInDb(receivedChunk: TokenChunkEvent, roomId: String) {
         monarchy.runTransactionSync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                             ?: return@runTransactionSync
+                    ?: return@runTransactionSync
 
-            val nextChunk = ChunkEntity.findWithPrevToken(realm, roomId, chunkEvent.nextToken)
-            val prevChunk = ChunkEntity.findWithNextToken(realm, roomId, chunkEvent.prevToken)
+            val currentChunk = ChunkEntity.findWithPrevToken(realm, roomId, receivedChunk.nextToken)
+                    ?: ChunkEntity()
+            currentChunk.prevToken = receivedChunk.prevToken
 
-            val eventIds = chunkEvent.chunk.filter { it.eventId != null }.map { it.eventId!! }
+            val prevChunk = ChunkEntity.findWithNextToken(realm, roomId, receivedChunk.prevToken)
+
+            val eventIds = receivedChunk.chunk.filter { it.eventId != null }.map { it.eventId!! }
             val chunksOverlapped = ChunkEntity.findAllIncludingEvents(realm, eventIds)
             val hasOverlapped = chunksOverlapped.isNotEmpty()
 
-            val currentChunk = if (nextChunk != null) {
-                nextChunk
-            } else {
-                ChunkEntity()
-            }
-            currentChunk.prevToken = chunkEvent.prevToken
-
-
-            val stateEventsChunk = StateEventsChunkHandler().handle(realm, roomId, chunkEvent.stateEvents)
+            val stateEventsChunk = stateEventsChunkHandler.handle(realm, roomId, receivedChunk.stateEvents)
             if (!roomEntity.chunks.contains(stateEventsChunk)) {
                 roomEntity.chunks.add(stateEventsChunk)
             }
 
-            chunkEvent.chunk.forEach { event ->
+            receivedChunk.chunk.forEach { event ->
                 val eventEntity = event.asEntity().let {
                     realm.copyToRealmOrUpdate(it)
                 }
                 if (!currentChunk.events.contains(eventEntity)) {
-                    currentChunk.events.add(0, eventEntity)
+                    currentChunk.events.add(eventEntity)
                 }
             }
 
@@ -111,7 +107,7 @@ class PaginationRequest(private val roomAPI: RoomAPI,
                 chunksOverlapped.forEach { overlapped ->
                     overlapped.events.forEach { event ->
                         if (!currentChunk.events.contains(event)) {
-                            currentChunk.events.add(0, event)
+                            currentChunk.events.add(event)
                         }
                     }
                     currentChunk.prevToken = overlapped.prevToken

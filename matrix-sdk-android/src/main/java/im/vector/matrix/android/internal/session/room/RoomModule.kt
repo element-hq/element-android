@@ -18,7 +18,7 @@ class RoomModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            PaginationRequest(get(), get(), get())
+            PaginationRequest(get(), get(), get(), get())
         }
     }.invoke()
 }
