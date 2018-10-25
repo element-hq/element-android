@@ -13,8 +13,8 @@ import im.vector.matrix.android.internal.util.PagingRequestHelper
 import java.util.*
 import java.util.concurrent.Executor
 
-class TimelineBoundaryCallback(private val paginationRequest: PaginationRequest,
-                               private val roomId: String,
+class TimelineBoundaryCallback(private val roomId: String,
+                               private val paginationRequest: PaginationRequest,
                                private val monarchy: Monarchy,
                                ioExecutor: Executor
 ) : PagedList.BoundaryCallback<EnrichedEvent>() {
