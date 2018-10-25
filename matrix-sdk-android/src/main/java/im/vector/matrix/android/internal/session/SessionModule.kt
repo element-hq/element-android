@@ -4,8 +4,8 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.auth.data.SessionParams
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
-import im.vector.matrix.android.internal.session.room.RoomDisplayNameResolver
-import im.vector.matrix.android.internal.session.room.RoomMemberDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import io.realm.RealmConfiguration
 import org.koin.dsl.context.ModuleDefinition

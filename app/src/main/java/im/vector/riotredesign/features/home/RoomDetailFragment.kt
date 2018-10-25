@@ -43,6 +43,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
         super.onActivityCreated(savedInstanceState)
         setupRecyclerView()
         room = currentSession.getRoom(roomId)!!
+        room.loadRoomMembersIfNeeded()
         room.liveTimeline().observe(this, Observer { renderEvents(it) })
     }
 

@@ -12,6 +12,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import io.realm.Realm
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean

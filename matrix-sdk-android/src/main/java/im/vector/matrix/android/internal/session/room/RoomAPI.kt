@@ -1,6 +1,7 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.network.NetworkConstants
+import im.vector.matrix.android.internal.session.room.model.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.model.TokenChunkEvent
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
@@ -26,6 +27,22 @@ interface RoomAPI {
                             @Query("limit") limit: Int,
                             @Query("filter") filter: String?
     ): Deferred<Response<TokenChunkEvent>>
+
+
+    /**
+     * Get all members of a room
+     *
+     * @param roomId        the room id where to get the members
+     * @param syncToken     the sync token (optional)
+     * @param membership    to include only one type of membership (optional)
+     * @param notMembership to exclude one type of membership (optional)
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/members")
+    fun getMembers(@Path("roomId") roomId: String,
+                   @Query("at") syncToken: String?,
+                   @Query("membership") membership: String?,
+                   @Query("not_membership") notMembership: String?
+    ): Deferred<Response<RoomMembersResponse>>
 
 
 }

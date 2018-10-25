@@ -1,4 +1,4 @@
-package im.vector.matrix.android.internal.session.room
+package im.vector.matrix.android.internal.session.room.members
 
 import im.vector.matrix.android.api.session.room.model.RoomMember
 

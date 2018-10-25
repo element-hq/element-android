@@ -1,6 +1,7 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.session.DefaultSession
+import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersRequest
 import im.vector.matrix.android.internal.session.room.timeline.PaginationRequest
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
@@ -20,5 +21,10 @@ class RoomModule : Module {
         scope(DefaultSession.SCOPE) {
             PaginationRequest(get(), get(), get(), get())
         }
+
+        scope(DefaultSession.SCOPE) {
+            LoadRoomMembersRequest(get(), get(), get(), get())
+        }
+
     }.invoke()
 }

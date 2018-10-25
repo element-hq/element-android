@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.room
+package im.vector.matrix.android.internal.session.room.members
 
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy

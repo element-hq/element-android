@@ -8,6 +8,11 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
 
+fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {
+    return realm.where(EventEntity::class.java)
+            .equalTo("eventId", eventId)
+}
+
 fun EventEntity.Companion.where(realm: Realm, roomId: String, type: String? = null): RealmQuery<EventEntity> {
     val query = realm.where(EventEntity::class.java)
             .equalTo("chunk.room.roomId", roomId)
