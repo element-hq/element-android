@@ -8,4 +8,6 @@ open class ReadReceiptEntity(@PrimaryKey var primaryKey: String = "",
                              var eventId: String = "",
                              var roomId: String = "",
                              var originServerTs: Double = 0.0
-) : RealmObject()
+) : RealmObject() {
+    companion object
+}

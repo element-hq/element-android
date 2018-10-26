@@ -6,6 +6,7 @@ import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
 
@@ -19,7 +20,7 @@ class MessageEventInterceptor(val monarchy: Monarchy) : EnrichedEventInterceptor
         monarchy.doWithRealm { realm ->
             val roomMember = EventEntity
                     .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-                    .equalTo("stateKey", event.root.sender)
+                    .equalTo(EventEntityFields.STATE_KEY, event.root.sender)
                     .last(from = event.root.originServerTs)
                     ?.asDomain()
             event.enrichWith(roomMember)

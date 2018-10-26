@@ -14,7 +14,6 @@ import im.vector.matrix.android.internal.database.query.findAllRoomMembers
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.session.room.model.RoomMembersResponse
 import im.vector.matrix.android.internal.session.sync.StateEventsChunkHandler
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers

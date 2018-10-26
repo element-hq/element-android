@@ -1,4 +1,4 @@
-package im.vector.matrix.android.internal.session.room.model
+package im.vector.matrix.android.internal.session.room.timeline
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

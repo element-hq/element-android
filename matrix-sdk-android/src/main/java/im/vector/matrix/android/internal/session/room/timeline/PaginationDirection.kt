@@ -1,4 +1,4 @@
-package im.vector.matrix.android.internal.session.room.model
+package im.vector.matrix.android.internal.session.room.timeline
 
 enum class PaginationDirection(val value: String) {
     /**

@@ -24,8 +24,8 @@ class ReadReceiptHandler {
                             .flatMap { (_, userIdsDict) ->
                                 userIdsDict.map { (userId, paramsDict) ->
                                     val ts = paramsDict.filterKeys { it == "ts" }
-                                                     .values
-                                                     .firstOrNull() ?: 0.0
+                                            .values
+                                            .firstOrNull() ?: 0.0
                                     val primaryKey = roomId + userId
                                     ReadReceiptEntity(primaryKey, userId, eventId, roomId, ts)
                                 }

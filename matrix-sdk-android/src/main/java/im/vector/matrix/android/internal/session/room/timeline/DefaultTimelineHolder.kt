@@ -9,6 +9,7 @@ import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.TimelineHolder
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.events.interceptor.MessageEventInterceptor
 import io.realm.Sort
@@ -30,7 +31,7 @@ class DefaultTimelineHolder(private val roomId: String,
                     .findAll()
                     .last(null)
                     ?.let {
-                        it.events.where().sort("originServerTs", Sort.DESCENDING)
+                        it.events.where().sort(EventEntityFields.ORIGIN_SERVER_TS, Sort.DESCENDING)
                     }
         }
         val domainSourceFactory = realmDataSourceFactory

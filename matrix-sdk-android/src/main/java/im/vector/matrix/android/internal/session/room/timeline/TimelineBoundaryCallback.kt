@@ -7,8 +7,6 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
-import im.vector.matrix.android.internal.session.room.model.PaginationDirection
-import im.vector.matrix.android.internal.session.room.model.TokenChunkEvent
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import java.util.*
 import java.util.concurrent.Executor

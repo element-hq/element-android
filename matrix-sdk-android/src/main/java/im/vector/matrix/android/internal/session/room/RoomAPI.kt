@@ -1,8 +1,8 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.network.NetworkConstants
-import im.vector.matrix.android.internal.session.room.model.RoomMembersResponse
-import im.vector.matrix.android.internal.session.room.model.TokenChunkEvent
+import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
+import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEvent
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.GET

@@ -2,15 +2,18 @@ package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.DBConstants
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.ChunkEntityFields
+import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
+import io.realm.kotlin.where
 
 fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ChunkEntity> {
-    return realm.where(ChunkEntity::class.java)
-            .equalTo("room.roomId", roomId)
-            .notEqualTo("prevToken", DBConstants.STATE_EVENTS_CHUNK_TOKEN)
-            .notEqualTo("nextToken", DBConstants.STATE_EVENTS_CHUNK_TOKEN)
+    return realm.where<ChunkEntity>()
+            .equalTo("${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
+            .notEqualTo(ChunkEntityFields.PREV_TOKEN, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
+            .notEqualTo(ChunkEntityFields.NEXT_TOKEN, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
 }
 
 fun ChunkEntity.Companion.findWithPrevToken(realm: Realm, roomId: String, prevToken: String?): ChunkEntity? {
@@ -19,7 +22,7 @@ fun ChunkEntity.Companion.findWithPrevToken(realm: Realm, roomId: String, prevTo
     }
     return where(realm, roomId)
             .and()
-            .equalTo("prevToken", prevToken)
+            .equalTo(ChunkEntityFields.PREV_TOKEN, prevToken)
             .findFirst()
 }
 
@@ -29,22 +32,22 @@ fun ChunkEntity.Companion.findWithNextToken(realm: Realm, roomId: String, nextTo
     }
     return where(realm, roomId)
             .and()
-            .equalTo("nextToken", nextToken)
+            .equalTo(ChunkEntityFields.NEXT_TOKEN, nextToken)
             .findFirst()
 }
 
 fun ChunkEntity.Companion.findLastLiveChunkFromRoom(realm: Realm, roomId: String): ChunkEntity? {
     return where(realm, roomId)
             .and()
-            .isNull("nextToken")
+            .isNull(ChunkEntityFields.NEXT_TOKEN)
             .findAll()
             .last(null)
 }
 
 fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds: List<String>): RealmResults<ChunkEntity> {
-    return realm.where(ChunkEntity::class.java)
-            .`in`("events.eventId", eventIds.toTypedArray())
-            .notEqualTo("prevToken", DBConstants.STATE_EVENTS_CHUNK_TOKEN)
-            .notEqualTo("nextToken", DBConstants.STATE_EVENTS_CHUNK_TOKEN)
+    return realm.where<ChunkEntity>()
+            .`in`(ChunkEntityFields.EVENTS.EVENT_ID, eventIds.toTypedArray())
+            .notEqualTo(ChunkEntityFields.PREV_TOKEN, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
+            .notEqualTo(ChunkEntityFields.NEXT_TOKEN, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
             .findAll()
 }

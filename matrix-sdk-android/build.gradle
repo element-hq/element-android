@@ -70,6 +70,7 @@ dependencies {
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.5.1'
+    kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
 
     // Paging
     implementation "android.arch.paging:runtime:1.0.1"
