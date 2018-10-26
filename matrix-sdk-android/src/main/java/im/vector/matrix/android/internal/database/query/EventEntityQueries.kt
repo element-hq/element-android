@@ -5,6 +5,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.RealmQuery
 import io.realm.Sort
 
@@ -35,6 +36,10 @@ fun RealmQuery<EventEntity>.last(from: Long? = null): EventEntity? {
     return this
             .sort("originServerTs", Sort.DESCENDING)
             .findFirst()
+}
+
+fun RealmList<EventEntity>.fastContains(eventEntity: EventEntity): Boolean {
+    return this.where().equalTo("eventId", eventEntity.eventId).findFirst() != null
 }
 
 fun EventEntity.Companion.findAllRoomMembers(realm: Realm, roomId: String): Map<String, RoomMember> {

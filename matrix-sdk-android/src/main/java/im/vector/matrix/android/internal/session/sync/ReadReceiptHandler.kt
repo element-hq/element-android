@@ -17,21 +17,22 @@ class ReadReceiptHandler {
         if (content == null) {
             return emptyList()
         }
-        return content
+        val readReceipts = content
                 .flatMap { (eventId, receiptDict) ->
                     receiptDict
                             .filterKeys { it == "m.read" }
                             .flatMap { (_, userIdsDict) ->
                                 userIdsDict.map { (userId, paramsDict) ->
                                     val ts = paramsDict.filterKeys { it == "ts" }
-                                            .values
-                                            .firstOrNull() ?: 0.0
+                                                     .values
+                                                     .firstOrNull() ?: 0.0
                                     val primaryKey = roomId + userId
                                     ReadReceiptEntity(primaryKey, userId, eventId, roomId, ts)
                                 }
                             }
                 }
-                .apply { realm.insertOrUpdate(this) }
+        realm.insertOrUpdate(readReceipts)
+        return readReceipts
     }
 
 }

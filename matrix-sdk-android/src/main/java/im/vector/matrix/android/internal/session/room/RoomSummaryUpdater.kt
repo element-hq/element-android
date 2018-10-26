@@ -14,6 +14,7 @@ import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -46,28 +47,28 @@ internal class RoomSummaryUpdater(private val monarchy: Monarchy,
         val rooms = changeSet.realmResults.map { it.asDomain() }
         val indexesToUpdate = changeSet.orderedCollectionChangeSet.changes + changeSet.orderedCollectionChangeSet.insertions
         monarchy.writeAsync { realm ->
-            manageRoomList(realm, rooms, indexesToUpdate)
+            insertRoomList(realm, rooms, indexesToUpdate)
         }
     }
 
 
-    private fun manageRoomList(realm: Realm, rooms: List<Room>, indexes: IntArray) {
+    private fun insertRoomList(realm: Realm, rooms: List<Room>, indexes: IntArray) {
         indexes.forEach {
             val room = rooms[it]
             try {
-                manageRoom(realm, room)
+                insertRoom(realm, room)
             } catch (e: Exception) {
                 Timber.e(e, "An error occured when updating room summaries")
             }
         }
     }
 
-    private fun manageRoom(realm: Realm, room: Room?) {
+    private fun insertRoom(realm: Realm, room: Room?) {
         if (room == null) {
             return
         }
         val roomSummary = RoomSummaryEntity.where(realm, room.roomId).findFirst()
-                ?: RoomSummaryEntity(room.roomId)
+                          ?: realm.createObject(room.roomId)
 
         val lastMessageEvent = EventEntity.where(realm, room.roomId, EventType.MESSAGE).last()
         val lastTopicEvent = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()

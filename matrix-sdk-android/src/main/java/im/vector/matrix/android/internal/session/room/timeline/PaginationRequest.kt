@@ -7,9 +7,10 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.mapper.asEntity
+import im.vector.matrix.android.internal.database.helper.addManagedToChunk
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.fastContains
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.findWithNextToken
 import im.vector.matrix.android.internal.database.query.findWithPrevToken
@@ -22,6 +23,7 @@ import im.vector.matrix.android.internal.session.room.model.TokenChunkEvent
 import im.vector.matrix.android.internal.session.sync.StateEventsChunkHandler
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import io.realm.kotlin.createObject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,15 +75,16 @@ class PaginationRequest(private val roomAPI: RoomAPI,
     private fun insertInDb(receivedChunk: TokenChunkEvent, roomId: String) {
         monarchy.runTransactionSync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                    ?: return@runTransactionSync
+                             ?: throw IllegalStateException("You shouldn't use this method without a room")
 
             val currentChunk = ChunkEntity.findWithPrevToken(realm, roomId, receivedChunk.nextToken)
-                    ?: ChunkEntity()
+                               ?: realm.createObject()
+
             currentChunk.prevToken = receivedChunk.prevToken
 
             val prevChunk = ChunkEntity.findWithNextToken(realm, roomId, receivedChunk.prevToken)
 
-            val eventIds = receivedChunk.chunk.filter { it.eventId != null }.map { it.eventId!! }
+            val eventIds = receivedChunk.events.filter { it.eventId != null }.map { it.eventId!! }
             val chunksOverlapped = ChunkEntity.findAllIncludingEvents(realm, eventIds)
             val hasOverlapped = chunksOverlapped.isNotEmpty()
 
@@ -90,14 +93,7 @@ class PaginationRequest(private val roomAPI: RoomAPI,
                 roomEntity.chunks.add(stateEventsChunk)
             }
 
-            receivedChunk.chunk.forEach { event ->
-                val eventEntity = event.asEntity().let {
-                    realm.copyToRealmOrUpdate(it)
-                }
-                if (!currentChunk.events.contains(eventEntity)) {
-                    currentChunk.events.add(eventEntity)
-                }
-            }
+            receivedChunk.events.addManagedToChunk(currentChunk)
 
             if (prevChunk != null) {
                 currentChunk.events.addAll(prevChunk.events)
@@ -106,7 +102,7 @@ class PaginationRequest(private val roomAPI: RoomAPI,
             } else if (hasOverlapped) {
                 chunksOverlapped.forEach { overlapped ->
                     overlapped.events.forEach { event ->
-                        if (!currentChunk.events.contains(event)) {
+                        if (!currentChunk.events.fastContains(event)) {
                             currentChunk.events.add(event)
                         }
                     }

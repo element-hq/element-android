@@ -61,13 +61,17 @@ internal class LoadRoomMembersRequest(private val roomAPI: RoomAPI,
     private fun insertInDb(response: RoomMembersResponse, roomId: String) {
         monarchy.runTransactionSync { realm ->
             // We ignore all the already known members
+            val roomEntity = RoomEntity.where(realm, roomId).findFirst()
+                             ?: throw IllegalStateException("You shouldn't use this method without a room")
+
             val roomMembers = EventEntity.findAllRoomMembers(realm, roomId)
             val eventsToInsert = response.roomMemberEvents.filter { !roomMembers.containsKey(it.stateKey) }
-            stateEventsChunkHandler.handle(realm, roomId, eventsToInsert)
 
-            RoomEntity
-                    .where(realm, roomId).findFirst()
-                    ?.let { it.areAllMembersLoaded = true }
+            val chunk = stateEventsChunkHandler.handle(realm, roomId, eventsToInsert)
+            if (!roomEntity.chunks.contains(chunk)) {
+                roomEntity.chunks.add(chunk)
+            }
+            roomEntity.areAllMembersLoaded = true
         }
     }
 
