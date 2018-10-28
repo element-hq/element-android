@@ -41,6 +41,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(":matrix-sdk-android")
+    implementation project(":matrix-sdk-android-rx")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -51,11 +52,11 @@ dependencies {
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
     implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
+    implementation 'com.airbnb.android:mvrx:0.6.0'
 
 
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-scope:$koin_version"
-    implementation "org.koin:koin-android-viewmodel:$koin_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

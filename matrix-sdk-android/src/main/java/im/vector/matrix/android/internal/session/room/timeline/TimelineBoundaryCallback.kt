@@ -53,7 +53,7 @@ class TimelineBoundaryCallback(private val roomId: String,
         }
 
         override fun onFailure(failure: Failure) {
-            pagingRequestCallback.recordFailure(failure.toException())
+            pagingRequestCallback.recordFailure(failure)
         }
     }
 }

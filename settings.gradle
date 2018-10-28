@@ -1,1 +1,1 @@
-include ':app', ':matrix-sdk-rx', ':matrix-sdk-android'
+include ':app', ':matrix-sdk-android', ':matrix-sdk-android-rx'

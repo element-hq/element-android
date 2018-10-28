@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home
+package im.vector.riotredesign.features.home.detail
 
 import android.support.v7.util.DiffUtil
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent

@@ -13,5 +13,9 @@ interface RoomService {
 
     fun liveRoomSummaries(): LiveData<List<RoomSummary>>
 
+    fun lastSelectedRoom(): RoomSummary?
+
+    fun saveLastSelectedRoom(roomSummary: RoomSummary)
+
 
 }

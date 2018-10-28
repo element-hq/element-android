@@ -1,7 +1,5 @@
 package im.vector.riotredesign.core.platform
 
-import android.support.v7.app.AppCompatActivity
+import com.airbnb.mvrx.BaseMvRxActivity
 
-open class RiotActivity : AppCompatActivity() {
-
-}
+abstract class RiotActivity : BaseMvRxActivity()

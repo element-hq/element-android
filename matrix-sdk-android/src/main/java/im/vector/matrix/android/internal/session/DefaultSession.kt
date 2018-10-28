@@ -75,6 +75,14 @@ class DefaultSession(override val sessionParams: SessionParams) : Session, KoinC
         return roomService.liveRoomSummaries()
     }
 
+    override fun lastSelectedRoom(): RoomSummary? {
+        return roomService.lastSelectedRoom()
+    }
+
+    override fun saveLastSelectedRoom(roomSummary: RoomSummary) {
+        roomService.saveLastSelectedRoom(roomSummary)
+    }
+
     // Private methods *****************************************************************************
 
     private fun checkIsMainThread() {

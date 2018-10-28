@@ -13,8 +13,20 @@ object RoomSummaryMapper {
                 roomSummaryEntity.topic ?: ""
         )
     }
+
+    internal fun map(roomSummary: RoomSummary): RoomSummaryEntity {
+        return RoomSummaryEntity(
+                roomSummary.roomId,
+                roomSummary.displayName,
+                roomSummary.topic
+        )
+    }
 }
 
 fun RoomSummaryEntity.asDomain(): RoomSummary {
+    return RoomSummaryMapper.map(this)
+}
+
+fun RoomSummaryEntity.asEntity(): RoomSummary {
     return RoomSummaryMapper.map(this)
 }

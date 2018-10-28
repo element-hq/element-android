@@ -1,6 +1,12 @@
 package im.vector.riotredesign.core.platform
 
-import android.support.v4.app.Fragment
+import com.airbnb.mvrx.BaseMvRxFragment
 
-open class RiotFragment : Fragment() {
+abstract class RiotFragment : BaseMvRxFragment() {
+
+    override fun invalidate() {
+        //no-ops by default
+    }
+
+
 }

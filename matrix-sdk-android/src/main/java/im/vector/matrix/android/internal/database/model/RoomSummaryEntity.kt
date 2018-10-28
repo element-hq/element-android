@@ -11,7 +11,8 @@ open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                              var lastMessage: EventEntity? = null,
                              var heroes: RealmList<String> = RealmList(),
                              var joinedMembersCount: Int? = 0,
-                             var invitedMembersCount: Int? = 0
+                             var invitedMembersCount: Int? = 0,
+                             var isLatestSelected: Boolean = false
 ) : RealmObject() {
 
     companion object
