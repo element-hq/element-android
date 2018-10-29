@@ -16,6 +16,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.utils.FragmentArgumentDelegate
+import im.vector.riotredesign.features.home.RoomSummaryViewHelper
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 
@@ -76,7 +77,15 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
 
     private fun renderRoomSummary(roomSummary: RoomSummary?) {
         roomSummary?.let {
-            toolbar.title = it.displayName
+            val roomSummaryViewHelper = RoomSummaryViewHelper(it)
+            toolbarTitleView.text = it.displayName
+            toolbarAvatarImageView.setImageDrawable(roomSummaryViewHelper.avatarDrawable(riotActivity))
+            if (it.topic.isNotEmpty()) {
+                toolbarSubtitleView.visibility = View.VISIBLE
+                toolbarSubtitleView.text = it.topic
+            } else {
+                toolbarSubtitleView.visibility = View.GONE
+            }
         }
     }
 

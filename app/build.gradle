@@ -54,6 +54,11 @@ dependencies {
     implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
     implementation 'com.airbnb.android:mvrx:0.6.0'
 
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
+    //todo remove that
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+
 
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-scope:$koin_version"

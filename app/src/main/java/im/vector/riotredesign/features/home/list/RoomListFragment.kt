@@ -36,7 +36,7 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        roomController = RoomSummaryController(this)
+        roomController = RoomSummaryController(riotActivity, this)
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
 
