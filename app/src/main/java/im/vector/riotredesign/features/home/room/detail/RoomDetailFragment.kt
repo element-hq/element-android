@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home.detail
+package im.vector.riotredesign.features.home.room.detail
 
 import android.arch.lifecycle.Observer
 import android.arch.paging.PagedList

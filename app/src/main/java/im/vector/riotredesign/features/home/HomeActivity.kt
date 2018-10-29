@@ -12,9 +12,8 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
-import im.vector.riotredesign.features.home.detail.LoadingRoomDetailFragment
-import im.vector.riotredesign.features.home.detail.RoomDetailFragment
-import im.vector.riotredesign.features.home.list.RoomListFragment
+import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
+import im.vector.riotredesign.features.home.room.detail.RoomDetailFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.standalone.StandAloneContext.loadKoinModules
 
@@ -27,10 +26,10 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         if (savedInstanceState == null) {
-            val roomListFragment = RoomListFragment.newInstance()
+            val homeDrawerFragment = HomeDrawerFragment.newInstance()
             val loadingDetail = LoadingRoomDetailFragment.newInstance()
             replaceFragment(loadingDetail, R.id.homeDetailFragmentContainer)
-            replaceFragment(roomListFragment, R.id.homeDrawerFragmentContainer)
+            replaceFragment(homeDrawerFragment, R.id.homeDrawerFragmentContainer)
         }
     }
 

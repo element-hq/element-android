@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home.detail
+package im.vector.riotredesign.features.home.room.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater

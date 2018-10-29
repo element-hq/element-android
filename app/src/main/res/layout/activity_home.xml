@@ -16,7 +16,6 @@
         android:id="@+id/homeDrawerFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:layout_marginRight="24dp" />
+        android:layout_gravity="start" />
 
 </android.support.v4.widget.DrawerLayout>

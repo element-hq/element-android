@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home.detail
+package im.vector.riotredesign.features.home.room.detail
 
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyModel

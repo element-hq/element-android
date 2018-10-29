@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home.list
+package im.vector.riotredesign.features.home.room.list
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState

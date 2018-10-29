@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home.list
+package im.vector.riotredesign.features.home.room.list
 
 import android.support.v4.app.FragmentActivity
 import com.airbnb.mvrx.BaseMvRxViewModel

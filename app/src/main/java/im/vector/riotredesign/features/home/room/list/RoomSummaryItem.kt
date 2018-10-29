@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home.list
+package im.vector.riotredesign.features.home.room.list
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
