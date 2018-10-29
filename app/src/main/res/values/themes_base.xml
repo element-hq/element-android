@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.V1.Theme.Riot" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/dark</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <item name="colorAccent">@color/pale_teal</item>
+    </style>
+
+    <style name="Base.Theme.Riot" parent="Base.V1.Theme.Riot" />
+
+
+</resources>

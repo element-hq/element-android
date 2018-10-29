@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.V21.Theme.Riot" parent="Base.V1.Theme.Riot"></style>
+
+    <style name="Base.Theme.Riot" parent="Base.V21.Theme.Riot" />
+
+
+</resources>

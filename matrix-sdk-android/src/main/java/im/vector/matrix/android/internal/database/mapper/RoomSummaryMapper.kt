@@ -10,7 +10,8 @@ object RoomSummaryMapper {
         return RoomSummary(
                 roomSummaryEntity.roomId,
                 roomSummaryEntity.displayName ?: "",
-                roomSummaryEntity.topic ?: ""
+                roomSummaryEntity.topic ?: "",
+                roomSummaryEntity.avatarUrl ?: ""
         )
     }
 
@@ -18,7 +19,8 @@ object RoomSummaryMapper {
         return RoomSummaryEntity(
                 roomSummary.roomId,
                 roomSummary.displayName,
-                roomSummary.topic
+                roomSummary.topic,
+                roomSummary.avatarUrl
         )
     }
 }

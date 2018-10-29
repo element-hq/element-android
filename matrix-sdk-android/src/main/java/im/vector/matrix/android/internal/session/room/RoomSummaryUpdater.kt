@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 internal class RoomSummaryUpdater(private val monarchy: Monarchy,
                                   private val roomDisplayNameResolver: RoomDisplayNameResolver,
+                                  private val roomAvatarResolver: RoomAvatarResolver,
                                   private val context: Context
 ) : Observer<Monarchy.ManagedChangeSet<RoomEntity>> {
 
@@ -47,23 +48,23 @@ internal class RoomSummaryUpdater(private val monarchy: Monarchy,
         val rooms = changeSet.realmResults.map { it.asDomain() }
         val indexesToUpdate = changeSet.orderedCollectionChangeSet.changes + changeSet.orderedCollectionChangeSet.insertions
         monarchy.writeAsync { realm ->
-            insertRoomList(realm, rooms, indexesToUpdate)
+            updateRoomList(realm, rooms, indexesToUpdate)
         }
     }
 
 
-    private fun insertRoomList(realm: Realm, rooms: List<Room>, indexes: IntArray) {
+    private fun updateRoomList(realm: Realm, rooms: List<Room>, indexes: IntArray) {
         indexes.forEach {
             val room = rooms[it]
             try {
-                insertRoom(realm, room)
+                updateRoom(realm, room)
             } catch (e: Exception) {
                 Timber.e(e, "An error occured when updating room summaries")
             }
         }
     }
 
-    private fun insertRoom(realm: Realm, room: Room?) {
+    private fun updateRoom(realm: Realm, room: Room?) {
         if (room == null) {
             return
         }
@@ -74,6 +75,7 @@ internal class RoomSummaryUpdater(private val monarchy: Monarchy,
         val lastTopicEvent = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()
 
         roomSummary.displayName = roomDisplayNameResolver.resolve(context, room).toString()
+        roomSummary.avatarUrl = roomAvatarResolver.resolve(room)
         roomSummary.topic = lastTopicEvent?.content<RoomTopicContent>()?.topic
         roomSummary.lastMessage = lastMessageEvent
     }

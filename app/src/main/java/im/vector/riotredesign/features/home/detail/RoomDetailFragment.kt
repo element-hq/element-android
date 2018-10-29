@@ -11,8 +11,10 @@ import android.view.ViewGroup
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
+import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.utils.FragmentArgumentDelegate
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
@@ -41,14 +43,19 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setupRecyclerView()
         room = currentSession.getRoom(roomId)!!
+        setupRecyclerView()
+        setupToolbar()
         room.loadRoomMembersIfNeeded()
         room.liveTimeline().observe(this, Observer { renderEvents(it) })
+        room.roomSummary.observe(this, Observer { renderRoomSummary(it) })
     }
 
-    private fun renderEvents(events: PagedList<EnrichedEvent>?) {
-        timelineAdapter.submitList(events)
+    private fun setupToolbar() {
+        val parentActivity = riotActivity
+        if (parentActivity is ToolbarConfigurable) {
+            parentActivity.configure(toolbar)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -67,7 +74,19 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
         //recyclerView.setController(timelineEventController)
     }
 
-    override fun onEventsListChanged(oldList: List<EnrichedEvent>?, newList: List<EnrichedEvent>?) {
+    private fun renderRoomSummary(roomSummary: RoomSummary?) {
+        roomSummary?.let {
+            toolbar.title = it.displayName
+        }
+    }
+
+    private fun renderEvents(events: PagedList<EnrichedEvent>?) {
+        timelineAdapter.submitList(events)
+    }
+
+
+    override
+    fun onEventsListChanged(oldList: List<EnrichedEvent>?, newList: List<EnrichedEvent>?) {
         if (oldList == null && newList != null) {
             recyclerView.scrollToPosition(0)
         }

@@ -1,6 +1,7 @@
 package im.vector.matrix.android.internal.session.room
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
@@ -9,7 +10,9 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.TimelineHolder
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -24,18 +27,25 @@ data class DefaultRoom(
         override val myMembership: MyMembership
 ) : Room, KoinComponent {
 
+
     private val loadRoomMembersRequest by inject<LoadRoomMembersRequest>()
     private val syncTokenStore by inject<SyncTokenStore>()
     private val monarchy by inject<Monarchy>()
     private val timelineHolder by inject<TimelineHolder>(parameters = { parametersOf(roomId) })
 
-    override fun liveTimeline(): LiveData<PagedList<EnrichedEvent>> {
-        return timelineHolder.liveTimeline()
+    override val roomSummary: LiveData<RoomSummary> by lazy {
+        val liveData = monarchy
+                .findAllMappedWithChanges(
+                        { realm -> RoomSummaryEntity.where(realm, roomId) },
+                        { from -> from.asDomain() })
+
+        Transformations.map(liveData) {
+            it.first()
+        }
     }
 
-    override fun getNumberOfJoinedMembers(): Int {
-        val roomSummary = monarchy.fetchAllCopiedSync { realm -> RoomSummaryEntity.where(realm, roomId) }.firstOrNull()
-        return roomSummary?.joinedMembersCount ?: 0
+    override fun liveTimeline(): LiveData<PagedList<EnrichedEvent>> {
+        return timelineHolder.liveTimeline()
     }
 
     override fun loadRoomMembersIfNeeded(): Cancelable {
@@ -46,7 +56,6 @@ data class DefaultRoom(
             loadRoomMembersRequest.execute(roomId, token, Membership.LEAVE, object : MatrixCallback<Boolean> {})
         }
     }
-
 
     private fun areAllMembersLoaded(): Boolean {
         return monarchy

@@ -63,9 +63,6 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
         roomEntity.membership = MyMembership.JOINED
 
-        if (roomSync.summary != null) {
-            handleRoomSummary(realm, roomId, roomSync.summary)
-        }
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             val chunkEntity = stateEventsChunkHandler.handle(realm, roomId, roomSync.state.events)
             if (!roomEntity.chunks.contains(chunkEntity)) {
@@ -77,6 +74,9 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
             if (!roomEntity.chunks.contains(chunkEntity)) {
                 roomEntity.chunks.add(chunkEntity)
             }
+        }
+        if (roomSync.summary != null) {
+            handleRoomSummary(realm, roomId, roomSync.summary)
         }
         return roomEntity
     }

@@ -4,9 +4,10 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.auth.data.SessionParams
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
+import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
+import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import io.realm.RealmConfiguration
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
@@ -37,11 +38,15 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomDisplayNameResolver(get(), get(), sessionParams)
+            RoomDisplayNameResolver(get(), get(), sessionParams.credentials)
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSummaryUpdater(get(), get(), get())
+            RoomAvatarResolver(get(), sessionParams.credentials)
+        }
+
+        scope(DefaultSession.SCOPE) {
+            RoomSummaryUpdater(get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

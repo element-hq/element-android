@@ -1,8 +1,5 @@
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.room.model.RoomMember
-import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -44,14 +41,4 @@ fun RealmQuery<EventEntity>.last(from: Long? = null): EventEntity? {
 
 fun RealmList<EventEntity>.fastContains(eventEntity: EventEntity): Boolean {
     return this.where().equalTo(EventEntityFields.EVENT_ID, eventEntity.eventId).findFirst() != null
-}
-
-fun EventEntity.Companion.findAllRoomMembers(realm: Realm, roomId: String): Map<String, RoomMember> {
-    return EventEntity
-            .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-            .sort(EventEntityFields.ORIGIN_SERVER_TS)
-            .findAll()
-            .map { it.asDomain() }
-            .associateBy { it.stateKey!! }
-            .mapValues { it.value.content<RoomMember>()!! }
 }

@@ -25,20 +25,19 @@ import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
-import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.internal.auth.data.Credentials
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.findAllRoomMembers
 import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
 
 /**
  * This class computes room display name
  */
-class RoomDisplayNameResolver(private val monarchy: Monarchy,
-                              private val roomMemberDisplayNameResolver: RoomMemberDisplayNameResolver,
-                              private val sessionParams: SessionParams
+internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
+                                       private val roomMemberDisplayNameResolver: RoomMemberDisplayNameResolver,
+                                       private val credentials: Credentials
 ) {
 
     /**
@@ -75,9 +74,9 @@ class RoomDisplayNameResolver(private val monarchy: Monarchy,
                 return@doWithRealm
             }
 
-            val otherRoomMembers = EventEntity
-                    .findAllRoomMembers(realm, room.roomId)
-                    .filterKeys { it != sessionParams.credentials.userId }
+            val roomMembers = RoomMembers(realm, room.roomId)
+            val otherRoomMembers = roomMembers.getLoaded()
+                    .filterKeys { it != credentials.userId }
 
             if (room.myMembership == MyMembership.INVITED) {
                 //TODO handle invited
@@ -117,9 +116,9 @@ class RoomDisplayNameResolver(private val monarchy: Monarchy,
                     else -> {
                         val member = memberIds[0]
                         name = context.resources.getQuantityString(R.plurals.room_displayname_three_and_more_members,
-                                                                   room.getNumberOfJoinedMembers() - 1,
+                                                                   roomMembers.getNumberOfJoinedMembers() - 1,
                                                                    roomMemberDisplayNameResolver.resolve(member, otherRoomMembers),
-                                                                   room.getNumberOfJoinedMembers() - 1)
+                                                                   roomMembers.getNumberOfJoinedMembers() - 1)
                     }
                 }
             }

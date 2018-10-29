@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
@@ -35,16 +39,19 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
         roomController = RoomSummaryController(this)
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
+
         viewModel.subscribe { renderState(it) }
     }
 
     private fun renderState(state: RoomListViewState) {
         when (state.roomSummaries) {
             is Incomplete -> renderLoading()
-            is Success -> renderSuccess(state.roomSummaries(), state.selectedRoom)
-            is Fail -> renderFailure(state.roomSummaries.error)
+            is Success    -> renderSuccess(state.roomSummaries(), state.selectedRoom)
+            is Fail       -> renderFailure(state.roomSummaries.error)
         }
-        if (state.showLastSelectedRoom && state.selectedRoom != null) {
+        if (state.selectedRoom != null && state.showLastSelectedRoom) {
+            val position = state.roomSummaries()?.indexOf(state.selectedRoom) ?: 0
+            epoxyRecyclerView.scrollToPosition(position)
             homeNavigator.openRoomDetail(state.selectedRoom.roomId)
         }
     }
@@ -65,7 +72,7 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     private fun renderFailure(error: Throwable) {
         val message = when (error) {
             is Failure.NetworkConnection -> "Pas de connexion internet"
-            else -> "Une erreur est survenue"
+            else                         -> "Une erreur est survenue"
         }
         stateView.state = StateView.State.Error(message)
     }
