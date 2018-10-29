@@ -7,14 +7,15 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 
 data class RoomListViewState(
         val roomSummaries: Async<List<RoomSummary>> = Uninitialized,
-        val selectedRoom: RoomSummary? = null
+        val selectedRoom: RoomSummary? = null,
+        private var _showLastSelectedRoom: Boolean = true
 ) : MvRxState {
 
-    var showLastSelectedRoom: Boolean = true
+    var showLastSelectedRoom: Boolean = _showLastSelectedRoom
         private set
         get() {
-            if (field) {
-                field = false
+            if (_showLastSelectedRoom) {
+                _showLastSelectedRoom = false
                 return true
             }
             return false

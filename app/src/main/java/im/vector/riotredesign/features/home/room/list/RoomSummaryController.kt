@@ -15,7 +15,7 @@ class RoomSummaryController(private val context: Context,
             RoomSummaryItem(
                     title = it.displayName,
                     avatarDrawable = roomSummaryViewHelper.avatarDrawable(context),
-                    isSelected = it == selected,
+                    isSelected = it.roomId == selected?.roomId,
                     listener = { callback?.onRoomSelected(it) }
             )
                     .id(it.roomId)

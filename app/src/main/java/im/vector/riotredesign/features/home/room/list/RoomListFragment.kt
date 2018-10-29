@@ -79,7 +79,7 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
 
     override fun onRoomSelected(room: RoomSummary) {
         withState(viewModel) {
-            if (it.selectedRoom != room) {
+            if (it.selectedRoom?.roomId != room.roomId) {
                 viewModel.accept(RoomListActions.SelectRoom(room))
                 homeNavigator.openRoomDetail(room.roomId)
             }
