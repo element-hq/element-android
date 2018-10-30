@@ -1,36 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<im.vector.riotredesign.core.platform.CheckableConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<im.vector.riotredesign.core.platform.CheckableFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemRoomLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="8dp"
+    android:paddingRight="16dp"
+    android:foreground="?attr/selectableItemBackground"
     android:background="@drawable/bg_room_item"
-    android:minHeight="48dp">
+    android:clickable="true"
+    android:focusable="true">
 
-    <ImageView
-        android:id="@+id/avatarImageView"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/titleView"
-        android:layout_width="0dp"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:duplicateParentState="true"
-        android:textColor="@color/color_room_title"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/avatarImageView"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/full_names" />
+        android:minHeight="48dp">
 
-</im.vector.riotredesign.core.platform.CheckableConstraintLayout>
+        <ImageView
+            android:id="@+id/avatarImageView"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/titleView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:duplicateParentState="true"
+            android:textColor="@color/color_room_title"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatarImageView"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/full_names" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</im.vector.riotredesign.core.platform.CheckableFrameLayout>

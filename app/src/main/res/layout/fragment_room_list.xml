@@ -1,13 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<im.vector.riotredesign.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/stateView"
+
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pale_grey">
 
-    <com.airbnb.epoxy.EpoxyRecyclerView
-        android:id="@+id/epoxyRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <EditText
+        android:id="@+id/filterRoomView"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_search_edit_text"
+        android:drawableLeft="@drawable/ic_search_white"
+        android:drawablePadding="8dp"
+        android:drawableTint="#9fa9ba"
+        android:hint="Filter by name..."
+        android:paddingLeft="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/stateView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</im.vector.riotredesign.core.platform.StateView>
+    <im.vector.riotredesign.core.platform.StateView
+        android:id="@+id/stateView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterRoomView">
+
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/epoxyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </im.vector.riotredesign.core.platform.StateView>
+
+</android.support.constraint.ConstraintLayout>

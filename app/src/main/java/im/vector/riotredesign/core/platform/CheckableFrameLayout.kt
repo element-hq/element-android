@@ -1,12 +1,12 @@
 package im.vector.riotredesign.core.platform
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
 import android.widget.Checkable
+import android.widget.FrameLayout
 
-class CheckableConstraintLayout : ConstraintLayout, Checkable {
+class CheckableFrameLayout : FrameLayout, Checkable {
 
     private var mChecked = false
 

@@ -5,7 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
-import im.vector.riotredesign.core.platform.CheckableConstraintLayout
+import im.vector.riotredesign.core.platform.CheckableFrameLayout
 
 
 data class RoomSummaryItem(
@@ -17,11 +17,11 @@ data class RoomSummaryItem(
 
     private val titleView by bind<TextView>(R.id.titleView)
     private val avatarImageView by bind<ImageView>(R.id.avatarImageView)
-    private val rootView by bind<CheckableConstraintLayout>(R.id.itemRoomLayout)
+    private val rootView by bind<CheckableFrameLayout>(R.id.itemRoomLayout)
 
     override fun bind() {
         rootView.isChecked = isSelected
-        titleView.setOnClickListener { listener?.invoke() }
+        rootView.setOnClickListener { listener?.invoke() }
         titleView.text = title
         avatarImageView.setImageDrawable(avatarDrawable)
     }

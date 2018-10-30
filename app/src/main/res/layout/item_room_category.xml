@@ -4,20 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
     android:gravity="center_vertical"
     android:minHeight="24dp"
     android:padding="16dp"
+    android:background="?attr/selectableItemBackground"
     tools:background="@color/pale_grey">
 
     <TextView
         android:id="@+id/roomCategoryTitleView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginEnd="8dp"
-        android:gravity="center_vertical"
         android:drawableLeft="@drawable/ic_expand_more_white"
         android:drawableTint="@color/bluey_grey_two"
-        android:foregroundTint="@color/bluey_grey_two"
+        android:gravity="center_vertical"
         android:text="DIRECT MESSAGES"
         android:textColor="@color/bluey_grey_two"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,9 +30,9 @@
 
     <ImageView
         android:id="@+id/roomCategoryAddButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+
         android:scaleType="centerInside"
         android:src="@drawable/ic_add_circle_white"
         android:tint="@color/bluey_grey_two"
