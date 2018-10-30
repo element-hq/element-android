@@ -10,7 +10,7 @@ data class SyncResponse(
         /**
          * The user private data.
          */
-        @Json(name = "account_data") val accountData: Map<String, Any>? = emptyMap(),
+        @Json(name = "account_data") val accountData: UserAccountDataSync? = null,
 
         /**
          * The opaque token for the end.

@@ -4,7 +4,6 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-// TODO to be completed
 open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                              var displayName: String? = "",
                              var avatarUrl: String? = "",
@@ -13,6 +12,7 @@ open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                              var heroes: RealmList<String> = RealmList(),
                              var joinedMembersCount: Int? = 0,
                              var invitedMembersCount: Int? = 0,
+                             var isDirect: Boolean = false,
                              var isLatestSelected: Boolean = false
 ) : RealmObject() {
 

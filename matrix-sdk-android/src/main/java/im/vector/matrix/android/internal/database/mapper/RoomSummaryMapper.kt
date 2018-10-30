@@ -11,24 +11,12 @@ object RoomSummaryMapper {
                 roomSummaryEntity.roomId,
                 roomSummaryEntity.displayName ?: "",
                 roomSummaryEntity.topic ?: "",
-                roomSummaryEntity.avatarUrl ?: ""
-        )
-    }
-
-    internal fun map(roomSummary: RoomSummary): RoomSummaryEntity {
-        return RoomSummaryEntity(
-                roomSummary.roomId,
-                roomSummary.displayName,
-                roomSummary.topic,
-                roomSummary.avatarUrl
+                roomSummaryEntity.avatarUrl ?: "",
+                roomSummaryEntity.isDirect
         )
     }
 }
 
 fun RoomSummaryEntity.asDomain(): RoomSummary {
-    return RoomSummaryMapper.map(this)
-}
-
-fun RoomSummaryEntity.asEntity(): RoomSummary {
     return RoomSummaryMapper.map(this)
 }

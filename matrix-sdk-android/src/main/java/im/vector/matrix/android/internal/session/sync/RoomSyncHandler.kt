@@ -15,6 +15,7 @@ import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
+import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import io.realm.Realm
 import io.realm.kotlin.createObject
 
@@ -29,7 +30,21 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handleRoomSync(handlingStrategy: HandlingStrategy) {
+    fun handle(roomsSyncResponse: RoomsSyncResponse) {
+        handleRoomSync(RoomSyncHandler.HandlingStrategy.JOINED(roomsSyncResponse.join))
+        handleRoomSync(RoomSyncHandler.HandlingStrategy.INVITED(roomsSyncResponse.invite))
+        handleRoomSync(RoomSyncHandler.HandlingStrategy.LEFT(roomsSyncResponse.leave))
+
+        monarchy.runTransactionSync { realm ->
+            roomsSyncResponse.join.forEach { (roomId, roomSync) ->
+                handleEphemeral(realm, roomId, roomSync.ephemeral)
+            }
+        }
+    }
+
+    // PRIVATE METHODS *****************************************************************************
+
+    private fun handleRoomSync(handlingStrategy: HandlingStrategy) {
         monarchy.runTransactionSync { realm ->
             val rooms = when (handlingStrategy) {
                 is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
@@ -38,17 +53,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
             }
             realm.insertOrUpdate(rooms)
         }
-
-        if (handlingStrategy is HandlingStrategy.JOINED) {
-            monarchy.runTransactionSync { realm ->
-                handlingStrategy.data.forEach { (roomId, roomSync) ->
-                    handleEphemeral(realm, roomId, roomSync.ephemeral)
-                }
-            }
-        }
     }
-
-    // PRIVATE METHODS *****************************************************************************
 
     private fun handleJoinedRoom(realm: Realm,
                                  roomId: String,

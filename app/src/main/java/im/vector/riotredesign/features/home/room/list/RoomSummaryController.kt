@@ -10,15 +10,49 @@ class RoomSummaryController(private val context: Context,
                             private val callback: Callback? = null
 ) : Typed2EpoxyController<List<RoomSummary>, RoomSummary>() {
 
+
+    private var directRoomsExpanded = true
+    private var groupRoomsExpanded = true
+
     override fun buildModels(summaries: List<RoomSummary>?, selected: RoomSummary?) {
+
+        val directRooms = summaries?.filter { it.isDirect } ?: emptyList()
+        val groupRooms = summaries?.filter { !it.isDirect } ?: emptyList()
+
         RoomCategoryItem(
                 title = "DIRECT MESSAGES",
-                expandDrawable = R.drawable.ic_expand_more_white
+                isExpanded = directRoomsExpanded,
+                listener = {
+                    directRoomsExpanded = !directRoomsExpanded
+                    setData(summaries, selected)
+                }
         )
                 .id("direct_messages")
                 .addTo(this)
 
-        summaries?.forEach {
+        if (directRoomsExpanded) {
+            buildRoomModels(directRooms, selected)
+        }
+
+        RoomCategoryItem(
+                title = "GROUPS",
+                isExpanded = groupRoomsExpanded,
+                listener = {
+                    groupRoomsExpanded = !groupRoomsExpanded
+                    setData(summaries, selected)
+                }
+        )
+                .id("group_messages")
+                .addTo(this)
+
+        if (groupRoomsExpanded) {
+            buildRoomModels(groupRooms, selected)
+        }
+
+    }
+
+    private fun buildRoomModels(summaries: List<RoomSummary>, selected: RoomSummary?) {
+        summaries.forEach {
             val roomSummaryViewHelper = RoomSummaryViewHelper(it)
             RoomSummaryItem(
                     title = it.displayName,

@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
+    android:id="@+id/roomCategoryRootView"
     android:gravity="center_vertical"
     android:minHeight="24dp"
     android:padding="16dp"

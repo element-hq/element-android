@@ -8,6 +8,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.lastSelected
 import im.vector.matrix.android.internal.database.query.where
 
@@ -38,7 +39,7 @@ class DefaultRoomService(private val monarchy: Monarchy) : RoomService {
 
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { realm -> RoomSummaryEntity.where(realm) },
+                { realm -> RoomSummaryEntity.where(realm).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
                 { it.asDomain() }
         )
     }

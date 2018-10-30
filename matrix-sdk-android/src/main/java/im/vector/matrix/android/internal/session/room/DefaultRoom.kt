@@ -15,6 +15,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersRequest
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
@@ -36,7 +37,7 @@ data class DefaultRoom(
     override val roomSummary: LiveData<RoomSummary> by lazy {
         val liveData = monarchy
                 .findAllMappedWithChanges(
-                        { realm -> RoomSummaryEntity.where(realm, roomId) },
+                        { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
                         { from -> from.asDomain() })
 
         Transformations.map(liveData) {
