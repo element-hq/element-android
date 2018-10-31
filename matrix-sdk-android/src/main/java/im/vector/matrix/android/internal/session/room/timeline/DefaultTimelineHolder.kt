@@ -14,6 +14,8 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.events.interceptor.MessageEventInterceptor
 import io.realm.Sort
 
+private const val PAGE_SIZE = 30
+
 class DefaultTimelineHolder(private val roomId: String,
                             private val monarchy: Monarchy,
                             private val boundaryCallback: TimelineBoundaryCallback
@@ -22,6 +24,7 @@ class DefaultTimelineHolder(private val roomId: String,
     private val eventInterceptors = ArrayList<EnrichedEventInterceptor>()
 
     init {
+        boundaryCallback.limit = PAGE_SIZE
         eventInterceptors.add(MessageEventInterceptor(monarchy))
     }
 
@@ -37,6 +40,7 @@ class DefaultTimelineHolder(private val roomId: String,
         val domainSourceFactory = realmDataSourceFactory
                 .map { it.asDomain() }
                 .map { event ->
+
                     val enrichedEvent = EnrichedEvent(event)
                     eventInterceptors
                             .filter {
@@ -49,7 +53,7 @@ class DefaultTimelineHolder(private val roomId: String,
 
         val pagedListConfig = PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
-                .setPageSize(10)
+                .setPageSize(PAGE_SIZE)
                 .setPrefetchDistance(10)
                 .build()
 

@@ -19,6 +19,8 @@ class TimelineBoundaryCallback(private val roomId: String,
 
     private val helper = PagingRequestHelper(ioExecutor)
 
+    var limit = 10
+
     override fun onZeroItemsLoaded() {
         // actually, it's not possible
     }
@@ -30,7 +32,7 @@ class TimelineBoundaryCallback(private val roomId: String,
                     return@doWithRealm
                 }
                 val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(itemAtEnd.root.eventId)).firstOrNull()
-                paginationRequest.execute(roomId, chunkEntity?.prevToken, PaginationDirection.BACKWARDS, callback = createCallback(it))
+                paginationRequest.execute(roomId, chunkEntity?.prevToken, PaginationDirection.BACKWARDS, limit, callback = createCallback(it))
             }
         }
     }
@@ -42,7 +44,7 @@ class TimelineBoundaryCallback(private val roomId: String,
                     return@doWithRealm
                 }
                 val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(itemAtFront.root.eventId)).firstOrNull()
-                paginationRequest.execute(roomId, chunkEntity?.nextToken, PaginationDirection.FORWARDS, callback = createCallback(it))
+                paginationRequest.execute(roomId, chunkEntity?.nextToken, PaginationDirection.FORWARDS, limit, callback = createCallback(it))
             }
         }
     }
