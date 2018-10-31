@@ -7,14 +7,17 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.request.RequestOptions
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.avatarDrawable
+import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
+import im.vector.riotredesign.core.utils.Constants
 import im.vector.riotredesign.core.utils.FragmentArgumentDelegate
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
@@ -67,6 +70,14 @@ class RoomDetailFragment : RiotFragment() {
     private fun renderRoomSummary(roomSummary: RoomSummary?) {
         roomSummary?.let {
             toolbarTitleView.text = it.displayName
+            val avatarUrl = it.avatarUrl.replace("mxc://", Constants.MEDIA_URL)
+            GlideApp
+                    .with(this)
+                    .load(avatarUrl)
+                    .placeholder(riotActivity.avatarDrawable(it.displayName))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(toolbarAvatarImageView)
+
             toolbarAvatarImageView.setImageDrawable(riotActivity.avatarDrawable(it.displayName))
             if (it.topic.isNotEmpty()) {
                 toolbarSubtitleView.visibility = View.VISIBLE

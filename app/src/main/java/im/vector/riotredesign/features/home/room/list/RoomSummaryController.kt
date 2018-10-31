@@ -4,6 +4,7 @@ import android.content.Context
 import com.airbnb.epoxy.Typed2EpoxyController
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.core.extensions.avatarDrawable
+import im.vector.riotredesign.core.utils.Constants
 
 class RoomSummaryController(private val context: Context,
                             private val callback: Callback? = null
@@ -51,10 +52,14 @@ class RoomSummaryController(private val context: Context,
     }
 
     private fun buildRoomModels(summaries: List<RoomSummary>, selected: RoomSummary?) {
+
         summaries.forEach {
+            val avatarUrl = it.avatarUrl.replace("mxc://", Constants.MEDIA_URL)
+
             RoomSummaryItem(
                     title = it.displayName,
-                    avatarDrawable = context.avatarDrawable(it.displayName),
+                    avatarUrl = avatarUrl,
+                    fallbackAvatarDrawable = context.avatarDrawable(it.displayName),
                     isSelected = it.roomId == selected?.roomId,
                     listener = { callback?.onRoomSelected(it) }
             )
