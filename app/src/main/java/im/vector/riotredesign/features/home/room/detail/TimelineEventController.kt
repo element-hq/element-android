@@ -1,21 +1,22 @@
 package im.vector.riotredesign.features.home.room.detail
 
 import android.arch.paging.PagedList
+import android.content.Context
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.roomMember
 import im.vector.matrix.android.api.session.room.model.MessageContent
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.riotredesign.core.extensions.avatarDrawable
 import im.vector.riotredesign.features.home.LoadingItemModel_
 
-private const val PREFETCH_DISTANCE = 5
-
-class TimelineEventController : EpoxyController(
+class TimelineEventController(private val context: Context) : EpoxyController(
         EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
+
+    private val messagesLoadedWithInformation = HashSet<String?>()
 
     private val pagedListCallback = object : PagedList.Callback() {
         override fun onChanged(position: Int, count: Int) {
@@ -38,7 +39,6 @@ class TimelineEventController : EpoxyController(
             field?.addWeakCallback(null, pagedListCallback)
         }
 
-
     override fun buildModels() {
         buildModels(timeline)
     }
@@ -47,22 +47,37 @@ class TimelineEventController : EpoxyController(
         if (data.isNullOrEmpty()) {
             return
         }
-        data.forEachIndexed { index, enrichedEvent ->
-            val item = if (enrichedEvent.root.type == EventType.MESSAGE) {
-                val messageContent = enrichedEvent.root.content<MessageContent>()
-                val roomMember = enrichedEvent.getMetadata<Event>(EventType.STATE_ROOM_MEMBER)?.content<RoomMember>()
-                val title = "${roomMember?.displayName} : ${messageContent?.body}"
-                TimelineEventItem(title = title)
-            } else {
-                TimelineEventItem(title = enrichedEvent.toString())
+        for (index in 0 until data.size) {
+            val event = data[index]
+            val nextEvent = if (index + 1 < data.size) data[index + 1] else null
+
+            if (event.root.type == EventType.MESSAGE) {
+                val messageContent = event.root.content<MessageContent>()
+                val roomMember = event.roomMember()
+                if (messageContent == null || roomMember == null) {
+                    continue
+                }
+                val nextRoomMember = nextEvent?.roomMember()
+                if (nextRoomMember != roomMember) {
+                    messagesLoadedWithInformation.add(event.root.eventId)
+                }
+                val showInformation = messagesLoadedWithInformation.contains(event.root.eventId)
+
+                val avatarDrawable = context.avatarDrawable(roomMember.displayName ?: "")
+                TimelineMessageItem(
+                        message = messageContent.body,
+                        showInformation = showInformation,
+                        avatarDrawable = avatarDrawable,
+                        memberName = roomMember.displayName
+                )
+                        .onBind { timeline?.loadAround(index) }
+                        .id(event.root.eventId)
+                        .addTo(this)
             }
-            item
-                    .onBind { timeline?.loadAround(index) }
-                    .id(enrichedEvent.root.eventId)
-                    .addTo(this)
         }
 
-        val isLastEvent = data.last().getMetadata<Boolean>(EnrichedEvent.IS_LAST_EVENT) ?: false
+        //It's a hack at the moment
+        val isLastEvent = data.last().root.type == EventType.STATE_ROOM_CREATE
         LoadingItemModel_()
                 .id("backward_loading_item")
                 .addIf(!isLastEvent, this)

@@ -1,5 +1,7 @@
 package im.vector.matrix.android.api.session.events.model
 
+import im.vector.matrix.android.api.session.room.model.RoomMember
+
 data class EnrichedEvent(val root: Event) {
 
     val metadata = HashMap<String, Any>()
@@ -30,4 +32,8 @@ data class EnrichedEvent(val root: Event) {
         const val READ_RECEIPTS = "READ_RECEIPTS"
     }
 
+}
+
+fun EnrichedEvent.roomMember(): RoomMember? {
+    return getMetadata<Event>(EventType.STATE_ROOM_MEMBER)?.content<RoomMember>()
 }

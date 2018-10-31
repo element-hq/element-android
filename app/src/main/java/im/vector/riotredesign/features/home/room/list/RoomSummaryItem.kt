@@ -16,7 +16,7 @@ data class RoomSummaryItem(
 ) : KotlinModel(R.layout.item_room) {
 
     private val titleView by bind<TextView>(R.id.titleView)
-    private val avatarImageView by bind<ImageView>(R.id.avatarImageView)
+    private val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
     private val rootView by bind<CheckableFrameLayout>(R.id.itemRoomLayout)
 
     override fun bind() {

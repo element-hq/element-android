@@ -11,7 +11,6 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.events.interceptor.IsLastEventInterceptor
 import im.vector.matrix.android.internal.session.events.interceptor.MessageEventInterceptor
 import io.realm.Sort
 
@@ -24,7 +23,6 @@ class DefaultTimelineHolder(private val roomId: String,
 
     init {
         eventInterceptors.add(MessageEventInterceptor(monarchy))
-        eventInterceptors.add(IsLastEventInterceptor(monarchy))
     }
 
     override fun liveTimeline(): LiveData<PagedList<EnrichedEvent>> {
