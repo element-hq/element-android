@@ -12,16 +12,23 @@ abstract class KotlinModel(
 ) : EpoxyModel<View>() {
 
     private var view: View? = null
+    private var onBindCallback: (() -> Unit)? = null
 
     abstract fun bind()
 
     override fun bind(view: View) {
         this.view = view
+        onBindCallback?.invoke()
         bind()
     }
 
     override fun unbind(view: View) {
         this.view = null
+    }
+
+    fun onBind(lambda: (() -> Unit)?): KotlinModel {
+        onBindCallback = lambda
+        return this
     }
 
     override fun getDefaultLayout() = layoutRes
@@ -33,7 +40,7 @@ abstract class KotlinModel(
             // be optimized with a map
             @Suppress("UNCHECKED_CAST")
             return view?.findViewById(id) as V?
-                   ?: throw IllegalStateException("View ID $id for '${property.name}' not found.")
+                    ?: throw IllegalStateException("View ID $id for '${property.name}' not found.")
         }
     }
 }

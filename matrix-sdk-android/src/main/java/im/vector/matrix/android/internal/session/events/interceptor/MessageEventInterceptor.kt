@@ -10,6 +10,7 @@ import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
 
+
 class MessageEventInterceptor(val monarchy: Monarchy) : EnrichedEventInterceptor {
 
     override fun canEnrich(event: EnrichedEvent): Boolean {

@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.arch.paging.PagedList
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,7 @@ import im.vector.riotredesign.features.home.RoomSummaryViewHelper
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 
-class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
+class RoomDetailFragment : RiotFragment() {
 
     companion object {
 
@@ -34,7 +33,6 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
     private val matrix by inject<Matrix>()
     private val currentSession = matrix.currentSession!!
     private var roomId by FragmentArgumentDelegate<String>()
-    private val timelineAdapter = TimelineEventAdapter(this)
     private val timelineEventController = TimelineEventController()
     private lateinit var room: Room
 
@@ -61,18 +59,8 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
-        layoutManager.stackFromEnd = true
-        timelineAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (layoutManager.findFirstVisibleItemPosition() == 0) {
-                    layoutManager.scrollToPosition(0)
-                }
-
-            }
-        })
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = timelineAdapter
-        //recyclerView.setController(timelineEventController)
+        recyclerView.setController(timelineEventController)
     }
 
     private fun renderRoomSummary(roomSummary: RoomSummary?) {
@@ -90,16 +78,8 @@ class RoomDetailFragment : RiotFragment(), TimelineEventAdapter.Callback {
     }
 
     private fun renderEvents(events: PagedList<EnrichedEvent>?) {
-        timelineAdapter.submitList(events)
+        timelineEventController.timeline = events
+        timelineEventController.requestModelBuild()
     }
-
-
-    override
-    fun onEventsListChanged(oldList: List<EnrichedEvent>?, newList: List<EnrichedEvent>?) {
-        if (oldList == null && newList != null) {
-            recyclerView.scrollToPosition(0)
-        }
-    }
-
 
 }

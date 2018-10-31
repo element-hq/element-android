@@ -2,7 +2,7 @@ package im.vector.matrix.android.api.session.events.model
 
 data class EnrichedEvent(val root: Event) {
 
-    private val metaEventsByType = HashMap<String, ArrayList<Event>>()
+    val metadata = HashMap<String, Any>()
 
     fun enrichWith(events: List<Event>) {
         events.forEach { enrichWith(it) }
@@ -12,24 +12,22 @@ data class EnrichedEvent(val root: Event) {
         if (event == null) {
             return
         }
-        var currentEventsForType = metaEventsByType[event.type]
-        if (currentEventsForType == null) {
-            currentEventsForType = ArrayList()
-            metaEventsByType[event.type] = currentEventsForType
+        enrichWith(event.type, event)
+    }
+
+    fun enrichWith(key: String, data: Any) {
+        if (!metadata.containsKey(key)) {
+            metadata[key] = data
         }
-        currentEventsForType.add(event)
     }
 
-    fun getMetaEvents(type: String): List<Event> {
-        return metaEventsByType[type] ?: emptyList()
+    inline fun <reified T> getMetadata(key: String): T? {
+        return metadata[key] as T?
     }
 
-    fun getMetaEvents(): List<Event> {
-        return metaEventsByType.values.flatten()
-    }
-
-    override fun toString(): String {
-        return super.toString()
+    companion object {
+        const val IS_LAST_EVENT = "IS_LAST_EVENT"
+        const val READ_RECEIPTS = "READ_RECEIPTS"
     }
 
 }
