@@ -1,6 +1,7 @@
 package im.vector.riotredesign
 
 import android.app.Application
+import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.BuildConfig
 import im.vector.riotredesign.core.di.AppModule
 import org.koin.log.EmptyLogger
@@ -14,6 +15,7 @@ class Riot : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+        AndroidThreeTen.init(this)
         startKoin(listOf(AppModule(this)), logger = EmptyLogger())
     }
 

@@ -9,14 +9,17 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.roomMember
 import im.vector.matrix.android.api.session.room.model.MessageContent
 import im.vector.riotredesign.core.extensions.avatarDrawable
+import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 class TimelineEventController(private val context: Context) : EpoxyController(
         EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
 
-    private val messagesLoadedWithInformation = HashSet<String?>()
+    private val messagesDisplayedWithInformation = HashSet<String?>()
 
     private val pagedListCallback = object : PagedList.Callback() {
         override fun onChanged(position: Int, count: Int) {
@@ -57,22 +60,34 @@ class TimelineEventController(private val context: Context) : EpoxyController(
                 if (messageContent == null || roomMember == null) {
                     continue
                 }
+
+                val date = event.root.localDateTime()
+                val nextDate = nextEvent?.root?.localDateTime()
+                val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
+
                 val nextRoomMember = nextEvent?.roomMember()
-                if (nextRoomMember != roomMember) {
-                    messagesLoadedWithInformation.add(event.root.eventId)
+                if (addDaySeparator || nextRoomMember != roomMember) {
+                    messagesDisplayedWithInformation.add(event.root.eventId)
                 }
-                val showInformation = messagesLoadedWithInformation.contains(event.root.eventId)
+                val showInformation = messagesDisplayedWithInformation.contains(event.root.eventId)
 
                 val avatarDrawable = context.avatarDrawable(roomMember.displayName ?: "")
                 TimelineMessageItem(
                         message = messageContent.body,
                         showInformation = showInformation,
+                        time = date.toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
                         avatarDrawable = avatarDrawable,
                         memberName = roomMember.displayName
                 )
                         .onBind { timeline?.loadAround(index) }
                         .id(event.root.eventId)
                         .addTo(this)
+
+
+                if (addDaySeparator) {
+                    val formattedDay = date.toLocalDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                    TimelineDaySeparatorItem(formattedDay).id(formattedDay).addTo(this)
+                }
             }
         }
 
