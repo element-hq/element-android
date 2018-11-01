@@ -38,7 +38,8 @@ class LoginActivity : RiotActivity() {
 
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session) {
-                openSessionAndGoToHome(data)
+                matrix.currentSession = data
+                goToHome()
             }
 
             override fun onFailure(failure: Failure) {
@@ -50,16 +51,11 @@ class LoginActivity : RiotActivity() {
 
     private fun checkActiveSessions() {
         if (authenticator.hasActiveSessions()) {
-            val session = authenticator.getLastActiveSession()
-            session?.let {
-                openSessionAndGoToHome(it)
-            }
+            goToHome()
         }
     }
 
-    private fun openSessionAndGoToHome(session: Session) {
-        matrix.currentSession = session
-        session.open()
+    private fun goToHome() {
         val intent = HomeActivity.newIntent(this)
         startActivity(intent)
         finish()

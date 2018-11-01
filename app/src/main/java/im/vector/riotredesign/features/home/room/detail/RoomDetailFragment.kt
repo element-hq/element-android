@@ -34,7 +34,7 @@ class RoomDetailFragment : RiotFragment() {
     }
 
     private val matrix by inject<Matrix>()
-    private val currentSession = matrix.currentSession!!
+    private val currentSession = matrix.currentSession
     private var roomId by FragmentArgumentDelegate<String>()
     private lateinit var timelineEventController: TimelineEventController
     private lateinit var room: Room
@@ -77,8 +77,6 @@ class RoomDetailFragment : RiotFragment() {
                     .placeholder(riotActivity.avatarDrawable(it.displayName))
                     .apply(RequestOptions.circleCropTransform())
                     .into(toolbarAvatarImageView)
-
-            toolbarAvatarImageView.setImageDrawable(riotActivity.avatarDrawable(it.displayName))
             if (it.topic.isNotEmpty()) {
                 toolbarSubtitleView.visibility = View.VISIBLE
                 toolbarSubtitleView.text = it.topic

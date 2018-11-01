@@ -19,7 +19,7 @@ class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
     private val authenticator by inject<Authenticator>()
     private val backgroundDetectionObserver by inject<BackgroundDetectionObserver>()
 
-    var currentSession: Session? = null
+    lateinit var currentSession: Session
 
     init {
         Monarchy.init(matrixOptions.context)
@@ -28,6 +28,11 @@ class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
         val authModule = AuthModule()
         loadKoinModules(listOf(matrixModule, networkModule, authModule))
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        val lastActiveSession = authenticator.getLastActiveSession()
+        if (lastActiveSession != null) {
+            currentSession = lastActiveSession
+            currentSession.open()
+        }
     }
 
     fun authenticator(): Authenticator {

@@ -17,7 +17,7 @@ class RoomListViewModel(initialState: RoomListViewState,
         @JvmStatic
         override fun create(activity: FragmentActivity, state: RoomListViewState): RoomListViewModel {
             val matrix = activity.get<Matrix>()
-            val currentSession = matrix.currentSession!!
+            val currentSession = matrix.currentSession
             return RoomListViewModel(state, currentSession)
         }
     }

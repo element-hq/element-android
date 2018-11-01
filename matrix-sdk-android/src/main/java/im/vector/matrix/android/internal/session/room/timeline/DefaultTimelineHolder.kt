@@ -54,6 +54,7 @@ class DefaultTimelineHolder(private val roomId: String,
         val pagedListConfig = PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
                 .setPageSize(PAGE_SIZE)
+                .setInitialLoadSizeHint(PAGE_SIZE)
                 .setPrefetchDistance(10)
                 .build()
 
