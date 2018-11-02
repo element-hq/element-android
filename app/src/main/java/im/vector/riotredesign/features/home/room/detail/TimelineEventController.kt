@@ -53,16 +53,16 @@ class TimelineEventController(private val context: Context) : EpoxyController(
             val event = data[index]
             val nextEvent = if (index + 1 < data.size) data[index + 1] else null
 
+            val date = event.root.localDateTime()
+            val nextDate = nextEvent?.root?.localDateTime()
+            val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
+
             if (event.root.type == EventType.MESSAGE) {
                 val messageContent = event.root.content<MessageContent>()
                 val roomMember = event.roomMember()
                 if (messageContent == null || roomMember == null) {
                     continue
                 }
-
-                val date = event.root.localDateTime()
-                val nextDate = nextEvent?.root?.localDateTime()
-                val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
                 val nextRoomMember = nextEvent?.roomMember()
                 if (addDaySeparator || nextRoomMember != roomMember) {
@@ -80,12 +80,15 @@ class TimelineEventController(private val context: Context) : EpoxyController(
                         .onBind { timeline?.loadAround(index) }
                         .id(event.root.eventId)
                         .addTo(this)
-
-
-                if (addDaySeparator) {
-                    val formattedDay = date.toLocalDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-                    TimelineDaySeparatorItem(formattedDay).id(formattedDay).addTo(this)
-                }
+            } else {
+                BlankItemModel_()
+                        .id(event.root.eventId)
+                        .onBind { _, _, _ -> timeline?.loadAround(index) }
+                        .addTo(this)
+            }
+            if (addDaySeparator) {
+                val formattedDay = date.toLocalDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                TimelineDaySeparatorItem(formattedDay).id(formattedDay).addTo(this)
             }
         }
 
