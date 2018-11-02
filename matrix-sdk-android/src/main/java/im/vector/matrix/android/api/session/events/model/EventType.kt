@@ -46,4 +46,25 @@ object EventType {
     const val CALL_ANSWER = "m.call.answer"
     const val CALL_HANGUP = "m.call.hangup"
 
+    private val STATE_EVENTS = listOf(
+            STATE_ROOM_NAME,
+            STATE_ROOM_TOPIC,
+            STATE_ROOM_AVATAR,
+            STATE_ROOM_MEMBER,
+            STATE_ROOM_THIRD_PARTY_INVITE,
+            STATE_ROOM_CREATE,
+            STATE_ROOM_JOIN_RULES,
+            STATE_ROOM_GUEST_ACCESS,
+            STATE_ROOM_POWER_LEVELS,
+            STATE_ROOM_TOMBSTONE,
+            STATE_HISTORY_VISIBILITY,
+            STATE_RELATED_GROUPS,
+            STATE_PINNED_EVENT
+    )
+
+
+    fun isStateEvent(type: String): Boolean {
+        return STATE_EVENTS.contains(type)
+    }
+
 }

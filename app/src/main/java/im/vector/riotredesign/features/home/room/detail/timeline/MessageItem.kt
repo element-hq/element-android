@@ -7,7 +7,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
 import im.vector.riotredesign.features.home.AvatarRenderer
 
-data class TimelineMessageItem(
+data class MessageItem(
         val message: CharSequence? = null,
         val time: CharSequence? = null,
         val avatarUrl: String?,

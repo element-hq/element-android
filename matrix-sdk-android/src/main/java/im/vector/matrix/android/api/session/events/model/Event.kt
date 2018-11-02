@@ -43,11 +43,4 @@ data class Event(
         return moshiAdapter.fromJsonValue(data)
     }
 
-    val isCallEvent: Boolean by lazy {
-        EventType.CALL_INVITE == type
-        || EventType.CALL_CANDIDATES == type
-        || EventType.CALL_ANSWER == type
-        || EventType.CALL_HANGUP == type
-    }
-
 }

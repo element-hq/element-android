@@ -4,13 +4,13 @@ import android.widget.TextView
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
 
-data class TimelineEventItem(
-        val title: String
-) : KotlinModel(R.layout.item_event) {
+data class TextItem(
+        val text: CharSequence? = null
+) : KotlinModel(R.layout.item_event_text) {
 
-    val titleView by bind<TextView>(R.id.titleView)
+    private val messageView by bind<TextView>(R.id.stateMessageView)
 
     override fun bind() {
-        titleView.text = title
+        messageView.text = text
     }
 }

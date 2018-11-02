@@ -5,17 +5,16 @@ import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.roomMember
-import im.vector.matrix.android.api.session.room.model.MessageContent
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
 
-class TimelineEventController(private val timelineDateFormatter: TimelineDateFormatter) : EpoxyController(
+class TimelineEventController(private val messageItemFactory: MessageItemFactory,
+                              private val textItemFactory: TextItemFactory,
+                              private val dateFormatter: TimelineDateFormatter
+) : EpoxyController(
         EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
-
-    private val messagesDisplayedWithInformation = HashSet<String?>()
 
     private val pagedListCallback = object : PagedList.Callback() {
         override fun onChanged(position: Int, count: Int) {
@@ -54,38 +53,18 @@ class TimelineEventController(private val timelineDateFormatter: TimelineDateFor
             val nextDate = nextEvent?.root?.localDateTime()
             val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
-            if (event.root.type == EventType.MESSAGE) {
-                val messageContent = event.root.content<MessageContent>()
-                val roomMember = event.roomMember()
-                if (messageContent == null || roomMember == null) {
-                    continue
-                }
-
-                val nextRoomMember = nextEvent?.roomMember()
-                if (addDaySeparator || nextRoomMember != roomMember) {
-                    messagesDisplayedWithInformation.add(event.root.eventId)
-                }
-                val showInformation = messagesDisplayedWithInformation.contains(event.root.eventId)
-
-                TimelineMessageItem(
-                        message = messageContent.body,
-                        avatarUrl = roomMember.avatarUrl,
-                        showInformation = showInformation,
-                        time = timelineDateFormatter.formatMessageHour(date),
-                        memberName = roomMember.displayName
-                )
-                        .onBind { timeline?.loadAround(index) }
-                        .id(event.root.eventId)
-                        .addTo(this)
-            } else {
-                BlankItemModel_()
-                        .id(event.root.eventId)
-                        .onBind { _, _, _ -> timeline?.loadAround(index) }
-                        .addTo(this)
+            val item = when (event.root.type) {
+                EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date)
+                else -> textItemFactory.create(event)
             }
+            item
+                    ?.onBind { timeline?.loadAround(index) }
+                    ?.id(event.root.eventId)
+                    ?.addTo(this)
+
             if (addDaySeparator) {
-                val formattedDay = timelineDateFormatter.formatMessageDay(date)
-                TimelineDaySeparatorItem(formattedDay).id(formattedDay).addTo(this)
+                val formattedDay = dateFormatter.formatMessageDay(date)
+                DaySeparatorItem(formattedDay).id(formattedDay).addTo(this)
             }
         }
 

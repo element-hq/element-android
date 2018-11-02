@@ -1,8 +1,13 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
-import android.content.Context
-import android.widget.FrameLayout
-import com.airbnb.epoxy.ModelView
+import im.vector.riotredesign.R
+import im.vector.riotredesign.core.epoxy.KotlinModel
 
-@ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
-class BlankItem(context: Context) : FrameLayout(context)
+class BlankItem
+    : KotlinModel(R.layout.item_event_blank) {
+
+    override fun bind() {
+        //no-op
+    }
+
+}
