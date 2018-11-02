@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home.room.detail
+package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.view.View
 import android.widget.ImageView

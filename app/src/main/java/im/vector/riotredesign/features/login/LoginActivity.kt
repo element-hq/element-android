@@ -39,6 +39,7 @@ class LoginActivity : RiotActivity() {
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session) {
                 matrix.currentSession = data
+                matrix.currentSession.open()
                 goToHome()
             }
 

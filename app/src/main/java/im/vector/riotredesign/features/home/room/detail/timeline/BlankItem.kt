@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home.room.detail
+package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.content.Context
 import android.widget.FrameLayout

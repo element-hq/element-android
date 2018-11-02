@@ -16,6 +16,7 @@ import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.utils.FragmentArgumentDelegate
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 

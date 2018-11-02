@@ -60,26 +60,32 @@ class DefaultSession(override val sessionParams: SessionParams) : Session, KoinC
     // ROOM SERVICE
 
     override fun getRoom(roomId: String): Room? {
+        assert(isOpen)
         return roomService.getRoom(roomId)
     }
 
     override fun getAllRooms(): List<Room> {
+        assert(isOpen)
         return roomService.getAllRooms()
     }
 
     override fun liveRooms(): LiveData<List<Room>> {
+        assert(isOpen)
         return roomService.liveRooms()
     }
 
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
+        assert(isOpen)
         return roomService.liveRoomSummaries()
     }
 
     override fun lastSelectedRoom(): RoomSummary? {
+        assert(isOpen)
         return roomService.lastSelectedRoom()
     }
 
     override fun saveLastSelectedRoom(roomSummary: RoomSummary) {
+        assert(isOpen)
         roomService.saveLastSelectedRoom(roomSummary)
     }
 
