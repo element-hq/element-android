@@ -1,7 +1,6 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.arch.paging.PagedList
-import android.content.Context
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
@@ -10,10 +9,8 @@ import im.vector.matrix.android.api.session.events.model.roomMember
 import im.vector.matrix.android.api.session.room.model.MessageContent
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
 
-class TimelineEventController(private val context: Context) : EpoxyController(
+class TimelineEventController(private val timelineDateFormatter: TimelineDateFormatter) : EpoxyController(
         EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
@@ -74,7 +71,7 @@ class TimelineEventController(private val context: Context) : EpoxyController(
                         message = messageContent.body,
                         avatarUrl = roomMember.avatarUrl,
                         showInformation = showInformation,
-                        time = date.toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
+                        time = timelineDateFormatter.formatMessageHour(date),
                         memberName = roomMember.displayName
                 )
                         .onBind { timeline?.loadAround(index) }
@@ -87,7 +84,7 @@ class TimelineEventController(private val context: Context) : EpoxyController(
                         .addTo(this)
             }
             if (addDaySeparator) {
-                val formattedDay = date.toLocalDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                val formattedDay = timelineDateFormatter.formatMessageDay(date)
                 TimelineDaySeparatorItem(formattedDay).id(formattedDay).addTo(this)
             }
         }

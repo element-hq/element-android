@@ -23,11 +23,14 @@ class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
 
     init {
         Monarchy.init(matrixOptions.context)
+
         val matrixModule = MatrixModule(matrixOptions)
         val networkModule = NetworkModule()
         val authModule = AuthModule()
         loadKoinModules(listOf(matrixModule, networkModule, authModule))
+
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+
         val lastActiveSession = authenticator.getLastActiveSession()
         if (lastActiveSession != null) {
             currentSession = lastActiveSession

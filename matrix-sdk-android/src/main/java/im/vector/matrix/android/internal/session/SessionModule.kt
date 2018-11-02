@@ -19,11 +19,16 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
     override fun invoke(): ModuleDefinition = module(override = true) {
 
         scope(DefaultSession.SCOPE) {
-            RealmConfiguration.Builder().name(sessionParams.credentials.userId).deleteRealmIfMigrationNeeded().build()
+            RealmConfiguration.Builder()
+                    .name(sessionParams.credentials.userId)
+                    .deleteRealmIfMigrationNeeded()
+                    .build()
         }
 
         scope(DefaultSession.SCOPE) {
-            Monarchy.Builder().setRealmConfiguration(get()).build()
+            Monarchy.Builder()
+                    .setRealmConfiguration(get())
+                    .build()
         }
 
         scope(DefaultSession.SCOPE) {
