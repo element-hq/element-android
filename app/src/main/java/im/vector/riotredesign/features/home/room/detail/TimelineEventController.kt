@@ -8,9 +8,7 @@ import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.roomMember
 import im.vector.matrix.android.api.session.room.model.MessageContent
-import im.vector.riotredesign.core.extensions.avatarDrawable
 import im.vector.riotredesign.core.extensions.localDateTime
-import im.vector.riotredesign.core.utils.Constants
 import im.vector.riotredesign.features.home.LoadingItemModel_
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -72,16 +70,11 @@ class TimelineEventController(private val context: Context) : EpoxyController(
                 }
                 val showInformation = messagesDisplayedWithInformation.contains(event.root.eventId)
 
-
-                val avatarUrl = roomMember.avatarUrl?.replace("mxc://", Constants.MEDIA_URL) ?: ""
-
                 TimelineMessageItem(
                         message = messageContent.body,
-                        avatarUrl = avatarUrl,
+                        avatarUrl = roomMember.avatarUrl,
                         showInformation = showInformation,
                         time = date.toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
-                        fallbackAvatarDrawable = context.avatarDrawable(roomMember.displayName
-                                                                        ?: ""),
                         memberName = roomMember.displayName
                 )
                         .onBind { timeline?.loadAround(index) }
