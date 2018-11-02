@@ -29,25 +29,40 @@ class RoomListViewModel(initialState: RoomListViewState,
     fun accept(action: RoomListActions) {
         when (action) {
             is RoomListActions.SelectRoom -> handleSelectRoom(action)
+            is RoomListActions.RoomDisplayed -> setState { copy(shouldOpenRoomDetail = false) }
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectRoom(action: RoomListActions.SelectRoom) {
-        session.saveLastSelectedRoom(action.roomSummary)
-        setState { copy(selectedRoom = action.roomSummary) }
+        withState { state ->
+            if (state.selectedRoom?.roomId != action.roomSummary.roomId) {
+                session.saveLastSelectedRoom(action.roomSummary)
+                setState { copy(selectedRoom = action.roomSummary, shouldOpenRoomDetail = true) }
+            }
+        }
     }
 
     private fun observeRoomSummaries() {
         session
                 .rx().liveRoomSummaries()
-                .execute {
+                .execute { async ->
+                    val summaries = async()
+                    val directRooms = summaries?.filter { it.isDirect } ?: emptyList()
+                    val groupRooms = summaries?.filter { !it.isDirect } ?: emptyList()
+
                     val selectedRoom = selectedRoom
                             ?: session.lastSelectedRoom()
-                            ?: it.invoke()?.firstOrNull()
+                            ?: directRooms.firstOrNull()
+                            ?: groupRooms.firstOrNull()
 
-                    copy(roomSummaries = it, selectedRoom = selectedRoom)
+                    copy(
+                            async = async,
+                            directRooms = directRooms,
+                            groupRooms = groupRooms,
+                            selectedRoom = selectedRoom
+                    )
                 }
     }
 

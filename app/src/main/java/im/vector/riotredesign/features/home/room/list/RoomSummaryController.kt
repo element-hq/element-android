@@ -1,62 +1,59 @@
 package im.vector.riotredesign.features.home.room.list
 
-import com.airbnb.epoxy.Typed2EpoxyController
+import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 
 class RoomSummaryController(private val callback: Callback? = null
-) : Typed2EpoxyController<List<RoomSummary>, RoomSummary>() {
+) : TypedEpoxyController<RoomListViewState>() {
 
 
-    private var directRoomsExpanded = true
-    private var groupRoomsExpanded = true
+    private var isDirectRoomsExpanded = true
+    private var isGroupRoomsExpanded = true
 
-    override fun buildModels(summaries: List<RoomSummary>?, selected: RoomSummary?) {
-
-        val directRooms = summaries?.filter { it.isDirect } ?: emptyList()
-        val groupRooms = summaries?.filter { !it.isDirect } ?: emptyList()
+    override fun buildModels(viewState: RoomListViewState) {
 
         RoomCategoryItem(
                 title = "DIRECT MESSAGES",
-                isExpanded = directRoomsExpanded,
+                isExpanded = isDirectRoomsExpanded,
                 listener = {
-                    directRoomsExpanded = !directRoomsExpanded
-                    setData(summaries, selected)
+                    isDirectRoomsExpanded = !isDirectRoomsExpanded
+                    setData(viewState)
                 }
         )
                 .id("direct_messages")
                 .addTo(this)
 
-        if (directRoomsExpanded) {
-            buildRoomModels(directRooms, selected)
+        if (isDirectRoomsExpanded) {
+            buildRoomModels(viewState.directRooms, viewState.selectedRoom)
         }
 
         RoomCategoryItem(
                 title = "GROUPS",
-                isExpanded = groupRoomsExpanded,
+                isExpanded = isGroupRoomsExpanded,
                 listener = {
-                    groupRoomsExpanded = !groupRoomsExpanded
-                    setData(summaries, selected)
+                    isGroupRoomsExpanded = !isGroupRoomsExpanded
+                    setData(viewState)
                 }
         )
                 .id("group_messages")
                 .addTo(this)
 
-        if (groupRoomsExpanded) {
-            buildRoomModels(groupRooms, selected)
+        if (isGroupRoomsExpanded) {
+            buildRoomModels(viewState.groupRooms, viewState.selectedRoom)
         }
 
     }
 
     private fun buildRoomModels(summaries: List<RoomSummary>, selected: RoomSummary?) {
-
-        summaries.forEach {
+        summaries.forEach { roomSummary ->
+            val isSelected = roomSummary.roomId == selected?.roomId
             RoomSummaryItem(
-                    roomName = it.displayName,
-                    avatarUrl = it.avatarUrl,
-                    isSelected = it.roomId == selected?.roomId,
-                    listener = { callback?.onRoomSelected(it) }
+                    roomName = roomSummary.displayName,
+                    avatarUrl = roomSummary.avatarUrl,
+                    isSelected = isSelected,
+                    listener = { callback?.onRoomSelected(roomSummary) }
             )
-                    .id(it.roomId)
+                    .id(roomSummary.roomId)
                     .addTo(this)
         }
     }

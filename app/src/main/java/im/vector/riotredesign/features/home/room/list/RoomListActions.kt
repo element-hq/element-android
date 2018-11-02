@@ -6,5 +6,6 @@ sealed class RoomListActions {
 
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListActions()
 
+    object RoomDisplayed : RoomListActions()
 
 }

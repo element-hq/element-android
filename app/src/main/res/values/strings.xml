@@ -2,5 +2,8 @@
     <string name="app_name">Riot Redesign</string>
 
     <string name="global_retry">Réessayer</string>
+    <string name="error_no_network">Pas de connexion internet</string>
+    <string name="error_common">Une erreur est survenue</string>
+    <string name="room_list_empty">Rejoignez une room pour commencer à utiliser l\'application</string>
 
 </resources>

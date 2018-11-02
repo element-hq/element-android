@@ -8,7 +8,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
@@ -39,30 +38,28 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
         roomController = RoomSummaryController(this)
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
-
         viewModel.subscribe { renderState(it) }
     }
 
     private fun renderState(state: RoomListViewState) {
-        when (state.roomSummaries) {
+        when (state.async) {
             is Incomplete -> renderLoading()
-            is Success    -> renderSuccess(state.roomSummaries(), state.selectedRoom)
-            is Fail       -> renderFailure(state.roomSummaries.error)
+            is Success -> renderSuccess(state)
+            is Fail -> renderFailure(state.async.error)
         }
-        if (state.selectedRoom != null && state.showLastSelectedRoom) {
-            val position = state.roomSummaries()?.indexOf(state.selectedRoom) ?: 0
-            epoxyRecyclerView.scrollToPosition(position)
+        if (state.shouldOpenRoomDetail && state.selectedRoom != null) {
             homeNavigator.openRoomDetail(state.selectedRoom.roomId)
+            viewModel.accept(RoomListActions.RoomDisplayed)
         }
     }
 
-    private fun renderSuccess(roomSummaries: List<RoomSummary>?, selectedRoom: RoomSummary?) {
-        if (roomSummaries.isNullOrEmpty()) {
-            stateView.state = StateView.State.Empty("Rejoignez une room pour commencer à utiliser l'application")
+    private fun renderSuccess(state: RoomListViewState) {
+        if (state.async().isNullOrEmpty()) {
+            stateView.state = StateView.State.Empty(getString(R.string.room_list_empty))
         } else {
             stateView.state = StateView.State.Content
         }
-        roomController.setData(roomSummaries, selectedRoom)
+        roomController.setData(state)
     }
 
     private fun renderLoading() {
@@ -71,19 +68,14 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
 
     private fun renderFailure(error: Throwable) {
         val message = when (error) {
-            is Failure.NetworkConnection -> "Pas de connexion internet"
-            else                         -> "Une erreur est survenue"
+            is Failure.NetworkConnection -> getString(R.string.error_no_network)
+            else -> getString(R.string.error_common)
         }
         stateView.state = StateView.State.Error(message)
     }
 
     override fun onRoomSelected(room: RoomSummary) {
-        withState(viewModel) {
-            if (it.selectedRoom?.roomId != room.roomId) {
-                viewModel.accept(RoomListActions.SelectRoom(room))
-                homeNavigator.openRoomDetail(room.roomId)
-            }
-        }
+        viewModel.accept(RoomListActions.SelectRoom(room))
     }
 
 }
