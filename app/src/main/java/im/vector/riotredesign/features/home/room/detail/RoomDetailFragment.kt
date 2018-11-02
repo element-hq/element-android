@@ -33,6 +33,7 @@ class RoomDetailFragment : RiotFragment() {
     private val matrix by inject<Matrix>()
     private val currentSession = matrix.currentSession
     private var roomId by FragmentArgumentDelegate<String>()
+
     private lateinit var timelineEventController: TimelineEventController
     private lateinit var room: Room
 
@@ -59,8 +60,10 @@ class RoomDetailFragment : RiotFragment() {
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+        val listUpdateCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
         timelineEventController = TimelineEventController(riotActivity)
+        timelineEventController.addModelBuildListener { it.dispatchTo(listUpdateCallback) }
         recyclerView.setController(timelineEventController)
     }
 
