@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.auth
 
+import android.util.Patterns
 import arrow.core.Either
 import arrow.core.leftIfNull
 import im.vector.matrix.android.api.MatrixCallback
@@ -11,6 +12,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.internal.auth.data.ThreePidMedium
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.util.CancelableCoroutine
@@ -53,7 +55,11 @@ class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
                                      password: String): Either<Failure, Session> = withContext(coroutineDispatchers.io) {
 
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
-        val loginParams = PasswordLoginParams.userIdentifier(login, password, "Mobile")
+        val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
+            PasswordLoginParams.thirdPartyIdentifier(ThreePidMedium.EMAIL, login, password, "Mobile")
+        } else {
+            PasswordLoginParams.userIdentifier(login, password, "Mobile")
+        }
         executeRequest<Credentials> {
             apiCall = authAPI.login(loginParams)
         }.leftIfNull {
