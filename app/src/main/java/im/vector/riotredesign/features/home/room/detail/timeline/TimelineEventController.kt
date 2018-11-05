@@ -8,7 +8,8 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
 
-class TimelineEventController(private val messageItemFactory: MessageItemFactory,
+class TimelineEventController(private val roomId: String,
+                              private val messageItemFactory: MessageItemFactory,
                               private val textItemFactory: TextItemFactory,
                               private val dateFormatter: TimelineDateFormatter
 ) : EpoxyController(
@@ -18,35 +19,37 @@ class TimelineEventController(private val messageItemFactory: MessageItemFactory
 
     private val pagedListCallback = object : PagedList.Callback() {
         override fun onChanged(position: Int, count: Int) {
-            requestModelBuild()
+            buildSnapshotList()
         }
 
         override fun onInserted(position: Int, count: Int) {
-            requestModelBuild()
+            buildSnapshotList()
         }
 
         override fun onRemoved(position: Int, count: Int) {
-            requestModelBuild()
+            buildSnapshotList()
         }
     }
 
+    var snapshotList: List<EnrichedEvent>? = emptyList()
     var timeline: PagedList<EnrichedEvent>? = null
         set(value) {
             field?.removeWeakCallback(pagedListCallback)
             field = value
             field?.addWeakCallback(null, pagedListCallback)
+            buildSnapshotList()
         }
 
     override fun buildModels() {
-        buildModels(timeline)
+        buildModels(snapshotList)
     }
 
-    private fun buildModels(data: List<EnrichedEvent>?) {
+    private fun buildModels(data: List<EnrichedEvent?>?) {
         if (data.isNullOrEmpty()) {
             return
         }
         for (index in 0 until data.size) {
-            val event = data[index]
+            val event = data[index] ?: continue
             val nextEvent = if (index + 1 < data.size) data[index + 1] else null
 
             val date = event.root.localDateTime()
@@ -55,7 +58,7 @@ class TimelineEventController(private val messageItemFactory: MessageItemFactory
 
             val item = when (event.root.type) {
                 EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date)
-                else -> textItemFactory.create(event)
+                else              -> textItemFactory.create(event)
             }
             item
                     ?.onBind { timeline?.loadAround(index) }
@@ -64,15 +67,20 @@ class TimelineEventController(private val messageItemFactory: MessageItemFactory
 
             if (addDaySeparator) {
                 val formattedDay = dateFormatter.formatMessageDay(date)
-                DaySeparatorItem(formattedDay).id(formattedDay).addTo(this)
+                DaySeparatorItem(formattedDay).id(roomId + formattedDay).addTo(this)
             }
         }
 
         //It's a hack at the moment
-        val isLastEvent = data.last().root.type == EventType.STATE_ROOM_CREATE
+        val isLastEvent = data.last()?.root?.type == EventType.STATE_ROOM_CREATE
         LoadingItemModel_()
-                .id("backward_loading_item")
+                .id(roomId + "backward_loading_item")
                 .addIf(!isLastEvent, this)
+    }
+
+    private fun buildSnapshotList() {
+        snapshotList = timeline?.snapshot() ?: emptyList()
+        requestModelBuild()
     }
 
 }

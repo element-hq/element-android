@@ -19,6 +19,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
+import org.koin.core.parameter.ParameterList
 
 class RoomDetailFragment : RiotFragment() {
 
@@ -34,7 +35,7 @@ class RoomDetailFragment : RiotFragment() {
     private val matrix by inject<Matrix>()
     private val currentSession = matrix.currentSession
     private var roomId by FragmentArgumentDelegate<String>()
-    private val timelineEventController by inject<TimelineEventController>()
+    private val timelineEventController by inject<TimelineEventController>(parameters = { ParameterList(roomId) })
     private lateinit var room: Room
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -81,7 +82,6 @@ class RoomDetailFragment : RiotFragment() {
 
     private fun renderEvents(events: PagedList<EnrichedEvent>?) {
         timelineEventController.timeline = events
-        timelineEventController.requestModelBuild()
     }
 
 }

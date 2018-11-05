@@ -28,8 +28,9 @@ class HomeModule(private val homeActivity: HomeActivity) : Module {
             TextItemFactory()
         }
 
-        single {
-            TimelineEventController(get(), get(), get())
+        factory {
+            val roomId = it.get(0) as String
+            TimelineEventController(roomId, get(), get(), get())
         }
 
     }.invoke()
