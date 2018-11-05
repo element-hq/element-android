@@ -16,7 +16,6 @@
  */
 package im.vector.matrix.android.internal.legacy.rest.model.group;
 
-import java.io.Serializable;
 import java.util.Map;
 
 /**

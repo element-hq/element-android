@@ -1,8 +1,11 @@
 package im.vector.matrix.android.internal.session
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.internal.session.group.DefaultGroupService
+import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
 import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
@@ -56,6 +59,14 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
 
         scope(DefaultSession.SCOPE) {
             DefaultRoomService(get()) as RoomService
+        }
+
+        scope(DefaultSession.SCOPE) {
+            GroupSummaryUpdater(get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultGroupService(get()) as GroupService
         }
 
     }.invoke()

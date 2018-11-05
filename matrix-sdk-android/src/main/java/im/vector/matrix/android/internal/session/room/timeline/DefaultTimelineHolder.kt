@@ -55,7 +55,7 @@ class DefaultTimelineHolder(private val roomId: String,
                 .setEnablePlaceholders(false)
                 .setPageSize(PAGE_SIZE)
                 .setInitialLoadSizeHint(PAGE_SIZE)
-                .setPrefetchDistance(10)
+                .setPrefetchDistance(20)
                 .build()
 
         val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)

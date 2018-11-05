@@ -4,10 +4,15 @@ import android.arch.lifecycle.LiveData
 import android.os.Looper
 import android.support.annotation.MainThread
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.Group
+import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.internal.session.group.GroupModule
+import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncModule
@@ -28,7 +33,9 @@ class DefaultSession(override val sessionParams: SessionParams) : Session, KoinC
     private lateinit var scope: Scope
 
     private val roomSummaryObserver by inject<RoomSummaryUpdater>()
+    private val groupSummaryUpdater by inject<GroupSummaryUpdater>()
     private val roomService by inject<RoomService>()
+    private val groupService by inject<GroupService>()
     private val syncThread by inject<SyncThread>()
     private var isOpen = false
 
@@ -40,9 +47,11 @@ class DefaultSession(override val sessionParams: SessionParams) : Session, KoinC
         val sessionModule = SessionModule(sessionParams)
         val syncModule = SyncModule()
         val roomModule = RoomModule()
-        StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule, roomModule))
+        val groupModule = GroupModule()
+        StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule, roomModule, groupModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         roomSummaryObserver.start()
+        groupSummaryUpdater.start()
         syncThread.start()
     }
 
@@ -52,6 +61,7 @@ class DefaultSession(override val sessionParams: SessionParams) : Session, KoinC
         checkIsMainThread()
         assert(isOpen)
         syncThread.kill()
+        groupSummaryUpdater.dispose()
         roomSummaryObserver.dispose()
         scope.close()
         isOpen = false
@@ -87,6 +97,18 @@ class DefaultSession(override val sessionParams: SessionParams) : Session, KoinC
     override fun saveLastSelectedRoom(roomSummary: RoomSummary) {
         assert(isOpen)
         roomService.saveLastSelectedRoom(roomSummary)
+    }
+
+    // GROUP SERVICE
+
+    override fun getGroup(groupId: String): Group? {
+        assert(isOpen)
+        return groupService.getGroup(groupId)
+    }
+
+    override fun liveGroupSummaries(): LiveData<List<GroupSummary>> {
+        assert(isOpen)
+        return groupService.liveGroupSummaries()
     }
 
     // Private methods *****************************************************************************

@@ -30,11 +30,15 @@ class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
+            GroupSyncHandler(get())
+        }
+
+        scope(DefaultSession.SCOPE) {
             UserAccountDataSyncHandler(get())
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncResponseHandler(get(), get())
+            SyncResponseHandler(get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
