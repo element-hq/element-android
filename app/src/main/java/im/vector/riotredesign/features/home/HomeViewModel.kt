@@ -1,4 +1,4 @@
-package im.vector.riotredesign.features.home.room.list
+package im.vector.riotredesign.features.home
 
 import android.support.v4.app.FragmentActivity
 import com.airbnb.mvrx.BaseMvRxViewModel
@@ -6,43 +6,48 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
-import im.vector.riotredesign.features.home.group.GroupListActions
-import im.vector.riotredesign.features.home.group.GroupListViewModel
-import im.vector.riotredesign.features.home.group.GroupListViewState
 import org.koin.android.ext.android.get
 
-class RoomListViewModel(initialState: RoomListViewState,
-                        private val session: Session
-) : BaseMvRxViewModel<RoomListViewState>(initialState) {
+class HomeViewModel(initialState: HomeViewState, private val session: Session) : BaseMvRxViewModel<HomeViewState>(initialState) {
 
-    companion object : MvRxViewModelFactory<RoomListViewState> {
+    companion object : MvRxViewModelFactory<HomeViewState> {
 
         @JvmStatic
-        override fun create(activity: FragmentActivity, state: RoomListViewState): RoomListViewModel {
+        override fun create(activity: FragmentActivity, state: HomeViewState): HomeViewModel {
             val matrix = activity.get<Matrix>()
             val currentSession = matrix.currentSession
-            return RoomListViewModel(state, currentSession)
+            return HomeViewModel(state, currentSession)
         }
     }
 
     init {
         observeRoomSummaries()
+        observeGroupSummaries()
     }
 
-    fun accept(action: RoomListActions) {
+    fun accept(action: HomeActions) {
         when (action) {
-            is RoomListActions.SelectRoom   -> handleSelectRoom(action)
-            is RoomListActions.RoomDisplayed -> setState { copy(shouldOpenRoomDetail = false) }
+            is HomeActions.SelectRoom -> handleSelectRoom(action)
+            is HomeActions.SelectGroup -> handleSelectGroup(action)
+            is HomeActions.RoomDisplayed -> setState { copy(shouldOpenRoomDetail = false) }
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleSelectRoom(action: RoomListActions.SelectRoom) {
+    private fun handleSelectRoom(action: HomeActions.SelectRoom) {
         withState { state ->
             if (state.selectedRoom?.roomId != action.roomSummary.roomId) {
                 session.saveLastSelectedRoom(action.roomSummary)
                 setState { copy(selectedRoom = action.roomSummary, shouldOpenRoomDetail = true) }
+            }
+        }
+    }
+
+    private fun handleSelectGroup(action: HomeActions.SelectGroup) {
+        withState { state ->
+            if (state.selectedGroup?.groupId != action.groupSummary.groupId) {
+                setState { copy(selectedGroup = action.groupSummary) }
             }
         }
     }
@@ -61,7 +66,7 @@ class RoomListViewModel(initialState: RoomListViewState,
                             ?: groupRooms.firstOrNull()
 
                     copy(
-                            async = async,
+                            asyncRooms = async,
                             directRooms = directRooms,
                             groupRooms = groupRooms,
                             selectedRoom = selectedRoom
@@ -69,4 +74,11 @@ class RoomListViewModel(initialState: RoomListViewState,
                 }
     }
 
+    private fun observeGroupSummaries() {
+        session
+                .rx().liveGroupSummaries()
+                .execute { async ->
+                    copy(asyncGroups = async)
+                }
+    }
 }

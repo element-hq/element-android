@@ -16,6 +16,7 @@ data class GroupSummaryItem(
     private val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
 
     override fun bind() {
+        avatarImageView.setOnClickListener { listener?.invoke() }
         AvatarRenderer.render(avatarUrl, groupName.toString(), avatarImageView)
     }
 }

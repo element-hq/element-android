@@ -2,17 +2,16 @@ package im.vector.riotredesign.features.home.room.list
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.riotredesign.features.home.group.GroupListViewState
-import im.vector.riotredesign.features.home.group.GroupSummaryItem
+import im.vector.riotredesign.features.home.HomeViewState
 
 class RoomSummaryController(private val callback: Callback? = null
-) : TypedEpoxyController<RoomListViewState>() {
+) : TypedEpoxyController<HomeViewState>() {
 
 
     private var isDirectRoomsExpanded = true
     private var isGroupRoomsExpanded = true
 
-    override fun buildModels(viewState: RoomListViewState) {
+    override fun buildModels(viewState: HomeViewState) {
 
         RoomCategoryItem(
                 title = "DIRECT MESSAGES",
