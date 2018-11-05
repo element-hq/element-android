@@ -6,6 +6,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
+import im.vector.riotredesign.features.home.group.GroupListActions
+import im.vector.riotredesign.features.home.group.GroupListViewModel
+import im.vector.riotredesign.features.home.group.GroupListViewState
 import org.koin.android.ext.android.get
 
 class RoomListViewModel(initialState: RoomListViewState,
@@ -28,7 +31,7 @@ class RoomListViewModel(initialState: RoomListViewState,
 
     fun accept(action: RoomListActions) {
         when (action) {
-            is RoomListActions.SelectRoom -> handleSelectRoom(action)
+            is RoomListActions.SelectRoom   -> handleSelectRoom(action)
             is RoomListActions.RoomDisplayed -> setState { copy(shouldOpenRoomDetail = false) }
         }
     }

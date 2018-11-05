@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<im.vector.riotredesign.core.platform.CheckableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemGroupLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/groupAvatarImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        tools:src="@tools:sample/avatars" />
+
+</im.vector.riotredesign.core.platform.CheckableFrameLayout>

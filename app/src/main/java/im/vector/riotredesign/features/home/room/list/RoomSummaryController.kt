@@ -2,6 +2,8 @@ package im.vector.riotredesign.features.home.room.list
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotredesign.features.home.group.GroupListViewState
+import im.vector.riotredesign.features.home.group.GroupSummaryItem
 
 class RoomSummaryController(private val callback: Callback? = null
 ) : TypedEpoxyController<RoomListViewState>() {
