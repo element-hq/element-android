@@ -11,5 +11,5 @@ data class RoomSyncEphemeral(
         /**
          * List of ephemeral events (array of Event).
          */
-        @Json(name = "events") val events: List<Event>? = null
+        @Json(name = "events") val events: List<Event> = emptyList()
 )

@@ -31,28 +31,22 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
     }
 
     fun handle(roomsSyncResponse: RoomsSyncResponse) {
-        handleRoomSync(RoomSyncHandler.HandlingStrategy.JOINED(roomsSyncResponse.join))
-        handleRoomSync(RoomSyncHandler.HandlingStrategy.INVITED(roomsSyncResponse.invite))
-        handleRoomSync(RoomSyncHandler.HandlingStrategy.LEFT(roomsSyncResponse.leave))
-
         monarchy.runTransactionSync { realm ->
-            roomsSyncResponse.join.forEach { (roomId, roomSync) ->
-                handleEphemeral(realm, roomId, roomSync.ephemeral)
-            }
+            handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.JOINED(roomsSyncResponse.join))
+            handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.INVITED(roomsSyncResponse.invite))
+            handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.LEFT(roomsSyncResponse.leave))
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleRoomSync(handlingStrategy: HandlingStrategy) {
-        monarchy.runTransactionSync { realm ->
-            val rooms = when (handlingStrategy) {
-                is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
-                is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
-                is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
-            }
-            realm.insertOrUpdate(rooms)
+    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy) {
+        val rooms = when (handlingStrategy) {
+            is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
+            is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
+            is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
         }
+        realm.insertOrUpdate(rooms)
     }
 
     private fun handleJoinedRoom(realm: Realm,
@@ -80,8 +74,13 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                 roomEntity.chunks.add(chunkEntity)
             }
         }
+
         if (roomSync.summary != null) {
             handleRoomSummary(realm, roomId, roomSync.summary)
+        }
+
+        if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
+            handleEphemeral(realm, roomId, roomSync.ephemeral)
         }
         return roomEntity
     }
@@ -152,10 +151,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,
-                                ephemeral: RoomSyncEphemeral?) {
-        if (ephemeral == null || ephemeral.events.isNullOrEmpty()) {
-            return
-        }
+                                ephemeral: RoomSyncEphemeral) {
         ephemeral.events
                 .filter { it.type == EventType.RECEIPT }
                 .map { it.content<ReadReceiptContent>() }
