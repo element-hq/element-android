@@ -3,7 +3,6 @@ package im.vector.matrix.android.internal.session.room.timeline
 import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
@@ -54,7 +53,7 @@ class TimelineBoundaryCallback(private val roomId: String,
             pagingRequestCallback.recordSuccess()
         }
 
-        override fun onFailure(failure: Failure) {
+        override fun onFailure(failure: Throwable) {
             pagingRequestCallback.recordFailure(failure)
         }
     }

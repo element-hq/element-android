@@ -1,10 +1,6 @@
 package im.vector.matrix.android.internal.session.sync
 
-import arrow.core.Either
-import arrow.core.flatMap
-import arrow.core.leftIfNull
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.legacy.rest.model.filter.FilterBody
 import im.vector.matrix.android.internal.legacy.util.FilterUtil
@@ -24,7 +20,7 @@ internal class SyncRequest(private val syncAPI: SyncAPI,
     fun execute(token: String?, callback: MatrixCallback<SyncResponse>): Cancelable {
         val job = GlobalScope.launch {
             val syncOrFailure = execute(token)
-            syncOrFailure.bimap({ callback.onFailure(it) }, { callback.onSuccess(it) })
+            syncOrFailure.fold({ callback.onFailure(it) }, { callback.onSuccess(it) })
         }
         return CancelableCoroutine(job)
     }
@@ -42,15 +38,8 @@ internal class SyncRequest(private val syncAPI: SyncAPI,
         params["filter"] = filterBody.toJSONString()
         executeRequest<SyncResponse> {
             apiCall = syncAPI.sync(params)
-        }.leftIfNull {
-            Failure.Unknown(RuntimeException("Sync response shouln't be null"))
-        }.flatMap {
-            try {
-                syncResponseHandler.handleResponse(it, token, false)
-                Either.right(it)
-            } catch (exception: Exception) {
-                Either.Left(Failure.Unknown(exception))
-            }
+        }.flatMap { syncResponse ->
+            syncResponseHandler.handleResponse(syncResponse, token, false)
         }
     }
 

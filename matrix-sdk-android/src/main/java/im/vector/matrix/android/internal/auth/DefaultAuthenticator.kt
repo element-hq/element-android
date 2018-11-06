@@ -1,12 +1,9 @@
 package im.vector.matrix.android.internal.auth
 
 import android.util.Patterns
-import arrow.core.Either
-import arrow.core.leftIfNull
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
-import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.auth.data.Credentials
@@ -44,7 +41,7 @@ class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
 
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val sessionOrFailure = authenticate(homeServerConnectionConfig, login, password)
-            sessionOrFailure.bimap({ callback.onFailure(it) }, { callback.onSuccess(it) })
+            sessionOrFailure.fold({ callback.onFailure(it) }, { callback.onSuccess(it) })
         }
         return CancelableCoroutine(job)
 
@@ -52,7 +49,7 @@ class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
 
     private suspend fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
                                      login: String,
-                                     password: String): Either<Failure, Session> = withContext(coroutineDispatchers.io) {
+                                     password: String) = withContext(coroutineDispatchers.io) {
 
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
@@ -62,8 +59,6 @@ class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
         }
         executeRequest<Credentials> {
             apiCall = authAPI.login(loginParams)
-        }.leftIfNull {
-            Failure.Unknown(IllegalArgumentException("Credentials shouldn't not be null"))
         }.map {
             val sessionParams = SessionParams(it, homeServerConnectionConfig)
             sessionParamsStore.save(sessionParams)

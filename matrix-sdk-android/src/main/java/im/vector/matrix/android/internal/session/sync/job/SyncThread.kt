@@ -84,7 +84,7 @@ internal class SyncThread(private val syncRequest: SyncRequest,
                         latch.countDown()
                     }
 
-                    override fun onFailure(failure: Failure) {
+                    override fun onFailure(failure: Throwable) {
                         if (failure !is Failure.NetworkConnection) {
                             // Wait 10s before retrying
                             sleep(RETRY_WAIT_TIME_MS)

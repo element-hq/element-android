@@ -5,7 +5,6 @@ import im.vector.matrix.android.api.thread.MainThreadExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module

@@ -1,9 +1,9 @@
 package im.vector.matrix.android.internal.session.group
 
 import im.vector.matrix.android.internal.network.NetworkConstants
+import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
-import kotlinx.coroutines.Deferred
-import retrofit2.Response
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -15,7 +15,15 @@ interface GroupAPI {
      * @param groupId the group id
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "groups/{groupId}/summary")
-    fun getSummary(@Path("groupId") groupId: String): Deferred<Response<GroupSummaryResponse>>
+    fun getSummary(@Path("groupId") groupId: String): Call<GroupSummaryResponse>
+
+    /**
+     * Request the rooms list.
+     *
+     * @param groupId the group id
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "groups/{groupId}/rooms")
+    fun getRooms(@Path("groupId") groupId: String): Call<GroupRooms>
 
 
 }

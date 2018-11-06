@@ -6,7 +6,6 @@ import android.widget.Toast
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
-import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotActivity
@@ -43,7 +42,7 @@ class LoginActivity : RiotActivity() {
                 goToHome()
             }
 
-            override fun onFailure(failure: Failure) {
+            override fun onFailure(failure: Throwable) {
                 progressBar.visibility = View.GONE
                 Toast.makeText(this@LoginActivity, "Authenticate failure: $failure", Toast.LENGTH_LONG).show()
             }

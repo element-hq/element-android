@@ -4,6 +4,7 @@ import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEvent
 import kotlinx.coroutines.Deferred
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -26,7 +27,7 @@ interface RoomAPI {
                             @Query("dir") dir: String,
                             @Query("limit") limit: Int,
                             @Query("filter") filter: String?
-    ): Deferred<Response<TokenChunkEvent>>
+    ): Call<TokenChunkEvent>
 
 
     /**
@@ -42,7 +43,7 @@ interface RoomAPI {
                    @Query("at") syncToken: String?,
                    @Query("membership") membership: String?,
                    @Query("not_membership") notMembership: String?
-    ): Deferred<Response<RoomMembersResponse>>
+    ): Call<RoomMembersResponse>
 
 
 }

@@ -7,12 +7,11 @@ import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class GroupSummaryUpdater(private val monarchy: Monarchy,
-                                   private val getGroupSummaryRequest: GetGroupSummaryRequest
+                                   private val getGroupDataRequest: GetGroupDataRequest
 ) : Observer<Monarchy.ManagedChangeSet<GroupEntity>> {
 
     private var isStarted = AtomicBoolean(false)
@@ -57,7 +56,7 @@ internal class GroupSummaryUpdater(private val monarchy: Monarchy,
         if (group == null) {
             return
         }
-        getGroupSummaryRequest.execute(group.groupId, object : MatrixCallback<GroupSummaryResponse> {})
+        getGroupDataRequest.execute(group.groupId, object : MatrixCallback<Boolean> {})
     }
 
 }
