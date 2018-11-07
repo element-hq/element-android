@@ -17,7 +17,8 @@ object EventMapper {
         val eventEntity = EventEntity()
         eventEntity.eventId = event.eventId ?: ""
         eventEntity.content = adapter.toJson(event.content)
-        eventEntity.prevContent = adapter.toJson(event.prevContent)
+        val resolvedPrevContent = event.prevContent ?: event.unsignedData?.prevContent
+        eventEntity.prevContent = adapter.toJson(resolvedPrevContent)
         eventEntity.stateKey = event.stateKey
         eventEntity.type = event.type
         eventEntity.sender = event.sender
