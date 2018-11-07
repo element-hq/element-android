@@ -13,7 +13,8 @@ open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                              var joinedMembersCount: Int? = 0,
                              var invitedMembersCount: Int? = 0,
                              var isDirect: Boolean = false,
-                             var isLatestSelected: Boolean = false
+                             var isLatestSelected: Boolean = false,
+                             var otherMemberIds: RealmList<String> = RealmList()
 ) : RealmObject() {
 
     companion object

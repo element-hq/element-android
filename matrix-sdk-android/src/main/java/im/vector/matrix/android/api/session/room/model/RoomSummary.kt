@@ -5,5 +5,6 @@ data class RoomSummary(
         val displayName: String = "",
         val topic: String = "",
         val avatarUrl: String = "",
-        val isDirect: Boolean
+        val isDirect: Boolean,
+        val otherMemberIds: List<String> = emptyList()
 )

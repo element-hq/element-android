@@ -48,6 +48,8 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
         withState { state ->
             if (state.selectedGroup?.groupId != action.groupSummary.groupId) {
                 setState { copy(selectedGroup = action.groupSummary) }
+            } else {
+                setState { copy(selectedGroup = null) }
             }
         }
     }
@@ -56,6 +58,7 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
         session
                 .rx().liveRoomSummaries()
                 .execute { async ->
+
                     val summaries = async()
                     val directRooms = summaries?.filter { it.isDirect } ?: emptyList()
                     val groupRooms = summaries?.filter { !it.isDirect } ?: emptyList()

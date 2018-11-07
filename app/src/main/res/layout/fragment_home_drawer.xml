@@ -7,7 +7,7 @@
 
     <FrameLayout
         android:id="@+id/groupListFragmentContainer"
-        android:layout_width="56dp"
+        android:layout_width="64dp"
         android:layout_height="match_parent" />
 
     <FrameLayout

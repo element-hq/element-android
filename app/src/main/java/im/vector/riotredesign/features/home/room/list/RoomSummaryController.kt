@@ -25,7 +25,16 @@ class RoomSummaryController(private val callback: Callback? = null
                 .addTo(this)
 
         if (isDirectRoomsExpanded) {
-            buildRoomModels(viewState.directRooms, viewState.selectedRoom)
+            val filteredDirectRooms = viewState.directRooms.filter {
+                if (viewState.selectedGroup == null) {
+                    true
+                } else {
+                    it.otherMemberIds
+                            .intersect(viewState.selectedGroup.userIds)
+                            .isNotEmpty()
+                }
+            }
+            buildRoomModels(filteredDirectRooms, viewState.selectedRoom)
         }
 
         RoomCategoryItem(
@@ -40,7 +49,10 @@ class RoomSummaryController(private val callback: Callback? = null
                 .addTo(this)
 
         if (isGroupRoomsExpanded) {
-            buildRoomModels(viewState.groupRooms, viewState.selectedRoom)
+            val filteredGroupRooms = viewState.groupRooms.filter {
+                viewState.selectedGroup?.roomIds?.contains(it.roomId) ?: true
+            }
+            buildRoomModels(filteredGroupRooms, viewState.selectedRoom)
         }
 
     }

@@ -12,9 +12,11 @@
 
     <ImageView
         android:id="@+id/groupAvatarImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center"
+        android:duplicateParentState="true"
+        android:foreground="@drawable/fg_group_item"
         tools:src="@tools:sample/avatars" />
 
 </im.vector.riotredesign.core.platform.CheckableFrameLayout>

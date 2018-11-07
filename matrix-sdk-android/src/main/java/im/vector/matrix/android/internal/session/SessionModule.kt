@@ -54,7 +54,7 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSummaryUpdater(get(), get(), get(), get())
+            RoomSummaryUpdater(get(), get(), get(), get(), sessionParams.credentials)
         }
 
         scope(DefaultSession.SCOPE) {

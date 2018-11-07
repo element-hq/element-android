@@ -12,7 +12,8 @@ object RoomSummaryMapper {
                 roomSummaryEntity.displayName ?: "",
                 roomSummaryEntity.topic ?: "",
                 roomSummaryEntity.avatarUrl ?: "",
-                roomSummaryEntity.isDirect
+                roomSummaryEntity.isDirect,
+                roomSummaryEntity.otherMemberIds.toList()
         )
     }
 }
