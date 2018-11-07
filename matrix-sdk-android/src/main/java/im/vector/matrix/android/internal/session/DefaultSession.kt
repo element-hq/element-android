@@ -11,10 +11,9 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.group.GroupModule
-import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.RoomModule
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import org.koin.core.scope.Scope
@@ -32,8 +31,7 @@ class DefaultSession(override val sessionParams: SessionParams) : Session, KoinC
 
     private lateinit var scope: Scope
 
-    private val roomSummaryObserver by inject<RoomSummaryUpdater>()
-    private val groupSummaryUpdater by inject<GroupSummaryUpdater>()
+    private val liveEntityUpdaters by inject<List<LiveEntityObserver>>()
     private val roomService by inject<RoomService>()
     private val groupService by inject<GroupService>()
     private val syncThread by inject<SyncThread>()
@@ -50,8 +48,7 @@ class DefaultSession(override val sessionParams: SessionParams) : Session, KoinC
         val groupModule = GroupModule()
         StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule, roomModule, groupModule))
         scope = getKoin().getOrCreateScope(SCOPE)
-        roomSummaryObserver.start()
-        groupSummaryUpdater.start()
+        liveEntityUpdaters.forEach { it.start() }
         syncThread.start()
     }
 
@@ -61,8 +58,7 @@ class DefaultSession(override val sessionParams: SessionParams) : Session, KoinC
         checkIsMainThread()
         assert(isOpen)
         syncThread.kill()
-        groupSummaryUpdater.dispose()
-        roomSummaryObserver.dispose()
+        liveEntityUpdaters.forEach { it.dispose() }
         scope.close()
         isOpen = false
     }

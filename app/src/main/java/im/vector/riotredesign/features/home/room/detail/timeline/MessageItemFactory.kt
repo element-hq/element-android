@@ -26,7 +26,7 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
                 avatarUrl = roomMember.avatarUrl,
                 showInformation = showInformation,
                 time = timelineDateFormatter.formatMessageHour(date),
-                memberName = roomMember.displayName
+                memberName = roomMember.displayName ?: event.root.sender
         )
     }
 

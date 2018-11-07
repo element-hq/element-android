@@ -4,6 +4,8 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.internal.database.LiveEntityObserver
+import im.vector.matrix.android.internal.session.events.prune.EventsPruner
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
@@ -54,20 +56,21 @@ class SessionModule(private val sessionParams: SessionParams) : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSummaryUpdater(get(), get(), get(), get(), sessionParams.credentials)
-        }
-
-        scope(DefaultSession.SCOPE) {
             DefaultRoomService(get()) as RoomService
         }
 
-        scope(DefaultSession.SCOPE) {
-            GroupSummaryUpdater(get(), get())
-        }
 
         scope(DefaultSession.SCOPE) {
             DefaultGroupService(get()) as GroupService
         }
+
+        scope(DefaultSession.SCOPE) {
+            val roomSummaryUpdater = RoomSummaryUpdater(get(), get(), get(), get(), sessionParams.credentials)
+            val groupSummaryUpdater = GroupSummaryUpdater(get(), get())
+            val eventsPruner = EventsPruner(get())
+            listOf<LiveEntityObserver>(roomSummaryUpdater, groupSummaryUpdater, eventsPruner)
+        }
+
 
     }.invoke()
 

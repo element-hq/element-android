@@ -31,7 +31,7 @@ class TimelineEventController(private val roomId: String,
         }
     }
 
-    var snapshotList: List<EnrichedEvent>? = emptyList()
+    private var snapshotList: List<EnrichedEvent>? = emptyList()
     var timeline: PagedList<EnrichedEvent>? = null
         set(value) {
             field?.removeWeakCallback(pagedListCallback)

@@ -1,10 +1,10 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import com.squareup.moshi.Types
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.api.session.events.model.Event
 
 
 object EventMapper {
@@ -22,21 +22,23 @@ object EventMapper {
         eventEntity.type = event.type
         eventEntity.sender = event.sender
         eventEntity.originServerTs = event.originServerTs
+        eventEntity.redacts = event.redacts
         eventEntity.age = event.unsignedData?.age ?: event.originServerTs
         return eventEntity
     }
 
     internal fun map(eventEntity: EventEntity): Event {
         return Event(
-                eventEntity.type,
-                eventEntity.eventId,
-                adapter.fromJson(eventEntity.content),
-                adapter.fromJson(eventEntity.prevContent ?: ""),
-                eventEntity.originServerTs,
-                eventEntity.sender,
-                eventEntity.stateKey,
-                null,
-                UnsignedData(eventEntity.age)
+                type = eventEntity.type,
+                eventId = eventEntity.eventId,
+                content = adapter.fromJson(eventEntity.content),
+                prevContent = adapter.fromJson(eventEntity.prevContent ?: ""),
+                originServerTs = eventEntity.originServerTs,
+                sender = eventEntity.sender,
+                stateKey = eventEntity.stateKey,
+                roomId = null,
+                unsignedData = UnsignedData(eventEntity.age),
+                redacts = eventEntity.redacts
         )
     }
 }

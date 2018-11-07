@@ -15,9 +15,11 @@ fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<Event
             .equalTo(EventEntityFields.EVENT_ID, eventId)
 }
 
-fun EventEntity.Companion.where(realm: Realm, roomId: String, type: String? = null): RealmQuery<EventEntity> {
+fun EventEntity.Companion.where(realm: Realm, roomId: String? = null, type: String? = null): RealmQuery<EventEntity> {
     val query = realm.where<EventEntity>()
-            .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
+    if (roomId != null) {
+        query.equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
+    }
     if (type != null) {
         query.equalTo(EventEntityFields.TYPE, type)
     }
@@ -32,7 +34,7 @@ fun EventEntity.Companion.stateEvents(realm: Realm, roomId: String): RealmQuery<
 
 fun RealmQuery<EventEntity>.last(from: Long? = null): EventEntity? {
     if (from != null) {
-        this.lessThanOrEqualTo(EventEntityFields.ORIGIN_SERVER_TS, from)
+        this.lessThan(EventEntityFields.ORIGIN_SERVER_TS, from)
     }
     return this
             .sort(EventEntityFields.ORIGIN_SERVER_TS, Sort.DESCENDING)
