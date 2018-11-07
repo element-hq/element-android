@@ -12,7 +12,8 @@ object GroupSummaryMapper {
                 roomSummaryEntity.displayName,
                 roomSummaryEntity.shortDescription,
                 roomSummaryEntity.avatarUrl,
-                roomSummaryEntity.roomIds.toList()
+                roomSummaryEntity.roomIds.toList(),
+                roomSummaryEntity.userIds.toList()
         )
     }
 }

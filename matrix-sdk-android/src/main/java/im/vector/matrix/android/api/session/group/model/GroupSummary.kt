@@ -5,5 +5,6 @@ data class GroupSummary(
         val displayName: String = "",
         val shortDescription: String = "",
         val avatarUrl: String = "",
-        val roomIds: List<String> = emptyList()
+        val roomIds: List<String> = emptyList(),
+        val userIds: List<String> = emptyList()
 )

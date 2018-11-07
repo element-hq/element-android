@@ -6,11 +6,11 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class GroupRoom(
 
-        @Json(name = "aliases") val aliases: List<String>? = null,
+        @Json(name = "aliases") val aliases: List<String> = emptyList(),
         @Json(name = "canonical_alias") val canonicalAlias: String? = null,
         @Json(name = "name") val name: String? = null,
         @Json(name = "num_joined_members") val numJoinedMembers: Int = 0,
-        @Json(name = "room_id") val roomId: String? = null,
+        @Json(name = "room_id") val roomId: String,
         @Json(name = "topic") val topic: String? = null,
         @Json(name = "world_readable") val worldReadable: Boolean = false,
         @Json(name = "guest_can_join") val guestCanJoin: Boolean = false,

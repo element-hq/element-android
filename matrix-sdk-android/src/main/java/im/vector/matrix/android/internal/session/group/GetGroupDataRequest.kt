@@ -12,6 +12,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
+import im.vector.matrix.android.internal.session.group.model.GroupUsers
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.tryTransactionSync
@@ -45,24 +46,37 @@ class GetGroupDataRequest(
             val groupRooms = executeRequest<GroupRooms> {
                 apiCall = groupAPI.getRooms(groupId)
             }.bind()
-            insertInDb(groupSummary, groupRooms, groupId).bind()
+
+            val groupUsers = executeRequest<GroupUsers> {
+                apiCall = groupAPI.getUsers(groupId)
+            }.bind()
+            insertInDb(groupSummary, groupRooms, groupUsers, groupId).bind()
         }.fix()
     }
 
-    private fun insertInDb(groupSummary: GroupSummaryResponse, groupRooms: GroupRooms, groupId: String): Try<Unit> {
+    private fun insertInDb(groupSummary: GroupSummaryResponse,
+                           groupRooms: GroupRooms,
+                           groupUsers: GroupUsers,
+                           groupId: String): Try<Unit> {
         return monarchy
                 .tryTransactionSync { realm ->
                     val groupSummaryEntity = GroupSummaryEntity.where(realm, groupId).findFirst()
-                                             ?: realm.createObject(groupId)
+                            ?: realm.createObject(groupId)
 
                     groupSummaryEntity.avatarUrl = groupSummary.profile?.avatarUrl ?: ""
                     val name = groupSummary.profile?.name
                     groupSummaryEntity.displayName = if (name.isNullOrEmpty()) groupId else name
                     groupSummaryEntity.shortDescription = groupSummary.profile?.shortDescription ?: ""
 
-                    val roomIds = groupRooms.rooms.mapNotNull { it.roomId }
+                    val roomIds = groupRooms.rooms.map { it.roomId }
                     groupSummaryEntity.roomIds.clear()
                     groupSummaryEntity.roomIds.addAll(roomIds)
+
+                    val userIds = groupUsers.users.map { it.userId }
+                    groupSummaryEntity.userIds.clear()
+                    groupSummaryEntity.userIds.addAll(userIds)
+
+
                 }
     }
 
