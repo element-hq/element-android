@@ -75,6 +75,9 @@ dependencies {
     // Paging
     implementation "android.arch.paging:runtime:1.0.1"
 
+    // Work
+    implementation "android.arch.work:work-runtime-ktx:1.0.0-alpha10"
+
     // FP
     implementation "io.arrow-kt:arrow-core:$arrow_version"
     implementation "io.arrow-kt:arrow-instances-core:$arrow_version"

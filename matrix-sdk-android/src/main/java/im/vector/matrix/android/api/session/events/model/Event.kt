@@ -6,12 +6,14 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.legacy.util.JsonUtils
 
+typealias Content = Map<String, Any>
+
 @JsonClass(generateAdapter = true)
 data class Event(
         @Json(name = "type") val type: String,
         @Json(name = "event_id") val eventId: String?,
-        @Json(name = "content") val content: Map<String, Any>? = null,
-        @Json(name = "prev_content") val prevContent: Map<String, Any>? = null,
+        @Json(name = "content") val content: Content? = null,
+        @Json(name = "prev_content") val prevContent: Content? = null,
         @Json(name = "origin_server_ts") val originServerTs: Long? = null,
         @Json(name = "sender") val sender: String? = null,
         @Json(name = "state_key") val stateKey: String? = null,
@@ -39,7 +41,7 @@ data class Event(
         return toModel(prevContent)
     }
 
-    inline fun <reified T> toModel(data: Map<String, Any>?): T? {
+    inline fun <reified T> toModel(data: Content?): T? {
         val moshi = MoshiProvider.providesMoshi()
         val moshiAdapter = moshi.adapter(T::class.java)
         return moshiAdapter.fromJsonValue(data)

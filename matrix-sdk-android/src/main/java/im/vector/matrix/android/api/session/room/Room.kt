@@ -5,7 +5,7 @@ import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.Cancelable
 
-interface Room : TimelineHolder {
+interface Room : TimelineHolder, SendService {
 
     val roomId: String
 

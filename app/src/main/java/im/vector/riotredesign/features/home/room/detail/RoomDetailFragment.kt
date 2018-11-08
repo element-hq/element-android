@@ -50,6 +50,13 @@ class RoomDetailFragment : RiotFragment() {
         room.loadRoomMembersIfNeeded()
         room.liveTimeline().observe(this, Observer { renderEvents(it) })
         room.roomSummary.observe(this, Observer { renderRoomSummary(it) })
+        sendButton.setOnClickListener {
+            val textMessage = composerEditText.text.toString()
+            if (textMessage.isNotBlank()) {
+                composerEditText.text = null
+                room.sendTextMessage(textMessage)
+            }
+        }
     }
 
     private fun setupToolbar() {

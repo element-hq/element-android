@@ -7,6 +7,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.SendService
 import im.vector.matrix.android.api.session.room.TimelineHolder
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.MyMembership
@@ -28,11 +29,11 @@ internal data class DefaultRoom(
         override val myMembership: MyMembership
 ) : Room, KoinComponent {
 
-
     private val loadRoomMembersRequest by inject<LoadRoomMembersRequest>()
     private val syncTokenStore by inject<SyncTokenStore>()
     private val monarchy by inject<Monarchy>()
     private val timelineHolder by inject<TimelineHolder>(parameters = { parametersOf(roomId) })
+    private val sendService by inject<SendService>(parameters = { parametersOf(roomId) })
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
         val liveData = monarchy
@@ -65,5 +66,9 @@ internal data class DefaultRoom(
                        ?.areAllMembersLoaded ?: false
     }
 
+
+    override fun sendTextMessage(text: String): Cancelable {
+        return sendService.sendTextMessage(text)
+    }
 
 }

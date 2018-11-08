@@ -73,9 +73,53 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/composerDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <View
+        android:id="@+id/composerDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/pale_grey"
+        app:layout_constraintBottom_toTopOf="@+id/composerLayout" />
+
+    <RelativeLayout
+        android:id="@+id/composerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/sendButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_send_white"
+            android:tint="?attr/colorAccent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+
+        <EditText
+            android:id="@+id/composerEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/sendButton"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:hint="Send a message"
+            android:minHeight="48dp"
+            android:nextFocusLeft="@id/composerEditText"
+            android:nextFocusUp="@id/composerEditText"
+            android:padding="16dp"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

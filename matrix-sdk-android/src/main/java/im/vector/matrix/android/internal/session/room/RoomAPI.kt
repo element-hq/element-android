@@ -1,12 +1,14 @@
 package im.vector.matrix.android.internal.session.room
 
+import im.vector.matrix.android.api.session.room.model.MessageContent
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
+import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEvent
-import kotlinx.coroutines.Deferred
 import retrofit2.Call
-import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -44,6 +46,22 @@ internal interface RoomAPI {
                    @Query("membership") membership: String?,
                    @Query("not_membership") notMembership: String?
     ): Call<RoomMembersResponse>
+
+
+    /**
+     * Send an event to a room.
+     *
+     * @param txId      the transaction Id
+     * @param roomId    the room id
+     * @param eventType the event type
+     * @param content   the event content
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send/{eventType}/{txId}")
+    fun send(@Path("txId") txId: String,
+             @Path("roomId") roomId: String,
+             @Path("eventType") eventType: String,
+             @Body content: MessageContent
+    ): Call<SendResponse>
 
 
 }
