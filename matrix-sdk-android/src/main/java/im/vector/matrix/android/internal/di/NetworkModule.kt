@@ -2,6 +2,7 @@ package im.vector.matrix.android.internal.di
 
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.internal.network.RequestExecutor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.context.ModuleDefinition
@@ -48,6 +49,10 @@ class NetworkModule : Module {
 
         single {
             NetworkConnectivityChecker(get())
+        }
+
+        single {
+            RequestExecutor(get(), get())
         }
 
         factory {

@@ -9,6 +9,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.network.RequestExecutor
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
@@ -19,26 +20,27 @@ import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 internal class GetGroupDataRequest(
         private val groupAPI: GroupAPI,
         private val monarchy: Monarchy,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val requestExecutor: RequestExecutor
 ) {
 
     fun execute(groupId: String,
                 callback: MatrixCallback<Boolean>
     ): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val groupOrFailure = execute(groupId)
+            val groupOrFailure = requestExecutor.execute { getGroupData(groupId) }
             groupOrFailure.fold({ callback.onFailure(it) }, { callback.onSuccess(true) })
         }
         return CancelableCoroutine(job)
     }
 
-    private suspend fun execute(groupId: String) = withContext(coroutineDispatchers.io) {
-        Try.monad().binding {
+    private fun getGroupData(groupId: String): Try<Unit> {
+        return Try.monad().binding {
+
             val groupSummary = executeRequest<GroupSummaryResponse> {
                 apiCall = groupAPI.getSummary(groupId)
             }.bind()
@@ -50,6 +52,7 @@ internal class GetGroupDataRequest(
             val groupUsers = executeRequest<GroupUsers> {
                 apiCall = groupAPI.getUsers(groupId)
             }.bind()
+
             insertInDb(groupSummary, groupRooms, groupUsers, groupId).bind()
         }.fix()
     }
@@ -61,7 +64,7 @@ internal class GetGroupDataRequest(
         return monarchy
                 .tryTransactionSync { realm ->
                     val groupSummaryEntity = GroupSummaryEntity.where(realm, groupId).findFirst()
-                            ?: realm.createObject(groupId)
+                                             ?: realm.createObject(groupId)
 
                     groupSummaryEntity.avatarUrl = groupSummary.profile?.avatarUrl ?: ""
                     val name = groupSummary.profile?.name

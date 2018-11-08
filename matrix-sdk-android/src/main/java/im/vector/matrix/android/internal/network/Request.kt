@@ -19,7 +19,7 @@ internal inline fun <DATA> executeRequest(block: Request<DATA>.() -> Unit) = Req
 
 internal class Request<DATA> {
 
-    var moshi: Moshi = MoshiProvider.providesMoshi()
+    private val moshi: Moshi = MoshiProvider.providesMoshi()
     lateinit var apiCall: Call<DATA>
 
     fun execute(): Try<DATA> {

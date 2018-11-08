@@ -16,7 +16,7 @@ class GroupModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            GetGroupDataRequest(get(), get(), get())
+            GetGroupDataRequest(get(), get(), get(), get())
         }
 
     }.invoke()
