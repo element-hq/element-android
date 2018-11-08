@@ -10,7 +10,7 @@ import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 
-class DefaultGroupService(private val monarchy: Monarchy) : GroupService {
+internal class DefaultGroupService(private val monarchy: Monarchy) : GroupService {
 
     override fun getGroup(groupId: String): Group? {
         return null

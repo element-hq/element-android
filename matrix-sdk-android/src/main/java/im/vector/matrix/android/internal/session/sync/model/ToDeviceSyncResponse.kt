@@ -6,7 +6,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 
 // ToDeviceSyncResponse represents the data directly sent to one of user's devices.
 @JsonClass(generateAdapter = true)
-data class ToDeviceSyncResponse(
+internal data class ToDeviceSyncResponse(
 
         /**
          * List of direct-to-device events.

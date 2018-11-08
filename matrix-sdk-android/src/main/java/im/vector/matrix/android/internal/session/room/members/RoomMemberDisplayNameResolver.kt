@@ -2,7 +2,7 @@ package im.vector.matrix.android.internal.session.room.members
 
 import im.vector.matrix.android.api.session.room.model.RoomMember
 
-class RoomMemberDisplayNameResolver {
+internal class RoomMemberDisplayNameResolver {
 
     fun resolve(userId: String, members: Map<String, RoomMember>): String? {
         val currentMember = members[userId]

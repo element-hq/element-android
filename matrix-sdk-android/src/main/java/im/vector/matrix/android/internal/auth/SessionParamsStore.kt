@@ -1,9 +1,9 @@
 package im.vector.matrix.android.internal.auth
 
 import arrow.core.Try
-import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.SessionParams
 
-interface SessionParamsStore {
+internal interface SessionParamsStore {
 
     fun get(): SessionParams?
 

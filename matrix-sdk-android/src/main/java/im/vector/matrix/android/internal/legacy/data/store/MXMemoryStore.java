@@ -24,7 +24,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.api.auth.data.Credentials;
 import im.vector.matrix.android.internal.legacy.MXDataHandler;
 import im.vector.matrix.android.internal.legacy.data.Room;
 import im.vector.matrix.android.internal.legacy.data.RoomAccountData;

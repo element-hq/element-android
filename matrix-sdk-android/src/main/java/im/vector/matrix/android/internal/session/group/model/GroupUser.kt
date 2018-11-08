@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GroupUser(
+internal data class GroupUser(
         @Json(name = "display_name") val displayName: String = "",
         @Json(name = "user_id") val userId: String,
         @Json(name = "is_privileged") val isPrivileged: Boolean = false,

@@ -22,7 +22,7 @@ import org.matrix.olm.OlmException;
 import org.matrix.olm.OlmPkEncryption;
 import org.matrix.olm.OlmPkMessage;
 
-import im.vector.matrix.android.internal.auth.data.SessionParams;
+import im.vector.matrix.android.api.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.data.store.IMXStore;
 import im.vector.matrix.android.internal.legacy.rest.api.MediaScanApi;

@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 
 // RoomInviteState represents the state of a room that the user has been invited to.
 @JsonClass(generateAdapter = true)
-data class RoomInviteState(
+internal data class RoomInviteState(
 
         /**
          * List of state events (array of MXEvent).

@@ -12,7 +12,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.lastSelected
 import im.vector.matrix.android.internal.database.query.where
 
-class DefaultRoomService(private val monarchy: Monarchy) : RoomService {
+internal class DefaultRoomService(private val monarchy: Monarchy) : RoomService {
 
     override fun getAllRooms(): List<Room> {
         var rooms: List<Room> = emptyList()

@@ -20,7 +20,7 @@ package im.vector.matrix.android.internal.legacy.util;
 import android.support.annotation.Nullable;
 
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
-import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.api.auth.data.Credentials;
 import im.vector.matrix.android.internal.legacy.RestClient;
 
 /**

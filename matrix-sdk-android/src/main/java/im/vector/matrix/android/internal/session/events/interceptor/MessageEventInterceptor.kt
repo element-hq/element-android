@@ -11,7 +11,7 @@ import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
 
 
-class MessageEventInterceptor(val monarchy: Monarchy) : EnrichedEventInterceptor {
+internal class MessageEventInterceptor(val monarchy: Monarchy) : EnrichedEventInterceptor {
 
     override fun canEnrich(event: EnrichedEvent): Boolean {
         return event.root.type == EventType.MESSAGE

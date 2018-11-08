@@ -7,7 +7,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirectMessages
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataSync
 
-class UserAccountDataSyncHandler(private val monarchy: Monarchy) {
+internal class UserAccountDataSyncHandler(private val monarchy: Monarchy) {
 
     fun handle(accountData: UserAccountDataSync) {
         accountData.list.forEach {

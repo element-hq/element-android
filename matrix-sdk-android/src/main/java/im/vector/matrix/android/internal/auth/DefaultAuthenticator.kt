@@ -6,9 +6,9 @@ import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.auth.data.Credentials
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
-import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultSession
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 
-class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
+internal class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
                            private val coroutineDispatchers: MatrixCoroutineDispatchers,
                            private val sessionParamsStore: SessionParamsStore) : Authenticator {
 

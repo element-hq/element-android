@@ -7,7 +7,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 
 // RoomSyncTimeline represents the timeline of messages and state changes for a room during server sync v2.
 @JsonClass(generateAdapter = true)
-data class RoomSyncTimeline(
+internal data class RoomSyncTimeline(
 
         /**
          * List of events (array of Event).

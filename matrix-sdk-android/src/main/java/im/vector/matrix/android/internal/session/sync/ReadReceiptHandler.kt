@@ -11,7 +11,7 @@ import io.realm.Realm
 //                    dict value ts value
 typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
 
-class ReadReceiptHandler {
+internal class ReadReceiptHandler {
 
     fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?): List<ReadReceiptEntity> {
         if (content == null) {

@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GroupSyncProfile(
+internal data class GroupSyncProfile(
         /**
          * The name of the group, if any. May be nil.
          */

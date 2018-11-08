@@ -21,7 +21,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class GetGroupDataRequest(
+internal class GetGroupDataRequest(
         private val groupAPI: GroupAPI,
         private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers

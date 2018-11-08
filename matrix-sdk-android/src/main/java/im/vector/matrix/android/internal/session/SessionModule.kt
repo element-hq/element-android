@@ -3,7 +3,7 @@ package im.vector.matrix.android.internal.session
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
-import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.events.prune.EventsPruner
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
@@ -19,7 +19,7 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 
-class SessionModule(private val sessionParams: SessionParams) : Module {
+internal class SessionModule(private val sessionParams: SessionParams) : Module {
 
     override fun invoke(): ModuleDefinition = module(override = true) {
 

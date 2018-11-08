@@ -5,7 +5,7 @@ import com.novoda.merlin.Merlin
 import com.novoda.merlin.MerlinsBeard
 import com.novoda.merlin.registerable.connection.Connectable
 
-class NetworkConnectivityChecker(context: Context) {
+internal class NetworkConnectivityChecker(context: Context) {
 
     private val merlin = Merlin.Builder().withConnectableCallbacks().build(context)
     private val merlinsBeard = MerlinsBeard.from(context)

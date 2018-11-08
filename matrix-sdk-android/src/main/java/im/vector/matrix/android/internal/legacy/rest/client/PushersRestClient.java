@@ -19,7 +19,7 @@ package im.vector.matrix.android.internal.legacy.rest.client;
 
 import java.util.HashMap;
 
-import im.vector.matrix.android.internal.auth.data.SessionParams;
+import im.vector.matrix.android.api.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.data.Pusher;
 import im.vector.matrix.android.internal.legacy.rest.api.PushersApi;

@@ -41,7 +41,7 @@ import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.api.auth.data.Credentials;
 import im.vector.matrix.android.internal.legacy.crypto.IncomingRoomKeyRequest;
 import im.vector.matrix.android.internal.legacy.crypto.OutgoingRoomKeyRequest;
 import im.vector.matrix.android.internal.legacy.crypto.data.MXDeviceInfo;

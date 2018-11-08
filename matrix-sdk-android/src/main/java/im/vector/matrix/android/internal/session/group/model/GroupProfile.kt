@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
  * This class represents a community profile in the server responses.
  */
 @JsonClass(generateAdapter = true)
-data class GroupProfile(
+internal data class GroupProfile(
 
         @Json(name = "short_description") val shortDescription: String? = null,
 

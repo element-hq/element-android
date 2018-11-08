@@ -31,7 +31,7 @@ import kotlin.experimental.and
 /**
  * Various utility classes for dealing with X509Certificates
  */
-object CertUtil {
+internal object CertUtil {
 
     private val hexArray = "0123456789ABCDEF".toCharArray()
 

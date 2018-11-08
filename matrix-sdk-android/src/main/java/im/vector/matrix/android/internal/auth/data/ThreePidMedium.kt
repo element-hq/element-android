@@ -1,6 +1,6 @@
 package im.vector.matrix.android.internal.auth.data
 
-object ThreePidMedium {
+internal object ThreePidMedium {
     const val EMAIL = "email"
     const val MSISDN = "msisdn"
 }

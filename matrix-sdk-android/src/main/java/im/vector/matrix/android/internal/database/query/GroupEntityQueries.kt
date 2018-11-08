@@ -7,11 +7,11 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 
-fun GroupEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<GroupEntity> {
+internal fun GroupEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<GroupEntity> {
     return realm.where<GroupEntity>().equalTo(GroupEntityFields.GROUP_ID, roomId)
 }
 
-fun GroupEntity.Companion.where(realm: Realm, membership: MyMembership? = null): RealmQuery<GroupEntity> {
+internal fun GroupEntity.Companion.where(realm: Realm, membership: MyMembership? = null): RealmQuery<GroupEntity> {
     val query = realm.where<GroupEntity>()
     if (membership != null) {
         query.equalTo(GroupEntityFields.MEMBERSHIP_STR, membership.name)

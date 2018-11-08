@@ -8,7 +8,7 @@ import im.vector.matrix.android.internal.database.query.findWithNextToken
 import io.realm.Realm
 import io.realm.kotlin.createObject
 
-class StateEventsChunkHandler {
+internal class StateEventsChunkHandler {
 
     fun handle(realm: Realm, roomId: String, stateEvents: List<Event>): ChunkEntity {
         val chunkEntity = ChunkEntity.findWithNextToken(realm, roomId, DBConstants.STATE_EVENTS_CHUNK_TOKEN)

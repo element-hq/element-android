@@ -5,6 +5,6 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
-data class RoomMembersResponse(
+internal data class RoomMembersResponse(
         @Json(name = "chunk") val roomMemberEvents: List<Event>
 )

@@ -1,6 +1,6 @@
 package im.vector.matrix.android.internal.session.sync.model
 
-interface UserAccountData {
+internal interface UserAccountData {
 
     companion object {
         const val TYPE_IGNORED_USER_LIST = "m.ignored_user_list"

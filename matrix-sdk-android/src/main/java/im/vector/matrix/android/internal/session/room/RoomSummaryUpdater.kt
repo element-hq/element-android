@@ -5,7 +5,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
-import im.vector.matrix.android.internal.auth.data.Credentials
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity

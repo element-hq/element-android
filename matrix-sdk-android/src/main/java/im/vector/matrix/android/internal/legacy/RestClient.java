@@ -37,8 +37,8 @@ import javax.net.ssl.X509TrustManager;
 
 import im.vector.matrix.android.BuildConfig;
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
-import im.vector.matrix.android.internal.auth.data.Credentials;
-import im.vector.matrix.android.internal.auth.data.SessionParams;
+import im.vector.matrix.android.api.auth.data.Credentials;
+import im.vector.matrix.android.api.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.listeners.IMXNetworkEventListener;
 import im.vector.matrix.android.internal.legacy.network.NetworkConnectivityReceiver;
 import im.vector.matrix.android.internal.legacy.rest.client.MXRestExecutorService;

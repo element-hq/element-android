@@ -4,9 +4,9 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 
 
-object GroupSummaryMapper {
+internal object GroupSummaryMapper {
 
-    internal fun map(roomSummaryEntity: GroupSummaryEntity): GroupSummary {
+    fun map(roomSummaryEntity: GroupSummaryEntity): GroupSummary {
         return GroupSummary(
                 roomSummaryEntity.groupId,
                 roomSummaryEntity.displayName,
@@ -18,6 +18,6 @@ object GroupSummaryMapper {
     }
 }
 
-fun GroupSummaryEntity.asDomain(): GroupSummary {
+internal fun GroupSummaryEntity.asDomain(): GroupSummary {
     return GroupSummaryMapper.map(this)
 }

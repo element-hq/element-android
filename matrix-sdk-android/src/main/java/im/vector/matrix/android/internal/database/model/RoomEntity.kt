@@ -7,7 +7,7 @@ import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import kotlin.properties.Delegates
 
-open class RoomEntity(@PrimaryKey var roomId: String = "",
+internal open class RoomEntity(@PrimaryKey var roomId: String = "",
                       var chunks: RealmList<ChunkEntity> = RealmList(),
                       var areAllMembersLoaded: Boolean = false
 ) : RealmObject() {

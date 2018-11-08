@@ -5,7 +5,7 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.LinkingObjects
 
-open class ChunkEntity(var prevToken: String? = null,
+internal open class ChunkEntity(var prevToken: String? = null,
                        var nextToken: String? = null,
                        var events: RealmList<EventEntity> = RealmList()
 ) : RealmObject() {

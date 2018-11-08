@@ -10,7 +10,7 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
@@ -23,7 +23,7 @@ import org.koin.standalone.getKoin
 import org.koin.standalone.inject
 
 
-class DefaultSession(override val sessionParams: SessionParams) : Session, KoinComponent, RoomService {
+internal class DefaultSession(override val sessionParams: SessionParams) : Session, KoinComponent, RoomService {
 
     companion object {
         const val SCOPE: String = "session"

@@ -2,10 +2,10 @@ package im.vector.matrix.android.internal.auth.db
 
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
-import im.vector.matrix.android.internal.auth.data.Credentials
-import im.vector.matrix.android.internal.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.auth.data.SessionParams
 
-class SessionParamsMapper(moshi: Moshi) {
+internal class SessionParamsMapper(moshi: Moshi) {
 
     private val credentialsAdapter = moshi.adapter(Credentials::class.java)
     private val homeServerConnectionConfigAdapter = moshi.adapter(HomeServerConnectionConfig::class.java)

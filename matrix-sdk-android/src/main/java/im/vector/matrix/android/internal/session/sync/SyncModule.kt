@@ -8,7 +8,7 @@ import org.koin.dsl.module.module
 import retrofit2.Retrofit
 
 
-class SyncModule : Module {
+internal class SyncModule : Module {
 
     override fun invoke(): ModuleDefinition = module(override = true) {
 

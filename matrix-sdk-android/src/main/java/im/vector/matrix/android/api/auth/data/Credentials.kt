@@ -1,4 +1,4 @@
-package im.vector.matrix.android.internal.auth.data
+package im.vector.matrix.android.api.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

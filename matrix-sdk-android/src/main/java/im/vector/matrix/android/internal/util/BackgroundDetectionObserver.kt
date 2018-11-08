@@ -8,7 +8,7 @@ import timber.log.Timber
 /**
  * To be attached to ProcessLifecycleOwner lifecycle
  */
-class BackgroundDetectionObserver : LifecycleObserver {
+internal class BackgroundDetectionObserver : LifecycleObserver {
 
     var isIsBackground: Boolean = false
         private set

@@ -10,7 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface RoomAPI {
+internal interface RoomAPI {
 
     /**
      * Get a list of messages starting from a reference.

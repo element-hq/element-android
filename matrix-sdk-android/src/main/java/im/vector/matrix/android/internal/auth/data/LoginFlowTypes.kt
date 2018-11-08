@@ -1,6 +1,6 @@
 package im.vector.matrix.android.internal.auth.data
 
-object LoginFlowTypes {
+internal object LoginFlowTypes {
     const val PASSWORD = "m.login.password"
     const val OAUTH2 = "m.login.oauth2"
     const val EMAIL_CODE = "m.login.email.code"

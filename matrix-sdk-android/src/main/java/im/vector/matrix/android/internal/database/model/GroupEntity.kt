@@ -6,7 +6,7 @@ import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import kotlin.properties.Delegates
 
-open class GroupEntity(@PrimaryKey var groupId: String = ""
+internal open class GroupEntity(@PrimaryKey var groupId: String = ""
 
 ) : RealmObject() {
 

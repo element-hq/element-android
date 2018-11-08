@@ -4,7 +4,7 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
+internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                              var displayName: String? = "",
                              var avatarUrl: String? = "",
                              var topic: String? = "",

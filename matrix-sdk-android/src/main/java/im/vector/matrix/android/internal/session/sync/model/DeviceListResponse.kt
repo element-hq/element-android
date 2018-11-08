@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
  * This class describes the device list response from a sync request
  */
 @JsonClass(generateAdapter = true)
-data class DeviceListResponse(
+internal data class DeviceListResponse(
         // user ids list which have new crypto devices
         val changed: List<String> = emptyList(),
         //  List of user ids who are no more tracked.

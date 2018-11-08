@@ -46,8 +46,8 @@ import java.util.Map;
 import java.util.Set;
 
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
-import im.vector.matrix.android.internal.auth.data.Credentials;
-import im.vector.matrix.android.internal.auth.data.SessionParams;
+import im.vector.matrix.android.api.auth.data.Credentials;
+import im.vector.matrix.android.api.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.call.MXCallsManager;
 import im.vector.matrix.android.internal.legacy.crypto.MXCrypto;
 import im.vector.matrix.android.internal.legacy.crypto.MXCryptoConfig;

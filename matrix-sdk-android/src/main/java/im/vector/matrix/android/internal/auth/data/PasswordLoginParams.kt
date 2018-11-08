@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class PasswordLoginParams(@Json(name = "identifier") val identifier: Map<String, String>,
+internal data class PasswordLoginParams(@Json(name = "identifier") val identifier: Map<String, String>,
                                @Json(name = "password") val password: String,
                                @Json(name = "type") override val type: String,
                                @Json(name = "initial_device_display_name") val deviceDisplayName: String?,

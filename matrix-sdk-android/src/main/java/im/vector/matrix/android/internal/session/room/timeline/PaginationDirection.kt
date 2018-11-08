@@ -1,6 +1,6 @@
 package im.vector.matrix.android.internal.session.room.timeline
 
-enum class PaginationDirection(val value: String) {
+internal enum class PaginationDirection(val value: String) {
     /**
      * Forwards when the event is added to the end of the timeline.
      * These events come from the /sync stream or from forwards pagination.

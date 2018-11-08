@@ -9,7 +9,7 @@ import im.vector.matrix.android.api.session.events.model.Event
  * `MXRoomSyncUnreadNotifications` represents the unread counts for a room.
  */
 @JsonClass(generateAdapter = true)
-data class RoomSyncUnreadNotifications(
+internal data class RoomSyncUnreadNotifications(
         /**
          * List of account data events (array of Event).
          */

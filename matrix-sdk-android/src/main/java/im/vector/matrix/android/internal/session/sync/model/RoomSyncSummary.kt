@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 
 
 @JsonClass(generateAdapter = true)
-data class RoomSyncSummary(
+internal data class RoomSyncSummary(
 
         /**
          * Present only if the room has no m.room.name or m.room.canonical_alias.

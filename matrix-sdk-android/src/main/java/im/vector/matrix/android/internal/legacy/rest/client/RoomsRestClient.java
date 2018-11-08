@@ -27,7 +27,7 @@ import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import im.vector.matrix.android.internal.auth.data.SessionParams;
+import im.vector.matrix.android.api.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.data.RoomState;
 import im.vector.matrix.android.internal.legacy.data.timeline.EventTimeline;

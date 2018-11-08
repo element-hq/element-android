@@ -26,8 +26,8 @@ import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.UUID;
 
-import im.vector.matrix.android.internal.auth.data.Credentials;
-import im.vector.matrix.android.internal.auth.data.SessionParams;
+import im.vector.matrix.android.api.auth.data.Credentials;
+import im.vector.matrix.android.api.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.LoginApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;

@@ -4,7 +4,7 @@ import im.vector.matrix.android.internal.database.model.SyncEntity
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
-class SyncTokenStore(private val realmConfiguration: RealmConfiguration) {
+internal class SyncTokenStore(private val realmConfiguration: RealmConfiguration) {
 
     fun getLastToken(): String? {
         val realm = Realm.getInstance(realmConfiguration)

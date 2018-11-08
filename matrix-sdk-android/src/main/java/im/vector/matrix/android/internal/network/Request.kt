@@ -15,9 +15,9 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import java.io.IOException
 
-inline fun <DATA> executeRequest(block: Request<DATA>.() -> Unit) = Request<DATA>().apply(block).execute()
+internal inline fun <DATA> executeRequest(block: Request<DATA>.() -> Unit) = Request<DATA>().apply(block).execute()
 
-class Request<DATA> {
+internal class Request<DATA> {
 
     var moshi: Moshi = MoshiProvider.providesMoshi()
     lateinit var apiCall: Call<DATA>

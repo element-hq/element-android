@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 
 // RoomsSyncResponse represents the rooms list in server sync v2 response.
 @JsonClass(generateAdapter = true)
-data class RoomsSyncResponse(
+internal data class RoomsSyncResponse(
         /**
          * Joined rooms: keys are rooms ids.
          */

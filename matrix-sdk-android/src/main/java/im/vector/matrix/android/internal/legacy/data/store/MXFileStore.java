@@ -41,7 +41,7 @@ import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.api.auth.data.Credentials;
 import im.vector.matrix.android.internal.legacy.data.Room;
 import im.vector.matrix.android.internal.legacy.data.RoomAccountData;
 import im.vector.matrix.android.internal.legacy.data.RoomState;

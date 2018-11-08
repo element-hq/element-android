@@ -4,7 +4,7 @@ import im.vector.matrix.android.internal.auth.SessionParamsStore
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AccessTokenInterceptor(private val sessionParamsStore: SessionParamsStore) : Interceptor {
+internal class AccessTokenInterceptor(private val sessionParamsStore: SessionParamsStore) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()

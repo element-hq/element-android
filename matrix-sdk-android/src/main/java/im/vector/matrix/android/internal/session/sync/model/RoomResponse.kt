@@ -8,7 +8,7 @@ import im.vector.matrix.android.api.session.events.model.Event
  * Class representing a room from a JSON response from room or global initial sync.
  */
 @JsonClass(generateAdapter = true)
-data class RoomResponse(
+internal data class RoomResponse(
         // The room identifier.
         val roomId: String? = null,
 

@@ -21,7 +21,7 @@ import android.text.TextUtils;
 import java.util.List;
 import java.util.Map;
 
-import im.vector.matrix.android.internal.auth.data.SessionParams;
+import im.vector.matrix.android.api.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.ProfileApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;

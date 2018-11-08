@@ -1,5 +1,5 @@
 package im.vector.matrix.android.internal.auth.data
 
-interface LoginParams {
+internal interface LoginParams {
     val type: String
 }

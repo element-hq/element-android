@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
  * This class represents the current user status in a group summary response.
  */
 @JsonClass(generateAdapter = true)
-data class GroupSummaryUser(
+internal data class GroupSummaryUser(
 
         /**
          * The current user membership in this community.

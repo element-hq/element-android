@@ -16,7 +16,7 @@ import io.realm.Sort
 
 private const val PAGE_SIZE = 30
 
-class DefaultTimelineHolder(private val roomId: String,
+internal class DefaultTimelineHolder(private val roomId: String,
                             private val monarchy: Monarchy,
                             private val boundaryCallback: TimelineBoundaryCallback
 ) : TimelineHolder {

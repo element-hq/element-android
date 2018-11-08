@@ -5,7 +5,7 @@ import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.fastContains
 
-fun List<Event>.addManagedToChunk(chunkEntity: ChunkEntity) {
+internal fun List<Event>.addManagedToChunk(chunkEntity: ChunkEntity) {
     if (!chunkEntity.isManaged) {
         throw IllegalStateException("Chunk entity should be managed to use fast contains")
     }

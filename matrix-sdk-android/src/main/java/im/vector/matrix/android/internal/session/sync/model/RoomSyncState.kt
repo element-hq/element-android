@@ -7,7 +7,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 
 // RoomSyncState represents the state updates for a room during server sync v2.
 @JsonClass(generateAdapter = true)
-data class RoomSyncState(
+internal data class RoomSyncState(
 
         /**
          * List of state events (array of Event). The resulting state corresponds to the *start* of the timeline.

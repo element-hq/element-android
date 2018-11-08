@@ -4,7 +4,7 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-open class GroupSummaryEntity(@PrimaryKey var groupId: String = "",
+internal open class GroupSummaryEntity(@PrimaryKey var groupId: String = "",
                               var displayName: String = "",
                               var shortDescription: String = "",
                               var avatarUrl: String = "",

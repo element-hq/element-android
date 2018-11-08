@@ -25,7 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PaginationRequest(private val roomAPI: RoomAPI,
+internal class PaginationRequest(private val roomAPI: RoomAPI,
                         private val monarchy: Monarchy,
                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
                         private val stateEventsChunkHandler: StateEventsChunkHandler) {

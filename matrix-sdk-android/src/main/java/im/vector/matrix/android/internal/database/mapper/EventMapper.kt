@@ -7,13 +7,13 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
 
 
-object EventMapper {
+internal object EventMapper {
 
     private val moshi = MoshiProvider.providesMoshi()
     private val type = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)
     private val adapter = moshi.adapter<Map<String, Any>>(type)
 
-    internal fun map(event: Event): EventEntity {
+    fun map(event: Event): EventEntity {
         val eventEntity = EventEntity()
         eventEntity.eventId = event.eventId ?: ""
         eventEntity.content = adapter.toJson(event.content)
@@ -28,7 +28,7 @@ object EventMapper {
         return eventEntity
     }
 
-    internal fun map(eventEntity: EventEntity): Event {
+    fun map(eventEntity: EventEntity): Event {
         return Event(
                 type = eventEntity.type,
                 eventId = eventEntity.eventId,
@@ -44,10 +44,10 @@ object EventMapper {
     }
 }
 
-fun EventEntity.asDomain(): Event {
+internal fun EventEntity.asDomain(): Event {
     return EventMapper.map(this)
 }
 
-fun Event.asEntity(): EventEntity {
+internal fun Event.asEntity(): EventEntity {
     return EventMapper.map(this)
 }

@@ -6,7 +6,7 @@ import im.vector.matrix.android.internal.legacy.rest.model.group.GroupsSyncRespo
 
 // SyncResponse represents the request response for server sync v2.
 @JsonClass(generateAdapter = true)
-data class SyncResponse(
+internal data class SyncResponse(
         /**
          * The user private data.
          */

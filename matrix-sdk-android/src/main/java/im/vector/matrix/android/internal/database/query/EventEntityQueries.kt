@@ -10,12 +10,12 @@ import io.realm.RealmQuery
 import io.realm.Sort
 import io.realm.kotlin.where
 
-fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {
+internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {
     return realm.where<EventEntity>()
             .equalTo(EventEntityFields.EVENT_ID, eventId)
 }
 
-fun EventEntity.Companion.where(realm: Realm, roomId: String? = null, type: String? = null): RealmQuery<EventEntity> {
+internal fun EventEntity.Companion.where(realm: Realm, roomId: String? = null, type: String? = null): RealmQuery<EventEntity> {
     val query = realm.where<EventEntity>()
     if (roomId != null) {
         query.equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
@@ -26,13 +26,13 @@ fun EventEntity.Companion.where(realm: Realm, roomId: String? = null, type: Stri
     return query
 }
 
-fun EventEntity.Companion.stateEvents(realm: Realm, roomId: String): RealmQuery<EventEntity> {
+internal fun EventEntity.Companion.stateEvents(realm: Realm, roomId: String): RealmQuery<EventEntity> {
     return realm.where<EventEntity>()
             .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
             .isNotNull(EventEntityFields.STATE_KEY)
 }
 
-fun RealmQuery<EventEntity>.last(from: Long? = null): EventEntity? {
+internal fun RealmQuery<EventEntity>.last(from: Long? = null): EventEntity? {
     if (from != null) {
         this.lessThan(EventEntityFields.ORIGIN_SERVER_TS, from)
     }
@@ -41,6 +41,6 @@ fun RealmQuery<EventEntity>.last(from: Long? = null): EventEntity? {
             .findFirst()
 }
 
-fun RealmList<EventEntity>.fastContains(eventEntity: EventEntity): Boolean {
+internal fun RealmList<EventEntity>.fastContains(eventEntity: EventEntity): Boolean {
     return this.where().equalTo(EventEntityFields.EVENT_ID, eventEntity.eventId).findFirst() != null
 }

@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig;
-import im.vector.matrix.android.internal.auth.data.Credentials;
+import im.vector.matrix.android.api.auth.data.Credentials;
 import im.vector.matrix.android.internal.legacy.MXPatterns;
 import im.vector.matrix.android.internal.legacy.data.RoomState;
 import im.vector.matrix.android.internal.legacy.rest.model.pid.Invite3Pid;

@@ -5,7 +5,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 
 //  PresenceSyncResponse represents the updates to the presence status of other users during server sync v2.
 @JsonClass(generateAdapter = true)
-data class PresenceSyncResponse(
+internal data class PresenceSyncResponse(
 
         /**
          * List of presence events (array of Event with type m.presence).

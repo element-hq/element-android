@@ -5,7 +5,7 @@ import io.realm.RealmResults
 import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 
-open class EventEntity(@PrimaryKey var eventId: String = "",
+internal open class EventEntity(@PrimaryKey var eventId: String = "",
                        var type: String = "",
                        var content: String = "",
                        var prevContent: String? = null,

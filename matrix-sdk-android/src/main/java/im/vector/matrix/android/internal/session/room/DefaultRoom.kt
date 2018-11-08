@@ -23,7 +23,7 @@ import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
-data class DefaultRoom(
+internal data class DefaultRoom(
         override val roomId: String,
         override val myMembership: MyMembership
 ) : Room, KoinComponent {

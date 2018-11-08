@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GroupRoom(
+internal data class GroupRoom(
 
         @Json(name = "aliases") val aliases: List<String> = emptyList(),
         @Json(name = "canonical_alias") val canonicalAlias: String? = null,

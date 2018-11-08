@@ -17,7 +17,7 @@ package im.vector.matrix.android.internal.legacy.rest.client;
 
 import com.google.gson.JsonObject;
 
-import im.vector.matrix.android.internal.auth.data.SessionParams;
+import im.vector.matrix.android.api.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.CallRulesApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;

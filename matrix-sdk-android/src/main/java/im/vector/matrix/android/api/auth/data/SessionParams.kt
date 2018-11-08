@@ -1,6 +1,4 @@
-package im.vector.matrix.android.internal.auth.data
-
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+package im.vector.matrix.android.api.auth.data
 
 data class SessionParams(
         val credentials: Credentials,

@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GroupsSyncResponse(
+internal data class GroupsSyncResponse(
         /**
          * Joined groups: An array of groups ids.
          */

@@ -16,7 +16,7 @@
  */
 package im.vector.matrix.android.internal.legacy.rest.client;
 
-import im.vector.matrix.android.internal.auth.data.SessionParams;
+import im.vector.matrix.android.api.auth.data.SessionParams;
 import im.vector.matrix.android.internal.legacy.RestClient;
 import im.vector.matrix.android.internal.legacy.rest.api.PresenceApi;
 import im.vector.matrix.android.internal.legacy.rest.callback.ApiCallback;

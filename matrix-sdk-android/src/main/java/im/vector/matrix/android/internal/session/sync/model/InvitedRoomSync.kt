@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 
 // InvitedRoomSync represents a room invitation during server sync v2.
 @JsonClass(generateAdapter = true)
-data class InvitedRoomSync(
+internal data class InvitedRoomSync(
 
         /**
          * The state of a room that the user has been invited to. These state events may only have the 'sender', 'type', 'state_key'
