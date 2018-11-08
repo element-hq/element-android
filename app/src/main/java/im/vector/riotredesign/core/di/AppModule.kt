@@ -12,7 +12,7 @@ class AppModule(private val context: Context) : Module {
 
     override fun invoke(): ModuleDefinition = module {
 
-        single {
+        single(createOnStart = true) {
             val matrixOptions = MatrixOptions(context)
             Matrix(matrixOptions)
         }
