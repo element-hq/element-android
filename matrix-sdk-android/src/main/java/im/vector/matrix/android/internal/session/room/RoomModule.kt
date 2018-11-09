@@ -1,10 +1,12 @@
 package im.vector.matrix.android.internal.session.room
 
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.room.SendService
 import im.vector.matrix.android.api.session.room.TimelineHolder
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersRequest
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
+import im.vector.matrix.android.internal.session.room.send.EventFactory
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
 import im.vector.matrix.android.internal.session.room.timeline.PaginationRequest
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
@@ -32,6 +34,10 @@ class RoomModule : Module {
             PaginationRequest(get(), get(), get(), get())
         }
 
+        scope(DefaultSession.SCOPE) {
+            val sessionParams = get<SessionParams>()
+            EventFactory(sessionParams.credentials)
+        }
 
         factory {
             val roomId: String = it[0]
@@ -41,7 +47,7 @@ class RoomModule : Module {
 
         factory {
             val roomId: String = it[0]
-            DefaultSendService(roomId) as SendService
+            DefaultSendService(roomId, get(), get()) as SendService
         }
 
     }.invoke()

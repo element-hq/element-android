@@ -9,7 +9,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.mapper.asEntity
+import im.vector.matrix.android.internal.database.mapper.fillWith
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
@@ -48,16 +48,18 @@ internal class PruneEventWorker(context: Context,
         if (redactionEvent == null || redactionEvent.redacts.isNullOrEmpty()) {
             return
         }
-        val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()?.asDomain()
+        val eventToPruneEntity = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
                 ?: return
+
+        val eventToPrune = eventToPruneEntity.asDomain()
 
         val allowedKeys = computeAllowedKeys(eventToPrune.type)
         val prunedContent = allowedKeys.fold(
                 { eventToPrune.content },
                 { eventToPrune.content?.filterKeys { key -> it.contains(key) } }
         )
-        val eventToPruneEntity = eventToPrune.copy(content = prunedContent).asEntity()
-        realm.insertOrUpdate(eventToPruneEntity)
+        val prunedEvent = eventToPrune.copy(content = prunedContent)
+        eventToPruneEntity.fillWith(prunedEvent)
     }
 
     private fun computeAllowedKeys(type: String): Option<List<String>> {
