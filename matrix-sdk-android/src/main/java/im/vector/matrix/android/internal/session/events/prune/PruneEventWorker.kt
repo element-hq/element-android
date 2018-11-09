@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import arrow.core.Option
+import com.squareup.moshi.JsonClass
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -11,6 +12,7 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import io.realm.Realm
 import org.koin.standalone.KoinComponent
@@ -20,10 +22,19 @@ internal class PruneEventWorker(context: Context,
                                 workerParameters: WorkerParameters
 ) : Worker(context, workerParameters), KoinComponent {
 
+    @JsonClass(generateAdapter = true)
+    internal data class Params(
+            val redactionEvents: List<Event>,
+            val updateIndexes: List<Int>,
+            val deletionIndexes: List<Int>
+    )
+
     private val monarchy by inject<Monarchy>()
 
     override fun doWork(): Result {
-        val params = PruneEventWorkerParams.fromData(inputData) ?: return Result.FAILURE
+        val params = WorkerParamsFactory.fromData<Params>(inputData)
+                ?: return Result.FAILURE
+
         val result = monarchy.tryTransactionAsync { realm ->
             params.updateIndexes.forEach { index ->
                 val data = params.redactionEvents[index]

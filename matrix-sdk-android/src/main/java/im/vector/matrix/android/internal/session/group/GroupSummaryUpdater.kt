@@ -5,6 +5,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import io.realm.RealmResults
 
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
@@ -20,8 +21,8 @@ internal class GroupSummaryUpdater(monarchy: Monarchy
 
     override fun process(results: RealmResults<GroupEntity>, updateIndexes: IntArray, deletionIndexes: IntArray) {
         val groupIds = results.map { it.groupId }
-        val getGroupDataWorkerParams = GetGroupDataWorkerParams(groupIds, updateIndexes.toList(), deletionIndexes.toList())
-        val workData = getGroupDataWorkerParams.toData()
+        val getGroupDataWorkerParams = GetGroupDataWorker.Params(groupIds, updateIndexes.toList(), deletionIndexes.toList())
+        val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
 
         val sendWork = OneTimeWorkRequestBuilder<GetGroupDataWorker>()
                 .setInputData(workData)

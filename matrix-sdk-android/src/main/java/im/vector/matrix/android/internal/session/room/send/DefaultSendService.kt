@@ -1,18 +1,13 @@
 package im.vector.matrix.android.internal.session.room.send
 
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import im.vector.matrix.android.api.session.room.SendService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.util.CancelableWork
+import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import java.util.concurrent.TimeUnit
 
-private const val SEND_WORK_NAME = "SEND_WORK_NAME"
+private const val SEND_WORK = "SEND_WORK"
 
 internal class DefaultSendService(private val roomId: String) : SendService {
 
@@ -22,20 +17,17 @@ internal class DefaultSendService(private val roomId: String) : SendService {
 
     override fun sendTextMessage(text: String): Cancelable {
 
-        val data = mapOf(
-                "roomId" to roomId,
-                "text" to text
-        )
-        val workData = Data.Builder().putAll(data).build()
+        val sendContentWorkerParams = SendEventWorker.Params(roomId, text)
+        val workData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
-        val sendWork = OneTimeWorkRequestBuilder<SendContentWorker>()
+        val sendWork = OneTimeWorkRequestBuilder<SendEventWorker>()
                 .setConstraints(sendConstraints)
                 .setInputData(workData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000, TimeUnit.MILLISECONDS)
                 .build()
 
         val work = WorkManager.getInstance()
-                .beginUniqueWork(SEND_WORK_NAME, ExistingWorkPolicy.APPEND, sendWork)
+                .beginUniqueWork(SEND_WORK, ExistingWorkPolicy.APPEND, sendWork)
                 .enqueue()
 
         return CancelableWork(work)

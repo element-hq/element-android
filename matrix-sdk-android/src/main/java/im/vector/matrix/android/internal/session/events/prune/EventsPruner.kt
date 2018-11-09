@@ -9,6 +9,7 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import io.realm.RealmResults
 
 private const val PRUNE_EVENT_WORKER = "PRUNE_EVENT_WORKER"
@@ -20,8 +21,8 @@ internal class EventsPruner(monarchy: Monarchy) :
 
     override fun process(results: RealmResults<EventEntity>, updateIndexes: IntArray, deletionIndexes: IntArray) {
         val redactionEvents = results.map { it.asDomain() }
-        val pruneEventWorkerParams = PruneEventWorkerParams(redactionEvents, updateIndexes.toList(), deletionIndexes.toList())
-        val workData = pruneEventWorkerParams.toData()
+        val pruneEventWorkerParams = PruneEventWorker.Params(redactionEvents, updateIndexes.toList(), deletionIndexes.toList())
+        val workData = WorkerParamsFactory.toData(pruneEventWorkerParams)
 
         val sendWork = OneTimeWorkRequestBuilder<PruneEventWorker>()
                 .setInputData(workData)
