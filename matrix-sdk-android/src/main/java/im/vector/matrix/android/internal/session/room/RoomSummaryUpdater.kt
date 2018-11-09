@@ -28,10 +28,10 @@ internal class RoomSummaryUpdater(monarchy: Monarchy,
 
     override val query = Monarchy.Query<RoomEntity> { RoomEntity.where(it) }
 
-    override fun process(results: RealmResults<RoomEntity>, indexes: IntArray) {
+    override fun process(results: RealmResults<RoomEntity>, updateIndexes: IntArray, deletionIndexes: IntArray) {
         val rooms = results.map { it.asDomain() }
         monarchy.writeAsync { realm ->
-            indexes.forEach { index ->
+            updateIndexes.forEach { index ->
                 val data = rooms[index]
                 updateRoom(realm, data)
             }

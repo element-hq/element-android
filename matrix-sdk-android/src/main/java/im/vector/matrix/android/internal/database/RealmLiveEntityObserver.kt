@@ -39,10 +39,11 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
         if (changeSet == null) {
             return
         }
-        val indexes = changeSet.orderedCollectionChangeSet.changes + changeSet.orderedCollectionChangeSet.insertions
-        process(changeSet.realmResults, indexes)
+        val updateIndexes = changeSet.orderedCollectionChangeSet.changes + changeSet.orderedCollectionChangeSet.insertions
+        val deletionIndexes = changeSet.orderedCollectionChangeSet.deletions
+        process(changeSet.realmResults, updateIndexes, deletionIndexes)
     }
 
-    abstract fun process(results: RealmResults<T>, indexes: IntArray)
+    abstract fun process(results: RealmResults<T>, updateIndexes: IntArray, deletionIndexes: IntArray)
 
 }

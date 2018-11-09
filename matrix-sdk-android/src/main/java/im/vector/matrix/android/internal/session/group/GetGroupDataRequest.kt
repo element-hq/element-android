@@ -38,7 +38,7 @@ internal class GetGroupDataRequest(
         return CancelableCoroutine(job)
     }
 
-    private fun getGroupData(groupId: String): Try<Unit> {
+    fun getGroupData(groupId: String): Try<Unit> {
         return Try.monad().binding {
 
             val groupSummary = executeRequest<GroupSummaryResponse> {
@@ -64,7 +64,7 @@ internal class GetGroupDataRequest(
         return monarchy
                 .tryTransactionSync { realm ->
                     val groupSummaryEntity = GroupSummaryEntity.where(realm, groupId).findFirst()
-                                             ?: realm.createObject(groupId)
+                            ?: realm.createObject(groupId)
 
                     groupSummaryEntity.avatarUrl = groupSummary.profile?.avatarUrl ?: ""
                     val name = groupSummary.profile?.name
