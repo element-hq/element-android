@@ -38,10 +38,8 @@ internal fun ChunkEntity.Companion.findWithNextToken(realm: Realm, roomId: Strin
 
 internal fun ChunkEntity.Companion.findLastLiveChunkFromRoom(realm: Realm, roomId: String): ChunkEntity? {
     return where(realm, roomId)
-            .and()
-            .isNull(ChunkEntityFields.NEXT_TOKEN)
-            .findAll()
-            .last(null)
+            .equalTo(ChunkEntityFields.IS_LAST, true)
+            .findFirst()
 }
 
 internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds: List<String>): RealmResults<ChunkEntity> {

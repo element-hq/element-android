@@ -8,7 +8,8 @@ import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInte
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.TimelineHolder
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.ChunkEntityFields
+import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.events.interceptor.MessageEventInterceptor
@@ -17,8 +18,8 @@ import io.realm.Sort
 private const val PAGE_SIZE = 30
 
 internal class DefaultTimelineHolder(private val roomId: String,
-                            private val monarchy: Monarchy,
-                            private val boundaryCallback: TimelineBoundaryCallback
+                                     private val monarchy: Monarchy,
+                                     private val boundaryCallback: TimelineBoundaryCallback
 ) : TimelineHolder {
 
     private val eventInterceptors = ArrayList<EnrichedEventInterceptor>()
@@ -30,12 +31,9 @@ internal class DefaultTimelineHolder(private val roomId: String,
 
     override fun liveTimeline(): LiveData<PagedList<EnrichedEvent>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            ChunkEntity.where(realm, roomId)
-                    .findAll()
-                    .last(null)
-                    ?.let {
-                        it.events.where().sort(EventEntityFields.ORIGIN_SERVER_TS, Sort.DESCENDING)
-                    }
+            EventEntity.where(realm, roomId = roomId)
+                    .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST}", true)
+                    .sort(EventEntityFields.ORIGIN_SERVER_TS, Sort.DESCENDING)
         }
         val domainSourceFactory = realmDataSourceFactory
                 .map { it.asDomain() }
