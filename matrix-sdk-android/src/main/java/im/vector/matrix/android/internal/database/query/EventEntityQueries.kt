@@ -26,18 +26,13 @@ internal fun EventEntity.Companion.where(realm: Realm, roomId: String? = null, t
     return query
 }
 
-internal fun EventEntity.Companion.stateEvents(realm: Realm, roomId: String): RealmQuery<EventEntity> {
-    return realm.where<EventEntity>()
-            .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
-            .isNotNull(EventEntityFields.STATE_KEY)
-}
 
-internal fun RealmQuery<EventEntity>.last(from: Long? = null): EventEntity? {
+internal fun RealmQuery<EventEntity>.last(from: Int? = null): EventEntity? {
     if (from != null) {
-        this.lessThan(EventEntityFields.ORIGIN_SERVER_TS, from)
+        this.lessThanOrEqualTo(EventEntityFields.STATE_INDEX, from)
     }
     return this
-            .sort(EventEntityFields.ORIGIN_SERVER_TS, Sort.DESCENDING)
+            .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
             .findFirst()
 }
 

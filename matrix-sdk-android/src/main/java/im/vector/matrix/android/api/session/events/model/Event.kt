@@ -1,10 +1,10 @@
 package im.vector.matrix.android.api.session.events.model
 
-import com.google.gson.JsonObject
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.squareup.moshi.Types
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.legacy.util.JsonUtils
+import java.lang.reflect.ParameterizedType
 
 typealias Content = Map<String, Any>
 
@@ -23,14 +23,8 @@ data class Event(
 
 ) {
 
-    val contentAsJsonObject: JsonObject? by lazy {
-        val gson = JsonUtils.getGson(true)
-        gson.toJsonTree(content).asJsonObject
-    }
-
-    val prevContentAsJsonObject: JsonObject? by lazy {
-        val gson = JsonUtils.getGson(true)
-        gson.toJsonTree(prevContent).asJsonObject
+    fun isStateEvent(): Boolean {
+        return EventType.isStateEvent(type)
     }
 
     inline fun <reified T> content(): T? {
@@ -47,4 +41,7 @@ data class Event(
         return moshiAdapter.fromJsonValue(data)
     }
 
+    companion object {
+        internal val CONTENT_TYPE: ParameterizedType = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)
+    }
 }

@@ -11,5 +11,13 @@ internal enum class PaginationDirection(val value: String) {
      * Backwards when the event is added to the start of the timeline.
      * These events come from a back pagination.
      */
-    BACKWARDS("b")
+    BACKWARDS("b");
+
+    val incrementStateIndex: Int by lazy {
+        when (this) {
+            FORWARDS  -> 1
+            BACKWARDS -> -1
+        }
+    }
+
 }

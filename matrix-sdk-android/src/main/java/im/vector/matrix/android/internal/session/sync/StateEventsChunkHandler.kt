@@ -2,9 +2,11 @@ package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.database.DBConstants
-import im.vector.matrix.android.internal.database.helper.addManagedToChunk
+import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.findWithNextToken
+import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import io.realm.Realm
 import io.realm.kotlin.createObject
 
@@ -18,7 +20,10 @@ internal class StateEventsChunkHandler {
                                       nextToken = DBConstants.STATE_EVENTS_CHUNK_TOKEN
                                   }
 
-        stateEvents.addManagedToChunk(chunkEntity)
+
+        stateEvents.forEach { event ->
+            chunkEntity.add(event, EventEntity.DEFAULT_STATE_INDEX, PaginationDirection.FORWARDS)
+        }
         return chunkEntity
     }
 

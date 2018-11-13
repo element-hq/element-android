@@ -4,13 +4,14 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.MyMembership
-import im.vector.matrix.android.internal.database.helper.addManagedToChunk
+import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
@@ -68,6 +69,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                 roomEntity.chunks.add(chunkEntity)
             }
         }
+
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
             val chunkEntity = handleTimelineEvents(realm, roomId, roomSync.timeline.events, roomSync.timeline.prevToken, isLimited = roomSync.timeline.limited)
             if (!roomEntity.chunks.contains(chunkEntity)) {
@@ -148,7 +150,15 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         lastChunk?.isLast = false
         chunkEntity.isLast = true
         chunkEntity.nextToken = nextToken
-        eventList.addManagedToChunk(chunkEntity)
+
+        var currentStateIndex = chunkEntity.nextStateIndex
+        eventList.forEach { event ->
+            if (event.isStateEvent() && currentStateIndex != 0) {
+                currentStateIndex += 1
+            }
+            chunkEntity.add(event, currentStateIndex, PaginationDirection.FORWARDS)
+        }
+        chunkEntity.nextStateIndex = currentStateIndex
         return chunkEntity
     }
 

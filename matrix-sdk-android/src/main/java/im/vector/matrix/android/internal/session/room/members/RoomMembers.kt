@@ -21,7 +21,7 @@ internal class RoomMembers(private val realm: Realm,
     fun getLoaded(): Map<String, RoomMember> {
         return EventEntity
                 .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-                .sort(EventEntityFields.ORIGIN_SERVER_TS)
+                .sort(EventEntityFields.STATE_INDEX)
                 .findAll()
                 .map { it.asDomain() }
                 .associateBy { it.stateKey!! }
