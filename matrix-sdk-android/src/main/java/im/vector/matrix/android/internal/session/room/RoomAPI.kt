@@ -1,12 +1,16 @@
 package im.vector.matrix.android.internal.session.room
 
-import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.room.model.MessageContent
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEvent
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 internal interface RoomAPI {
 
@@ -56,7 +60,7 @@ internal interface RoomAPI {
     fun send(@Path("txId") txId: String,
              @Path("roomId") roomId: String,
              @Path("eventType") eventType: String,
-             @Body content: Content?
+             @Body content: MessageContent
     ): Call<SendResponse>
 
 

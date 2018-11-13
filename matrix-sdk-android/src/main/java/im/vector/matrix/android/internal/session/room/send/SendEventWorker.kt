@@ -4,14 +4,12 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.model.MessageContent
+import im.vector.matrix.android.api.session.room.model.MessageType
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import im.vector.matrix.android.internal.util.tryTransactionSync
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
@@ -22,34 +20,24 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
     @JsonClass(generateAdapter = true)
     internal data class Params(
             val roomId: String,
-            val event: Event
+            val text: String
     )
 
     private val roomAPI by inject<RoomAPI>()
-    private val monarchy by inject<Monarchy>()
 
     override fun doWork(): Result {
 
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
+        val sendWorkerParameters = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.FAILURE
 
-        if (params.event.eventId == null) {
-            return Result.FAILURE
-        }
-
+        val fakeId = sendWorkerParameters.roomId + "-" + System.currentTimeMillis()
         val result = executeRequest<SendResponse> {
             apiCall = roomAPI.send(
-                    params.event.eventId,
-                    params.roomId,
-                    params.event.type,
-                    params.event.content
+                    fakeId,
+                    sendWorkerParameters.roomId,
+                    EventType.MESSAGE,
+                    MessageContent(MessageType.MSGTYPE_TEXT, sendWorkerParameters.text)
             )
-        }
-        result.flatMap { sendResponse ->
-            monarchy.tryTransactionSync { realm ->
-                val dummyEventEntity = EventEntity.where(realm, params.event.eventId).findFirst()
-                dummyEventEntity?.eventId = sendResponse.eventId
-            }
         }
         return result.fold({ Result.RETRY }, { Result.SUCCESS })
     }
