@@ -26,11 +26,21 @@ internal fun EventEntity.Companion.where(realm: Realm, roomId: String? = null, t
     return query
 }
 
-
-internal fun RealmQuery<EventEntity>.last(from: Int? = null): EventEntity? {
-    if (from != null) {
-        this.lessThanOrEqualTo(EventEntityFields.STATE_INDEX, from)
+internal fun RealmQuery<EventEntity>.findMostSuitableStateEvent(stateIndex: Int): EventEntity? {
+    val sort: Sort = if (stateIndex < 0) {
+        this.greaterThanOrEqualTo(EventEntityFields.STATE_INDEX, stateIndex)
+        Sort.ASCENDING
+    } else {
+        this.lessThanOrEqualTo(EventEntityFields.STATE_INDEX, stateIndex)
+        Sort.DESCENDING
     }
+    return this
+            .sort(EventEntityFields.STATE_INDEX, sort)
+            .findFirst()
+}
+
+
+internal fun RealmQuery<EventEntity>.last(): EventEntity? {
     return this
             .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
             .findFirst()

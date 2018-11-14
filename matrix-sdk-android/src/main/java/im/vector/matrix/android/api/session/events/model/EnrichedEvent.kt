@@ -6,18 +6,10 @@ data class EnrichedEvent(val root: Event) {
 
     val metadata = HashMap<String, Any>()
 
-    fun enrichWith(events: List<Event>) {
-        events.forEach { enrichWith(it) }
-    }
-
-    fun enrichWith(event: Event?) {
-        if (event == null) {
+    fun enrichWith(key: String?, data: Any?) {
+        if (key == null || data == null) {
             return
         }
-        enrichWith(event.type, event)
-    }
-
-    fun enrichWith(key: String, data: Any) {
         if (!metadata.containsKey(key)) {
             metadata[key] = data
         }
@@ -35,5 +27,5 @@ data class EnrichedEvent(val root: Event) {
 }
 
 fun EnrichedEvent.roomMember(): RoomMember? {
-    return getMetadata<Event>(EventType.STATE_ROOM_MEMBER)?.content<RoomMember>()
+    return getMetadata<RoomMember>(EventType.STATE_ROOM_MEMBER)
 }

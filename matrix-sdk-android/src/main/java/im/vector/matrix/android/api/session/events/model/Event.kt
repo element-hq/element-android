@@ -41,6 +41,14 @@ data class Event(
         return moshiAdapter.fromJsonValue(data)
     }
 
+    internal inline fun <reified T> pickContent(stateIndex: Int): T? {
+        return if (stateIndex < 0) {
+            prevContent<T>()
+        } else {
+            content<T>()
+        }
+    }
+
     companion object {
         internal val CONTENT_TYPE: ParameterizedType = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)
     }

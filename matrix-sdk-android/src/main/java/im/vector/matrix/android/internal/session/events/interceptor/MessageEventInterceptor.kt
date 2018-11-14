@@ -4,20 +4,19 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInterceptor
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
 
 
-internal class MessageEventInterceptor(val monarchy: Monarchy) : EnrichedEventInterceptor {
+internal class MessageEventInterceptor(private val monarchy: Monarchy,
+                                       private val roomId: String) : EnrichedEventInterceptor {
 
     override fun canEnrich(event: EnrichedEvent): Boolean {
         return event.root.type == EventType.MESSAGE
     }
 
-    override fun enrich(roomId: String, event: EnrichedEvent) {
+    override fun enrich(event: EnrichedEvent) {
         monarchy.doWithRealm { realm ->
 
             if (event.root.eventId == null) {
@@ -25,14 +24,10 @@ internal class MessageEventInterceptor(val monarchy: Monarchy) : EnrichedEventIn
             }
 
             val rootEntity = EventEntity.where(realm, eventId = event.root.eventId).findFirst()
-                             ?: return@doWithRealm
+                    ?: return@doWithRealm
 
-            val roomMember = EventEntity
-                    .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-                    .equalTo(EventEntityFields.STATE_KEY, event.root.sender)
-                    .last(from = rootEntity.stateIndex)
-                    ?.asDomain()
-            event.enrichWith(roomMember)
+            val roomMember = RoomMemberExtractor(realm, roomId).extractFrom(rootEntity)
+            event.enrichWith(EventType.STATE_ROOM_MEMBER, roomMember)
         }
     }
 

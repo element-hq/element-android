@@ -23,7 +23,7 @@ internal class DefaultTimelineHolder(private val roomId: String,
 
     init {
         boundaryCallback.limit = PAGE_SIZE
-        eventInterceptors.add(MessageEventInterceptor(monarchy))
+        eventInterceptors.add(MessageEventInterceptor(monarchy, roomId))
     }
 
     override fun liveTimeline(): LiveData<PagedList<EnrichedEvent>> {
@@ -41,7 +41,7 @@ internal class DefaultTimelineHolder(private val roomId: String,
                             .filter {
                                 it.canEnrich(enrichedEvent)
                             }.forEach {
-                                it.enrich(roomId, enrichedEvent)
+                                it.enrich(enrichedEvent)
                             }
                     enrichedEvent
                 }
