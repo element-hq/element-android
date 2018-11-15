@@ -6,6 +6,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.helper.addAll
+import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.helper.merge
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -90,15 +91,11 @@ internal class PaginationRequest(private val roomAPI: RoomAPI,
                                 }
                     }
 
-                    if (!roomEntity.chunks.contains(currentChunk)) {
-                        roomEntity.chunks.add(currentChunk)
-                    }
+                    roomEntity.addOrUpdate(currentChunk)
 
                     // TODO : there is an issue with the pagination sending unwanted room member events
                     val stateEventsChunk = stateEventsChunkHandler.handle(realm, roomId, receivedChunk.stateEvents)
-                    if (!roomEntity.chunks.contains(stateEventsChunk)) {
-                        roomEntity.chunks.add(stateEventsChunk)
-                    }
+                    roomEntity.addOrUpdate(stateEventsChunk)
                 }
                 .map { receivedChunk }
     }

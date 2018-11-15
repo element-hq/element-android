@@ -9,3 +9,10 @@ internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
     chunkEntity.events.deleteAllFromRealm()
     chunkEntity.deleteFromRealm()
 }
+
+internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {
+    chunkEntity.events.forEachIndexed { index, eventEntity -> eventEntity.displayIndex = index }
+    if (!chunks.contains(chunkEntity)) {
+        chunks.add(chunkEntity)
+    }
+}

@@ -5,12 +5,11 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.StateEventsChunkHandler
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -53,15 +52,13 @@ internal class LoadRoomMembersRequest(private val roomAPI: RoomAPI,
                 .tryTransactionSync { realm ->
                     // We ignore all the already known members
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                            ?: throw IllegalStateException("You shouldn't use this method without a room")
+                                     ?: throw IllegalStateException("You shouldn't use this method without a room")
 
                     val roomMembers = RoomMembers(realm, roomId).getLoaded()
                     val eventsToInsert = response.roomMemberEvents.filter { !roomMembers.containsKey(it.stateKey) }
 
                     val chunk = stateEventsChunkHandler.handle(realm, roomId, eventsToInsert)
-                    if (!roomEntity.chunks.contains(chunk)) {
-                        roomEntity.chunks.add(chunk)
-                    }
+                    roomEntity.addOrUpdate(chunk)
                     roomEntity.areAllMembersLoaded = true
                 }
                 .map { response }

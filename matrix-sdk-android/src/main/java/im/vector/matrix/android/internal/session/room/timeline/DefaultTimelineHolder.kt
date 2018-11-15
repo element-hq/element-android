@@ -8,8 +8,10 @@ import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInte
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.TimelineHolder
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.model.ChunkEntityFields
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.events.interceptor.MessageEventInterceptor
 
 private const val PAGE_SIZE = 30
@@ -28,9 +30,10 @@ internal class DefaultTimelineHolder(private val roomId: String,
 
     override fun liveTimeline(): LiveData<PagedList<EnrichedEvent>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-                    ?.events
-                    ?.where()
+            EventEntity
+                    .where(realm, roomId = roomId)
+                    .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST}", true)
+                    .sort(EventEntityFields.DISPLAY_INDEX)
         }
         val domainSourceFactory = realmDataSourceFactory
                 .map { it.asDomain() }

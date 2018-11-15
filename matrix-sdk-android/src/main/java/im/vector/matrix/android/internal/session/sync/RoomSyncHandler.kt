@@ -5,6 +5,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.internal.database.helper.addAll
+import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -65,16 +66,12 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             val chunkEntity = stateEventsChunkHandler.handle(realm, roomId, roomSync.state.events)
-            if (!roomEntity.chunks.contains(chunkEntity)) {
-                roomEntity.chunks.add(chunkEntity)
-            }
+            roomEntity.addOrUpdate(chunkEntity)
         }
 
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
             val chunkEntity = handleTimelineEvents(realm, roomId, roomSync.timeline.events, roomSync.timeline.prevToken, isLimited = roomSync.timeline.limited)
-            if (!roomEntity.chunks.contains(chunkEntity)) {
-                roomEntity.chunks.add(chunkEntity)
-            }
+            roomEntity.addOrUpdate(chunkEntity)
         }
 
         if (roomSync.summary != null) {
@@ -96,9 +93,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         roomEntity.membership = MyMembership.INVITED
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
             val chunkEntity = handleTimelineEvents(realm, roomId, roomSync.inviteState.events)
-            if (!roomEntity.chunks.contains(chunkEntity)) {
-                roomEntity.chunks.add(chunkEntity)
-            }
+            roomEntity.addOrUpdate(chunkEntity)
         }
         return roomEntity
     }
@@ -110,26 +105,6 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
             this.roomId = roomId
             this.membership = MyMembership.LEFT
         }
-    }
-
-    private fun handleRoomSummary(realm: Realm,
-                                  roomId: String,
-                                  roomSummary: RoomSyncSummary) {
-
-        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: RoomSummaryEntity(roomId)
-
-        if (roomSummary.heroes.isNotEmpty()) {
-            roomSummaryEntity.heroes.clear()
-            roomSummaryEntity.heroes.addAll(roomSummary.heroes)
-        }
-        if (roomSummary.invitedMembersCount != null) {
-            roomSummaryEntity.invitedMembersCount = roomSummary.invitedMembersCount
-        }
-        if (roomSummary.joinedMembersCount != null) {
-            roomSummaryEntity.joinedMembersCount = roomSummary.joinedMembersCount
-        }
-        realm.insertOrUpdate(roomSummaryEntity)
     }
 
     private fun handleTimelineEvents(realm: Realm,
@@ -153,6 +128,26 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
         chunkEntity.addAll(eventList, PaginationDirection.FORWARDS)
         return chunkEntity
+    }
+
+    private fun handleRoomSummary(realm: Realm,
+                                  roomId: String,
+                                  roomSummary: RoomSyncSummary) {
+
+        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
+                                ?: RoomSummaryEntity(roomId)
+
+        if (roomSummary.heroes.isNotEmpty()) {
+            roomSummaryEntity.heroes.clear()
+            roomSummaryEntity.heroes.addAll(roomSummary.heroes)
+        }
+        if (roomSummary.invitedMembersCount != null) {
+            roomSummaryEntity.invitedMembersCount = roomSummary.invitedMembersCount
+        }
+        if (roomSummary.joinedMembersCount != null) {
+            roomSummaryEntity.joinedMembersCount = roomSummary.joinedMembersCount
+        }
+        realm.insertOrUpdate(roomSummaryEntity)
     }
 
     private fun handleEphemeral(realm: Realm,
