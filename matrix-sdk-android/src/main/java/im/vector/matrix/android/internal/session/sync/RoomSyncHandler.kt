@@ -4,7 +4,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.MyMembership
-import im.vector.matrix.android.internal.database.helper.add
+import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -151,14 +151,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         chunkEntity.isLast = true
         chunkEntity.nextToken = nextToken
 
-        var currentStateIndex = chunkEntity.nextStateIndex
-        eventList.forEach { event ->
-            if (event.isStateEvent()) {
-                currentStateIndex += PaginationDirection.FORWARDS.incrementStateIndex
-            }
-            chunkEntity.add(event, currentStateIndex, PaginationDirection.FORWARDS)
-        }
-        chunkEntity.nextStateIndex = currentStateIndex
+        chunkEntity.addAll(eventList, PaginationDirection.FORWARDS)
         return chunkEntity
     }
 

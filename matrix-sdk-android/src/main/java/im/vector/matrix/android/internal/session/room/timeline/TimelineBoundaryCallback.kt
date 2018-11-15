@@ -11,9 +11,9 @@ import java.util.*
 import java.util.concurrent.Executor
 
 internal class TimelineBoundaryCallback(private val roomId: String,
-                               private val paginationRequest: PaginationRequest,
-                               private val monarchy: Monarchy,
-                               ioExecutor: Executor
+                                        private val paginationRequest: PaginationRequest,
+                                        private val monarchy: Monarchy,
+                                        ioExecutor: Executor
 ) : PagedList.BoundaryCallback<EnrichedEvent>() {
 
     private val helper = PagingRequestHelper(ioExecutor)

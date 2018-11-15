@@ -7,8 +7,8 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findMostSuitableStateEvent
-import im.vector.matrix.android.internal.database.query.findWithNextToken
 import im.vector.matrix.android.internal.database.query.last
 import io.realm.Realm
 import io.realm.RealmQuery
@@ -32,7 +32,7 @@ internal class RoomMemberExtractor(private val realm: Realm,
         }
 
         // If the content is null, we try get the last state event coming from a state events chunk
-        val stateChunkEntity = ChunkEntity.findWithNextToken(realm, roomId, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
+        val stateChunkEntity = ChunkEntity.find(realm, roomId, nextToken = DBConstants.STATE_EVENTS_CHUNK_TOKEN)
                                ?: return null
 
         return buildQuery(stateChunkEntity, event.sender)

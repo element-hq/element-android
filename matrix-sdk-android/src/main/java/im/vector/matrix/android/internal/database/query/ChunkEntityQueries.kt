@@ -14,24 +14,15 @@ internal fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQue
             .equalTo("${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
 }
 
-internal fun ChunkEntity.Companion.findWithPrevToken(realm: Realm, roomId: String, prevToken: String?): ChunkEntity? {
-    if (prevToken == null) {
-        return null
+internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): ChunkEntity? {
+    val query = where(realm, roomId)
+    if (prevToken != null) {
+        query.equalTo(ChunkEntityFields.PREV_TOKEN, prevToken)
     }
-    return where(realm, roomId)
-            .and()
-            .equalTo(ChunkEntityFields.PREV_TOKEN, prevToken)
-            .findFirst()
-}
-
-internal fun ChunkEntity.Companion.findWithNextToken(realm: Realm, roomId: String, nextToken: String?): ChunkEntity? {
-    if (nextToken == null) {
-        return null
+    if (nextToken != null) {
+        query.equalTo(ChunkEntityFields.NEXT_TOKEN, nextToken)
     }
-    return where(realm, roomId)
-            .and()
-            .equalTo(ChunkEntityFields.NEXT_TOKEN, nextToken)
-            .findFirst()
+    return query.findFirst()
 }
 
 internal fun ChunkEntity.Companion.findLastLiveChunkFromRoom(realm: Realm, roomId: String): ChunkEntity? {

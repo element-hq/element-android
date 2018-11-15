@@ -26,12 +26,11 @@ internal open class ChunkEntity(var prevToken: String? = null,
         }
     }
 
-    fun updateStateIndex(stateIndex: Int, direction: PaginationDirection){
+    fun updateStateIndex(direction: PaginationDirection) {
         when (direction) {
-            PaginationDirection.FORWARDS  -> nextStateIndex = stateIndex
-            PaginationDirection.BACKWARDS -> prevStateIndex = stateIndex
+            PaginationDirection.FORWARDS  -> nextStateIndex += 1
+            PaginationDirection.BACKWARDS -> prevStateIndex -= 1
         }
     }
-
 
 }

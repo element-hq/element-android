@@ -13,11 +13,4 @@ internal enum class PaginationDirection(val value: String) {
      */
     BACKWARDS("b");
 
-    val incrementStateIndex: Int by lazy {
-        when (this) {
-            FORWARDS  -> 1
-            BACKWARDS -> -1
-        }
-    }
-
 }

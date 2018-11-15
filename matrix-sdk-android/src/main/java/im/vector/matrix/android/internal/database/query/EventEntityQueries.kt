@@ -46,6 +46,10 @@ internal fun RealmQuery<EventEntity>.last(): EventEntity? {
             .findFirst()
 }
 
-internal fun RealmList<EventEntity>.fastContains(eventEntity: EventEntity): Boolean {
-    return this.where().equalTo(EventEntityFields.EVENT_ID, eventEntity.eventId).findFirst() != null
+internal fun RealmList<EventEntity>.find(eventId: String): EventEntity? {
+    return this.where().equalTo(EventEntityFields.EVENT_ID, eventId).findFirst()
+}
+
+internal fun RealmList<EventEntity>.fastContains(eventId: String): Boolean {
+    return this.find(eventId) != null
 }
