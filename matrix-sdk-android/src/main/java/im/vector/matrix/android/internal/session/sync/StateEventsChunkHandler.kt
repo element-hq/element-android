@@ -11,19 +11,21 @@ import io.realm.kotlin.createObject
 
 internal class StateEventsChunkHandler {
 
-    fun handle(realm: Realm, roomId: String, stateEvents: List<Event>, direction: PaginationDirection): ChunkEntity {
+    fun handle(realm: Realm, roomId: String, stateEvents: List<Event>): ChunkEntity {
         val chunkEntity = ChunkEntity.findWithNextToken(realm, roomId, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
-                ?: realm.createObject<ChunkEntity>()
-                        .apply {
-                            prevToken = DBConstants.STATE_EVENTS_CHUNK_TOKEN
-                            nextToken = DBConstants.STATE_EVENTS_CHUNK_TOKEN
-                            nextStateIndex = Int.MIN_VALUE / 2
-                            prevStateIndex = Int.MIN_VALUE / 2
-                        }
+                          ?: realm.createObject<ChunkEntity>()
+                                  .apply {
+                                      prevToken = DBConstants.STATE_EVENTS_CHUNK_TOKEN
+                                      nextToken = DBConstants.STATE_EVENTS_CHUNK_TOKEN
+                                      nextStateIndex = Int.MIN_VALUE
+                                      prevStateIndex = Int.MIN_VALUE
+                                  }
 
+        // We always consider going forwards as data from server are the most recent
+        val direction = PaginationDirection.FORWARDS
         val stateIndex = chunkEntity.stateIndex(direction) + direction.incrementStateIndex
         stateEvents.forEach { event ->
-            chunkEntity.add(event, stateIndex, PaginationDirection.FORWARDS)
+            chunkEntity.add(event, stateIndex, direction)
         }
         chunkEntity.updateStateIndex(stateIndex, direction)
         return chunkEntity

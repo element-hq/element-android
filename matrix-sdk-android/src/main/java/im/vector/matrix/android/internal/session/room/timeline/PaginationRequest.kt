@@ -8,9 +8,12 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.*
+import im.vector.matrix.android.internal.database.query.fastContains
+import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
+import im.vector.matrix.android.internal.database.query.findWithNextToken
+import im.vector.matrix.android.internal.database.query.findWithPrevToken
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.legacy.util.FilterUtil
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -62,10 +65,10 @@ internal class PaginationRequest(private val roomAPI: RoomAPI,
         return monarchy
                 .tryTransactionSync { realm ->
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                            ?: throw IllegalStateException("You shouldn't use this method without a room")
+                                     ?: throw IllegalStateException("You shouldn't use this method without a room")
 
                     val currentChunk = ChunkEntity.findWithPrevToken(realm, roomId, receivedChunk.nextToken)
-                            ?: realm.createObject()
+                                       ?: realm.createObject()
 
                     currentChunk.prevToken = receivedChunk.prevToken
 
@@ -79,10 +82,10 @@ internal class PaginationRequest(private val roomAPI: RoomAPI,
                     val incrementStateIndex = direction.incrementStateIndex
 
                     receivedChunk.events.forEach { event ->
-                        currentChunk.add(event, currentStateIndex, direction)
                         if (EventType.isStateEvent(event.type)) {
                             currentStateIndex += incrementStateIndex
                         }
+                        currentChunk.add(event, currentStateIndex, direction)
                     }
 
                     if (prevChunk != null) {
@@ -110,8 +113,8 @@ internal class PaginationRequest(private val roomAPI: RoomAPI,
 
                     currentChunk.updateStateIndex(currentStateIndex, direction)
 
-
-                    val stateEventsChunk = stateEventsChunkHandler.handle(realm, roomId, receivedChunk.stateEvents, direction)
+                    // TODO : there is an issue with the pagination sending unwanted room member events
+                    val stateEventsChunk = stateEventsChunkHandler.handle(realm, roomId, receivedChunk.stateEvents)
                     if (!roomEntity.chunks.contains(stateEventsChunk)) {
                         roomEntity.chunks.add(stateEventsChunk)
                     }

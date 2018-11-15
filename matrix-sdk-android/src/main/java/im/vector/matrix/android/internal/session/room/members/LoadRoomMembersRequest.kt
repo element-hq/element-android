@@ -58,7 +58,7 @@ internal class LoadRoomMembersRequest(private val roomAPI: RoomAPI,
                     val roomMembers = RoomMembers(realm, roomId).getLoaded()
                     val eventsToInsert = response.roomMemberEvents.filter { !roomMembers.containsKey(it.stateKey) }
 
-                    val chunk = stateEventsChunkHandler.handle(realm, roomId, eventsToInsert, PaginationDirection.BACKWARDS)
+                    val chunk = stateEventsChunkHandler.handle(realm, roomId, eventsToInsert)
                     if (!roomEntity.chunks.contains(chunk)) {
                         roomEntity.chunks.add(chunk)
                     }

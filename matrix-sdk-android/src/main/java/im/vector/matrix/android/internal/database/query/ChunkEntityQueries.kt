@@ -12,8 +12,6 @@ import io.realm.kotlin.where
 internal fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ChunkEntity> {
     return realm.where<ChunkEntity>()
             .equalTo("${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
-            .notEqualTo(ChunkEntityFields.PREV_TOKEN, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
-            .notEqualTo(ChunkEntityFields.NEXT_TOKEN, DBConstants.STATE_EVENTS_CHUNK_TOKEN)
 }
 
 internal fun ChunkEntity.Companion.findWithPrevToken(realm: Realm, roomId: String, prevToken: String?): ChunkEntity? {
