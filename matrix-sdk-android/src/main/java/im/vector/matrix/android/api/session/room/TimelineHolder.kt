@@ -6,6 +6,6 @@ import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 
 interface TimelineHolder {
 
-    fun liveTimeline(): LiveData<PagedList<EnrichedEvent>>
+    fun timeline(eventId: String? = null): LiveData<PagedList<EnrichedEvent>>
 
 }

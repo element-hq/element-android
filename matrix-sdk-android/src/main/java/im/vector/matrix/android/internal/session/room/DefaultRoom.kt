@@ -46,8 +46,8 @@ internal data class DefaultRoom(
         }
     }
 
-    override fun liveTimeline(): LiveData<PagedList<EnrichedEvent>> {
-        return timelineHolder.liveTimeline()
+    override fun timeline(eventId: String?): LiveData<PagedList<EnrichedEvent>> {
+        return timelineHolder.timeline(eventId)
     }
 
     override fun loadRoomMembersIfNeeded(): Cancelable {

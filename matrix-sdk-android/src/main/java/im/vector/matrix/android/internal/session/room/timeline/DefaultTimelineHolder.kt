@@ -13,6 +13,8 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.events.interceptor.MessageEventInterceptor
+import io.realm.Realm
+import io.realm.RealmQuery
 
 private const val PAGE_SIZE = 30
 
@@ -28,12 +30,12 @@ internal class DefaultTimelineHolder(private val roomId: String,
         eventInterceptors.add(MessageEventInterceptor(monarchy, roomId))
     }
 
-    override fun liveTimeline(): LiveData<PagedList<EnrichedEvent>> {
-        val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            EventEntity
-                    .where(realm, roomId = roomId)
-                    .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST}", true)
-                    .sort(EventEntityFields.DISPLAY_INDEX)
+    override fun timeline(eventId: String?): LiveData<PagedList<EnrichedEvent>> {
+        if (eventId != null) {
+            fetchEventIfNeeded()
+        }
+        val realmDataSourceFactory = monarchy.createDataSourceFactory {
+            buildDataSourceFactoryQuery(it, eventId)
         }
         val domainSourceFactory = realmDataSourceFactory
                 .map { it.asDomain() }
@@ -59,4 +61,23 @@ internal class DefaultTimelineHolder(private val roomId: String,
         val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
     }
+
+    private fun fetchEventIfNeeded() {
+
+    }
+
+    private fun buildDataSourceFactoryQuery(realm: Realm, eventId: String?): RealmQuery<EventEntity> {
+        val query = if (eventId == null) {
+            EventEntity
+                    .where(realm, roomId = roomId)
+                    .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST}", true)
+        } else {
+            EventEntity
+                    .where(realm, roomId = roomId)
+                    .`in`("${EventEntityFields.CHUNK}.${ChunkEntityFields.EVENTS.EVENT_ID}", arrayOf(eventId))
+        }
+        return query.sort(EventEntityFields.DISPLAY_INDEX)
+    }
+
+
 }

@@ -15,6 +15,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.utils.FragmentArgumentDelegate
+import im.vector.riotredesign.core.utils.UnsafeFragmentArgumentDelegate
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import kotlinx.android.synthetic.main.fragment_room_detail.*
@@ -25,16 +26,18 @@ class RoomDetailFragment : RiotFragment() {
 
     companion object {
 
-        fun newInstance(roomId: String): RoomDetailFragment {
+        fun newInstance(roomId: String, eventId: String? = null): RoomDetailFragment {
             return RoomDetailFragment().apply {
                 this.roomId = roomId
+                this.eventId = eventId
             }
         }
     }
 
     private val matrix by inject<Matrix>()
     private val currentSession = matrix.currentSession
-    private var roomId by FragmentArgumentDelegate<String>()
+    private var roomId: String by UnsafeFragmentArgumentDelegate()
+    private var eventId: String? by FragmentArgumentDelegate()
     private val timelineEventController by inject<TimelineEventController>(parameters = { ParameterList(roomId) })
     private lateinit var room: Room
 
@@ -48,7 +51,7 @@ class RoomDetailFragment : RiotFragment() {
         setupRecyclerView()
         setupToolbar()
         room.loadRoomMembersIfNeeded()
-        room.liveTimeline().observe(this, Observer { renderEvents(it) })
+        room.timeline(eventId).observe(this, Observer { renderEvents(it) })
         room.roomSummary.observe(this, Observer { renderRoomSummary(it) })
         sendButton.setOnClickListener {
             val textMessage = composerEditText.text.toString()

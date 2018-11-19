@@ -6,21 +6,22 @@ import android.support.v4.app.BundleCompat
 import android.support.v4.app.Fragment
 import kotlin.reflect.KProperty
 
-class FragmentArgumentDelegate<T : Any> : kotlin.properties.ReadWriteProperty<Fragment, T> {
+class FragmentArgumentDelegate<T : Any> : kotlin.properties.ReadWriteProperty<Fragment, T?> {
 
     var value: T? = null
 
-    override operator fun getValue(thisRef: android.support.v4.app.Fragment, property: kotlin.reflect.KProperty<*>): T {
+    override operator fun getValue(thisRef: android.support.v4.app.Fragment, property: kotlin.reflect.KProperty<*>): T? {
         if (value == null) {
             val args = thisRef.arguments
-                       ?: throw IllegalStateException("Cannot read property ${property.name} if no arguments have been set")
             @Suppress("UNCHECKED_CAST")
-            value = args.get(property.name) as T
+            value = args?.get(property.name) as T?
         }
-        return value ?: throw IllegalStateException("Property ${property.name} could not be read")
+        return value
     }
 
-    override operator fun setValue(thisRef: Fragment, property: KProperty<*>, value: T) {
+    override operator fun setValue(thisRef: Fragment, property: KProperty<*>, value: T?) {
+        if (value == null) return
+
         if (thisRef.arguments == null) {
             thisRef.arguments = Bundle()
         }
@@ -42,7 +43,21 @@ class FragmentArgumentDelegate<T : Any> : kotlin.properties.ReadWriteProperty<Fr
             is Binder                -> BundleCompat.putBinder(args, key, value)
             is android.os.Parcelable -> args.putParcelable(key, value)
             is java.io.Serializable  -> args.putSerializable(key, value)
-            else                     -> throw IllegalStateException("Type ${value.javaClass.canonicalName} of property ${property.name} is not supported")
+            else                     -> throw IllegalStateException("Type ${value.javaClass.name} of property ${property.name} is not supported")
         }
     }
-} 
+}
+
+class UnsafeFragmentArgumentDelegate<T : Any> : kotlin.properties.ReadWriteProperty<Fragment, T> {
+
+    private val innerDelegate = FragmentArgumentDelegate<T>()
+
+    override fun setValue(thisRef: Fragment, property: KProperty<*>, value: T) {
+        innerDelegate.setValue(thisRef, property, value)
+    }
+
+    override fun getValue(thisRef: Fragment, property: KProperty<*>): T {
+        return innerDelegate.getValue(thisRef, property)!!
+    }
+
+}

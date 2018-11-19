@@ -1,9 +1,11 @@
 package im.vector.matrix.android.internal.session.room
 
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.MessageContent
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.send.SendResponse
+import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEvent
 import retrofit2.Call
 import retrofit2.http.Body
@@ -62,6 +64,29 @@ internal interface RoomAPI {
              @Path("eventType") eventType: String,
              @Body content: MessageContent
     ): Call<SendResponse>
+
+    /**
+     * Get the context surrounding an event.
+     *
+     * @param roomId  the room id
+     * @param eventId the event Id
+     * @param limit   the maximum number of messages to retrieve
+     * @param filter  A JSON RoomEventFilter to filter returned events with. Optional.
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/context/{eventId}")
+    fun getContextOfEvent(@Path("roomId") roomId: String,
+                          @Path("eventId") eventId: String,
+                          @Query("limit") limit: Int,
+                          @Query("filter") filter: String? = null): Call<EventContextResponse>
+
+    /**
+     * Retrieve an event from its room id / events id
+     *
+     * @param roomId  the room id
+     * @param eventId the event Id
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/event/{eventId}")
+    fun getEvent(@Path("roomId") roomId: String, @Path("eventId") eventId: String): Call<Event>
 
 
 }

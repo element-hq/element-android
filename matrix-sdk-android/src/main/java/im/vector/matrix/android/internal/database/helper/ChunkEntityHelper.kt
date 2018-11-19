@@ -12,8 +12,10 @@ import im.vector.matrix.android.internal.session.room.timeline.PaginationDirecti
 internal fun ChunkEntity.merge(chunkEntity: ChunkEntity,
                                direction: PaginationDirection) {
 
-    val events = chunkEntity.events.map { it.asDomain() }
-    addAll(events, direction)
+
+    chunkEntity.events.forEach {
+        addOrUpdate(it.asDomain(), direction)
+    }
     if (direction == PaginationDirection.FORWARDS) {
         nextToken = chunkEntity.nextToken
     } else {
@@ -26,21 +28,23 @@ internal fun ChunkEntity.addAll(events: List<Event>,
                                 updateStateIndex: Boolean = true) {
 
     events.forEach { event ->
-        if (updateStateIndex && event.isStateEvent()) {
-            updateStateIndex(direction)
-        }
-        addOrUpdate(event, direction)
+        addOrUpdate(event, direction, updateStateIndex)
     }
 }
 
 internal fun ChunkEntity.addOrUpdate(event: Event,
-                                     direction: PaginationDirection) {
+                                     direction: PaginationDirection,
+                                     updateStateIndex: Boolean = true) {
     if (!isManaged) {
         throw IllegalStateException("Chunk entity should be managed to use fast contains")
     }
 
     if (event.eventId == null) {
         return
+    }
+
+    if (updateStateIndex && event.isStateEvent()) {
+        updateStateIndex(direction)
     }
 
     val currentStateIndex = stateIndex(direction)
