@@ -18,15 +18,11 @@ internal class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            StateEventsChunkHandler()
-        }
-
-        scope(DefaultSession.SCOPE) {
             ReadReceiptHandler()
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSyncHandler(get(), get(), get())
+            RoomSyncHandler(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

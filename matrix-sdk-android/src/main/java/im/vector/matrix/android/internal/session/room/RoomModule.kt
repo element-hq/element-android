@@ -25,11 +25,11 @@ class RoomModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            LoadRoomMembersRequest(get(), get(), get(), get())
+            LoadRoomMembersRequest(get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
-            PaginationRequest(get(), get(), get(), get())
+            PaginationRequest(get(), get(), get())
         }
 
 

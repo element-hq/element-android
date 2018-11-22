@@ -8,8 +8,9 @@ import io.realm.annotations.PrimaryKey
 import kotlin.properties.Delegates
 
 internal open class RoomEntity(@PrimaryKey var roomId: String = "",
-                      var chunks: RealmList<ChunkEntity> = RealmList(),
-                      var areAllMembersLoaded: Boolean = false
+                               var chunks: RealmList<ChunkEntity> = RealmList(),
+                               var untimelinedStateEvents: RealmList<EventEntity> = RealmList(),
+                               var areAllMembersLoaded: Boolean = false
 ) : RealmObject() {
 
     private var membershipStr: String = MyMembership.NONE.name

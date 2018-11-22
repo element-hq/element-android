@@ -7,6 +7,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.helper.merge
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -17,7 +18,6 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.legacy.util.FilterUtil
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.session.sync.StateEventsChunkHandler
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.tryTransactionSync
@@ -28,8 +28,7 @@ import kotlinx.coroutines.withContext
 
 internal class PaginationRequest(private val roomAPI: RoomAPI,
                                  private val monarchy: Monarchy,
-                                 private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                 private val stateEventsChunkHandler: StateEventsChunkHandler
+                                 private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
 
     fun execute(roomId: String,
@@ -92,10 +91,8 @@ internal class PaginationRequest(private val roomAPI: RoomAPI,
                     }
 
                     roomEntity.addOrUpdate(currentChunk)
-
                     // TODO : there is an issue with the pagination sending unwanted room member events
-                    val stateEventsChunk = stateEventsChunkHandler.handle(realm, roomId, receivedChunk.stateEvents)
-                    roomEntity.addOrUpdate(stateEventsChunk)
+                    roomEntity.addStateEvents(receivedChunk.stateEvents)
                 }
                 .map { receivedChunk }
     }

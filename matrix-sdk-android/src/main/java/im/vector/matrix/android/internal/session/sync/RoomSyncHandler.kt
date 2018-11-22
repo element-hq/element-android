@@ -6,10 +6,11 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.addStateEvents
+import im.vector.matrix.android.internal.database.helper.lastStateIndex
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
@@ -23,7 +24,6 @@ import io.realm.kotlin.createObject
 
 
 internal class RoomSyncHandler(private val monarchy: Monarchy,
-                               private val stateEventsChunkHandler: StateEventsChunkHandler,
                                private val readReceiptHandler: ReadReceiptHandler) {
 
     sealed class HandlingStrategy {
@@ -56,7 +56,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                  roomSync: RoomSync): RoomEntity {
 
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: RoomEntity(roomId)
+                         ?: realm.createObject(roomId)
 
         if (roomEntity.membership == MyMembership.INVITED) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -64,13 +64,27 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
         roomEntity.membership = MyMembership.JOINED
 
+        val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
+        val isInitialSync = lastChunk == null
+        val lastStateIndex = lastChunk?.lastStateIndex(PaginationDirection.FORWARDS) ?: 0
+        val numberOfStateEvents = roomSync.state?.events?.size ?: 0
+        val stateIndexOffset = lastStateIndex + numberOfStateEvents
+
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
-            val chunkEntity = stateEventsChunkHandler.handle(realm, roomId, roomSync.state.events)
-            roomEntity.addOrUpdate(chunkEntity)
+            val untimelinedStateIndex = if (isInitialSync) Int.MIN_VALUE else stateIndexOffset
+            roomEntity.addStateEvents(roomSync.state.events, stateIndex = untimelinedStateIndex)
         }
 
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
-            val chunkEntity = handleTimelineEvents(realm, roomId, roomSync.timeline.events, roomSync.timeline.prevToken, isLimited = roomSync.timeline.limited)
+            val timelineStateOffset = if (isInitialSync || roomSync.timeline.limited.not()) 0 else stateIndexOffset
+            val chunkEntity = handleTimelineEvents(
+                    realm,
+                    roomId,
+                    roomSync.timeline.events,
+                    roomSync.timeline.prevToken,
+                    roomSync.timeline.limited,
+                    timelineStateOffset
+            )
             roomEntity.addOrUpdate(chunkEntity)
         }
 
@@ -111,22 +125,19 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                      roomId: String,
                                      eventList: List<Event>,
                                      prevToken: String? = null,
-                                     nextToken: String? = null,
-                                     isLimited: Boolean = true): ChunkEntity {
+                                     isLimited: Boolean = true,
+                                     stateIndexOffset: Int = 0): ChunkEntity {
 
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
-        val chunkEntity = if (!isLimited) {
+        val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
-            val eventIds = eventList.filter { it.eventId != null }.map { it.eventId!! }
-            ChunkEntity.findAllIncludingEvents(realm, eventIds).firstOrNull()
-        } ?: realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
+            realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
+        }
 
         lastChunk?.isLast = false
         chunkEntity.isLast = true
-        chunkEntity.nextToken = nextToken
-
-        chunkEntity.addAll(eventList, PaginationDirection.FORWARDS)
+        chunkEntity.addAll(eventList, PaginationDirection.FORWARDS, stateIndexOffset)
         return chunkEntity
     }
 

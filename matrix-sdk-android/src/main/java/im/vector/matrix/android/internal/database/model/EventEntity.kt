@@ -24,4 +24,7 @@ internal open class EventEntity(var eventId: String = "",
     @LinkingObjects("events")
     val chunk: RealmResults<ChunkEntity>? = null
 
+    @LinkingObjects("untimelinedStateEvents")
+    val room: RealmResults<RoomEntity>? = null
+
 }
