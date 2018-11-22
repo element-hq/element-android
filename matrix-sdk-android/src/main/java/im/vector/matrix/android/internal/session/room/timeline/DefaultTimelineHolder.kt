@@ -16,7 +16,7 @@ import im.vector.matrix.android.internal.session.events.interceptor.MessageEvent
 import io.realm.Realm
 import io.realm.RealmQuery
 
-private const val PAGE_SIZE = 30
+private const val PAGE_SIZE = 60
 
 internal class DefaultTimelineHolder(private val roomId: String,
                                      private val monarchy: Monarchy,
@@ -26,7 +26,7 @@ internal class DefaultTimelineHolder(private val roomId: String,
     private val eventInterceptors = ArrayList<EnrichedEventInterceptor>()
 
     init {
-        boundaryCallback.limit = PAGE_SIZE
+        boundaryCallback.limit = PAGE_SIZE / 2
         eventInterceptors.add(MessageEventInterceptor(monarchy, roomId))
     }
 
@@ -55,7 +55,7 @@ internal class DefaultTimelineHolder(private val roomId: String,
                 .setEnablePlaceholders(false)
                 .setPageSize(PAGE_SIZE)
                 .setInitialLoadSizeHint(PAGE_SIZE)
-                .setPrefetchDistance(20)
+                .setPrefetchDistance(PAGE_SIZE / 2)
                 .build()
 
         val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)
