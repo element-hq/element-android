@@ -24,6 +24,10 @@ internal class SessionModule(private val sessionParams: SessionParams) : Module 
     override fun invoke(): ModuleDefinition = module(override = true) {
 
         scope(DefaultSession.SCOPE) {
+            sessionParams
+        }
+
+        scope(DefaultSession.SCOPE) {
             RealmConfiguration.Builder()
                     .name(sessionParams.credentials.userId)
                     .deleteRealmIfMigrationNeeded()

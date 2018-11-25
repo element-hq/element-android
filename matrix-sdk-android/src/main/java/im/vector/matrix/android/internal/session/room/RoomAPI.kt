@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.session.room
 
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.MessageContent
 import im.vector.matrix.android.internal.network.NetworkConstants
@@ -62,7 +63,7 @@ internal interface RoomAPI {
     fun send(@Path("txId") txId: String,
              @Path("roomId") roomId: String,
              @Path("eventType") eventType: String,
-             @Body content: MessageContent
+             @Body content: Content?
     ): Call<SendResponse>
 
     /**

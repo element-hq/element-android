@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
@@ -58,7 +60,9 @@ class RoomDetailFragment : RiotFragment() {
             val textMessage = composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 composerEditText.text = null
-                room.sendTextMessage(textMessage)
+                room.sendTextMessage(textMessage, object : MatrixCallback<Event> {
+
+                })
             }
         }
     }

@@ -58,7 +58,7 @@ class TimelineEventController(private val roomId: String,
 
             val item = when (event.root.type) {
                 EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date)
-                else              -> textItemFactory.create(event)
+                else -> textItemFactory.create(event)
             }
             item
                     ?.onBind { timeline?.loadAround(index) }

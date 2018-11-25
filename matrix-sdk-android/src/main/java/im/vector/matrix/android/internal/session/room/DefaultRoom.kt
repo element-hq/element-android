@@ -6,6 +6,7 @@ import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.SendService
 import im.vector.matrix.android.api.session.room.TimelineHolder
@@ -61,14 +62,14 @@ internal data class DefaultRoom(
 
     private fun areAllMembersLoaded(): Boolean {
         return monarchy
-                       .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
-                       .firstOrNull()
-                       ?.areAllMembersLoaded ?: false
+                .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
+                .firstOrNull()
+                ?.areAllMembersLoaded ?: false
     }
 
 
-    override fun sendTextMessage(text: String): Cancelable {
-        return sendService.sendTextMessage(text)
+    override fun sendTextMessage(text: String, callback: MatrixCallback<Event>): Cancelable {
+        return sendService.sendTextMessage(text, callback)
     }
 
 }

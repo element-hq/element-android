@@ -6,7 +6,7 @@ import com.squareup.moshi.Types
 import im.vector.matrix.android.internal.di.MoshiProvider
 import java.lang.reflect.ParameterizedType
 
-typealias Content = Map<String, Any>
+typealias Content = Map<String, @JvmSuppressWildcards Any>
 
 @JsonClass(generateAdapter = true)
 data class Event(

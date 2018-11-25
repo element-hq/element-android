@@ -13,7 +13,7 @@ internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
 }
 
 internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {
-    chunkEntity.events.forEachIndexed { index, eventEntity -> eventEntity.displayIndex = index }
+    chunkEntity.updateDisplayIndexes()
     if (!chunks.contains(chunkEntity)) {
         chunks.add(chunkEntity)
     }
