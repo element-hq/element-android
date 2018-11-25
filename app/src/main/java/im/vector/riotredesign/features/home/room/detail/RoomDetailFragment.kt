@@ -40,6 +40,7 @@ class RoomDetailFragment : RiotFragment() {
     private var eventId: String? by FragmentArgumentDelegate()
     private val timelineEventController by inject<TimelineEventController>(parameters = { ParameterList(roomId) })
     private lateinit var room: Room
+    private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_room_detail, container, false)
@@ -71,9 +72,9 @@ class RoomDetailFragment : RiotFragment() {
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
-        val listUpdateCallback = ScrollOnNewMessageCallback(layoutManager)
+        scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
-        timelineEventController.addModelBuildListener { it.dispatchTo(listUpdateCallback) }
+        timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
         recyclerView.setController(timelineEventController)
     }
 
@@ -91,6 +92,7 @@ class RoomDetailFragment : RiotFragment() {
     }
 
     private fun renderEvents(events: PagedList<EnrichedEvent>?) {
+        scrollOnNewMessageCallback.hasBeenUpdated.set(true)
         timelineEventController.timeline = events
     }
 
