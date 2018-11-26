@@ -4,12 +4,14 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.room.SendService
 import im.vector.matrix.android.api.session.room.TimelineHolder
 import im.vector.matrix.android.api.session.room.send.EventFactory
+import im.vector.matrix.android.internal.database.DatabaseInstances
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersRequest
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
 import im.vector.matrix.android.internal.session.room.timeline.PaginationRequest
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
+import im.vector.matrix.android.internal.util.PagingRequestHelper
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
@@ -27,18 +29,11 @@ class RoomModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            LoadRoomMembersRequest(get(), get(), get())
+            LoadRoomMembersRequest(get(), get<DatabaseInstances>().disk, get())
         }
 
         scope(DefaultSession.SCOPE) {
-            PaginationRequest(get(), get(), get())
-        }
-
-
-        factory {
-            val roomId: String = it[0]
-            val timelineBoundaryCallback = TimelineBoundaryCallback(roomId, get(), get(), Executors.newSingleThreadExecutor())
-            DefaultTimelineHolder(roomId, get(), timelineBoundaryCallback) as TimelineHolder
+            PaginationRequest(get(), get<DatabaseInstances>().disk, get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -46,9 +41,14 @@ class RoomModule : Module {
             EventFactory(sessionParams.credentials)
         }
 
-        factory {
-            val roomId: String = it[0]
-            DefaultSendService(roomId, get(), get()) as SendService
+        factory { (roomId: String) ->
+            val helper = PagingRequestHelper(Executors.newSingleThreadExecutor())
+            val timelineBoundaryCallback = TimelineBoundaryCallback(roomId, get(), get<DatabaseInstances>().disk, helper)
+            DefaultTimelineHolder(roomId, get<DatabaseInstances>().disk, timelineBoundaryCallback) as TimelineHolder
+        }
+
+        factory { (roomId: String) ->
+            DefaultSendService(roomId, get(), get<DatabaseInstances>().disk) as SendService
         }
 
     }.invoke()

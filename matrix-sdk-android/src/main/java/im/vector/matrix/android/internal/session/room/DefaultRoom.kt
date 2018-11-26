@@ -3,7 +3,6 @@ package im.vector.matrix.android.internal.session.room
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Transformations
 import android.arch.paging.PagedList
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.Event
@@ -14,6 +13,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.database.DatabaseInstances
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -32,12 +32,12 @@ internal data class DefaultRoom(
 
     private val loadRoomMembersRequest by inject<LoadRoomMembersRequest>()
     private val syncTokenStore by inject<SyncTokenStore>()
-    private val monarchy by inject<Monarchy>()
-    private val timelineHolder by inject<TimelineHolder>(parameters = { parametersOf(roomId) })
-    private val sendService by inject<SendService>(parameters = { parametersOf(roomId) })
+    private val dbInstances by inject<DatabaseInstances>()
+    private val timelineHolder by inject<TimelineHolder> { parametersOf(roomId) }
+    private val sendService by inject<SendService> { parametersOf(roomId) }
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
-        val liveData = monarchy
+        val liveData = dbInstances.disk
                 .findAllMappedWithChanges(
                         { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
                         { from -> from.asDomain() })
@@ -61,10 +61,10 @@ internal data class DefaultRoom(
     }
 
     private fun areAllMembersLoaded(): Boolean {
-        return monarchy
-                .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
-                .firstOrNull()
-                ?.areAllMembersLoaded ?: false
+        return dbInstances.disk
+                       .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
+                       .firstOrNull()
+                       ?.areAllMembersLoaded ?: false
     }
 
 

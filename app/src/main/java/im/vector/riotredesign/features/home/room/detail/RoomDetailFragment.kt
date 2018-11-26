@@ -22,7 +22,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
-import org.koin.core.parameter.ParameterList
+import org.koin.core.parameter.parametersOf
 
 class RoomDetailFragment : RiotFragment() {
 
@@ -40,7 +40,7 @@ class RoomDetailFragment : RiotFragment() {
     private val currentSession = matrix.currentSession
     private var roomId: String by UnsafeFragmentArgumentDelegate()
     private var eventId: String? by FragmentArgumentDelegate()
-    private val timelineEventController by inject<TimelineEventController>(parameters = { ParameterList(roomId) })
+    private val timelineEventController by inject<TimelineEventController> { parametersOf(roomId) }
     private lateinit var room: Room
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
 

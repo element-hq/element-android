@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.session.sync
 
+import im.vector.matrix.android.internal.database.DatabaseInstances
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import org.koin.dsl.context.ModuleDefinition
@@ -22,15 +23,15 @@ internal class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSyncHandler(get(), get())
+            RoomSyncHandler(get<DatabaseInstances>().disk, get())
         }
 
         scope(DefaultSession.SCOPE) {
-            GroupSyncHandler(get())
+            GroupSyncHandler(get<DatabaseInstances>().disk)
         }
 
         scope(DefaultSession.SCOPE) {
-            UserAccountDataSyncHandler(get())
+            UserAccountDataSyncHandler(get<DatabaseInstances>().disk)
         }
 
         scope(DefaultSession.SCOPE) {
@@ -42,7 +43,7 @@ internal class SyncModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncTokenStore(get())
+            SyncTokenStore(get<DatabaseInstances>().disk)
         }
 
         scope(DefaultSession.SCOPE) {
