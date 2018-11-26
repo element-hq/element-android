@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/app_name" />
+    <!--PreferenceScreen
+        android:key="homeserver"
+        android:title="key1_action"
+        android:summary="key1_summary">
+        <intent
+            android:action="key1.ACTION"
+            android:targetPackage="key1.package"
+            android:targetClass="key1.class" />
+    </PreferenceScreen-->
+</PreferenceScreen>

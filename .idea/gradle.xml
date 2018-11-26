@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/matrix-sdk-android" />
             <option value="$PROJECT_DIR$/matrix-sdk-android-rx" />
+            <option value="$PROJECT_DIR$/provider" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

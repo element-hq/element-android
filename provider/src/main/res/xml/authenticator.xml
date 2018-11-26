@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="org.matrix.android.account"
+    android:icon="@drawable/matrix_user"
+    android:label="@string/app_name"
+    android:accountPreferences="@xml/account_preferences"
+    />

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Matrix</string>
+    <string name="login_activity_username_label">Username</string>
+    <string name="login_activity_password_label">Password</string>
+    <string name="login_activity_homeserver_label">Homeserver</string>
+    <string name="login_activity_create_account">Create account</string>
+    <string name="login_activity_ok_button">Login</string>
+    <string name="login_activity_loginfail_text_both">Login failed</string>
+    <string name="login_activity_loginfail_text_pwonly">Invalid password</string>
+    <string name="login_activity_loginfail_text_pwmissing">Login with password</string>
+    <string name="login_activity_newaccount_text">Login to your matrix account.</string>
+</resources>
