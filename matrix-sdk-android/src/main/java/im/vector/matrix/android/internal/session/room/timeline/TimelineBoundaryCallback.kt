@@ -13,10 +13,8 @@ import java.util.concurrent.Executor
 internal class TimelineBoundaryCallback(private val roomId: String,
                                         private val paginationRequest: PaginationRequest,
                                         private val monarchy: Monarchy,
-                                        ioExecutor: Executor
+                                        private val helper: PagingRequestHelper
 ) : PagedList.BoundaryCallback<EnrichedEvent>() {
-
-    private val helper = PagingRequestHelper(ioExecutor)
 
     var limit = 10
 

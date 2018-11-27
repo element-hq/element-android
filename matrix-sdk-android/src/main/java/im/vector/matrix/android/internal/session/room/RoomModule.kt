@@ -10,6 +10,7 @@ import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
 import im.vector.matrix.android.internal.session.room.timeline.PaginationRequest
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
+import im.vector.matrix.android.internal.util.PagingRequestHelper
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
@@ -34,20 +35,19 @@ class RoomModule : Module {
             PaginationRequest(get(), get(), get())
         }
 
-
-        factory {
-            val roomId: String = it[0]
-            val timelineBoundaryCallback = TimelineBoundaryCallback(roomId, get(), get(), Executors.newSingleThreadExecutor())
-            DefaultTimelineHolder(roomId, get(), timelineBoundaryCallback) as TimelineHolder
-        }
-
         scope(DefaultSession.SCOPE) {
             val sessionParams = get<SessionParams>()
             EventFactory(sessionParams.credentials)
         }
 
-        factory {
-            val roomId: String = it[0]
+        factory { (roomId: String) ->
+            val helper = PagingRequestHelper(Executors.newSingleThreadExecutor())
+            val timelineBoundaryCallback = TimelineBoundaryCallback(roomId, get(), get(), helper)
+            DefaultTimelineHolder(roomId, get(), timelineBoundaryCallback) as TimelineHolder
+        }
+
+
+        factory { (roomId: String) ->
             DefaultSendService(roomId, get(), get()) as SendService
         }
 

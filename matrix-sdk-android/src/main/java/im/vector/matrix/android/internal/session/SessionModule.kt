@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.session
 
+import android.content.Context
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.group.GroupService
@@ -18,6 +19,7 @@ import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
+import java.io.File
 
 internal class SessionModule(private val sessionParams: SessionParams) : Module {
 
@@ -28,8 +30,12 @@ internal class SessionModule(private val sessionParams: SessionParams) : Module 
         }
 
         scope(DefaultSession.SCOPE) {
+            val context = get<Context>()
+            val directory = File(context.filesDir, sessionParams.credentials.userId)
+
             RealmConfiguration.Builder()
-                    .name(sessionParams.credentials.userId)
+                    .directory(directory)
+                    .name("disk_store.realm")
                     .deleteRealmIfMigrationNeeded()
                     .build()
         }
@@ -69,6 +75,7 @@ internal class SessionModule(private val sessionParams: SessionParams) : Module 
         }
 
         scope(DefaultSession.SCOPE) {
+
             val roomSummaryUpdater = RoomSummaryUpdater(get(), get(), get(), get(), sessionParams.credentials)
             val groupSummaryUpdater = GroupSummaryUpdater(get())
             val eventsPruner = EventsPruner(get())

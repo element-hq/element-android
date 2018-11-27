@@ -33,8 +33,8 @@ internal data class DefaultRoom(
     private val loadRoomMembersRequest by inject<LoadRoomMembersRequest>()
     private val syncTokenStore by inject<SyncTokenStore>()
     private val monarchy by inject<Monarchy>()
-    private val timelineHolder by inject<TimelineHolder>(parameters = { parametersOf(roomId) })
-    private val sendService by inject<SendService>(parameters = { parametersOf(roomId) })
+    private val timelineHolder by inject<TimelineHolder> { parametersOf(roomId) }
+    private val sendService by inject<SendService> { parametersOf(roomId) }
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
         val liveData = monarchy
@@ -62,9 +62,9 @@ internal data class DefaultRoom(
 
     private fun areAllMembersLoaded(): Boolean {
         return monarchy
-                .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
-                .firstOrNull()
-                ?.areAllMembersLoaded ?: false
+                       .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
+                       .firstOrNull()
+                       ?.areAllMembersLoaded ?: false
     }
 
 
