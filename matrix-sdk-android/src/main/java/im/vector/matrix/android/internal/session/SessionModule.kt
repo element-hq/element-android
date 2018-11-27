@@ -1,9 +1,9 @@
 package im.vector.matrix.android.internal.session
 
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
-import im.vector.matrix.android.internal.database.DatabaseInstances
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.events.prune.EventsPruner
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
@@ -13,6 +13,7 @@ import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
+import io.realm.RealmConfiguration
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
@@ -27,7 +28,20 @@ internal class SessionModule(private val sessionParams: SessionParams) : Module 
         }
 
         scope(DefaultSession.SCOPE) {
-            val retrofitBuilder = get<Retrofit.Builder>()
+            RealmConfiguration.Builder()
+                    .name(sessionParams.credentials.userId)
+                    .deleteRealmIfMigrationNeeded()
+                    .build()
+        }
+
+        scope(DefaultSession.SCOPE) {
+            Monarchy.Builder()
+                    .setRealmConfiguration(get())
+                    .build()
+        }
+
+        scope(DefaultSession.SCOPE) {
+            val retrofitBuilder = get() as Retrofit.Builder
             retrofitBuilder
                     .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
                     .build()
@@ -38,27 +52,26 @@ internal class SessionModule(private val sessionParams: SessionParams) : Module 
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomDisplayNameResolver(get<DatabaseInstances>().disk, get(), sessionParams.credentials)
+            RoomDisplayNameResolver(get(), get(), sessionParams.credentials)
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomAvatarResolver(get<DatabaseInstances>().disk, sessionParams.credentials)
+            RoomAvatarResolver(get(), sessionParams.credentials)
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultRoomService(get<DatabaseInstances>().disk) as RoomService
+            DefaultRoomService(get()) as RoomService
         }
 
 
         scope(DefaultSession.SCOPE) {
-            DefaultGroupService(get<DatabaseInstances>().disk) as GroupService
+            DefaultGroupService(get()) as GroupService
         }
 
         scope(DefaultSession.SCOPE) {
-            val disk = get<DatabaseInstances>().disk
-            val roomSummaryUpdater = RoomSummaryUpdater(disk, get(), get(), get(), sessionParams.credentials)
-            val groupSummaryUpdater = GroupSummaryUpdater(disk)
-            val eventsPruner = EventsPruner(disk)
+            val roomSummaryUpdater = RoomSummaryUpdater(get(), get(), get(), get(), sessionParams.credentials)
+            val groupSummaryUpdater = GroupSummaryUpdater(get())
+            val eventsPruner = EventsPruner(get())
             listOf<LiveEntityObserver>(roomSummaryUpdater, groupSummaryUpdater, eventsPruner)
         }
 

@@ -31,6 +31,9 @@ internal class DefaultTimelineHolder(private val roomId: String,
     }
 
     override fun timeline(eventId: String?): LiveData<PagedList<EnrichedEvent>> {
+        if (eventId != null) {
+            fetchEventIfNeeded()
+        }
         val realmDataSourceFactory = monarchy.createDataSourceFactory {
             buildDataSourceFactoryQuery(it, eventId)
         }
@@ -57,21 +60,18 @@ internal class DefaultTimelineHolder(private val roomId: String,
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
     }
 
+    private fun fetchEventIfNeeded() {
+
+    }
+
     private fun buildDataSourceFactoryQuery(realm: Realm, eventId: String?): RealmQuery<EventEntity> {
         val query = if (eventId == null) {
             EventEntity
                     .where(realm, roomId = roomId)
                     .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST}", true)
         } else {
-            val event = EventEntity.where(realm, eventId = eventId).findFirst()
-            val permalinkRealm: Realm
-            if (event == null) {
-                permalinkRealm = realm
-            } else {
-                permalinkRealm = realm
-            }
             EventEntity
-                    .where(permalinkRealm, roomId = roomId)
+                    .where(realm, roomId = roomId)
                     .`in`("${EventEntityFields.CHUNK}.${ChunkEntityFields.EVENTS.EVENT_ID}", arrayOf(eventId))
         }
         return query.sort(EventEntityFields.DISPLAY_INDEX)

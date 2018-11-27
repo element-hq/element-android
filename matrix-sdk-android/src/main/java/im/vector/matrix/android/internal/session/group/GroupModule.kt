@@ -1,6 +1,5 @@
 package im.vector.matrix.android.internal.session.group
 
-import im.vector.matrix.android.internal.database.DatabaseInstances
 import im.vector.matrix.android.internal.session.DefaultSession
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
@@ -17,7 +16,7 @@ class GroupModule : Module {
         }
 
         scope(DefaultSession.SCOPE) {
-            GetGroupDataRequest(get(), get<DatabaseInstances>().disk, get(), get())
+            GetGroupDataRequest(get(), get(), get(), get())
         }
 
     }.invoke()

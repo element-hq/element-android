@@ -3,7 +3,6 @@ package im.vector.matrix.android.internal.session
 import android.arch.lifecycle.LiveData
 import android.os.Looper
 import android.support.annotation.MainThread
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
@@ -11,7 +10,7 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.internal.database.DatabaseModule
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
@@ -47,8 +46,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         val syncModule = SyncModule()
         val roomModule = RoomModule()
         val groupModule = GroupModule()
-        val databaseModule = DatabaseModule()
-        StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule, roomModule, groupModule, databaseModule))
+        StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule, roomModule, groupModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         liveEntityUpdaters.forEach { it.start() }
         syncThread.start()

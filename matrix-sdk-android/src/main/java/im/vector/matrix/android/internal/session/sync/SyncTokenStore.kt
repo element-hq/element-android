@@ -1,23 +1,25 @@
 package im.vector.matrix.android.internal.session.sync
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.SyncEntity
+import io.realm.Realm
+import io.realm.RealmConfiguration
 
-internal class SyncTokenStore(private val monarchy: Monarchy) {
+internal class SyncTokenStore(private val realmConfiguration: RealmConfiguration) {
 
     fun getLastToken(): String? {
-        var token: String? = null
-        monarchy.doWithRealm { realm ->
-            token = realm.where(SyncEntity::class.java).findFirst()?.nextBatch
-        }
+        val realm = Realm.getInstance(realmConfiguration)
+        val token = realm.where(SyncEntity::class.java).findFirst()?.nextBatch
+        realm.close()
         return token
     }
 
     fun saveToken(token: String?) {
-        monarchy.writeAsync {
+        val realm = Realm.getInstance(realmConfiguration)
+        realm.executeTransaction {
             val sync = SyncEntity(token)
             it.insertOrUpdate(sync)
         }
+        realm.close()
     }
 
 

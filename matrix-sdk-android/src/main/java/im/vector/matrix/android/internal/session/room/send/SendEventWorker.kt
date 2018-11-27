@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.internal.database.DatabaseInstances
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
@@ -26,12 +26,12 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
     )
 
     private val roomAPI by inject<RoomAPI>()
-    private val dbInstances by inject<DatabaseInstances>()
+    private val monarchy by inject<Monarchy>()
 
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.FAILURE
+                ?: return Result.FAILURE
 
         if (params.event.eventId == null) {
             return Result.FAILURE
@@ -46,7 +46,7 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
             )
         }
         result.flatMap { sendResponse ->
-            dbInstances.disk.tryTransactionSync { realm ->
+            monarchy.tryTransactionSync { realm ->
                 val dummyEventEntity = EventEntity.where(realm, params.event.eventId).findFirst()
                 dummyEventEntity?.eventId = sendResponse.eventId
             }

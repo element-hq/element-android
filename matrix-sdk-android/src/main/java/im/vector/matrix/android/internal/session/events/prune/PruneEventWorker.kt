@@ -5,9 +5,9 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import arrow.core.Option
 import com.squareup.moshi.JsonClass
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.database.DatabaseInstances
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.asEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -29,13 +29,13 @@ internal class PruneEventWorker(context: Context,
             val deletionIndexes: List<Int>
     )
 
-    private val dbInstances by inject<DatabaseInstances>()
+    private val monarchy by inject<Monarchy>()
 
     override fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.FAILURE
+                ?: return Result.FAILURE
 
-        val result = dbInstances.disk.tryTransactionAsync { realm ->
+        val result = monarchy.tryTransactionAsync { realm ->
             params.updateIndexes.forEach { index ->
                 val data = params.redactionEvents[index]
                 pruneEvent(realm, data)
@@ -49,7 +49,7 @@ internal class PruneEventWorker(context: Context,
             return
         }
         val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()?.asDomain()
-                           ?: return
+                ?: return
 
         val allowedKeys = computeAllowedKeys(eventToPrune.type)
         val prunedContent = allowedKeys.fold(
@@ -63,22 +63,22 @@ internal class PruneEventWorker(context: Context,
     private fun computeAllowedKeys(type: String): Option<List<String>> {
         // Add filtered content, allowed keys in content depends on the event type
         val result = when (type) {
-            EventType.STATE_ROOM_MEMBER       -> listOf("membership")
-            EventType.STATE_ROOM_CREATE       -> listOf("creator")
-            EventType.STATE_ROOM_JOIN_RULES   -> listOf("join_rule")
+            EventType.STATE_ROOM_MEMBER -> listOf("membership")
+            EventType.STATE_ROOM_CREATE -> listOf("creator")
+            EventType.STATE_ROOM_JOIN_RULES -> listOf("join_rule")
             EventType.STATE_ROOM_POWER_LEVELS -> listOf("users",
-                                                        "users_default",
-                                                        "events",
-                                                        "events_default",
-                                                        "state_default",
-                                                        "ban",
-                                                        "kick",
-                                                        "redact",
-                                                        "invite")
-            EventType.STATE_ROOM_ALIASES      -> listOf("aliases")
-            EventType.STATE_CANONICAL_ALIAS   -> listOf("alias")
-            EventType.FEEDBACK                -> listOf("type", "target_event_id")
-            else                              -> null
+                    "users_default",
+                    "events",
+                    "events_default",
+                    "state_default",
+                    "ban",
+                    "kick",
+                    "redact",
+                    "invite")
+            EventType.STATE_ROOM_ALIASES -> listOf("aliases")
+            EventType.STATE_CANONICAL_ALIAS -> listOf("alias")
+            EventType.FEEDBACK -> listOf("type", "target_event_id")
+            else -> null
         }
         return Option.fromNullable(result)
     }
