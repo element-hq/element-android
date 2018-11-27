@@ -8,7 +8,6 @@ import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import java.util.*
-import java.util.concurrent.Executor
 
 internal class TimelineBoundaryCallback(private val roomId: String,
                                         private val paginationRequest: PaginationRequest,
@@ -24,27 +23,36 @@ internal class TimelineBoundaryCallback(private val roomId: String,
 
     override fun onItemAtEndLoaded(itemAtEnd: EnrichedEvent) {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
-            monarchy.doWithRealm { realm ->
-                if (itemAtEnd.root.eventId == null) {
-                    return@doWithRealm
-                }
-                val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(itemAtEnd.root.eventId)).firstOrNull()
-                paginationRequest.execute(roomId, chunkEntity?.prevToken, PaginationDirection.BACKWARDS, limit, callback = createCallback(it))
-            }
+            runPaginationRequest(it, itemAtEnd, PaginationDirection.BACKWARDS)
         }
     }
 
     override fun onItemAtFrontLoaded(itemAtFront: EnrichedEvent) {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.BEFORE) {
-            monarchy.doWithRealm { realm ->
-                if (itemAtFront.root.eventId == null) {
-                    return@doWithRealm
-                }
-                val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(itemAtFront.root.eventId)).firstOrNull()
-                paginationRequest.execute(roomId, chunkEntity?.nextToken, PaginationDirection.FORWARDS, limit, callback = createCallback(it))
-            }
+            runPaginationRequest(it, itemAtFront, PaginationDirection.FORWARDS)
         }
     }
+
+    private fun runPaginationRequest(requestCallback: PagingRequestHelper.Request.Callback,
+                                     item: EnrichedEvent,
+                                     direction: PaginationDirection) {
+        var token: String? = null
+        monarchy.doWithRealm { realm ->
+            if (item.root.eventId == null) {
+                return@doWithRealm
+            }
+            val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(item.root.eventId)).firstOrNull()
+            token = if (direction == PaginationDirection.FORWARDS) chunkEntity?.nextToken else chunkEntity?.prevToken
+        }
+        paginationRequest.execute(
+                roomId = roomId,
+                from = token,
+                direction = direction,
+                limit = limit,
+                callback = createCallback(requestCallback)
+        )
+    }
+
 
     private fun createCallback(pagingRequestCallback: PagingRequestHelper.Request.Callback) = object : MatrixCallback<TokenChunkEvent> {
         override fun onSuccess(data: TokenChunkEvent) {

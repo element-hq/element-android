@@ -17,6 +17,10 @@ class TimelineEventController(private val roomId: String,
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
 
+    init {
+        setFilterDuplicates(true)
+    }
+
     private val pagedListCallback = object : PagedList.Callback() {
         override fun onChanged(position: Int, count: Int) {
             buildSnapshotList()

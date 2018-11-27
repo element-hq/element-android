@@ -4,7 +4,6 @@ import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.helper.deleteOnCascade
@@ -46,7 +45,7 @@ internal class GetContextOfEventRequest(private val roomAPI: RoomAPI,
                                 filter: String?) = withContext(coroutineDispatchers.io) {
 
         executeRequest<EventContextResponse> {
-            apiCall = roomAPI.getContextOfEvent(roomId, eventId, 1, filter)
+            apiCall = roomAPI.getContextOfEvent(roomId, eventId, 0, filter)
         }.flatMap { response ->
             insertInDb(response, roomId)
         }
@@ -56,17 +55,14 @@ internal class GetContextOfEventRequest(private val roomAPI: RoomAPI,
         return monarchy
                 .tryTransactionSync { realm ->
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                                     ?: throw IllegalStateException("You shouldn't use this method without a room")
+                            ?: throw IllegalStateException("You shouldn't use this method without a room")
 
                     val currentChunk = realm.createObject<ChunkEntity>().apply {
                         prevToken = response.prevToken
                         nextToken = response.nextToken
                     }
 
-                    currentChunk.addOrUpdate(response.event, PaginationDirection.FORWARDS)
-                    currentChunk.addAll(response.eventsAfter, PaginationDirection.FORWARDS)
-                    currentChunk.addAll(response.eventsBefore, PaginationDirection.BACKWARDS)
-
+                    currentChunk.addOrUpdate(response.event, PaginationDirection.FORWARDS, isUnlinked = true)
                     // Now, handles chunk merge
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = response.prevToken)
                     val nextChunk = ChunkEntity.find(realm, roomId, prevToken = response.nextToken)
@@ -79,18 +75,8 @@ internal class GetContextOfEventRequest(private val roomAPI: RoomAPI,
                         currentChunk.merge(nextChunk, PaginationDirection.FORWARDS)
                         roomEntity.deleteOnCascade(nextChunk)
                     }
-                    /*
-                    val eventIds = response.timelineEvents.mapNotNull { it.eventId }
-                    ChunkEntity
-                            .findAllIncludingEvents(realm, eventIds)
-                            .filter { it != currentChunk }
-                            .forEach { overlapped ->
-                                currentChunk.merge(overlapped, direction)
-                                roomEntity.deleteOnCascade(overlapped)
-                            }
-                    */
                     roomEntity.addOrUpdate(currentChunk)
-                    roomEntity.addStateEvents(response.stateEvents)
+                    roomEntity.addStateEvents(response.stateEvents, stateIndex = Int.MIN_VALUE, isUnlinked = true)
                 }
                 .map { response }
     }

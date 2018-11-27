@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInterceptor
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.TimelineHolder
@@ -20,7 +21,8 @@ private const val PAGE_SIZE = 30
 
 internal class DefaultTimelineHolder(private val roomId: String,
                                      private val monarchy: Monarchy,
-                                     private val boundaryCallback: TimelineBoundaryCallback
+                                     private val boundaryCallback: TimelineBoundaryCallback,
+                                     private val contextOfEventRequest: GetContextOfEventRequest
 ) : TimelineHolder {
 
     private val eventInterceptors = ArrayList<EnrichedEventInterceptor>()
@@ -32,7 +34,7 @@ internal class DefaultTimelineHolder(private val roomId: String,
 
     override fun timeline(eventId: String?): LiveData<PagedList<EnrichedEvent>> {
         if (eventId != null) {
-            fetchEventIfNeeded()
+            fetchEventIfNeeded(eventId)
         }
         val realmDataSourceFactory = monarchy.createDataSourceFactory {
             buildDataSourceFactoryQuery(it, eventId)
@@ -60,8 +62,18 @@ internal class DefaultTimelineHolder(private val roomId: String,
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
     }
 
-    private fun fetchEventIfNeeded() {
+    private fun fetchEventIfNeeded(eventId: String) {
+        if (!isEventPersisted(eventId)) {
+            contextOfEventRequest.execute(roomId, eventId, object : MatrixCallback<EventContextResponse> {})
+        }
+    }
 
+    private fun isEventPersisted(eventId: String): Boolean {
+        var isEventPersisted = false
+        monarchy.doWithRealm {
+            isEventPersisted = EventEntity.where(it, eventId = eventId).findFirst() != null
+        }
+        return isEventPersisted
     }
 
     private fun buildDataSourceFactoryQuery(realm: Realm, eventId: String?): RealmQuery<EventEntity> {

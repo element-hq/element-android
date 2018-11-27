@@ -14,7 +14,8 @@ internal open class EventEntity(var eventId: String = "",
                                 var age: Long? = 0,
                                 var redacts: String? = null,
                                 var stateIndex: Int = 0,
-                                var displayIndex: Int = 0
+                                var displayIndex: Int = 0,
+                                var isUnlinked: Boolean = false
 ) : RealmObject() {
 
     companion object {

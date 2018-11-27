@@ -14,6 +14,7 @@ import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
+import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
@@ -31,7 +32,8 @@ internal class SessionModule(private val sessionParams: SessionParams) : Module 
 
         scope(DefaultSession.SCOPE) {
             val context = get<Context>()
-            val directory = File(context.filesDir, sessionParams.credentials.userId)
+            val childPath = sessionParams.credentials.userId.md5()
+            val directory = File(context.filesDir, childPath)
 
             RealmConfiguration.Builder()
                     .directory(directory)
@@ -47,7 +49,7 @@ internal class SessionModule(private val sessionParams: SessionParams) : Module 
         }
 
         scope(DefaultSession.SCOPE) {
-            val retrofitBuilder = get() as Retrofit.Builder
+            val retrofitBuilder = get<Retrofit.Builder>()
             retrofitBuilder
                     .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
                     .build()

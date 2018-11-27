@@ -12,11 +12,4 @@ data class EventContextResponse(
         @Json(name = "events_after") val eventsAfter: List<Event> = emptyList(),
         @Json(name = "end") val nextToken: String? = null,
         @Json(name = "state") val stateEvents: List<Event> = emptyList()
-) {
-
-    val timelineEvents: List<Event> by lazy {
-        eventsBefore + event + eventsAfter
-    }
-
-
-}
+)

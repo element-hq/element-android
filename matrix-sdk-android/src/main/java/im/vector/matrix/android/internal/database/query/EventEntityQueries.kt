@@ -27,6 +27,7 @@ internal fun EventEntity.Companion.where(realm: Realm, roomId: String? = null, t
     if (type != null) {
         query.equalTo(EventEntityFields.TYPE, type)
     }
+    query.notEqualTo(EventEntityFields.IS_UNLINKED, true)
     return query
 }
 
