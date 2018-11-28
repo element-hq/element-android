@@ -8,8 +8,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 
 internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
     chunks.remove(chunkEntity)
-    chunkEntity.events.deleteAllFromRealm()
-    chunkEntity.deleteFromRealm()
+    chunkEntity.deleteOnCascade()
 }
 
 internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {

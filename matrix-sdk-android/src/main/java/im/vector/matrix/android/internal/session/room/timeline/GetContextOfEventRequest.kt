@@ -5,6 +5,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.helper.merge
@@ -62,7 +63,7 @@ internal class GetContextOfEventRequest(private val roomAPI: RoomAPI,
                         nextToken = response.nextToken
                     }
 
-                    currentChunk.addOrUpdate(response.event, PaginationDirection.FORWARDS, isUnlinked = true)
+                    currentChunk.add(response.event, PaginationDirection.FORWARDS, isUnlinked = true)
                     // Now, handles chunk merge
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = response.prevToken)
                     val nextChunk = ChunkEntity.find(realm, roomId, prevToken = response.nextToken)

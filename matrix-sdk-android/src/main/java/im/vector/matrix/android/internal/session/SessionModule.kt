@@ -38,7 +38,7 @@ internal class SessionModule(private val sessionParams: SessionParams) : Module 
             RealmConfiguration.Builder()
                     .directory(directory)
                     .name("disk_store.realm")
-                    .deleteRealmIfMigrationNeeded()
+                    .inMemory()
                     .build()
         }
 

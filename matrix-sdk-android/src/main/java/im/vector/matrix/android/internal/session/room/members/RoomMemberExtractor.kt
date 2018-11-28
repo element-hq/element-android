@@ -18,12 +18,13 @@ internal class RoomMemberExtractor(private val realm: Realm,
         val sender = event.sender ?: return null
         // When stateIndex is negative, we try to get the next stateEvent prevContent()
         // If prevContent is null we fallback to the Int.MIN state events content()
-        return if (event.stateIndex <= 0) {
+        val roomMember: RoomMember? = if (event.stateIndex <= 0) {
             baseQuery(realm, roomId, sender).next(from = event.stateIndex)?.asDomain()?.prevContent()
             ?: baseQuery(realm, roomId, sender).last(since = event.stateIndex)?.asDomain()?.content()
         } else {
             baseQuery(realm, roomId, sender).last(since = event.stateIndex)?.asDomain()?.content()
         }
+        return roomMember
     }
 
     private fun baseQuery(realm: Realm,
