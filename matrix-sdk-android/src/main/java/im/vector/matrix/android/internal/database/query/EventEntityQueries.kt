@@ -2,6 +2,7 @@ package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import io.realm.Realm
@@ -15,7 +16,10 @@ internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQu
             .equalTo(EventEntityFields.EVENT_ID, eventId)
 }
 
-internal fun EventEntity.Companion.where(realm: Realm, roomId: String? = null, type: String? = null): RealmQuery<EventEntity> {
+internal fun EventEntity.Companion.where(realm: Realm,
+                                         roomId: String? = null,
+                                         type: String? = null,
+                                         linkFilterMode: EventEntity.LinkFilterMode = LINKED_ONLY): RealmQuery<EventEntity> {
     val query = realm.where<EventEntity>()
     if (roomId != null) {
         query.beginGroup()
@@ -27,8 +31,11 @@ internal fun EventEntity.Companion.where(realm: Realm, roomId: String? = null, t
     if (type != null) {
         query.equalTo(EventEntityFields.TYPE, type)
     }
-    query.notEqualTo(EventEntityFields.IS_UNLINKED, true)
-    return query
+    return when (linkFilterMode) {
+        LINKED_ONLY -> query.equalTo(EventEntityFields.IS_UNLINKED, false)
+        UNLINKED_ONLY -> query.equalTo(EventEntityFields.IS_UNLINKED, true)
+        BOTH -> query
+    }
 }
 
 internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = true): EventEntity? {

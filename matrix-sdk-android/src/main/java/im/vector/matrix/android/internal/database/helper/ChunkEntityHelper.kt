@@ -16,8 +16,9 @@ internal fun ChunkEntity.deleteOnCascade() {
     this.deleteFromRealm()
 }
 
+// By default if a chunk is empty we consider it unlinked
 internal fun ChunkEntity.isUnlinked(): Boolean {
-    return events.where().equalTo(EventEntityFields.IS_UNLINKED, true).findAll().isNotEmpty()
+    return events.where().equalTo(EventEntityFields.IS_UNLINKED, false).findAll().isEmpty()
 }
 
 internal fun ChunkEntity.merge(chunkToMerge: ChunkEntity,
@@ -89,7 +90,7 @@ internal fun ChunkEntity.add(event: Event,
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
-               PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
+        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
+    } ?: defaultValue
 }

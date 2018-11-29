@@ -6,6 +6,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 internal fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ChunkEntity> {
@@ -34,4 +35,11 @@ internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds
     return realm.where<ChunkEntity>()
             .`in`(ChunkEntityFields.EVENTS.EVENT_ID, eventIds.toTypedArray())
             .findAll()
+}
+
+internal fun ChunkEntity.Companion.create(realm: Realm, prevToken: String?, nextToken: String?): ChunkEntity {
+    return realm.createObject<ChunkEntity>().apply {
+        this.prevToken = prevToken
+        this.nextToken = nextToken
+    }
 }

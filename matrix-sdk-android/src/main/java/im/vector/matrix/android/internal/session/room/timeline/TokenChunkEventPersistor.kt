@@ -5,11 +5,11 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.tryTransactionSync
-import io.realm.kotlin.createObject
 
 
 internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
@@ -23,51 +23,67 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
                             ?: throw IllegalStateException("You shouldn't use this method without a room")
 
-                    // We create a new chunk with prev and next token as a base
-                    // In case of permalink, we may not encounter other chunks, so it can be added
-                    // By default, it's an unlinked chunk
-                    val newChunk = realm.createObject<ChunkEntity>().apply {
-                        prevToken = receivedChunk.prevToken
-                        nextToken = receivedChunk.nextToken
+                    val nextToken: String?
+                    val prevToken: String?
+                    if (direction == PaginationDirection.FORWARDS) {
+                        nextToken = receivedChunk.end
+                        prevToken = receivedChunk.start
+                    } else {
+                        nextToken = receivedChunk.start
+                        prevToken = receivedChunk.end
                     }
-                    newChunk.addAll(receivedChunk.events, direction, isUnlinked = true)
+                    val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
+                    val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
 
                     // The current chunk is the one we will keep all along the merge process.
-                    var currentChunk = newChunk
-                    val prevChunk = ChunkEntity.find(realm, roomId, nextToken = receivedChunk.prevToken)
-                    val nextChunk = ChunkEntity.find(realm, roomId, prevToken = receivedChunk.nextToken)
+                    // We try to look for a chunk next to the token,
+                    // otherwise we create a whole new one
 
-                    // We always merge the bottom chunk into top chunk, so we are always merging backwards
-                    if (prevChunk != null) {
-                        newChunk.merge(prevChunk, PaginationDirection.BACKWARDS)
-                        roomEntity.deleteOnCascade(prevChunk)
+                    var currentChunk = if (direction == PaginationDirection.FORWARDS) {
+                        prevChunk?.apply { this.nextToken = nextToken }
+                                ?: ChunkEntity.create(realm, prevToken, nextToken)
+                    } else {
+                        nextChunk?.apply { this.prevToken = prevToken }
+                                ?: ChunkEntity.create(realm, prevToken, nextToken)
                     }
-                    if (nextChunk != null) {
-                        nextChunk.merge(newChunk, PaginationDirection.BACKWARDS)
-                        roomEntity.deleteOnCascade(newChunk)
-                        currentChunk = nextChunk
-                    }
-                    val newEventIds = receivedChunk.events.mapNotNull { it.eventId }
-                    ChunkEntity
-                            .findAllIncludingEvents(realm, newEventIds)
-                            .filter { it != currentChunk }
-                            .forEach { overlapped ->
-                                if (direction == PaginationDirection.BACKWARDS) {
-                                    currentChunk.merge(overlapped, PaginationDirection.BACKWARDS)
-                                    roomEntity.deleteOnCascade(overlapped)
-                                } else {
-                                    overlapped.merge(currentChunk, PaginationDirection.BACKWARDS)
-                                    roomEntity.deleteOnCascade(currentChunk)
-                                    currentChunk = overlapped
-                                }
-                            }
-                    roomEntity.addOrUpdate(currentChunk)
 
-                    // TODO : there is an issue with the pagination sending unwanted room member events
                     val isUnlinked = currentChunk.isUnlinked()
+                    currentChunk.addAll(receivedChunk.events, direction, isUnlinked = isUnlinked)
+
+                    // Then we merge chunks if needed
+                    if (currentChunk != prevChunk && prevChunk != null) {
+                        currentChunk = handleMerge(roomEntity, direction, currentChunk, prevChunk)
+                    } else if (currentChunk != nextChunk && nextChunk != null) {
+                        currentChunk = handleMerge(roomEntity, direction, currentChunk, nextChunk)
+                    } else {
+                        val newEventIds = receivedChunk.events.mapNotNull { it.eventId }
+                        ChunkEntity
+                                .findAllIncludingEvents(realm, newEventIds)
+                                .filter { it != currentChunk }
+                                .forEach { overlapped ->
+                                    currentChunk = handleMerge(roomEntity, direction, currentChunk, overlapped)
+                                }
+                    }
+                    roomEntity.addOrUpdate(currentChunk)
                     roomEntity.addStateEvents(receivedChunk.stateEvents, isUnlinked = isUnlinked)
                 }
     }
 
+    private fun handleMerge(roomEntity: RoomEntity,
+                            direction: PaginationDirection,
+                            currentChunk: ChunkEntity,
+                            otherChunk: ChunkEntity): ChunkEntity {
+
+        // We always merge the bottom chunk into top chunk, so we are always merging backwards
+        return if (direction == PaginationDirection.BACKWARDS) {
+            currentChunk.merge(otherChunk, PaginationDirection.BACKWARDS)
+            roomEntity.deleteOnCascade(otherChunk)
+            currentChunk
+        } else {
+            otherChunk.merge(currentChunk, PaginationDirection.BACKWARDS)
+            roomEntity.deleteOnCascade(currentChunk)
+            otherChunk
+        }
+    }
 
 }

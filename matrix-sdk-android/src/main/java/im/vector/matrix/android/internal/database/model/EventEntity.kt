@@ -18,6 +18,12 @@ internal open class EventEntity(var eventId: String = "",
                                 var isUnlinked: Boolean = false
 ) : RealmObject() {
 
+    enum class LinkFilterMode {
+        LINKED_ONLY,
+        UNLINKED_ONLY,
+        BOTH
+    }
+
     companion object {
         const val DEFAULT_STATE_INDEX = Int.MIN_VALUE
     }

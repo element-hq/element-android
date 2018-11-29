@@ -14,6 +14,7 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.events.interceptor.MessageEventInterceptor
+import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import io.realm.RealmQuery
 
@@ -33,6 +34,7 @@ internal class DefaultTimelineHolder(private val roomId: String,
     }
 
     override fun timeline(eventId: String?): LiveData<PagedList<EnrichedEvent>> {
+        clearUnlinkedEvents()
         if (eventId != null) {
             fetchEventIfNeeded(eventId)
         }
@@ -62,6 +64,16 @@ internal class DefaultTimelineHolder(private val roomId: String,
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
     }
 
+    private fun clearUnlinkedEvents() {
+        monarchy.tryTransactionSync { realm ->
+            val unlinkedEvents = EventEntity
+                    .where(realm, roomId = roomId)
+                    .equalTo(EventEntityFields.IS_UNLINKED, true)
+                    .findAll()
+            unlinkedEvents.deleteAllFromRealm()
+        }
+    }
+
     private fun fetchEventIfNeeded(eventId: String) {
         if (!isEventPersisted(eventId)) {
             contextOfEventRequest.execute(roomId, eventId, object : MatrixCallback<EventContextResponse> {})
@@ -79,11 +91,11 @@ internal class DefaultTimelineHolder(private val roomId: String,
     private fun buildDataSourceFactoryQuery(realm: Realm, eventId: String?): RealmQuery<EventEntity> {
         val query = if (eventId == null) {
             EventEntity
-                    .where(realm, roomId = roomId)
+                    .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.LINKED_ONLY)
                     .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST}", true)
         } else {
             EventEntity
-                    .where(realm, roomId = roomId)
+                    .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.BOTH)
                     .`in`("${EventEntityFields.CHUNK}.${ChunkEntityFields.EVENTS.EVENT_ID}", arrayOf(eventId))
         }
         return query.sort(EventEntityFields.DISPLAY_INDEX)
