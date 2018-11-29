@@ -7,10 +7,7 @@ import im.vector.matrix.android.api.session.room.send.EventFactory
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersRequest
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
-import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
-import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventRequest
-import im.vector.matrix.android.internal.session.room.timeline.PaginationRequest
-import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
+import im.vector.matrix.android.internal.session.room.timeline.*
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import org.koin.dsl.context.ModuleDefinition
 import org.koin.dsl.module.Module
@@ -30,6 +27,10 @@ class RoomModule : Module {
 
         scope(DefaultSession.SCOPE) {
             LoadRoomMembersRequest(get(), get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            TokenChunkEventPersistor(get())
         }
 
         scope(DefaultSession.SCOPE) {
