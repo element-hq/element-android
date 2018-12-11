@@ -9,13 +9,13 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.network.RequestExecutor
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
 import im.vector.matrix.android.internal.session.group.model.GroupUsers
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.retry
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.GlobalScope
@@ -24,15 +24,14 @@ import kotlinx.coroutines.launch
 internal class GetGroupDataRequest(
         private val groupAPI: GroupAPI,
         private val monarchy: Monarchy,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val requestExecutor: RequestExecutor
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
 
     fun execute(groupId: String,
                 callback: MatrixCallback<Boolean>
     ): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val groupOrFailure = requestExecutor.execute { getGroupData(groupId) }
+            val groupOrFailure = retry { getGroupData(groupId) }
             groupOrFailure.fold({ callback.onFailure(it) }, { callback.onSuccess(true) })
         }
         return CancelableCoroutine(job)
@@ -64,7 +63,7 @@ internal class GetGroupDataRequest(
         return monarchy
                 .tryTransactionSync { realm ->
                     val groupSummaryEntity = GroupSummaryEntity.where(realm, groupId).findFirst()
-                            ?: realm.createObject(groupId)
+                                             ?: realm.createObject(groupId)
 
                     groupSummaryEntity.avatarUrl = groupSummary.profile?.avatarUrl ?: ""
                     val name = groupSummary.profile?.name
