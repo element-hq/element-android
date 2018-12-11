@@ -13,4 +13,11 @@ internal enum class PaginationDirection(val value: String) {
      */
     BACKWARDS("b");
 
+    fun reversed(): PaginationDirection {
+        return when (this) {
+            FORWARDS  -> BACKWARDS
+            BACKWARDS -> FORWARDS
+        }
+    }
+
 }

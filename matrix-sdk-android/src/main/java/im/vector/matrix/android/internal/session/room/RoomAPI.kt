@@ -2,18 +2,13 @@ package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.MessageContent
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
-import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEvent
+import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 internal interface RoomAPI {
 
@@ -32,7 +27,7 @@ internal interface RoomAPI {
                             @Query("dir") dir: String,
                             @Query("limit") limit: Int,
                             @Query("filter") filter: String?
-    ): Call<TokenChunkEvent>
+    ): Call<PaginationResponse>
 
 
     /**

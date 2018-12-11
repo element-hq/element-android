@@ -5,16 +5,9 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
-data class EventContextResponse(
-        @Json(name = "event") val event: Event,
+internal data class PaginationResponse(
         @Json(name = "start") override val start: String? = null,
-        @Json(name = "events_before") val eventsBefore: List<Event> = emptyList(),
-        @Json(name = "events_after") val eventsAfter: List<Event> = emptyList(),
         @Json(name = "end") override val end: String? = null,
+        @Json(name = "chunk") override val events: List<Event> = emptyList(),
         @Json(name = "state") override val stateEvents: List<Event> = emptyList()
-) : TokenChunkEvent {
-
-    override val events: List<Event>
-        get() = listOf(event)
-
-}
+) : TokenChunkEvent

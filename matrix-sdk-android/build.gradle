@@ -20,6 +20,7 @@ repositories {
 
 android {
     compileSdkVersion 28
+    testOptions.unitTests.includeAndroidResources = true
 
     defaultConfig {
         minSdkVersion 21
@@ -45,6 +46,7 @@ dependencies {
     def support_version = '28.0.0'
     def moshi_version = '1.8.0'
     def lifecycle_version = "1.1.1"
+    def powermock_version = "2.0.0-RC.4"
 
     implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -94,7 +96,14 @@ dependencies {
 
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:4.0.2'
+    testImplementation 'org.robolectric:shadows-support-v4:3.0'
+    testImplementation "io.mockk:mockk:1.8.13.kotlin13"
+    testImplementation 'org.amshove.kluent:kluent-android:1.44'
+
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
+
 
 }

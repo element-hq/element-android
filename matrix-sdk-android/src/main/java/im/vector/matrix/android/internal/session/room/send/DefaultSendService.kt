@@ -7,7 +7,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.SendService
 import im.vector.matrix.android.api.session.room.send.EventFactory
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.helper.updateDisplayIndexes
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
@@ -33,7 +33,7 @@ internal class DefaultSendService(private val roomId: String,
         monarchy.tryTransactionAsync { realm ->
             val chunkEntity = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
                     ?: return@tryTransactionAsync
-            chunkEntity.addOrUpdate(event, PaginationDirection.FORWARDS)
+            chunkEntity.add(event, PaginationDirection.FORWARDS)
             chunkEntity.updateDisplayIndexes()
         }
 
