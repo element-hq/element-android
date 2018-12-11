@@ -14,6 +14,8 @@ import im.vector.matrix.android.internal.session.room.timeline.PaginationDirecti
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
+import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
@@ -117,7 +119,7 @@ internal class ChunkEntityTest : InstrumentedTest() {
             chunk1.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
             chunk2.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = false)
             chunk1.merge(chunk2, PaginationDirection.BACKWARDS)
-            chunk1.isUnlinked() shouldEqual false
+            chunk1.isUnlinked().shouldBeFalse()
         }
     }
 
@@ -129,7 +131,35 @@ internal class ChunkEntityTest : InstrumentedTest() {
             chunk1.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
             chunk2.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
             chunk1.merge(chunk2, PaginationDirection.BACKWARDS)
-            chunk1.isUnlinked() shouldEqual true
+            chunk1.isUnlinked().shouldBeTrue()
+        }
+    }
+
+    @Test
+    fun merge_shouldPrevTokenMerged_whenMergingForwards() {
+        monarchy.runTransactionSync { realm ->
+            val chunk1: ChunkEntity = realm.createObject()
+            val chunk2: ChunkEntity = realm.createObject()
+            val prevToken = "prev_token"
+            chunk1.prevToken = prevToken
+            chunk1.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk2.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk1.merge(chunk2, PaginationDirection.FORWARDS)
+            chunk1.prevToken shouldEqual prevToken
+        }
+    }
+
+    @Test
+    fun merge_shouldNextTokenMerged_whenMergingBackwards() {
+        monarchy.runTransactionSync { realm ->
+            val chunk1: ChunkEntity = realm.createObject()
+            val chunk2: ChunkEntity = realm.createObject()
+            val nextToken = "next_token"
+            chunk1.nextToken = nextToken
+            chunk1.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk2.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk1.merge(chunk2, PaginationDirection.BACKWARDS)
+            chunk1.nextToken shouldEqual nextToken
         }
     }
 
