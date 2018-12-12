@@ -3,6 +3,7 @@ package im.vector.matrix.android.internal.session
 import android.arch.lifecycle.LiveData
 import android.os.Looper
 import android.support.annotation.MainThread
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
@@ -10,7 +11,6 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
@@ -39,13 +39,13 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     @MainThread
     override fun open() {
-        checkIsMainThread()
+        assertMainThread()
         assert(!isOpen)
         isOpen = true
-        val sessionModule = SessionModule(sessionParams)
-        val syncModule = SyncModule()
-        val roomModule = RoomModule()
-        val groupModule = GroupModule()
+        val sessionModule = SessionModule(sessionParams).definition
+        val syncModule = SyncModule().definition
+        val roomModule = RoomModule().definition
+        val groupModule = GroupModule().definition
         StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule, roomModule, groupModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         liveEntityUpdaters.forEach { it.start() }
@@ -55,7 +55,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     @MainThread
     override fun close() {
-        checkIsMainThread()
+        assertMainThread()
         assert(isOpen)
         syncThread.kill()
         liveEntityUpdaters.forEach { it.dispose() }
@@ -109,9 +109,9 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     // Private methods *****************************************************************************
 
-    private fun checkIsMainThread() {
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            throw IllegalStateException("Should be called on main thread")
+    private fun assertMainThread() {
+        if (Looper.getMainLooper().thread !== Thread.currentThread()) {
+            throw IllegalStateException("This method can only be called on the main thread!")
         }
     }
 

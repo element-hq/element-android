@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
+apply plugin: 'okreplay'
 
 buildscript {
 
@@ -36,6 +37,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    adbOptions {
+        installOptions "-g"
     }
 
 }
@@ -94,14 +99,20 @@ dependencies {
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
+    debugImplementation 'com.airbnb.okreplay:okreplay:1.4.0'
+    releaseImplementation 'com.airbnb.okreplay:noop:1.4.0'
+    androidTestImplementation 'com.airbnb.okreplay:espresso:1.4.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.0.2'
+    testImplementation "org.koin:koin-test:$koin_version"
     testImplementation 'org.robolectric:shadows-support-v4:3.0'
     testImplementation "io.mockk:mockk:1.8.13.kotlin13"
     testImplementation 'org.amshove.kluent:kluent-android:1.44'
 
+    androidTestImplementation "org.koin:koin-test:$koin_version"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation "com.android.support.test:rules:1.0.2"
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
 

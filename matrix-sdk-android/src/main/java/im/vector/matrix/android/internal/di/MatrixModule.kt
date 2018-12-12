@@ -6,14 +6,12 @@ import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
-import org.koin.dsl.context.ModuleDefinition
-import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 
 
-class MatrixModule(private val options: MatrixOptions) : Module {
+class MatrixModule(private val options: MatrixOptions) {
 
-    override fun invoke(): ModuleDefinition = module {
+    val definition = module {
 
         single {
             options.context
@@ -27,5 +25,5 @@ class MatrixModule(private val options: MatrixOptions) : Module {
             BackgroundDetectionObserver()
         }
 
-    }.invoke()
+    }
 }

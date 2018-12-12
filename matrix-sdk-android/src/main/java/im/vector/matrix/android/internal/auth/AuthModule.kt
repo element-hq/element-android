@@ -4,13 +4,11 @@ import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
 import im.vector.matrix.android.internal.auth.db.SessionParamsMapper
 import io.realm.RealmConfiguration
-import org.koin.dsl.context.ModuleDefinition
-import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 
-class AuthModule : Module {
+class AuthModule {
 
-    override fun invoke(): ModuleDefinition = module {
+    val definition = module {
 
         single {
             DefaultAuthenticator(get(), get(), get()) as Authenticator
@@ -22,5 +20,5 @@ class AuthModule : Module {
             RealmSessionParamsStore(mapper, realmConfiguration) as SessionParamsStore
         }
 
-    }.invoke()
+    }
 }

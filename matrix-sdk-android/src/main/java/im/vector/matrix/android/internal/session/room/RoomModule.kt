@@ -9,16 +9,14 @@ import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersReq
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.timeline.*
 import im.vector.matrix.android.internal.util.PagingRequestHelper
-import org.koin.dsl.context.ModuleDefinition
-import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import java.util.concurrent.Executors
 
 
-class RoomModule : Module {
+class RoomModule {
 
-    override fun invoke(): ModuleDefinition = module(override = true) {
+    val definition = module(override = true) {
 
         scope(DefaultSession.SCOPE) {
             val retrofit: Retrofit = get()
@@ -56,5 +54,5 @@ class RoomModule : Module {
             DefaultSendService(roomId, get(), get()) as SendService
         }
 
-    }.invoke()
+    }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.test.InstrumentationRegistry
 import java.io.File
 
-abstract class InstrumentedTest {
+interface InstrumentedTest {
     fun context(): Context {
         return InstrumentationRegistry.getTargetContext()
     }

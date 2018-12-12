@@ -16,15 +16,13 @@ import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameRes
 import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
-import org.koin.dsl.context.ModuleDefinition
-import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import java.io.File
 
-internal class SessionModule(private val sessionParams: SessionParams) : Module {
+internal class SessionModule(private val sessionParams: SessionParams) {
 
-    override fun invoke(): ModuleDefinition = module(override = true) {
+    val definition = module(override = true) {
 
         scope(DefaultSession.SCOPE) {
             sessionParams
@@ -85,7 +83,7 @@ internal class SessionModule(private val sessionParams: SessionParams) : Module 
         }
 
 
-    }.invoke()
+    }
 
 
 }

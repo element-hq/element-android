@@ -4,8 +4,7 @@ import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.dsl.context.ModuleDefinition
-import org.koin.dsl.module.Module
+import okreplay.OkReplayInterceptor
 import org.koin.dsl.module.module
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -13,9 +12,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class NetworkModule : Module {
+class NetworkModule {
 
-    override fun invoke(): ModuleDefinition = module {
+    val definition = module {
 
         single {
             AccessTokenInterceptor(get())
@@ -29,12 +28,17 @@ class NetworkModule : Module {
         }
 
         single {
+            OkReplayInterceptor()
+        }
+
+        single {
             OkHttpClient.Builder()
                     .connectTimeout(30, TimeUnit.SECONDS)
                     .readTimeout(30, TimeUnit.SECONDS)
                     .writeTimeout(30, TimeUnit.SECONDS)
-                    .addInterceptor(get() as AccessTokenInterceptor)
-                    .addInterceptor(get() as HttpLoggingInterceptor)
+                    .addInterceptor(get<AccessTokenInterceptor>())
+                    .addInterceptor(get<HttpLoggingInterceptor>())
+                    .addInterceptor(get<OkReplayInterceptor>())
                     .build()
         }
 
@@ -56,5 +60,5 @@ class NetworkModule : Module {
                     .addConverterFactory(get())
         }
 
-    }.invoke()
+    }
 }

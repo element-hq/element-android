@@ -22,7 +22,7 @@ import org.junit.Test
 import kotlin.random.Random
 
 
-internal class ChunkEntityTest : InstrumentedTest() {
+internal class ChunkEntityTest : InstrumentedTest {
 
     private lateinit var monarchy: Monarchy
 
