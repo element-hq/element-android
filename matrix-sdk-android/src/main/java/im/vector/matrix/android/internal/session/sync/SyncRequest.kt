@@ -2,11 +2,11 @@ package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.legacy.rest.model.filter.FilterBody
-import im.vector.matrix.android.internal.legacy.util.FilterUtil
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.filter.FilterBody
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.util.CancelableCoroutine
+import im.vector.matrix.android.internal.util.FilterUtil
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

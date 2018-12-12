@@ -16,8 +16,8 @@
 
 package im.vector.matrix.android.internal.network.ssl
 
-import im.vector.matrix.android.internal.legacy.util.Log
 import okhttp3.TlsVersion
+import timber.log.Timber
 import java.io.IOException
 import java.net.InetAddress
 import java.net.Socket
@@ -117,7 +117,7 @@ constructor(trustPinned: Array<TrustManager>, acceptedTlsVersions: List<TlsVersi
                 try {
                     sslSocket.enabledProtocols = filteredEnabledProtocols.toTypedArray()
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "Exception: ", e)
+                    Timber.e(e)
                 }
 
             }

@@ -4,8 +4,8 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.legacy.rest.model.group.GroupsSyncResponse
-import im.vector.matrix.android.internal.legacy.rest.model.group.InvitedGroupSync
+import im.vector.matrix.android.internal.session.sync.model.GroupsSyncResponse
+import im.vector.matrix.android.internal.session.sync.model.InvitedGroupSync
 import io.realm.Realm
 
 
