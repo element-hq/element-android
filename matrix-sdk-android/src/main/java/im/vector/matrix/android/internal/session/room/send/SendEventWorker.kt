@@ -31,10 +31,10 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.FAILURE
+                ?: return Result.failure()
 
         if (params.event.eventId == null) {
-            return Result.FAILURE
+            return Result.failure()
         }
 
         val result = executeRequest<SendResponse> {
@@ -51,7 +51,7 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
                 dummyEventEntity?.eventId = sendResponse.eventId
             }
         }
-        return result.fold({ Result.RETRY }, { Result.SUCCESS })
+        return result.fold({ Result.retry() }, { Result.success() })
     }
 
 

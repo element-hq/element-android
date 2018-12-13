@@ -1,6 +1,11 @@
 package im.vector.matrix.android.internal.session.room.send
 
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
@@ -32,7 +37,7 @@ internal class DefaultSendService(private val roomId: String,
 
         monarchy.tryTransactionAsync { realm ->
             val chunkEntity = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
-                    ?: return@tryTransactionAsync
+                              ?: return@tryTransactionAsync
             chunkEntity.add(event, PaginationDirection.FORWARDS)
             chunkEntity.updateDisplayIndexes()
         }
@@ -46,11 +51,11 @@ internal class DefaultSendService(private val roomId: String,
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000, TimeUnit.MILLISECONDS)
                 .build()
 
-        val work = WorkManager.getInstance()
+        WorkManager.getInstance()
                 .beginUniqueWork(SEND_WORK, ExistingWorkPolicy.APPEND, sendWork)
                 .enqueue()
 
-        return CancelableWork(work)
+        return CancelableWork(sendWork.id)
 
     }
 

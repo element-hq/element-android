@@ -1,13 +1,13 @@
 package im.vector.matrix.android.internal.util
 
-import com.google.common.util.concurrent.ListenableFuture
+import androidx.work.WorkManager
 import im.vector.matrix.android.api.util.Cancelable
-import kotlinx.coroutines.Job
+import java.util.*
 
-internal class CancelableWork(private val work: ListenableFuture<Void>) : Cancelable {
+internal class CancelableWork(private val workId: UUID) : Cancelable {
 
     override fun cancel() {
-        work.cancel(true)
+        WorkManager.getInstance().cancelWorkById(workId)
     }
 
 }

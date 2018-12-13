@@ -15,7 +15,6 @@ import im.vector.matrix.android.internal.session.group.model.GroupSummaryRespons
 import im.vector.matrix.android.internal.session.group.model.GroupUsers
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import im.vector.matrix.android.internal.util.retry
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.GlobalScope
@@ -31,7 +30,7 @@ internal class GetGroupDataRequest(
                 callback: MatrixCallback<Boolean>
     ): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val groupOrFailure = retry { getGroupData(groupId) }
+            val groupOrFailure = getGroupData(groupId)
             groupOrFailure.fold({ callback.onFailure(it) }, { callback.onSuccess(true) })
         }
         return CancelableCoroutine(job)

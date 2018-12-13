@@ -33,7 +33,7 @@ internal class PruneEventWorker(context: Context,
 
     override fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.FAILURE
+                ?: return Result.failure()
 
         val result = monarchy.tryTransactionAsync { realm ->
             params.updateIndexes.forEach { index ->
@@ -41,7 +41,7 @@ internal class PruneEventWorker(context: Context,
                 pruneEvent(realm, data)
             }
         }
-        return result.fold({ Result.RETRY }, { Result.SUCCESS })
+        return result.fold({ Result.retry() }, { Result.success() })
     }
 
     private fun pruneEvent(realm: Realm, redactionEvent: Event?) {

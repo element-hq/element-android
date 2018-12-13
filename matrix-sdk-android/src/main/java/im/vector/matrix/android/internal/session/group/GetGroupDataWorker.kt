@@ -24,14 +24,14 @@ internal class GetGroupDataWorker(context: Context,
 
     override fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.FAILURE
+                     ?: return Result.failure()
 
         val results = params.updateIndexes.map { index ->
             val groupId = params.groupIds[index]
             fetchGroupData(groupId)
         }
         val isSuccessful = results.none { it.isFailure() }
-        return if (isSuccessful) Result.SUCCESS else Result.RETRY
+        return if (isSuccessful) Result.success() else Result.retry()
     }
 
     private fun fetchGroupData(groupId: String): Try<Unit> {
