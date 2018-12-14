@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.RiotActivity
@@ -64,8 +66,21 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
 
     override fun openRoomDetail(roomId: String) {
         val roomDetailFragment = RoomDetailFragment.newInstance(roomId)
-        replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
-        drawerLayout.closeDrawer(Gravity.LEFT)
+        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            closeDrawerLayout(Gravity.LEFT) { replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer) }
+        } else {
+            replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
+        }
+    }
+
+    private fun closeDrawerLayout(gravity: Int, actionOnClose: () -> Unit) {
+        drawerLayout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
+            override fun onDrawerClosed(p0: View) {
+                drawerLayout.removeDrawerListener(this)
+                actionOnClose()
+            }
+        })
+        drawerLayout.closeDrawer(gravity)
     }
 
     companion object {
