@@ -4,18 +4,20 @@ import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
+import im.vector.matrix.android.internal.TaskExecutor
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import java.util.*
 
 internal class TimelineBoundaryCallback(private val roomId: String,
-                                        private val paginationRequest: PaginationRequest,
+                                        private val taskExecutor: TaskExecutor,
+                                        private val paginationTask: PaginationTask,
                                         private val monarchy: Monarchy,
                                         private val helper: PagingRequestHelper
 ) : PagedList.BoundaryCallback<EnrichedEvent>() {
 
-    var limit = 10
+    var limit = 30
 
     override fun onZeroItemsLoaded() {
         // actually, it's not possible
@@ -44,13 +46,12 @@ internal class TimelineBoundaryCallback(private val roomId: String,
             val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(item.root.eventId)).firstOrNull()
             token = if (direction == PaginationDirection.FORWARDS) chunkEntity?.nextToken else chunkEntity?.prevToken
         }
-        paginationRequest.execute(
-                roomId = roomId,
-                from = token,
-                direction = direction,
-                limit = limit,
-                callback = createCallback(requestCallback)
-        )
+        val params = PaginationTask.Params(roomId = roomId,
+                                           from = token,
+                                           direction = direction,
+                                           limit = limit)
+
+        taskExecutor.executeTask(paginationTask, params, createCallback(requestCallback))
     }
 
 

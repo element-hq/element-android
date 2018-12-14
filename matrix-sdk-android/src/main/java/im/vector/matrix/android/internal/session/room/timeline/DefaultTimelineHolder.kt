@@ -8,6 +8,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInterceptor
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.TimelineHolder
+import im.vector.matrix.android.internal.TaskExecutor
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -22,14 +23,14 @@ private const val PAGE_SIZE = 30
 
 internal class DefaultTimelineHolder(private val roomId: String,
                                      private val monarchy: Monarchy,
+                                     private val taskExecutor: TaskExecutor,
                                      private val boundaryCallback: TimelineBoundaryCallback,
-                                     private val contextOfEventRequest: GetContextOfEventRequest
+                                     private val contextOfEventTask: GetContextOfEventTask
 ) : TimelineHolder {
 
     private val eventInterceptors = ArrayList<EnrichedEventInterceptor>()
 
     init {
-        boundaryCallback.limit = 30
         eventInterceptors.add(MessageEventInterceptor(monarchy, roomId))
     }
 
@@ -76,7 +77,8 @@ internal class DefaultTimelineHolder(private val roomId: String,
 
     private fun fetchEventIfNeeded(eventId: String) {
         if (!isEventPersisted(eventId)) {
-            contextOfEventRequest.execute(roomId, eventId, object : MatrixCallback<EventContextResponse> {})
+            val params = GetContextOfEventTask.Params(roomId, eventId)
+            taskExecutor.executeTask(contextOfEventTask, params, object : MatrixCallback<TokenChunkEvent> {})
         }
     }
 

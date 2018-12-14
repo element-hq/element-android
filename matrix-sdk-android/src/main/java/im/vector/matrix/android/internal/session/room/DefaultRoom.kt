@@ -14,12 +14,13 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.TaskExecutor
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersRequest
+import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
@@ -30,11 +31,12 @@ internal data class DefaultRoom(
         override val myMembership: MyMembership
 ) : Room, KoinComponent {
 
-    private val loadRoomMembersRequest by inject<LoadRoomMembersRequest>()
+    private val loadRoomMembersTask by inject<LoadRoomMembersTask>()
     private val syncTokenStore by inject<SyncTokenStore>()
     private val monarchy by inject<Monarchy>()
     private val timelineHolder by inject<TimelineHolder> { parametersOf(roomId) }
     private val sendService by inject<SendService> { parametersOf(roomId) }
+    private val taskExecutor by inject<TaskExecutor>()
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
         val liveData = monarchy
@@ -56,7 +58,8 @@ internal data class DefaultRoom(
             object : Cancelable {}
         } else {
             val token = syncTokenStore.getLastToken()
-            loadRoomMembersRequest.execute(roomId, token, Membership.LEAVE, object : MatrixCallback<Boolean> {})
+            val params = LoadRoomMembersTask.Params(roomId, token, Membership.LEAVE)
+            taskExecutor.executeTask(loadRoomMembersTask, params, object : MatrixCallback<Boolean> {})
         }
     }
 

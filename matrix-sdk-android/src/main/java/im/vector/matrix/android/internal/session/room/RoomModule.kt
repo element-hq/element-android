@@ -5,9 +5,16 @@ import im.vector.matrix.android.api.session.room.SendService
 import im.vector.matrix.android.api.session.room.TimelineHolder
 import im.vector.matrix.android.api.session.room.send.EventFactory
 import im.vector.matrix.android.internal.session.DefaultSession
-import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersRequest
+import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
-import im.vector.matrix.android.internal.session.room.timeline.*
+import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
+import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
+import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -24,7 +31,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            LoadRoomMembersRequest(get(), get(), get())
+            DefaultLoadRoomMembersTask(get(), get()) as LoadRoomMembersTask
         }
 
         scope(DefaultSession.SCOPE) {
@@ -32,11 +39,11 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            PaginationRequest(get(), get(), get())
+            DefaultPaginationTask(get(), get()) as PaginationTask
         }
 
         scope(DefaultSession.SCOPE) {
-            GetContextOfEventRequest(get(), get(), get())
+            DefaultGetContextOfEventTask(get(), get()) as GetContextOfEventTask
         }
 
         scope(DefaultSession.SCOPE) {
@@ -46,8 +53,8 @@ class RoomModule {
 
         factory { (roomId: String) ->
             val helper = PagingRequestHelper(Executors.newSingleThreadExecutor())
-            val timelineBoundaryCallback = TimelineBoundaryCallback(roomId, get(), get(), helper)
-            DefaultTimelineHolder(roomId, get(), timelineBoundaryCallback, get()) as TimelineHolder
+            val timelineBoundaryCallback = TimelineBoundaryCallback(roomId, get(), get(), get(), helper)
+            DefaultTimelineHolder(roomId, get(), get() , timelineBoundaryCallback, get()) as TimelineHolder
         }
 
         factory { (roomId: String) ->

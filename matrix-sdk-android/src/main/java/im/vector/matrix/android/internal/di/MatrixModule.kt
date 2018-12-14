@@ -1,11 +1,10 @@
 package im.vector.matrix.android.internal.di
 
 import im.vector.matrix.android.api.MatrixOptions
-import im.vector.matrix.android.api.thread.MainThreadExecutor
+import im.vector.matrix.android.internal.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asCoroutineDispatcher
 import org.koin.dsl.module.module
 
 
@@ -18,7 +17,11 @@ class MatrixModule(private val options: MatrixOptions) {
         }
 
         single {
-            MatrixCoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.IO, main = MainThreadExecutor().asCoroutineDispatcher())
+            MatrixCoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.IO, main = Dispatchers.Main)
+        }
+
+        single {
+            TaskExecutor(get())
         }
 
         single {

@@ -5,38 +5,30 @@ import arrow.core.fix
 import arrow.instances.`try`.monad.monad
 import arrow.typeclasses.binding
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.Task
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
 import im.vector.matrix.android.internal.session.group.model.GroupUsers
-import im.vector.matrix.android.internal.util.CancelableCoroutine
-import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-internal class GetGroupDataRequest(
+internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
+
+    data class Params(val groupId: String)
+
+}
+
+
+internal class DefaultGetGroupDataTask(
         private val groupAPI: GroupAPI,
-        private val monarchy: Monarchy,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
-) {
+        private val monarchy: Monarchy
+) : GetGroupDataTask {
 
-    fun execute(groupId: String,
-                callback: MatrixCallback<Boolean>
-    ): Cancelable {
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val groupOrFailure = getGroupData(groupId)
-            groupOrFailure.fold({ callback.onFailure(it) }, { callback.onSuccess(true) })
-        }
-        return CancelableCoroutine(job)
-    }
-
-    fun getGroupData(groupId: String): Try<Unit> {
+    override fun execute(params: GetGroupDataTask.Params): Try<Unit> {
+        val groupId = params.groupId
         return Try.monad().binding {
 
             val groupSummary = executeRequest<GroupSummaryResponse> {
@@ -54,6 +46,7 @@ internal class GetGroupDataRequest(
             insertInDb(groupSummary, groupRooms, groupUsers, groupId).bind()
         }.fix()
     }
+
 
     private fun insertInDb(groupSummary: GroupSummaryResponse,
                            groupRooms: GroupRooms,
@@ -76,7 +69,6 @@ internal class GetGroupDataRequest(
                     val userIds = groupUsers.users.map { it.userId }
                     groupSummaryEntity.userIds.clear()
                     groupSummaryEntity.userIds.addAll(userIds)
-
 
                 }
     }

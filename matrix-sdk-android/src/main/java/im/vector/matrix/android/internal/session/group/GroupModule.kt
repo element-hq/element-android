@@ -14,7 +14,7 @@ class GroupModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            GetGroupDataRequest(get(), get(), get())
+            DefaultGetGroupDataTask(get(), get()) as GetGroupDataTask
         }
 
     }

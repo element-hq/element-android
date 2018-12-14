@@ -20,7 +20,7 @@ internal class GetGroupDataWorker(context: Context,
             val deletionIndexes: List<Int>
     )
 
-    private val getGroupDataRequest by inject<GetGroupDataRequest>()
+    private val getGroupDataTask by inject<GetGroupDataTask>()
 
     override fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -35,7 +35,7 @@ internal class GetGroupDataWorker(context: Context,
     }
 
     private fun fetchGroupData(groupId: String): Try<Unit> {
-        return getGroupDataRequest.getGroupData(groupId)
+        return getGroupDataTask.execute(GetGroupDataTask.Params(groupId))
     }
 
 }

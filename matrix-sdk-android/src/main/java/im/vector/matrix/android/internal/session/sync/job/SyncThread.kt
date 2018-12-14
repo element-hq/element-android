@@ -3,8 +3,9 @@ package im.vector.matrix.android.internal.session.sync.job
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.TaskExecutor
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
-import im.vector.matrix.android.internal.session.sync.SyncRequest
+import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
@@ -13,10 +14,11 @@ import java.util.concurrent.CountDownLatch
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
 
-internal class SyncThread(private val syncRequest: SyncRequest,
+internal class SyncThread(private val syncTask: SyncTask,
                           private val networkConnectivityChecker: NetworkConnectivityChecker,
                           private val syncTokenStore: SyncTokenStore,
-                          private val backgroundDetectionObserver: BackgroundDetectionObserver
+                          private val backgroundDetectionObserver: BackgroundDetectionObserver,
+                          private val taskExecutor: TaskExecutor
 ) : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     enum class State {
@@ -30,7 +32,7 @@ internal class SyncThread(private val syncRequest: SyncRequest,
     private var state: State = State.IDLE
     private val lock = Object()
     private var nextBatch = syncTokenStore.getLastToken()
-    private var cancelableRequest: Cancelable? = null
+    private var cancelableTask: Cancelable? = null
 
     fun restart() {
         synchronized(lock) {
@@ -57,7 +59,7 @@ internal class SyncThread(private val syncRequest: SyncRequest,
         synchronized(lock) {
             Timber.v("Kill sync...")
             state = State.KILLING
-            cancelableRequest?.cancel()
+            cancelableTask?.cancel()
             lock.notify()
         }
     }
@@ -77,7 +79,8 @@ internal class SyncThread(private val syncRequest: SyncRequest,
             } else {
                 Timber.v("Execute sync request...")
                 val latch = CountDownLatch(1)
-                cancelableRequest = syncRequest.execute(nextBatch, object : MatrixCallback<SyncResponse> {
+                val params = SyncTask.Params(nextBatch)
+                cancelableTask = taskExecutor.executeTask(syncTask, params, object : MatrixCallback<SyncResponse> {
                     override fun onSuccess(data: SyncResponse) {
                         nextBatch = data.nextBatch
                         syncTokenStore.saveToken(nextBatch)

@@ -36,7 +36,7 @@ internal class SyncModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncRequest(get(), get(), get())
+            DefaultSyncTask(get(), get()) as SyncTask
         }
 
         scope(DefaultSession.SCOPE) {
@@ -44,7 +44,7 @@ internal class SyncModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncThread(get(), get(), get(), get())
+            SyncThread(get(), get(), get(), get(), get())
         }
 
     }
