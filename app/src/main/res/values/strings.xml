@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Riot Redesign</string>
+    <string name="app_name">Riot X</string>
 
     <string name="global_retry">Réessayer</string>
     <string name="error_no_network">Pas de connexion internet</string>
