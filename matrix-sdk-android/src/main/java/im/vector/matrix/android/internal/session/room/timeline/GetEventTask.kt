@@ -2,7 +2,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import arrow.core.Try
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.internal.Task
+import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 

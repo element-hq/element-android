@@ -4,11 +4,11 @@ import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInterceptor
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.TimelineHolder
-import im.vector.matrix.android.internal.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -78,7 +78,7 @@ internal class DefaultTimelineHolder(private val roomId: String,
     private fun fetchEventIfNeeded(eventId: String) {
         if (!isEventPersisted(eventId)) {
             val params = GetContextOfEventTask.Params(roomId, eventId)
-            taskExecutor.executeTask(contextOfEventTask, params, object : MatrixCallback<TokenChunkEvent> {})
+            contextOfEventTask.configureWith(params).executeBy(taskExecutor)
         }
     }
 

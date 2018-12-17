@@ -3,7 +3,7 @@ package im.vector.matrix.android.internal.session.room.members
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.internal.Task
+import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where

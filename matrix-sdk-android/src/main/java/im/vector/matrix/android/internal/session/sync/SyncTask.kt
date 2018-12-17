@@ -1,7 +1,7 @@
 package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
-import im.vector.matrix.android.internal.Task
+import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterBody
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse

@@ -6,7 +6,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.LiveDataTestObserver
 import im.vector.matrix.android.api.thread.MainThreadExecutor
-import im.vector.matrix.android.internal.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor

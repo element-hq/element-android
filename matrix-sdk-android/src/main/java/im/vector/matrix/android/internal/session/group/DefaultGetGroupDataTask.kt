@@ -5,7 +5,7 @@ import arrow.core.fix
 import arrow.instances.`try`.monad.monad
 import arrow.typeclasses.binding
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.Task
+import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest

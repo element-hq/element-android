@@ -3,7 +3,9 @@ package im.vector.matrix.android.internal.session.sync.job
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
@@ -80,21 +82,27 @@ internal class SyncThread(private val syncTask: SyncTask,
                 Timber.v("Execute sync request...")
                 val latch = CountDownLatch(1)
                 val params = SyncTask.Params(nextBatch)
-                cancelableTask = taskExecutor.executeTask(syncTask, params, object : MatrixCallback<SyncResponse> {
-                    override fun onSuccess(data: SyncResponse) {
-                        nextBatch = data.nextBatch
-                        syncTokenStore.saveToken(nextBatch)
-                        latch.countDown()
-                    }
+                cancelableTask = syncTask.configureWith(params)
+                        .callbackOn(TaskThread.CALLER)
+                        .executeOn(TaskThread.CALLER)
+                        .dispatchTo(object : MatrixCallback<SyncResponse> {
+                            override fun onSuccess(data: SyncResponse) {
+                                nextBatch = data.nextBatch
+                                syncTokenStore.saveToken(nextBatch)
+                                latch.countDown()
+                            }
 
-                    override fun onFailure(failure: Throwable) {
-                        if (failure !is Failure.NetworkConnection) {
-                            // Wait 10s before retrying
-                            sleep(RETRY_WAIT_TIME_MS)
-                        }
-                        latch.countDown()
-                    }
-                })
+                            override fun onFailure(failure: Throwable) {
+                                if (failure !is Failure.NetworkConnection) {
+                                    // Wait 10s before retrying
+                                    sleep(RETRY_WAIT_TIME_MS)
+                                }
+                                latch.countDown()
+                            }
+
+                        })
+                        .executeBy(taskExecutor)
+
                 latch.await()
             }
         }

@@ -4,7 +4,8 @@ import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
-import im.vector.matrix.android.internal.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.util.PagingRequestHelper
@@ -51,17 +52,17 @@ internal class TimelineBoundaryCallback(private val roomId: String,
                                            direction = direction,
                                            limit = limit)
 
-        taskExecutor.executeTask(paginationTask, params, createCallback(requestCallback))
+        paginationTask.configureWith(params)
+                .dispatchTo(object : MatrixCallback<TokenChunkEvent> {
+                    override fun onSuccess(data: TokenChunkEvent) {
+                        requestCallback.recordSuccess()
+                    }
+
+                    override fun onFailure(failure: Throwable) {
+                        requestCallback.recordFailure(failure)
+                    }
+                })
+                .executeBy(taskExecutor)
     }
 
-
-    private fun createCallback(pagingRequestCallback: PagingRequestHelper.Request.Callback) = object : MatrixCallback<TokenChunkEvent> {
-        override fun onSuccess(data: TokenChunkEvent) {
-            pagingRequestCallback.recordSuccess()
-        }
-
-        override fun onFailure(failure: Throwable) {
-            pagingRequestCallback.recordFailure(failure)
-        }
-    }
 }
