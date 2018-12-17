@@ -18,16 +18,15 @@ internal class MessageEventInterceptor(private val monarchy: Monarchy,
 
     override fun enrich(event: EnrichedEvent) {
         monarchy.doWithRealm { realm ->
-
             if (event.root.eventId == null) {
                 return@doWithRealm
             }
-
             val rootEntity = EventEntity.where(realm, eventId = event.root.eventId).findFirst()
-                    ?: return@doWithRealm
+                             ?: return@doWithRealm
+            event.enrichWith(EnrichedEvent.LOCAL_ID, rootEntity.localId)
 
             val roomMember = RoomMemberExtractor(realm, roomId).extractFrom(rootEntity)
-            event.enrichWith(EventType.STATE_ROOM_MEMBER, roomMember)
+            event.enrichWith(EnrichedEvent.ROOM_MEMBER, roomMember)
         }
     }
 

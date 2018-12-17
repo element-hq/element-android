@@ -20,12 +20,18 @@ data class EnrichedEvent(val root: Event) {
     }
 
     companion object {
+        const val ROOM_MEMBER = "ROOM_MEMBER"
         const val IS_LAST_EVENT = "IS_LAST_EVENT"
         const val READ_RECEIPTS = "READ_RECEIPTS"
+        const val LOCAL_ID = "LOCAL_ID"
     }
 
 }
 
 fun EnrichedEvent.roomMember(): RoomMember? {
-    return getMetadata<RoomMember>(EventType.STATE_ROOM_MEMBER)
+    return getMetadata<RoomMember>(EnrichedEvent.ROOM_MEMBER)
+}
+
+fun EnrichedEvent.localId(): String? {
+    return getMetadata<String>(EnrichedEvent.LOCAL_ID)
 }
