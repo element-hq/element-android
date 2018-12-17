@@ -3,13 +3,11 @@ package im.vector.matrix.android.internal.session.events.prune
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import arrow.core.Option
 import com.squareup.moshi.JsonClass
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.mapper.asEntity
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
@@ -33,7 +31,7 @@ internal class PruneEventWorker(context: Context,
 
     override fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.failure()
+                     ?: return Result.failure()
 
         val result = monarchy.tryTransactionAsync { realm ->
             params.updateIndexes.forEach { index ->
@@ -48,39 +46,36 @@ internal class PruneEventWorker(context: Context,
         if (redactionEvent == null || redactionEvent.redacts.isNullOrEmpty()) {
             return
         }
-        val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()?.asDomain()
-                ?: return
+        val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
+                           ?: return
 
         val allowedKeys = computeAllowedKeys(eventToPrune.type)
-        val prunedContent = allowedKeys.fold(
-                { eventToPrune.content },
-                { eventToPrune.content?.filterKeys { key -> it.contains(key) } }
-        )
-        val eventToPruneEntity = eventToPrune.copy(content = prunedContent).asEntity()
-        realm.insertOrUpdate(eventToPruneEntity)
+        if (allowedKeys.isNotEmpty()) {
+            val prunedContent = ContentMapper.map(eventToPrune.content)?.filterKeys { key -> allowedKeys.contains(key) }
+            eventToPrune.content = ContentMapper.map(prunedContent)
+        }
     }
 
-    private fun computeAllowedKeys(type: String): Option<List<String>> {
+    private fun computeAllowedKeys(type: String): List<String> {
         // Add filtered content, allowed keys in content depends on the event type
-        val result = when (type) {
-            EventType.STATE_ROOM_MEMBER -> listOf("membership")
-            EventType.STATE_ROOM_CREATE -> listOf("creator")
-            EventType.STATE_ROOM_JOIN_RULES -> listOf("join_rule")
+        return when (type) {
+            EventType.STATE_ROOM_MEMBER       -> listOf("membership")
+            EventType.STATE_ROOM_CREATE       -> listOf("creator")
+            EventType.STATE_ROOM_JOIN_RULES   -> listOf("join_rule")
             EventType.STATE_ROOM_POWER_LEVELS -> listOf("users",
-                    "users_default",
-                    "events",
-                    "events_default",
-                    "state_default",
-                    "ban",
-                    "kick",
-                    "redact",
-                    "invite")
-            EventType.STATE_ROOM_ALIASES -> listOf("aliases")
-            EventType.STATE_CANONICAL_ALIAS -> listOf("alias")
-            EventType.FEEDBACK -> listOf("type", "target_event_id")
-            else -> null
+                                                        "users_default",
+                                                        "events",
+                                                        "events_default",
+                                                        "state_default",
+                                                        "ban",
+                                                        "kick",
+                                                        "redact",
+                                                        "invite")
+            EventType.STATE_ROOM_ALIASES      -> listOf("aliases")
+            EventType.STATE_CANONICAL_ALIAS   -> listOf("alias")
+            EventType.FEEDBACK                -> listOf("type", "target_event_id")
+            else                              -> emptyList()
         }
-        return Option.fromNullable(result)
     }
 
 }

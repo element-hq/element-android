@@ -3,17 +3,23 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.di.MoshiProvider
 
 
 internal object EventMapper {
 
-    private val moshi = MoshiProvider.providesMoshi()
-    private val adapter = moshi.adapter<Map<String, Any>>(Event.CONTENT_TYPE)
 
     fun map(event: Event): EventEntity {
         val eventEntity = EventEntity()
-        fill(eventEntity, with = event)
+        eventEntity.eventId = event.eventId ?: ""
+        eventEntity.content = ContentMapper.map(event.content)
+        val resolvedPrevContent = event.prevContent ?: event.unsignedData?.prevContent
+        eventEntity.prevContent = ContentMapper.map(resolvedPrevContent)
+        eventEntity.stateKey = event.stateKey
+        eventEntity.type = event.type
+        eventEntity.sender = event.sender
+        eventEntity.originServerTs = event.originServerTs
+        eventEntity.redacts = event.redacts
+        eventEntity.age = event.unsignedData?.age ?: event.originServerTs
         return eventEntity
     }
 
@@ -21,8 +27,8 @@ internal object EventMapper {
         return Event(
                 type = eventEntity.type,
                 eventId = eventEntity.eventId,
-                content = adapter.fromJson(eventEntity.content),
-                prevContent = adapter.fromJson(eventEntity.prevContent ?: ""),
+                content = ContentMapper.map(eventEntity.content),
+                prevContent = ContentMapper.map(eventEntity.prevContent),
                 originServerTs = eventEntity.originServerTs,
                 sender = eventEntity.sender,
                 stateKey = eventEntity.stateKey,
@@ -32,18 +38,6 @@ internal object EventMapper {
         )
     }
 
-    fun fill(eventEntity: EventEntity, with: Event) {
-        eventEntity.eventId = with.eventId ?: ""
-        eventEntity.content = adapter.toJson(with.content)
-        val resolvedPrevContent = with.prevContent ?: with.unsignedData?.prevContent
-        eventEntity.prevContent = adapter.toJson(resolvedPrevContent)
-        eventEntity.stateKey = with.stateKey
-        eventEntity.type = with.type
-        eventEntity.sender = with.sender
-        eventEntity.originServerTs = with.originServerTs
-        eventEntity.redacts = with.redacts
-        eventEntity.age = with.unsignedData?.age ?: with.originServerTs
-    }
 
 }
 
@@ -53,8 +47,4 @@ internal fun EventEntity.asDomain(): Event {
 
 internal fun Event.asEntity(): EventEntity {
     return EventMapper.map(this)
-}
-
-internal fun EventEntity.fillWith(event: Event) {
-    EventMapper.fill(this, with = event)
 }
