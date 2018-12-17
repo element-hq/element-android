@@ -5,5 +5,9 @@
 
     </style>
 
+    <style name="Theme.Riot.Splash">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+    </style>
+
 
 </resources>

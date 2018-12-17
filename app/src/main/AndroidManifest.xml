@@ -13,14 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Riot">
-        <activity android:name=".features.login.LoginActivity">
+
+        <activity
+            android:name=".features.MainActivity"
+            android:theme="@style/Theme.Riot.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".features.home.HomeActivity" />
+        <activity android:name=".features.login.LoginActivity" />
     </application>
 
 </manifest>

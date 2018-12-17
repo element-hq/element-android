@@ -1,5 +1,7 @@
 package im.vector.riotredesign.features.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -21,7 +23,6 @@ class LoginActivity : RiotActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        checkActiveSessions()
         authenticateButton.setOnClickListener { authenticate() }
     }
 
@@ -49,16 +50,18 @@ class LoginActivity : RiotActivity() {
         })
     }
 
-    private fun checkActiveSessions() {
-        if (authenticator.hasActiveSessions()) {
-            goToHome()
-        }
-    }
 
     private fun goToHome() {
         val intent = HomeActivity.newIntent(this)
         startActivity(intent)
         finish()
+    }
+
+    companion object {
+        fun newIntent(context: Context): Intent {
+            return Intent(context, LoginActivity::class.java)
+        }
+
     }
 
 }
