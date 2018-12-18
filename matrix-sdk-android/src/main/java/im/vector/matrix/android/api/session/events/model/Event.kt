@@ -25,7 +25,7 @@ data class Event(
         @Json(name = "origin_server_ts") val originServerTs: Long? = null,
         @Json(name = "sender") val sender: String? = null,
         @Json(name = "state_key") val stateKey: String? = null,
-        @Json(name = "room_id") var roomId: String? = null,
+        @Json(name = "room_id") val roomId: String? = null,
         @Json(name = "unsigned") val unsignedData: UnsignedData? = null,
         @Json(name = "redacts") val redacts: String? = null
 
