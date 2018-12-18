@@ -19,13 +19,14 @@ package im.vector.matrix.android.internal.session.room.members
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -57,19 +58,19 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
         var name: CharSequence? = null
         monarchy.doWithRealm { realm ->
             val roomName = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_NAME).last()?.asDomain()
-            name = roomName?.content<RoomNameContent>()?.name
+            name = roomName?.content.toModel<RoomNameContent>()?.name
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
             val canonicalAlias = EventEntity.where(realm, room.roomId, EventType.STATE_CANONICAL_ALIAS).last()?.asDomain()
-            name = canonicalAlias?.content<RoomCanonicalAliasContent>()?.canonicalAlias
+            name = canonicalAlias?.content.toModel<RoomCanonicalAliasContent>()?.canonicalAlias
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
             val aliases = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_ALIASES).last()?.asDomain()
-            name = aliases?.content<RoomAliasesContent>()?.aliases?.firstOrNull()
+            name = aliases?.content.toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }

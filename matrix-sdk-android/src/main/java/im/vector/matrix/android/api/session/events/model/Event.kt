@@ -8,6 +8,14 @@ import java.lang.reflect.ParameterizedType
 
 typealias Content = Map<String, @JvmSuppressWildcards Any>
 
+inline fun <reified T> Content?.toModel(): T? {
+    return this?.let {
+        val moshi = MoshiProvider.providesMoshi()
+        val moshiAdapter = moshi.adapter(T::class.java)
+        return moshiAdapter.fromJsonValue(it)
+    }
+}
+
 @JsonClass(generateAdapter = true)
 data class Event(
         @Json(name = "type") val type: String,
@@ -25,28 +33,6 @@ data class Event(
 
     fun isStateEvent(): Boolean {
         return EventType.isStateEvent(type)
-    }
-
-    inline fun <reified T> content(): T? {
-        return toModel(content)
-    }
-
-    inline fun <reified T> prevContent(): T? {
-        return toModel(prevContent)
-    }
-
-    inline fun <reified T> toModel(data: Content?): T? {
-        val moshi = MoshiProvider.providesMoshi()
-        val moshiAdapter = moshi.adapter(T::class.java)
-        return moshiAdapter.fromJsonValue(data)
-    }
-
-    internal inline fun <reified T> pickContent(stateIndex: Int): T? {
-        return if (stateIndex < 0) {
-            prevContent<T>()
-        } else {
-            content<T>()
-        }
     }
 
     companion object {

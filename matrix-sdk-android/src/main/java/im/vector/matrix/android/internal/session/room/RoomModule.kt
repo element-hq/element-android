@@ -7,10 +7,11 @@ import im.vector.matrix.android.api.session.room.send.EventFactory
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
-import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
 import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
@@ -54,7 +55,8 @@ class RoomModule {
         factory { (roomId: String) ->
             val helper = PagingRequestHelper(Executors.newSingleThreadExecutor())
             val timelineBoundaryCallback = TimelineBoundaryCallback(roomId, get(), get(), get(), helper)
-            DefaultTimelineHolder(roomId, get(), get() , timelineBoundaryCallback, get()) as TimelineHolder
+            val roomMemberExtractor = RoomMemberExtractor(get(), roomId)
+            DefaultTimelineHolder(roomId, get(), get(), timelineBoundaryCallback, get(), roomMemberExtractor) as TimelineHolder
         }
 
         factory { (roomId: String) ->

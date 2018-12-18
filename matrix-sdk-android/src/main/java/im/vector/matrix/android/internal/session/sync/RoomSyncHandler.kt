@@ -3,6 +3,7 @@ package im.vector.matrix.android.internal.session.sync
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
@@ -166,7 +167,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                 ephemeral: RoomSyncEphemeral) {
         ephemeral.events
                 .filter { it.type == EventType.RECEIPT }
-                .map { it.content<ReadReceiptContent>() }
+                .map { it.content.toModel<ReadReceiptContent>() }
                 .flatMap { readReceiptHandler.handle(realm, roomId, it) }
     }
 }

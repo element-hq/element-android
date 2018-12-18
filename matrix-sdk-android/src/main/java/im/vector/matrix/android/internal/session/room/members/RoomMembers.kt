@@ -1,6 +1,7 @@
 package im.vector.matrix.android.internal.session.room.members
 
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -25,7 +26,7 @@ internal class RoomMembers(private val realm: Realm,
                 .findAll()
                 .map { it.asDomain() }
                 .associateBy { it.stateKey!! }
-                .mapValues { it.value.content<RoomMember>()!! }
+                .mapValues { it.value.content.toModel<RoomMember>()!! }
     }
 
 

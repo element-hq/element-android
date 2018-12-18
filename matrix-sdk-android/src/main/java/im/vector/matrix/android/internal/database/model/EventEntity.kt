@@ -9,7 +9,7 @@ import java.util.*
 internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUID().toString(),
                                 var eventId: String = "",
                                 var type: String = "",
-                                var content: String = "",
+                                var content: String? = null,
                                 var prevContent: String? = null,
                                 var stateKey: String? = null,
                                 var originServerTs: Long? = null,

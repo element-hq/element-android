@@ -1,11 +1,12 @@
 package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.last
@@ -24,7 +25,7 @@ internal class RoomAvatarResolver(private val monarchy: Monarchy,
         var res: String? = null
         monarchy.doWithRealm { realm ->
             val roomName = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_AVATAR).last()?.asDomain()
-            res = roomName?.content<RoomAvatarContent>()?.avatarUrl
+            res = roomName?.content.toModel<RoomAvatarContent>()?.avatarUrl
             if (!res.isNullOrEmpty()) {
                 return@doWithRealm
             }

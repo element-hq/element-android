@@ -7,14 +7,14 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInterceptor
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.TimelineHolder
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.events.interceptor.MessageEventInterceptor
+import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import io.realm.RealmQuery
@@ -25,14 +25,11 @@ internal class DefaultTimelineHolder(private val roomId: String,
                                      private val monarchy: Monarchy,
                                      private val taskExecutor: TaskExecutor,
                                      private val boundaryCallback: TimelineBoundaryCallback,
-                                     private val contextOfEventTask: GetContextOfEventTask
+                                     private val contextOfEventTask: GetContextOfEventTask,
+                                     private val roomMemberExtractor: RoomMemberExtractor
 ) : TimelineHolder {
 
     private val eventInterceptors = ArrayList<EnrichedEventInterceptor>()
-
-    init {
-        eventInterceptors.add(MessageEventInterceptor(monarchy, roomId))
-    }
 
     override fun timeline(eventId: String?): LiveData<PagedList<EnrichedEvent>> {
         clearUnlinkedEvents()
@@ -43,17 +40,9 @@ internal class DefaultTimelineHolder(private val roomId: String,
             buildDataSourceFactoryQuery(it, eventId)
         }
         val domainSourceFactory = realmDataSourceFactory
-                .map { it.asDomain() }
-                .map { event ->
-
-                    val enrichedEvent = EnrichedEvent(event)
-                    eventInterceptors
-                            .filter {
-                                it.canEnrich(enrichedEvent)
-                            }.forEach {
-                                it.enrich(enrichedEvent)
-                            }
-                    enrichedEvent
+                .map { eventEntity ->
+                    val roomMember = roomMemberExtractor.extractFrom(eventEntity)
+                    EnrichedEvent(eventEntity.asDomain(), eventEntity.localId, roomMember)
                 }
 
         val pagedListConfig = PagedList.Config.Builder()

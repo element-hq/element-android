@@ -10,11 +10,15 @@ internal object ContentMapper {
     private val adapter = moshi.adapter<Content>(Event.CONTENT_TYPE)
 
     fun map(content: String?): Content? {
-        return adapter.fromJson(content ?: "")
+        return content?.let {
+            adapter.fromJson(it)
+        }
     }
 
-    fun map(content: Content?): String {
-        return adapter.toJson(content)
+    fun map(content: Content?): String? {
+        return content?.let {
+            adapter.toJson(it)
+        }
     }
 
 }

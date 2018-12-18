@@ -5,7 +5,6 @@ import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.localId
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
 
@@ -67,7 +66,7 @@ class TimelineEventController(private val roomId: String,
             }
             item
                     ?.onBind { timeline?.loadAround(index) }
-                    ?.id(event.localId())
+                    ?.id(event.localId)
                     ?.addTo(this)
 
             if (addDaySeparator) {

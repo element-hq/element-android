@@ -2,10 +2,11 @@ package im.vector.matrix.android.internal.session.room
 
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -43,7 +44,7 @@ internal class RoomSummaryUpdater(monarchy: Monarchy,
             return
         }
         val roomSummary = RoomSummaryEntity.where(realm, room.roomId).findFirst()
-                ?: realm.createObject(room.roomId)
+                          ?: realm.createObject(room.roomId)
 
         val lastMessageEvent = EventEntity.where(realm, room.roomId, EventType.MESSAGE).last()
         val lastTopicEvent = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()
@@ -52,7 +53,7 @@ internal class RoomSummaryUpdater(monarchy: Monarchy,
 
         roomSummary.displayName = roomDisplayNameResolver.resolve(context, room).toString()
         roomSummary.avatarUrl = roomAvatarResolver.resolve(room)
-        roomSummary.topic = lastTopicEvent?.content<RoomTopicContent>()?.topic
+        roomSummary.topic = lastTopicEvent?.content.toModel<RoomTopicContent>()?.topic
         roomSummary.lastMessage = lastMessageEvent
         roomSummary.otherMemberIds.clear()
         roomSummary.otherMemberIds.addAll(otherRoomMembers.keys)
