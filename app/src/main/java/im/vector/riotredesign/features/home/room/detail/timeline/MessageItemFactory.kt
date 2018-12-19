@@ -9,7 +9,13 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
 
     private val messagesDisplayedWithInformation = HashSet<String?>()
 
-    fun create(event: EnrichedEvent, nextEvent: EnrichedEvent?, addDaySeparator: Boolean, date: LocalDateTime): MessageItem? {
+    fun create(event: EnrichedEvent,
+               nextEvent: EnrichedEvent?,
+               addDaySeparator: Boolean,
+               date: LocalDateTime,
+               callback: TimelineEventController.Callback?
+    ): MessageItem? {
+
         val messageContent: MessageContent? = event.root.content.toModel()
         val roomMember = event.roomMember
         if (messageContent == null || roomMember == null) {
@@ -20,13 +26,13 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
             messagesDisplayedWithInformation.add(event.root.eventId)
         }
         val showInformation = messagesDisplayedWithInformation.contains(event.root.eventId)
-
         return MessageItem(
                 message = messageContent.body,
                 avatarUrl = roomMember.avatarUrl,
                 showInformation = showInformation,
                 time = timelineDateFormatter.formatMessageHour(date),
-                memberName = roomMember.displayName ?: event.root.sender
+                memberName = roomMember.displayName ?: event.root.sender,
+                onUrlClickedListener = { callback?.onUrlClicked(it) }
         )
     }
 

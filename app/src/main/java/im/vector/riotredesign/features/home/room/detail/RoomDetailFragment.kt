@@ -23,8 +23,9 @@ import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventCo
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
-class RoomDetailFragment : RiotFragment() {
+class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     companion object {
 
@@ -80,6 +81,7 @@ class RoomDetailFragment : RiotFragment() {
         recyclerView.layoutManager = layoutManager
         timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
         recyclerView.setController(timelineEventController)
+        timelineEventController.callback = this
     }
 
     private fun renderRoomSummary(roomSummary: RoomSummary?) {
@@ -98,6 +100,12 @@ class RoomDetailFragment : RiotFragment() {
     private fun renderEvents(events: PagedList<EnrichedEvent>?) {
         scrollOnNewMessageCallback.hasBeenUpdated.set(true)
         timelineEventController.timeline = events
+    }
+
+    // TimelineEventController.Callback ************************************************************
+
+    override fun onUrlClicked(url: String) {
+        Timber.v("Url clicked: $url")
     }
 
 }

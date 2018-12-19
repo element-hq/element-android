@@ -44,6 +44,8 @@ class TimelineEventController(private val roomId: String,
             buildSnapshotList()
         }
 
+    var callback: Callback? = null
+
     override fun buildModels() {
         buildModels(snapshotList)
     }
@@ -61,8 +63,8 @@ class TimelineEventController(private val roomId: String,
             val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
             val item = when (event.root.type) {
-                EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date)
-                else              -> textItemFactory.create(event)
+                EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date, callback)
+                else -> textItemFactory.create(event)
             }
             item
                     ?.onBind { timeline?.loadAround(index) }
@@ -85,6 +87,10 @@ class TimelineEventController(private val roomId: String,
     private fun buildSnapshotList() {
         snapshotList = timeline?.snapshot() ?: emptyList()
         requestModelBuild()
+    }
+
+    interface Callback {
+        fun onUrlClicked(url: String)
     }
 
 }
