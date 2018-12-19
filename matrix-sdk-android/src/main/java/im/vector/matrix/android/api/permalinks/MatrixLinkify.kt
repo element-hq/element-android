@@ -5,14 +5,14 @@ import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.widget.TextView
 
-object MatrixUrlLinkify {
+object MatrixLinkify {
 
     /**
      * Find the matrix spans i.e matrix id , user id ... to display them as URL.
      *
      * @param spannable the text in which the matrix items has to be clickable.
      */
-    fun addLinks(spannable: Spannable?, callback: MatrixURLSpan.Callback?): Boolean {
+    fun addLinks(spannable: Spannable?, callback: MatrixPermalinkSpan.Callback?): Boolean {
         // sanity checks
         if (spannable.isNullOrEmpty()) {
             return false
@@ -28,7 +28,7 @@ object MatrixUrlLinkify {
                 if (startPos == 0 || text[startPos - 1] != '/') {
                     val endPos = matcher.end(0)
                     val url = text.substring(matcher.start(0), matcher.end(0))
-                    val span = MatrixURLSpan(url, callback)
+                    val span = MatrixPermalinkSpan(url, callback)
                     spannable.setSpan(span, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
@@ -36,7 +36,7 @@ object MatrixUrlLinkify {
         return hasMatch
     }
 
-    fun addLinks(textView: TextView, callback: MatrixURLSpan.Callback?): Boolean {
+    fun addLinks(textView: TextView, callback: MatrixPermalinkSpan.Callback?): Boolean {
         val text = textView.text
         if (text is Spannable) {
             if (addLinks(text, callback)) {

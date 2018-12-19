@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.permalinks.PermalinkParser
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
@@ -105,7 +106,8 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String) {
-        Timber.v("Url clicked: $url")
+        val permalinkData = PermalinkParser.parse(url)
+        Timber.v("Permalink data : $permalinkData")
     }
 
 }

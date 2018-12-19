@@ -3,8 +3,8 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import im.vector.matrix.android.api.permalinks.MatrixURLSpan
-import im.vector.matrix.android.api.permalinks.MatrixUrlLinkify
+import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
+import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
 import im.vector.riotredesign.features.home.AvatarRenderer
@@ -25,7 +25,7 @@ data class MessageItem(
 
     override fun bind() {
         messageView.text = message
-        MatrixUrlLinkify.addLinks(messageView, object : MatrixURLSpan.Callback {
+        MatrixLinkify.addLinks(messageView, object : MatrixPermalinkSpan.Callback {
             override fun onUrlClicked(url: String) {
                 onUrlClickedListener?.invoke(url)
             }

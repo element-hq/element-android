@@ -6,7 +6,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 /**
  * Useful methods to deals with Matrix permalink
  */
-object PermalinkUtils {
+object PermalinkFactory {
 
     private val MATRIX_TO_URL_BASE = "https://matrix.to/#/"
 
