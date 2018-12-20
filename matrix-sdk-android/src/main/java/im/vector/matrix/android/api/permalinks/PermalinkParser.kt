@@ -1,10 +1,9 @@
 package im.vector.matrix.android.api.permalinks
 
 import android.net.Uri
+import im.vector.matrix.android.api.MatrixPatterns
 
 object PermalinkParser {
-
-    private const val MATRIX_NAVIGATE_TO_HOST = "matrix.to"
 
     fun parse(uriString: String): PermalinkData {
         val uri = Uri.parse(uriString)
@@ -12,14 +11,8 @@ object PermalinkParser {
     }
 
     fun parse(uri: Uri): PermalinkData {
-        val host = uri.host
-        val path = uri.path
         val fragment = uri.fragment
-
-        if (path.isNullOrEmpty()
-                || host.isNullOrEmpty()
-                || fragment.isNullOrEmpty()
-                || host != MATRIX_NAVIGATE_TO_HOST) {
+        if (fragment.isNullOrEmpty()) {
             return PermalinkData.FallbackLink(uri)
         }
         // we are limiting to 2 params

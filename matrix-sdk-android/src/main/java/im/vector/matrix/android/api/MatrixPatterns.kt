@@ -1,4 +1,4 @@
-package im.vector.matrix.android.api.permalinks
+package im.vector.matrix.android.api
 
 import java.util.*
 import java.util.regex.Pattern
@@ -36,7 +36,7 @@ object MatrixPatterns {
     // Android does not support in URL so extract it.
     private val PERMALINK_BASE_REGEX = "https://matrix\\.to/#/"
     private val APP_BASE_REGEX = "https://[A-Z0-9.-]+\\.[A-Z]{2,}/[A-Z]{3,}/#/room/"
-    private val SEP_REGEX = "/"
+    val SEP_REGEX = "/"
 
     private val LINK_TO_ROOM_ID_REGEXP = PERMALINK_BASE_REGEX + MATRIX_ROOM_IDENTIFIER_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
     val PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ID = Pattern.compile(LINK_TO_ROOM_ID_REGEXP, Pattern.CASE_INSENSITIVE)
@@ -52,15 +52,15 @@ object MatrixPatterns {
 
     // list of patterns to find some matrix item.
     val MATRIX_PATTERNS = Arrays.asList(
-            MatrixPatterns.PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ID,
-            MatrixPatterns.PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ALIAS,
-            MatrixPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID,
-            MatrixPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ALIAS,
-            MatrixPatterns.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER,
-            MatrixPatterns.PATTERN_CONTAIN_MATRIX_ALIAS,
-            MatrixPatterns.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER,
-            MatrixPatterns.PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER,
-            MatrixPatterns.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
+            PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ID,
+            PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ALIAS,
+            PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID,
+            PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ALIAS,
+            PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER,
+            PATTERN_CONTAIN_MATRIX_ALIAS,
+            PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER,
+            PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER,
+            PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
     )
 
     /**

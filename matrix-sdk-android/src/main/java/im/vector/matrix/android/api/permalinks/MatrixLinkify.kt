@@ -4,6 +4,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.widget.TextView
+import im.vector.matrix.android.api.MatrixPatterns
 
 object MatrixLinkify {
 
