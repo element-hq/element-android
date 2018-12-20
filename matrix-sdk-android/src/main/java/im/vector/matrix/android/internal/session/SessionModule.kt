@@ -6,7 +6,7 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
-import im.vector.matrix.android.internal.session.events.prune.EventsPruner
+import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.DefaultRoomService

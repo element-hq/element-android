@@ -1,4 +1,4 @@
-package im.vector.matrix.android.internal.session.events.prune
+package im.vector.matrix.android.internal.session.room.prune
 
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder

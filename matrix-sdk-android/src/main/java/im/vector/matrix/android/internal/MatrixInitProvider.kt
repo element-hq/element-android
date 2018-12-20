@@ -6,7 +6,7 @@ import android.database.Cursor
 import android.net.Uri
 import im.vector.matrix.android.api.Matrix
 
-class MatrixInitProvider : ContentProvider() {
+internal class MatrixInitProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
         Matrix.initialize(context!!)
