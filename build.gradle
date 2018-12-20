@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.3.0'
-    ext.koin_version = '1.0.1'
+    ext.koin_version = '1.0.2'
     repositories {
         google()
         jcenter()

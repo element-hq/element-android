@@ -8,15 +8,15 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import im.vector.matrix.android.internal.util.tryTransactionSync
-import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
 internal class SendEventWorker(context: Context, params: WorkerParameters)
-    : Worker(context, params), KoinComponent {
+    : Worker(context, params), MatrixKoinComponent {
 
 
     @JsonClass(generateAdapter = true)
@@ -31,7 +31,7 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.failure()
+                     ?: return Result.failure()
 
         if (params.event.eventId == null) {
             return Result.failure()

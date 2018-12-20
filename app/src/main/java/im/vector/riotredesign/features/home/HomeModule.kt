@@ -4,17 +4,11 @@ import im.vector.riotredesign.features.home.room.detail.timeline.MessageItemFact
 import im.vector.riotredesign.features.home.room.detail.timeline.TextItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
-import org.koin.dsl.context.ModuleDefinition
-import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 
-class HomeModule(private val homeActivity: HomeActivity) : Module {
+class HomeModule(private val homeActivity: HomeActivity) {
 
-    override fun invoke(): ModuleDefinition = module(override = true) {
-
-        factory {
-            homeActivity as HomeNavigator
-        }
+    val definition = module(override = true) {
 
         single {
             TimelineDateFormatter(get())
@@ -28,9 +22,13 @@ class HomeModule(private val homeActivity: HomeActivity) : Module {
             TextItemFactory()
         }
 
+        factory {
+            homeActivity as HomeNavigator
+        }
+
         factory { (roomId: String) ->
             TimelineEventController(roomId, get(), get(), get())
         }
 
-    }.invoke()
+    }
 }

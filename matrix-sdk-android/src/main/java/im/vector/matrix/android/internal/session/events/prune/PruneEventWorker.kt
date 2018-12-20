@@ -10,15 +10,15 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import io.realm.Realm
-import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
 internal class PruneEventWorker(context: Context,
                                 workerParameters: WorkerParameters
-) : Worker(context, workerParameters), KoinComponent {
+) : Worker(context, workerParameters), MatrixKoinComponent {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

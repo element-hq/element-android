@@ -5,13 +5,13 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import arrow.core.Try
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
 internal class GetGroupDataWorker(context: Context,
                                   workerParameters: WorkerParameters
-) : Worker(context, workerParameters), KoinComponent {
+) : Worker(context, workerParameters), MatrixKoinComponent {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

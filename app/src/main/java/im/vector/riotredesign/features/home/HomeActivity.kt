@@ -24,7 +24,7 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        loadKoinModules(listOf(HomeModule(this)))
+        loadKoinModules(listOf(HomeModule(this).definition))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         if (savedInstanceState == null) {

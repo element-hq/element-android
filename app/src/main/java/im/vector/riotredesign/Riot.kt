@@ -16,7 +16,7 @@ class Riot : Application() {
             Timber.plant(Timber.DebugTree())
         }
         AndroidThreeTen.init(this)
-        startKoin(listOf(AppModule(this)), logger = EmptyLogger())
+        startKoin(listOf(AppModule(this).definition), logger = EmptyLogger())
     }
 
 }

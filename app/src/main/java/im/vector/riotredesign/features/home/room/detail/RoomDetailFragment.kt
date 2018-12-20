@@ -38,8 +38,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         }
     }
 
-    private val matrix by inject<Matrix>()
-    private val currentSession = matrix.currentSession
+    private val currentSession = Matrix.getInstance().currentSession
     private var roomId: String by UnsafeFragmentArgumentDelegate()
     private var eventId: String? by FragmentArgumentDelegate()
     private val timelineEventController by inject<TimelineEventController> { parametersOf(roomId) }

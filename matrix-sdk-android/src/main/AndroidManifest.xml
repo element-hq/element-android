@@ -1,7 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.vector.matrix.android" >
+    package="im.vector.matrix.android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application>
+
+        <provider
+            android:name=".internal.MatrixInitProvider"
+            android:authorities="im.vector.matrix.android.MatrixInitProvider" />
+
+    </application>
+
+
 </manifest>

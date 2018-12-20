@@ -6,7 +6,6 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
-import org.koin.android.ext.android.get
 
 class HomeViewModel(initialState: HomeViewState, private val session: Session) : BaseMvRxViewModel<HomeViewState>(initialState) {
 
@@ -14,8 +13,7 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
 
         @JvmStatic
         override fun create(activity: FragmentActivity, state: HomeViewState): HomeViewModel {
-            val matrix = activity.get<Matrix>()
-            val currentSession = matrix.currentSession
+            val currentSession = Matrix.getInstance().currentSession
             return HomeViewModel(state, currentSession)
         }
     }
@@ -27,8 +25,8 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
 
     fun accept(action: HomeActions) {
         when (action) {
-            is HomeActions.SelectRoom -> handleSelectRoom(action)
-            is HomeActions.SelectGroup -> handleSelectGroup(action)
+            is HomeActions.SelectRoom    -> handleSelectRoom(action)
+            is HomeActions.SelectGroup   -> handleSelectGroup(action)
             is HomeActions.RoomDisplayed -> setState { copy(shouldOpenRoomDetail = false) }
         }
     }
@@ -64,9 +62,9 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
                     val groupRooms = summaries?.filter { !it.isDirect } ?: emptyList()
 
                     val selectedRoom = selectedRoom
-                            ?: session.lastSelectedRoom()
-                            ?: directRooms.firstOrNull()
-                            ?: groupRooms.firstOrNull()
+                                       ?: session.lastSelectedRoom()
+                                       ?: directRooms.firstOrNull()
+                                       ?: groupRooms.firstOrNull()
 
                     copy(
                             asyncRooms = async,

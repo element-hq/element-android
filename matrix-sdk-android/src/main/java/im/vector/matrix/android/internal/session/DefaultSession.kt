@@ -12,18 +12,17 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.internal.database.LiveEntityObserver
+import im.vector.matrix.android.internal.di.MatrixKoinComponent
+import im.vector.matrix.android.internal.di.MatrixKoinHolder
 import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import org.koin.core.scope.Scope
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.StandAloneContext
-import org.koin.standalone.getKoin
 import org.koin.standalone.inject
 
 
-internal class DefaultSession(override val sessionParams: SessionParams) : Session, KoinComponent, RoomService {
+internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent, RoomService {
 
     companion object {
         const val SCOPE: String = "session"
@@ -46,7 +45,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         val syncModule = SyncModule().definition
         val roomModule = RoomModule().definition
         val groupModule = GroupModule().definition
-        StandAloneContext.loadKoinModules(listOf(sessionModule, syncModule, roomModule, groupModule))
+        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         liveEntityUpdaters.forEach { it.start() }
         syncThread.start()

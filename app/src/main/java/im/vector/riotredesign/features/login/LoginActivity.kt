@@ -13,12 +13,10 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.features.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import org.koin.android.ext.android.inject
 
 class LoginActivity : RiotActivity() {
 
-    private val matrix by inject<Matrix>()
-    private val authenticator = matrix.authenticator()
+    private val authenticator = Matrix.getInstance().authenticator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +36,8 @@ class LoginActivity : RiotActivity() {
 
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session) {
-                matrix.currentSession = data
-                matrix.currentSession.open()
+                Matrix.getInstance().currentSession = data
+                Matrix.getInstance().currentSession.open()
                 goToHome()
             }
 

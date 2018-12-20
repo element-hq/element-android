@@ -10,8 +10,8 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : RiotActivity() {
 
-    private val matrix by inject<Matrix>()
-    private val authenticator = matrix.authenticator()
+    private val authenticator = Matrix.getInstance().authenticator()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -14,23 +14,23 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import org.koin.core.parameter.parametersOf
-import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
 internal data class DefaultRoom(
         override val roomId: String,
         override val myMembership: MyMembership
-) : Room, KoinComponent {
+) : Room, MatrixKoinComponent {
 
     private val loadRoomMembersTask by inject<LoadRoomMembersTask>()
     private val syncTokenStore by inject<SyncTokenStore>()

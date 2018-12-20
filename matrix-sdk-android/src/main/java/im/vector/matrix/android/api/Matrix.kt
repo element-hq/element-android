@@ -6,29 +6,27 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.auth.AuthModule
+import im.vector.matrix.android.internal.di.MatrixKoinComponent
+import im.vector.matrix.android.internal.di.MatrixKoinHolder
 import im.vector.matrix.android.internal.di.MatrixModule
 import im.vector.matrix.android.internal.di.NetworkModule
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.StandAloneContext.loadKoinModules
 import org.koin.standalone.inject
 
 
-class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
+class Matrix private constructor(context: Context) : MatrixKoinComponent {
 
     private val authenticator by inject<Authenticator>()
     private val backgroundDetectionObserver by inject<BackgroundDetectionObserver>()
-
     lateinit var currentSession: Session
 
     init {
-        Monarchy.init(matrixOptions.context)
-        val matrixModule = MatrixModule(matrixOptions).definition
+        Monarchy.init(context)
+        val matrixModule = MatrixModule(context).definition
         val networkModule = NetworkModule().definition
         val authModule = AuthModule().definition
-        loadKoinModules(listOf(matrixModule, networkModule, authModule))
+        MatrixKoinHolder.instance.loadModules(listOf(matrixModule, networkModule, authModule))
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
-
         val lastActiveSession = authenticator.getLastActiveSession()
         if (lastActiveSession != null) {
             currentSession = lastActiveSession
@@ -40,6 +38,17 @@ class Matrix(matrixOptions: MatrixOptions) : KoinComponent {
         return authenticator
     }
 
-}
+    companion object {
+        private lateinit var instance: Matrix
 
-data class MatrixOptions(val context: Context)
+        internal fun initialize(context: Context) {
+            instance = Matrix(context.applicationContext)
+        }
+
+        fun getInstance(): Matrix {
+            return instance
+        }
+
+    }
+
+}
