@@ -18,10 +18,10 @@ import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragmen
 import im.vector.riotredesign.features.home.room.detail.RoomDetailFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.standalone.StandAloneContext.loadKoinModules
+import timber.log.Timber
 
 
 class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         loadKoinModules(listOf(HomeModule(this).definition))
@@ -64,13 +64,23 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
         }
     }
 
-    override fun openRoomDetail(roomId: String) {
+    // HomeNavigator *******************************************************************************
+
+    override fun openRoomDetail(roomId: String, eventId: String?) {
         val roomDetailFragment = RoomDetailFragment.newInstance(roomId)
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             closeDrawerLayout(Gravity.LEFT) { replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer) }
         } else {
             replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
         }
+    }
+
+    override fun openGroupDetail(groupId: String) {
+        Timber.v("Open group detail $groupId")
+    }
+
+    override fun openUserDetail(userId: String) {
+        Timber.v("Open user detail $userId")
     }
 
     private fun closeDrawerLayout(gravity: Int, actionOnClose: () -> Unit) {
