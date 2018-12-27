@@ -10,7 +10,8 @@ data class HomeViewState(
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
         val directRooms: List<RoomSummary> = emptyList(),
         val groupRooms: List<RoomSummary> = emptyList(),
-        val selectedRoom: RoomSummary? = null,
+        val selectedRoomId: String? = null,
+        val selectedEventId: String? = null,
         val shouldOpenRoomDetail: Boolean = true,
         val asyncGroups: Async<List<GroupSummary>> = Uninitialized,
         val selectedGroup: GroupSummary? = null

@@ -50,8 +50,8 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
             is Success    -> renderSuccess(state)
             is Fail       -> renderFailure(state.asyncRooms.error)
         }
-        if (state.shouldOpenRoomDetail && state.selectedRoom != null) {
-            homeNavigator.openRoomDetail(state.selectedRoom.roomId, null)
+        if (state.shouldOpenRoomDetail && state.selectedRoomId != null) {
+            homeNavigator.openRoomDetail(state.selectedRoomId, null)
             viewModel.accept(HomeActions.RoomDisplayed)
         }
     }

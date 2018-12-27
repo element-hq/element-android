@@ -34,7 +34,7 @@ class RoomSummaryController(private val callback: Callback? = null
                             .isNotEmpty()
                 }
             }
-            buildRoomModels(filteredDirectRooms, viewState.selectedRoom)
+            buildRoomModels(filteredDirectRooms, viewState.selectedRoomId)
         }
 
         RoomCategoryItem(
@@ -52,14 +52,14 @@ class RoomSummaryController(private val callback: Callback? = null
             val filteredGroupRooms = viewState.groupRooms.filter {
                 viewState.selectedGroup?.roomIds?.contains(it.roomId) ?: true
             }
-            buildRoomModels(filteredGroupRooms, viewState.selectedRoom)
+            buildRoomModels(filteredGroupRooms, viewState.selectedRoomId)
         }
 
     }
 
-    private fun buildRoomModels(summaries: List<RoomSummary>, selected: RoomSummary?) {
+    private fun buildRoomModels(summaries: List<RoomSummary>, selectedRoomId: String?) {
         summaries.forEach { roomSummary ->
-            val isSelected = roomSummary.roomId == selected?.roomId
+            val isSelected = roomSummary.roomId == selectedRoomId
             RoomSummaryItem(
                     roomName = roomSummary.displayName,
                     avatarUrl = roomSummary.avatarUrl,

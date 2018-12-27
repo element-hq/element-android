@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity
 import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.MvRxViewModelFactory
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 
@@ -25,19 +26,42 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
 
     fun accept(action: HomeActions) {
         when (action) {
-            is HomeActions.SelectRoom    -> handleSelectRoom(action)
-            is HomeActions.SelectGroup   -> handleSelectGroup(action)
-            is HomeActions.RoomDisplayed -> setState { copy(shouldOpenRoomDetail = false) }
+            is HomeActions.SelectRoom       -> handleSelectRoom(action)
+            is HomeActions.SelectGroup      -> handleSelectGroup(action)
+            is HomeActions.RoomDisplayed    -> setState { copy(shouldOpenRoomDetail = false) }
+            is HomeActions.PermalinkClicked -> handlePermalinkClicked(action)
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
+    private fun handlePermalinkClicked(action: HomeActions.PermalinkClicked) {
+        withState { state ->
+            when (action.permalinkData) {
+                is PermalinkData.EventLink    -> {
+
+                }
+                is PermalinkData.RoomLink     -> {
+
+                }
+                is PermalinkData.GroupLink    -> {
+
+                }
+                is PermalinkData.UserLink     -> {
+
+                }
+                is PermalinkData.FallbackLink -> {
+
+                }
+            }
+        }
+    }
+
     private fun handleSelectRoom(action: HomeActions.SelectRoom) {
         withState { state ->
-            if (state.selectedRoom?.roomId != action.roomSummary.roomId) {
+            if (state.selectedRoomId != action.roomSummary.roomId) {
                 session.saveLastSelectedRoom(action.roomSummary)
-                setState { copy(selectedRoom = action.roomSummary, shouldOpenRoomDetail = true) }
+                setState { copy(selectedRoomId = action.roomSummary.roomId, shouldOpenRoomDetail = true) }
             }
         }
     }
@@ -56,21 +80,20 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
         session
                 .rx().liveRoomSummaries()
                 .execute { async ->
-
                     val summaries = async()
                     val directRooms = summaries?.filter { it.isDirect } ?: emptyList()
                     val groupRooms = summaries?.filter { !it.isDirect } ?: emptyList()
 
-                    val selectedRoom = selectedRoom
-                                       ?: session.lastSelectedRoom()
-                                       ?: directRooms.firstOrNull()
-                                       ?: groupRooms.firstOrNull()
+                    val selectedRoomId = selectedRoomId
+                                         ?: session.lastSelectedRoom()?.roomId
+                                         ?: directRooms.firstOrNull()?.roomId
+                                         ?: groupRooms.firstOrNull()?.roomId
 
                     copy(
                             asyncRooms = async,
                             directRooms = directRooms,
                             groupRooms = groupRooms,
-                            selectedRoom = selectedRoom
+                            selectedRoomId = selectedRoomId
                     )
                 }
     }

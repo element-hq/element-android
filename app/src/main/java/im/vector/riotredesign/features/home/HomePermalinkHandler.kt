@@ -1,11 +1,10 @@
-package im.vector.riotredesign.core
+package im.vector.riotredesign.features.home
 
 import android.net.Uri
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
-import im.vector.riotredesign.features.home.HomeNavigator
 
-class HomePermalinkNavigator(private val navigator: HomeNavigator) {
+class HomePermalinkHandler(private val navigator: HomeNavigator) {
 
     fun launch(deepLink: String?) {
         val uri = deepLink?.let { Uri.parse(it) }
@@ -22,7 +21,7 @@ class HomePermalinkNavigator(private val navigator: HomeNavigator) {
                 navigator.openRoomDetail(permalinkData.roomIdOrAlias, permalinkData.eventId)
             }
             is PermalinkData.RoomLink     -> {
-                navigator.openRoomDetail(permalinkData.roomIdOrAlias, null )
+                navigator.openRoomDetail(permalinkData.roomIdOrAlias, null)
             }
             is PermalinkData.GroupLink    -> {
                 navigator.openGroupDetail(permalinkData.groupId)

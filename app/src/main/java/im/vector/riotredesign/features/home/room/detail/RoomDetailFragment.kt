@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.mvrx.activityViewModel
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkParser
@@ -20,11 +21,12 @@ import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.utils.FragmentArgumentDelegate
 import im.vector.riotredesign.core.utils.UnsafeFragmentArgumentDelegate
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.HomeActions
+import im.vector.riotredesign.features.home.HomeViewModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
@@ -38,6 +40,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         }
     }
 
+    private val viewModel: HomeViewModel by activityViewModel()
     private val currentSession = Matrix.getInstance().currentSession
     private var roomId: String by UnsafeFragmentArgumentDelegate()
     private var eventId: String? by FragmentArgumentDelegate()
@@ -106,7 +109,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     override fun onUrlClicked(url: String) {
         val permalinkData = PermalinkParser.parse(url)
-        Timber.v("Permalink data : $permalinkData")
+        viewModel.accept(HomeActions.PermalinkClicked(permalinkData))
     }
 
 }
