@@ -7,15 +7,20 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
+import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
+import org.koin.android.ext.android.get
 
-class HomeViewModel(initialState: HomeViewState, private val session: Session) : BaseMvRxViewModel<HomeViewState>(initialState) {
+class HomeViewModel(initialState: HomeViewState,
+                    private val session: Session,
+                    private val roomSelectionRepository: RoomSelectionRepository) : BaseMvRxViewModel<HomeViewState>(initialState) {
 
     companion object : MvRxViewModelFactory<HomeViewState> {
 
         @JvmStatic
         override fun create(activity: FragmentActivity, state: HomeViewState): HomeViewModel {
             val currentSession = Matrix.getInstance().currentSession
-            return HomeViewModel(state, currentSession)
+            val roomSelectionRepository = activity.get<RoomSelectionRepository>()
+            return HomeViewModel(state, currentSession, roomSelectionRepository)
         }
     }
 
@@ -26,9 +31,9 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
 
     fun accept(action: HomeActions) {
         when (action) {
-            is HomeActions.SelectRoom       -> handleSelectRoom(action)
-            is HomeActions.SelectGroup      -> handleSelectGroup(action)
-            is HomeActions.RoomDisplayed    -> setState { copy(shouldOpenRoomDetail = false) }
+            is HomeActions.SelectRoom -> handleSelectRoom(action)
+            is HomeActions.SelectGroup -> handleSelectGroup(action)
+            is HomeActions.RoomDisplayed -> setState { copy(shouldOpenRoomDetail = false) }
             is HomeActions.PermalinkClicked -> handlePermalinkClicked(action)
         }
     }
@@ -38,16 +43,16 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
     private fun handlePermalinkClicked(action: HomeActions.PermalinkClicked) {
         withState { state ->
             when (action.permalinkData) {
-                is PermalinkData.EventLink    -> {
+                is PermalinkData.EventLink -> {
 
                 }
-                is PermalinkData.RoomLink     -> {
+                is PermalinkData.RoomLink -> {
 
                 }
-                is PermalinkData.GroupLink    -> {
+                is PermalinkData.GroupLink -> {
 
                 }
-                is PermalinkData.UserLink     -> {
+                is PermalinkData.UserLink -> {
 
                 }
                 is PermalinkData.FallbackLink -> {
@@ -60,7 +65,7 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
     private fun handleSelectRoom(action: HomeActions.SelectRoom) {
         withState { state ->
             if (state.selectedRoomId != action.roomSummary.roomId) {
-                session.saveLastSelectedRoom(action.roomSummary)
+                roomSelectionRepository.saveLastSelectedRoom(action.roomSummary.roomId)
                 setState { copy(selectedRoomId = action.roomSummary.roomId, shouldOpenRoomDetail = true) }
             }
         }
@@ -85,9 +90,9 @@ class HomeViewModel(initialState: HomeViewState, private val session: Session) :
                     val groupRooms = summaries?.filter { !it.isDirect } ?: emptyList()
 
                     val selectedRoomId = selectedRoomId
-                                         ?: session.lastSelectedRoom()?.roomId
-                                         ?: directRooms.firstOrNull()?.roomId
-                                         ?: groupRooms.firstOrNull()?.roomId
+                            ?: roomSelectionRepository.lastSelectedRoom()
+                            ?: directRooms.firstOrNull()?.roomId
+                            ?: groupRooms.firstOrNull()?.roomId
 
                     copy(
                             asyncRooms = async,
