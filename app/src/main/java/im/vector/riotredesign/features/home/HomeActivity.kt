@@ -3,6 +3,7 @@ package im.vector.riotredesign.features.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -12,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceFragment
+import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
@@ -46,7 +48,6 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            // Android home
             android.R.id.home -> {
                 drawerLayout.openDrawer(GravityCompat.START)
                 return true
@@ -60,8 +61,28 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(Gravity.LEFT)
         } else {
-            super.onBackPressed()
+            val handled = recursivelyDispatchOnBackPressed(supportFragmentManager)
+            if (!handled) {
+                super.onBackPressed()
+            }
         }
+    }
+
+    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
+        if (fm.backStackEntryCount == 0)
+            return false
+        val reverseOrder = fm.fragments.filter { it is OnBackPressed }.reversed()
+        for (f in reverseOrder) {
+            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
+            if (handledByChildFragments) {
+                return true
+            }
+            val backPressable = f as OnBackPressed
+            if (backPressable.onBackPressed()) {
+                return true
+            }
+        }
+        return false
     }
 
     // HomeNavigator *******************************************************************************
