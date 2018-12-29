@@ -1,0 +1,93 @@
+package im.vector.riotredesign.features.home.room.list
+
+import android.support.v4.app.FragmentActivity
+import arrow.core.Option
+import com.airbnb.mvrx.MvRxViewModelFactory
+import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.rx.rx
+import im.vector.riotredesign.core.platform.RiotViewModel
+import im.vector.riotredesign.features.home.group.SelectedGroupHolder
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import org.koin.android.ext.android.get
+
+class RoomListViewModel(initialState: RoomListViewState,
+                        private val session: Session,
+                        private val selectedGroupHolder: SelectedGroupHolder,
+                        private val roomSelectionRepository: RoomSelectionRepository)
+    : RiotViewModel<RoomListViewState>(initialState) {
+
+    companion object : MvRxViewModelFactory<RoomListViewState> {
+
+        @JvmStatic
+        override fun create(activity: FragmentActivity, state: RoomListViewState): RoomListViewModel {
+            val currentSession = Matrix.getInstance().currentSession
+            val roomSelectionRepository = activity.get<RoomSelectionRepository>()
+            val selectedGroupHolder = activity.get<SelectedGroupHolder>()
+            return RoomListViewModel(state, currentSession, selectedGroupHolder, roomSelectionRepository)
+        }
+    }
+
+    init {
+        observeRoomSummaries()
+    }
+
+    fun accept(action: RoomListActions) {
+        when (action) {
+            is RoomListActions.SelectRoom -> handleSelectRoom(action)
+        }
+    }
+
+    // PRIVATE METHODS *****************************************************************************
+
+    private fun handleSelectRoom(action: RoomListActions.SelectRoom) = withState { state ->
+        if (state.selectedRoomId != action.roomSummary.roomId) {
+            roomSelectionRepository.saveLastSelectedRoom(action.roomSummary.roomId)
+            setState { copy(selectedRoomId = action.roomSummary.roomId) }
+        }
+    }
+
+    private fun observeRoomSummaries() {
+        Observable.combineLatest<List<RoomSummary>, Option<GroupSummary>, RoomSummaries>(
+                session.rx().liveRoomSummaries(),
+                selectedGroupHolder.selectedGroup(),
+                BiFunction { rooms, selectedGroupOption ->
+                    val selectedGroup = selectedGroupOption.orNull()
+
+                    val filteredDirectRooms = rooms
+                            .filter { it.isDirect }
+                            .filter {
+                                if (selectedGroup == null) {
+                                    true
+                                } else {
+                                    it.otherMemberIds
+                                            .intersect(selectedGroup.userIds)
+                                            .isNotEmpty()
+                                }
+                            }
+
+                    val filteredGroupRooms = rooms
+                            .filter { !it.isDirect }
+                            .filter {
+                                selectedGroup?.roomIds?.contains(it.roomId) ?: true
+                            }
+                    RoomSummaries(filteredDirectRooms, filteredGroupRooms)
+                }
+        )
+                .execute { async ->
+                    val summaries = async()
+                    val selectedRoomId = selectedRoomId
+                            ?: roomSelectionRepository.lastSelectedRoom()
+                            ?: summaries?.directRooms?.firstOrNull()?.roomId
+                            ?: summaries?.groupRooms?.firstOrNull()?.roomId
+
+                    copy(
+                            asyncRooms = async,
+                            selectedRoomId = selectedRoomId
+                    )
+                }
+    }
+}

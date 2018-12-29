@@ -13,10 +13,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.StateView
-import im.vector.riotredesign.features.home.HomeActions
 import im.vector.riotredesign.features.home.HomeNavigator
-import im.vector.riotredesign.features.home.HomeViewModel
-import im.vector.riotredesign.features.home.HomeViewState
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.koin.android.ext.android.inject
 
@@ -29,7 +26,7 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     }
 
     private val homeNavigator by inject<HomeNavigator>()
-    private val homeViewModel: HomeViewModel by activityViewModel()
+    private val homeViewModel: RoomListViewModel by activityViewModel()
     private lateinit var roomController: RoomSummaryController
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,19 +41,15 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
         homeViewModel.subscribe { renderState(it) }
     }
 
-    private fun renderState(state: HomeViewState) {
+    private fun renderState(state: RoomListViewState) {
         when (state.asyncRooms) {
             is Incomplete -> renderLoading()
             is Success -> renderSuccess(state)
             is Fail -> renderFailure(state.asyncRooms.error)
         }
-        if (state.shouldOpenRoomDetail && state.selectedRoomId != null) {
-            homeNavigator.openRoomDetail(state.selectedRoomId, null)
-            homeViewModel.accept(HomeActions.RoomDisplayed)
-        }
     }
 
-    private fun renderSuccess(state: HomeViewState) {
+    private fun renderSuccess(state: RoomListViewState) {
         if (state.asyncRooms().isNullOrEmpty()) {
             stateView.state = StateView.State.Empty(getString(R.string.room_list_empty))
         } else {
@@ -78,7 +71,8 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     }
 
     override fun onRoomSelected(room: RoomSummary) {
-        homeViewModel.accept(HomeActions.SelectRoom(room))
+        homeViewModel.accept(RoomListActions.SelectRoom(room))
+        homeNavigator.openRoomDetail(room.roomId, null)
     }
 
 }

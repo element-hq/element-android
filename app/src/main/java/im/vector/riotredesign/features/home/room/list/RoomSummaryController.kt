@@ -2,17 +2,15 @@ package im.vector.riotredesign.features.home.room.list
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.riotredesign.features.home.HomeViewState
 
 class RoomSummaryController(private val callback: Callback? = null
-) : TypedEpoxyController<HomeViewState>() {
-
+) : TypedEpoxyController<RoomListViewState>() {
 
     private var isDirectRoomsExpanded = true
     private var isGroupRoomsExpanded = true
 
-    override fun buildModels(viewState: HomeViewState) {
-
+    override fun buildModels(viewState: RoomListViewState) {
+        val roomSummaries = viewState.asyncRooms()
         RoomCategoryItem(
                 title = "DIRECT MESSAGES",
                 isExpanded = isDirectRoomsExpanded,
@@ -25,16 +23,7 @@ class RoomSummaryController(private val callback: Callback? = null
                 .addTo(this)
 
         if (isDirectRoomsExpanded) {
-            val filteredDirectRooms = viewState.directRooms.filter {
-                if (viewState.selectedGroup == null) {
-                    true
-                } else {
-                    it.otherMemberIds
-                            .intersect(viewState.selectedGroup.userIds)
-                            .isNotEmpty()
-                }
-            }
-            buildRoomModels(filteredDirectRooms, viewState.selectedRoomId)
+            buildRoomModels(roomSummaries?.directRooms ?: emptyList(), viewState.selectedRoomId)
         }
 
         RoomCategoryItem(
@@ -49,10 +38,7 @@ class RoomSummaryController(private val callback: Callback? = null
                 .addTo(this)
 
         if (isGroupRoomsExpanded) {
-            val filteredGroupRooms = viewState.groupRooms.filter {
-                viewState.selectedGroup?.roomIds?.contains(it.roomId) ?: true
-            }
-            buildRoomModels(filteredGroupRooms, viewState.selectedRoomId)
+            buildRoomModels(roomSummaries?.groupRooms ?: emptyList(), viewState.selectedRoomId)
         }
 
     }

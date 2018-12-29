@@ -1,5 +1,6 @@
 package im.vector.riotredesign.features.home
 
+import im.vector.riotredesign.features.home.group.SelectedGroupHolder
 import im.vector.riotredesign.features.home.room.detail.timeline.MessageItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.TextItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineDateFormatter
@@ -28,6 +29,10 @@ class HomeModule(private val homeActivity: HomeActivity) {
 
         factory { (roomId: String) ->
             TimelineEventController(roomId, get(), get(), get())
+        }
+
+        single {
+            SelectedGroupHolder()
         }
 
     }

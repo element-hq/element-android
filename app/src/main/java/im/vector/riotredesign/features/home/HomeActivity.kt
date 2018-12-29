@@ -5,12 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
-import android.view.View
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
@@ -91,11 +89,8 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
     override fun openRoomDetail(roomId: String, eventId: String?) {
         val args = RoomDetailArgs(roomId, eventId)
         val roomDetailFragment = RoomDetailFragment.newInstance(args)
-        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            closeDrawerLayout(Gravity.LEFT) { replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer) }
-        } else {
-            replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
-        }
+        drawerLayout.closeDrawer(Gravity.LEFT)
+        replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
     }
 
     override fun openGroupDetail(groupId: String) {
@@ -104,16 +99,6 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
 
     override fun openUserDetail(userId: String) {
         Timber.v("Open user detail $userId")
-    }
-
-    private fun closeDrawerLayout(gravity: Int, actionOnClose: () -> Unit) {
-        drawerLayout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
-            override fun onDrawerClosed(p0: View) {
-                drawerLayout.removeDrawerListener(this)
-                actionOnClose()
-            }
-        })
-        drawerLayout.closeDrawer(gravity)
     }
 
     companion object {

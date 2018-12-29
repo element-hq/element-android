@@ -6,8 +6,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.permalinks.PermalinkParser
@@ -16,8 +14,6 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.features.home.AvatarRenderer
-import im.vector.riotredesign.features.home.HomeActions
-import im.vector.riotredesign.features.home.HomeViewModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
@@ -41,7 +37,6 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         }
     }
 
-    private val homeViewModel: HomeViewModel by activityViewModel()
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
     private val roomDetailArgs: RoomDetailArgs by args()
 
@@ -83,12 +78,8 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     }
 
     private fun renderState(state: RoomDetailViewState) {
-        when (state.asyncTimeline) {
-            is Success -> renderTimeline(state.asyncTimeline())
-        }
-        when (state.asyncRoomSummary) {
-            is Success -> renderRoomSummary(state.asyncRoomSummary())
-        }
+        renderTimeline(state.asyncTimeline())
+        renderRoomSummary(state.asyncRoomSummary())
     }
 
     private fun renderRoomSummary(roomSummary: RoomSummary?) {
@@ -113,7 +104,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     override fun onUrlClicked(url: String) {
         val permalinkData = PermalinkParser.parse(url)
-        homeViewModel.accept(HomeActions.PermalinkClicked(permalinkData))
+
     }
 
 }
