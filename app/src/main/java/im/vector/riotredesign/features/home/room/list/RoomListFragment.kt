@@ -29,7 +29,7 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     }
 
     private val homeNavigator by inject<HomeNavigator>()
-    private val viewModel: HomeViewModel by activityViewModel()
+    private val homeViewModel: HomeViewModel by activityViewModel()
     private lateinit var roomController: RoomSummaryController
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,18 +41,18 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
         roomController = RoomSummaryController(this)
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
-        viewModel.subscribe { renderState(it) }
+        homeViewModel.subscribe { renderState(it) }
     }
 
     private fun renderState(state: HomeViewState) {
         when (state.asyncRooms) {
             is Incomplete -> renderLoading()
-            is Success    -> renderSuccess(state)
-            is Fail       -> renderFailure(state.asyncRooms.error)
+            is Success -> renderSuccess(state)
+            is Fail -> renderFailure(state.asyncRooms.error)
         }
         if (state.shouldOpenRoomDetail && state.selectedRoomId != null) {
             homeNavigator.openRoomDetail(state.selectedRoomId, null)
-            viewModel.accept(HomeActions.RoomDisplayed)
+            homeViewModel.accept(HomeActions.RoomDisplayed)
         }
     }
 
@@ -72,13 +72,13 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     private fun renderFailure(error: Throwable) {
         val message = when (error) {
             is Failure.NetworkConnection -> getString(R.string.error_no_network)
-            else                         -> getString(R.string.error_common)
+            else -> getString(R.string.error_common)
         }
         stateView.state = StateView.State.Error(message)
     }
 
     override fun onRoomSelected(room: RoomSummary) {
-        viewModel.accept(HomeActions.SelectRoom(room))
+        homeViewModel.accept(HomeActions.SelectRoom(room))
     }
 
 }

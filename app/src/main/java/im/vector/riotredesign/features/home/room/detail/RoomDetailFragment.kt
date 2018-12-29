@@ -1,51 +1,51 @@
 package im.vector.riotredesign.features.home.room.detail
 
-import android.arch.lifecycle.Observer
-import android.arch.paging.PagedList
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
-import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.MatrixCallback
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.permalinks.PermalinkParser
-import im.vector.matrix.android.api.session.events.model.EnrichedEvent
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
-import im.vector.riotredesign.core.utils.FragmentArgumentDelegate
-import im.vector.riotredesign.core.utils.UnsafeFragmentArgumentDelegate
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeActions
 import im.vector.riotredesign.features.home.HomeViewModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
+
+@Parcelize
+data class RoomDetailArgs(
+        val roomId: String,
+        val eventId: String? = null
+) : Parcelable
 
 class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     companion object {
 
-        fun newInstance(roomId: String, eventId: String? = null): RoomDetailFragment {
+        fun newInstance(args: RoomDetailArgs): RoomDetailFragment {
             return RoomDetailFragment().apply {
-                this.roomId = roomId
-                this.eventId = eventId
+                setArguments(args)
             }
         }
     }
 
-    private val viewModel: HomeViewModel by activityViewModel()
-    private val currentSession = Matrix.getInstance().currentSession
-    private var roomId: String by UnsafeFragmentArgumentDelegate()
-    private var eventId: String? by FragmentArgumentDelegate()
-    private val timelineEventController by inject<TimelineEventController> { parametersOf(roomId) }
-    private lateinit var room: Room
+    private val homeViewModel: HomeViewModel by activityViewModel()
+    private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
+    private val roomDetailArgs: RoomDetailArgs by args()
+
+    private val timelineEventController by inject<TimelineEventController> { parametersOf(roomDetailArgs.roomId) }
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -54,21 +54,16 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        room = currentSession.getRoom(roomId)!!
         setupRecyclerView()
         setupToolbar()
-        room.loadRoomMembersIfNeeded()
-        room.timeline(eventId).observe(this, Observer { renderEvents(it) })
-        room.roomSummary.observe(this, Observer { renderRoomSummary(it) })
         sendButton.setOnClickListener {
             val textMessage = composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 composerEditText.text = null
-                room.sendTextMessage(textMessage, object : MatrixCallback<Event> {
-
-                })
+                roomDetailViewModel.accept(RoomDetailActions.SendMessage(textMessage))
             }
         }
+        roomDetailViewModel.subscribe { renderState(it) }
     }
 
     private fun setupToolbar() {
@@ -87,6 +82,15 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         timelineEventController.callback = this
     }
 
+    private fun renderState(state: RoomDetailViewState) {
+        when (state.asyncTimeline) {
+            is Success -> renderTimeline(state.asyncTimeline())
+        }
+        when (state.asyncRoomSummary) {
+            is Success -> renderRoomSummary(state.asyncRoomSummary())
+        }
+    }
+
     private fun renderRoomSummary(roomSummary: RoomSummary?) {
         roomSummary?.let {
             toolbarTitleView.text = it.displayName
@@ -100,16 +104,16 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         }
     }
 
-    private fun renderEvents(events: PagedList<EnrichedEvent>?) {
+    private fun renderTimeline(timeline: Timeline?) {
         scrollOnNewMessageCallback.hasBeenUpdated.set(true)
-        timelineEventController.timeline = events
+        timelineEventController.timeline = timeline
     }
 
     // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String) {
         val permalinkData = PermalinkParser.parse(url)
-        viewModel.accept(HomeActions.PermalinkClicked(permalinkData))
+        homeViewModel.accept(HomeActions.PermalinkClicked(permalinkData))
     }
 
 }

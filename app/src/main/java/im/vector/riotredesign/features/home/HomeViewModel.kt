@@ -40,44 +40,38 @@ class HomeViewModel(initialState: HomeViewState,
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handlePermalinkClicked(action: HomeActions.PermalinkClicked) {
-        withState { state ->
-            when (action.permalinkData) {
-                is PermalinkData.EventLink -> {
+    private fun handlePermalinkClicked(action: HomeActions.PermalinkClicked) = withState { state ->
+        when (action.permalinkData) {
+            is PermalinkData.EventLink -> {
 
-                }
-                is PermalinkData.RoomLink -> {
+            }
+            is PermalinkData.RoomLink -> {
 
-                }
-                is PermalinkData.GroupLink -> {
+            }
+            is PermalinkData.GroupLink -> {
 
-                }
-                is PermalinkData.UserLink -> {
+            }
+            is PermalinkData.UserLink -> {
 
-                }
-                is PermalinkData.FallbackLink -> {
+            }
+            is PermalinkData.FallbackLink -> {
 
-                }
             }
         }
     }
 
-    private fun handleSelectRoom(action: HomeActions.SelectRoom) {
-        withState { state ->
-            if (state.selectedRoomId != action.roomSummary.roomId) {
-                roomSelectionRepository.saveLastSelectedRoom(action.roomSummary.roomId)
-                setState { copy(selectedRoomId = action.roomSummary.roomId, shouldOpenRoomDetail = true) }
-            }
+    private fun handleSelectRoom(action: HomeActions.SelectRoom) = withState { state ->
+        if (state.selectedRoomId != action.roomSummary.roomId) {
+            roomSelectionRepository.saveLastSelectedRoom(action.roomSummary.roomId)
+            setState { copy(selectedRoomId = action.roomSummary.roomId, shouldOpenRoomDetail = true) }
         }
     }
 
-    private fun handleSelectGroup(action: HomeActions.SelectGroup) {
-        withState { state ->
-            if (state.selectedGroup?.groupId != action.groupSummary.groupId) {
-                setState { copy(selectedGroup = action.groupSummary) }
-            } else {
-                setState { copy(selectedGroup = null) }
-            }
+    private fun handleSelectGroup(action: HomeActions.SelectGroup) = withState { state ->
+        if (state.selectedGroup?.groupId != action.groupSummary.groupId) {
+            setState { copy(selectedGroup = action.groupSummary) }
+        } else {
+            setState { copy(selectedGroup = null) }
         }
     }
 

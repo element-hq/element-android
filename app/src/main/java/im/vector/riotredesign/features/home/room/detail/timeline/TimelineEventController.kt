@@ -7,6 +7,7 @@ import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
+import im.vector.riotredesign.features.home.room.detail.Timeline
 
 class TimelineEventController(private val roomId: String,
                               private val messageItemFactory: MessageItemFactory,
@@ -36,7 +37,7 @@ class TimelineEventController(private val roomId: String,
     }
 
     private var snapshotList: List<EnrichedEvent>? = emptyList()
-    var timeline: PagedList<EnrichedEvent>? = null
+    var timeline: Timeline? = null
         set(value) {
             field?.removeWeakCallback(pagedListCallback)
             field = value

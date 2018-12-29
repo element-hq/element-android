@@ -17,6 +17,7 @@ import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
+import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.home.room.detail.RoomDetailFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.standalone.StandAloneContext.loadKoinModules
@@ -88,7 +89,8 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
     // HomeNavigator *******************************************************************************
 
     override fun openRoomDetail(roomId: String, eventId: String?) {
-        val roomDetailFragment = RoomDetailFragment.newInstance(roomId)
+        val args = RoomDetailArgs(roomId, eventId)
+        val roomDetailFragment = RoomDetailFragment.newInstance(args)
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             closeDrawerLayout(Gravity.LEFT) { replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer) }
         } else {
