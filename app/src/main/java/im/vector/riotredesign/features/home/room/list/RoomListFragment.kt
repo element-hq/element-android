@@ -50,6 +50,9 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     }
 
     private fun renderSuccess(state: RoomListViewState) {
+        if (state.selectedRoomId != null) {
+            homeNavigator.openRoomDetail(state.selectedRoomId, null)
+        }
         if (state.asyncRooms().isNullOrEmpty()) {
             stateView.state = StateView.State.Empty(getString(R.string.room_list_empty))
         } else {

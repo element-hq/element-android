@@ -23,8 +23,8 @@ class HomeModule(private val homeActivity: HomeActivity) {
             TextItemFactory()
         }
 
-        factory {
-            homeActivity as HomeNavigator
+        single {
+            HomeNavigator()
         }
 
         factory { (roomId: String) ->

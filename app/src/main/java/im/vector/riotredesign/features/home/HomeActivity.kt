@@ -15,17 +15,18 @@ import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
-import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
-import im.vector.riotredesign.features.home.room.detail.RoomDetailFragment
 import kotlinx.android.synthetic.main.activity_home.*
+import org.koin.android.ext.android.inject
 import org.koin.standalone.StandAloneContext.loadKoinModules
-import timber.log.Timber
 
 
-class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
+class HomeActivity : RiotActivity(), ToolbarConfigurable {
+
+    private val homeNavigator by inject<HomeNavigator>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         loadKoinModules(listOf(HomeModule(this).definition))
+        homeNavigator.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         if (savedInstanceState == null) {
@@ -34,6 +35,11 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
             replaceFragment(loadingDetail, R.id.homeDetailFragmentContainer)
             replaceFragment(homeDrawerFragment, R.id.homeDrawerFragmentContainer)
         }
+    }
+
+    override fun onDestroy() {
+        homeNavigator.activity = null
+        super.onDestroy()
     }
 
     override fun configure(toolbar: Toolbar) {
@@ -84,22 +90,6 @@ class HomeActivity : RiotActivity(), HomeNavigator, ToolbarConfigurable {
         return false
     }
 
-    // HomeNavigator *******************************************************************************
-
-    override fun openRoomDetail(roomId: String, eventId: String?) {
-        val args = RoomDetailArgs(roomId, eventId)
-        val roomDetailFragment = RoomDetailFragment.newInstance(args)
-        drawerLayout.closeDrawer(Gravity.LEFT)
-        replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
-    }
-
-    override fun openGroupDetail(groupId: String) {
-        Timber.v("Open group detail $groupId")
-    }
-
-    override fun openUserDetail(userId: String) {
-        Timber.v("Open user detail $userId")
-    }
 
     companion object {
         fun newIntent(context: Context): Intent {

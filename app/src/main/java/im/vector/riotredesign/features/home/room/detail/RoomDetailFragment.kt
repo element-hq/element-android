@@ -78,7 +78,9 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     }
 
     private fun renderState(state: RoomDetailViewState) {
-        renderTimeline(state.asyncTimeline())
+        if (state.asyncTimeline.complete) {
+            renderTimeline(state.asyncTimeline())
+        }
         renderRoomSummary(state.asyncRoomSummary())
     }
 
