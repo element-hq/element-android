@@ -9,13 +9,7 @@ import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMem
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
-import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
-import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
-import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
-import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
+import im.vector.matrix.android.internal.session.room.timeline.*
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -32,7 +26,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultLoadRoomMembersTask(get(), get()) as LoadRoomMembersTask
+            DefaultLoadRoomMembersTask(get(), get(), get()) as LoadRoomMembersTask
         }
 
         scope(DefaultSession.SCOPE) {

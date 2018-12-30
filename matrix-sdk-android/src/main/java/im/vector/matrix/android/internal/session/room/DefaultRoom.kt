@@ -15,13 +15,11 @@ import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
-import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import org.koin.core.parameter.parametersOf
@@ -33,7 +31,6 @@ internal data class DefaultRoom(
 ) : Room, MatrixKoinComponent {
 
     private val loadRoomMembersTask by inject<LoadRoomMembersTask>()
-    private val syncTokenStore by inject<SyncTokenStore>()
     private val monarchy by inject<Monarchy>()
     private val timelineHolder by inject<TimelineHolder> { parametersOf(roomId) }
     private val sendService by inject<SendService> { parametersOf(roomId) }
@@ -55,20 +52,8 @@ internal data class DefaultRoom(
     }
 
     override fun loadRoomMembersIfNeeded(): Cancelable {
-        return if (areAllMembersLoaded()) {
-            object : Cancelable {}
-        } else {
-            val token = syncTokenStore.getLastToken()
-            val params = LoadRoomMembersTask.Params(roomId, token, Membership.LEAVE)
-            loadRoomMembersTask.configureWith(params).executeBy(taskExecutor)
-        }
-    }
-
-    private fun areAllMembersLoaded(): Boolean {
-        return monarchy
-                       .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
-                       .firstOrNull()
-                       ?.areAllMembersLoaded ?: false
+        val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
+        return loadRoomMembersTask.configureWith(params).executeBy(taskExecutor)
     }
 
 
