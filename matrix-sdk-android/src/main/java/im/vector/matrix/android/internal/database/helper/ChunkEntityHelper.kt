@@ -2,7 +2,8 @@ package im.vector.matrix.android.internal.database.helper
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.database.mapper.asEntity
+import im.vector.matrix.android.internal.database.mapper.toEntity
+import im.vector.matrix.android.internal.database.mapper.updateWith
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -44,13 +45,14 @@ internal fun ChunkEntity.merge(chunkToMerge: ChunkEntity,
     }
 }
 
-internal fun ChunkEntity.addAll(events: List<Event>,
+internal fun ChunkEntity.addAll(roomId: String,
+                                events: List<Event>,
                                 direction: PaginationDirection,
                                 stateIndexOffset: Int = 0,
                                 isUnlinked: Boolean = false) {
 
     events.forEach { event ->
-        add(event, direction, stateIndexOffset, isUnlinked)
+        add(roomId, event, direction, stateIndexOffset, isUnlinked)
     }
 }
 
@@ -58,11 +60,13 @@ internal fun ChunkEntity.updateDisplayIndexes() {
     events.forEachIndexed { index, eventEntity -> eventEntity.displayIndex = index }
 }
 
-internal fun ChunkEntity.add(event: Event,
+internal fun ChunkEntity.add(roomId: String,
+                             event: Event,
                              direction: PaginationDirection,
                              stateIndexOffset: Int = 0,
                              isUnlinked: Boolean = false) {
-    add(event.asEntity(), direction, stateIndexOffset, isUnlinked)
+
+    add(event.toEntity(roomId), direction, stateIndexOffset, isUnlinked)
 }
 
 internal fun ChunkEntity.add(eventEntity: EventEntity,
@@ -76,7 +80,6 @@ internal fun ChunkEntity.add(eventEntity: EventEntity,
     if (eventEntity.eventId.isEmpty() || events.fastContains(eventEntity.eventId)) {
         return
     }
-
     var currentStateIndex = lastStateIndex(direction, defaultValue = stateIndexOffset)
     if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(eventEntity.type)) {
         currentStateIndex += 1
@@ -86,16 +89,14 @@ internal fun ChunkEntity.add(eventEntity: EventEntity,
             currentStateIndex -= 1
         }
     }
-
-    eventEntity.stateIndex = currentStateIndex
-    eventEntity.isUnlinked = isUnlinked
+    eventEntity.updateWith(currentStateIndex, isUnlinked)
     val position = if (direction == PaginationDirection.FORWARDS) 0 else this.events.size
     events.add(position, eventEntity)
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
-               PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
+        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
+    } ?: defaultValue
 }

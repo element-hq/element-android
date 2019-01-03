@@ -8,6 +8,7 @@ import java.util.*
 
 internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUID().toString(),
                                 var eventId: String = "",
+                                var roomId: String = "",
                                 var type: String = "",
                                 var content: String? = null,
                                 var prevContent: String? = null,
@@ -27,9 +28,7 @@ internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUI
         BOTH
     }
 
-    companion object {
-        const val DEFAULT_STATE_INDEX = Int.MIN_VALUE
-    }
+    companion object
 
     @LinkingObjects("events")
     val chunk: RealmResults<ChunkEntity>? = null

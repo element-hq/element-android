@@ -8,9 +8,10 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 internal object EventMapper {
 
 
-    fun map(event: Event): EventEntity {
+    fun map(event: Event, roomId: String): EventEntity {
         val eventEntity = EventEntity()
         eventEntity.eventId = event.eventId ?: ""
+        eventEntity.roomId = event.roomId ?: roomId
         eventEntity.content = ContentMapper.map(event.content)
         val resolvedPrevContent = event.prevContent ?: event.unsignedData?.prevContent
         eventEntity.prevContent = ContentMapper.map(resolvedPrevContent)
@@ -32,19 +33,24 @@ internal object EventMapper {
                 originServerTs = eventEntity.originServerTs,
                 sender = eventEntity.sender,
                 stateKey = eventEntity.stateKey,
-                roomId = null,
+                roomId = eventEntity.roomId,
                 unsignedData = UnsignedData(eventEntity.age),
                 redacts = eventEntity.redacts
         )
     }
 
+}
 
+internal fun EventEntity.updateWith(stateIndex: Int, isUnlinked: Boolean) {
+    this.stateIndex = stateIndex
+    this.isUnlinked = isUnlinked
 }
 
 internal fun EventEntity.asDomain(): Event {
     return EventMapper.map(this)
 }
 
-internal fun Event.asEntity(): EventEntity {
-    return EventMapper.map(this)
+internal fun Event.toEntity(roomId: String): EventEntity {
+    return EventMapper.map(this, roomId)
 }
+

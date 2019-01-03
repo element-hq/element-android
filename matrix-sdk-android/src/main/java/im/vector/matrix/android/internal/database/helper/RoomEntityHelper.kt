@@ -1,7 +1,8 @@
 package im.vector.matrix.android.internal.database.helper
 
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.internal.database.mapper.asEntity
+import im.vector.matrix.android.internal.database.mapper.toEntity
+import im.vector.matrix.android.internal.database.mapper.updateWith
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 
@@ -28,9 +29,8 @@ internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
         if (event.eventId == null) {
             return@forEach
         }
-        val eventEntity = event.asEntity()
-        eventEntity.stateIndex = stateIndex
-        eventEntity.isUnlinked = isUnlinked
+        val eventEntity = event.toEntity(roomId)
+        eventEntity.updateWith(stateIndex, isUnlinked)
         untimelinedStateEvents.add(eventEntity)
     }
 }
