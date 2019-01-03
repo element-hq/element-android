@@ -1,10 +1,11 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
+import android.text.util.Linkify
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
+import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
 import im.vector.riotredesign.features.home.AvatarRenderer
@@ -30,6 +31,7 @@ data class MessageItem(
                 onUrlClickedListener?.invoke(url)
             }
         })
+        Linkify.addLinks(messageView, Linkify.ALL)
         if (showInformation) {
             avatarImageView.visibility = View.VISIBLE
             memberNameView.visibility = View.VISIBLE

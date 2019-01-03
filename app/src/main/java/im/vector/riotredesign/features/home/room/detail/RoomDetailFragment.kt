@@ -8,17 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
-import im.vector.matrix.android.api.permalinks.PermalinkParser
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.HomePermalinkHandler
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 @Parcelize
 data class RoomDetailArgs(
@@ -41,6 +42,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     private val roomDetailArgs: RoomDetailArgs by args()
 
     private val timelineEventController by inject<TimelineEventController> { parametersOf(roomDetailArgs.roomId) }
+    private val homePermalinkHandler by inject<HomePermalinkHandler>()
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -70,16 +72,18 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
-        scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
+        //scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
-        timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
+        //timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
     }
 
     private fun renderState(state: RoomDetailViewState) {
-        if (state.asyncTimeline.complete) {
-            renderTimeline(state.asyncTimeline())
+        Timber.v("Render state")
+        val timeline = state.asyncTimeline()
+        if (timeline != null) {
+            renderTimeline(timeline)
         }
         renderRoomSummary(state.asyncRoomSummary())
     }
@@ -98,15 +102,14 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     }
 
     private fun renderTimeline(timeline: Timeline?) {
-        scrollOnNewMessageCallback.hasBeenUpdated.set(true)
+        //scrollOnNewMessageCallback.hasBeenUpdated.set(true)
         timelineEventController.timeline = timeline
     }
 
     // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String) {
-        val permalinkData = PermalinkParser.parse(url)
-
+        homePermalinkHandler.launch(url)
     }
 
 }

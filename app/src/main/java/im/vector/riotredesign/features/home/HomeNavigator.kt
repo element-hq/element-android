@@ -1,7 +1,9 @@
 package im.vector.riotredesign.features.home
 
+import android.support.v4.app.FragmentManager
 import android.view.Gravity
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.home.room.detail.RoomDetailFragment
@@ -14,8 +16,11 @@ class HomeNavigator {
 
     private var currentRoomId: String? = null
 
-    fun openRoomDetail(roomId: String, eventId: String?) {
-        if (isRoomOpened(roomId)) {
+    fun openRoomDetail(roomId: String,
+                       eventId: String?,
+                       addToBackstack: Boolean = false) {
+        Timber.v("Open room detail $roomId - $eventId - $addToBackstack")
+        if (!addToBackstack && isRoomOpened(roomId)) {
             return
         }
         currentRoomId = roomId
@@ -23,7 +28,12 @@ class HomeNavigator {
             val args = RoomDetailArgs(roomId, eventId)
             val roomDetailFragment = RoomDetailFragment.newInstance(args)
             it.drawerLayout?.closeDrawer(Gravity.LEFT)
-            it.replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
+            if (addToBackstack) {
+                it.addFragmentToBackstack(roomDetailFragment, R.id.homeDetailFragmentContainer, roomId)
+            } else {
+                clearBackStack(it.supportFragmentManager)
+                it.replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
+            }
         }
     }
 
@@ -37,6 +47,13 @@ class HomeNavigator {
 
     fun isRoomOpened(roomId: String): Boolean {
         return currentRoomId == roomId
+    }
+
+    private fun clearBackStack(fragmentManager: FragmentManager) {
+        if (fragmentManager.backStackEntryCount > 0) {
+            val first = fragmentManager.getBackStackEntryAt(0)
+            fragmentManager.popBackStack(first.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
     }
 
 }

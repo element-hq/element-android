@@ -35,5 +35,9 @@ class HomeModule(private val homeActivity: HomeActivity) {
             SelectedGroupHolder()
         }
 
+        single {
+            HomePermalinkHandler(get())
+        }
+
     }
 }
