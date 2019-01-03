@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.OkReplayRuleChainNoActivity
-import im.vector.matrix.android.api.MatrixOptions
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.di.MatrixModule
@@ -26,7 +25,7 @@ internal class AuthenticatorTest : InstrumentedTest, KoinTest {
 
     init {
         Monarchy.init(context())
-        val matrixModule = MatrixModule(MatrixOptions(context())).definition
+        val matrixModule = MatrixModule(context()).definition
         val networkModule = NetworkModule().definition
         val authModule = AuthModule().definition
         loadKoinModules(listOf(matrixModule, networkModule, authModule))

@@ -34,7 +34,7 @@ object RoomDataHelper {
                 prevToken = Random.nextLong(System.currentTimeMillis()).toString()
                 isLast = true
             }
-            chunkEntity.addAll(eventList, PaginationDirection.FORWARDS)
+            chunkEntity.addAll("roomId", eventList, PaginationDirection.FORWARDS)
             roomEntity.addOrUpdate(chunkEntity)
         }
     }
