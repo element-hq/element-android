@@ -4,10 +4,10 @@ import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import java.util.*
 
@@ -53,6 +53,7 @@ internal class TimelineBoundaryCallback(private val roomId: String,
                                            limit = limit)
 
         paginationTask.configureWith(params)
+                .enableRetry()
                 .dispatchTo(object : MatrixCallback<TokenChunkEvent> {
                     override fun onSuccess(data: TokenChunkEvent) {
                         requestCallback.recordSuccess()
