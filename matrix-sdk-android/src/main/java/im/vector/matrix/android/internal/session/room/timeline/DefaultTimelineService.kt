@@ -6,7 +6,8 @@ import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInterceptor
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
-import im.vector.matrix.android.api.session.room.TimelineHolder
+import im.vector.matrix.android.api.session.room.timeline.TimelineData
+import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -15,23 +16,25 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.LiveDataUtils
+import im.vector.matrix.android.internal.util.PagingRequestHelper
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import io.realm.Realm
 import io.realm.RealmQuery
 
 private const val PAGE_SIZE = 30
 
-internal class DefaultTimelineHolder(private val roomId: String,
-                                     private val monarchy: Monarchy,
-                                     private val taskExecutor: TaskExecutor,
-                                     private val boundaryCallback: TimelineBoundaryCallback,
-                                     private val contextOfEventTask: GetContextOfEventTask,
-                                     private val roomMemberExtractor: RoomMemberExtractor
-) : TimelineHolder {
+internal class DefaultTimelineService(private val roomId: String,
+                                      private val monarchy: Monarchy,
+                                      private val taskExecutor: TaskExecutor,
+                                      private val boundaryCallback: TimelineBoundaryCallback,
+                                      private val contextOfEventTask: GetContextOfEventTask,
+                                      private val roomMemberExtractor: RoomMemberExtractor
+) : TimelineService {
 
     private val eventInterceptors = ArrayList<EnrichedEventInterceptor>()
 
-    override fun timeline(eventId: String?): LiveData<PagedList<EnrichedEvent>> {
+    override fun timeline(eventId: String?): LiveData<TimelineData> {
         clearUnlinkedEvents()
         if (eventId != null) {
             fetchEventIfNeeded(eventId)
@@ -51,8 +54,15 @@ internal class DefaultTimelineHolder(private val roomId: String,
                 .build()
 
         val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)
-        return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
+        val eventsLiveData = monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
+
+        return LiveDataUtils.combine(eventsLiveData, boundaryCallback.status) { events, status ->
+            val isLoadingForward = status.before == PagingRequestHelper.Status.RUNNING
+            val isLoadingBackward = status.after == PagingRequestHelper.Status.RUNNING
+            TimelineData(events, isLoadingForward, isLoadingBackward)
+        }
     }
+
 
     private fun clearUnlinkedEvents() {
         monarchy.tryTransactionAsync { realm ->

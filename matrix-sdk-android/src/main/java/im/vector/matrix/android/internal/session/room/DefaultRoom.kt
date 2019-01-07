@@ -9,10 +9,11 @@ import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.SendService
-import im.vector.matrix.android.api.session.room.TimelineHolder
+import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -32,7 +33,7 @@ internal data class DefaultRoom(
 
     private val loadRoomMembersTask by inject<LoadRoomMembersTask>()
     private val monarchy by inject<Monarchy>()
-    private val timelineHolder by inject<TimelineHolder> { parametersOf(roomId) }
+    private val timelineService by inject<TimelineService> { parametersOf(roomId) }
     private val sendService by inject<SendService> { parametersOf(roomId) }
     private val taskExecutor by inject<TaskExecutor>()
 
@@ -47,8 +48,8 @@ internal data class DefaultRoom(
         }
     }
 
-    override fun timeline(eventId: String?): LiveData<PagedList<EnrichedEvent>> {
-        return timelineHolder.timeline(eventId)
+    override fun timeline(eventId: String?): LiveData<TimelineData> {
+        return timelineService.timeline(eventId)
     }
 
     override fun loadRoomMembersIfNeeded(): Cancelable {

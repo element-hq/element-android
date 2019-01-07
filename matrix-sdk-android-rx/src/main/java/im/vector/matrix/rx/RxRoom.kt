@@ -1,9 +1,8 @@
 package im.vector.matrix.rx
 
-import android.arch.paging.PagedList
-import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import io.reactivex.Observable
 
 class RxRoom(private val room: Room) {
@@ -12,7 +11,7 @@ class RxRoom(private val room: Room) {
         return room.roomSummary.asObservable()
     }
 
-    fun timeline(eventId: String? = null): Observable<PagedList<EnrichedEvent>> {
+    fun timeline(eventId: String? = null): Observable<TimelineData> {
         return room.timeline(eventId).asObservable()
     }
 

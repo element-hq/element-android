@@ -53,9 +53,10 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     private fun observeTimeline() {
         room.rx().timeline(eventId)
-                .execute { asyncTimeline ->
-                    copy(asyncTimeline = asyncTimeline)
+                .execute { timelineData ->
+                    copy(asyncTimelineData= timelineData)
                 }
     }
+
 
 }

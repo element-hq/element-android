@@ -5,9 +5,9 @@ import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
-import im.vector.riotredesign.features.home.room.detail.Timeline
 
 class TimelineEventController(private val roomId: String,
                               private val messageItemFactory: MessageItemFactory,
@@ -36,28 +36,38 @@ class TimelineEventController(private val roomId: String,
         }
     }
 
-    private var snapshotList: List<EnrichedEvent>? = emptyList()
-    var timeline: Timeline? = null
-        set(value) {
-            field?.removeWeakCallback(pagedListCallback)
-            field = value
-            field?.addWeakCallback(null, pagedListCallback)
-            buildSnapshotList()
-        }
-
+    private var snapshotList: List<EnrichedEvent> = emptyList()
+    private var timelineData: TimelineData? = null
     var callback: Callback? = null
 
-    override fun buildModels() {
-        buildModels(snapshotList)
+    fun update(timelineData: TimelineData?) {
+        timelineData?.events?.removeWeakCallback(pagedListCallback)
+        this.timelineData = timelineData
+        timelineData?.events?.addWeakCallback(null, pagedListCallback)
+        buildSnapshotList()
     }
 
-    private fun buildModels(data: List<EnrichedEvent?>?) {
-        if (data.isNullOrEmpty()) {
+    override fun buildModels() {
+        buildModelsWith(
+                snapshotList,
+                timelineData?.isLoadingForward ?: false,
+                timelineData?.isLoadingBackward ?: false
+        )
+    }
+
+    private fun buildModelsWith(events: List<EnrichedEvent?>,
+                                isLoadingForward: Boolean,
+                                isLoadingBackward: Boolean) {
+        if (events.isEmpty()) {
             return
         }
-        for (index in 0 until data.size) {
-            val event = data[index] ?: continue
-            val nextEvent = if (index + 1 < data.size) data[index + 1] else null
+        LoadingItemModel_()
+                .id(roomId + "forward_loading_item")
+                .addIf(isLoadingForward, this)
+
+        for (index in 0 until events.size) {
+            val event = events[index] ?: continue
+            val nextEvent = if (index + 1 < events.size) events[index + 1] else null
 
             val date = event.root.localDateTime()
             val nextDate = nextEvent?.root?.localDateTime()
@@ -65,10 +75,13 @@ class TimelineEventController(private val roomId: String,
 
             val item = when (event.root.type) {
                 EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date, callback)
-                else -> textItemFactory.create(event)
+                else              -> textItemFactory.create(event)
             }
+
             item
-                    ?.onBind { timeline?.loadAround(index) }
+                    ?.onBind {
+                        timelineData?.events?.loadAround(index)
+                    }
                     ?.id(event.localId)
                     ?.addTo(this)
 
@@ -78,15 +91,14 @@ class TimelineEventController(private val roomId: String,
             }
         }
 
-        //It's a hack at the moment
-        val isLastEvent = data.last()?.root?.type == EventType.STATE_ROOM_CREATE
         LoadingItemModel_()
                 .id(roomId + "backward_loading_item")
-                .addIf(!isLastEvent, this)
+                .addIf(isLoadingBackward, this)
+
     }
 
     private fun buildSnapshotList() {
-        snapshotList = timeline?.snapshot() ?: emptyList()
+        snapshotList = timelineData?.events?.snapshot() ?: emptyList()
         requestModelBuild()
     }
 

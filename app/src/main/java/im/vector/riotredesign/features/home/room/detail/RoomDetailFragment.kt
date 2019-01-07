@@ -6,9 +6,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
-import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
@@ -19,7 +19,6 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 @Parcelize
 data class RoomDetailArgs(
@@ -72,7 +71,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
-        //scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
+        scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
         //timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
         recyclerView.setHasFixedSize(true)
@@ -82,16 +81,19 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     }
 
     private fun renderState(state: RoomDetailViewState) {
-        Timber.v("Render state")
-        val timeline = state.asyncTimeline()
-        if (timeline != null) {
-            renderTimeline(timeline)
-        }
-        renderRoomSummary(state.asyncRoomSummary())
+        renderRoomSummary(state)
+        renderTimeline(state)
     }
 
-    private fun renderRoomSummary(roomSummary: RoomSummary?) {
-        roomSummary?.let {
+    private fun renderTimeline(state: RoomDetailViewState) {
+        when (state.asyncTimelineData) {
+            is Success -> timelineEventController.update(state.asyncTimelineData())
+
+        }
+    }
+
+    private fun renderRoomSummary(state: RoomDetailViewState) {
+        state.asyncRoomSummary()?.let {
             toolbarTitleView.text = it.displayName
             AvatarRenderer.render(it, toolbarAvatarImageView)
             if (it.topic.isNotEmpty()) {
@@ -101,11 +103,6 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
                 toolbarSubtitleView.visibility = View.GONE
             }
         }
-    }
-
-    private fun renderTimeline(timeline: Timeline?) {
-        //scrollOnNewMessageCallback.hasBeenUpdated.set(true)
-        timelineEventController.timeline = timeline
     }
 
     // TimelineEventController.Callback ************************************************************
