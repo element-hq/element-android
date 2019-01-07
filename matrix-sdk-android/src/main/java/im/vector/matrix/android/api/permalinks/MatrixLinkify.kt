@@ -58,7 +58,7 @@ object MatrixLinkify {
     }
 
 
-    private fun addLinkMovementMethod(textView: TextView) {
+    fun addLinkMovementMethod(textView: TextView) {
         val movementMethod = textView.movementMethod
         if (movementMethod == null || movementMethod !is LinkMovementMethod) {
             if (textView.linksClickable) {

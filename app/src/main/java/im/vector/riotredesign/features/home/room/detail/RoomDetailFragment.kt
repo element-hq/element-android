@@ -75,6 +75,8 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         //scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
         //timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
+        recyclerView.setHasFixedSize(true)
+        recyclerView.setItemViewCacheSize(20)
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
     }

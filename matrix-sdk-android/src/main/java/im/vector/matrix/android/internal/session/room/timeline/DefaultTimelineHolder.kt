@@ -15,7 +15,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.tryTransactionSync
+import im.vector.matrix.android.internal.util.tryTransactionAsync
 import io.realm.Realm
 import io.realm.RealmQuery
 
@@ -55,7 +55,7 @@ internal class DefaultTimelineHolder(private val roomId: String,
     }
 
     private fun clearUnlinkedEvents() {
-        monarchy.tryTransactionSync { realm ->
+        monarchy.tryTransactionAsync { realm ->
             val unlinkedEvents = EventEntity
                     .where(realm, roomId = roomId)
                     .equalTo(EventEntityFields.IS_UNLINKED, true)
