@@ -37,6 +37,10 @@ internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds
             .findAll()
 }
 
+internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, eventId: String): ChunkEntity? {
+    return findAllIncludingEvents(realm, listOf(eventId)).firstOrNull()
+}
+
 internal fun ChunkEntity.Companion.create(realm: Realm, prevToken: String?, nextToken: String?): ChunkEntity {
     return realm.createObject<ChunkEntity>().apply {
         this.prevToken = prevToken

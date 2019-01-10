@@ -15,7 +15,12 @@ import io.realm.RealmQuery
 internal class RoomMemberExtractor(private val monarchy: Monarchy,
                                    private val roomId: String) {
 
+    private val cached = HashMap<String, RoomMember?>()
+
     fun extractFrom(event: EventEntity): RoomMember? {
+        if (cached.containsKey(event.eventId)) {
+            return cached[event.eventId]
+        }
         val sender = event.sender ?: return null
         // If the event is unlinked we want to fetch unlinked state events
         val unlinked = event.isUnlinked
@@ -23,11 +28,13 @@ internal class RoomMemberExtractor(private val monarchy: Monarchy,
         // If prevContent is null we fallback to the Int.MIN state events content()
         val content = if (event.stateIndex <= 0) {
             baseQuery(monarchy, roomId, sender, unlinked).next(from = event.stateIndex)?.prevContent
-            ?: baseQuery(monarchy, roomId, sender, unlinked).last(since = event.stateIndex)?.content
+                    ?: baseQuery(monarchy, roomId, sender, unlinked).last(since = event.stateIndex)?.content
         } else {
             baseQuery(monarchy, roomId, sender, unlinked).last(since = event.stateIndex)?.content
         }
-        return ContentMapper.map(content).toModel()
+        val roomMember: RoomMember? = ContentMapper.map(content).toModel()
+        cached[event.eventId] = roomMember
+        return roomMember
     }
 
     private fun baseQuery(monarchy: Monarchy,

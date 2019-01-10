@@ -2,12 +2,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.database.helper.addAll
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
-import im.vector.matrix.android.internal.database.helper.addStateEvents
-import im.vector.matrix.android.internal.database.helper.deleteOnCascade
-import im.vector.matrix.android.internal.database.helper.isUnlinked
-import im.vector.matrix.android.internal.database.helper.merge
+import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.create
@@ -21,12 +16,15 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
 
     fun insertInDb(receivedChunk: TokenChunkEvent,
                    roomId: String,
-                   direction: PaginationDirection): Try<Unit> {
+                   direction: PaginationDirection): Try<Boolean> {
 
+        if (receivedChunk.events.isEmpty() && receivedChunk.stateEvents.isEmpty()) {
+            return Try.just(false)
+        }
         return monarchy
                 .tryTransactionSync { realm ->
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                                     ?: throw IllegalStateException("You shouldn't use this method without a room")
+                            ?: throw IllegalStateException("You shouldn't use this method without a room")
 
                     val nextToken: String?
                     val prevToken: String?
@@ -46,10 +44,10 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
 
                     var currentChunk = if (direction == PaginationDirection.FORWARDS) {
                         prevChunk?.apply { this.nextToken = nextToken }
-                        ?: ChunkEntity.create(realm, prevToken, nextToken)
+                                ?: ChunkEntity.create(realm, prevToken, nextToken)
                     } else {
                         nextChunk?.apply { this.prevToken = prevToken }
-                        ?: ChunkEntity.create(realm, prevToken, nextToken)
+                                ?: ChunkEntity.create(realm, prevToken, nextToken)
                     }
 
                     currentChunk.addAll(roomId, receivedChunk.events, direction, isUnlinked = currentChunk.isUnlinked())
@@ -71,6 +69,7 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
                     roomEntity.addOrUpdate(currentChunk)
                     roomEntity.addStateEvents(receivedChunk.stateEvents, isUnlinked = currentChunk.isUnlinked())
                 }
+                .map { true }
     }
 
     private fun handleMerge(roomEntity: RoomEntity,

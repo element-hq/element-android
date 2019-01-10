@@ -4,7 +4,7 @@ import android.widget.TextView
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
 
-data class TextItem(
+class TextItem(
         val text: CharSequence? = null
 ) : KotlinModel(R.layout.item_event_text) {
 

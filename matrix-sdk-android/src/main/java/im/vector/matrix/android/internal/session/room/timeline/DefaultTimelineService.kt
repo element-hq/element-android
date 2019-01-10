@@ -22,7 +22,8 @@ import im.vector.matrix.android.internal.util.tryTransactionAsync
 import io.realm.Realm
 import io.realm.RealmQuery
 
-private const val PAGE_SIZE = 30
+private const val PAGE_SIZE = 50
+private const val PREFETCH_DISTANCE = 20
 
 internal class DefaultTimelineService(private val roomId: String,
                                       private val monarchy: Monarchy,
@@ -51,6 +52,7 @@ internal class DefaultTimelineService(private val roomId: String,
         val pagedListConfig = PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
                 .setPageSize(PAGE_SIZE)
+                .setPrefetchDistance(PREFETCH_DISTANCE)
                 .build()
 
         val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)

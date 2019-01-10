@@ -6,11 +6,11 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EnrichedEvent
 import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
+import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.PagingRequestHelper
-import java.util.*
+import timber.log.Timber
 
 internal class TimelineBoundaryCallback(private val roomId: String,
                                         private val taskExecutor: TaskExecutor,
@@ -43,8 +43,9 @@ internal class TimelineBoundaryCallback(private val roomId: String,
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: EnrichedEvent) {
+        Timber.v("On item at end loaded")
         val token = itemAtEnd.root.eventId?.let { getToken(it, PaginationDirection.BACKWARDS) }
-                    ?: return
+                ?: return
 
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
             runPaginationRequest(it, token, PaginationDirection.BACKWARDS)
@@ -52,8 +53,9 @@ internal class TimelineBoundaryCallback(private val roomId: String,
     }
 
     override fun onItemAtFrontLoaded(itemAtFront: EnrichedEvent) {
+        Timber.v("On item at front loaded")
         val token = itemAtFront.root.eventId?.let { getToken(it, PaginationDirection.FORWARDS) }
-                    ?: return
+                ?: return
 
         helper.runIfNotRunning(PagingRequestHelper.RequestType.BEFORE) {
             runPaginationRequest(it, token, PaginationDirection.FORWARDS)
@@ -63,7 +65,7 @@ internal class TimelineBoundaryCallback(private val roomId: String,
     private fun getToken(eventId: String, direction: PaginationDirection): String? {
         var token: String? = null
         monarchy.doWithRealm { realm ->
-            val chunkEntity = ChunkEntity.findAllIncludingEvents(realm, Collections.singletonList(eventId)).firstOrNull()
+            val chunkEntity = ChunkEntity.findIncludingEvent(realm, eventId)
             token = if (direction == PaginationDirection.FORWARDS) chunkEntity?.nextToken else chunkEntity?.prevToken
         }
         return token
@@ -74,14 +76,14 @@ internal class TimelineBoundaryCallback(private val roomId: String,
                                      direction: PaginationDirection) {
 
         val params = PaginationTask.Params(roomId = roomId,
-                                           from = from,
-                                           direction = direction,
-                                           limit = limit)
+                from = from,
+                direction = direction,
+                limit = limit)
 
         paginationTask.configureWith(params)
                 .enableRetry()
-                .dispatchTo(object : MatrixCallback<TokenChunkEvent> {
-                    override fun onSuccess(data: TokenChunkEvent) {
+                .dispatchTo(object : MatrixCallback<Boolean> {
+                    override fun onSuccess(data: Boolean) {
                         requestCallback.recordSuccess()
                     }
 
