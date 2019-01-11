@@ -44,15 +44,12 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     private fun renderState(state: RoomListViewState) {
         when (state.asyncRooms) {
             is Incomplete -> renderLoading()
-            is Success -> renderSuccess(state)
-            is Fail -> renderFailure(state.asyncRooms.error)
+            is Success    -> renderSuccess(state)
+            is Fail       -> renderFailure(state.asyncRooms.error)
         }
     }
 
     private fun renderSuccess(state: RoomListViewState) {
-        if (state.selectedRoomId != null) {
-            homeNavigator.openRoomDetail(state.selectedRoomId, null)
-        }
         if (state.asyncRooms().isNullOrEmpty()) {
             stateView.state = StateView.State.Empty(getString(R.string.room_list_empty))
         } else {
@@ -68,7 +65,7 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     private fun renderFailure(error: Throwable) {
         val message = when (error) {
             is Failure.NetworkConnection -> getString(R.string.error_no_network)
-            else -> getString(R.string.error_common)
+            else                         -> getString(R.string.error_common)
         }
         stateView.state = StateView.State.Error(message)
     }

@@ -62,6 +62,11 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         roomDetailViewModel.subscribe { renderState(it) }
     }
 
+    override fun onResume() {
+        super.onResume()
+        roomDetailViewModel.accept(RoomDetailActions.IsDisplayed)
+    }
+
     private fun setupToolbar() {
         val parentActivity = riotActivity
         if (parentActivity is ToolbarConfigurable) {

@@ -10,13 +10,16 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
 import im.vector.riotredesign.features.home.group.SelectedGroupHolder
+import im.vector.riotredesign.features.home.room.VisibleRoomHolder
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
 
 class RoomListViewModel(initialState: RoomListViewState,
                         private val session: Session,
                         private val selectedGroupHolder: SelectedGroupHolder,
+                        private val visibleRoomHolder: VisibleRoomHolder,
                         private val roomSelectionRepository: RoomSelectionRepository)
     : RiotViewModel<RoomListViewState>(initialState) {
 
@@ -27,12 +30,14 @@ class RoomListViewModel(initialState: RoomListViewState,
             val currentSession = Matrix.getInstance().currentSession
             val roomSelectionRepository = activity.get<RoomSelectionRepository>()
             val selectedGroupHolder = activity.get<SelectedGroupHolder>()
-            return RoomListViewModel(state, currentSession, selectedGroupHolder, roomSelectionRepository)
+            val visibleRoomHolder = activity.get<VisibleRoomHolder>()
+            return RoomListViewModel(state, currentSession, selectedGroupHolder, visibleRoomHolder, roomSelectionRepository)
         }
     }
 
     init {
         observeRoomSummaries()
+        observeVisibleRoom()
     }
 
     fun accept(action: RoomListActions) {
@@ -46,8 +51,15 @@ class RoomListViewModel(initialState: RoomListViewState,
     private fun handleSelectRoom(action: RoomListActions.SelectRoom) = withState { state ->
         if (state.selectedRoomId != action.roomSummary.roomId) {
             roomSelectionRepository.saveLastSelectedRoom(action.roomSummary.roomId)
-            setState { copy(selectedRoomId = action.roomSummary.roomId) }
         }
+    }
+
+    private fun observeVisibleRoom() {
+        visibleRoomHolder.visibleRoom()
+                .subscribeBy {
+                    setState { copy(selectedRoomId = it) }
+                }
+                .disposeOnClear()
     }
 
     private fun observeRoomSummaries() {
@@ -78,15 +90,8 @@ class RoomListViewModel(initialState: RoomListViewState,
                 }
         )
                 .execute { async ->
-                    val summaries = async()
-                    val selectedRoomId = selectedRoomId
-                            ?: roomSelectionRepository.lastSelectedRoom()
-                            ?: summaries?.directRooms?.firstOrNull()?.roomId
-                            ?: summaries?.groupRooms?.firstOrNull()?.roomId
-
                     copy(
-                            asyncRooms = async,
-                            selectedRoomId = selectedRoomId
+                            asyncRooms = async
                     )
                 }
     }

@@ -9,7 +9,9 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
+import com.airbnb.mvrx.viewModel
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.RiotActivity
@@ -22,6 +24,8 @@ import org.koin.standalone.StandAloneContext.loadKoinModules
 
 class HomeActivity : RiotActivity(), ToolbarConfigurable {
 
+
+    private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private val homeNavigator by inject<HomeNavigator>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +38,9 @@ class HomeActivity : RiotActivity(), ToolbarConfigurable {
             val loadingDetail = LoadingRoomDetailFragment.newInstance()
             replaceFragment(loadingDetail, R.id.homeDetailFragmentContainer)
             replaceFragment(homeDrawerFragment, R.id.homeDrawerFragmentContainer)
+        }
+        homeActivityViewModel.openRoomLiveData.observeEvent(this) {
+            homeNavigator.openRoomDetail(it, null)
         }
     }
 

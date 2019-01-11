@@ -1,6 +1,7 @@
 package im.vector.riotredesign.features.home
 
 import im.vector.riotredesign.features.home.group.SelectedGroupHolder
+import im.vector.riotredesign.features.home.room.VisibleRoomHolder
 import im.vector.riotredesign.features.home.room.detail.timeline.MessageItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.TextItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineDateFormatter
@@ -36,8 +37,13 @@ class HomeModule(private val homeActivity: HomeActivity) {
         }
 
         single {
+            VisibleRoomHolder()
+        }
+
+        single {
             HomePermalinkHandler(get())
         }
+
 
     }
 }
