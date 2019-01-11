@@ -52,13 +52,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         super.onActivityCreated(savedInstanceState)
         setupRecyclerView()
         setupToolbar()
-        sendButton.setOnClickListener {
-            val textMessage = composerEditText.text.toString()
-            if (textMessage.isNotBlank()) {
-                composerEditText.text = null
-                roomDetailViewModel.accept(RoomDetailActions.SendMessage(textMessage))
-            }
-        }
+        setupSendButton()
         roomDetailViewModel.subscribe { renderState(it) }
     }
 
@@ -82,6 +76,16 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         //timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
+    }
+
+    private fun setupSendButton() {
+        sendButton.setOnClickListener {
+            val textMessage = composerEditText.text.toString()
+            if (textMessage.isNotBlank()) {
+                composerEditText.text = null
+                roomDetailViewModel.accept(RoomDetailActions.SendMessage(textMessage))
+            }
+        }
     }
 
     private fun renderState(state: RoomDetailViewState) {

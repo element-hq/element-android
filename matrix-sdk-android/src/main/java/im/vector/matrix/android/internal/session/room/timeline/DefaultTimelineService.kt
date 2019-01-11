@@ -22,8 +22,9 @@ import im.vector.matrix.android.internal.util.tryTransactionAsync
 import io.realm.Realm
 import io.realm.RealmQuery
 
-private const val PAGE_SIZE = 50
-private const val PREFETCH_DISTANCE = 20
+private const val PAGE_SIZE = 120
+private const val PREFETCH_DISTANCE = 40
+private const val EVENT_NOT_FOUND_INDEX = -1
 
 internal class DefaultTimelineService(private val roomId: String,
                                       private val monarchy: Monarchy,
@@ -37,8 +38,15 @@ internal class DefaultTimelineService(private val roomId: String,
 
     override fun timeline(eventId: String?): LiveData<TimelineData> {
         clearUnlinkedEvents()
+        var initialLoadKey = 0
         if (eventId != null) {
-            fetchEventIfNeeded(eventId)
+            val indexOfEvent = indexOfEvent(eventId)
+            if (indexOfEvent == EVENT_NOT_FOUND_INDEX) {
+                val params = GetContextOfEventTask.Params(roomId, eventId)
+                contextOfEventTask.configureWith(params).executeBy(taskExecutor)
+            } else {
+                initialLoadKey = indexOfEvent
+            }
         }
         val realmDataSourceFactory = monarchy.createDataSourceFactory {
             buildDataSourceFactoryQuery(it, eventId)
@@ -52,10 +60,14 @@ internal class DefaultTimelineService(private val roomId: String,
         val pagedListConfig = PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
                 .setPageSize(PAGE_SIZE)
+                .setInitialLoadSizeHint(PAGE_SIZE)
                 .setPrefetchDistance(PREFETCH_DISTANCE)
                 .build()
 
-        val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig).setBoundaryCallback(boundaryCallback)
+        val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig)
+                .setBoundaryCallback(boundaryCallback)
+                .setInitialLoadKey(initialLoadKey)
+
         val eventsLiveData = monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
 
         return LiveDataUtils.combine(eventsLiveData, boundaryCallback.status) { events, status ->
@@ -76,19 +88,12 @@ internal class DefaultTimelineService(private val roomId: String,
         }
     }
 
-    private fun fetchEventIfNeeded(eventId: String) {
-        if (!isEventPersisted(eventId)) {
-            val params = GetContextOfEventTask.Params(roomId, eventId)
-            contextOfEventTask.configureWith(params).executeBy(taskExecutor)
-        }
-    }
-
-    private fun isEventPersisted(eventId: String): Boolean {
-        var isEventPersisted = false
+    private fun indexOfEvent(eventId: String): Int {
+        var displayIndex = EVENT_NOT_FOUND_INDEX
         monarchy.doWithRealm {
-            isEventPersisted = EventEntity.where(it, eventId = eventId).findFirst() != null
+            displayIndex = EventEntity.where(it, eventId = eventId).findFirst()?.displayIndex ?: EVENT_NOT_FOUND_INDEX
         }
-        return isEventPersisted
+        return displayIndex
     }
 
     private fun buildDataSourceFactoryQuery(realm: Realm, eventId: String?): RealmQuery<EventEntity> {
