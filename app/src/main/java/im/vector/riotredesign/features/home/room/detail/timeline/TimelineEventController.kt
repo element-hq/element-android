@@ -23,14 +23,18 @@ class TimelineEventController(private val roomId: String,
 
     private var isLoadingForward: Boolean = false
     private var isLoadingBackward: Boolean = false
+    private var hasReachedEnd: Boolean = false
 
     var callback: Callback? = null
 
     fun update(timelineData: TimelineData?) {
-        isLoadingForward = timelineData?.isLoadingForward ?: false
-        isLoadingBackward = timelineData?.isLoadingBackward ?: false
-        submitList(timelineData?.events)
-        requestModelBuild()
+        timelineData?.let {
+            isLoadingForward = it.isLoadingForward
+            isLoadingBackward = it.isLoadingBackward
+            hasReachedEnd = it.events.lastOrNull()?.root?.type == EventType.STATE_ROOM_CREATE
+            submitList(it.events)
+            requestModelBuild()
+        }
     }
 
 
@@ -48,7 +52,7 @@ class TimelineEventController(private val roomId: String,
 
         val item = when (event.root.type) {
             EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date, callback)
-            else -> textItemFactory.create(event)
+            else              -> textItemFactory.create(event)
         }
         item?.also {
             it.id(event.localId)
@@ -72,7 +76,7 @@ class TimelineEventController(private val roomId: String,
 
         LoadingItemModel_()
                 .id(roomId + "backward_loading_item")
-                .addIf(isLoadingBackward, this)
+                .addIf(!hasReachedEnd, this)
     }
 
 
