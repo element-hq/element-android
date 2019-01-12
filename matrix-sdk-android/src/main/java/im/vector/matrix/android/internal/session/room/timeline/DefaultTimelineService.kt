@@ -22,8 +22,8 @@ import im.vector.matrix.android.internal.util.tryTransactionAsync
 import io.realm.Realm
 import io.realm.RealmQuery
 
-private const val PAGE_SIZE = 120
-private const val PREFETCH_DISTANCE = 40
+private const val PAGE_SIZE = 100
+private const val PREFETCH_DISTANCE = 30
 private const val EVENT_NOT_FOUND_INDEX = -1
 
 internal class DefaultTimelineService(private val roomId: String,
@@ -60,7 +60,7 @@ internal class DefaultTimelineService(private val roomId: String,
         val pagedListConfig = PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
                 .setPageSize(PAGE_SIZE)
-                .setInitialLoadSizeHint(PAGE_SIZE)
+                .setInitialLoadSizeHint(2 * PAGE_SIZE)
                 .setPrefetchDistance(PREFETCH_DISTANCE)
                 .build()
 

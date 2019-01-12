@@ -10,7 +10,6 @@ import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.PagingRequestHelper
-import timber.log.Timber
 
 internal class TimelineBoundaryCallback(private val roomId: String,
                                         private val taskExecutor: TaskExecutor,
@@ -43,22 +42,20 @@ internal class TimelineBoundaryCallback(private val roomId: String,
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: EnrichedEvent) {
-        Timber.v("On item at end loaded")
         val token = itemAtEnd.root.eventId?.let { getToken(it, PaginationDirection.BACKWARDS) }
                 ?: return
 
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
-            runPaginationRequest(it, token, PaginationDirection.BACKWARDS)
+            executePaginationTask(it, token, PaginationDirection.BACKWARDS)
         }
     }
 
     override fun onItemAtFrontLoaded(itemAtFront: EnrichedEvent) {
-        Timber.v("On item at front loaded")
         val token = itemAtFront.root.eventId?.let { getToken(it, PaginationDirection.FORWARDS) }
                 ?: return
 
         helper.runIfNotRunning(PagingRequestHelper.RequestType.BEFORE) {
-            runPaginationRequest(it, token, PaginationDirection.FORWARDS)
+            executePaginationTask(it, token, PaginationDirection.FORWARDS)
         }
     }
 
@@ -71,9 +68,9 @@ internal class TimelineBoundaryCallback(private val roomId: String,
         return token
     }
 
-    private fun runPaginationRequest(requestCallback: PagingRequestHelper.Request.Callback,
-                                     from: String,
-                                     direction: PaginationDirection) {
+    private fun executePaginationTask(requestCallback: PagingRequestHelper.Request.Callback,
+                                      from: String,
+                                      direction: PaginationDirection) {
 
         val params = PaginationTask.Params(roomId = roomId,
                 from = from,
