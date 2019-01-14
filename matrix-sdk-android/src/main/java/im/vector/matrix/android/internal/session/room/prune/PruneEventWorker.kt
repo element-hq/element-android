@@ -13,6 +13,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import im.vector.matrix.android.internal.util.tryTransactionAsync
+import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import org.koin.standalone.inject
 
@@ -22,9 +23,7 @@ internal class PruneEventWorker(context: Context,
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            val redactionEvents: List<Event>,
-            val updateIndexes: List<Int>,
-            val deletionIndexes: List<Int>
+            val redactionEvents: List<Event>
     )
 
     private val monarchy by inject<Monarchy>()
@@ -33,10 +32,9 @@ internal class PruneEventWorker(context: Context,
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                      ?: return Result.failure()
 
-        val result = monarchy.tryTransactionAsync { realm ->
-            params.updateIndexes.forEach { index ->
-                val data = params.redactionEvents[index]
-                pruneEvent(realm, data)
+        val result = monarchy.tryTransactionSync { realm ->
+            params.redactionEvents.forEach { event ->
+                pruneEvent(realm, event)
             }
         }
         return result.fold({ Result.retry() }, { Result.success() })

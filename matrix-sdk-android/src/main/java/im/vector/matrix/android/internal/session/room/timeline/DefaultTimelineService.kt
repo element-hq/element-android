@@ -4,8 +4,8 @@ import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.interceptor.EnrichedEventInterceptor
-import im.vector.matrix.android.api.session.events.model.EnrichedEvent
+import im.vector.matrix.android.api.session.events.interceptor.TimelineEventInterceptor
+import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -34,35 +34,21 @@ internal class DefaultTimelineService(private val roomId: String,
                                       private val roomMemberExtractor: RoomMemberExtractor
 ) : TimelineService {
 
-    private val eventInterceptors = ArrayList<EnrichedEventInterceptor>()
+    private val eventInterceptors = ArrayList<TimelineEventInterceptor>()
 
     override fun timeline(eventId: String?): LiveData<TimelineData> {
         clearUnlinkedEvents()
-        var initialLoadKey = 0
-        if (eventId != null) {
-            val indexOfEvent = indexOfEvent(eventId)
-            if (indexOfEvent == EVENT_NOT_FOUND_INDEX) {
-                val params = GetContextOfEventTask.Params(roomId, eventId)
-                contextOfEventTask.configureWith(params).executeBy(taskExecutor)
-            } else {
-                initialLoadKey = indexOfEvent
-            }
-        }
+        val initialLoadKey = getInitialLoadKey(eventId)
         val realmDataSourceFactory = monarchy.createDataSourceFactory {
             buildDataSourceFactoryQuery(it, eventId)
         }
         val domainSourceFactory = realmDataSourceFactory
                 .map { eventEntity ->
                     val roomMember = roomMemberExtractor.extractFrom(eventEntity)
-                    EnrichedEvent(eventEntity.asDomain(), eventEntity.localId, roomMember)
+                    TimelineEvent(eventEntity.asDomain(), eventEntity.localId, roomMember)
                 }
 
-        val pagedListConfig = PagedList.Config.Builder()
-                .setEnablePlaceholders(false)
-                .setPageSize(PAGE_SIZE)
-                .setInitialLoadSizeHint(2 * PAGE_SIZE)
-                .setPrefetchDistance(PREFETCH_DISTANCE)
-                .build()
+        val pagedListConfig = buildPagedListConfig()
 
         val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig)
                 .setBoundaryCallback(boundaryCallback)
@@ -77,6 +63,35 @@ internal class DefaultTimelineService(private val roomId: String,
         }
     }
 
+    // PRIVATE FUNCTIONS ***************************************************************************
+
+    private fun getInitialLoadKey(eventId: String?): Int {
+        var initialLoadKey = 0
+        if (eventId != null) {
+            val indexOfEvent = indexOfEvent(eventId)
+            if (indexOfEvent == EVENT_NOT_FOUND_INDEX) {
+                fetchEvent(eventId)
+            } else {
+                initialLoadKey = indexOfEvent
+            }
+        }
+        return initialLoadKey
+    }
+
+
+    private fun fetchEvent(eventId: String) {
+        val params = GetContextOfEventTask.Params(roomId, eventId)
+        contextOfEventTask.configureWith(params).executeBy(taskExecutor)
+    }
+
+    private fun buildPagedListConfig(): PagedList.Config {
+        return PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setPageSize(PAGE_SIZE)
+                .setInitialLoadSizeHint(2 * PAGE_SIZE)
+                .setPrefetchDistance(PREFETCH_DISTANCE)
+                .build()
+    }
 
     private fun clearUnlinkedEvents() {
         monarchy.tryTransactionAsync { realm ->

@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.events.model.EnrichedEvent
+import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -16,7 +16,7 @@ internal class TimelineBoundaryCallback(private val roomId: String,
                                         private val paginationTask: PaginationTask,
                                         private val monarchy: Monarchy,
                                         private val helper: PagingRequestHelper
-) : PagedList.BoundaryCallback<EnrichedEvent>() {
+) : PagedList.BoundaryCallback<TimelineEvent>() {
 
     var limit = 30
 
@@ -41,7 +41,7 @@ internal class TimelineBoundaryCallback(private val roomId: String,
         // actually, it's not possible
     }
 
-    override fun onItemAtEndLoaded(itemAtEnd: EnrichedEvent) {
+    override fun onItemAtEndLoaded(itemAtEnd: TimelineEvent) {
         val token = itemAtEnd.root.eventId?.let { getToken(it, PaginationDirection.BACKWARDS) }
                 ?: return
 
@@ -50,7 +50,7 @@ internal class TimelineBoundaryCallback(private val roomId: String,
         }
     }
 
-    override fun onItemAtFrontLoaded(itemAtFront: EnrichedEvent) {
+    override fun onItemAtFrontLoaded(itemAtFront: TimelineEvent) {
         val token = itemAtFront.root.eventId?.let { getToken(it, PaginationDirection.FORWARDS) }
                 ?: return
 

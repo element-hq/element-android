@@ -23,7 +23,6 @@ class HomeNavigator {
         if (!addToBackstack && isRoomOpened(roomId)) {
             return
         }
-        currentRoomId = roomId
         activity?.let {
             val args = RoomDetailArgs(roomId, eventId)
             val roomDetailFragment = RoomDetailFragment.newInstance(args)
@@ -31,6 +30,7 @@ class HomeNavigator {
             if (addToBackstack) {
                 it.addFragmentToBackstack(roomDetailFragment, R.id.homeDetailFragmentContainer, roomId)
             } else {
+                currentRoomId = roomId
                 clearBackStack(it.supportFragmentManager)
                 it.replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
             }

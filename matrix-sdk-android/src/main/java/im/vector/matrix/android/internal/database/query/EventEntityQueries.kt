@@ -26,11 +26,12 @@ internal fun EventEntity.Companion.where(realm: Realm,
         query.equalTo(EventEntityFields.TYPE, type)
     }
     return when (linkFilterMode) {
-        LINKED_ONLY -> query.equalTo(EventEntityFields.IS_UNLINKED, false)
+        LINKED_ONLY   -> query.equalTo(EventEntityFields.IS_UNLINKED, false)
         UNLINKED_ONLY -> query.equalTo(EventEntityFields.IS_UNLINKED, true)
-        BOTH -> query
+        BOTH          -> query
     }
 }
+
 
 internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = true): EventEntity? {
     if (from != null) {

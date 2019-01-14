@@ -9,7 +9,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
-import im.vector.riotredesign.core.utils.Event
+import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
@@ -31,8 +31,8 @@ class HomeActivityViewModel(state: EmptyState,
         }
     }
 
-    private val _openRoomLiveData = MutableLiveData<Event<String>>()
-    val openRoomLiveData: LiveData<Event<String>>
+    private val _openRoomLiveData = MutableLiveData<LiveEvent<String>>()
+    val openRoomLiveData: LiveData<LiveEvent<String>>
         get() = _openRoomLiveData
 
     init {
@@ -40,7 +40,7 @@ class HomeActivityViewModel(state: EmptyState,
         if (lastSelectedRoom == null) {
             getTheFirstRoomWhenAvailable()
         } else {
-            _openRoomLiveData.postValue(Event(lastSelectedRoom))
+            _openRoomLiveData.postValue(LiveEvent(lastSelectedRoom))
         }
     }
 
@@ -51,7 +51,7 @@ class HomeActivityViewModel(state: EmptyState,
                 .subscribeBy {
                     val firstRoom = it.firstOrNull()
                     if (firstRoom != null) {
-                        _openRoomLiveData.postValue(Event(firstRoom.roomId))
+                        _openRoomLiveData.postValue(LiveEvent(firstRoom.roomId))
                     }
                 }
                 .disposeOnClear()

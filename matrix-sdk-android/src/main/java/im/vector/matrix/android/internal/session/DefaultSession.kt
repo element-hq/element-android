@@ -31,6 +31,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private lateinit var scope: Scope
 
     private val liveEntityUpdaters by inject<List<LiveEntityObserver>>()
+    private val sessionListeners by inject<SessionListeners>()
     private val roomService by inject<RoomService>()
     private val groupService by inject<GroupService>()
     private val syncThread by inject<SyncThread>()
@@ -60,6 +61,14 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         liveEntityUpdaters.forEach { it.dispose() }
         scope.close()
         isOpen = false
+    }
+
+    override fun addListener(listener: Session.Listener) {
+        sessionListeners.addListener(listener)
+    }
+
+    override fun removeListener(listener: Session.Listener) {
+        sessionListeners.removeListener(listener)
     }
 
     // ROOM SERVICE

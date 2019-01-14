@@ -6,10 +6,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager) : DefaultListUpdateCallback {
 
-    val hasBeenUpdated = AtomicBoolean(false)
+    var isLocked = AtomicBoolean(true)
 
     override fun onInserted(position: Int, count: Int) {
-        if (hasBeenUpdated.compareAndSet(true, false) && position == 0 && layoutManager.findFirstVisibleItemPosition() == 0) {
+        if (isLocked.compareAndSet(false, true) && position == 0 && layoutManager.findFirstVisibleItemPosition() == 0) {
             layoutManager.scrollToPosition(0)
         }
     }

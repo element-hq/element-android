@@ -2,7 +2,7 @@ package im.vector.matrix.android.api.session.events.model
 
 import im.vector.matrix.android.api.session.room.model.RoomMember
 
-data class EnrichedEvent(
+data class TimelineEvent(
         val root: Event,
         val localId: String,
         val roomMember: RoomMember?

@@ -70,6 +70,9 @@ abstract class PagedListEpoxyController<T>(
             modelBuildingHandler = modelBuildingHandler
     )
 
+    var currentList: PagedList<T>? = null
+        private set
+
     final override fun buildModels() {
         addModels(modelCache.getModels())
     }
@@ -107,6 +110,7 @@ abstract class PagedListEpoxyController<T>(
      * to [buildItemModel] with items from the previous list.
      */
     fun submitList(newList: PagedList<T>?) {
+        currentList = newList
         modelCache.submitList(newList)
     }
 

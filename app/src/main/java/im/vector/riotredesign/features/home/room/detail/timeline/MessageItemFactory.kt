@@ -4,7 +4,7 @@ import android.text.SpannableStringBuilder
 import android.text.util.Linkify
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
-import im.vector.matrix.android.api.session.events.model.EnrichedEvent
+import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.MessageContent
 import org.threeten.bp.LocalDateTime
@@ -13,8 +13,8 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
 
     private val messagesDisplayedWithInformation = HashSet<String?>()
 
-    fun create(event: EnrichedEvent,
-               nextEvent: EnrichedEvent?,
+    fun create(event: TimelineEvent,
+               nextEvent: TimelineEvent?,
                addDaySeparator: Boolean,
                date: LocalDateTime,
                callback: TimelineEventController.Callback?

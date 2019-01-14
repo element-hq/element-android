@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import com.zhuinden.monarchy.Monarchy
 import io.realm.RealmObject
-import io.realm.RealmResults
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal interface LiveEntityObserver {
@@ -39,11 +38,15 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
         if (changeSet == null) {
             return
         }
-        val updateIndexes = changeSet.orderedCollectionChangeSet.changes + changeSet.orderedCollectionChangeSet.insertions
+        val insertionIndexes = changeSet.orderedCollectionChangeSet.insertions
+        val updateIndexes = changeSet.orderedCollectionChangeSet.changes
         val deletionIndexes = changeSet.orderedCollectionChangeSet.deletions
-        process(changeSet.realmResults, updateIndexes, deletionIndexes)
+        val inserted = changeSet.realmResults.filterIndexed { index, _ -> insertionIndexes.contains(index) }
+        val updated = changeSet.realmResults.filterIndexed { index, _ -> updateIndexes.contains(index) }
+        val deleted = changeSet.realmResults.filterIndexed { index, _ -> deletionIndexes.contains(index) }
+        process(inserted, updated, deleted)
     }
 
-    abstract fun process(results: RealmResults<T>, updateIndexes: IntArray, deletionIndexes: IntArray)
+    abstract fun process(inserted: List<T>, updated: List<T>, deleted: List<T>)
 
 }

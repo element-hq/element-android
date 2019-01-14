@@ -2,7 +2,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyModel
-import im.vector.matrix.android.api.session.events.model.EnrichedEvent
+import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.riotredesign.core.extensions.localDateTime
@@ -13,7 +13,7 @@ class TimelineEventController(private val roomId: String,
                               private val messageItemFactory: MessageItemFactory,
                               private val textItemFactory: TextItemFactory,
                               private val dateFormatter: TimelineDateFormatter
-) : PagedListEpoxyController<EnrichedEvent>(
+) : PagedListEpoxyController<TimelineEvent>(
         EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
@@ -38,7 +38,7 @@ class TimelineEventController(private val roomId: String,
     }
 
 
-    override fun buildItemModels(currentPosition: Int, items: List<EnrichedEvent?>): List<EpoxyModel<*>> {
+    override fun buildItemModels(currentPosition: Int, items: List<TimelineEvent?>): List<EpoxyModel<*>> {
         if (items.isNullOrEmpty()) {
             return emptyList()
         }

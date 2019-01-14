@@ -73,7 +73,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
-        //timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
+        timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
     }
@@ -95,8 +95,15 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     private fun renderTimeline(state: RoomDetailViewState) {
         when (state.asyncTimelineData) {
-            is Success -> timelineEventController.update(state.asyncTimelineData())
+            is Success -> {
+                val timelineData = state.asyncTimelineData()
+                val lockAutoScroll = timelineData?.let {
+                    it.events == timelineEventController.currentList && it.isLoadingForward
+                } ?: true
 
+                scrollOnNewMessageCallback.isLocked.set(lockAutoScroll)
+                timelineEventController.update(timelineData)
+            }
         }
     }
 
