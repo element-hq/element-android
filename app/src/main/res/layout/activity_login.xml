@@ -43,6 +43,16 @@
                 android:inputType="textPassword"
                 android:maxLines="1" />
 
+            <EditText
+                android:id="@+id/hsField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Homeserver"
+                android:inputType="textUri"
+                android:maxLines="1" />
+
         </LinearLayout>
     </ScrollView>
 

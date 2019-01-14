@@ -27,9 +27,10 @@ class LoginActivity : RiotActivity() {
     private fun authenticate() {
         val login = loginField.text.trim().toString()
         val password = passwordField.text.trim().toString()
+        val homeserver = hsField.text.trim().toString()
         progressBar.visibility = View.VISIBLE
         val homeServerConnectionConfig = HomeServerConnectionConfig.Builder()
-                .withHomeServerUri("https://matrix.org/")
+                .withHomeServerUri(homeserver)
                 .withIdentityServerUri("https://vector.im")
                 .withAntiVirusServerUri("https://matrix.org/")
                 .build()
