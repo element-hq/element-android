@@ -15,9 +15,7 @@ internal class GetGroupDataWorker(context: Context,
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            val groupIds: List<String>,
-            val updateIndexes: List<Int>,
-            val deletionIndexes: List<Int>
+            val groupIds: List<String>
     )
 
     private val getGroupDataTask by inject<GetGroupDataTask>()
@@ -26,8 +24,7 @@ internal class GetGroupDataWorker(context: Context,
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                      ?: return Result.failure()
 
-        val results = params.updateIndexes.map { index ->
-            val groupId = params.groupIds[index]
+        val results = params.groupIds.map { groupId ->
             fetchGroupData(groupId)
         }
         val isSuccessful = results.none { it.isFailure() }

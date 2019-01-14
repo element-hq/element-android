@@ -31,6 +31,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private lateinit var scope: Scope
 
     private val liveEntityUpdaters by inject<List<LiveEntityObserver>>()
+    private val sessionListeners by inject<SessionListeners>()
     private val roomService by inject<RoomService>()
     private val groupService by inject<GroupService>()
     private val syncThread by inject<SyncThread>()
@@ -62,6 +63,14 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         isOpen = false
     }
 
+    override fun addListener(listener: Session.Listener) {
+        sessionListeners.addListener(listener)
+    }
+
+    override fun removeListener(listener: Session.Listener) {
+        sessionListeners.removeListener(listener)
+    }
+
     // ROOM SERVICE
 
     override fun getRoom(roomId: String): Room? {
@@ -69,29 +78,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return roomService.getRoom(roomId)
     }
 
-    override fun getAllRooms(): List<Room> {
-        assert(isOpen)
-        return roomService.getAllRooms()
-    }
-
-    override fun liveRooms(): LiveData<List<Room>> {
-        assert(isOpen)
-        return roomService.liveRooms()
-    }
 
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
         assert(isOpen)
         return roomService.liveRoomSummaries()
-    }
-
-    override fun lastSelectedRoom(): RoomSummary? {
-        assert(isOpen)
-        return roomService.lastSelectedRoom()
-    }
-
-    override fun saveLastSelectedRoom(roomSummary: RoomSummary) {
-        assert(isOpen)
-        roomService.saveLastSelectedRoom(roomSummary)
     }
 
     // GROUP SERVICE

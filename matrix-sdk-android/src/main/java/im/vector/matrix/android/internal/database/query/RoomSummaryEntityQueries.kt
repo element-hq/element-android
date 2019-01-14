@@ -13,9 +13,3 @@ internal fun RoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = n
     }
     return query
 }
-
-internal fun RoomSummaryEntity.Companion.lastSelected(realm: Realm): RoomSummaryEntity? {
-    return realm.where<RoomSummaryEntity>()
-            .equalTo(RoomSummaryEntityFields.IS_LATEST_SELECTED, true)
-            .findFirst()
-}

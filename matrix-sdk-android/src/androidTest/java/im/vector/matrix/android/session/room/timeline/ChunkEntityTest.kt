@@ -39,7 +39,7 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
             val fakeEvent = createFakeEvent(false)
-            chunk.add(fakeEvent, PaginationDirection.FORWARDS)
+            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.events.size shouldEqual 1
         }
     }
@@ -49,8 +49,8 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
             val fakeEvent = createFakeEvent(false)
-            chunk.add(fakeEvent, PaginationDirection.FORWARDS)
-            chunk.add(fakeEvent, PaginationDirection.FORWARDS)
+            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
+            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.events.size shouldEqual 1
         }
     }
@@ -60,7 +60,7 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
             val fakeEvent = createFakeEvent(true)
-            chunk.add(fakeEvent, PaginationDirection.FORWARDS)
+            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.lastStateIndex(PaginationDirection.FORWARDS) shouldEqual 1
         }
     }
@@ -70,7 +70,7 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
             val fakeEvent = createFakeEvent(false)
-            chunk.add(fakeEvent, PaginationDirection.FORWARDS)
+            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.lastStateIndex(PaginationDirection.FORWARDS) shouldEqual 0
         }
     }
@@ -81,7 +81,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk: ChunkEntity = realm.createObject()
             val fakeEvents = createFakeListOfEvents(30)
             val numberOfStateEvents = fakeEvents.filter { it.isStateEvent() }.size
-            chunk.addAll(fakeEvents, PaginationDirection.FORWARDS)
+            chunk.addAll("roomId", fakeEvents, PaginationDirection.FORWARDS)
             chunk.lastStateIndex(PaginationDirection.FORWARDS) shouldEqual numberOfStateEvents
         }
     }
@@ -94,7 +94,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             val numberOfStateEvents = fakeEvents.filter { it.isStateEvent() }.size
             val lastIsState = fakeEvents.last().isStateEvent()
             val expectedStateIndex = if (lastIsState) -numberOfStateEvents + 1 else -numberOfStateEvents
-            chunk.addAll(fakeEvents, PaginationDirection.BACKWARDS)
+            chunk.addAll("roomId", fakeEvents, PaginationDirection.BACKWARDS)
             chunk.lastStateIndex(PaginationDirection.BACKWARDS) shouldEqual expectedStateIndex
         }
     }
@@ -104,10 +104,27 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk1: ChunkEntity = realm.createObject()
             val chunk2: ChunkEntity = realm.createObject()
-            chunk1.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk2.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk1.merge(chunk2, PaginationDirection.BACKWARDS)
+            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
             chunk1.events.size shouldEqual 60
+        }
+    }
+
+    @Test
+    fun merge_shouldAddOnlyDifferentEvents_whenMergingBackward() {
+        monarchy.runTransactionSync { realm ->
+            val chunk1: ChunkEntity = realm.createObject()
+            val chunk2: ChunkEntity = realm.createObject()
+            val eventsForChunk1 = createFakeListOfEvents(30)
+            val eventsForChunk2 = eventsForChunk1 + createFakeListOfEvents(10)
+            chunk1.isLast = true
+            chunk2.isLast = false
+            chunk1.addAll("roomId", eventsForChunk1, PaginationDirection.FORWARDS)
+            chunk2.addAll("roomId", eventsForChunk2, PaginationDirection.BACKWARDS)
+            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
+            chunk1.events.size shouldEqual 40
+            chunk1.isLast.shouldBeTrue()
         }
     }
 
@@ -116,9 +133,9 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk1: ChunkEntity = realm.createObject()
             val chunk2: ChunkEntity = realm.createObject()
-            chunk1.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk2.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = false)
-            chunk1.merge(chunk2, PaginationDirection.BACKWARDS)
+            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = false)
+            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
             chunk1.isUnlinked().shouldBeFalse()
         }
     }
@@ -128,9 +145,9 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk1: ChunkEntity = realm.createObject()
             val chunk2: ChunkEntity = realm.createObject()
-            chunk1.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk2.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk1.merge(chunk2, PaginationDirection.BACKWARDS)
+            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
             chunk1.isUnlinked().shouldBeTrue()
         }
     }
@@ -142,9 +159,9 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk2: ChunkEntity = realm.createObject()
             val prevToken = "prev_token"
             chunk1.prevToken = prevToken
-            chunk1.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk2.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk1.merge(chunk2, PaginationDirection.FORWARDS)
+            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk1.merge("roomId", chunk2, PaginationDirection.FORWARDS)
             chunk1.prevToken shouldEqual prevToken
         }
     }
@@ -156,9 +173,9 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk2: ChunkEntity = realm.createObject()
             val nextToken = "next_token"
             chunk1.nextToken = nextToken
-            chunk1.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk2.addAll(createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk1.merge(chunk2, PaginationDirection.BACKWARDS)
+            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
             chunk1.nextToken shouldEqual nextToken
         }
     }

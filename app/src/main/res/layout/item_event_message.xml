@@ -27,7 +27,6 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:paddingBottom="8dp"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/toolbarSubtitleView"
         app:layout_constraintEnd_toStartOf="@+id/messageTimeView"

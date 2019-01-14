@@ -1,10 +1,8 @@
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
 import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
@@ -22,21 +20,18 @@ internal fun EventEntity.Companion.where(realm: Realm,
                                          linkFilterMode: EventEntity.LinkFilterMode = LINKED_ONLY): RealmQuery<EventEntity> {
     val query = realm.where<EventEntity>()
     if (roomId != null) {
-        query.beginGroup()
-                .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
-                .or()
-                .equalTo("${EventEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
-                .endGroup()
+        query.equalTo(EventEntityFields.ROOM_ID, roomId)
     }
     if (type != null) {
         query.equalTo(EventEntityFields.TYPE, type)
     }
     return when (linkFilterMode) {
-        LINKED_ONLY -> query.equalTo(EventEntityFields.IS_UNLINKED, false)
+        LINKED_ONLY   -> query.equalTo(EventEntityFields.IS_UNLINKED, false)
         UNLINKED_ONLY -> query.equalTo(EventEntityFields.IS_UNLINKED, true)
-        BOTH -> query
+        BOTH          -> query
     }
 }
+
 
 internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = true): EventEntity? {
     if (from != null) {
@@ -69,7 +64,6 @@ internal fun RealmList<EventEntity>.find(eventId: String): EventEntity? {
     return this.where().equalTo(EventEntityFields.EVENT_ID, eventId).findFirst()
 }
 
-internal fun RealmList<EventEntity>.
-        fastContains(eventId: String): Boolean {
+internal fun RealmList<EventEntity>.fastContains(eventId: String): Boolean {
     return this.find(eventId) != null
 }

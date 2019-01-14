@@ -15,4 +15,12 @@ interface Session : RoomService, GroupService {
     @MainThread
     fun close()
 
+    fun addListener(listener: Listener)
+
+    fun removeListener(listener: Listener)
+
+    // Not used at the moment
+    interface Listener
+
+
 }

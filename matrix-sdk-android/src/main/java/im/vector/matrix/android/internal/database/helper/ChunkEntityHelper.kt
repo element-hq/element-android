@@ -2,7 +2,9 @@ package im.vector.matrix.android.internal.database.helper
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.database.mapper.asEntity
+import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.mapper.toEntity
+import im.vector.matrix.android.internal.database.mapper.updateWith
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -11,18 +13,21 @@ import im.vector.matrix.android.internal.session.room.timeline.PaginationDirecti
 import io.realm.Sort
 
 internal fun ChunkEntity.deleteOnCascade() {
+    assertIsManaged()
     this.events.deleteAllFromRealm()
     this.deleteFromRealm()
 }
 
 // By default if a chunk is empty we consider it unlinked
 internal fun ChunkEntity.isUnlinked(): Boolean {
+    assertIsManaged()
     return events.where().equalTo(EventEntityFields.IS_UNLINKED, false).findAll().isEmpty()
 }
 
-internal fun ChunkEntity.merge(chunkToMerge: ChunkEntity,
+internal fun ChunkEntity.merge(roomId: String,
+                               chunkToMerge: ChunkEntity,
                                direction: PaginationDirection) {
-
+    assertIsManaged()
     val isChunkToMergeUnlinked = chunkToMerge.isUnlinked()
     val isCurrentChunkUnlinked = this.isUnlinked()
     val isUnlinked = isCurrentChunkUnlinked && isChunkToMergeUnlinked
@@ -40,17 +45,18 @@ internal fun ChunkEntity.merge(chunkToMerge: ChunkEntity,
         eventsToMerge = chunkToMerge.events
     }
     eventsToMerge.forEach {
-        add(it, direction, isUnlinked = isUnlinked)
+        add(roomId, it.asDomain(), direction, isUnlinked = isUnlinked)
     }
 }
 
-internal fun ChunkEntity.addAll(events: List<Event>,
+internal fun ChunkEntity.addAll(roomId: String,
+                                events: List<Event>,
                                 direction: PaginationDirection,
                                 stateIndexOffset: Int = 0,
                                 isUnlinked: Boolean = false) {
-
+    assertIsManaged()
     events.forEach { event ->
-        add(event, direction, stateIndexOffset, isUnlinked)
+        add(roomId, event, direction, stateIndexOffset, isUnlinked)
     }
 }
 
@@ -58,27 +64,18 @@ internal fun ChunkEntity.updateDisplayIndexes() {
     events.forEachIndexed { index, eventEntity -> eventEntity.displayIndex = index }
 }
 
-internal fun ChunkEntity.add(event: Event,
+internal fun ChunkEntity.add(roomId: String,
+                             event: Event,
                              direction: PaginationDirection,
                              stateIndexOffset: Int = 0,
                              isUnlinked: Boolean = false) {
-    add(event.asEntity(), direction, stateIndexOffset, isUnlinked)
-}
 
-internal fun ChunkEntity.add(eventEntity: EventEntity,
-                             direction: PaginationDirection,
-                             stateIndexOffset: Int = 0,
-                             isUnlinked: Boolean = false) {
-    if (!isManaged) {
-        throw IllegalStateException("Chunk entity should be managed to use fast contains")
-    }
-
-    if (eventEntity.eventId.isEmpty() || events.fastContains(eventEntity.eventId)) {
+    assertIsManaged()
+    if (event.eventId.isNullOrEmpty() || events.fastContains(event.eventId)) {
         return
     }
-
     var currentStateIndex = lastStateIndex(direction, defaultValue = stateIndexOffset)
-    if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(eventEntity.type)) {
+    if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(event.type)) {
         currentStateIndex += 1
     } else if (direction == PaginationDirection.BACKWARDS && events.isNotEmpty()) {
         val lastEventType = events.last()?.type ?: ""
@@ -86,11 +83,16 @@ internal fun ChunkEntity.add(eventEntity: EventEntity,
             currentStateIndex -= 1
         }
     }
-
-    eventEntity.stateIndex = currentStateIndex
-    eventEntity.isUnlinked = isUnlinked
+    val eventEntity = event.toEntity(roomId)
+    eventEntity.updateWith(currentStateIndex, isUnlinked)
     val position = if (direction == PaginationDirection.FORWARDS) 0 else this.events.size
     events.add(position, eventEntity)
+}
+
+private fun ChunkEntity.assertIsManaged() {
+    if (!isManaged) {
+        throw IllegalStateException("Chunk entity should be managed to use this function")
+    }
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {

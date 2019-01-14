@@ -6,10 +6,11 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.LiveDataTestObserver
 import im.vector.matrix.android.api.thread.MainThreadExecutor
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineHolder
+import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
+import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import im.vector.matrix.android.testCoroutineDispatchers
 import io.realm.Realm
@@ -43,17 +44,17 @@ internal class TimelineHolderTest : InstrumentedTest {
         val boundaryCallback = TimelineBoundaryCallback(roomId, taskExecutor, paginationTask, monarchy, PagingRequestHelper(MainThreadExecutor()))
 
         RoomDataHelper.fakeInitialSync(monarchy, roomId)
-        val timelineHolder = DefaultTimelineHolder(roomId, monarchy, taskExecutor, boundaryCallback, getContextOfEventTask)
+        val timelineHolder = DefaultTimelineService(roomId, monarchy, taskExecutor, boundaryCallback, getContextOfEventTask, RoomMemberExtractor(monarchy, roomId))
         val timelineObserver = LiveDataTestObserver.test(timelineHolder.timeline())
         timelineObserver.awaitNextValue().assertHasValue()
-        var pagedList = timelineObserver.value()
-        pagedList.size shouldEqual 30
-        (0 until pagedList.size).map {
-            pagedList.loadAround(it)
+        var timelineData = timelineObserver.value()
+        timelineData.events.size shouldEqual 30
+        (0 until timelineData.events.size).map {
+            timelineData.events.loadAround(it)
         }
         timelineObserver.awaitNextValue().assertHasValue()
-        pagedList = timelineObserver.value()
-        pagedList.size shouldEqual 60
+        timelineData = timelineObserver.value()
+        timelineData.events.size shouldEqual 60
     }
 
 

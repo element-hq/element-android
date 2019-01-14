@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.replaceFragment
+import im.vector.riotredesign.core.extensions.replaceChildFragment
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.features.home.group.GroupListFragment
 import im.vector.riotredesign.features.home.room.list.RoomListFragment
@@ -27,9 +27,9 @@ class HomeDrawerFragment : RiotFragment() {
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState == null) {
             val groupListFragment = GroupListFragment.newInstance()
-            replaceFragment(groupListFragment, R.id.groupListFragmentContainer)
+            replaceChildFragment(groupListFragment, R.id.groupListFragmentContainer)
             val roomListFragment = RoomListFragment.newInstance()
-            replaceFragment(roomListFragment, R.id.roomListFragmentContainer)
+            replaceChildFragment(roomListFragment, R.id.roomListFragmentContainer)
         }
     }
 

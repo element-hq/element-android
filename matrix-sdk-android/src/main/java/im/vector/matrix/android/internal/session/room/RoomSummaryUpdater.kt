@@ -17,7 +17,6 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.members.RoomMembers
 import io.realm.Realm
-import io.realm.RealmResults
 import io.realm.kotlin.createObject
 
 internal class RoomSummaryUpdater(monarchy: Monarchy,
@@ -29,13 +28,10 @@ internal class RoomSummaryUpdater(monarchy: Monarchy,
 
     override val query = Monarchy.Query<RoomEntity> { RoomEntity.where(it) }
 
-    override fun process(results: RealmResults<RoomEntity>, updateIndexes: IntArray, deletionIndexes: IntArray) {
-        val rooms = results.map { it.asDomain() }
+    override fun process(inserted: List<RoomEntity>, updated: List<RoomEntity>, deleted: List<RoomEntity>) {
+        val rooms = (inserted + updated).map { it.asDomain() }
         monarchy.writeAsync { realm ->
-            updateIndexes.forEach { index ->
-                val data = rooms[index]
-                updateRoom(realm, data)
-            }
+            rooms.forEach { updateRoom(realm, it) }
         }
     }
 

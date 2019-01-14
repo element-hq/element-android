@@ -7,15 +7,6 @@ interface RoomService {
 
     fun getRoom(roomId: String): Room?
 
-    fun getAllRooms(): List<Room>
-
-    fun liveRooms(): LiveData<List<Room>>
-
     fun liveRoomSummaries(): LiveData<List<RoomSummary>>
-
-    fun lastSelectedRoom(): RoomSummary?
-
-    fun saveLastSelectedRoom(roomSummary: RoomSummary)
-
 
 }

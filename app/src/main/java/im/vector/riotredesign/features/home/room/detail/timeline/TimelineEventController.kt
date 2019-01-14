@@ -1,93 +1,84 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
-import android.arch.paging.PagedList
 import com.airbnb.epoxy.EpoxyAsyncUtil
-import com.airbnb.epoxy.EpoxyController
-import im.vector.matrix.android.api.session.events.model.EnrichedEvent
+import com.airbnb.epoxy.EpoxyModel
+import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
+import im.vector.riotredesign.features.home.room.detail.timeline.paging.PagedListEpoxyController
 
 class TimelineEventController(private val roomId: String,
                               private val messageItemFactory: MessageItemFactory,
                               private val textItemFactory: TextItemFactory,
                               private val dateFormatter: TimelineDateFormatter
-) : EpoxyController(
+) : PagedListEpoxyController<TimelineEvent>(
         EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
-
     init {
         setFilterDuplicates(true)
     }
 
-    private val pagedListCallback = object : PagedList.Callback() {
-        override fun onChanged(position: Int, count: Int) {
-            buildSnapshotList()
-        }
-
-        override fun onInserted(position: Int, count: Int) {
-            buildSnapshotList()
-        }
-
-        override fun onRemoved(position: Int, count: Int) {
-            buildSnapshotList()
-        }
-    }
-
-    private var snapshotList: List<EnrichedEvent>? = emptyList()
-    var timeline: PagedList<EnrichedEvent>? = null
-        set(value) {
-            field?.removeWeakCallback(pagedListCallback)
-            field = value
-            field?.addWeakCallback(null, pagedListCallback)
-            buildSnapshotList()
-        }
+    private var isLoadingForward: Boolean = false
+    private var isLoadingBackward: Boolean = false
+    private var hasReachedEnd: Boolean = false
 
     var callback: Callback? = null
 
-    override fun buildModels() {
-        buildModels(snapshotList)
+    fun update(timelineData: TimelineData?) {
+        timelineData?.let {
+            isLoadingForward = it.isLoadingForward
+            isLoadingBackward = it.isLoadingBackward
+            hasReachedEnd = it.events.lastOrNull()?.root?.type == EventType.STATE_ROOM_CREATE
+            submitList(it.events)
+            requestModelBuild()
+        }
     }
 
-    private fun buildModels(data: List<EnrichedEvent?>?) {
-        if (data.isNullOrEmpty()) {
-            return
+
+    override fun buildItemModels(currentPosition: Int, items: List<TimelineEvent?>): List<EpoxyModel<*>> {
+        if (items.isNullOrEmpty()) {
+            return emptyList()
         }
-        for (index in 0 until data.size) {
-            val event = data[index] ?: continue
-            val nextEvent = if (index + 1 < data.size) data[index + 1] else null
+        val epoxyModels = ArrayList<EpoxyModel<*>>()
+        val event = items[currentPosition] ?: return emptyList()
+        val nextEvent = if (currentPosition + 1 < items.size) items[currentPosition + 1] else null
 
-            val date = event.root.localDateTime()
-            val nextDate = nextEvent?.root?.localDateTime()
-            val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
+        val date = event.root.localDateTime()
+        val nextDate = nextEvent?.root?.localDateTime()
+        val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
-            val item = when (event.root.type) {
-                EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date, callback)
-                else -> textItemFactory.create(event)
-            }
-            item
-                    ?.onBind { timeline?.loadAround(index) }
-                    ?.id(event.localId)
-                    ?.addTo(this)
-
-            if (addDaySeparator) {
-                val formattedDay = dateFormatter.formatMessageDay(date)
-                DaySeparatorItem(formattedDay).id(roomId + formattedDay).addTo(this)
-            }
+        val item = when (event.root.type) {
+            EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date, callback)
+            else              -> textItemFactory.create(event)
+        }
+        item?.also {
+            it.id(event.localId)
+            epoxyModels.add(it)
         }
 
-        //It's a hack at the moment
-        val isLastEvent = data.last()?.root?.type == EventType.STATE_ROOM_CREATE
+        if (addDaySeparator) {
+            val formattedDay = dateFormatter.formatMessageDay(date)
+            val daySeparatorItem = DaySeparatorItem(formattedDay).id(roomId + formattedDay)
+            epoxyModels.add(daySeparatorItem)
+        }
+        return epoxyModels
+    }
+
+    override fun addModels(models: List<EpoxyModel<*>>) {
+        LoadingItemModel_()
+                .id(roomId + "forward_loading_item")
+                .addIf(isLoadingForward, this)
+
+        super.add(models)
+
         LoadingItemModel_()
                 .id(roomId + "backward_loading_item")
-                .addIf(!isLastEvent, this)
+                .addIf(!hasReachedEnd, this)
     }
 
-    private fun buildSnapshotList() {
-        snapshotList = timeline?.snapshot() ?: emptyList()
-        requestModelBuild()
-    }
 
     interface Callback {
         fun onUrlClicked(url: String)

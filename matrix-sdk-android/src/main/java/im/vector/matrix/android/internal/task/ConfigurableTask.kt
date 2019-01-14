@@ -13,6 +13,7 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
         val params: PARAMS,
         val callbackThread: TaskThread = TaskThread.MAIN,
         val executionThread: TaskThread = TaskThread.IO,
+        val retryCount: Int = 0,
         val callback: MatrixCallback<RESULT> = object : MatrixCallback<RESULT> {}
 ) : Task<PARAMS, RESULT> {
 
@@ -33,8 +34,16 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
         return copy(callback = matrixCallback)
     }
 
+    fun enableRetry(retryCount: Int = Int.MAX_VALUE): ConfigurableTask<PARAMS, RESULT> {
+        return copy(retryCount = retryCount)
+    }
+
     fun executeBy(taskExecutor: TaskExecutor): Cancelable {
         return taskExecutor.execute(this)
+    }
+
+    override fun toString(): String {
+        return task.javaClass.name
     }
 
 }

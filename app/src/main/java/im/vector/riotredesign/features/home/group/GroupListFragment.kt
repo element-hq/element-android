@@ -6,14 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.StateView
-import im.vector.riotredesign.features.home.HomeActions
-import im.vector.riotredesign.features.home.HomeViewModel
-import im.vector.riotredesign.features.home.HomeViewState
 import kotlinx.android.synthetic.main.fragment_group_list.*
 
 class GroupListFragment : RiotFragment(), GroupSummaryController.Callback {
@@ -24,7 +21,7 @@ class GroupListFragment : RiotFragment(), GroupSummaryController.Callback {
         }
     }
 
-    private val viewModel: HomeViewModel by activityViewModel()
+    private val viewModel: GroupListViewModel by fragmentViewModel()
 
     private lateinit var groupController: GroupSummaryController
 
@@ -40,14 +37,14 @@ class GroupListFragment : RiotFragment(), GroupSummaryController.Callback {
         viewModel.subscribe { renderState(it) }
     }
 
-    private fun renderState(state: HomeViewState) {
+    private fun renderState(state: GroupListViewState) {
         when (state.asyncGroups) {
             is Incomplete -> renderLoading()
             is Success -> renderSuccess(state)
         }
     }
 
-    private fun renderSuccess(state: HomeViewState) {
+    private fun renderSuccess(state: GroupListViewState) {
         stateView.state = StateView.State.Content
         groupController.setData(state)
     }
@@ -57,7 +54,7 @@ class GroupListFragment : RiotFragment(), GroupSummaryController.Callback {
     }
 
     override fun onGroupSelected(groupSummary: GroupSummary) {
-        viewModel.accept(HomeActions.SelectGroup(groupSummary))
+        viewModel.accept(GroupListActions.SelectGroup(groupSummary))
     }
 
 }

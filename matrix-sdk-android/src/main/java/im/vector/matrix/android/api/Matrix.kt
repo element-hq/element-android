@@ -12,6 +12,7 @@ import im.vector.matrix.android.internal.di.MatrixModule
 import im.vector.matrix.android.internal.di.NetworkModule
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import org.koin.standalone.inject
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class Matrix private constructor(context: Context) : MatrixKoinComponent {
@@ -40,9 +41,12 @@ class Matrix private constructor(context: Context) : MatrixKoinComponent {
 
     companion object {
         private lateinit var instance: Matrix
+        private val isInit = AtomicBoolean(false)
 
         internal fun initialize(context: Context) {
-            instance = Matrix(context.applicationContext)
+            if (isInit.compareAndSet(false, true)) {
+                instance = Matrix(context.applicationContext)
+            }
         }
 
         fun getInstance(): Matrix {

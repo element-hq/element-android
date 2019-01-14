@@ -379,6 +379,11 @@ public class PagingRequestHelper {
         @NonNull
         private final Throwable[] mErrors;
 
+        public static StatusReport createDefault() {
+            final Throwable[] errors = {};
+            return new StatusReport(Status.SUCCESS, Status.SUCCESS, Status.SUCCESS, errors);
+        }
+
         StatusReport(@NonNull Status initial, @NonNull Status before, @NonNull Status after,
                      @NonNull Throwable[] errors) {
             this.initial = initial;
