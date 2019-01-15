@@ -2,17 +2,16 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyModel
-import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
 import im.vector.riotredesign.features.home.room.detail.timeline.paging.PagedListEpoxyController
 
 class TimelineEventController(private val roomId: String,
-                              private val messageItemFactory: MessageItemFactory,
-                              private val textItemFactory: TextItemFactory,
-                              private val dateFormatter: TimelineDateFormatter
+                              private val dateFormatter: TimelineDateFormatter,
+                              private val timelineItemFactory: TimelineItemFactory
 ) : PagedListEpoxyController<TimelineEvent>(
         EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
@@ -50,15 +49,10 @@ class TimelineEventController(private val roomId: String,
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
-        val item = when (event.root.type) {
-            EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, addDaySeparator, date, callback)
-            else              -> textItemFactory.create(event)
-        }
-        item?.also {
+        timelineItemFactory.create(event, nextEvent, addDaySeparator, date, callback)?.also {
             it.id(event.localId)
             epoxyModels.add(it)
         }
-
         if (addDaySeparator) {
             val formattedDay = dateFormatter.formatMessageDay(date)
             val daySeparatorItem = DaySeparatorItem(formattedDay).id(roomId + formattedDay)

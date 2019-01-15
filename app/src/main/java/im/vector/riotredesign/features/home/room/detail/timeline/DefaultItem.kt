@@ -4,9 +4,9 @@ import android.widget.TextView
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
 
-class TextItem(
+class DefaultItem(
         val text: CharSequence? = null
-) : KotlinModel(R.layout.item_event_text) {
+) : KotlinModel(R.layout.item_timeline_event_default) {
 
     private val messageView by bind<TextView>(R.id.stateMessageView)
 

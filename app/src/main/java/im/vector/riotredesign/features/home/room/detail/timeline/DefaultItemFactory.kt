@@ -2,11 +2,11 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import im.vector.matrix.android.api.session.events.model.TimelineEvent
 
-class TextItemFactory {
+class DefaultItemFactory {
 
-    fun create(event: TimelineEvent): TextItem? {
+    fun create(event: TimelineEvent): DefaultItem? {
         val text = "${event.root.type} events are not yet handled"
-        return TextItem(text = text)
+        return DefaultItem(text = text)
     }
 
 }

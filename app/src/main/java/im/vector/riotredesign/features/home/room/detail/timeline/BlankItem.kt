@@ -4,7 +4,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
 
 class BlankItem
-    : KotlinModel(R.layout.item_event_blank) {
+    : KotlinModel(R.layout.item_timeline_event_blank) {
 
     override fun bind() {
         //no-op

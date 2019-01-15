@@ -18,7 +18,7 @@
     <string name="notice_display_name_set">Ο/Η %1$s άλλαξε το εμφανιζόμενό του/της όνομα σε %2$s</string>
     <string name="notice_display_name_changed_from">Ο/Η %1$s άλλαξε το εμφανιζόμενό του/της όνομα από %2$s σε %3$s</string>
     <string name="notice_display_name_removed">Ο/Η %1$s αφαίρεσε το εμφανιζόμενό του/της όνομα (%2$s)</string>
-    <string name="notice_topic_changed">Ο/Η %1$s άλλαξε το θέμα σε: %2$s</string>
+    <string name="notice_room_topic_changed">Ο/Η %1$s άλλαξε το θέμα σε: %2$s</string>
     <string name="notice_room_name_changed">Ο/Η %1$s άλλαξε το όνομα του δωματίου σε: %2$s</string>
     <string name="notice_answered_call">Ο/Η %s απάντησε στην κλήση.</string>
     <string name="notice_ended_call">Ο/Η %s τερμάτισε την κλήση.</string>

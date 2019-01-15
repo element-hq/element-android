@@ -6,7 +6,7 @@ import im.vector.riotredesign.core.epoxy.KotlinModel
 
 data class DaySeparatorItem(
         val formattedDay: CharSequence
-) : KotlinModel(R.layout.item_event_day_separator) {
+) : KotlinModel(R.layout.item_timeline_event_day_separator) {
 
     private val dayTextView by bind<TextView>(R.id.itemDayTextView)
 

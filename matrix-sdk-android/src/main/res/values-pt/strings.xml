@@ -19,7 +19,7 @@
     <string name="notice_display_name_set">%1$s definiu seu nome público como %2$s</string>
     <string name="notice_display_name_changed_from">%1$s alterou seu nome público de %2$s para %3$s</string>
     <string name="notice_display_name_removed">%1$s apagou o seu nome público (%2$s)</string>
-    <string name="notice_topic_changed">%1$s alterou o tópico desta sala para: %2$s</string>
+    <string name="notice_room_topic_changed">%1$s alterou o tópico desta sala para: %2$s</string>
     <string name="notice_room_name_changed">%1$s alterou o nome desta sala para: %2$s</string>
     <string name="notice_placed_video_call">%s iniciou uma chamada de vídeo.</string>
     <string name="notice_placed_voice_call">%s iniciou uma chamada de voz.</string>

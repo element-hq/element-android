@@ -21,7 +21,7 @@
     <string name="notice_display_name_set">%1$s sette visingsnamnet sitt som %2$s</string>
     <string name="notice_display_name_changed_from">%1$s endra visingsnamnet sitt frå %2$s til %3$s</string>
     <string name="notice_display_name_removed">%1$s fjerna visingsnamnet sitt (%2$s)</string>
-    <string name="notice_topic_changed">%1$s endra emnet til: %2$s</string>
+    <string name="notice_room_topic_changed">%1$s endra emnet til: %2$s</string>
     <string name="notice_room_name_changed">%1$s endra romnamnet til: %2$s</string>
     <string name="notice_placed_video_call">%s starta ei videosamtale.</string>
     <string name="notice_placed_voice_call">%s starta ei røystsamtale.</string>

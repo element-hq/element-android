@@ -14,7 +14,7 @@ class MessageItem(
         val avatarUrl: String?,
         val memberName: CharSequence? = null,
         val showInformation: Boolean = true
-) : KotlinModel(R.layout.item_event_message) {
+) : KotlinModel(R.layout.item_timeline_event_message) {
 
     private val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
     private val memberNameView by bind<TextView>(R.id.messageMemberNameView)
