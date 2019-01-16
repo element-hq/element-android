@@ -1,6 +1,6 @@
 package im.vector.riotredesign.features.home.room.detail
 
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.riotredesign.core.platform.DefaultListUpdateCallback
 import java.util.concurrent.atomic.AtomicBoolean
 

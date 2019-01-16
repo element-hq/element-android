@@ -1,6 +1,6 @@
 package im.vector.matrix.android.api.session.room
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 
 interface RoomService {

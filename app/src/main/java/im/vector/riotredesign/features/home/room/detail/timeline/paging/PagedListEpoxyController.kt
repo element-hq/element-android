@@ -16,9 +16,9 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.paging
 
-import android.arch.paging.PagedList
+import androidx.paging.PagedList
 import android.os.Handler
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyViewHolder

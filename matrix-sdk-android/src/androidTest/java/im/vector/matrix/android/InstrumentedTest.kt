@@ -1,7 +1,7 @@
 package im.vector.matrix.android
 
 import android.content.Context
-import android.support.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry
 import java.io.File
 
 interface InstrumentedTest {

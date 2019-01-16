@@ -1,7 +1,7 @@
 package im.vector.riotredesign.features.home
 
-import android.support.v4.app.FragmentManager
 import android.view.Gravity
+import androidx.fragment.app.FragmentManager
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.extensions.replaceFragment

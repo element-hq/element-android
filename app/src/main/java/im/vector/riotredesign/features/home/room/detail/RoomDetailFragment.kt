@@ -2,10 +2,11 @@ package im.vector.riotredesign.features.home.room.detail
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -69,7 +70,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     }
 
     private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+        val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)

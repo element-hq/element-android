@@ -1,6 +1,6 @@
 package im.vector.matrix.android.api.session.room.timeline
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 
 interface TimelineService {
 

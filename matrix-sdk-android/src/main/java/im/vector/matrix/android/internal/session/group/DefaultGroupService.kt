@@ -1,6 +1,6 @@
 package im.vector.matrix.android.internal.session.group
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService

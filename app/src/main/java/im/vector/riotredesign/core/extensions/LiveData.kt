@@ -1,8 +1,8 @@
 package im.vector.riotredesign.core.extensions
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.core.utils.EventObserver
 

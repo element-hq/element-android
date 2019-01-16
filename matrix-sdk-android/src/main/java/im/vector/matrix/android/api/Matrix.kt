@@ -1,6 +1,6 @@
 package im.vector.matrix.android.api
 
-import android.arch.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.Authenticator

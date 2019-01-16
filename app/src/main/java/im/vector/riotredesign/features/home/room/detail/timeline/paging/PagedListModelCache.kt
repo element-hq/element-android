@@ -17,12 +17,12 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.paging
 
 import android.annotation.SuppressLint
-import android.arch.paging.AsyncPagedListDiffer
-import android.arch.paging.PagedList
+import androidx.paging.AsyncPagedListDiffer
+import androidx.paging.PagedList
 import android.os.Handler
-import android.support.v7.recyclerview.extensions.AsyncDifferConfig
-import android.support.v7.util.DiffUtil
-import android.support.v7.util.ListUpdateCallback
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListUpdateCallback
 import android.util.Log
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel

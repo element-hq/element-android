@@ -1,7 +1,7 @@
 package im.vector.riotredesign.features.home.room.detail
 
-import android.support.v4.app.FragmentActivity
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
@@ -20,12 +20,12 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
 
-    companion object : MvRxViewModelFactory<RoomDetailViewState> {
+    companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 
         @JvmStatic
-        override fun create(activity: FragmentActivity, state: RoomDetailViewState): RoomDetailViewModel {
+        override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
             val currentSession = Matrix.getInstance().currentSession
-            val visibleRoomHolder = activity.get<VisibleRoomHolder>()
+            val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomHolder>()
             return RoomDetailViewModel(state, currentSession, visibleRoomHolder)
         }
     }

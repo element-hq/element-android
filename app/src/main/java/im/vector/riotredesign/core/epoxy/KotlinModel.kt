@@ -1,7 +1,7 @@
 package im.vector.riotredesign.core.epoxy
 
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import android.view.View
 import com.airbnb.epoxy.EpoxyModel
 import kotlin.properties.ReadOnlyProperty

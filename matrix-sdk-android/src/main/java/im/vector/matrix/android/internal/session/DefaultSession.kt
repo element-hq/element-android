@@ -1,8 +1,8 @@
 package im.vector.matrix.android.internal.session
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import android.os.Looper
-import android.support.annotation.MainThread
+import androidx.annotation.MainThread
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.Group

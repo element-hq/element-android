@@ -10,7 +10,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:5.7.0"
+        classpath "io.realm:realm-gradle-plugin:5.8.0"
     }
 }
 
@@ -28,7 +28,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
@@ -47,9 +47,9 @@ android {
 dependencies {
 
     def arrow_version = "0.8.0"
-    def support_version = '28.0.0'
+    def support_version = '1.1.0-alpha01'
     def moshi_version = '1.8.0'
-    def lifecycle_version = "1.1.1"
+    def lifecycle_version = '2.0.0-beta01'
     def coroutines_version = "1.0.1"
 
     implementation fileTree(dir: 'libs', include: ['*.aar'])
@@ -57,11 +57,11 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    implementation "com.android.support:appcompat-v7:$support_version"
-    implementation "com.android.support:recyclerview-v7:$support_version"
+    implementation "androidx.appcompat:appcompat:$support_version"
+    implementation "androidx.recyclerview:recyclerview:$support_version"
 
-    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
-    kapt "android.arch.lifecycle:compiler:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     // Network
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
@@ -77,10 +77,10 @@ dependencies {
     kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
 
     // Paging
-    implementation "android.arch.paging:runtime:1.0.1"
+    implementation 'androidx.paging:paging-runtime:2.1.0-rc01'
 
     // Work
-    implementation "android.arch.work:work-runtime-ktx:1.0.0-alpha13"
+    implementation "android.arch.work:work-runtime-ktx:1.0.0-beta02"
 
     // FP
     implementation "io.arrow-kt:arrow-core:$arrow_version"
@@ -106,16 +106,16 @@ dependencies {
     testImplementation 'org.robolectric:shadows-support-v4:3.0'
     testImplementation "io.mockk:mockk:1.8.13.kotlin13"
     testImplementation 'org.amshove.kluent:kluent-android:1.44'
-    testImplementation "android.arch.core:core-testing:$lifecycle_version"
+    testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     androidTestImplementation "org.koin:koin-test:$koin_version"
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation "com.android.support.test:rules:1.0.2"
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
     androidTestImplementation "io.mockk:mockk-android:1.8.13.kotlin13"
-    androidTestImplementation "android.arch.core:core-testing:$lifecycle_version"
+    androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
 
