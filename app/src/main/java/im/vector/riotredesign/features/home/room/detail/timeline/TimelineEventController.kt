@@ -49,7 +49,7 @@ class TimelineEventController(private val roomId: String,
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
-        timelineItemFactory.create(event, nextEvent, addDaySeparator, date, callback)?.also {
+        timelineItemFactory.create(event, nextEvent, callback)?.also {
             it.id(event.localId)
             epoxyModels.add(it)
         }
