@@ -55,8 +55,9 @@ dependencies {
 
     // rx
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
@@ -69,6 +70,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
 
     // DI
     implementation "org.koin:koin-android:$koin_version"
