@@ -1,6 +1,6 @@
 package im.vector.matrix.android.internal.session.room
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService

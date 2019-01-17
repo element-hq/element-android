@@ -1,8 +1,7 @@
 package im.vector.riotredesign.features.home.group
 
-import android.support.v4.app.FragmentActivity
-import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
@@ -14,12 +13,12 @@ class GroupListViewModel(initialState: GroupListViewState,
                          private val session: Session
 ) : RiotViewModel<GroupListViewState>(initialState) {
 
-    companion object : MvRxViewModelFactory<GroupListViewState> {
+    companion object : MvRxViewModelFactory<GroupListViewModel, GroupListViewState> {
 
         @JvmStatic
-        override fun create(activity: FragmentActivity, state: GroupListViewState): GroupListViewModel {
+        override fun create(viewModelContext: ViewModelContext, state: GroupListViewState): GroupListViewModel? {
             val currentSession = Matrix.getInstance().currentSession
-            val selectedGroupHolder = activity.get<SelectedGroupHolder>()
+            val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupHolder>()
             return GroupListViewModel(state, selectedGroupHolder, currentSession)
         }
     }

@@ -1,6 +1,6 @@
 package im.vector.riotredesign.core.platform
 
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 
 interface ToolbarConfigurable {
 

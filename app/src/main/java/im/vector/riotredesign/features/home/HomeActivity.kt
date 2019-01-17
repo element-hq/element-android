@@ -3,12 +3,12 @@ package im.vector.riotredesign.features.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.viewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.observeEvent

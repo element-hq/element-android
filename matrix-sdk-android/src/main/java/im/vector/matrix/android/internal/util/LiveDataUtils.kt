@@ -1,7 +1,7 @@
 package im.vector.matrix.android.internal.util
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 
 object LiveDataUtils {
 

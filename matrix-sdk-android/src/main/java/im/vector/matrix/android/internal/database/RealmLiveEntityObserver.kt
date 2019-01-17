@@ -1,7 +1,7 @@
 package im.vector.matrix.android.internal.database
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.zhuinden.monarchy.Monarchy
 import io.realm.RealmObject
 import java.util.concurrent.atomic.AtomicBoolean

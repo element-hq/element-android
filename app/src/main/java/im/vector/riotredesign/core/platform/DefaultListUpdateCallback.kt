@@ -1,6 +1,6 @@
 package im.vector.riotredesign.core.platform
 
-import android.support.v7.util.ListUpdateCallback
+import androidx.recyclerview.widget.ListUpdateCallback
 
 interface DefaultListUpdateCallback : ListUpdateCallback {
 

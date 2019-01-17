@@ -1,7 +1,7 @@
 package im.vector.matrix.android.session.room.timeline
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.support.test.annotation.UiThreadTest
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.annotation.UiThreadTest
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.LiveDataTestObserver

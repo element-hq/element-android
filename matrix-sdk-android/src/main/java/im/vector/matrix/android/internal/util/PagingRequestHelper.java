@@ -16,11 +16,11 @@
  */
 package im.vector.matrix.android.internal.util;
 
-import android.support.annotation.AnyThread;
-import android.support.annotation.GuardedBy;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.AnyThread;
+import androidx.annotation.GuardedBy;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -28,8 +28,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * A helper class for {@link android.arch.paging.PagedList.BoundaryCallback BoundaryCallback}s and
- * {@link android.arch.paging.DataSource}s to help with tracking network requests.
+ * A helper class for {@link androidx.paging.PagedList.BoundaryCallback BoundaryCallback}s and
+ * {@link androidx.paging.DataSource}s to help with tracking network requests.
  * <p>
  * It is designed to support 3 types of requests, {@link RequestType#INITIAL INITIAL},
  * {@link RequestType#BEFORE BEFORE} and {@link RequestType#AFTER AFTER} and runs only 1 request
@@ -493,20 +493,20 @@ public class PagingRequestHelper {
      */
     public enum RequestType {
         /**
-         * Corresponds to an initial request made to a {@link android.arch.paging.DataSource} or the empty state for
-         * a {@link android.arch.paging.PagedList.BoundaryCallback BoundaryCallback}.
+         * Corresponds to an initial request made to a {@link androidx.paging.DataSource} or the empty state for
+         * a {@link androidx.paging.PagedList.BoundaryCallback BoundaryCallback}.
          */
         INITIAL,
         /**
-         * Corresponds to the {@code loadBefore} calls in {@link android.arch.paging.DataSource} or
+         * Corresponds to the {@code loadBefore} calls in {@link androidx.paging.DataSource} or
          * {@code onItemAtFrontLoaded} in
-         * {@link android.arch.paging.PagedList.BoundaryCallback BoundaryCallback}.
+         * {@link androidx.paging.PagedList.BoundaryCallback BoundaryCallback}.
          */
         BEFORE,
         /**
-         * Corresponds to the {@code loadAfter} calls in {@link android.arch.paging.DataSource} or
+         * Corresponds to the {@code loadAfter} calls in {@link androidx.paging.DataSource} or
          * {@code onItemAtEndLoaded} in
-         * {@link android.arch.paging.PagedList.BoundaryCallback BoundaryCallback}.
+         * {@link androidx.paging.PagedList.BoundaryCallback BoundaryCallback}.
          */
         AFTER
     }

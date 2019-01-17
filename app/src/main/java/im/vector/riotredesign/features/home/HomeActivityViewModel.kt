@@ -1,10 +1,10 @@
 package im.vector.riotredesign.features.home
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.support.v4.app.FragmentActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
@@ -21,12 +21,12 @@ class HomeActivityViewModel(state: EmptyState,
                             roomSelectionRepository: RoomSelectionRepository
 ) : RiotViewModel<EmptyState>(state) {
 
-    companion object : MvRxViewModelFactory<EmptyState> {
+    companion object : MvRxViewModelFactory<HomeActivityViewModel, EmptyState> {
 
         @JvmStatic
-        override fun create(activity: FragmentActivity, state: EmptyState): HomeActivityViewModel {
+        override fun create(viewModelContext: ViewModelContext, state: EmptyState): HomeActivityViewModel? {
             val session = Matrix.getInstance().currentSession
-            val roomSelectionRepository = activity.get<RoomSelectionRepository>()
+            val roomSelectionRepository = viewModelContext.activity.get<RoomSelectionRepository>()
             return HomeActivityViewModel(state, session, roomSelectionRepository)
         }
     }

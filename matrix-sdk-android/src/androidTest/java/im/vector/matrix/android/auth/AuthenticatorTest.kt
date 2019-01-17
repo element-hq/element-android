@@ -1,8 +1,8 @@
 package im.vector.matrix.android.auth
 
-import android.support.test.annotation.UiThreadTest
-import android.support.test.rule.GrantPermissionRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.annotation.UiThreadTest
+import androidx.test.rule.GrantPermissionRule
+import androidx.test.runner.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.OkReplayRuleChainNoActivity

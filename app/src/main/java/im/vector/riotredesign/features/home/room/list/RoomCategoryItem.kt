@@ -1,6 +1,6 @@
 package im.vector.riotredesign.features.home.room.list
 
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.view.ViewGroup
 import android.widget.TextView
 import im.vector.riotredesign.R

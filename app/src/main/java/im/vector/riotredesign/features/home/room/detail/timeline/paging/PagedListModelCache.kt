@@ -17,14 +17,12 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.paging
 
 import android.annotation.SuppressLint
-import android.arch.paging.AsyncPagedListDiffer
-import android.arch.paging.PagedList
 import android.os.Handler
-import android.support.v7.recyclerview.extensions.AsyncDifferConfig
-import android.support.v7.util.DiffUtil
-import android.support.v7.util.ListUpdateCallback
-import android.util.Log
-import com.airbnb.epoxy.EpoxyController
+import androidx.paging.AsyncPagedListDiffer
+import androidx.paging.PagedList
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListUpdateCallback
 import com.airbnb.epoxy.EpoxyModel
 import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicBoolean
@@ -79,8 +77,8 @@ class PagedListModelCache<T>(
         }
     }
 
-    private val asyncDiffer = @SuppressLint("RestrictedApi")
-    object : AsyncPagedListDiffer<T>(
+    @SuppressLint("RestrictedApi")
+    private val asyncDiffer = AsyncPagedListDiffer<T>(
             updateCallback,
             AsyncDifferConfig.Builder<T>(
                     itemDiffCallback
@@ -94,27 +92,7 @@ class PagedListModelCache<T>(
                     modelBuildingHandler.post(runnable)
                 }
             }.build()
-    ) {
-        init {
-            if (modelBuildingHandler != EpoxyController.defaultModelBuildingHandler) {
-                try {
-                    // looks like AsyncPagedListDiffer in 1.x ignores the config.
-                    // Reflection to the rescue.
-                    val mainThreadExecutorField =
-                            AsyncPagedListDiffer::class.java.getDeclaredField("mMainThreadExecutor")
-                    mainThreadExecutorField.isAccessible = true
-                    mainThreadExecutorField.set(this, Executor {
-                        modelBuildingHandler.post(it)
-                    })
-                } catch (t: Throwable) {
-                    val msg = "Failed to hijack update handler in AsyncPagedListDiffer." +
-                            "You can only build models on the main thread"
-                    Log.e("PagedListModelCache", msg, t)
-                    throw IllegalStateException(msg, t)
-                }
-            }
-        }
-    }
+    )
 
     fun submitList(pagedList: PagedList<T>?) {
         asyncDiffer.submitList(pagedList)

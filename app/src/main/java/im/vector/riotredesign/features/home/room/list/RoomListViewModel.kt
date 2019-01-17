@@ -1,8 +1,8 @@
 package im.vector.riotredesign.features.home.room.list
 
-import android.support.v4.app.FragmentActivity
 import arrow.core.Option
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
@@ -23,14 +23,14 @@ class RoomListViewModel(initialState: RoomListViewState,
                         private val roomSelectionRepository: RoomSelectionRepository)
     : RiotViewModel<RoomListViewState>(initialState) {
 
-    companion object : MvRxViewModelFactory<RoomListViewState> {
+    companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
 
         @JvmStatic
-        override fun create(activity: FragmentActivity, state: RoomListViewState): RoomListViewModel {
+        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
             val currentSession = Matrix.getInstance().currentSession
-            val roomSelectionRepository = activity.get<RoomSelectionRepository>()
-            val selectedGroupHolder = activity.get<SelectedGroupHolder>()
-            val visibleRoomHolder = activity.get<VisibleRoomHolder>()
+            val roomSelectionRepository = viewModelContext.activity.get<RoomSelectionRepository>()
+            val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupHolder>()
+            val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomHolder>()
             return RoomListViewModel(state, currentSession, selectedGroupHolder, visibleRoomHolder, roomSelectionRepository)
         }
     }
