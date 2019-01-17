@@ -16,7 +16,7 @@
     <string name="notice_display_name_set">ضبط ⁨%1$s⁩ اسم العرض على ⁨%2$s⁩</string>
     <string name="notice_display_name_changed_from">غيّر ⁨%1$s⁩ اسم العرض من ⁨%2$s⁩ إلى ⁨%3$s⁩</string>
     <string name="notice_display_name_removed">أزال ⁨%1$s⁩ اسم العرض (⁨%2$s⁩)</string>
-    <string name="notice_topic_changed">غيّر ⁨%1$s⁩ الموضوع إلى: ⁨%2$s⁩</string>
+    <string name="notice_room_topic_changed">غيّر ⁨%1$s⁩ الموضوع إلى: ⁨%2$s⁩</string>
     <string name="notice_room_name_changed">غيّر ⁨%1$s⁩ اسم الغرفة إلى: ⁨%2$s⁩</string>
     <string name="notice_answered_call">ردّ ⁨%s⁩ على المكالمة.</string>
     <string name="notice_ended_call">أنهى ⁨%s⁩ المكالمة.</string>

@@ -18,7 +18,7 @@
     <string name="notice_display_name_set">%1$s 設定了他們的顯示名稱為 %2$s</string>
     <string name="notice_display_name_changed_from">%1$s 變更了他們的顯示名稱從 %2$s 到 %3$s</string>
     <string name="notice_display_name_removed">%1$s 移除了他們的顯示名稱 (%2$s)</string>
-    <string name="notice_topic_changed">%1$s 變更主題為：%2$s</string>
+    <string name="notice_room_topic_changed">%1$s 變更主題為：%2$s</string>
     <string name="notice_room_name_changed">%1$s 變更房間名稱為：%2$s</string>
     <string name="notice_placed_video_call">%s 撥出了視訊通話。</string>
     <string name="notice_placed_voice_call">%s 撥出了語音通話。</string>

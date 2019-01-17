@@ -18,7 +18,7 @@
 
     <string name="notice_display_name_changed_from">%1$s ha canviat el seu nom visible de %2$s a %3$s</string>
     <string name="notice_display_name_removed">%1$s ha eliminat el seu nom visible (%2$s)</string>
-    <string name="notice_topic_changed">%1$s ha canviat el tema a: %2$s</string>
+    <string name="notice_room_topic_changed">%1$s ha canviat el tema a: %2$s</string>
     <string name="notice_room_name_changed">%1$s ha canviat el nom de la sala a: %2$s</string>
     <string name="notice_answered_call">%s ha contestat la trucada.</string>
     <string name="notice_ended_call">%s ha finalitzat la trucada.</string>

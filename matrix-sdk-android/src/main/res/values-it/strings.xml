@@ -18,7 +18,7 @@
     <string name="notice_display_name_set">%1$s hanno cambiato il nome visualizzato con %2$s</string>
     <string name="notice_display_name_changed_from">%1$s ha cambiato il nome visualizzato da %2$s a %3$s</string>
     <string name="notice_display_name_removed">%1$s ha rimosso il nome visibile (%2$s)</string>
-    <string name="notice_topic_changed">%1$s ha cambiato l\'argomento con: %2$s</string>
+    <string name="notice_room_topic_changed">%1$s ha cambiato l\'argomento con: %2$s</string>
     <string name="notice_room_name_changed">%1$s ha cambiato il nome della stanza con: %2$s</string>
     <string name="notice_placed_video_call">%s ha iniziato una chiamata video.</string>
     <string name="notice_placed_voice_call">%s ha iniziato una chiamata vocale.</string>

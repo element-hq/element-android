@@ -4,10 +4,11 @@ import android.text.SpannableStringBuilder
 import android.text.util.Linkify
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.MessageContent
-import org.threeten.bp.LocalDateTime
+import im.vector.riotredesign.core.extensions.localDateTime
 
 class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatter) {
 
@@ -15,8 +16,6 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
-               addDaySeparator: Boolean,
-               date: LocalDateTime,
                callback: TimelineEventController.Callback?
     ): MessageItem? {
 
@@ -26,7 +25,17 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
             return null
         }
         val nextRoomMember = nextEvent?.roomMember
-        if (addDaySeparator || nextRoomMember != roomMember) {
+
+        val date = event.root.localDateTime()
+        val nextDate = nextEvent?.root?.localDateTime()
+        val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
+        val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
+                ?: false
+
+        if (addDaySeparator
+                || nextRoomMember != roomMember
+                || nextEvent.root.type != EventType.MESSAGE
+                || isNextMessageReceivedMoreThanOneHourAgo) {
             messagesDisplayedWithInformation.add(event.root.eventId)
         }
 

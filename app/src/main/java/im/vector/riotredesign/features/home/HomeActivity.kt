@@ -29,7 +29,7 @@ class HomeActivity : RiotActivity(), ToolbarConfigurable {
     private val homeNavigator by inject<HomeNavigator>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        loadKoinModules(listOf(HomeModule(this).definition))
+        loadKoinModules(listOf(HomeModule().definition))
         homeNavigator.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)

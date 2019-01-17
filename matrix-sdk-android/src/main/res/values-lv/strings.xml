@@ -18,7 +18,7 @@
     <string name="notice_display_name_set">%1$s uzstādīja redzamo vārdu uz %2$s</string>
     <string name="notice_display_name_changed_from">%1$s nomainīja redzamo vārdu no %2$s uz %3$s</string>
     <string name="notice_display_name_removed">%1$s dzēsa savu redzamo vārdu (%2$s)</string>
-    <string name="notice_topic_changed">%1$s nomainīja tēmas nosaukumu uz: %2$s</string>
+    <string name="notice_room_topic_changed">%1$s nomainīja tēmas nosaukumu uz: %2$s</string>
     <string name="notice_room_name_changed">%1$s nomainīja istabas nosaukumu uz: %2$s</string>
     <string name="notice_placed_video_call">%s veica video zvanu.</string>
     <string name="notice_placed_voice_call">%s veica audio zvanu.</string>

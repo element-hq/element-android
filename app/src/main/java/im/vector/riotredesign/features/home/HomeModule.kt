@@ -2,13 +2,17 @@ package im.vector.riotredesign.features.home
 
 import im.vector.riotredesign.features.home.group.SelectedGroupHolder
 import im.vector.riotredesign.features.home.room.VisibleRoomHolder
+import im.vector.riotredesign.features.home.room.detail.timeline.DefaultItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.MessageItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.TextItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.RoomMemberItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.RoomNameItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.RoomTopicItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineItemFactory
 import org.koin.dsl.module.module
 
-class HomeModule(private val homeActivity: HomeActivity) {
+class HomeModule {
 
     val definition = module(override = true) {
 
@@ -21,7 +25,23 @@ class HomeModule(private val homeActivity: HomeActivity) {
         }
 
         single {
-            TextItemFactory()
+            RoomNameItemFactory(get())
+        }
+
+        single {
+            RoomTopicItemFactory(get())
+        }
+
+        single {
+            RoomMemberItemFactory(get())
+        }
+
+        single {
+            DefaultItemFactory()
+        }
+
+        single {
+            TimelineItemFactory(get(), get(), get(), get(), get())
         }
 
         single {
@@ -29,7 +49,7 @@ class HomeModule(private val homeActivity: HomeActivity) {
         }
 
         factory { (roomId: String) ->
-            TimelineEventController(roomId, get(), get(), get())
+            TimelineEventController(roomId, get(), get())
         }
 
         single {
