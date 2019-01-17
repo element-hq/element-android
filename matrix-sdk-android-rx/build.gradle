@@ -40,7 +40,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 
     // Paging
-    implementation 'androidx.paging:paging-runtime:2.1.0-rc01'
+    implementation 'androidx.paging:paging-runtime:2.0.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
