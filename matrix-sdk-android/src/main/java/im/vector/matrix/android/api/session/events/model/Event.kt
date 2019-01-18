@@ -26,6 +26,9 @@ import java.lang.reflect.ParameterizedType
 
 typealias Content = Map<String, @JvmSuppressWildcards Any>
 
+/**
+ * This methods is a facility method to map a json content to a model.
+ */
 inline fun <reified T> Content?.toModel(): T? {
     return this?.let {
         val moshi = MoshiProvider.providesMoshi()
@@ -34,6 +37,10 @@ inline fun <reified T> Content?.toModel(): T? {
     }
 }
 
+/**
+ * Generic event class with all possible fields for events.
+ * The content and prevContent json fields can easily be mapped to a model with [toModel] method.
+ */
 @JsonClass(generateAdapter = true)
 data class Event(
         @Json(name = "type") val type: String,
@@ -49,6 +56,10 @@ data class Event(
 
 ) {
 
+    /**
+     * Check if event is a state event.
+     * @return true if event is state event.
+     */
     fun isStateEvent(): Boolean {
         return EventType.isStateEvent(type)
     }

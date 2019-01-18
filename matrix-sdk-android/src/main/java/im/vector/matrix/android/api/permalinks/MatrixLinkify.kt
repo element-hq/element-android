@@ -24,6 +24,10 @@ import android.text.method.LinkMovementMethod
 import android.widget.TextView
 import im.vector.matrix.android.api.MatrixPatterns
 
+/**
+ *  MatrixLinkify take a piece of text and turns all of the
+ *  matrix patterns matches in the text into clickable links.
+ */
 object MatrixLinkify {
 
     /**
@@ -75,7 +79,10 @@ object MatrixLinkify {
         }
     }
 
-
+    /**
+     * Add linkMovementMethod on textview if not already set
+     * @param textView the textView on which the movementMethod is set
+     */
     fun addLinkMovementMethod(textView: TextView) {
         val movementMethod = textView.movementMethod
         if (movementMethod == null || movementMethod !is LinkMovementMethod) {

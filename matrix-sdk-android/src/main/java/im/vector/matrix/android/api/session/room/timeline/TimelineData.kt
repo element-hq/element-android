@@ -19,10 +19,25 @@
 package im.vector.matrix.android.api.session.room.timeline
 
 import androidx.paging.PagedList
-import im.vector.matrix.android.api.session.events.model.TimelineEvent
 
+/**
+ * This data class is a holder for timeline data.
+ * It's returned by [TimelineService]
+ */
 data class TimelineData(
+
+        /**
+         * The [PagedList] of [TimelineEvent] to usually be render in a RecyclerView.
+         */
         val events: PagedList<TimelineEvent>,
+
+        /**
+         * True if Timeline is currently paginating forward on server
+         */
         val isLoadingForward: Boolean = false,
+
+        /**
+         * True if Timeline is currently paginating backward on server
+         */
         val isLoadingBackward: Boolean = false
 )

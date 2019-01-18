@@ -19,7 +19,7 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.text.TextUtils
-import im.vector.matrix.android.api.session.events.model.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.riotredesign.R

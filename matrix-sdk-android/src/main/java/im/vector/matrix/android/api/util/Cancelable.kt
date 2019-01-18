@@ -18,7 +18,15 @@
 
 package im.vector.matrix.android.api.util
 
+/**
+ * An interface defining a unique cancel method.
+ * It should be used with methods you want to be able to cancel, such as ones interacting with Web Services.
+ */
 interface Cancelable {
+
+    /**
+     * The cancel method, it does nothing by default.
+     */
     fun cancel() {
         //no-op
     }

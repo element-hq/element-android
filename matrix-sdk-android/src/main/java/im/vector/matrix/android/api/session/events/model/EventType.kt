@@ -19,6 +19,9 @@
 package im.vector.matrix.android.api.session.events.model
 
 
+/**
+ * Constants defining known event types from Matrix specifications.
+ */
 object EventType {
 
     const val PRESENCE = "m.presence"

@@ -18,6 +18,10 @@
 
 package im.vector.matrix.android.api.auth.data
 
+/**
+ * This data class holds necessary data to open a session.
+ * You don't have to manually instantiate it.
+ */
 data class SessionParams(
         val credentials: Credentials,
         val homeServerConnectionConfig: HomeServerConnectionConfig

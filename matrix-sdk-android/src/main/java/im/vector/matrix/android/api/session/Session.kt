@@ -23,20 +23,44 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
 
+/**
+ * This interface defines interactions with a session.
+ * An instance of a session will be provided by the SDK.
+ */
 interface Session : RoomService, GroupService {
 
+    /**
+     * The params associated to the session
+     */
     val sessionParams: SessionParams
 
+    /**
+     * This method allow to open a session. It does start some service on the background.
+     */
     @MainThread
     fun open()
 
+    /**
+     * This method allow to close a session. It does stop some services.
+     */
     @MainThread
     fun close()
 
+    /**
+     * Add a listener to the session.
+     * @param listener the listener to add.
+     */
     fun addListener(listener: Listener)
 
+    /**
+     * Remove a listener from the session.
+     * @param listener the listener to remove.
+     */
     fun removeListener(listener: Listener)
 
+    /**
+     * A global session listener to get notified for some events.
+     */
     // Not used at the moment
     interface Listener
 

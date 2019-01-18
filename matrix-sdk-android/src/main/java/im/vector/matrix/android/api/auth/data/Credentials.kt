@@ -21,6 +21,11 @@ package im.vector.matrix.android.api.auth.data
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * This data class hold credentials user data.
+ * You shouldn't have to instantiate it.
+ * The access token should be use to authenticate user in all server requests.
+ */
 @JsonClass(generateAdapter = true)
 data class Credentials(
         @Json(name = "user_id") val userId: String,

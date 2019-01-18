@@ -22,8 +22,8 @@ import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.interceptor.TimelineEventInterceptor
-import im.vector.matrix.android.api.session.events.model.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.TimelineEventInterceptor
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.database.mapper.asDomain

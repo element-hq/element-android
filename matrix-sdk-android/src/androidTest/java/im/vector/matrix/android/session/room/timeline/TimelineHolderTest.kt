@@ -23,7 +23,7 @@ import androidx.test.annotation.UiThreadTest
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.LiveDataTestObserver
-import im.vector.matrix.android.api.thread.MainThreadExecutor
+import im.vector.matrix.android.MainThreadExecutor
 import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback

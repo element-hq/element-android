@@ -16,7 +16,7 @@
  *
  */
 
-package im.vector.matrix.android.api.session.room.send
+package im.vector.matrix.android.internal.session.room.send
 
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.Content

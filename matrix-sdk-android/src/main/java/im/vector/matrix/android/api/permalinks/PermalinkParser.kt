@@ -21,13 +21,22 @@ package im.vector.matrix.android.api.permalinks
 import android.net.Uri
 import im.vector.matrix.android.api.MatrixPatterns
 
+/**
+ * This class turns an uri to a [PermalinkData]
+ */
 object PermalinkParser {
 
+    /**
+     * Turns an uri string to a [PermalinkData]
+     */
     fun parse(uriString: String): PermalinkData {
         val uri = Uri.parse(uriString)
         return parse(uri)
     }
 
+    /**
+     * Turns an uri to a [PermalinkData]
+     */
     fun parse(uri: Uri): PermalinkData {
         val fragment = uri.fragment
         if (fragment.isNullOrEmpty()) {
@@ -45,16 +54,16 @@ object PermalinkParser {
             return PermalinkData.FallbackLink(uri)
         }
         return when {
-            MatrixPatterns.isUserId(identifier) -> PermalinkData.UserLink(userId = identifier)
+            MatrixPatterns.isUserId(identifier)  -> PermalinkData.UserLink(userId = identifier)
             MatrixPatterns.isGroupId(identifier) -> PermalinkData.GroupLink(groupId = identifier)
-            MatrixPatterns.isRoomId(identifier) -> {
+            MatrixPatterns.isRoomId(identifier)  -> {
                 if (!extraParameter.isNullOrEmpty() && MatrixPatterns.isEventId(extraParameter)) {
                     PermalinkData.EventLink(roomIdOrAlias = identifier, eventId = extraParameter)
                 } else {
                     PermalinkData.RoomLink(roomIdOrAlias = identifier)
                 }
             }
-            else -> PermalinkData.FallbackLink(uri)
+            else                                 -> PermalinkData.FallbackLink(uri)
         }
     }
 

@@ -19,8 +19,8 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.api.session.room.SendService
-import im.vector.matrix.android.api.session.room.send.EventFactory
+import im.vector.matrix.android.api.session.room.send.SendService
+import im.vector.matrix.android.internal.session.room.send.EventFactory
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMembersTask

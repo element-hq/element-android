@@ -16,28 +16,14 @@
  *
  */
 
-package im.vector.matrix.android.api.session.events.model
+package im.vector.matrix.android.api.session.room.timeline
 
-import im.vector.matrix.android.api.session.room.model.RoomMember
 
-data class TimelineEvent(
-        val root: Event,
-        val localId: String,
-        val roomMember: RoomMember?
-) {
+interface TimelineEventInterceptor {
 
-    val metadata = HashMap<String, Any>()
+    fun canEnrich(event: TimelineEvent): Boolean
 
-    fun enrichWith(key: String?, data: Any?) {
-        if (key == null || data == null) {
-            return
-        }
-        if (!metadata.containsKey(key)) {
-            metadata[key] = data
-        }
-    }
+    fun enrich(event: TimelineEvent)
 
-    inline fun <reified T> getMetadata(key: String): T? {
-        return metadata[key] as T?
-    }
 }
+

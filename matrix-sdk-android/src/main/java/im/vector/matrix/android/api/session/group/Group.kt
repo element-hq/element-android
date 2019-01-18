@@ -18,6 +18,9 @@
 
 package im.vector.matrix.android.api.session.group
 
+/**
+ * This interface defines methods to interact within a group.
+ */
 interface Group {
     val groupId: String
 }

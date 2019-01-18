@@ -30,7 +30,6 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import org.koin.standalone.inject
@@ -90,7 +89,7 @@ internal class PruneEventWorker(context: Context,
             EventType.STATE_ROOM_ALIASES      -> listOf("aliases")
             EventType.STATE_CANONICAL_ALIAS   -> listOf("alias")
             EventType.FEEDBACK                -> listOf("type", "target_event_id")
-            else                              -> emptyList()
+            else                                                                                -> emptyList()
         }
     }
 

@@ -21,17 +21,34 @@ package im.vector.matrix.android.api.session.room
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.util.Cancelable
 
+/**
+ * This interface defines methods to interact within a room.
+ */
 interface Room : TimelineService, SendService {
 
+    /**
+     * The roomId of this room
+     */
     val roomId: String
 
+    /**
+     * The membership of this room for the current user
+     */
     val myMembership: MyMembership
 
+    /**
+     * A live [RoomSummary] associated with the room
+     */
     val roomSummary: LiveData<RoomSummary>
 
+    /**
+     * This methods load all room members if it was done yet.
+     * @return a [Cancelable]
+     */
     fun loadRoomMembersIfNeeded(): Cancelable
 
 }

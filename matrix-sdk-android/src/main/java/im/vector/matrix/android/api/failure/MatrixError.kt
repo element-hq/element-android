@@ -21,6 +21,10 @@ package im.vector.matrix.android.api.failure
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * This data class holds the error defined by the matrix specifications.
+ * You shouldn't have to instantiate it.
+ */
 @JsonClass(generateAdapter = true)
 data class MatrixError(
         @Json(name = "errcode") val code: String,

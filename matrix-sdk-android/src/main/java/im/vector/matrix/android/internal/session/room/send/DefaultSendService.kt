@@ -22,8 +22,7 @@ import androidx.work.*
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.SendService
-import im.vector.matrix.android.api.session.room.send.EventFactory
+import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.helper.updateDisplayIndexes

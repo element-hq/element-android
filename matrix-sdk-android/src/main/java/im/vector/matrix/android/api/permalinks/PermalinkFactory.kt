@@ -22,7 +22,7 @@ import android.text.TextUtils
 import im.vector.matrix.android.api.session.events.model.Event
 
 /**
- * Useful methods to deals with Matrix permalink
+ * Useful methods to create Matrix permalink.
  */
 object PermalinkFactory {
 

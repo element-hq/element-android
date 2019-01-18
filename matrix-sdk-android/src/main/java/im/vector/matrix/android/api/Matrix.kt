@@ -18,8 +18,8 @@
 
 package im.vector.matrix.android.api
 
-import androidx.lifecycle.ProcessLifecycleOwner
 import android.content.Context
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
@@ -32,7 +32,11 @@ import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import org.koin.standalone.inject
 import java.util.concurrent.atomic.AtomicBoolean
 
-
+/**
+ * This is the main entry point to the matrix sdk.
+ * This class is automatically init by a provider.
+ * To get the singleton instance, use getInstance static method.
+ */
 class Matrix private constructor(context: Context) : MatrixKoinComponent {
 
     private val authenticator by inject<Authenticator>()

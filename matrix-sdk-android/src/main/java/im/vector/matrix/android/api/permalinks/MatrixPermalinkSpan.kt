@@ -21,6 +21,11 @@ package im.vector.matrix.android.api.permalinks
 import android.text.style.ClickableSpan
 import android.view.View
 
+/**
+ * This MatrixPermalinkSpan is a clickable span which use a [Callback] to communicate back.
+ * @param url the permalink url tied to the span
+ * @param callback the callback to use.
+ */
 class MatrixPermalinkSpan(private val url: String,
                           private val callback: Callback? = null) : ClickableSpan() {
 

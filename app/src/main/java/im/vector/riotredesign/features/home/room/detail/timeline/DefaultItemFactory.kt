@@ -18,7 +18,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline
 
-import im.vector.matrix.android.api.session.events.model.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 class DefaultItemFactory {
 

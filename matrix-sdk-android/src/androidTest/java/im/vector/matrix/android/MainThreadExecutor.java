@@ -16,15 +16,19 @@
  *
  */
 
-package im.vector.matrix.android.api.session.events.interceptor
+package im.vector.matrix.android;
 
-import im.vector.matrix.android.api.session.events.model.TimelineEvent
+import android.os.Handler;
+import android.os.Looper;
 
-interface TimelineEventInterceptor {
+import java.util.concurrent.Executor;
 
-    fun canEnrich(event: TimelineEvent): Boolean
+public class MainThreadExecutor implements Executor {
 
-    fun enrich(event: TimelineEvent)
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
-}
-
+    @Override
+    public void execute(Runnable runnable) {
+        handler.post(runnable);
+    }
+} 

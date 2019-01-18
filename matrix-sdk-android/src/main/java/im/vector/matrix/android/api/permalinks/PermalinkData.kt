@@ -20,6 +20,10 @@ package im.vector.matrix.android.api.permalinks
 
 import android.net.Uri
 
+/**
+ * This sealed class represents all the permalink cases.
+ * You don't have to instantiate yourself but should use [PermalinkParser] instead.
+ */
 sealed class PermalinkData {
 
     data class EventLink(val roomIdOrAlias: String, val eventId: String) : PermalinkData()

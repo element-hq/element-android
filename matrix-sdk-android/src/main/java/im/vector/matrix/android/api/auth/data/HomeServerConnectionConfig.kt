@@ -20,10 +20,16 @@ package im.vector.matrix.android.api.auth.data
 
 import android.net.Uri
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig.Builder
 import im.vector.matrix.android.internal.network.ssl.Fingerprint
 import okhttp3.CipherSuite
 import okhttp3.TlsVersion
 
+/**
+ * This data class holds how to connect to a specific Homeserver.
+ * It's used with [im.vector.matrix.android.api.auth.Authenticator] class.
+ * You should use the [Builder] to create one.
+ */
 @JsonClass(generateAdapter = true)
 data class HomeServerConnectionConfig(
         val homeServerUri: Uri,
@@ -38,6 +44,9 @@ data class HomeServerConnectionConfig(
         val forceUsageTlsVersions: Boolean = false
 ) {
 
+    /**
+     * This builder should be use to create a [HomeServerConnectionConfig] instance.
+     */
     class Builder {
 
         private lateinit var homeServerUri: Uri

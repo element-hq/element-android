@@ -20,7 +20,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import com.airbnb.epoxy.EpoxyModel
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                           private val roomNameItemFactory: RoomNameItemFactory,
@@ -37,7 +37,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
             EventType.STATE_ROOM_NAME   -> roomNameItemFactory.create(event)
             EventType.STATE_ROOM_TOPIC  -> roomTopicItemFactory.create(event)
             EventType.STATE_ROOM_MEMBER -> roomMemberItemFactory.create(event)
-            else                        -> defaultItemFactory.create(event)
+            else                                                                          -> defaultItemFactory.create(event)
         }
     }
 
