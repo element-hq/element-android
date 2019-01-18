@@ -21,7 +21,7 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
 
         val messageContent: MessageContent? = event.root.content.toModel()
         val roomMember = event.roomMember
-        if (messageContent == null || roomMember == null) {
+        if (messageContent == null) {
             return null
         }
         val nextRoomMember = nextEvent?.roomMember
@@ -34,7 +34,7 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
 
         if (addDaySeparator
                 || nextRoomMember != roomMember
-                || nextEvent.root.type != EventType.MESSAGE
+                || nextEvent?.root?.type != EventType.MESSAGE
                 || isNextMessageReceivedMoreThanOneHourAgo) {
             messagesDisplayedWithInformation.add(event.root.eventId)
         }
@@ -52,10 +52,10 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
         val showInformation = messagesDisplayedWithInformation.contains(event.root.eventId)
         return MessageItem(
                 message = message,
-                avatarUrl = roomMember.avatarUrl,
+                avatarUrl = roomMember?.avatarUrl,
                 showInformation = showInformation,
                 time = timelineDateFormatter.formatMessageHour(date),
-                memberName = roomMember.displayName ?: event.root.sender
+                memberName = roomMember?.displayName ?: event.root.sender
         )
     }
 
