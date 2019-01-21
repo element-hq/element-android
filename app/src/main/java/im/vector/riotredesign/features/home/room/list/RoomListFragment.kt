@@ -1,9 +1,12 @@
 package im.vector.riotredesign.features.home.room.list
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
@@ -11,6 +14,8 @@ import com.airbnb.mvrx.activityViewModel
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.hideKeyboard
+import im.vector.riotredesign.core.extensions.setupAsSearch
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.features.home.HomeNavigator
@@ -38,6 +43,7 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
         roomController = RoomSummaryController(this)
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
+        setupFilterView()
         homeViewModel.subscribe { renderState(it) }
     }
 
@@ -69,6 +75,21 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
         }
         stateView.state = StateView.State.Error(message)
     }
+
+    private fun setupFilterView() {
+        filterRoomView.setupAsSearch()
+        filterRoomView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) = Unit
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                homeViewModel.accept(RoomListActions.FilterRooms(s))
+            }
+        })
+    }
+
+    // RoomSummaryController.Callback **************************************************************
 
     override fun onRoomSelected(room: RoomSummary) {
         homeViewModel.accept(RoomListActions.SelectRoom(room))

@@ -8,4 +8,6 @@ sealed class RoomListActions {
 
     object RoomDisplayed : RoomListActions()
 
+    data class FilterRooms(val roomName: CharSequence? = null) : RoomListActions()
+
 }
