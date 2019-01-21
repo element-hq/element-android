@@ -7,7 +7,8 @@ import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.riotredesign.core.extensions.localDateTime
 
 class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatter) {
@@ -17,27 +18,42 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                callback: TimelineEventController.Callback?
-    ): MessageItem? {
+    ): MessageTextItem? {
 
-        val messageContent: MessageContent? = event.root.content.toModel()
         val roomMember = event.roomMember
-        if (messageContent == null) {
-            return null
-        }
         val nextRoomMember = nextEvent?.roomMember
 
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                ?: false
+                                                      ?: false
 
         if (addDaySeparator
-                || nextRoomMember != roomMember
-                || nextEvent?.root?.type != EventType.MESSAGE
-                || isNextMessageReceivedMoreThanOneHourAgo) {
+            || nextRoomMember != roomMember
+            || nextEvent?.root?.type != EventType.MESSAGE
+            || isNextMessageReceivedMoreThanOneHourAgo) {
             messagesDisplayedWithInformation.add(event.root.eventId)
         }
+
+        val messageContent: MessageContent = event.root.content.toModel() ?: return null
+        val showInformation = messagesDisplayedWithInformation.contains(event.root.eventId)
+        val time = timelineDateFormatter.formatMessageHour(date)
+        val avatarUrl = roomMember?.avatarUrl
+        val memberName = roomMember?.displayName ?: event.root.sender
+
+        return when (messageContent) {
+            is MessageTextContent -> buildTextMessageItem(messageContent, memberName, avatarUrl, time, showInformation, callback)
+            else                  -> null
+        }
+    }
+
+    private fun buildTextMessageItem(messageContent: MessageTextContent,
+                                     memberName: String?,
+                                     avatarUrl: String?,
+                                     time: String,
+                                     showInformation: Boolean,
+                                     callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body?.let {
             val spannable = SpannableStringBuilder(it)
@@ -49,13 +65,12 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
             Linkify.addLinks(spannable, Linkify.ALL)
             spannable
         }
-        val showInformation = messagesDisplayedWithInformation.contains(event.root.eventId)
-        return MessageItem(
+        return MessageTextItem(
                 message = message,
-                avatarUrl = roomMember?.avatarUrl,
+                avatarUrl = avatarUrl,
                 showInformation = showInformation,
-                time = timelineDateFormatter.formatMessageHour(date),
-                memberName = roomMember?.displayName ?: event.root.sender
+                time = time,
+                memberName = memberName
         )
     }
 
