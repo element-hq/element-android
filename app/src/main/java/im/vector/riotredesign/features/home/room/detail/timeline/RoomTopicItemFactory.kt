@@ -1,6 +1,5 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
@@ -16,10 +15,10 @@ class RoomTopicItemFactory(private val stringProvider: StringProvider) {
         if (content == null || roomMember == null) {
             return null
         }
-        val text = if (!TextUtils.isEmpty(content.topic)) {
-            stringProvider.getString(R.string.notice_room_topic_changed, roomMember.displayName, content.topic)
-        } else {
+        val text = if (content.topic.isNullOrEmpty()) {
             stringProvider.getString(R.string.notice_room_topic_removed, roomMember.displayName)
+        } else {
+            stringProvider.getString(R.string.notice_room_topic_changed, roomMember.displayName, content.topic)
         }
         return NoticeItem(text, roomMember.avatarUrl, roomMember.displayName)
     }
