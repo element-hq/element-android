@@ -2,22 +2,24 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.widget.ImageView
 import android.widget.TextView
-import im.vector.matrix.android.api.permalinks.MatrixLinkify
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.riotredesign.R
+import im.vector.riotredesign.features.media.MessageImageRenderer
 
-class MessageTextItem(
-        val message: CharSequence? = null,
+class MessageImageItem(
+        private val messageContent: MessageImageContent,
         informationData: MessageInformationData
-) : AbsMessageItem(informationData, R.layout.item_timeline_event_text_message) {
+) : AbsMessageItem(informationData, R.layout.item_timeline_event_image_message) {
 
     override val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
     override val memberNameView by bind<TextView>(R.id.messageMemberNameView)
     override val timeView by bind<TextView>(R.id.messageTimeView)
-    private val messageView by bind<TextView>(R.id.messageTextView)
+    private val imageView by bind<ImageView>(R.id.messageImageView)
 
     override fun bind() {
         super.bind()
-        messageView.text = message
-        MatrixLinkify.addLinkMovementMethod(messageView)
+        MessageImageRenderer.render(messageContent, imageView)
     }
+
+
 }

@@ -1,9 +1,10 @@
 package im.vector.riotredesign.features.home
 
-import androidx.core.content.ContextCompat
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.request.RequestOptions
+import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
@@ -27,7 +28,7 @@ object AvatarRenderer {
         if (name.isNullOrEmpty()) {
             return
         }
-        val resolvedUrl = avatarUrl?.replace(MXC_PREFIX, MEDIA_URL)
+        val resolvedUrl = ContentUrlResolver.resolve(avatarUrl)
         val avatarColor = ContextCompat.getColor(imageView.context, R.color.pale_teal)
         val fallbackDrawable = TextDrawable.builder().buildRound(name.firstCharAsString().toUpperCase(), avatarColor)
 

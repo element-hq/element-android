@@ -8,6 +8,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.riotredesign.core.extensions.localDateTime
 
@@ -18,7 +19,7 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                callback: TimelineEventController.Callback?
-    ): MessageTextItem? {
+    ): AbsMessageItem? {
 
         val roomMember = event.roomMember
         val nextRoomMember = nextEvent?.roomMember
@@ -41,21 +42,24 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
         val time = timelineDateFormatter.formatMessageHour(date)
         val avatarUrl = roomMember?.avatarUrl
         val memberName = roomMember?.displayName ?: event.root.sender
+        val informationData = MessageInformationData(time, avatarUrl, memberName, showInformation)
 
         return when (messageContent) {
-            is MessageTextContent -> buildTextMessageItem(messageContent, memberName, avatarUrl, time, showInformation, callback)
-            else                  -> null
+            is MessageTextContent  -> buildTextMessageItem(messageContent, informationData, callback)
+            is MessageImageContent -> buildImageMessageItem(messageContent, informationData)
+            else                   -> null
         }
     }
 
+    private fun buildImageMessageItem(messageContent: MessageImageContent, informationData: MessageInformationData): MessageImageItem? {
+        return MessageImageItem(messageContent, informationData)
+    }
+
     private fun buildTextMessageItem(messageContent: MessageTextContent,
-                                     memberName: String?,
-                                     avatarUrl: String?,
-                                     time: String,
-                                     showInformation: Boolean,
+                                     informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
-        val message = messageContent.body?.let {
+        val message = messageContent.body.let {
             val spannable = SpannableStringBuilder(it)
             MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
                 override fun onUrlClicked(url: String) {
@@ -67,10 +71,7 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
         }
         return MessageTextItem(
                 message = message,
-                avatarUrl = avatarUrl,
-                showInformation = showInformation,
-                time = time,
-                memberName = memberName
+                informationData = informationData
         )
     }
 
