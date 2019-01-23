@@ -2,12 +2,11 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.widget.ImageView
 import android.widget.TextView
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.riotredesign.R
-import im.vector.riotredesign.features.media.MessageImageRenderer
+import im.vector.riotredesign.features.media.MediaContentRenderer
 
 class MessageImageItem(
-        private val messageContent: MessageImageContent,
+        private val mediaData: MediaContentRenderer.Data,
         informationData: MessageInformationData
 ) : AbsMessageItem(informationData, R.layout.item_timeline_event_image_message) {
 
@@ -18,7 +17,7 @@ class MessageImageItem(
 
     override fun bind() {
         super.bind()
-        MessageImageRenderer.render(messageContent, imageView)
+        MediaContentRenderer.render(mediaData, MediaContentRenderer.Mode.THUMBNAIL, imageView)
     }
 
 
