@@ -5,6 +5,7 @@ import android.graphics.Point
 import android.media.ExifInterface
 import android.view.WindowManager
 import android.widget.ImageView
+import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.riotredesign.core.glide.GlideApp
@@ -48,12 +49,17 @@ object MessageImageRenderer {
         imageView.layoutParams.height = finalHeight
         imageView.layoutParams.width = finalWidth
 
-        val resolvedUrl = ContentUrlResolver.resolve(messageContent.url) ?: return
+        val contentUrlResolver = Matrix.getInstance().currentSession.contentUrlResolver()
+        val resolvedUrl = contentUrlResolver.resolveThumbnail(
+                messageContent.url,
+                finalWidth,
+                finalHeight,
+                ContentUrlResolver.ThumbnailMethod.SCALE
+        ) ?: return
+
         GlideApp
                 .with(imageView)
                 .load(resolvedUrl)
-                .override(finalWidth, finalHeight)
-                .thumbnail(0.3f)
                 .into(imageView)
     }
 
