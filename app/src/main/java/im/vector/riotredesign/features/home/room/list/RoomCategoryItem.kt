@@ -1,8 +1,9 @@
 package im.vector.riotredesign.features.home.room.list
 
-import androidx.core.content.ContextCompat
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.KotlinModel
 
@@ -21,8 +22,9 @@ data class RoomCategoryItem(
 
     override fun bind() {
         val expandedArrowDrawableRes = if (isExpanded) R.drawable.ic_expand_more_white else R.drawable.ic_expand_less_white
-        val expandedArrowDrawable = ContextCompat.getDrawable(rootView.context, expandedArrowDrawableRes)
-        expandedArrowDrawable?.setTint(tintColor)
+        val expandedArrowDrawable = ContextCompat.getDrawable(rootView.context, expandedArrowDrawableRes)?.also {
+            DrawableCompat.setTint(it, tintColor)
+        }
         titleView.setCompoundDrawablesWithIntrinsicBounds(expandedArrowDrawable, null, null, null)
         titleView.text = title
         rootView.setOnClickListener { listener?.invoke() }

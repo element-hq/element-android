@@ -1,12 +1,15 @@
 package im.vector.riotredesign
 
 import android.app.Application
+import android.content.Context
+import androidx.multidex.MultiDex
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.BuildConfig
 import im.vector.riotredesign.core.di.AppModule
 import org.koin.log.EmptyLogger
 import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
+
 
 class Riot : Application() {
 
@@ -17,6 +20,11 @@ class Riot : Application() {
         }
         AndroidThreeTen.init(this)
         startKoin(listOf(AppModule(this).definition), logger = EmptyLogger())
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 
 }

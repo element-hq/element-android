@@ -15,8 +15,9 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "im.vector.riotredesign"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 28
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -42,6 +43,7 @@ dependencies {
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
+    implementation 'com.android.support:multidex:1.0.3'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
