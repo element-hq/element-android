@@ -11,9 +11,11 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.riotredesign.core.extensions.localDateTime
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.media.MediaContentRenderer
 
-class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatter) {
+class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
+                         private val timelineDateFormatter: TimelineDateFormatter) {
 
     private val messagesDisplayedWithInformation = HashSet<String?>()
 
@@ -29,12 +31,12 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                ?: false
+                                                      ?: false
 
         if (addDaySeparator
-                || nextRoomMember != roomMember
-                || nextEvent?.root?.type != EventType.MESSAGE
-                || isNextMessageReceivedMoreThanOneHourAgo) {
+            || nextRoomMember != roomMember
+            || nextEvent?.root?.type != EventType.MESSAGE
+            || isNextMessageReceivedMoreThanOneHourAgo) {
             messagesDisplayedWithInformation.add(event.root.eventId)
         }
 
@@ -54,13 +56,14 @@ class MessageItemFactory(private val timelineDateFormatter: TimelineDateFormatte
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,
                                       informationData: MessageInformationData): MessageImageItem? {
-        // TODO : manage maxHeight/maxWidth
+
+        val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val data = MediaContentRenderer.Data(
                 url = messageContent.url,
                 height = messageContent.info.height,
-                maxHeight = 800,
+                maxHeight = maxHeight,
                 width = messageContent.info.width,
-                maxWidth = 800,
+                maxWidth = maxWidth,
                 rotation = messageContent.info.rotation,
                 orientation = messageContent.info.orientation
         )

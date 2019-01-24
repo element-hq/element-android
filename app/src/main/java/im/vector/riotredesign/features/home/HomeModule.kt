@@ -10,6 +10,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.RoomTopicItemFa
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import org.koin.dsl.module.module
 
 class HomeModule {
@@ -21,7 +22,7 @@ class HomeModule {
         }
 
         single {
-            MessageItemFactory(get())
+            MessageItemFactory(get(), get())
         }
 
         single {
@@ -49,7 +50,11 @@ class HomeModule {
         }
 
         factory { (roomId: String) ->
-            TimelineEventController(roomId, get(), get())
+            TimelineEventController(roomId, get(), get(), get())
+        }
+
+        single {
+            TimelineMediaSizeProvider()
         }
 
         single {
