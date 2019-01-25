@@ -22,6 +22,9 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.EventType
 import java.util.*
 
+/**
+ * Class representing the EventType.EVENT_TYPE_STATE_ROOM_POWER_LEVELS state event content.
+ */
 @JsonClass(generateAdapter = true)
 data class PowerLevels(
         @Json(name = "ban") val ban: Int = 50,

@@ -16,6 +16,10 @@
 
 package im.vector.matrix.android.api.session.room.model
 
+/**
+ * This class holds some data of a room.
+ * It can be retrieved by [im.vector.matrix.android.api.session.room.Room] and [im.vector.matrix.android.api.session.room.RoomService]
+ */
 data class RoomSummary(
         val roomId: String,
         val displayName: String = "",

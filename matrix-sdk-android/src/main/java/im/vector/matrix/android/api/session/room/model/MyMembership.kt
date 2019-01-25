@@ -16,6 +16,9 @@
 
 package im.vector.matrix.android.api.session.room.model
 
+/**
+ * Represents the membership of the current auth user on a room.
+ */
 enum class MyMembership {
     JOINED,
     LEFT,

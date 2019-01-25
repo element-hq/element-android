@@ -20,6 +20,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 
+/**
+ * Class representing the EventType.STATE_ROOM_MEMBER state event content
+ */
 @JsonClass(generateAdapter = true)
 data class RoomMember(
         @Json(name = "membership") val membership: Membership,

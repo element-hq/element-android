@@ -18,6 +18,9 @@ package im.vector.matrix.android.api.session.room.model
 
 import com.squareup.moshi.Json
 
+/**
+ * Represents the membership of a user on a room. Linked to a [RoomMember]
+ */
 enum class Membership(val value: String) {
 
     @Json(name = "invite")

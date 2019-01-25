@@ -19,6 +19,9 @@ package im.vector.matrix.android.api.session.room.model
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * Class representing the EventType.STATE_ROOM_AVATAR state event content
+ */
 @JsonClass(generateAdapter = true)
 data class RoomAvatarContent(
         @Json(name = "url") val avatarUrl: String? = null

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room
+package im.vector.matrix.android.api.session.room.model
 
 import com.squareup.moshi.Json
 
