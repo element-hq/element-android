@@ -22,10 +22,10 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class VideoInfo(
         @Json(name = "mimetype") val mimeType: String,
-        @Json(name = "w") val w: Int,
-        @Json(name = "h") val h: Int,
-        @Json(name = "size") val size: Long,
-        @Json(name = "duration") val duration: Int,
+        @Json(name = "w") val w: Int = 0,
+        @Json(name = "h") val h: Int = 0,
+        @Json(name = "size") val size: Long = 0,
+        @Json(name = "duration") val duration: Int = 0,
         @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,
         @Json(name = "thumbnail_url") val thumbnailUrl: String? = null
 )

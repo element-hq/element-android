@@ -21,6 +21,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class LocationInfo(
-        @Json(name = "thumbnail_url") val thumbnailUrl: String,
-        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo
+        @Json(name = "thumbnail_url") val thumbnailUrl: String? = null,
+        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null
 )

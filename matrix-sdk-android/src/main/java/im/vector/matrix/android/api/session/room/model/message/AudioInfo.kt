@@ -22,6 +22,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class AudioInfo(
         @Json(name = "mimetype") val mimeType: String,
-        @Json(name = "size") val size: Long,
-        @Json(name = "duration") val duration: Int
+        @Json(name = "size") val size: Long = 0,
+        @Json(name = "duration") val duration: Int = 0
 )

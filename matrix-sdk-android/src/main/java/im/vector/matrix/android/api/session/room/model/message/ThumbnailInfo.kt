@@ -21,8 +21,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ThumbnailInfo(
-        @Json(name = "w") val width: Int,
-        @Json(name = "h") val height: Int,
-        @Json(name = "size") val size: Long,
+        @Json(name = "w") val width: Int = 0,
+        @Json(name = "h") val height: Int = 0,
+        @Json(name = "size") val size: Long = 0,
         @Json(name = "mimetype") val mimeType: String
 )

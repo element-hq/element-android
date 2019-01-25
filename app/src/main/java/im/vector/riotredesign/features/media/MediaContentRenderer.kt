@@ -26,12 +26,12 @@ object MediaContentRenderer {
 
     data class Data(
             val url: String?,
-            val height: Int,
+            val height: Int?,
             val maxHeight: Int,
-            val width: Int,
-            val maxWidth: Int = width,
-            val orientation: Int,
-            val rotation: Int
+            val width: Int?,
+            val maxWidth: Int,
+            val orientation: Int?,
+            val rotation: Int?
     )
 
     enum class Mode {
@@ -46,10 +46,10 @@ object MediaContentRenderer {
 
         val contentUrlResolver = Matrix.getInstance().currentSession.contentUrlResolver()
         val resolvedUrl = when (mode) {
-            Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
-            Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-        }
-                ?: return
+                              Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
+                              Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+                          }
+                          ?: return
 
         GlideApp
                 .with(imageView)
@@ -61,10 +61,10 @@ object MediaContentRenderer {
     private fun processSize(data: Data, mode: Mode): Pair<Int, Int> {
         val maxImageWidth = data.maxWidth
         val maxImageHeight = data.maxHeight
-        val rotationAngle = data.rotation
-        val orientation = data.orientation
-        var width = data.width
-        var height = data.height
+        val rotationAngle = data.rotation ?: 0
+        val orientation = data.orientation ?: ExifInterface.ORIENTATION_NORMAL
+        var width = data.width ?: maxImageWidth
+        var height = data.height ?: maxImageHeight
         var finalHeight = -1
         var finalWidth = -1
 

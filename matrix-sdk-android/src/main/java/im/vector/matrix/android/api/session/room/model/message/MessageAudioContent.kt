@@ -23,6 +23,6 @@ import com.squareup.moshi.JsonClass
 data class MessageAudioContent(
         @Json(name = "msgtype") override val type: String,
         @Json(name = "body") override val body: String,
-        @Json(name = "info") val info: AudioInfo,
+        @Json(name = "info") val info: AudioInfo? = null,
         @Json(name = "url") val url: String? = null
 ) : MessageContent

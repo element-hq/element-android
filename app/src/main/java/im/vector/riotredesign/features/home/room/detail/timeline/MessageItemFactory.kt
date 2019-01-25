@@ -21,11 +21,11 @@ import android.text.util.Linkify
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.media.MediaContentRenderer
@@ -76,12 +76,12 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val data = MediaContentRenderer.Data(
                 url = messageContent.url,
-                height = messageContent.info.height,
+                height = messageContent.info?.height,
                 maxHeight = maxHeight,
-                width = messageContent.info.width,
+                width = messageContent.info?.width,
                 maxWidth = maxWidth,
-                rotation = messageContent.info.rotation,
-                orientation = messageContent.info.orientation
+                rotation = messageContent.info?.rotation,
+                orientation = messageContent.info?.orientation
         )
         return MessageImageItem(data, informationData)
     }

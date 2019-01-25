@@ -23,6 +23,6 @@ import com.squareup.moshi.JsonClass
 data class MessageImageContent(
         @Json(name = "msgtype") override val type: String,
         @Json(name = "body") override val body: String,
-        @Json(name = "info") val info: ImageInfo,
+        @Json(name = "info") val info: ImageInfo? = null,
         @Json(name = "url") val url: String? = null
 ) : MessageContent
