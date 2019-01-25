@@ -129,16 +129,8 @@ public final class RuntimeJsonAdapterFactory<T> implements JsonAdapter.Factory {
             Object jsonValue = reader.readJsonValue();
             Map<String, Object> jsonObject = (Map<String, Object>) jsonValue;
             Object label = jsonObject.get(labelKey);
-            if (label == null) {
-                throw new JsonDataException("Missing label for " + labelKey);
-            }
             if (!(label instanceof String)) {
-                throw new JsonDataException("Label for '"
-                        + labelKey
-                        + "' must be a string but was "
-                        + label
-                        + ", a "
-                        + label.getClass());
+                return null;
             }
             JsonAdapter<Object> adapter = labelToAdapter.get(label);
             if (adapter == null) {

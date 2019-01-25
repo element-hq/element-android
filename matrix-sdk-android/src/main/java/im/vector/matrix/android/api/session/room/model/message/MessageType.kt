@@ -1,4 +1,4 @@
-package im.vector.matrix.android.api.session.room.model
+package im.vector.matrix.android.api.session.room.model.message
 
 object MessageType {
 

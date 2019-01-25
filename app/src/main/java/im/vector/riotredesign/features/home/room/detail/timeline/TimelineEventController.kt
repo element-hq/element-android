@@ -1,5 +1,6 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyModel
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -7,11 +8,13 @@ import im.vector.matrix.android.api.session.events.model.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.paging.PagedListEpoxyController
 
 class TimelineEventController(private val roomId: String,
                               private val dateFormatter: TimelineDateFormatter,
-                              private val timelineItemFactory: TimelineItemFactory
+                              private val timelineItemFactory: TimelineItemFactory,
+                              private val timelineMediaSizeProvider: TimelineMediaSizeProvider
 ) : PagedListEpoxyController<TimelineEvent>(
         EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
@@ -36,6 +39,10 @@ class TimelineEventController(private val roomId: String,
         }
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        timelineMediaSizeProvider.recyclerView = recyclerView
+    }
 
     override fun buildItemModels(currentPosition: Int, items: List<TimelineEvent?>): List<EpoxyModel<*>> {
         if (items.isNullOrEmpty()) {

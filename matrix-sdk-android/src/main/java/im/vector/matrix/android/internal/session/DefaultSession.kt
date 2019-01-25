@@ -1,10 +1,11 @@
 package im.vector.matrix.android.internal.session
 
-import androidx.lifecycle.LiveData
 import android.os.Looper
 import androidx.annotation.MainThread
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.group.model.GroupSummary
@@ -35,6 +36,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val roomService by inject<RoomService>()
     private val groupService by inject<GroupService>()
     private val syncThread by inject<SyncThread>()
+    private val contentUrlResolver by inject<ContentUrlResolver>()
     private var isOpen = false
 
     @MainThread
@@ -61,6 +63,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         liveEntityUpdaters.forEach { it.dispose() }
         scope.close()
         isOpen = false
+    }
+
+    override fun contentUrlResolver(): ContentUrlResolver {
+        return contentUrlResolver
     }
 
     override fun addListener(listener: Session.Listener) {

@@ -1,17 +1,15 @@
 package im.vector.riotredesign.features.home
 
-import androidx.core.content.ContextCompat
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.request.RequestOptions
+import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.firstCharAsString
 import im.vector.riotredesign.core.glide.GlideApp
-
-private const val MEDIA_URL = "https://matrix.org/_matrix/media/v1/download/"
-private const val MXC_PREFIX = "mxc://"
 
 object AvatarRenderer {
 
@@ -27,7 +25,7 @@ object AvatarRenderer {
         if (name.isNullOrEmpty()) {
             return
         }
-        val resolvedUrl = avatarUrl?.replace(MXC_PREFIX, MEDIA_URL)
+        val resolvedUrl = Matrix.getInstance().currentSession.contentUrlResolver().resolveFullSize(avatarUrl)
         val avatarColor = ContextCompat.getColor(imageView.context, R.color.pale_teal)
         val fallbackDrawable = TextDrawable.builder().buildRound(name.firstCharAsString().toUpperCase(), avatarColor)
 
