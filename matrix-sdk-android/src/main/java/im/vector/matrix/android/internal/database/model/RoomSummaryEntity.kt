@@ -29,7 +29,9 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                                       var joinedMembersCount: Int? = 0,
                                       var invitedMembersCount: Int? = 0,
                                       var isDirect: Boolean = false,
-                                      var otherMemberIds: RealmList<String> = RealmList()
+                                      var otherMemberIds: RealmList<String> = RealmList(),
+                                      var notificationCount: Int = 0,
+                                      var highlightCount: Int = 0
 ) : RealmObject() {
 
     companion object

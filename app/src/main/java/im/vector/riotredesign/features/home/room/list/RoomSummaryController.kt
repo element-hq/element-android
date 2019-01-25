@@ -61,11 +61,15 @@ class RoomSummaryController(private val callback: Callback? = null
 
     private fun buildRoomModels(summaries: List<RoomSummary>, selectedRoomId: String?) {
         summaries.forEach { roomSummary ->
+            val unreadCount = roomSummary.notificationCount
+            val showHighlighted = roomSummary.highlightCount > 0
             val isSelected = roomSummary.roomId == selectedRoomId
             RoomSummaryItem(
                     roomName = roomSummary.displayName,
                     avatarUrl = roomSummary.avatarUrl,
                     isSelected = isSelected,
+                    showHighlighted = showHighlighted,
+                    unreadCount = unreadCount,
                     listener = { callback?.onRoomSelected(roomSummary) }
             )
                     .id(roomSummary.roomId)

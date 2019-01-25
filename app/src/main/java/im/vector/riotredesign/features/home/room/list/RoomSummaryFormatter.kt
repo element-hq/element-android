@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.model
+package im.vector.riotredesign.features.home.room.list
 
-/**
- * This class holds some data of a room.
- * It can be retrieved by [im.vector.matrix.android.api.session.room.Room] and [im.vector.matrix.android.api.session.room.RoomService]
- */
-data class RoomSummary(
-        val roomId: String,
-        val displayName: String = "",
-        val topic: String = "",
-        val avatarUrl: String = "",
-        val isDirect: Boolean,
-        val otherMemberIds: List<String> = emptyList(),
-        var notificationCount: Int = 0,
-        var highlightCount: Int = 0
-)
+object RoomSummaryFormatter {
+
+    /**
+     * Format the unread messages counter.
+     *
+     * @param count the count
+     * @return the formatted value
+     */
+    fun formatUnreadMessagesCounter(count: Int): String {
+        return if (count > 999) {
+            "${count / 1000}.${count % 1000 / 100}K"
+        } else {
+            count.toString()
+        }
+    }
+
+}

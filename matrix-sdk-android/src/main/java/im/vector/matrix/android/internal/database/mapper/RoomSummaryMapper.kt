@@ -24,12 +24,14 @@ internal object RoomSummaryMapper {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
         return RoomSummary(
-                roomSummaryEntity.roomId,
-                roomSummaryEntity.displayName ?: "",
-                roomSummaryEntity.topic ?: "",
-                roomSummaryEntity.avatarUrl ?: "",
-                roomSummaryEntity.isDirect,
-                roomSummaryEntity.otherMemberIds.toList()
+                roomId = roomSummaryEntity.roomId,
+                displayName = roomSummaryEntity.displayName ?: "",
+                topic = roomSummaryEntity.topic ?: "",
+                avatarUrl = roomSummaryEntity.avatarUrl ?: "",
+                isDirect = roomSummaryEntity.isDirect,
+                otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
+                highlightCount = roomSummaryEntity.highlightCount,
+                notificationCount = roomSummaryEntity.notificationCount
         )
     }
 }

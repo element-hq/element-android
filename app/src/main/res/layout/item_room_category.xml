@@ -35,7 +35,6 @@
         android:id="@+id/roomCategoryAddButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
-
         android:scaleType="centerInside"
         android:src="@drawable/ic_add_circle_white"
         android:tint="@color/bluey_grey_two"
