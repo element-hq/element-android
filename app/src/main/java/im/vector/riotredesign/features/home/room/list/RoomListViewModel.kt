@@ -1,19 +1,17 @@
 /*
+ * Copyright 2019 New Vector Ltd
  *
- *  * Copyright 2019 New Vector Ltd
- *  *
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  *     http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package im.vector.riotredesign.features.home.room.list
@@ -21,6 +19,7 @@ package im.vector.riotredesign.features.home.room.list
 import arrow.core.Option
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
@@ -30,9 +29,11 @@ import im.vector.riotredesign.core.platform.RiotViewModel
 import im.vector.riotredesign.features.home.group.SelectedGroupHolder
 import im.vector.riotredesign.features.home.room.VisibleRoomHolder
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
+
+typealias RoomListFilterName = CharSequence
 
 class RoomListViewModel(initialState: RoomListViewState,
                         private val session: Session,
@@ -53,6 +54,9 @@ class RoomListViewModel(initialState: RoomListViewState,
         }
     }
 
+
+    private val roomListFilter = BehaviorRelay.createDefault<Option<RoomListFilterName>>(Option.empty())
+
     init {
         observeRoomSummaries()
         observeVisibleRoom()
@@ -60,7 +64,8 @@ class RoomListViewModel(initialState: RoomListViewState,
 
     fun accept(action: RoomListActions) {
         when (action) {
-            is RoomListActions.SelectRoom -> handleSelectRoom(action)
+            is RoomListActions.SelectRoom  -> handleSelectRoom(action)
+            is RoomListActions.FilterRooms -> handleFilterRooms(action)
         }
     }
 
@@ -72,6 +77,11 @@ class RoomListViewModel(initialState: RoomListViewState,
         }
     }
 
+    private fun handleFilterRooms(action: RoomListActions.FilterRooms) {
+        val optionalFilter = Option.fromNullable(action.roomName)
+        roomListFilter.accept(optionalFilter)
+    }
+
     private fun observeVisibleRoom() {
         visibleRoomHolder.visibleRoom()
                 .subscribeBy {
@@ -81,13 +91,22 @@ class RoomListViewModel(initialState: RoomListViewState,
     }
 
     private fun observeRoomSummaries() {
-        Observable.combineLatest<List<RoomSummary>, Option<GroupSummary>, RoomSummaries>(
+        Observable.combineLatest<List<RoomSummary>, Option<GroupSummary>, Option<RoomListFilterName>, RoomSummaries>(
                 session.rx().liveRoomSummaries(),
                 selectedGroupHolder.selectedGroup(),
-                BiFunction { rooms, selectedGroupOption ->
-                    val selectedGroup = selectedGroupOption.orNull()
+                roomListFilter,
+                Function3 { rooms, selectedGroupOption, filterRoomOption ->
+                    val filterRoom = filterRoomOption.orNull()
+                    val filteredRooms = rooms.filter {
+                        if (filterRoom.isNullOrBlank()) {
+                            true
+                        } else {
+                            it.displayName.contains(other = filterRoom, ignoreCase = true)
+                        }
+                    }
 
-                    val filteredDirectRooms = rooms
+                    val selectedGroup = selectedGroupOption.orNull()
+                    val filteredDirectRooms = filteredRooms
                             .filter { it.isDirect }
                             .filter {
                                 if (selectedGroup == null) {
@@ -99,7 +118,7 @@ class RoomListViewModel(initialState: RoomListViewState,
                                 }
                             }
 
-                    val filteredGroupRooms = rooms
+                    val filteredGroupRooms = filteredRooms
                             .filter { !it.isDirect }
                             .filter {
                                 selectedGroup?.roomIds?.contains(it.roomId) ?: true
