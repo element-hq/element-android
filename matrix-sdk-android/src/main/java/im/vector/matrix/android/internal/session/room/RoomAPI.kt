@@ -24,7 +24,12 @@ import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 internal interface RoomAPI {
 
@@ -99,6 +104,15 @@ internal interface RoomAPI {
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/event/{eventId}")
     fun getEvent(@Path("roomId") roomId: String, @Path("eventId") eventId: String): Call<Event>
+
+    /**
+     * Send read markers.
+     *
+     * @param roomId  the room id
+     * @param markers the read markers
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/read_markers")
+    fun sendReadMarker(@Path("roomId") roomId: String, @Body markers: Map<String, String>): Call<Void>
 
 
 }

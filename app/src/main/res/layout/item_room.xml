@@ -52,7 +52,7 @@
             android:gravity="center"
             android:minWidth="24dp"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"

@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.database.query
 
+import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -48,6 +49,12 @@ internal fun EventEntity.Companion.where(realm: Realm,
     }
 }
 
+internal fun EventEntity.Companion.latestEvent(realm: Realm,
+                                               roomId: String): EventEntity? {
+    val chunkEntity = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
+    return chunkEntity?.events?.where()?.sort(EventEntityFields.DISPLAY_INDEX)?.findFirst()
+}
+
 
 internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = true): EventEntity? {
     if (from != null) {
@@ -61,7 +68,6 @@ internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = t
             .sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING)
             .findFirst()
 }
-
 
 internal fun RealmQuery<EventEntity>.last(since: Int? = null, strict: Boolean = false): EventEntity? {
     if (since != null) {

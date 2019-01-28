@@ -19,6 +19,7 @@ package im.vector.matrix.android.api.session.room
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.util.Cancelable
@@ -26,7 +27,7 @@ import im.vector.matrix.android.api.util.Cancelable
 /**
  * This interface defines methods to interact within a room.
  */
-interface Room : TimelineService, SendService {
+interface Room : TimelineService, SendService, ReadService {
 
     /**
      * The roomId of this room

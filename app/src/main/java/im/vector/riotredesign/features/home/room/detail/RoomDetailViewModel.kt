@@ -50,6 +50,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         observeRoomSummary()
         observeTimeline()
         room.loadRoomMembersIfNeeded()
+        room.markLatestAsRead(callback = object : MatrixCallback<Void> {})
     }
 
     fun accept(action: RoomDetailActions) {

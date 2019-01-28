@@ -19,6 +19,8 @@ package im.vector.matrix.android.internal.util
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import io.realm.RealmModel
+import java.util.concurrent.atomic.AtomicReference
 
 internal fun Monarchy.tryTransactionSync(transaction: (realm: Realm) -> Unit): Try<Unit> {
     return Try {
@@ -30,4 +32,13 @@ internal fun Monarchy.tryTransactionAsync(transaction: (realm: Realm) -> Unit): 
     return Try {
         this.writeAsync(transaction)
     }
+}
+
+fun <T : RealmModel> Monarchy.fetchManaged(query: (Realm) -> T?): T? {
+    val ref = AtomicReference<T>()
+    doWithRealm { realm ->
+        val result = query.invoke(realm)
+        ref.set(result)
+    }
+    return ref.get()
 }

@@ -22,10 +22,11 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.read.ReadService
+import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.util.Cancelable
@@ -49,6 +50,7 @@ internal data class DefaultRoom(
     private val monarchy by inject<Monarchy>()
     private val timelineService by inject<TimelineService> { parametersOf(roomId) }
     private val sendService by inject<SendService> { parametersOf(roomId) }
+    private val readService by inject<ReadService> { parametersOf(roomId) }
     private val taskExecutor by inject<TaskExecutor>()
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
@@ -74,6 +76,22 @@ internal data class DefaultRoom(
 
     override fun sendTextMessage(text: String, callback: MatrixCallback<Event>): Cancelable {
         return sendService.sendTextMessage(text, callback)
+    }
+
+    override fun setReadReceipt(eventId: String, callback: MatrixCallback<Void>) {
+        readService.setReadReceipt(eventId, callback)
+    }
+
+    override fun setReadMarkers(fullyReadEventId: String, readReceiptEventId: String?, callback: MatrixCallback<Void>) {
+        readService.setReadMarkers(fullyReadEventId, readReceiptEventId, callback)
+    }
+
+    override fun markAllAsRead(callback: MatrixCallback<Void>) {
+        readService.markAllAsRead(callback)
+    }
+
+    override fun markLatestAsRead(callback: MatrixCallback<Void>) {
+        readService.markLatestAsRead(callback)
     }
 
 
