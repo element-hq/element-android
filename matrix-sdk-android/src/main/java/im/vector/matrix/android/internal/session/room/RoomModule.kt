@@ -17,29 +17,19 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.api.session.room.read.ReadService
-import im.vector.matrix.android.api.session.room.send.SendService
-import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
-import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
-import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
-import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.send.EventFactory
 import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
-import im.vector.matrix.android.internal.util.PagingRequestHelper
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
-import java.util.concurrent.Executors
 
 
 class RoomModule {
@@ -76,19 +66,8 @@ class RoomModule {
             EventFactory(sessionParams.credentials)
         }
 
-        factory { (roomId: String) ->
-            val helper = PagingRequestHelper(Executors.newSingleThreadExecutor())
-            val timelineBoundaryCallback = TimelineBoundaryCallback(roomId, get(), get(), get(), helper)
-            val roomMemberExtractor = RoomMemberExtractor(get(), roomId)
-            DefaultTimelineService(roomId, get(), get(), timelineBoundaryCallback, get(), roomMemberExtractor) as TimelineService
-        }
-
-        factory { (roomId: String) ->
-            DefaultSendService(roomId, get(), get()) as SendService
-        }
-
-        factory { (roomId: String) ->
-            DefaultReadService(roomId, get(), get(), get()) as ReadService
+        scope(DefaultSession.SCOPE) {
+            RoomFactory(get(), get(), get(), get(), get(), get(), get())
         }
 
     }

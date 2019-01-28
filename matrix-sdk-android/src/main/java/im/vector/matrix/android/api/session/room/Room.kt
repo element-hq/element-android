@@ -17,7 +17,6 @@
 package im.vector.matrix.android.api.session.room
 
 import androidx.lifecycle.LiveData
-import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
@@ -33,11 +32,6 @@ interface Room : TimelineService, SendService, ReadService {
      * The roomId of this room
      */
     val roomId: String
-
-    /**
-     * The membership of this room for the current user
-     */
-    val myMembership: MyMembership
 
     /**
      * A live [RoomSummary] associated with the room

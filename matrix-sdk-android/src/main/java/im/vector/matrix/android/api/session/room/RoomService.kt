@@ -27,7 +27,7 @@ interface RoomService {
     /**
      * Get a room from a roomId
      * @param roomId the roomId to look for.
-     * @return the room with roomId or null
+     * @return a room with roomId or null
      */
     fun getRoom(roomId: String): Room?
 
