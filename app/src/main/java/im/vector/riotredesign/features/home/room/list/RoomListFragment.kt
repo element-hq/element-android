@@ -22,7 +22,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
@@ -30,7 +29,6 @@ import com.airbnb.mvrx.activityViewModel
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.setupAsSearch
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.StateView
@@ -47,8 +45,8 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     }
 
     private val homeNavigator by inject<HomeNavigator>()
+    private val roomController by inject<RoomSummaryController>()
     private val homeViewModel: RoomListViewModel by activityViewModel()
-    private lateinit var roomController: RoomSummaryController
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_room_list, container, false)
@@ -56,7 +54,7 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        roomController = RoomSummaryController(this)
+        roomController.callback = this
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
         setupFilterView()

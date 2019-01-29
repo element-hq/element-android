@@ -16,47 +16,74 @@
 
 package im.vector.riotredesign.features.home.room.list
 
+import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotredesign.R
+import im.vector.riotredesign.core.resources.StringProvider
 
-class RoomSummaryController(private val callback: Callback? = null
+class RoomSummaryController(private val stringProvider: StringProvider
 ) : TypedEpoxyController<RoomListViewState>() {
 
     private var isDirectRoomsExpanded = true
     private var isGroupRoomsExpanded = true
+    private var isFavoriteRoomsExpanded = true
+    private var isLowPriorityRoomsExpanded = true
+    private var isServerNoticeRoomsExpanded = true
+
+    var callback: Callback? = null
 
     override fun buildModels(viewState: RoomListViewState) {
         val roomSummaries = viewState.asyncRooms()
-        RoomCategoryItem(
-                title = "DIRECT MESSAGES",
-                isExpanded = isDirectRoomsExpanded,
-                listener = {
-                    isDirectRoomsExpanded = !isDirectRoomsExpanded
-                    setData(viewState)
-                }
-        )
-                .id("direct_messages")
-                .addTo(this)
 
+        buildRoomCategory(viewState, R.string.room_list_favourites, isFavoriteRoomsExpanded) {
+            isFavoriteRoomsExpanded = !isFavoriteRoomsExpanded
+        }
+        if (isFavoriteRoomsExpanded) {
+            buildRoomModels(roomSummaries?.favourites ?: emptyList(), viewState.selectedRoomId)
+        }
+
+        buildRoomCategory(viewState, R.string.room_list_direct, isDirectRoomsExpanded) {
+            isDirectRoomsExpanded = !isDirectRoomsExpanded
+        }
         if (isDirectRoomsExpanded) {
             buildRoomModels(roomSummaries?.directRooms ?: emptyList(), viewState.selectedRoomId)
         }
 
-        RoomCategoryItem(
-                title = "GROUPS",
-                isExpanded = isGroupRoomsExpanded,
-                listener = {
-                    isGroupRoomsExpanded = !isGroupRoomsExpanded
-                    setData(viewState)
-                }
-        )
-                .id("group_messages")
-                .addTo(this)
-
+        buildRoomCategory(viewState, R.string.room_list_group, isGroupRoomsExpanded) {
+            isGroupRoomsExpanded = !isGroupRoomsExpanded
+        }
         if (isGroupRoomsExpanded) {
             buildRoomModels(roomSummaries?.groupRooms ?: emptyList(), viewState.selectedRoomId)
         }
 
+        buildRoomCategory(viewState, R.string.room_list_low_priority, isLowPriorityRoomsExpanded) {
+            isLowPriorityRoomsExpanded = !isLowPriorityRoomsExpanded
+        }
+        if (isLowPriorityRoomsExpanded) {
+            buildRoomModels(roomSummaries?.lowPriorities ?: emptyList(), viewState.selectedRoomId)
+        }
+
+        buildRoomCategory(viewState, R.string.room_list_system_alert, isServerNoticeRoomsExpanded) {
+            isServerNoticeRoomsExpanded = !isServerNoticeRoomsExpanded
+        }
+        if (isServerNoticeRoomsExpanded) {
+            buildRoomModels(roomSummaries?.serverNotices ?: emptyList(), viewState.selectedRoomId)
+        }
+
+    }
+
+    private fun buildRoomCategory(viewState: RoomListViewState, @StringRes titleRes: Int, isExpanded: Boolean, mutateExpandedState: () -> Unit) {
+        RoomCategoryItem(
+                title = stringProvider.getString(titleRes).toUpperCase(),
+                isExpanded = isExpanded,
+                listener = {
+                    mutateExpandedState()
+                    setData(viewState)
+                }
+        )
+                .id(titleRes)
+                .addTo(this)
     }
 
     private fun buildRoomModels(summaries: List<RoomSummary>, selectedRoomId: String?) {

@@ -35,6 +35,7 @@ interface Room : TimelineService, SendService, ReadService {
 
     /**
      * A live [RoomSummary] associated with the room
+     * You can observe this summary to get dynamic data from this room.
      */
     val roomSummary: LiveData<RoomSummary>
 

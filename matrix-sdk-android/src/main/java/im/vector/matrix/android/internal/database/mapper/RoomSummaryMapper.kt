@@ -17,12 +17,16 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 
 
 internal object RoomSummaryMapper {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
+        val tags = roomSummaryEntity.tags.map {
+            RoomTag(it.tagName, it.tagOrder)
+        }
         return RoomSummary(
                 roomId = roomSummaryEntity.roomId,
                 displayName = roomSummaryEntity.displayName ?: "",
@@ -31,7 +35,8 @@ internal object RoomSummaryMapper {
                 isDirect = roomSummaryEntity.isDirect,
                 otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
                 highlightCount = roomSummaryEntity.highlightCount,
-                notificationCount = roomSummaryEntity.notificationCount
+                notificationCount = roomSummaryEntity.notificationCount,
+                tags = tags
         )
     }
 }

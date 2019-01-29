@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model
+package im.vector.matrix.android.api.session.room.model.tag
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.events.model.Event
+data class RoomTag(
+        val name: String,
+        val order: Double?
+) {
 
-@JsonClass(generateAdapter = true)
-internal data class RoomSyncAccountData(
-        /**
-         * List of account data events (array of Event).
-         */
-        @Json(name = "events") val events: List<Event> = emptyList()
-)
+    companion object {
+        val ROOM_TAG_FAVOURITE = "m.favourite"
+        val ROOM_TAG_LOW_PRIORITY = "m.lowpriority"
+        val ROOM_TAG_NO_TAG = "m.recent"
+        val ROOM_TAG_SERVER_NOTICE = "m.server_notice"
+    }
+
+}

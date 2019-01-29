@@ -16,6 +16,8 @@
 
 package im.vector.matrix.android.api.session.room.model
 
+import im.vector.matrix.android.api.session.room.model.tag.RoomTag
+
 /**
  * This class holds some data of a room.
  * It can be retrieved by [im.vector.matrix.android.api.session.room.Room] and [im.vector.matrix.android.api.session.room.RoomService]
@@ -28,5 +30,6 @@ data class RoomSummary(
         val isDirect: Boolean,
         val otherMemberIds: List<String> = emptyList(),
         var notificationCount: Int = 0,
-        var highlightCount: Int = 0
+        var highlightCount: Int = 0,
+        var tags: List<RoomTag> = emptyList()
 )

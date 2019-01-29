@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addStateEvents
@@ -33,6 +34,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
+import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
@@ -40,9 +42,9 @@ import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import io.realm.Realm
 import io.realm.kotlin.createObject
 
-
 internal class RoomSyncHandler(private val monarchy: Monarchy,
-                               private val readReceiptHandler: ReadReceiptHandler) {
+                               private val readReceiptHandler: ReadReceiptHandler,
+                               private val roomTagHandler: RoomTagHandler) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -116,6 +118,10 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
             handleEphemeral(realm, roomId, roomSync.ephemeral)
+        }
+
+        if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
+            handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
         }
 
         return roomEntity
@@ -205,6 +211,13 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         }
         realm.insertOrUpdate(roomSummaryEntity)
 
+    }
+
+    private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
+        accountData.events
+                .filter { it.type == EventType.TAG }
+                .map { it.content.toModel<RoomTagContent>() }
+                .forEach { roomTagHandler.handle(realm, roomId, it) }
     }
 
 }

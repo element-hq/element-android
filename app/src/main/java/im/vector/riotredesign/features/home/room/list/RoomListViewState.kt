@@ -27,10 +27,13 @@ data class RoomListViewState(
 ) : MvRxState
 
 data class RoomSummaries(
+        val favourites: List<RoomSummary>,
         val directRooms: List<RoomSummary>,
-        val groupRooms: List<RoomSummary>
+        val groupRooms: List<RoomSummary>,
+        val lowPriorities: List<RoomSummary>,
+        val serverNotices: List<RoomSummary>
 )
 
 fun RoomSummaries?.isNullOrEmpty(): Boolean {
-    return this == null || (directRooms.isEmpty() && groupRooms.isEmpty())
+    return this == null || (directRooms.isEmpty() && groupRooms.isEmpty() && favourites.isEmpty() && lowPriorities.isEmpty() && serverNotices.isEmpty())
 }

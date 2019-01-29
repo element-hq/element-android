@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model
+package im.vector.matrix.android.internal.database.model
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.events.model.Event
+import io.realm.RealmObject
 
-@JsonClass(generateAdapter = true)
-internal data class RoomSyncAccountData(
-        /**
-         * List of account data events (array of Event).
-         */
-        @Json(name = "events") val events: List<Event> = emptyList()
-)
+internal open class RoomTagEntity(
+        var tagName: String = "",
+        var tagOrder: Double? = null
+) : RealmObject() {
+
+    companion object
+
+}
