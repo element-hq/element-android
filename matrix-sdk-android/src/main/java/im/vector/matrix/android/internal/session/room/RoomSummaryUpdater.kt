@@ -58,7 +58,7 @@ internal class RoomSummaryUpdater(monarchy: Monarchy,
         val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
                           ?: realm.createObject(roomId)
 
-        val lastEvent = EventEntity.latestEvent(realm, roomId)
+        val lastEvent = EventEntity.latestEvent(realm, roomId, includedTypes = listOf(EventType.MESSAGE))
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()
 
         val otherRoomMembers = RoomMembers(realm, roomId).getLoaded().filterKeys { it != credentials.userId }

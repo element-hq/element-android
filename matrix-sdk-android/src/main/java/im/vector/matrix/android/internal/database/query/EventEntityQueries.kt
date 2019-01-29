@@ -51,10 +51,15 @@ internal fun EventEntity.Companion.where(realm: Realm,
 
 internal fun EventEntity.Companion.latestEvent(realm: Realm,
                                                roomId: String,
+                                               includedTypes: List<String> = emptyList(),
                                                excludedTypes: List<String> = emptyList()): EventEntity? {
     val query = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.events?.where()
+    if (includedTypes.isNotEmpty()) {
+        query?.`in`(EventEntityFields.TYPE, includedTypes.toTypedArray())
+    } else if (excludedTypes.isNotEmpty()) {
+        query?.not()?.`in`(EventEntityFields.TYPE, excludedTypes.toTypedArray())
+    }
     return query
-            ?.not()?.`in`(EventEntityFields.TYPE, excludedTypes.toTypedArray())
             ?.sort(EventEntityFields.DISPLAY_INDEX)
             ?.findFirst()
 }
