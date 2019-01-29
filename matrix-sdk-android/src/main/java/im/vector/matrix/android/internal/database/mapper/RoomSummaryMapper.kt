@@ -33,6 +33,7 @@ internal object RoomSummaryMapper {
                 topic = roomSummaryEntity.topic ?: "",
                 avatarUrl = roomSummaryEntity.avatarUrl ?: "",
                 isDirect = roomSummaryEntity.isDirect,
+                lastMessage = roomSummaryEntity.lastMessage?.asDomain(),
                 otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
                 highlightCount = roomSummaryEntity.highlightCount,
                 notificationCount = roomSummaryEntity.notificationCount,

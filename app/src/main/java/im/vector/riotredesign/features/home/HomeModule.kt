@@ -27,6 +27,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.TimelineDateFor
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
 import im.vector.riotredesign.features.home.room.list.RoomSummaryController
 import org.koin.dsl.module.module
 
@@ -88,6 +89,10 @@ class HomeModule {
 
         single {
             HomePermalinkHandler(get())
+        }
+
+        single {
+            RoomSummaryComparator()
         }
 
 

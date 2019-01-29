@@ -40,7 +40,8 @@ class RoomListViewModel(initialState: RoomListViewState,
                         private val session: Session,
                         private val selectedGroupHolder: SelectedGroupHolder,
                         private val visibleRoomHolder: VisibleRoomHolder,
-                        private val roomSelectionRepository: RoomSelectionRepository)
+                        private val roomSelectionRepository: RoomSelectionRepository,
+                        private val roomSummaryComparator: RoomSummaryComparator)
     : RiotViewModel<RoomListViewState>(initialState) {
 
     companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
@@ -51,7 +52,8 @@ class RoomListViewModel(initialState: RoomListViewState,
             val roomSelectionRepository = viewModelContext.activity.get<RoomSelectionRepository>()
             val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupHolder>()
             val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomHolder>()
-            return RoomListViewModel(state, currentSession, selectedGroupHolder, visibleRoomHolder, roomSelectionRepository)
+            val roomSummaryComparator = viewModelContext.activity.get<RoomSummaryComparator>()
+            return RoomListViewModel(state, currentSession, selectedGroupHolder, visibleRoomHolder, roomSelectionRepository, roomSummaryComparator)
         }
     }
 
@@ -154,7 +156,14 @@ class RoomListViewModel(initialState: RoomListViewState,
                 else                                          -> groupRooms.add(room)
             }
         }
-        return RoomSummaries(favourites, directChats, groupRooms, lowPriorities, serverNotices)
+
+        return RoomSummaries(
+                favourites = favourites.sortedWith(roomSummaryComparator),
+                directRooms = directChats.sortedWith(roomSummaryComparator),
+                groupRooms = groupRooms.sortedWith(roomSummaryComparator),
+                lowPriorities = lowPriorities.sortedWith(roomSummaryComparator),
+                serverNotices = serverNotices.sortedWith(roomSummaryComparator)
+        )
     }
 
 

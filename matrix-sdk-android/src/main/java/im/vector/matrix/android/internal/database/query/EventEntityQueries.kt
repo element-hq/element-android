@@ -50,9 +50,13 @@ internal fun EventEntity.Companion.where(realm: Realm,
 }
 
 internal fun EventEntity.Companion.latestEvent(realm: Realm,
-                                               roomId: String): EventEntity? {
-    val chunkEntity = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
-    return chunkEntity?.events?.where()?.sort(EventEntityFields.DISPLAY_INDEX)?.findFirst()
+                                               roomId: String,
+                                               excludedTypes: List<String> = emptyList()): EventEntity? {
+    val query = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.events?.where()
+    return query
+            ?.not()?.`in`(EventEntityFields.TYPE, excludedTypes.toTypedArray())
+            ?.sort(EventEntityFields.DISPLAY_INDEX)
+            ?.findFirst()
 }
 
 

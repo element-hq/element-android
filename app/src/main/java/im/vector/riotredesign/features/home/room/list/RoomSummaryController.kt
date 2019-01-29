@@ -25,11 +25,11 @@ import im.vector.riotredesign.core.resources.StringProvider
 class RoomSummaryController(private val stringProvider: StringProvider
 ) : TypedEpoxyController<RoomListViewState>() {
 
-    private var isDirectRoomsExpanded = true
-    private var isGroupRoomsExpanded = true
     private var isFavoriteRoomsExpanded = true
-    private var isLowPriorityRoomsExpanded = true
-    private var isServerNoticeRoomsExpanded = true
+    private var isDirectRoomsExpanded = false
+    private var isGroupRoomsExpanded = false
+    private var isLowPriorityRoomsExpanded = false
+    private var isServerNoticeRoomsExpanded = false
 
     var callback: Callback? = null
 
@@ -79,7 +79,11 @@ class RoomSummaryController(private val stringProvider: StringProvider
 
     private fun buildRoomCategory(viewState: RoomListViewState, summaries: List<RoomSummary>, @StringRes titleRes: Int, isExpanded: Boolean, mutateExpandedState: () -> Unit) {
         //TODO should add some business logic later
-        val unreadCount = summaries.map { it.notificationCount }.reduce { acc, i -> acc + i }
+        val unreadCount = if (summaries.isEmpty()) {
+            0
+        } else {
+            summaries.map { it.notificationCount }.reduce { acc, i -> acc + i }
+        }
         val showHighlighted = summaries.any { it.highlightCount > 0 }
         RoomCategoryItem(
                 title = stringProvider.getString(titleRes).toUpperCase(),
