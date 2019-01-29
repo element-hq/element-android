@@ -26,9 +26,12 @@ import im.vector.riotredesign.core.epoxy.KotlinModel
 data class RoomCategoryItem(
         val title: CharSequence,
         val isExpanded: Boolean,
+        val unreadCount: Int,
+        val showHighlighted: Boolean,
         val listener: (() -> Unit)? = null
 ) : KotlinModel(R.layout.item_room_category) {
 
+    private val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomCategoryUnreadCounterBadgeView)
     private val titleView by bind<TextView>(R.id.roomCategoryTitleView)
     private val rootView by bind<ViewGroup>(R.id.roomCategoryRootView)
 
@@ -41,6 +44,7 @@ data class RoomCategoryItem(
         val expandedArrowDrawable = ContextCompat.getDrawable(rootView.context, expandedArrowDrawableRes)?.also {
             DrawableCompat.setTint(it, tintColor)
         }
+        unreadCounterBadgeView.render(unreadCount, showHighlighted)
         titleView.setCompoundDrawablesWithIntrinsicBounds(expandedArrowDrawable, null, null, null)
         titleView.text = title
         rootView.setOnClickListener { listener?.invoke() }
