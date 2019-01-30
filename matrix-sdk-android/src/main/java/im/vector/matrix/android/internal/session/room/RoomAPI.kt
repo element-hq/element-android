@@ -112,7 +112,7 @@ internal interface RoomAPI {
      * @param markers the read markers
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/read_markers")
-    fun sendReadMarker(@Path("roomId") roomId: String, @Body markers: Map<String, String>): Call<Void>
+    fun sendReadMarker(@Path("roomId") roomId: String, @Body markers: Map<String, String>): Call<Unit>
 
 
 }

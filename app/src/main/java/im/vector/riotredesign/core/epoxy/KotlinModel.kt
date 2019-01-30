@@ -16,10 +16,11 @@
 
 package im.vector.riotredesign.core.epoxy
 
+import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
-import android.view.View
 import com.airbnb.epoxy.EpoxyModel
+import com.airbnb.epoxy.OnModelVisibilityStateChangedListener
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -29,6 +30,7 @@ abstract class KotlinModel(
 
     private var view: View? = null
     private var onBindCallback: (() -> Unit)? = null
+    private var onModelVisibilityStateChangedListener: OnModelVisibilityStateChangedListener<KotlinModel, View>? = null
 
     abstract fun bind()
 
@@ -47,6 +49,16 @@ abstract class KotlinModel(
         return this
     }
 
+    override fun onVisibilityStateChanged(visibilityState: Int, view: View) {
+        onModelVisibilityStateChangedListener?.onVisibilityStateChanged(this, view, visibilityState)
+        super.onVisibilityStateChanged(visibilityState, view)
+    }
+
+    fun setOnVisibilityStateChanged(listener: OnModelVisibilityStateChangedListener<KotlinModel, View>): KotlinModel {
+        this.onModelVisibilityStateChangedListener = listener
+        return this
+    }
+
     override fun getDefaultLayout() = layoutRes
 
     protected fun <V : View> bind(@IdRes id: Int) = object : ReadOnlyProperty<KotlinModel, V> {
@@ -56,7 +68,7 @@ abstract class KotlinModel(
             // be optimized with a map
             @Suppress("UNCHECKED_CAST")
             return view?.findViewById(id) as V?
-                    ?: throw IllegalStateException("View ID $id for '${property.name}' not found.")
+                   ?: throw IllegalStateException("View ID $id for '${property.name}' not found.")
         }
     }
 }

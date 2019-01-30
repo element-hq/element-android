@@ -16,12 +16,16 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyModel
+import com.airbnb.epoxy.OnModelVisibilityStateChangedListener
+import com.airbnb.epoxy.VisibilityState
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.core.epoxy.KotlinModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
@@ -74,6 +78,11 @@ class TimelineEventController(private val roomId: String,
 
         timelineItemFactory.create(event, nextEvent, callback)?.also {
             it.id(event.localId)
+            it.setOnVisibilityStateChanged(OnModelVisibilityStateChangedListener<KotlinModel, View> { model, view, visibilityState ->
+                if (visibilityState == VisibilityState.VISIBLE) {
+                    callback?.onEventVisible(event, currentPosition)
+                }
+            })
             epoxyModels.add(it)
         }
         if (addDaySeparator) {
@@ -98,6 +107,7 @@ class TimelineEventController(private val roomId: String,
 
 
     interface Callback {
+        fun onEventVisible(event: TimelineEvent, index: Int)
         fun onUrlClicked(url: String)
     }
 

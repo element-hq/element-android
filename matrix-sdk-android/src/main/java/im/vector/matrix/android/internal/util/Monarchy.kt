@@ -34,10 +34,10 @@ internal fun Monarchy.tryTransactionAsync(transaction: (realm: Realm) -> Unit): 
     }
 }
 
-fun <T : RealmModel> Monarchy.fetchManaged(query: (Realm) -> T?): T? {
+fun <T : RealmModel> Monarchy.fetchCopied(query: (Realm) -> T?): T? {
     val ref = AtomicReference<T>()
     doWithRealm { realm ->
-        val result = query.invoke(realm)
+        val result = query.invoke(realm)?.let { realm.copyFromRealm(it) }
         ref.set(result)
     }
     return ref.get()

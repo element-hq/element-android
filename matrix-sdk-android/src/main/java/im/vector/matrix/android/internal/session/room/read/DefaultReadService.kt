@@ -23,22 +23,16 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.fetchManaged
+import im.vector.matrix.android.internal.util.fetchCopied
 
 internal class DefaultReadService(private val roomId: String,
                                   private val monarchy: Monarchy,
                                   private val setReadMarkersTask: SetReadMarkersTask,
                                   private val taskExecutor: TaskExecutor) : ReadService {
 
-    override fun markLatestAsRead(callback: MatrixCallback<Void>) {
-        val lastEvent = getLatestEvent()
-        val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = null, readReceiptEventId = lastEvent?.eventId)
-        setReadMarkersTask.configureWith(params).executeBy(taskExecutor)
-    }
-
     override fun markAllAsRead(callback: MatrixCallback<Void>) {
-        val lastEvent = getLatestEvent()
-        val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = lastEvent?.eventId, readReceiptEventId = null)
+        val latestEvent = getLatestEvent()
+        val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = latestEvent?.eventId, readReceiptEventId = latestEvent?.eventId)
         setReadMarkersTask.configureWith(params).executeBy(taskExecutor)
     }
 
@@ -47,13 +41,14 @@ internal class DefaultReadService(private val roomId: String,
         setReadMarkersTask.configureWith(params).executeBy(taskExecutor)
     }
 
-    override fun setReadMarkers(fullyReadEventId: String, readReceiptEventId: String?, callback: MatrixCallback<Void>) {
-        val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = fullyReadEventId, readReceiptEventId = readReceiptEventId)
+    override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Void>) {
+        val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = fullyReadEventId, readReceiptEventId = null)
         setReadMarkersTask.configureWith(params).executeBy(taskExecutor)
     }
 
     private fun getLatestEvent(): EventEntity? {
-        return monarchy.fetchManaged { EventEntity.latestEvent(it, roomId) }
+        return monarchy.fetchCopied { EventEntity.latestEvent(it, roomId) }
     }
+
 
 }

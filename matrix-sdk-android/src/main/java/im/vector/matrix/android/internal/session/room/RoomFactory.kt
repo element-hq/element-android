@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
@@ -34,6 +35,7 @@ import java.util.concurrent.Executors
 
 internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
                            private val monarchy: Monarchy,
+                           private val credentials: Credentials,
                            private val paginationTask: PaginationTask,
                            private val contextOfEventTask: GetContextOfEventTask,
                            private val setReadMarkersTask: SetReadMarkersTask,

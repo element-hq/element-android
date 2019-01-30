@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room
 
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
@@ -58,16 +57,15 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultSetReadMarkersTask(get()) as SetReadMarkersTask
+            DefaultSetReadMarkersTask(get(), get(),get()) as SetReadMarkersTask
         }
 
         scope(DefaultSession.SCOPE) {
-            val sessionParams = get<SessionParams>()
-            EventFactory(sessionParams.credentials)
+            EventFactory(get())
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get())
+            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get())
         }
 
     }

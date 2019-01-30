@@ -18,11 +18,11 @@ package im.vector.matrix.android.internal.di
 
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.internal.network.UnitConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okreplay.OkReplayInterceptor
 import org.koin.dsl.module.module
-import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
@@ -63,17 +63,14 @@ class NetworkModule {
         }
 
         single {
-            MoshiConverterFactory.create(get()) as Converter.Factory
-        }
-
-        single {
             NetworkConnectivityChecker(get())
         }
 
         factory {
             Retrofit.Builder()
                     .client(get())
-                    .addConverterFactory(get())
+                    .addConverterFactory(UnitConverterFactory)
+                    .addConverterFactory(MoshiConverterFactory.create(get()))
         }
 
     }

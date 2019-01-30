@@ -18,14 +18,24 @@ package im.vector.matrix.android.api.session.room.read
 
 import im.vector.matrix.android.api.MatrixCallback
 
+/**
+ * This interface defines methods to handle read receipts and read marker in a room. It's implemented at the room level.
+ */
 interface ReadService {
 
-    fun markLatestAsRead(callback: MatrixCallback<Void>)
-
+    /**
+     * Force the read marker to be set on the latest event.
+     */
     fun markAllAsRead(callback: MatrixCallback<Void>)
 
+    /**
+     * Set the read receipt on the event with provided eventId.
+     */
     fun setReadReceipt(eventId: String, callback: MatrixCallback<Void>)
 
-    fun setReadMarkers(fullyReadEventId: String, readReceiptEventId: String?, callback: MatrixCallback<Void>)
+    /**
+     * Set the read marker on the event with provided eventId.
+     */
+    fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Void>)
 
 }

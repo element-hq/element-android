@@ -48,6 +48,10 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
+            sessionParams.credentials
+        }
+
+        scope(DefaultSession.SCOPE) {
             val context = get<Context>()
             val childPath = sessionParams.credentials.userId.md5()
             val directory = File(context.filesDir, childPath)
