@@ -11,6 +11,19 @@ androidExtensions {
     experimental = true
 }
 
+def versionMajor = 0
+def versionMinor = 1
+def versionPatch = 0
+
+def generateVersionCodeFromTimestamp() {
+    // It's unix timestamp divided by 10: It's incremented by one every 10 seconds.
+    return (System.currentTimeMillis() / 1_000 / 10).toInteger()
+}
+
+def generateVersionCodeFromVersionName() {
+    return versionMajor * 10000 + versionMinor * 100 + versionPatch
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -18,8 +31,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 1
-        versionName "1.0"
+        versionCode generateVersionCodeFromTimestamp()
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
