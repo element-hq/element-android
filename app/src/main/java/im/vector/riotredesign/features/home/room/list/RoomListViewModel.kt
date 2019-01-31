@@ -33,6 +33,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
+import java.util.concurrent.TimeUnit
 
 typealias RoomListFilterName = CharSequence
 
@@ -95,9 +96,9 @@ class RoomListViewModel(initialState: RoomListViewState,
 
     private fun observeRoomSummaries() {
         Observable.combineLatest<List<RoomSummary>, Option<GroupSummary>, Option<RoomListFilterName>, RoomSummaries>(
-                session.rx().liveRoomSummaries(),
+                session.rx().liveRoomSummaries().throttleLast(300, TimeUnit.MILLISECONDS),
                 selectedGroupHolder.selectedGroup(),
-                roomListFilter,
+                roomListFilter.throttleLast(300, TimeUnit.MILLISECONDS),
                 Function3 { rooms, selectedGroupOption, filterRoomOption ->
                     val filteredRooms = filterRooms(rooms, filterRoomOption)
                     val selectedGroup = selectedGroupOption.orNull()
