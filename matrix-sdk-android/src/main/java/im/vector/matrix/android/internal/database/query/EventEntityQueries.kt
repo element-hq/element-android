@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.database.query
 
+import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -48,6 +49,21 @@ internal fun EventEntity.Companion.where(realm: Realm,
     }
 }
 
+internal fun EventEntity.Companion.latestEvent(realm: Realm,
+                                               roomId: String,
+                                               includedTypes: List<String> = emptyList(),
+                                               excludedTypes: List<String> = emptyList()): EventEntity? {
+    val query = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.events?.where()
+    if (includedTypes.isNotEmpty()) {
+        query?.`in`(EventEntityFields.TYPE, includedTypes.toTypedArray())
+    } else if (excludedTypes.isNotEmpty()) {
+        query?.not()?.`in`(EventEntityFields.TYPE, excludedTypes.toTypedArray())
+    }
+    return query
+            ?.sort(EventEntityFields.DISPLAY_INDEX)
+            ?.findFirst()
+}
+
 
 internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = true): EventEntity? {
     if (from != null) {
@@ -61,7 +77,6 @@ internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = t
             .sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING)
             .findFirst()
 }
-
 
 internal fun RealmQuery<EventEntity>.last(since: Int? = null, strict: Boolean = false): EventEntity? {
     if (since != null) {

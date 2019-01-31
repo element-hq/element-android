@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.database.mapper
+package im.vector.matrix.android.api.session.room.model.tag
 
-import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.session.room.DefaultRoom
+data class RoomTag(
+        val name: String,
+        val order: Double?
+) {
 
-
-internal object RoomMapper {
-
-
-    fun map(roomEntity: RoomEntity): Room {
-        return DefaultRoom(
-                roomEntity.roomId,
-                roomEntity.membership
-        )
+    companion object {
+        val ROOM_TAG_FAVOURITE = "m.favourite"
+        val ROOM_TAG_LOW_PRIORITY = "m.lowpriority"
+        val ROOM_TAG_NO_TAG = "m.recent"
+        val ROOM_TAG_SERVER_NOTICE = "m.server_notice"
     }
-}
 
-internal fun RoomEntity.asDomain(): Room {
-    return RoomMapper.map(this)
 }

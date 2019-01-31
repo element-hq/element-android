@@ -20,11 +20,11 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.members.RoomMembers
@@ -34,20 +34,21 @@ internal class RoomAvatarResolver(private val monarchy: Monarchy,
 
     /**
      * Compute the room avatar url
-     *
+     * @param roomId the roomId of the room to resolve avatar
      * @return the room avatar url, can be a fallback to a room member avatar or null
      */
-    fun resolve(room: Room): String? {
+    fun resolve(roomId: String): String? {
         var res: String? = null
         monarchy.doWithRealm { realm ->
-            val roomName = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_AVATAR).last()?.asDomain()
+            val roomEntity = RoomEntity.where(realm, roomId).findFirst()
+            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_AVATAR).last()?.asDomain()
             res = roomName?.content.toModel<RoomAvatarContent>()?.avatarUrl
             if (!res.isNullOrEmpty()) {
                 return@doWithRealm
             }
-            val roomMembers = RoomMembers(realm, room.roomId)
+            val roomMembers = RoomMembers(realm, roomId)
             val members = roomMembers.getLoaded()
-            if (room.myMembership == MyMembership.INVITED) {
+            if (roomEntity?.membership == MyMembership.INVITED) {
                 if (members.size == 1) {
                     res = members.entries.first().value.avatarUrl
                 } else if (members.size > 1) {

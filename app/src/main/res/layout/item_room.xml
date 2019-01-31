@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<im.vector.riotredesign.core.platform.CheckableFrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<im.vector.riotredesign.core.platform.CheckableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemRoomLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="8dp"
-    android:paddingRight="16dp"
-    android:foreground="?attr/selectableItemBackground"
     android:background="@drawable/bg_room_item"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingLeft="8dp"
+    android:paddingRight="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,14 +34,33 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:duplicateParentState="true"
             android:textColor="@color/color_room_title"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
             app:layout_constraintStart_toEndOf="@id/roomAvatarImageView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/full_names" />
+
+        <im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
+            android:id="@+id/roomUnreadCounterBadgeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minWidth="24dp"
+            android:minHeight="24dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/bg_unread_highlight"
+            tools:text="115" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

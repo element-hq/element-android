@@ -23,9 +23,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
@@ -75,7 +77,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     override fun onResume() {
         super.onResume()
-        roomDetailViewModel.accept(RoomDetailActions.IsDisplayed)
+        roomDetailViewModel.process(RoomDetailActions.IsDisplayed)
     }
 
     private fun setupToolbar() {
@@ -86,6 +88,8 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     }
 
     private fun setupRecyclerView() {
+        val epoxyVisibilityTracker = EpoxyVisibilityTracker()
+        epoxyVisibilityTracker.attach(recyclerView)
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
@@ -100,7 +104,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
             val textMessage = composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 composerEditText.text = null
-                roomDetailViewModel.accept(RoomDetailActions.SendMessage(textMessage))
+                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage))
             }
         }
     }
@@ -141,6 +145,10 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     override fun onUrlClicked(url: String) {
         homePermalinkHandler.launch(url)
+    }
+
+    override fun onEventVisible(event: TimelineEvent, index: Int) {
+        roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event, index))
     }
 
 }

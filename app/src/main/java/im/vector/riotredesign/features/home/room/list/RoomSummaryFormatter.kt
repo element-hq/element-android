@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model
+package im.vector.riotredesign.features.home.room.list
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.events.model.Event
+object RoomSummaryFormatter {
 
-@JsonClass(generateAdapter = true)
-internal data class RoomSyncAccountData(
-        /**
-         * List of account data events (array of Event).
-         */
-        @Json(name = "events") val events: List<Event> = emptyList()
-)
+    /**
+     * Format the unread messages counter.
+     *
+     * @param count the count
+     * @return the formatted value
+     */
+    fun formatUnreadMessagesCounter(count: Int): String {
+        return if (count > 999) {
+            "${count / 1000}.${count % 1000 / 100}K"
+        } else {
+            count.toString()
+        }
+    }
+
+}

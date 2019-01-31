@@ -22,13 +22,13 @@ import im.vector.matrix.android.R
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.where
@@ -45,10 +45,10 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
      * Compute the room display name
      *
      * @param context
-     * @param room: the room to resolve the name of.
+     * @param roomId: the roomId to resolve the name of.
      * @return the room display name
      */
-    fun resolve(context: Context, room: Room): CharSequence {
+    fun resolve(context: Context, roomId: String): CharSequence {
         // this algorithm is the one defined in
         // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
         // calculateRoomName(room, userId)
@@ -57,29 +57,30 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
         // https://docs.google.com/document/d/11i14UI1cUz-OJ0knD5BFu7fmT6Fo327zvMYqfSAR7xs/edit#heading=h.qif6pkqyjgzn
         var name: CharSequence? = null
         monarchy.doWithRealm { realm ->
-            val roomName = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_NAME).last()?.asDomain()
+            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
+            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_NAME).last()?.asDomain()
             name = roomName?.content.toModel<RoomNameContent>()?.name
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val canonicalAlias = EventEntity.where(realm, room.roomId, EventType.STATE_CANONICAL_ALIAS).last()?.asDomain()
+            val canonicalAlias = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).last()?.asDomain()
             name = canonicalAlias?.content.toModel<RoomCanonicalAliasContent>()?.canonicalAlias
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val aliases = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_ALIASES).last()?.asDomain()
+            val aliases = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).last()?.asDomain()
             name = aliases?.content.toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val roomMembers = RoomMembers(realm, room.roomId)
+            val roomMembers = RoomMembers(realm, roomId)
             val otherRoomMembers = roomMembers.getLoaded()
                     .filterKeys { it != credentials.userId }
 
-            if (room.myMembership == MyMembership.INVITED) {
+            if (roomEntity?.membership == MyMembership.INVITED) {
                 //TODO handle invited
                 /*
                 if (currentUser != null
@@ -94,7 +95,7 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
                 name = context.getString(R.string.room_displayname_room_invite)
             } else {
 
-                val roomSummary = RoomSummaryEntity.where(realm, room.roomId).findFirst()
+                val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
                 val memberIds = if (roomSummary?.heroes?.isNotEmpty() == true) {
                     roomSummary.heroes
                 } else {
@@ -125,6 +126,6 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
             }
             return@doWithRealm
         }
-        return name ?: room.roomId
+        return name ?: roomId
     }
 }

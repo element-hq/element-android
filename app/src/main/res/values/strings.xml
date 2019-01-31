@@ -1,9 +1,15 @@
 <resources>
-    <string name="app_name">Riot X</string>
+    <string name="app_name">"Riot X"</string>
 
-    <string name="global_retry">Réessayer</string>
-    <string name="error_no_network">Pas de connexion internet</string>
-    <string name="error_common">Une erreur est survenue</string>
-    <string name="room_list_empty">Rejoignez une room pour commencer à utiliser l\'application</string>
+    <string name="global_retry">"Retry"</string>
+    <string name="error_no_network">"No network connection"</string>
+    <string name="error_common">"An error occurred"</string>
+
+    <string name="room_list_empty">"Join a room to start using the app."</string>
+    <string name="room_list_favourites">"Favourites"</string>
+    <string name="room_list_direct">"People"</string>
+    <string name="room_list_group">"Rooms"</string>
+    <string name="room_list_low_priority">"Low priority"</string>
+    <string name="room_list_system_alert">"System Alerts"</string>
 
 </resources>

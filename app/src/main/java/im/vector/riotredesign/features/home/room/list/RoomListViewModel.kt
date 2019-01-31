@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
 import im.vector.riotredesign.features.home.group.SelectedGroupHolder
@@ -32,6 +33,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
+import java.util.concurrent.TimeUnit
 
 typealias RoomListFilterName = CharSequence
 
@@ -39,7 +41,8 @@ class RoomListViewModel(initialState: RoomListViewState,
                         private val session: Session,
                         private val selectedGroupHolder: SelectedGroupHolder,
                         private val visibleRoomHolder: VisibleRoomHolder,
-                        private val roomSelectionRepository: RoomSelectionRepository)
+                        private val roomSelectionRepository: RoomSelectionRepository,
+                        private val roomSummaryComparator: RoomSummaryComparator)
     : RiotViewModel<RoomListViewState>(initialState) {
 
     companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
@@ -50,7 +53,8 @@ class RoomListViewModel(initialState: RoomListViewState,
             val roomSelectionRepository = viewModelContext.activity.get<RoomSelectionRepository>()
             val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupHolder>()
             val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomHolder>()
-            return RoomListViewModel(state, currentSession, selectedGroupHolder, visibleRoomHolder, roomSelectionRepository)
+            val roomSummaryComparator = viewModelContext.activity.get<RoomSummaryComparator>()
+            return RoomListViewModel(state, currentSession, selectedGroupHolder, visibleRoomHolder, roomSelectionRepository, roomSummaryComparator)
         }
     }
 
@@ -92,19 +96,11 @@ class RoomListViewModel(initialState: RoomListViewState,
 
     private fun observeRoomSummaries() {
         Observable.combineLatest<List<RoomSummary>, Option<GroupSummary>, Option<RoomListFilterName>, RoomSummaries>(
-                session.rx().liveRoomSummaries(),
+                session.rx().liveRoomSummaries().throttleLast(300, TimeUnit.MILLISECONDS),
                 selectedGroupHolder.selectedGroup(),
-                roomListFilter,
+                roomListFilter.throttleLast(300, TimeUnit.MILLISECONDS),
                 Function3 { rooms, selectedGroupOption, filterRoomOption ->
-                    val filterRoom = filterRoomOption.orNull()
-                    val filteredRooms = rooms.filter {
-                        if (filterRoom.isNullOrBlank()) {
-                            true
-                        } else {
-                            it.displayName.contains(other = filterRoom, ignoreCase = true)
-                        }
-                    }
-
+                    val filteredRooms = filterRooms(rooms, filterRoomOption)
                     val selectedGroup = selectedGroupOption.orNull()
                     val filteredDirectRooms = filteredRooms
                             .filter { it.isDirect }
@@ -123,7 +119,7 @@ class RoomListViewModel(initialState: RoomListViewState,
                             .filter {
                                 selectedGroup?.roomIds?.contains(it.roomId) ?: true
                             }
-                    RoomSummaries(filteredDirectRooms, filteredGroupRooms)
+                    buildRoomSummaries(filteredDirectRooms + filteredGroupRooms)
                 }
         )
                 .execute { async ->
@@ -132,4 +128,44 @@ class RoomListViewModel(initialState: RoomListViewState,
                     )
                 }
     }
+
+    private fun filterRooms(rooms: List<RoomSummary>, filterRoomOption: Option<RoomListFilterName>): List<RoomSummary> {
+        val filterRoom = filterRoomOption.orNull()
+        return rooms.filter {
+            if (filterRoom.isNullOrBlank()) {
+                true
+            } else {
+                it.displayName.contains(other = filterRoom, ignoreCase = true)
+            }
+        }
+    }
+
+    private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
+        val favourites = ArrayList<RoomSummary>()
+        val directChats = ArrayList<RoomSummary>()
+        val groupRooms = ArrayList<RoomSummary>()
+        val lowPriorities = ArrayList<RoomSummary>()
+        val serverNotices = ArrayList<RoomSummary>()
+
+        for (room in rooms) {
+            val tags = room.tags.map { it.name }
+            when {
+                tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
+                tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
+                tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
+                room.isDirect                                 -> directChats.add(room)
+                else                                          -> groupRooms.add(room)
+            }
+        }
+
+        return RoomSummaries(
+                favourites = favourites.sortedWith(roomSummaryComparator),
+                directRooms = directChats.sortedWith(roomSummaryComparator),
+                groupRooms = groupRooms.sortedWith(roomSummaryComparator),
+                lowPriorities = lowPriorities.sortedWith(roomSummaryComparator),
+                serverNotices = serverNotices.sortedWith(roomSummaryComparator)
+        )
+    }
+
+
 }

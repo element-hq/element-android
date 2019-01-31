@@ -21,7 +21,6 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -29,6 +28,7 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.last
+import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.members.RoomMembers
@@ -45,28 +45,28 @@ internal class RoomSummaryUpdater(monarchy: Monarchy,
     override val query = Monarchy.Query<RoomEntity> { RoomEntity.where(it) }
 
     override fun process(inserted: List<RoomEntity>, updated: List<RoomEntity>, deleted: List<RoomEntity>) {
-        val rooms = (inserted + updated).map { it.asDomain() }
+        val rooms = (inserted + updated).map { it.roomId }
         monarchy.writeAsync { realm ->
             rooms.forEach { updateRoom(realm, it) }
         }
     }
 
-    private fun updateRoom(realm: Realm, room: Room?) {
-        if (room == null) {
+    private fun updateRoom(realm: Realm, roomId: String?) {
+        if (roomId == null) {
             return
         }
-        val roomSummary = RoomSummaryEntity.where(realm, room.roomId).findFirst()
-                          ?: realm.createObject(room.roomId)
+        val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
+                          ?: realm.createObject(roomId)
 
-        val lastMessageEvent = EventEntity.where(realm, room.roomId, EventType.MESSAGE).last()
-        val lastTopicEvent = EventEntity.where(realm, room.roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()
+        val lastEvent = EventEntity.latestEvent(realm, roomId, includedTypes = listOf(EventType.MESSAGE))
+        val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()
 
-        val otherRoomMembers = RoomMembers(realm, room.roomId).getLoaded().filterKeys { it != credentials.userId }
+        val otherRoomMembers = RoomMembers(realm, roomId).getLoaded().filterKeys { it != credentials.userId }
 
-        roomSummary.displayName = roomDisplayNameResolver.resolve(context, room).toString()
-        roomSummary.avatarUrl = roomAvatarResolver.resolve(room)
+        roomSummary.displayName = roomDisplayNameResolver.resolve(context, roomId).toString()
+        roomSummary.avatarUrl = roomAvatarResolver.resolve(roomId)
         roomSummary.topic = lastTopicEvent?.content.toModel<RoomTopicContent>()?.topic
-        roomSummary.lastMessage = lastMessageEvent
+        roomSummary.lastMessage = lastEvent
         roomSummary.otherMemberIds.clear()
         roomSummary.otherMemberIds.addAll(otherRoomMembers.keys)
     }

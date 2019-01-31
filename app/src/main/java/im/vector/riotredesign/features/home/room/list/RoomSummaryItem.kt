@@ -28,14 +28,18 @@ data class RoomSummaryItem(
         val roomName: CharSequence,
         val avatarUrl: String?,
         val isSelected: Boolean,
+        val unreadCount: Int,
+        val showHighlighted: Boolean,
         val listener: (() -> Unit)? = null
 ) : KotlinModel(R.layout.item_room) {
 
+    private val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
     private val titleView by bind<TextView>(R.id.roomNameView)
     private val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
     private val rootView by bind<CheckableFrameLayout>(R.id.itemRoomLayout)
 
     override fun bind() {
+        unreadCounterBadgeView.render(unreadCount, showHighlighted)
         rootView.isChecked = isSelected
         rootView.setOnClickListener { listener?.invoke() }
         titleView.text = roomName
