@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.room.read
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -51,10 +52,13 @@ internal class DefaultSetReadMarkersTask(private val roomAPI: RoomAPI,
 
     override fun execute(params: SetReadMarkersTask.Params): Try<Unit> {
         val markers = HashMap<String, String>()
-        if (params.fullyReadEventId?.isNotEmpty() == true) {
+        if (params.fullyReadEventId != null && MatrixPatterns.isEventId(params.fullyReadEventId)) {
             markers[READ_MARKER] = params.fullyReadEventId
         }
-        if (params.readReceiptEventId?.isNotEmpty() == true && !isEventRead(params.roomId, params.readReceiptEventId)) {
+        if (params.readReceiptEventId != null
+                && MatrixPatterns.isEventId(params.readReceiptEventId)
+                && !isEventRead(params.roomId, params.readReceiptEventId)) {
+
             updateNotificationCountIfNecessary(params.roomId, params.readReceiptEventId)
             markers[READ_RECEIPT] = params.readReceiptEventId
         }
@@ -72,7 +76,7 @@ internal class DefaultSetReadMarkersTask(private val roomAPI: RoomAPI,
             val isLatestReceived = EventEntity.latestEvent(realm, eventId)?.eventId == eventId
             if (isLatestReceived) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                  ?: return@tryTransactionAsync
+                        ?: return@tryTransactionAsync
                 roomSummary.notificationCount = 0
                 roomSummary.highlightCount = 0
             }
@@ -83,11 +87,11 @@ internal class DefaultSetReadMarkersTask(private val roomAPI: RoomAPI,
         var isEventRead = false
         monarchy.doWithRealm {
             val readReceipt = ReadReceiptEntity.where(it, roomId, credentials.userId).findFirst()
-                              ?: return@doWithRealm
+                    ?: return@doWithRealm
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(it, roomId)
-                            ?: return@doWithRealm
+                    ?: return@doWithRealm
             val readReceiptIndex = liveChunk.events.find(readReceipt.eventId)?.displayIndex
-                                   ?: -1
+                    ?: -1
             val eventToCheckIndex = liveChunk.events.find(eventId)?.displayIndex ?: -1
             isEventRead = eventToCheckIndex >= readReceiptIndex
         }

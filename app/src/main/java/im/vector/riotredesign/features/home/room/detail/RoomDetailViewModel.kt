@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.rx.rx
+import im.vector.riotredesign.core.extensions.lastMinBy
 import im.vector.riotredesign.core.platform.RiotViewModel
 import im.vector.riotredesign.features.home.room.VisibleRoomHolder
 import io.reactivex.rxkotlin.subscribeBy
@@ -86,12 +87,12 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         displayedEventsObservable.hide()
                 .buffer(1, TimeUnit.SECONDS)
                 .filter { it.isNotEmpty() }
-                .subscribeBy { actions ->
-                    val mostRecentEvent = actions.minBy { it.index }
+                .subscribeBy(onNext = { actions ->
+                    val mostRecentEvent = actions.lastMinBy { it.index }
                     mostRecentEvent?.event?.root?.eventId?.let { eventId ->
                         room.setReadReceipt(eventId, callback = object : MatrixCallback<Void> {})
                     }
-                }
+                })
                 .disposeOnClear()
     }
 
