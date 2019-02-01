@@ -41,10 +41,10 @@ class RoomSummaryComparator
             rightTimestamp = rightRoomSummary.lastMessage?.originServerTs ?: 0
         }
 
-        if (leftRoomSummary?.lastMessage == null) {
-            retValue = 1
-        } else if (rightRoomSummary?.lastMessage == null) {
+        if (rightRoomSummary?.lastMessage == null) {
             retValue = -1
+        } else if (leftRoomSummary?.lastMessage == null) {
+            retValue = 1
         } else if (rightHighlightCount > 0 && leftHighlightCount == 0) {
             retValue = 1
         } else if (rightHighlightCount == 0 && leftHighlightCount > 0) {
