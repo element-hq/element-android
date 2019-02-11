@@ -30,12 +30,16 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                nextEvent: TimelineEvent?,
                callback: TimelineEventController.Callback?): KotlinModel? {
 
-        return when (event.root.type) {
-            EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, callback)
-            EventType.STATE_ROOM_NAME   -> roomNameItemFactory.create(event)
-            EventType.STATE_ROOM_TOPIC  -> roomTopicItemFactory.create(event)
-            EventType.STATE_ROOM_MEMBER -> roomMemberItemFactory.create(event)
-            else                        -> defaultItemFactory.create(event)
+        return try {
+            when (event.root.type) {
+                EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, callback)
+                EventType.STATE_ROOM_NAME   -> roomNameItemFactory.create(event)
+                EventType.STATE_ROOM_TOPIC  -> roomTopicItemFactory.create(event)
+                EventType.STATE_ROOM_MEMBER -> roomMemberItemFactory.create(event)
+                else                        -> defaultItemFactory.create(event)
+            }
+        } catch (e: Exception) {
+            defaultItemFactory.create(event, e)
         }
     }
 

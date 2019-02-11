@@ -20,8 +20,12 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 class DefaultItemFactory {
 
-    fun create(event: TimelineEvent): DefaultItem? {
-        val text = "${event.root.type} events are not yet handled"
+    fun create(event: TimelineEvent, exception: Exception? = null): DefaultItem? {
+        val text = if (exception == null) {
+            "${event.root.type} events are not yet handled"
+        } else {
+            "an exception occurred when rendering the event ${event.root.eventId}"
+        }
         return DefaultItem(text = text)
     }
 

@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.core.epoxy.KotlinModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.media.MediaContentRenderer
@@ -38,7 +39,7 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                callback: TimelineEventController.Callback?
-    ): AbsMessageItem? {
+    ): KotlinModel? {
 
         val roomMember = event.roomMember
         val nextRoomMember = nextEvent?.roomMember
@@ -66,8 +67,13 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
         return when (messageContent) {
             is MessageTextContent  -> buildTextMessageItem(messageContent, informationData, callback)
             is MessageImageContent -> buildImageMessageItem(messageContent, informationData)
-            else                   -> null
+            else                   -> buildNotHandledMessageItem(messageContent)
         }
+    }
+
+    private fun buildNotHandledMessageItem(messageContent: MessageContent): KotlinModel? {
+        val text = "${messageContent.type} message events are not yet handled"
+        return DefaultItem(text = text)
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,

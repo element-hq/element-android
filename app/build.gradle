@@ -24,6 +24,13 @@ def generateVersionCodeFromVersionName() {
     return versionMajor * 10000 + versionMinor * 100 + versionPatch
 }
 
+project.android.buildTypes.all { buildType ->
+    buildType.javaCompileOptions.annotationProcessorOptions.arguments =
+            [
+                    validateEpoxyModelUsage     : String.valueOf(buildType.name == 'debug')
+            ]
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {

@@ -52,11 +52,11 @@ class HomeActivityViewModel(state: EmptyState,
         get() = _openRoomLiveData
 
     init {
-        val lastSelectedRoom = roomSelectionRepository.lastSelectedRoom()
-        if (lastSelectedRoom == null) {
+        val lastSelectedRoomId = roomSelectionRepository.lastSelectedRoom()
+        if (lastSelectedRoomId == null || session.getRoom(lastSelectedRoomId) == null) {
             getTheFirstRoomWhenAvailable()
         } else {
-            _openRoomLiveData.postValue(LiveEvent(lastSelectedRoom))
+            _openRoomLiveData.postValue(LiveEvent(lastSelectedRoomId))
         }
     }
 
