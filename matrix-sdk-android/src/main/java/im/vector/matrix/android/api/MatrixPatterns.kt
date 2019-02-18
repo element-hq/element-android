@@ -44,6 +44,10 @@ object MatrixPatterns {
     private val MATRIX_EVENT_IDENTIFIER_REGEX = "\\$[A-Z0-9]+$DOMAIN_REGEX"
     val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER = Pattern.compile(MATRIX_EVENT_IDENTIFIER_REGEX, Pattern.CASE_INSENSITIVE)
 
+    // regex pattern to find message ids in a string.
+    private val MATRIX_EVENT_IDENTIFIER_V3_REGEX = "\\$[A-Z0-9/+]+"
+    val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3 = Pattern.compile(MATRIX_EVENT_IDENTIFIER_V3_REGEX, Pattern.CASE_INSENSITIVE)
+
     // regex pattern to find group ids in a string.
     private val MATRIX_GROUP_IDENTIFIER_REGEX = "\\+[A-Z0-9=_\\-./]+$DOMAIN_REGEX"
     val PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER = Pattern.compile(MATRIX_GROUP_IDENTIFIER_REGEX, Pattern.CASE_INSENSITIVE)
@@ -116,7 +120,7 @@ object MatrixPatterns {
      * @return true if the string is a valid event id.
      */
     fun isEventId(str: String?): Boolean {
-        return str != null && PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER.matcher(str).matches()
+        return str != null && (PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER.matcher(str).matches() || PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3.matcher(str).matches())
     }
 
     /**
