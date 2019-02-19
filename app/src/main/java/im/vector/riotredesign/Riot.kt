@@ -19,6 +19,7 @@ package im.vector.riotredesign
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
+import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.BuildConfig
 import im.vector.riotredesign.core.di.AppModule
@@ -33,6 +34,7 @@ class Riot : Application() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+            Stetho.initializeWithDefaults(this)
         }
         AndroidThreeTen.init(this)
         startKoin(listOf(AppModule(this).definition), logger = EmptyLogger())

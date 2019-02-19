@@ -95,6 +95,7 @@ dependencies {
 
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 
     debugImplementation 'com.airbnb.okreplay:okreplay:1.4.0'
     releaseImplementation 'com.airbnb.okreplay:noop:1.4.0'
