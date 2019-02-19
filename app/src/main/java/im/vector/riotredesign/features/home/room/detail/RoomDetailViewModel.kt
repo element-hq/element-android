@@ -26,14 +26,14 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.extensions.lastMinBy
 import im.vector.riotredesign.core.platform.RiotViewModel
-import im.vector.riotredesign.features.home.room.VisibleRoomHolder
+import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
 import java.util.concurrent.TimeUnit
 
 class RoomDetailViewModel(initialState: RoomDetailViewState,
                           private val session: Session,
-                          private val visibleRoomHolder: VisibleRoomHolder
+                          private val visibleRoomHolder: VisibleRoomStore
 ) : RiotViewModel<RoomDetailViewState>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -47,7 +47,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
             val currentSession = Matrix.getInstance().currentSession
-            val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomHolder>()
+            val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomStore>()
             return RoomDetailViewModel(state, currentSession, visibleRoomHolder)
         }
     }
@@ -78,7 +78,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     }
 
     private fun handleIsDisplayed() {
-        visibleRoomHolder.setVisibleRoom(roomId)
+        visibleRoomHolder.post(roomId)
     }
 
     private fun observeDisplayedEvents() {
