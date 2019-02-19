@@ -18,6 +18,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.text.SpannableStringBuilder
 import android.text.util.Linkify
+import com.airbnb.epoxy.EpoxyModel
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -39,7 +40,7 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                callback: TimelineEventController.Callback?
-    ): KotlinModel? {
+    ): EpoxyModel<*>? {
 
         val roomMember = event.roomMember
         val nextRoomMember = nextEvent?.roomMember
@@ -89,7 +90,9 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
                 rotation = messageContent.info?.rotation,
                 orientation = messageContent.info?.orientation
         )
-        return MessageImageItem(data, informationData)
+        return MessageImageItem_()
+                .informationData(informationData)
+                .mediaData(data)
     }
 
     private fun buildTextMessageItem(messageContent: MessageTextContent,
@@ -106,10 +109,9 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
             Linkify.addLinks(spannable, Linkify.ALL)
             spannable
         }
-        return MessageTextItem(
-                message = message,
-                informationData = informationData
-        )
+        return MessageTextItem_()
+                .message(message)
+                .informationData(informationData)
     }
 
 

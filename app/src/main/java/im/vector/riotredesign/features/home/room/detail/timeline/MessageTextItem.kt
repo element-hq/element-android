@@ -18,22 +18,29 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.widget.ImageView
 import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.riotredesign.R
 
-class MessageTextItem(
-        val message: CharSequence? = null,
-        informationData: MessageInformationData
-) : AbsMessageItem(informationData, R.layout.item_timeline_event_text_message) {
+@EpoxyModelClass(layout = R.layout.item_timeline_event_text_message)
+abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
-    override val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
-    override val memberNameView by bind<TextView>(R.id.messageMemberNameView)
-    override val timeView by bind<TextView>(R.id.messageTimeView)
-    private val messageView by bind<TextView>(R.id.messageTextView)
+    @EpoxyAttribute var message: CharSequence? = null
+    @EpoxyAttribute override lateinit var informationData: MessageInformationData
 
-    override fun bind() {
-        super.bind()
-        messageView.text = message
-        MatrixLinkify.addLinkMovementMethod(messageView)
+    override fun bind(holder: Holder) {
+        super.bind(holder)
+        holder.messageView.text = message
+        MatrixLinkify.addLinkMovementMethod(holder.messageView)
     }
+
+    class Holder : AbsMessageItem.Holder() {
+        override val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
+        override val memberNameView by bind<TextView>(R.id.messageMemberNameView)
+        override val timeView by bind<TextView>(R.id.messageTimeView)
+        val messageView by bind<TextView>(R.id.messageTextView)
+    }
+
+
 }

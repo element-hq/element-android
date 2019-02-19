@@ -19,31 +19,33 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.LayoutRes
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import com.airbnb.epoxy.EpoxyModelWithHolder
+import im.vector.riotredesign.core.epoxy.KotlinEpoxyHolder
 import im.vector.riotredesign.features.home.AvatarRenderer
 
-abstract class AbsMessageItem(private val informationData: MessageInformationData,
-                              @LayoutRes layoutRes: Int
-) : KotlinModel(layoutRes) {
+abstract class AbsMessageItem<H : AbsMessageItem.Holder> : EpoxyModelWithHolder<H>() {
 
-    protected abstract val avatarImageView: ImageView
-    protected abstract val memberNameView: TextView
-    protected abstract val timeView: TextView
+    abstract val informationData: MessageInformationData
 
-    override fun bind() {
+    override fun bind(holder: H) {
         if (informationData.showInformation) {
-            avatarImageView.visibility = View.VISIBLE
-            memberNameView.visibility = View.VISIBLE
-            timeView.visibility = View.VISIBLE
-            timeView.text = informationData.time
-            memberNameView.text = informationData.memberName
-            AvatarRenderer.render(informationData.avatarUrl, informationData.memberName?.toString(), avatarImageView)
+            holder.avatarImageView.visibility = View.VISIBLE
+            holder.memberNameView.visibility = View.VISIBLE
+            holder.timeView.visibility = View.VISIBLE
+            holder.timeView.text = informationData.time
+            holder.memberNameView.text = informationData.memberName
+            AvatarRenderer.render(informationData.avatarUrl, informationData.memberName?.toString(), holder.avatarImageView)
         } else {
-            avatarImageView.visibility = View.GONE
-            memberNameView.visibility = View.GONE
-            timeView.visibility = View.GONE
+            holder.avatarImageView.visibility = View.GONE
+            holder.memberNameView.visibility = View.GONE
+            holder.timeView.visibility = View.GONE
         }
+    }
+
+    abstract class Holder : KotlinEpoxyHolder() {
+        abstract val avatarImageView: ImageView
+        abstract val memberNameView: TextView
+        abstract val timeView: TextView
     }
 
 }
