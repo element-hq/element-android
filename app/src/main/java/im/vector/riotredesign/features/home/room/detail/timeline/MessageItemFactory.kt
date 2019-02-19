@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -67,6 +68,7 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
         return when (messageContent) {
             is MessageTextContent  -> buildTextMessageItem(messageContent, informationData, callback)
             is MessageImageContent -> buildImageMessageItem(messageContent, informationData)
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, callback)
             else                   -> buildNotHandledMessageItem(messageContent)
         }
     }
@@ -98,20 +100,34 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
                                      informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
+        val message = linkifyBody(messageContent.body, callback)
+        return MessageTextItem_()
+                .message(message)
+                .informationData(informationData)
+    }
+
+    private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
+                                      informationData: MessageInformationData,
+                                      callback: TimelineEventController.Callback?): MessageTextItem? {
+
         val message = messageContent.body.let {
-            val spannable = SpannableStringBuilder(it)
-            MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
-                override fun onUrlClicked(url: String) {
-                    callback?.onUrlClicked(url)
-                }
-            })
-            Linkify.addLinks(spannable, Linkify.ALL)
-            spannable
+            val formattedBody = "* ${informationData.memberName} $it"
+            linkifyBody(formattedBody, callback)
         }
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
     }
 
+    private fun linkifyBody(body: String, callback: TimelineEventController.Callback?): CharSequence {
+        val spannable = SpannableStringBuilder(body)
+        MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
+            override fun onUrlClicked(url: String) {
+                callback?.onUrlClicked(url)
+            }
+        })
+        Linkify.addLinks(spannable, Linkify.ALL)
+        return spannable
+    }
 
 }
