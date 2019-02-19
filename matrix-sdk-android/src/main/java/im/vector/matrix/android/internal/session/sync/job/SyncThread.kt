@@ -109,6 +109,7 @@ internal class SyncThread(private val syncTask: SyncTask,
                             }
 
                             override fun onFailure(failure: Throwable) {
+                                Timber.e(failure)
                                 if (failure !is Failure.NetworkConnection) {
                                     // Wait 10s before retrying
                                     sleep(RETRY_WAIT_TIME_MS)
