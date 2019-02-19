@@ -26,15 +26,15 @@ import kotlin.reflect.KProperty
  *
  * See [SampleKotlinModelWithHolder] for a usage example.
  */
-abstract class KotlinEpoxyHolder : EpoxyHolder() {
+abstract class RiotEpoxyHolder : EpoxyHolder() {
     private lateinit var view: View
 
     override fun bindView(itemView: View) {
         view = itemView
     }
 
-    protected fun <V : View> bind(id: Int): ReadOnlyProperty<KotlinEpoxyHolder, V> =
-            Lazy { holder: KotlinEpoxyHolder, prop ->
+    protected fun <V : View> bind(id: Int): ReadOnlyProperty<RiotEpoxyHolder, V> =
+            Lazy { holder: RiotEpoxyHolder, prop ->
                 holder.view.findViewById(id) as V?
                 ?: throw IllegalStateException("View ID $id for '${prop.name}' not found.")
             }
@@ -44,13 +44,13 @@ abstract class KotlinEpoxyHolder : EpoxyHolder() {
      * https://github.com/JakeWharton/kotterknife
      */
     private class Lazy<V>(
-            private val initializer: (KotlinEpoxyHolder, KProperty<*>) -> V
-    ) : ReadOnlyProperty<KotlinEpoxyHolder, V> {
+            private val initializer: (RiotEpoxyHolder, KProperty<*>) -> V
+    ) : ReadOnlyProperty<RiotEpoxyHolder, V> {
         private object EMPTY
 
         private var value: Any? = EMPTY
 
-        override fun getValue(thisRef: KotlinEpoxyHolder, property: KProperty<*>): V {
+        override fun getValue(thisRef: RiotEpoxyHolder, property: KProperty<*>): V {
             if (value == EMPTY) {
                 value = initializer(thisRef, property)
             }

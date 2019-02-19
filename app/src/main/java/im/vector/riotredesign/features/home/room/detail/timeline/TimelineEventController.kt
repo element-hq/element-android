@@ -16,16 +16,14 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyModel
-import com.airbnb.epoxy.OnModelVisibilityStateChangedListener
 import com.airbnb.epoxy.VisibilityState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.LoadingItemModel_
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
@@ -78,16 +76,12 @@ class TimelineEventController(private val roomId: String,
 
         timelineItemFactory.create(event, nextEvent, callback)?.also {
             it.id(event.localId)
-            it.setOnVisibilityStateChanged(OnModelVisibilityStateChangedListener<KotlinModel, View> { model, view, visibilityState ->
-                if (visibilityState == VisibilityState.VISIBLE) {
-                    callback?.onEventVisible(event, currentPosition)
-                }
-            })
+            it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event, currentPosition))
             epoxyModels.add(it)
         }
         if (addDaySeparator) {
             val formattedDay = dateFormatter.formatMessageDay(date)
-            val daySeparatorItem = DaySeparatorItem(formattedDay).id(roomId + formattedDay)
+            val daySeparatorItem = DaySeparatorItem_().formattedDay(formattedDay).id(roomId + formattedDay)
             epoxyModels.add(daySeparatorItem)
         }
         return epoxyModels
@@ -110,5 +104,19 @@ class TimelineEventController(private val roomId: String,
         fun onEventVisible(event: TimelineEvent, index: Int)
         fun onUrlClicked(url: String)
     }
+
+}
+
+private class TimelineEventVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?,
+                                                          private val event: TimelineEvent,
+                                                          private val currentPosition: Int)
+    : RiotEpoxyModel.OnVisibilityStateChangedListener {
+
+    override fun onVisibilityStateChanged(visibilityState: Int) {
+        if (visibilityState == VisibilityState.VISIBLE) {
+            callback?.onEventVisible(event, currentPosition)
+        }
+    }
+
 
 }

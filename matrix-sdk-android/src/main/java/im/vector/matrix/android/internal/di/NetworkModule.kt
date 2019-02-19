@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.di
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.UnitConverterFactory
@@ -48,10 +49,15 @@ class NetworkModule {
         }
 
         single {
+            StethoInterceptor()
+        }
+
+        single {
             OkHttpClient.Builder()
                     .connectTimeout(30, TimeUnit.SECONDS)
                     .readTimeout(30, TimeUnit.SECONDS)
                     .writeTimeout(30, TimeUnit.SECONDS)
+                    .addNetworkInterceptor(get<StethoInterceptor>())
                     .addInterceptor(get<AccessTokenInterceptor>())
                     .addInterceptor(get<HttpLoggingInterceptor>())
                     .addInterceptor(get<OkReplayInterceptor>())

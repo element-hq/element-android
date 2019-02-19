@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail.timeline
+package im.vector.riotredesign.features.home.room
 
-import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import im.vector.riotredesign.core.utils.RxStore
 
-class BlankItem
-    : KotlinModel(R.layout.item_timeline_event_blank) {
-
-    override fun bind() {
-        //no-op
-    }
-
-}
+class VisibleRoomStore : RxStore<String>()

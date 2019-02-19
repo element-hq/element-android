@@ -32,14 +32,13 @@ class GroupSummaryController(private val callback: Callback? = null
         }
         summaries.forEach { groupSummary ->
             val isSelected = groupSummary.groupId == selected?.groupId
-            GroupSummaryItem(
-                    groupName = groupSummary.displayName,
-                    avatarUrl = groupSummary.avatarUrl,
-                    isSelected = isSelected,
-                    listener = { callback?.onGroupSelected(groupSummary) }
-            )
-                    .id(groupSummary.groupId)
-                    .addTo(this)
+            groupSummaryItem {
+                id(groupSummary.groupId)
+                groupName(groupSummary.displayName)
+                selected(isSelected)
+                avatarUrl(groupSummary.avatarUrl)
+                listener { callback?.onGroupSelected(groupSummary) }
+            }
         }
     }
 

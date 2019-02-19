@@ -85,18 +85,17 @@ class RoomSummaryController(private val stringProvider: StringProvider
             summaries.map { it.notificationCount }.reduce { acc, i -> acc + i }
         }
         val showHighlighted = summaries.any { it.highlightCount > 0 }
-        RoomCategoryItem(
-                title = stringProvider.getString(titleRes).toUpperCase(),
-                isExpanded = isExpanded,
-                unreadCount = unreadCount,
-                showHighlighted = showHighlighted,
-                listener = {
-                    mutateExpandedState()
-                    setData(viewState)
-                }
-        )
-                .id(titleRes)
-                .addTo(this)
+        roomCategoryItem {
+            id(titleRes)
+            title(stringProvider.getString(titleRes).toUpperCase())
+            expanded(isExpanded)
+            unreadCount(unreadCount)
+            showHighlighted(showHighlighted)
+            listener {
+                mutateExpandedState()
+                setData(viewState)
+            }
+        }
     }
 
     private fun buildRoomModels(summaries: List<RoomSummary>, selectedRoomId: String?) {
@@ -104,16 +103,16 @@ class RoomSummaryController(private val stringProvider: StringProvider
             val unreadCount = roomSummary.notificationCount
             val showHighlighted = roomSummary.highlightCount > 0
             val isSelected = roomSummary.roomId == selectedRoomId
-            RoomSummaryItem(
-                    roomName = roomSummary.displayName,
-                    avatarUrl = roomSummary.avatarUrl,
-                    isSelected = isSelected,
-                    showHighlighted = showHighlighted,
-                    unreadCount = unreadCount,
-                    listener = { callback?.onRoomSelected(roomSummary) }
-            )
-                    .id(roomSummary.roomId)
-                    .addTo(this)
+
+            roomSummaryItem {
+                id(roomSummary.roomId)
+                roomName(roomSummary.displayName)
+                avatarUrl(roomSummary.avatarUrl)
+                selected(isSelected)
+                showHighlighted(showHighlighted)
+                unreadCount(unreadCount)
+                listener { callback?.onRoomSelected(roomSummary) }
+            }
         }
     }
 

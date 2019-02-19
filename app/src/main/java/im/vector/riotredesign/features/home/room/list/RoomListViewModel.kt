@@ -27,8 +27,8 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
-import im.vector.riotredesign.features.home.group.SelectedGroupHolder
-import im.vector.riotredesign.features.home.room.VisibleRoomHolder
+import im.vector.riotredesign.features.home.group.SelectedGroupStore
+import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
@@ -39,8 +39,8 @@ typealias RoomListFilterName = CharSequence
 
 class RoomListViewModel(initialState: RoomListViewState,
                         private val session: Session,
-                        private val selectedGroupHolder: SelectedGroupHolder,
-                        private val visibleRoomHolder: VisibleRoomHolder,
+                        private val selectedGroupHolder: SelectedGroupStore,
+                        private val visibleRoomHolder: VisibleRoomStore,
                         private val roomSelectionRepository: RoomSelectionRepository,
                         private val roomSummaryComparator: RoomSummaryComparator)
     : RiotViewModel<RoomListViewState>(initialState) {
@@ -51,8 +51,8 @@ class RoomListViewModel(initialState: RoomListViewState,
         override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
             val currentSession = Matrix.getInstance().currentSession
             val roomSelectionRepository = viewModelContext.activity.get<RoomSelectionRepository>()
-            val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupHolder>()
-            val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomHolder>()
+            val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupStore>()
+            val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomStore>()
             val roomSummaryComparator = viewModelContext.activity.get<RoomSummaryComparator>()
             return RoomListViewModel(state, currentSession, selectedGroupHolder, visibleRoomHolder, roomSelectionRepository, roomSummaryComparator)
         }
@@ -87,17 +87,18 @@ class RoomListViewModel(initialState: RoomListViewState,
     }
 
     private fun observeVisibleRoom() {
-        visibleRoomHolder.visibleRoom()
-                .subscribeBy {
+        visibleRoomHolder.observe()
+                .doOnNext {
                     setState { copy(selectedRoomId = it) }
                 }
+                .subscribe()
                 .disposeOnClear()
     }
 
     private fun observeRoomSummaries() {
         Observable.combineLatest<List<RoomSummary>, Option<GroupSummary>, Option<RoomListFilterName>, RoomSummaries>(
                 session.rx().liveRoomSummaries().throttleLast(300, TimeUnit.MILLISECONDS),
-                selectedGroupHolder.selectedGroup(),
+                selectedGroupHolder.observe(),
                 roomListFilter.throttleLast(300, TimeUnit.MILLISECONDS),
                 Function3 { rooms, selectedGroupOption, filterRoomOption ->
                     val filteredRooms = filterRooms(rooms, filterRoomOption)

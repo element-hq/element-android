@@ -18,20 +18,27 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.widget.ImageView
 import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
+import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
 
-class NoticeItem(private val noticeText: CharSequence? = null,
-                 private val avatarUrl: String?,
-                 private val memberName: CharSequence? = null)
-    : KotlinModel(R.layout.item_timeline_event_notice) {
+@EpoxyModelClass(layout = R.layout.item_timeline_event_notice)
+abstract class NoticeItem : RiotEpoxyModel<NoticeItem.Holder>() {
 
-    private val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
-    private val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
+    @EpoxyAttribute var noticeText: CharSequence? = null
+    @EpoxyAttribute var avatarUrl: String? = null
+    @EpoxyAttribute var memberName: CharSequence? = null
 
-    override fun bind() {
-        noticeTextView.text = noticeText
-        AvatarRenderer.render(avatarUrl, memberName?.toString(), avatarImageView)
+    override fun bind(holder: Holder) {
+        holder.noticeTextView.text = noticeText
+        AvatarRenderer.render(avatarUrl, memberName?.toString(), holder.avatarImageView)
+    }
+
+    class Holder : RiotEpoxyHolder() {
+        val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
+        val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
     }
 }

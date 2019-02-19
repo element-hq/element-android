@@ -16,8 +16,8 @@
 
 package im.vector.riotredesign.features.home
 
-import im.vector.riotredesign.features.home.group.SelectedGroupHolder
-import im.vector.riotredesign.features.home.room.VisibleRoomHolder
+import im.vector.riotredesign.features.home.group.SelectedGroupStore
+import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import im.vector.riotredesign.features.home.room.detail.timeline.DefaultItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.MessageItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.RoomMemberItemFactory
@@ -80,11 +80,11 @@ class HomeModule {
         }
 
         single {
-            SelectedGroupHolder()
+            SelectedGroupStore()
         }
 
         single {
-            VisibleRoomHolder()
+            VisibleRoomStore()
         }
 
         single {

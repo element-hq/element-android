@@ -17,25 +17,32 @@
 package im.vector.riotredesign.features.home.group
 
 import android.widget.ImageView
+import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
+import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.platform.CheckableFrameLayout
 import im.vector.riotredesign.features.home.AvatarRenderer
 
+@EpoxyModelClass(layout = R.layout.item_group)
+abstract class GroupSummaryItem : RiotEpoxyModel<GroupSummaryItem.Holder>() {
 
-data class GroupSummaryItem(
-        val groupName: CharSequence,
-        val avatarUrl: String?,
-        val isSelected: Boolean,
-        val listener: (() -> Unit)? = null
-) : KotlinModel(R.layout.item_group) {
+    @EpoxyAttribute lateinit var groupName: CharSequence
+    @EpoxyAttribute var avatarUrl: String? = null
+    @EpoxyAttribute var selected: Boolean = false
+    @EpoxyAttribute var listener: (() -> Unit)? = null
 
-    private val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
-    private val rootView by bind<CheckableFrameLayout>(R.id.itemGroupLayout)
-
-    override fun bind() {
-        rootView.isSelected = isSelected
-        rootView.setOnClickListener { listener?.invoke() }
-        AvatarRenderer.render(avatarUrl, groupName.toString(), avatarImageView)
+    override fun bind(holder: Holder) {
+        super.bind(holder)
+        holder.rootView.isSelected = selected
+        holder.rootView.setOnClickListener { listener?.invoke() }
+        AvatarRenderer.render(avatarUrl, groupName.toString(), holder.avatarImageView)
     }
+
+    class Holder : RiotEpoxyHolder() {
+        val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
+        val rootView by bind<CheckableFrameLayout>(R.id.itemGroupLayout)
+    }
+
 }

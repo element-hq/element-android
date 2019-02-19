@@ -76,6 +76,7 @@ dependencies {
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.facebook.stetho:stetho:1.5.0'
 
     // rx
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'

@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.group
+package im.vector.riotredesign.core.utils
 
-import arrow.core.Option
 import com.jakewharton.rxrelay2.BehaviorRelay
-import im.vector.matrix.android.api.session.group.model.GroupSummary
 import io.reactivex.Observable
 
-class SelectedGroupHolder {
+open class RxStore<T>(defaultValue: T? = null) {
 
-    private val selectedGroupStream = BehaviorRelay.createDefault<Option<GroupSummary>>(Option.empty())
-
-    fun setSelectedGroup(group: GroupSummary?) {
-        val optionValue = Option.fromNullable(group)
-        selectedGroupStream.accept(optionValue)
+    private val storeSubject: BehaviorRelay<T> = if (defaultValue == null) {
+        BehaviorRelay.create<T>()
+    } else {
+        BehaviorRelay.createDefault(defaultValue)
     }
 
-    fun selectedGroup(): Observable<Option<GroupSummary>> {
-        return selectedGroupStream.hide()
+    fun observe(): Observable<T> {
+        return storeSubject.hide().distinctUntilChanged()
     }
 
-
+    fun post(value: T) {
+        storeSubject.accept(value)
+    }
 }

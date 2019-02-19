@@ -14,23 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room
+package im.vector.riotredesign.features.home.group
 
-import com.jakewharton.rxrelay2.BehaviorRelay
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
+import arrow.core.Option
+import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.riotredesign.core.utils.RxStore
 
-class VisibleRoomHolder {
-
-    private val visibleRoomStream = BehaviorRelay.create<String>()
-
-    fun setVisibleRoom(roomId: String) {
-        visibleRoomStream.accept(roomId)
-    }
-
-    fun visibleRoom(): Observable<String> {
-        return visibleRoomStream.hide()
-    }
-
-
-}
+class SelectedGroupStore : RxStore<Option<GroupSummary>>(Option.empty())
