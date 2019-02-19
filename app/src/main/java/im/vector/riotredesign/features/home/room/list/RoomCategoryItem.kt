@@ -20,33 +20,39 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModelClass
+import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import im.vector.riotredesign.core.epoxy.KotlinEpoxyHolder
 
-data class RoomCategoryItem(
-        val title: CharSequence,
-        val isExpanded: Boolean,
-        val unreadCount: Int,
-        val showHighlighted: Boolean,
-        val listener: (() -> Unit)? = null
-) : KotlinModel(R.layout.item_room_category) {
+@EpoxyModelClass(layout = R.layout.item_room_category)
+abstract class RoomCategoryItem : EpoxyModelWithHolder<RoomCategoryItem.Holder>() {
 
-    private val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomCategoryUnreadCounterBadgeView)
-    private val titleView by bind<TextView>(R.id.roomCategoryTitleView)
-    private val rootView by bind<ViewGroup>(R.id.roomCategoryRootView)
+    @EpoxyAttribute lateinit var title: CharSequence
+    @EpoxyAttribute var expanded: Boolean = false
+    @EpoxyAttribute var unreadCount: Int = 0
+    @EpoxyAttribute var showHighlighted: Boolean = false
+    @EpoxyAttribute var listener: (() -> Unit)? = null
 
-    private val tintColor by lazy {
-        ContextCompat.getColor(rootView.context, R.color.bluey_grey_two)
-    }
-
-    override fun bind() {
-        val expandedArrowDrawableRes = if (isExpanded) R.drawable.ic_expand_more_white else R.drawable.ic_expand_less_white
-        val expandedArrowDrawable = ContextCompat.getDrawable(rootView.context, expandedArrowDrawableRes)?.also {
+    override fun bind(holder: Holder) {
+        val tintColor = ContextCompat.getColor(holder.rootView.context, R.color.bluey_grey_two)
+        val expandedArrowDrawableRes = if (expanded) R.drawable.ic_expand_more_white else R.drawable.ic_expand_less_white
+        val expandedArrowDrawable = ContextCompat.getDrawable(holder.rootView.context, expandedArrowDrawableRes)?.also {
             DrawableCompat.setTint(it, tintColor)
         }
-        unreadCounterBadgeView.render(unreadCount, showHighlighted)
-        titleView.setCompoundDrawablesWithIntrinsicBounds(expandedArrowDrawable, null, null, null)
-        titleView.text = title
-        rootView.setOnClickListener { listener?.invoke() }
+        holder.unreadCounterBadgeView.render(unreadCount, showHighlighted)
+        holder.titleView.setCompoundDrawablesWithIntrinsicBounds(expandedArrowDrawable, null, null, null)
+        holder.titleView.text = title
+        holder.rootView.setOnClickListener { listener?.invoke() }
     }
+
+
+    class Holder : KotlinEpoxyHolder() {
+        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomCategoryUnreadCounterBadgeView)
+        val titleView by bind<TextView>(R.id.roomCategoryTitleView)
+        val rootView by bind<ViewGroup>(R.id.roomCategoryRootView)
+    }
+
 }
+

@@ -18,31 +18,40 @@ package im.vector.riotredesign.features.home.room.list
 
 import android.widget.ImageView
 import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModelClass
+import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import im.vector.riotredesign.core.epoxy.KotlinEpoxyHolder
 import im.vector.riotredesign.core.platform.CheckableFrameLayout
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 
-data class RoomSummaryItem(
-        val roomName: CharSequence,
-        val avatarUrl: String?,
-        val isSelected: Boolean,
-        val unreadCount: Int,
-        val showHighlighted: Boolean,
-        val listener: (() -> Unit)? = null
-) : KotlinModel(R.layout.item_room) {
+@EpoxyModelClass(layout = R.layout.item_room)
+abstract class RoomSummaryItem : EpoxyModelWithHolder<RoomSummaryItem.Holder>() {
 
-    private val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
-    private val titleView by bind<TextView>(R.id.roomNameView)
-    private val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
-    private val rootView by bind<CheckableFrameLayout>(R.id.itemRoomLayout)
+    @EpoxyAttribute lateinit var roomName: CharSequence
+    @EpoxyAttribute var avatarUrl: String? = null
+    @EpoxyAttribute var selected: Boolean = false
+    @EpoxyAttribute var unreadCount: Int = 0
+    @EpoxyAttribute var showHighlighted: Boolean = false
+    @EpoxyAttribute var listener: (() -> Unit)? = null
 
-    override fun bind() {
-        unreadCounterBadgeView.render(unreadCount, showHighlighted)
-        rootView.isChecked = isSelected
-        rootView.setOnClickListener { listener?.invoke() }
-        titleView.text = roomName
-        AvatarRenderer.render(avatarUrl, roomName.toString(), avatarImageView)
+
+    override fun bind(holder: Holder) {
+        super.bind(holder)
+        holder.unreadCounterBadgeView.render(unreadCount, showHighlighted)
+        holder.rootView.isChecked = selected
+        holder.rootView.setOnClickListener { listener?.invoke() }
+        holder.titleView.text = roomName
+        AvatarRenderer.render(avatarUrl, roomName.toString(), holder.avatarImageView)
     }
+
+    class Holder : KotlinEpoxyHolder() {
+        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
+        val titleView by bind<TextView>(R.id.roomNameView)
+        val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
+        val rootView by bind<CheckableFrameLayout>(R.id.itemRoomLayout)
+    }
+
 }
