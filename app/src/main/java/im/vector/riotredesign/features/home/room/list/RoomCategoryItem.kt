@@ -22,12 +22,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
+import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 
 @EpoxyModelClass(layout = R.layout.item_room_category)
-abstract class RoomCategoryItem : EpoxyModelWithHolder<RoomCategoryItem.Holder>() {
+abstract class RoomCategoryItem : RiotEpoxyModel<RoomCategoryItem.Holder>() {
 
     @EpoxyAttribute lateinit var title: CharSequence
     @EpoxyAttribute var expanded: Boolean = false

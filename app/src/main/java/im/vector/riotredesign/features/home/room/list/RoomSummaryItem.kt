@@ -20,15 +20,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
+import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.platform.CheckableFrameLayout
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 
 @EpoxyModelClass(layout = R.layout.item_room)
-abstract class RoomSummaryItem : EpoxyModelWithHolder<RoomSummaryItem.Holder>() {
+abstract class RoomSummaryItem : RiotEpoxyModel<RoomSummaryItem.Holder>() {
 
     @EpoxyAttribute lateinit var roomName: CharSequence
     @EpoxyAttribute var avatarUrl: String? = null
