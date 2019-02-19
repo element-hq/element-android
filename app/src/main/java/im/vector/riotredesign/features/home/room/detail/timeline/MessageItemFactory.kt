@@ -18,7 +18,6 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.text.SpannableStringBuilder
 import android.text.util.Linkify
-import com.airbnb.epoxy.EpoxyModel
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -27,7 +26,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.media.MediaContentRenderer
@@ -40,7 +39,7 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                callback: TimelineEventController.Callback?
-    ): EpoxyModel<*>? {
+    ): RiotEpoxyModel<*>? {
 
         val roomMember = event.roomMember
         val nextRoomMember = nextEvent?.roomMember
@@ -49,12 +48,12 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                                                      ?: false
+                ?: false
 
         if (addDaySeparator
-            || nextRoomMember != roomMember
-            || nextEvent?.root?.type != EventType.MESSAGE
-            || isNextMessageReceivedMoreThanOneHourAgo) {
+                || nextRoomMember != roomMember
+                || nextEvent?.root?.type != EventType.MESSAGE
+                || isNextMessageReceivedMoreThanOneHourAgo) {
             messagesDisplayedWithInformation.add(event.root.eventId)
         }
 
@@ -72,9 +71,9 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
         }
     }
 
-    private fun buildNotHandledMessageItem(messageContent: MessageContent): KotlinModel? {
+    private fun buildNotHandledMessageItem(messageContent: MessageContent): DefaultItem? {
         val text = "${messageContent.type} message events are not yet handled"
-        return DefaultItem(text = text)
+        return DefaultItem_().text(text)
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,

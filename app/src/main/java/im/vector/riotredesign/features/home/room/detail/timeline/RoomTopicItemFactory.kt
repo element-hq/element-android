@@ -36,7 +36,10 @@ class RoomTopicItemFactory(private val stringProvider: StringProvider) {
         } else {
             stringProvider.getString(R.string.notice_room_topic_changed, roomMember.displayName, content.topic)
         }
-        return NoticeItem(text, roomMember.avatarUrl, roomMember.displayName)
+        return NoticeItem_()
+                .noticeText(text)
+                .avatarUrl(roomMember.avatarUrl)
+                .memberName(roomMember.displayName)
     }
 
 

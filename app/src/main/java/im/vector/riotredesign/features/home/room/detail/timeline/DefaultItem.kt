@@ -17,16 +17,22 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
+import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 
-class DefaultItem(
-        val text: CharSequence? = null
-) : KotlinModel(R.layout.item_timeline_event_default) {
+@EpoxyModelClass(layout = R.layout.item_timeline_event_default)
+abstract class DefaultItem : RiotEpoxyModel<DefaultItem.Holder>() {
 
-    private val messageView by bind<TextView>(R.id.stateMessageView)
+    @EpoxyAttribute var text: CharSequence? = null
 
-    override fun bind() {
-        messageView.text = text
+    override fun bind(holder: Holder) {
+        holder.messageView.text = text
+    }
+
+    class Holder : RiotEpoxyHolder() {
+        val messageView by bind<TextView>(R.id.stateMessageView)
     }
 }

@@ -21,7 +21,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinEpoxyHolder
+import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
 import im.vector.riotredesign.core.platform.CheckableFrameLayout
 import im.vector.riotredesign.features.home.AvatarRenderer
 
@@ -40,7 +40,7 @@ abstract class GroupSummaryItem : EpoxyModelWithHolder<GroupSummaryItem.Holder>(
         AvatarRenderer.render(avatarUrl, groupName.toString(), holder.avatarImageView)
     }
 
-    class Holder : KotlinEpoxyHolder() {
+    class Holder : RiotEpoxyHolder() {
         val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
         val rootView by bind<CheckableFrameLayout>(R.id.itemGroupLayout)
     }

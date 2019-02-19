@@ -24,7 +24,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinEpoxyHolder
+import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
 
 @EpoxyModelClass(layout = R.layout.item_room_category)
 abstract class RoomCategoryItem : EpoxyModelWithHolder<RoomCategoryItem.Holder>() {
@@ -48,7 +48,7 @@ abstract class RoomCategoryItem : EpoxyModelWithHolder<RoomCategoryItem.Holder>(
     }
 
 
-    class Holder : KotlinEpoxyHolder() {
+    class Holder : RiotEpoxyHolder() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomCategoryUnreadCounterBadgeView)
         val titleView by bind<TextView>(R.id.roomCategoryTitleView)
         val rootView by bind<ViewGroup>(R.id.roomCategoryRootView)

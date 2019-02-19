@@ -17,16 +17,22 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModelClass
+import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinModel
+import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
 
-data class DaySeparatorItem(
-        val formattedDay: CharSequence
-) : KotlinModel(R.layout.item_timeline_event_day_separator) {
+@EpoxyModelClass(layout = R.layout.item_timeline_event_day_separator)
+abstract class DaySeparatorItem : EpoxyModelWithHolder<DaySeparatorItem.Holder>() {
 
-    private val dayTextView by bind<TextView>(R.id.itemDayTextView)
+    @EpoxyAttribute lateinit var formattedDay: CharSequence
 
-    override fun bind() {
-        dayTextView.text = formattedDay
+    override fun bind(holder: Holder) {
+        holder.dayTextView.text = formattedDay
+    }
+
+    class Holder : RiotEpoxyHolder() {
+        val dayTextView by bind<TextView>(R.id.itemDayTextView)
     }
 }

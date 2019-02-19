@@ -17,10 +17,10 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.text.TextUtils
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
 
@@ -31,7 +31,10 @@ class RoomMemberItemFactory(private val stringProvider: StringProvider) {
     fun create(event: TimelineEvent): NoticeItem? {
         val roomMember = event.roomMember ?: return null
         val noticeText = buildRoomMemberNotice(event) ?: return null
-        return NoticeItem(noticeText, roomMember.avatarUrl, roomMember.displayName)
+        return NoticeItem_()
+                .noticeText(noticeText)
+                .avatarUrl(roomMember.avatarUrl)
+                .memberName(roomMember.displayName)
     }
 
     private fun buildRoomMemberNotice(event: TimelineEvent): String? {

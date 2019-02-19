@@ -22,7 +22,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.KotlinEpoxyHolder
+import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
 import im.vector.riotredesign.core.platform.CheckableFrameLayout
 import im.vector.riotredesign.features.home.AvatarRenderer
 
@@ -47,7 +47,7 @@ abstract class RoomSummaryItem : EpoxyModelWithHolder<RoomSummaryItem.Holder>() 
         AvatarRenderer.render(avatarUrl, roomName.toString(), holder.avatarImageView)
     }
 
-    class Holder : KotlinEpoxyHolder() {
+    class Holder : RiotEpoxyHolder() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
         val titleView by bind<TextView>(R.id.roomNameView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)

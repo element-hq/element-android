@@ -26,7 +26,7 @@ class DefaultItemFactory {
         } else {
             "an exception occurred when rendering the event ${event.root.eventId}"
         }
-        return DefaultItem(text = text)
+        return DefaultItem_().text(text)
     }
 
 }

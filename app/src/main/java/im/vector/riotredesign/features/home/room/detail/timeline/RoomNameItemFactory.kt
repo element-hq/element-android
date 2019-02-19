@@ -17,9 +17,9 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.text.TextUtils
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
 
@@ -37,7 +37,10 @@ class RoomNameItemFactory(private val stringProvider: StringProvider) {
         } else {
             stringProvider.getString(R.string.notice_room_name_removed, roomMember.displayName)
         }
-        return NoticeItem(text, roomMember.avatarUrl, roomMember.displayName)
+        return NoticeItem_()
+                .noticeText(text)
+                .avatarUrl(roomMember.avatarUrl)
+                .memberName(roomMember.displayName)
     }
 
 
