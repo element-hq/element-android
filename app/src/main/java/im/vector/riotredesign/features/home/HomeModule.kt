@@ -49,11 +49,15 @@ class HomeModule {
         }
 
         single {
+            RoomHistoryVisibilityItemFactory(get())
+        }
+
+        single {
             DefaultItemFactory()
         }
 
         single {
-            TimelineItemFactory(get(), get(), get(), get(), get())
+            TimelineItemFactory(get(), get(), get(), get(), get(), get())
         }
 
         single {

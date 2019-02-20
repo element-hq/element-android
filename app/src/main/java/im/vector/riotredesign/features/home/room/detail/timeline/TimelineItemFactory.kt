@@ -25,6 +25,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                           private val roomNameItemFactory: RoomNameItemFactory,
                           private val roomTopicItemFactory: RoomTopicItemFactory,
                           private val roomMemberItemFactory: RoomMemberItemFactory,
+                          private val roomHistoryVisibilityItemFactory: RoomHistoryVisibilityItemFactory,
                           private val defaultItemFactory: DefaultItemFactory) {
 
     fun create(event: TimelineEvent,
@@ -33,14 +34,15 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
 
         return try {
             when (event.root.type) {
-                EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, callback)
-                EventType.STATE_ROOM_NAME   -> roomNameItemFactory.create(event)
-                EventType.STATE_ROOM_TOPIC  -> roomTopicItemFactory.create(event)
-                EventType.STATE_ROOM_MEMBER -> roomMemberItemFactory.create(event)
+                EventType.MESSAGE                  -> messageItemFactory.create(event, nextEvent, callback)
+                EventType.STATE_ROOM_NAME          -> roomNameItemFactory.create(event)
+                EventType.STATE_ROOM_TOPIC         -> roomTopicItemFactory.create(event)
+                EventType.STATE_ROOM_MEMBER        -> roomMemberItemFactory.create(event)
+                EventType.STATE_HISTORY_VISIBILITY -> roomHistoryVisibilityItemFactory.create(event)
                 EventType.STATE_ROOM_CREATE,
                 EventType.STATE_ROOM_POWER_LEVELS,
-                EventType.REDACTION         -> EmptyItem_()
-                else                        -> defaultItemFactory.create(event)
+                EventType.REDACTION                -> EmptyItem_()
+                else                               -> defaultItemFactory.create(event)
             }
         } catch (e: Exception) {
             defaultItemFactory.create(event, e)
