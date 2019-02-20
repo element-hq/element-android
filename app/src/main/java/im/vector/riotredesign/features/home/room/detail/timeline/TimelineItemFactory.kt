@@ -26,6 +26,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                           private val roomTopicItemFactory: RoomTopicItemFactory,
                           private val roomMemberItemFactory: RoomMemberItemFactory,
                           private val roomHistoryVisibilityItemFactory: RoomHistoryVisibilityItemFactory,
+                          private val callItemFactory: CallItemFactory,
                           private val defaultItemFactory: DefaultItemFactory) {
 
     fun create(event: TimelineEvent,
@@ -39,8 +40,14 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 EventType.STATE_ROOM_TOPIC         -> roomTopicItemFactory.create(event)
                 EventType.STATE_ROOM_MEMBER        -> roomMemberItemFactory.create(event)
                 EventType.STATE_HISTORY_VISIBILITY -> roomHistoryVisibilityItemFactory.create(event)
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_ANSWER              -> callItemFactory.create(event)
                 EventType.STATE_ROOM_CREATE,
                 EventType.STATE_ROOM_POWER_LEVELS,
+                EventType.STATE_ROOM_JOIN_RULES,
+                EventType.STATE_ROOM_GUEST_ACCESS,
+                EventType.CALL_CANDIDATES,
                 EventType.REDACTION                -> EmptyItem_()
                 else                               -> defaultItemFactory.create(event)
             }

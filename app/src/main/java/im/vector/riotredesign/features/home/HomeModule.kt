@@ -49,6 +49,10 @@ class HomeModule {
         }
 
         single {
+            CallItemFactory(get())
+        }
+
+        single {
             RoomHistoryVisibilityItemFactory(get())
         }
 
@@ -57,7 +61,7 @@ class HomeModule {
         }
 
         single {
-            TimelineItemFactory(get(), get(), get(), get(), get(), get())
+            TimelineItemFactory(get(), get(), get(), get(), get(), get(), get())
         }
 
         single {
