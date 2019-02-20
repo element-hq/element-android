@@ -32,14 +32,14 @@ class RoomHistoryVisibilityItemFactory(private val stringProvider: StringProvide
 
     fun create(event: TimelineEvent): NoticeItem? {
         val roomMember = event.roomMember ?: return null
-        val noticeText = buildRoomMemberNotice(event.root, roomMember) ?: return null
+        val noticeText = buildNoticeText(event.root, roomMember) ?: return null
         return NoticeItem_()
                 .noticeText(noticeText)
                 .avatarUrl(roomMember.avatarUrl)
                 .memberName(roomMember.displayName)
     }
 
-    private fun buildRoomMemberNotice(event: Event, roomMember: RoomMember): CharSequence? {
+    private fun buildNoticeText(event: Event, roomMember: RoomMember): CharSequence? {
         val content = event.content.toModel<RoomHistoryVisibilityContent>() ?: return null
         val formattedVisibility = when (content.historyVisibility) {
             RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)

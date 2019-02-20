@@ -74,7 +74,7 @@ class TimelineEventController(private val roomId: String,
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
-        timelineItemFactory.create(event, nextEvent, callback)?.also {
+        timelineItemFactory.create(event, nextEvent, callback).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event, currentPosition))
             epoxyModels.add(it)

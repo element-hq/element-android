@@ -31,29 +31,32 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
-               callback: TimelineEventController.Callback?): RiotEpoxyModel<*>? {
+               callback: TimelineEventController.Callback?): RiotEpoxyModel<*> {
 
-        return try {
+        val computedModel = try {
             when (event.root.type) {
                 EventType.MESSAGE                  -> messageItemFactory.create(event, nextEvent, callback)
                 EventType.STATE_ROOM_NAME          -> roomNameItemFactory.create(event)
                 EventType.STATE_ROOM_TOPIC         -> roomTopicItemFactory.create(event)
                 EventType.STATE_ROOM_MEMBER        -> roomMemberItemFactory.create(event)
                 EventType.STATE_HISTORY_VISIBILITY -> roomHistoryVisibilityItemFactory.create(event)
+
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER              -> callItemFactory.create(event)
-                EventType.STATE_ROOM_CREATE,
-                EventType.STATE_ROOM_POWER_LEVELS,
-                EventType.STATE_ROOM_JOIN_RULES,
-                EventType.STATE_ROOM_GUEST_ACCESS,
-                EventType.CALL_CANDIDATES,
-                EventType.REDACTION                -> EmptyItem_()
-                else                               -> defaultItemFactory.create(event)
+
+                EventType.ENCRYPTED,
+                EventType.ENCRYPTION,
+                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                EventType.STICKER,
+                EventType.STATE_ROOM_CREATE        -> defaultItemFactory.create(event)
+
+                else                               -> null
             }
         } catch (e: Exception) {
             defaultItemFactory.create(event, e)
         }
+        return computedModel ?: EmptyItem_()
     }
 
 }
