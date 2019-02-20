@@ -18,29 +18,45 @@ package im.vector.riotredesign.features.home.room.detail.timeline
 
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.core.epoxy.EmptyItem_
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 
 class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                           private val roomNameItemFactory: RoomNameItemFactory,
                           private val roomTopicItemFactory: RoomTopicItemFactory,
                           private val roomMemberItemFactory: RoomMemberItemFactory,
+                          private val roomHistoryVisibilityItemFactory: RoomHistoryVisibilityItemFactory,
+                          private val callItemFactory: CallItemFactory,
                           private val defaultItemFactory: DefaultItemFactory) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
-               callback: TimelineEventController.Callback?): RiotEpoxyModel<*>? {
+               callback: TimelineEventController.Callback?): RiotEpoxyModel<*> {
 
-        return try {
+        val computedModel = try {
             when (event.root.type) {
-                EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, callback)
-                EventType.STATE_ROOM_NAME   -> roomNameItemFactory.create(event)
-                EventType.STATE_ROOM_TOPIC  -> roomTopicItemFactory.create(event)
-                EventType.STATE_ROOM_MEMBER -> roomMemberItemFactory.create(event)
-                else                        -> defaultItemFactory.create(event)
+                EventType.MESSAGE                  -> messageItemFactory.create(event, nextEvent, callback)
+                EventType.STATE_ROOM_NAME          -> roomNameItemFactory.create(event)
+                EventType.STATE_ROOM_TOPIC         -> roomTopicItemFactory.create(event)
+                EventType.STATE_ROOM_MEMBER        -> roomMemberItemFactory.create(event)
+                EventType.STATE_HISTORY_VISIBILITY -> roomHistoryVisibilityItemFactory.create(event)
+
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_ANSWER              -> callItemFactory.create(event)
+
+                EventType.ENCRYPTED,
+                EventType.ENCRYPTION,
+                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                EventType.STICKER,
+                EventType.STATE_ROOM_CREATE        -> defaultItemFactory.create(event)
+
+                else                               -> null
             }
         } catch (e: Exception) {
             defaultItemFactory.create(event, e)
         }
+        return computedModel ?: EmptyItem_()
     }
 
 }

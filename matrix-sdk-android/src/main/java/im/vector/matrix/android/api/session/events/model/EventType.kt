@@ -86,4 +86,10 @@ object EventType {
         return STATE_EVENTS.contains(type)
     }
 
+    fun isCallEvent(type: String): Boolean {
+        return type == CALL_INVITE
+                || type == CALL_CANDIDATES
+                || type == CALL_ANSWER
+                || type == CALL_HANGUP
+    }
 }

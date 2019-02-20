@@ -32,15 +32,16 @@ internal class RoomTagHandler {
         val tags = ArrayList<RoomTagEntity>()
         for (tagName in content.tags.keys) {
             val params = content.tags[tagName]
-            val tag = if (params != null) {
-                RoomTagEntity(tagName, params["order"])
+            val order = params?.get("order")
+            val tag = if (order is Double) {
+                RoomTagEntity(tagName, order)
             } else {
                 RoomTagEntity(tagName, null)
             }
             tags.add(tag)
         }
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: RoomSummaryEntity(roomId)
+                ?: RoomSummaryEntity(roomId)
 
         roomSummaryEntity.tags.clear()
         roomSummaryEntity.tags.addAll(tags)

@@ -22,17 +22,18 @@ import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
+import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.media.MediaContentRenderer
+import me.gujun.android.span.span
 
-class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
+class MessageItemFactory(private val colorProvider: ColorProvider,
+                         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                          private val timelineDateFormatter: TimelineDateFormatter) {
 
     private val messagesDisplayedWithInformation = HashSet<String?>()
@@ -66,10 +67,11 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
         val informationData = MessageInformationData(time, avatarUrl, memberName, showInformation)
 
         return when (messageContent) {
-            is MessageTextContent  -> buildTextMessageItem(messageContent, informationData, callback)
-            is MessageImageContent -> buildImageMessageItem(messageContent, informationData)
-            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, callback)
-            else                   -> buildNotHandledMessageItem(messageContent)
+            is MessageTextContent   -> buildTextMessageItem(messageContent, informationData, callback)
+            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData)
+            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, callback)
+            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
+            else                    -> buildNotHandledMessageItem(messageContent)
         }
     }
 
@@ -106,6 +108,23 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
                 .informationData(informationData)
     }
 
+    private fun buildNoticeMessageItem(messageContent: MessageNoticeContent,
+                                       informationData: MessageInformationData,
+                                       callback: TimelineEventController.Callback?): MessageTextItem? {
+
+        val message = messageContent.body.let {
+            val formattedBody = span {
+                text = it
+                textColor = colorProvider.getColor(R.color.slate_grey)
+                textStyle = "italic"
+            }
+            linkifyBody(formattedBody, callback)
+        }
+        return MessageTextItem_()
+                .message(message)
+                .informationData(informationData)
+    }
+
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
                                       informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
@@ -119,7 +138,7 @@ class MessageItemFactory(private val timelineMediaSizeProvider: TimelineMediaSiz
                 .informationData(informationData)
     }
 
-    private fun linkifyBody(body: String, callback: TimelineEventController.Callback?): CharSequence {
+    private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {
         val spannable = SpannableStringBuilder(body)
         MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
             override fun onUrlClicked(url: String) {
