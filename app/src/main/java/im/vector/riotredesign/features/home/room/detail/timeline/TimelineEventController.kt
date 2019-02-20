@@ -23,9 +23,9 @@ import com.airbnb.epoxy.VisibilityState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.core.epoxy.LoadingItemModel_
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
-import im.vector.riotredesign.features.home.LoadingItemModel_
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.paging.PagedListEpoxyController
 

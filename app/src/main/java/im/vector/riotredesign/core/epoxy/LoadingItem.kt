@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home
+package im.vector.riotredesign.core.epoxy
 
 import android.content.Context
 import android.widget.ProgressBar

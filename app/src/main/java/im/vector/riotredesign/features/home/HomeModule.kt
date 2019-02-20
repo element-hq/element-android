@@ -18,14 +18,7 @@ package im.vector.riotredesign.features.home
 
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
-import im.vector.riotredesign.features.home.room.detail.timeline.DefaultItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.MessageItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.RoomMemberItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.RoomNameItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.RoomTopicItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.TimelineDateFormatter
-import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotredesign.features.home.room.detail.timeline.TimelineItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.*
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
 import im.vector.riotredesign.features.home.room.list.RoomSummaryController
@@ -40,7 +33,7 @@ class HomeModule {
         }
 
         single {
-            MessageItemFactory(get(), get())
+            MessageItemFactory(get(), get(), get())
         }
 
         single {
