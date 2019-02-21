@@ -33,7 +33,7 @@ class HomeModule {
         }
 
         single {
-            MessageItemFactory(get(), get(), get())
+            MessageItemFactory(get(), get(), get(), get())
         }
 
         single {

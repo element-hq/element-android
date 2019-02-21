@@ -60,6 +60,7 @@ dependencies {
 
     def epoxy_version = "3.0.0"
     def arrow_version = "0.8.2"
+    def markwon_version = '3.0.0-SNAPSHOT'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -97,6 +98,9 @@ dependencies {
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'me.gujun.android:span:1.7'
+    implementation "ru.noties.markwon:core:$markwon_version"
+    implementation "ru.noties.markwon:html:$markwon_version"
+
 
     // DI
     implementation "org.koin:koin-android:$koin_version"

@@ -22,6 +22,7 @@ import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
+import im.vector.riotredesign.features.markdown.HtmlRenderer
 import org.koin.dsl.module.module
 
 class AppModule(private val context: Context) {
@@ -46,6 +47,10 @@ class AppModule(private val context: Context) {
 
         single {
             RoomSelectionRepository(get())
+        }
+
+        single {
+            HtmlRenderer(context)
         }
 
     }

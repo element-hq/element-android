@@ -29,12 +29,14 @@ import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.markdown.HtmlRenderer
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import me.gujun.android.span.span
 
 class MessageItemFactory(private val colorProvider: ColorProvider,
                          private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-                         private val timelineDateFormatter: TimelineDateFormatter) {
+                         private val timelineDateFormatter: TimelineDateFormatter,
+                         private val htmlRenderer: HtmlRenderer) {
 
     private val messagesDisplayedWithInformation = HashSet<String?>()
 
@@ -102,9 +104,15 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                      informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
-        val message = linkifyBody(messageContent.body, callback)
+        val bodyToUse = messageContent.formattedBody
+                ?.let {
+                    htmlRenderer.render(it)
+                }
+                ?: messageContent.body
+
+        val linkifiedBody = linkifyBody(bodyToUse, callback)
         return MessageTextItem_()
-                .message(message)
+                .message(linkifiedBody)
                 .informationData(informationData)
     }
 
