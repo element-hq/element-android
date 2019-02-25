@@ -22,17 +22,18 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.content.DefaultContentUrlResolver
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
 import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
-import im.vector.matrix.android.internal.session.room.RoomFactory
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
+import im.vector.matrix.android.internal.session.user.DefaultUserService
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import org.koin.dsl.module.module
@@ -94,6 +95,10 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             DefaultGroupService(get()) as GroupService
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultUserService(get()) as UserService
         }
 
         scope(DefaultSession.SCOPE) {

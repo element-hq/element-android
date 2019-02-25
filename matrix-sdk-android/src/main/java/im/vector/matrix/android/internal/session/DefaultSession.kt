@@ -28,6 +28,8 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.user.UserService
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
@@ -39,7 +41,7 @@ import org.koin.core.scope.Scope
 import org.koin.standalone.inject
 
 
-internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent, RoomService {
+internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent {
 
     companion object {
         const val SCOPE: String = "session"
@@ -51,6 +53,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val sessionListeners by inject<SessionListeners>()
     private val roomService by inject<RoomService>()
     private val groupService by inject<GroupService>()
+    private val userService by inject<UserService>()
     private val syncThread by inject<SyncThread>()
     private val contentUrlResolver by inject<ContentUrlResolver>()
     private var isOpen = false
@@ -116,6 +119,13 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     override fun liveGroupSummaries(): LiveData<List<GroupSummary>> {
         assert(isOpen)
         return groupService.liveGroupSummaries()
+    }
+
+    // USER SERVICE
+
+    override fun getUser(userId: String): User? {
+        assert(isOpen)
+        return userService.getUser(userId)
     }
 
     // Private methods *****************************************************************************
