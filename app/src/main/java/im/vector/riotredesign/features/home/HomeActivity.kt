@@ -24,9 +24,11 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.viewModel
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
@@ -44,11 +46,18 @@ class HomeActivity : RiotActivity(), ToolbarConfigurable {
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private val homeNavigator by inject<HomeNavigator>()
 
+    private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
+        override fun onDrawerStateChanged(newState: Int) {
+            hideKeyboard()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         loadKoinModules(listOf(HomeModule(this).definition))
         homeNavigator.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        drawerLayout.addDrawerListener(drawerListener)
         if (savedInstanceState == null) {
             val homeDrawerFragment = HomeDrawerFragment.newInstance()
             val loadingDetail = LoadingRoomDetailFragment.newInstance()
@@ -61,6 +70,7 @@ class HomeActivity : RiotActivity(), ToolbarConfigurable {
     }
 
     override fun onDestroy() {
+        drawerLayout.removeDrawerListener(drawerListener)
         homeNavigator.activity = null
         super.onDestroy()
     }
