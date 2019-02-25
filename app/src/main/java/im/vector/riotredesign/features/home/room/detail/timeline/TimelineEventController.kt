@@ -37,9 +37,6 @@ class TimelineEventController(private val roomId: String,
         EpoxyAsyncUtil.getAsyncBackgroundHandler(),
         EpoxyAsyncUtil.getAsyncBackgroundHandler()
 ) {
-    init {
-        setFilterDuplicates(true)
-    }
 
     private var isLoadingForward: Boolean = false
     private var isLoadingBackward: Boolean = false
