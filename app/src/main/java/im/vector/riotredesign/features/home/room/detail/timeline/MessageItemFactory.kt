@@ -29,14 +29,14 @@ import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.riotredesign.features.markdown.HtmlRenderer
+import im.vector.riotredesign.features.markdown.EventHtmlRenderer
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import me.gujun.android.span.span
 
 class MessageItemFactory(private val colorProvider: ColorProvider,
                          private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                          private val timelineDateFormatter: TimelineDateFormatter,
-                         private val htmlRenderer: HtmlRenderer) {
+                         private val htmlRenderer: EventHtmlRenderer) {
 
     private val messagesDisplayedWithInformation = HashSet<String?>()
 

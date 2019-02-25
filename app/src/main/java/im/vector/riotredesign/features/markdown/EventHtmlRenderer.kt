@@ -19,6 +19,11 @@
 package im.vector.riotredesign.features.markdown
 
 import android.content.Context
+import android.text.style.ImageSpan
+import com.google.android.material.chip.ChipDrawable
+import im.vector.matrix.android.api.permalinks.PermalinkData
+import im.vector.matrix.android.api.permalinks.PermalinkParser
+import im.vector.riotredesign.R
 import org.commonmark.node.BlockQuote
 import org.commonmark.node.HtmlBlock
 import org.commonmark.node.HtmlInline
@@ -45,10 +50,10 @@ import ru.noties.markwon.html.tag.SuperScriptHandler
 import ru.noties.markwon.html.tag.UnderlineHandler
 import java.util.Arrays.asList
 
-class HtmlRenderer(private val context: Context) {
+class EventHtmlRenderer(private val context: Context) {
 
     private val markwon = Markwon.builder(context)
-            .usePlugin(MatrixPlugin.create())
+            .usePlugin(MatrixPlugin.create(context))
             .build()
 
     fun render(text: String): CharSequence {
@@ -57,7 +62,7 @@ class HtmlRenderer(private val context: Context) {
 
 }
 
-private class MatrixPlugin private constructor() : AbstractMarkwonPlugin() {
+private class MatrixPlugin private constructor(private val context: Context) : AbstractMarkwonPlugin() {
 
     override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
         builder.htmlParser(MarkwonHtmlParserImpl.create())
@@ -70,7 +75,7 @@ private class MatrixPlugin private constructor() : AbstractMarkwonPlugin() {
                         ImageHandler.create())
                 .addHandler(
                         "a",
-                        LinkHandler())
+                        MxLinkHandler(context))
                 .addHandler(
                         "blockquote",
                         BlockquoteHandler())
@@ -122,10 +127,42 @@ private class MatrixPlugin private constructor() : AbstractMarkwonPlugin() {
 
     companion object {
 
-        fun create(): MatrixPlugin {
-            return MatrixPlugin()
+        fun create(context: Context): MatrixPlugin {
+            return MatrixPlugin(context)
         }
     }
+}
+
+private class MxLinkHandler(private val context: Context) : TagHandler() {
+
+    private val linkHandler = LinkHandler()
+
+    override fun handle(visitor: MarkwonVisitor, renderer: MarkwonHtmlRenderer, tag: HtmlTag) {
+        val link = tag.attributes()["href"]
+        if (link != null) {
+            val permalinkData = PermalinkParser.parse(link)
+            when (permalinkData) {
+                is PermalinkData.UserLink -> {
+                    val chipDrawable = ChipDrawable.createFromResource(context, R.xml.pill_view)
+                    chipDrawable.setText(permalinkData.userId)
+                    chipDrawable.textEndPadding = 8f
+                    chipDrawable.textStartPadding = 8f
+                    chipDrawable.setBounds(0, 0, chipDrawable.intrinsicWidth, (chipDrawable.intrinsicHeight / 1.5f).toInt())
+                    val span = ImageSpan(chipDrawable)
+                    SpannableBuilder.setSpans(
+                            visitor.builder(),
+                            span,
+                            tag.start(),
+                            tag.end()
+                    )
+                }
+                else                      -> linkHandler.handle(visitor, renderer, tag)
+            }
+        } else {
+            linkHandler.handle(visitor, renderer, tag)
+        }
+    }
+
 }
 
 private class MxReplyTagHandler : TagHandler() {

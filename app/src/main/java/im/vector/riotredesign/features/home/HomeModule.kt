@@ -22,14 +22,19 @@ import im.vector.riotredesign.features.home.room.detail.timeline.*
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
 import im.vector.riotredesign.features.home.room.list.RoomSummaryController
+import im.vector.riotredesign.features.markdown.EventHtmlRenderer
 import org.koin.dsl.module.module
 
-class HomeModule {
+class HomeModule(homeActivity: HomeActivity) {
 
     val definition = module(override = true) {
 
         single {
             TimelineDateFormatter(get())
+        }
+
+        single {
+            EventHtmlRenderer(homeActivity)
         }
 
         single {
