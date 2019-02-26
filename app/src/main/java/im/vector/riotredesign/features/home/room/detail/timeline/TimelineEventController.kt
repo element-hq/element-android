@@ -40,7 +40,11 @@ class TimelineEventController(private val roomId: String,
 
     private var isLoadingForward: Boolean = false
     private var isLoadingBackward: Boolean = false
-    private var hasReachedEnd: Boolean = false
+    private var hasReachedEnd: Boolean = true
+
+    init {
+        requestModelBuild()
+    }
 
     var callback: Callback? = null
 
