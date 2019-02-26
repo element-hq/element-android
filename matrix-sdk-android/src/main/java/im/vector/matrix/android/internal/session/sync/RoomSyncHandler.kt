@@ -92,7 +92,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             val untimelinedStateIndex = if (isInitialSync) Int.MIN_VALUE else stateIndexOffset
-            roomEntity.addStateEvents(roomSync.state.events, stateIndex = untimelinedStateIndex)
+            roomEntity.addStateEvents(roomSync.state.events, filterDuplicates = true, stateIndex = untimelinedStateIndex)
         }
 
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
