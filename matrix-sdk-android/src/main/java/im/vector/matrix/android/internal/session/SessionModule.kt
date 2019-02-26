@@ -34,6 +34,8 @@ import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameRes
 import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.user.DefaultUserService
+import im.vector.matrix.android.internal.session.user.UserEntityUpdater
+import im.vector.matrix.android.internal.session.user.UserModule
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import org.koin.dsl.module.module
@@ -113,7 +115,8 @@ internal class SessionModule(private val sessionParams: SessionParams) {
             val roomSummaryUpdater = RoomSummaryUpdater(get(), get(), get(), get(), sessionParams.credentials)
             val groupSummaryUpdater = GroupSummaryUpdater(get())
             val eventsPruner = EventsPruner(get())
-            listOf<LiveEntityObserver>(roomSummaryUpdater, groupSummaryUpdater, eventsPruner)
+            val userEntityUpdater = UserEntityUpdater(get(), get(), get())
+            listOf<LiveEntityObserver>(roomSummaryUpdater, groupSummaryUpdater, eventsPruner, userEntityUpdater)
         }
 
 

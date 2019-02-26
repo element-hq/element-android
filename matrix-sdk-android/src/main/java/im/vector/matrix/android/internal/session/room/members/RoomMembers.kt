@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
+import io.realm.Sort
 
 internal class RoomMembers(private val realm: Realm,
                            private val roomId: String
@@ -33,6 +34,17 @@ internal class RoomMembers(private val realm: Realm,
 
     private val roomSummary: RoomSummaryEntity? by lazy {
         RoomSummaryEntity.where(realm, roomId).findFirst()
+    }
+
+    fun get(userId: String): RoomMember? {
+        return EventEntity
+                .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
+                .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
+                .equalTo(EventEntityFields.STATE_KEY, userId)
+                .findFirst()
+                ?.let {
+                    it.asDomain().content?.toModel<RoomMember>()
+                }
     }
 
     fun getLoaded(): Map<String, RoomMember> {
@@ -44,7 +56,6 @@ internal class RoomMembers(private val realm: Realm,
                 .associateBy { it.stateKey!! }
                 .mapValues { it.value.content.toModel<RoomMember>()!! }
     }
-
 
     fun getNumberOfJoinedMembers(): Int {
         return roomSummary?.joinedMembersCount

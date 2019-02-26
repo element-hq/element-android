@@ -34,7 +34,7 @@ import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTas
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 
-internal data class DefaultRoom(
+internal class DefaultRoom(
         override val roomId: String,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val monarchy: Monarchy,

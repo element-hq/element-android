@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session
 import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
@@ -37,6 +38,7 @@ import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
+import im.vector.matrix.android.internal.session.user.UserModule
 import org.koin.core.scope.Scope
 import org.koin.standalone.inject
 
@@ -49,6 +51,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     private lateinit var scope: Scope
 
+    private val monarchy by inject<Monarchy>()
     private val liveEntityUpdaters by inject<List<LiveEntityObserver>>()
     private val sessionListeners by inject<SessionListeners>()
     private val roomService by inject<RoomService>()
@@ -67,8 +70,12 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         val syncModule = SyncModule().definition
         val roomModule = RoomModule().definition
         val groupModule = GroupModule().definition
-        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule))
+        val userModule = UserModule().definition
+        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule, userModule))
         scope = getKoin().getOrCreateScope(SCOPE)
+        if (!monarchy.isMonarchyThreadOpen) {
+            monarchy.openManually()
+        }
         liveEntityUpdaters.forEach { it.start() }
         syncThread.start()
     }
@@ -80,6 +87,9 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         assert(isOpen)
         syncThread.kill()
         liveEntityUpdaters.forEach { it.dispose() }
+        if (monarchy.isMonarchyThreadOpen) {
+            monarchy.closeManually()
+        }
         scope.close()
         isOpen = false
     }
