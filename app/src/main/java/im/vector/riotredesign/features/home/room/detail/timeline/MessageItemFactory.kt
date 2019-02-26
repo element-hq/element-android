@@ -29,7 +29,7 @@ import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.riotredesign.features.markdown.EventHtmlRenderer
+import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import me.gujun.android.span.span
 

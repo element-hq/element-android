@@ -16,16 +16,21 @@
 
 package im.vector.riotredesign.features.home
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.glide.GlideApp
+import im.vector.riotredesign.core.glide.GlideRequest
 
 object AvatarRenderer {
 
@@ -41,19 +46,52 @@ object AvatarRenderer {
         if (name.isNullOrEmpty()) {
             return
         }
+        buildGlideRequest(imageView.context, name, avatarUrl).into(imageView)
+    }
+
+    fun load(context: Context, avatarUrl: String?, name: String?, callback: Callback) {
+        if (name.isNullOrEmpty()) {
+            return
+        }
+        buildGlideRequest(context, name, avatarUrl).into(CallbackTarget(callback))
+    }
+
+    private fun buildGlideRequest(context: Context, name: String, avatarUrl: String?): GlideRequest<Drawable> {
         val resolvedUrl = Matrix.getInstance().currentSession.contentUrlResolver().resolveFullSize(avatarUrl)
-        val avatarColor = ContextCompat.getColor(imageView.context, R.color.pale_teal)
+        val avatarColor = ContextCompat.getColor(context, R.color.pale_teal)
         val isNameUserId = MatrixPatterns.isUserId(name)
         val firstLetterIndex = if (isNameUserId) 1 else 0
         val firstLetter = name[firstLetterIndex].toString().toUpperCase()
         val fallbackDrawable = TextDrawable.builder().buildRound(firstLetter, avatarColor)
-
-        GlideApp
-                .with(imageView)
+        return GlideApp
+                .with(context)
                 .load(resolvedUrl)
                 .placeholder(fallbackDrawable)
                 .apply(RequestOptions.circleCropTransform())
-                .into(imageView)
+    }
+
+    interface Callback {
+        fun onDrawableUpdated(drawable: Drawable?)
+        fun onDestroy()
+    }
+
+    private class CallbackTarget(private val callback: Callback) : SimpleTarget<Drawable>() {
+
+        override fun onDestroy() {
+            callback.onDestroy()
+        }
+
+        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+            callback.onDrawableUpdated(resource)
+        }
+
+        override fun onLoadStarted(placeholder: Drawable?) {
+            callback.onDrawableUpdated(placeholder)
+        }
+
+        override fun onLoadFailed(errorDrawable: Drawable?) {
+            callback.onDrawableUpdated(errorDrawable)
+        }
     }
 
 
