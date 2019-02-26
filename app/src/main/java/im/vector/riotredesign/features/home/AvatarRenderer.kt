@@ -21,10 +21,10 @@ import androidx.core.content.ContextCompat
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.request.RequestOptions
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.firstCharAsString
 import im.vector.riotredesign.core.glide.GlideApp
 
 object AvatarRenderer {
@@ -43,7 +43,10 @@ object AvatarRenderer {
         }
         val resolvedUrl = Matrix.getInstance().currentSession.contentUrlResolver().resolveFullSize(avatarUrl)
         val avatarColor = ContextCompat.getColor(imageView.context, R.color.pale_teal)
-        val fallbackDrawable = TextDrawable.builder().buildRound(name.firstCharAsString().toUpperCase(), avatarColor)
+        val isNameUserId = MatrixPatterns.isUserId(name)
+        val firstLetterIndex = if (isNameUserId) 1 else 0
+        val firstLetter = name[firstLetterIndex].toString().toUpperCase()
+        val fallbackDrawable = TextDrawable.builder().buildRound(firstLetter, avatarColor)
 
         GlideApp
                 .with(imageView)
