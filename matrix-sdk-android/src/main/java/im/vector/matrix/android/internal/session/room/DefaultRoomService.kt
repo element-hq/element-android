@@ -26,13 +26,13 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.util.fetchCopied
+import im.vector.matrix.android.internal.util.fetchManaged
 
 internal class DefaultRoomService(private val monarchy: Monarchy,
                                   private val roomFactory: RoomFactory) : RoomService {
 
     override fun getRoom(roomId: String): Room? {
-        monarchy.fetchCopied { RoomEntity.where(it, roomId).findFirst() } ?: return null
+        monarchy.fetchManaged { RoomEntity.where(it, roomId).findFirst() } ?: return null
         return roomFactory.instantiate(roomId)
     }
 
