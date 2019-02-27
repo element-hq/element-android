@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import io.realm.Realm
@@ -33,4 +34,8 @@ internal fun RoomEntity.Companion.where(realm: Realm, membership: MyMembership? 
         query.equalTo(RoomEntityFields.MEMBERSHIP_STR, membership.name)
     }
     return query
+}
+
+internal fun RoomEntity.fastContains(eventId: String): Boolean {
+    return EventEntity.where(realm, eventId = eventId).findFirst() != null
 }

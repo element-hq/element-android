@@ -27,8 +27,7 @@ import io.realm.Sort
 import io.realm.kotlin.where
 
 internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {
-    return realm.where<EventEntity>()
-            .equalTo(EventEntityFields.EVENT_ID, eventId)
+    return realm.where<EventEntity>().equalTo(EventEntityFields.EVENT_ID, eventId)
 }
 
 internal fun EventEntity.Companion.where(realm: Realm,

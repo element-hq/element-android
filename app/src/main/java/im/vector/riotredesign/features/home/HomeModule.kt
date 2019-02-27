@@ -16,24 +16,43 @@
 
 package im.vector.riotredesign.features.home
 
+import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
-import im.vector.riotredesign.features.home.room.detail.timeline.*
+import im.vector.riotredesign.features.home.room.detail.timeline.CallItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.DefaultItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.MessageItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.RoomHistoryVisibilityItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.RoomMemberItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.RoomNameItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.RoomTopicItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineDateFormatter
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
 import im.vector.riotredesign.features.home.room.list.RoomSummaryController
+import im.vector.riotredesign.features.html.EventHtmlRenderer
 import org.koin.dsl.module.module
 
-class HomeModule {
+class HomeModule(homeActivity: HomeActivity) {
 
     val definition = module(override = true) {
+
+        single {
+            Matrix.getInstance().currentSession
+        }
 
         single {
             TimelineDateFormatter(get())
         }
 
         single {
-            MessageItemFactory(get(), get(), get())
+            EventHtmlRenderer(homeActivity, get())
+        }
+
+        single {
+            MessageItemFactory(get(), get(), get(), get())
         }
 
         single {

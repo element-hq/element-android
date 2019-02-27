@@ -30,3 +30,7 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
 fun AppCompatActivity.addFragmentToBackstack(fragment: Fragment, frameId: Int, tag: String? = null) {
     supportFragmentManager.inTransaction { replace(frameId, fragment).addToBackStack(tag) }
 }
+
+fun AppCompatActivity.hideKeyboard() {
+    currentFocus?.hideKeyboard()
+}

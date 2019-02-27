@@ -16,11 +16,12 @@
 
 package im.vector.matrix.android.internal.database
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.zhuinden.monarchy.Monarchy
+import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmObject
+import io.realm.RealmResults
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 
 internal interface LiveEntityObserver {
     fun start()
@@ -28,38 +29,41 @@ internal interface LiveEntityObserver {
 }
 
 internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val monarchy: Monarchy)
-    : Observer<Monarchy.ManagedChangeSet<T>>, LiveEntityObserver {
+    : LiveEntityObserver {
 
     protected abstract val query: Monarchy.Query<T>
     private val isStarted = AtomicBoolean(false)
-    private val liveResults: LiveData<Monarchy.ManagedChangeSet<T>> by lazy {
-        monarchy.findAllManagedWithChanges(query)
-    }
+    private lateinit var results: AtomicReference<RealmResults<T>>
 
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
-            liveResults.observeForever(this)
+            monarchy.postToMonarchyThread {
+                val queryResults = query.createQuery(it).findAll()
+                queryResults.addChangeListener { t, changeSet ->
+                    onChanged(t, changeSet)
+                }
+                results = AtomicReference(queryResults)
+            }
         }
     }
 
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
-            liveResults.removeObserver(this)
+            monarchy.postToMonarchyThread {
+                results.getAndSet(null).removeAllChangeListeners()
+            }
         }
     }
 
     // PRIVATE
 
-    override fun onChanged(changeSet: Monarchy.ManagedChangeSet<T>?) {
-        if (changeSet == null) {
-            return
-        }
-        val insertionIndexes = changeSet.orderedCollectionChangeSet.insertions
-        val updateIndexes = changeSet.orderedCollectionChangeSet.changes
-        val deletionIndexes = changeSet.orderedCollectionChangeSet.deletions
-        val inserted = changeSet.realmResults.filterIndexed { index, _ -> insertionIndexes.contains(index) }
-        val updated = changeSet.realmResults.filterIndexed { index, _ -> updateIndexes.contains(index) }
-        val deleted = changeSet.realmResults.filterIndexed { index, _ -> deletionIndexes.contains(index) }
+    private fun onChanged(realmResults: RealmResults<T>, changeSet: OrderedCollectionChangeSet) {
+        val insertionIndexes = changeSet.insertions
+        val updateIndexes = changeSet.changes
+        val deletionIndexes = changeSet.deletions
+        val inserted = realmResults.filterIndexed { index, _ -> insertionIndexes.contains(index) }
+        val updated = realmResults.filterIndexed { index, _ -> updateIndexes.contains(index) }
+        val deleted = realmResults.filterIndexed { index, _ -> deletionIndexes.contains(index) }
         process(inserted, updated, deleted)
     }
 

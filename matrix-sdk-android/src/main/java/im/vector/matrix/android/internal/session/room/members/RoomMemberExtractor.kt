@@ -34,22 +34,23 @@ internal class RoomMemberExtractor(private val monarchy: Monarchy,
     private val cached = HashMap<String, RoomMember?>()
 
     fun extractFrom(event: EventEntity): RoomMember? {
-        if (cached.containsKey(event.eventId)) {
-            return cached[event.eventId]
-        }
         val sender = event.sender ?: return null
+        val cacheKey = sender + event.stateIndex
+        if (cached.containsKey(cacheKey)) {
+            return cached[cacheKey]
+        }
         // If the event is unlinked we want to fetch unlinked state events
         val unlinked = event.isUnlinked
         // When stateIndex is negative, we try to get the next stateEvent prevContent()
         // If prevContent is null we fallback to the Int.MIN state events content()
         val content = if (event.stateIndex <= 0) {
             baseQuery(monarchy, roomId, sender, unlinked).next(from = event.stateIndex)?.prevContent
-                    ?: baseQuery(monarchy, roomId, sender, unlinked).last(since = event.stateIndex)?.content
+            ?: baseQuery(monarchy, roomId, sender, unlinked).last(since = event.stateIndex)?.content
         } else {
             baseQuery(monarchy, roomId, sender, unlinked).last(since = event.stateIndex)?.content
         }
         val roomMember: RoomMember? = ContentMapper.map(content).toModel()
-        cached[event.eventId] = roomMember
+        cached[cacheKey] = roomMember
         return roomMember
     }
 

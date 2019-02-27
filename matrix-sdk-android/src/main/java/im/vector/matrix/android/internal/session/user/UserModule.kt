@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.core.extensions
+package im.vector.matrix.android.internal.session.user
 
+import im.vector.matrix.android.internal.session.DefaultSession
+import org.koin.dsl.module.module
 
-fun CharSequence.firstCharAsString(): String {
-    return if (isNotEmpty()) this[0].toString() else ""
+internal class UserModule {
+
+    val definition = module(override = true) {
+
+        scope(DefaultSession.SCOPE) {
+            DefaultUpdateUserTask(get()) as UpdateUserTask
+        }
+
+    }
 }

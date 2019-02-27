@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.core.extensions
+package im.vector.riotredesign.core.resources
 
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.riotredesign.core.resources.DateProvider
+import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
 
-fun Event.localDateTime(): LocalDateTime {
-    return DateProvider.toLocalDateTime(originServerTs)
+object DateProvider {
+
+    private val zoneId = ZoneId.systemDefault()
+
+    fun toLocalDateTime(timestamp: Long?): LocalDateTime {
+        val instant = Instant.ofEpochMilli(timestamp ?: 0)
+        return LocalDateTime.ofInstant(instant, zoneId)
+    }
+
 }

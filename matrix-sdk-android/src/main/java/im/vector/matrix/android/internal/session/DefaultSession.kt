@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session
 import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
@@ -28,6 +29,8 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.user.UserService
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
@@ -35,11 +38,12 @@ import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
+import im.vector.matrix.android.internal.session.user.UserModule
 import org.koin.core.scope.Scope
 import org.koin.standalone.inject
 
 
-internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent, RoomService {
+internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent {
 
     companion object {
         const val SCOPE: String = "session"
@@ -47,10 +51,12 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     private lateinit var scope: Scope
 
+    private val monarchy by inject<Monarchy>()
     private val liveEntityUpdaters by inject<List<LiveEntityObserver>>()
     private val sessionListeners by inject<SessionListeners>()
     private val roomService by inject<RoomService>()
     private val groupService by inject<GroupService>()
+    private val userService by inject<UserService>()
     private val syncThread by inject<SyncThread>()
     private val contentUrlResolver by inject<ContentUrlResolver>()
     private var isOpen = false
@@ -64,8 +70,12 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         val syncModule = SyncModule().definition
         val roomModule = RoomModule().definition
         val groupModule = GroupModule().definition
-        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule))
+        val userModule = UserModule().definition
+        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule, userModule))
         scope = getKoin().getOrCreateScope(SCOPE)
+        if (!monarchy.isMonarchyThreadOpen) {
+            monarchy.openManually()
+        }
         liveEntityUpdaters.forEach { it.start() }
         syncThread.start()
     }
@@ -77,6 +87,9 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         assert(isOpen)
         syncThread.kill()
         liveEntityUpdaters.forEach { it.dispose() }
+        if (monarchy.isMonarchyThreadOpen) {
+            monarchy.closeManually()
+        }
         scope.close()
         isOpen = false
     }
@@ -116,6 +129,13 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     override fun liveGroupSummaries(): LiveData<List<GroupSummary>> {
         assert(isOpen)
         return groupService.liveGroupSummaries()
+    }
+
+    // USER SERVICE
+
+    override fun getUser(userId: String): User? {
+        assert(isOpen)
+        return userService.getUser(userId)
     }
 
     // Private methods *****************************************************************************

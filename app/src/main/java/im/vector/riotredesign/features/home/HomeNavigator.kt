@@ -30,13 +30,13 @@ class HomeNavigator {
 
     var activity: HomeActivity? = null
 
-    private var currentRoomId: String? = null
+    private var rootRoomId: String? = null
 
     fun openRoomDetail(roomId: String,
                        eventId: String?,
                        addToBackstack: Boolean = false) {
         Timber.v("Open room detail $roomId - $eventId - $addToBackstack")
-        if (!addToBackstack && isRoomOpened(roomId)) {
+        if (!addToBackstack && isRoot(roomId)) {
             return
         }
         activity?.let {
@@ -46,7 +46,7 @@ class HomeNavigator {
             if (addToBackstack) {
                 it.addFragmentToBackstack(roomDetailFragment, R.id.homeDetailFragmentContainer, roomId)
             } else {
-                currentRoomId = roomId
+                rootRoomId = roomId
                 clearBackStack(it.supportFragmentManager)
                 it.replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
             }
@@ -61,15 +61,17 @@ class HomeNavigator {
         Timber.v("Open user detail $userId")
     }
 
-    fun isRoomOpened(roomId: String): Boolean {
-        return currentRoomId == roomId
-    }
+    // Private Methods *****************************************************************************
 
     private fun clearBackStack(fragmentManager: FragmentManager) {
         if (fragmentManager.backStackEntryCount > 0) {
             val first = fragmentManager.getBackStackEntryAt(0)
             fragmentManager.popBackStack(first.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
+    }
+
+    private fun isRoot(roomId: String): Boolean {
+        return rootRoomId == roomId
     }
 
 }
