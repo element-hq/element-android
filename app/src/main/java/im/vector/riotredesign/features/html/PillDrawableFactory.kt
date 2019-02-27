@@ -27,15 +27,18 @@ import java.lang.ref.WeakReference
 object PillDrawableFactory {
 
     fun create(context: Context, userId: String, user: User?): Drawable {
+        val textPadding = context.resources.getDimension(R.dimen.pill_text_padding)
+
         val chipDrawable = ChipDrawable.createFromResource(context, R.xml.pill_view).apply {
             setText(user?.displayName ?: userId)
-            textEndPadding = 8f
-            textStartPadding = 8f
-            setBounds(0, 0, intrinsicWidth, (intrinsicHeight / 1.5f).toInt())
+            textEndPadding = textPadding
+            textStartPadding = textPadding
+            setChipMinHeightResource(R.dimen.pill_min_height)
+            setChipIconSizeResource(R.dimen.pill_avatar_size)
+            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
         val avatarRendererCallback = AvatarRendererChipCallback(chipDrawable)
-        // TODO: need to work on getting drawable async
-        //AvatarRenderer.load(context, user?.avatarUrl, user?.displayName, avatarRendererCallback)
+        AvatarRenderer.load(context, user?.avatarUrl, user?.displayName, 80, avatarRendererCallback)
         return chipDrawable
     }
 
@@ -43,19 +46,14 @@ object PillDrawableFactory {
 
         private val weakChipDrawable = WeakReference<ChipDrawable>(chipDrawable)
 
-        override fun onDestroy() {
-            weakChipDrawable.clear()
-        }
-
         override fun onDrawableUpdated(drawable: Drawable?) {
             weakChipDrawable.get()?.apply {
                 chipIcon = drawable
-                setBounds(0, 0, intrinsicWidth, (intrinsicHeight / 1.5f).toInt())
+                setBounds(0, 0, intrinsicWidth, intrinsicHeight)
             }
         }
 
     }
-
 
 }
 

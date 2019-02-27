@@ -22,8 +22,6 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.room.model.RoomMember
@@ -31,6 +29,8 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.glide.GlideRequest
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 object AvatarRenderer {
 
@@ -46,53 +46,47 @@ object AvatarRenderer {
         if (name.isNullOrEmpty()) {
             return
         }
-        buildGlideRequest(imageView.context, name, avatarUrl).into(imageView)
+        val placeholder = buildPlaceholderDrawable(imageView.context, name)
+        buildGlideRequest(imageView.context, avatarUrl)
+                .placeholder(placeholder)
+                .into(imageView)
     }
 
-    fun load(context: Context, avatarUrl: String?, name: String?, callback: Callback) {
+    fun load(context: Context, avatarUrl: String?, name: String?, size: Int, callback: Callback) {
         if (name.isNullOrEmpty()) {
             return
         }
-        buildGlideRequest(context, name, avatarUrl).into(CallbackTarget(callback))
+        val request = buildGlideRequest(context, avatarUrl)
+        GlobalScope.launch {
+            val placeholder = buildPlaceholderDrawable(context, name)
+            callback.onDrawableUpdated(placeholder)
+            try {
+                val drawable = request.submit(size, size).get()
+                callback.onDrawableUpdated(drawable)
+            } catch (exception: Exception) {
+                callback.onDrawableUpdated(placeholder)
+            }
+        }
     }
 
-    private fun buildGlideRequest(context: Context, name: String, avatarUrl: String?): GlideRequest<Drawable> {
+    private fun buildGlideRequest(context: Context, avatarUrl: String?): GlideRequest<Drawable> {
         val resolvedUrl = Matrix.getInstance().currentSession.contentUrlResolver().resolveFullSize(avatarUrl)
+        return GlideApp
+                .with(context)
+                .load(resolvedUrl)
+                .apply(RequestOptions.circleCropTransform())
+    }
+
+    private fun buildPlaceholderDrawable(context: Context, name: String): Drawable {
         val avatarColor = ContextCompat.getColor(context, R.color.pale_teal)
         val isNameUserId = MatrixPatterns.isUserId(name)
         val firstLetterIndex = if (isNameUserId) 1 else 0
         val firstLetter = name[firstLetterIndex].toString().toUpperCase()
-        val fallbackDrawable = TextDrawable.builder().buildRound(firstLetter, avatarColor)
-        return GlideApp
-                .with(context)
-                .load(resolvedUrl)
-                .placeholder(fallbackDrawable)
-                .apply(RequestOptions.circleCropTransform())
+        return TextDrawable.builder().buildRound(firstLetter, avatarColor)
     }
 
     interface Callback {
         fun onDrawableUpdated(drawable: Drawable?)
-        fun onDestroy()
     }
-
-    private class CallbackTarget(private val callback: Callback) : SimpleTarget<Drawable>() {
-
-        override fun onDestroy() {
-            callback.onDestroy()
-        }
-
-        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-            callback.onDrawableUpdated(resource)
-        }
-
-        override fun onLoadStarted(placeholder: Drawable?) {
-            callback.onDrawableUpdated(placeholder)
-        }
-
-        override fun onLoadFailed(errorDrawable: Drawable?) {
-            callback.onDrawableUpdated(errorDrawable)
-        }
-    }
-
 
 }

@@ -60,6 +60,7 @@ dependencies {
 
     def epoxy_version = "3.0.0"
     def arrow_version = "0.8.2"
+    def coroutines_version = "1.0.1"
     def markwon_version = '3.0.0-SNAPSHOT'
 
     implementation project(":matrix-sdk-android")
@@ -67,6 +68,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
