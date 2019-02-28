@@ -29,8 +29,7 @@ import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.paging.PagedListEpoxyController
 
-class TimelineEventController(private val roomId: String,
-                              private val dateFormatter: TimelineDateFormatter,
+class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                               private val timelineItemFactory: TimelineItemFactory,
                               private val timelineMediaSizeProvider: TimelineMediaSizeProvider
 ) : PagedListEpoxyController<TimelineEvent>(
@@ -82,7 +81,7 @@ class TimelineEventController(private val roomId: String,
         }
         if (addDaySeparator) {
             val formattedDay = dateFormatter.formatMessageDay(date)
-            val daySeparatorItem = DaySeparatorItem_().formattedDay(formattedDay).id(roomId + formattedDay)
+            val daySeparatorItem = DaySeparatorItem_().formattedDay(formattedDay).id(formattedDay)
             epoxyModels.add(daySeparatorItem)
         }
         return epoxyModels
@@ -90,13 +89,13 @@ class TimelineEventController(private val roomId: String,
 
     override fun addModels(models: List<EpoxyModel<*>>) {
         LoadingItemModel_()
-                .id(roomId + "forward_loading_item")
+                .id("forward_loading_item")
                 .addIf(isLoadingForward, this)
 
         super.add(models)
 
         LoadingItemModel_()
-                .id(roomId + "backward_loading_item")
+                .id("backward_loading_item")
                 .addIf(!hasReachedEnd, this)
     }
 

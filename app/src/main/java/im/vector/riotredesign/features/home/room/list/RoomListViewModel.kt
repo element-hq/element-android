@@ -16,22 +16,23 @@
 
 package im.vector.riotredesign.features.home.room.list
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
+import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
 import java.util.concurrent.TimeUnit
 
@@ -49,7 +50,7 @@ class RoomListViewModel(initialState: RoomListViewState,
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
-            val currentSession = Matrix.getInstance().currentSession
+            val currentSession = viewModelContext.activity.get<Session>()
             val roomSelectionRepository = viewModelContext.activity.get<RoomSelectionRepository>()
             val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupStore>()
             val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomStore>()
@@ -61,6 +62,10 @@ class RoomListViewModel(initialState: RoomListViewState,
 
     private val roomListFilter = BehaviorRelay.createDefault<Option<RoomListFilterName>>(Option.empty())
 
+    private val _openRoomLiveData = MutableLiveData<LiveEvent<String>>()
+    val openRoomLiveData: LiveData<LiveEvent<String>>
+        get() = _openRoomLiveData
+
     init {
         observeRoomSummaries()
         observeVisibleRoom()
@@ -68,16 +73,18 @@ class RoomListViewModel(initialState: RoomListViewState,
 
     fun accept(action: RoomListActions) {
         when (action) {
-            is RoomListActions.SelectRoom  -> handleSelectRoom(action)
-            is RoomListActions.FilterRooms -> handleFilterRooms(action)
+            is RoomListActions.SelectRoom     -> handleSelectRoom(action)
+            is RoomListActions.FilterRooms    -> handleFilterRooms(action)
+            is RoomListActions.ToggleCategory -> handleToggleCategory(action)
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectRoom(action: RoomListActions.SelectRoom) = withState { state ->
-        if (state.selectedRoomId != action.roomSummary.roomId) {
+        if (state.visibleRoomId != action.roomSummary.roomId) {
             roomSelectionRepository.saveLastSelectedRoom(action.roomSummary.roomId)
+            _openRoomLiveData.postValue(LiveEvent(action.roomSummary.roomId))
         }
     }
 
@@ -86,10 +93,14 @@ class RoomListViewModel(initialState: RoomListViewState,
         roomListFilter.accept(optionalFilter)
     }
 
+    private fun handleToggleCategory(action: RoomListActions.ToggleCategory) = setState {
+        this.toggle(action.category)
+    }
+
     private fun observeVisibleRoom() {
         visibleRoomHolder.observe()
                 .doOnNext {
-                    setState { copy(selectedRoomId = it) }
+                    setState { copy(visibleRoomId = it) }
                 }
                 .subscribe()
                 .disposeOnClear()
@@ -159,13 +170,13 @@ class RoomListViewModel(initialState: RoomListViewState,
             }
         }
 
-        return RoomSummaries(
-                favourites = favourites.sortedWith(roomSummaryComparator),
-                directRooms = directChats.sortedWith(roomSummaryComparator),
-                groupRooms = groupRooms.sortedWith(roomSummaryComparator),
-                lowPriorities = lowPriorities.sortedWith(roomSummaryComparator),
-                serverNotices = serverNotices.sortedWith(roomSummaryComparator)
-        )
+        return RoomSummaries().apply {
+            put(RoomCategory.FAVOURITE, favourites.sortedWith(roomSummaryComparator))
+            put(RoomCategory.DIRECT, directChats.sortedWith(roomSummaryComparator))
+            put(RoomCategory.GROUP, groupRooms.sortedWith(roomSummaryComparator))
+            put(RoomCategory.LOW_PRIORITY, lowPriorities.sortedWith(roomSummaryComparator))
+            put(RoomCategory.SERVER_NOTICE, serverNotices.sortedWith(roomSummaryComparator))
+        }
     }
 
 

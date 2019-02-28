@@ -23,6 +23,7 @@ import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.BuildConfig
 import im.vector.riotredesign.core.di.AppModule
+import im.vector.riotredesign.features.home.HomeModule
 import org.koin.log.EmptyLogger
 import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
@@ -32,12 +33,15 @@ class Riot : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        applicationContext.setTheme(R.style.Theme_Riot)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             Stetho.initializeWithDefaults(this)
         }
         AndroidThreeTen.init(this)
-        startKoin(listOf(AppModule(this).definition), logger = EmptyLogger())
+        val appModule = AppModule(applicationContext).definition
+        val homeModule = HomeModule(applicationContext).definition
+        startKoin(listOf(appModule, homeModule), logger = EmptyLogger())
     }
 
     override fun attachBaseContext(base: Context) {

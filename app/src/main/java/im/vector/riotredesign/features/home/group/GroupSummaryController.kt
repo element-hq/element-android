@@ -19,8 +19,9 @@ package im.vector.riotredesign.features.home.group
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 
-class GroupSummaryController(private val callback: Callback? = null
-) : TypedEpoxyController<GroupListViewState>() {
+class GroupSummaryController : TypedEpoxyController<GroupListViewState>() {
+
+    var callback: Callback? = null
 
     override fun buildModels(viewState: GroupListViewState) {
         buildGroupModels(viewState.asyncGroups(), viewState.selectedGroup)

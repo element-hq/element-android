@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.list
+package im.vector.riotredesign.core.platform
 
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import android.os.Bundle
 
-sealed class RoomListActions {
+interface Restorable {
 
-    data class SelectRoom(val roomSummary: RoomSummary) : RoomListActions()
+    fun onSaveInstanceState(outState: Bundle)
 
-    data class FilterRooms(val roomName: CharSequence? = null) : RoomListActions()
-
-    data class ToggleCategory(val category: RoomCategory) : RoomListActions()
+    fun onRestoreInstanceState(savedInstanceState: Bundle?)
 
 }

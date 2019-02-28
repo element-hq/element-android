@@ -36,9 +36,6 @@ class HomeNavigator {
                        eventId: String?,
                        addToBackstack: Boolean = false) {
         Timber.v("Open room detail $roomId - $eventId - $addToBackstack")
-        if (!addToBackstack && isRoot(roomId)) {
-            return
-        }
         activity?.let {
             val args = RoomDetailArgs(roomId, eventId)
             val roomDetailFragment = RoomDetailFragment.newInstance(args)

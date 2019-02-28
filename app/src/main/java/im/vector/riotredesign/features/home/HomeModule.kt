@@ -16,7 +16,8 @@
 
 package im.vector.riotredesign.features.home
 
-import im.vector.matrix.android.api.Matrix
+import android.content.Context
+import im.vector.riotredesign.features.home.group.GroupSummaryController
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import im.vector.riotredesign.features.home.room.detail.timeline.CallItemFactory
@@ -35,84 +36,83 @@ import im.vector.riotredesign.features.home.room.list.RoomSummaryController
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import org.koin.dsl.module.module
 
-class HomeModule(homeActivity: HomeActivity) {
+class HomeModule(context: Context) {
 
-    val definition = module(override = true) {
+    companion object {
+        const val HOME_SCOPE = "HOME_SCOPE"
+        const val ROOM_DETAIL_SCOPE = "ROOM_DETAIL_SCOPE"
+        const val ROOM_LIST_SCOPE = "ROOM_LIST_SCOPE"
+        const val GROUP_LIST_SCOPE = "GROUP_LIST_SCOPE"
+    }
 
-        single {
-            Matrix.getInstance().currentSession
-        }
+    val definition = module {
 
-        single {
+        // Activity scope
+
+        scope(HOME_SCOPE) {
             TimelineDateFormatter(get())
         }
 
-        single {
-            EventHtmlRenderer(homeActivity, get())
-        }
-
-        single {
-            MessageItemFactory(get(), get(), get(), get())
-        }
-
-        single {
-            RoomNameItemFactory(get())
-        }
-
-        single {
-            RoomTopicItemFactory(get())
-        }
-
-        single {
-            RoomMemberItemFactory(get())
-        }
-
-        single {
-            CallItemFactory(get())
-        }
-
-        single {
-            RoomHistoryVisibilityItemFactory(get())
-        }
-
-        single {
-            DefaultItemFactory()
-        }
-
-        single {
-            TimelineItemFactory(get(), get(), get(), get(), get(), get(), get())
-        }
-
-        single {
+        scope(HOME_SCOPE) {
             HomeNavigator()
         }
 
-        factory {
-            RoomSummaryController(get())
-        }
-
-        factory { (roomId: String) ->
-            TimelineEventController(roomId, get(), get(), get())
-        }
-
-        single {
-            TimelineMediaSizeProvider()
-        }
-
-        single {
-            SelectedGroupStore()
-        }
-
-        single {
-            VisibleRoomStore()
-        }
-
-        single {
+        scope(HOME_SCOPE) {
             HomePermalinkHandler(get())
         }
 
-        single {
-            RoomSummaryComparator()
+        scope(HOME_SCOPE) {
+            RoomNameItemFactory(get())
+        }
+
+        scope(HOME_SCOPE) {
+            RoomTopicItemFactory(get())
+        }
+
+        scope(HOME_SCOPE) {
+            RoomMemberItemFactory(get())
+        }
+
+        scope(HOME_SCOPE) {
+            CallItemFactory(get())
+        }
+
+        scope(HOME_SCOPE) {
+            RoomHistoryVisibilityItemFactory(get())
+        }
+
+        scope(HOME_SCOPE) {
+            DefaultItemFactory()
+        }
+
+        scope(HOME_SCOPE) {
+            TimelineMediaSizeProvider()
+        }
+
+        scope(HOME_SCOPE) {
+            EventHtmlRenderer(context, get())
+        }
+
+        scope(HOME_SCOPE) {
+            MessageItemFactory(get(), get(), get(), get())
+        }
+
+        scope(HOME_SCOPE) {
+            TimelineItemFactory(get(), get(), get(), get(), get(), get(), get())
+        }
+
+        // Fragment scopes
+
+        scope(ROOM_DETAIL_SCOPE) {
+            TimelineEventController(get(), get(), get())
+        }
+
+        scope(ROOM_LIST_SCOPE) {
+            RoomSummaryController(get())
+        }
+
+        scope(GROUP_LIST_SCOPE) {
+            GroupSummaryController()
         }
 
 

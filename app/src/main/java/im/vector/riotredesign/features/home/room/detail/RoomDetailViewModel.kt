@@ -19,7 +19,6 @@ package im.vector.riotredesign.features.home.room.detail
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
@@ -46,7 +45,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
-            val currentSession = Matrix.getInstance().currentSession
+            val currentSession = viewModelContext.activity.get<Session>()
             val visibleRoomHolder = viewModelContext.activity.get<VisibleRoomStore>()
             return RoomDetailViewModel(state, currentSession, visibleRoomHolder)
         }

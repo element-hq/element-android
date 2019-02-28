@@ -22,19 +22,25 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.setupAsSearch
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.StateView
+import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomeNavigator
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.koin.android.ext.android.inject
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
 
 class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
 
@@ -44,9 +50,9 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
         }
     }
 
-    private val homeNavigator by inject<HomeNavigator>()
     private val roomController by inject<RoomSummaryController>()
-    private val homeViewModel: RoomListViewModel by activityViewModel()
+    private val homeNavigator by inject<HomeNavigator>()
+    private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_room_list, container, false)
@@ -54,11 +60,36 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        bindScope(getOrCreateScope(HomeModule.ROOM_LIST_SCOPE))
+        setupRecyclerView()
+        setupFilterView()
+        roomListViewModel.subscribe { renderState(it) }
+        roomListViewModel.openRoomLiveData.observeEvent(this) {
+            homeNavigator.openRoomDetail(it, null)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        val layoutManager = LinearLayoutManager(context)
+        val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
+        epoxyRecyclerView.layoutManager = layoutManager
         roomController.callback = this
+        roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
-        setupFilterView()
-        homeViewModel.subscribe { renderState(it) }
+    }
+
+    private fun setupFilterView() {
+        filterRoomView.setupAsSearch()
+        filterRoomView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) = Unit
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                roomListViewModel.accept(RoomListActions.FilterRooms(s))
+            }
+        })
     }
 
     private fun renderState(state: RoomListViewState) {
@@ -90,24 +121,13 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
         stateView.state = StateView.State.Error(message)
     }
 
-    private fun setupFilterView() {
-        filterRoomView.setupAsSearch()
-        filterRoomView.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) = Unit
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                homeViewModel.accept(RoomListActions.FilterRooms(s))
-            }
-        })
-    }
-
     // RoomSummaryController.Callback **************************************************************
 
     override fun onRoomSelected(room: RoomSummary) {
-        homeViewModel.accept(RoomListActions.SelectRoom(room))
-        homeNavigator.openRoomDetail(room.roomId, null)
+        roomListViewModel.accept(RoomListActions.SelectRoom(room))
     }
 
+    override fun onToggleRoomCategory(roomCategory: RoomCategory) {
+        roomListViewModel.accept(RoomListActions.ToggleCategory(roomCategory))
+    }
 }
