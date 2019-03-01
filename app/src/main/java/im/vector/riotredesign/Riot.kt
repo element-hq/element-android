@@ -33,14 +33,13 @@ class Riot : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        applicationContext.setTheme(R.style.Theme_Riot)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             Stetho.initializeWithDefaults(this)
         }
         AndroidThreeTen.init(this)
         val appModule = AppModule(applicationContext).definition
-        val homeModule = HomeModule(applicationContext).definition
+        val homeModule = HomeModule().definition
         startKoin(listOf(appModule, homeModule), logger = EmptyLogger())
     }
 

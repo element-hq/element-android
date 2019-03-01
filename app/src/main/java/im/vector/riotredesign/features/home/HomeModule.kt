@@ -16,10 +16,9 @@
 
 package im.vector.riotredesign.features.home
 
-import android.content.Context
+import androidx.fragment.app.Fragment
+import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.features.home.group.GroupSummaryController
-import im.vector.riotredesign.features.home.group.SelectedGroupStore
-import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import im.vector.riotredesign.features.home.room.detail.timeline.CallItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.DefaultItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.MessageItemFactory
@@ -31,12 +30,11 @@ import im.vector.riotredesign.features.home.room.detail.timeline.TimelineDateFor
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
 import im.vector.riotredesign.features.home.room.list.RoomSummaryController
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import org.koin.dsl.module.module
 
-class HomeModule(context: Context) {
+class HomeModule {
 
     companion object {
         const val HOME_SCOPE = "HOME_SCOPE"
@@ -50,10 +48,6 @@ class HomeModule(context: Context) {
         // Activity scope
 
         scope(HOME_SCOPE) {
-            TimelineDateFormatter(get())
-        }
-
-        scope(HOME_SCOPE) {
             HomeNavigator()
         }
 
@@ -61,50 +55,23 @@ class HomeModule(context: Context) {
             HomePermalinkHandler(get())
         }
 
-        scope(HOME_SCOPE) {
-            RoomNameItemFactory(get())
-        }
-
-        scope(HOME_SCOPE) {
-            RoomTopicItemFactory(get())
-        }
-
-        scope(HOME_SCOPE) {
-            RoomMemberItemFactory(get())
-        }
-
-        scope(HOME_SCOPE) {
-            CallItemFactory(get())
-        }
-
-        scope(HOME_SCOPE) {
-            RoomHistoryVisibilityItemFactory(get())
-        }
-
-        scope(HOME_SCOPE) {
-            DefaultItemFactory()
-        }
-
-        scope(HOME_SCOPE) {
-            TimelineMediaSizeProvider()
-        }
-
-        scope(HOME_SCOPE) {
-            EventHtmlRenderer(context, get())
-        }
-
-        scope(HOME_SCOPE) {
-            MessageItemFactory(get(), get(), get(), get())
-        }
-
-        scope(HOME_SCOPE) {
-            TimelineItemFactory(get(), get(), get(), get(), get(), get(), get())
-        }
-
         // Fragment scopes
 
-        scope(ROOM_DETAIL_SCOPE) {
-            TimelineEventController(get(), get(), get())
+        scope(ROOM_DETAIL_SCOPE) { (fragment: Fragment) ->
+            val eventHtmlRenderer = EventHtmlRenderer(GlideApp.with(fragment), fragment.requireContext(), get())
+            val timelineDateFormatter = TimelineDateFormatter(get())
+            val timelineMediaSizeProvider = TimelineMediaSizeProvider()
+            val messageItemFactory = MessageItemFactory(get(), timelineMediaSizeProvider, timelineDateFormatter, eventHtmlRenderer)
+
+            val timelineItemFactory = TimelineItemFactory(messageItemFactory = messageItemFactory,
+                                                          roomNameItemFactory = RoomNameItemFactory(get()),
+                                                          roomTopicItemFactory = RoomTopicItemFactory(get()),
+                                                          roomMemberItemFactory = RoomMemberItemFactory(get()),
+                                                          roomHistoryVisibilityItemFactory = RoomHistoryVisibilityItemFactory(get()),
+                                                          callItemFactory = CallItemFactory(get()),
+                                                          defaultItemFactory = DefaultItemFactory()
+            )
+            TimelineEventController(timelineDateFormatter, timelineItemFactory, timelineMediaSizeProvider)
         }
 
         scope(ROOM_LIST_SCOPE) {

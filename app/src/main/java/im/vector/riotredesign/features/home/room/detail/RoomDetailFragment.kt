@@ -40,6 +40,7 @@ import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
+import org.koin.core.parameter.parametersOf
 
 @Parcelize
 data class RoomDetailArgs(
@@ -60,8 +61,8 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     }
 
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
-    private val timelineEventController by inject<TimelineEventController>()
-    private val homePermalinkHandler by inject<HomePermalinkHandler>()
+    private val timelineEventController: TimelineEventController by inject { parametersOf(this) }
+    private val homePermalinkHandler: HomePermalinkHandler by inject()
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
 
