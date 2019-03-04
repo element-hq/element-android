@@ -148,7 +148,7 @@ private class MxLinkHandler(private val glideRequests: GlideRequests,
             val permalinkData = PermalinkParser.parse(link)
             when (permalinkData) {
                 is PermalinkData.UserLink -> {
-                    val user = session.getUser(permalinkData.userId) ?: return
+                    val user = session.getUser(permalinkData.userId)
                     val span = PillImageSpan(glideRequests, context, permalinkData.userId, user)
                     SpannableBuilder.setSpans(
                             visitor.builder(),

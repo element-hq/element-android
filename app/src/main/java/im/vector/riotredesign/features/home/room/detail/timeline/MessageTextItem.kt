@@ -48,11 +48,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         findPillsAndProcess { it.bind(holder.messageView) }
     }
 
-    override fun unbind(holder: Holder) {
-        findPillsAndProcess { it.unbind() }
-        super.unbind(holder)
-    }
-
     private fun findPillsAndProcess(processBlock: (span: PillImageSpan) -> Unit) {
         GlobalScope.launch(Dispatchers.Main) {
             val pillImageSpans: Array<PillImageSpan>? = withContext(Dispatchers.IO) {

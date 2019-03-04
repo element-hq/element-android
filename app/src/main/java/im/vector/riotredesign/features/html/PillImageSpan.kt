@@ -22,7 +22,7 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.text.style.ReplacementSpan
 import android.widget.TextView
-import androidx.annotation.MainThread
+import androidx.annotation.UiThread
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.ChipDrawable
@@ -32,36 +32,33 @@ import im.vector.riotredesign.core.glide.GlideRequests
 import im.vector.riotredesign.features.home.AvatarRenderer
 import java.lang.ref.WeakReference
 
+/**
+ * This span is able to replace a text by a [ChipDrawable]
+ * It's needed to call [bind] method to start requesting avatar, otherwise only the placeholder icon will be displayed if not already cached.
+ */
+
+private const val PILL_AVATAR_SIZE = 80
+
 class PillImageSpan(private val glideRequests: GlideRequests,
                     private val context: Context,
                     private val userId: String,
                     private val user: User?) : ReplacementSpan() {
 
-    private val pillDrawable = createChipDrawable(context, userId, user)
+    private val displayName by lazy {
+        if (user?.displayName.isNullOrEmpty()) userId else user?.displayName!!
+    }
+
+    private val pillDrawable = createChipDrawable()
     private val target = PillImageSpanTarget(this)
     private var tv: WeakReference<TextView>? = null
 
-    @MainThread
+    @UiThread
     fun bind(textView: TextView) {
         tv = WeakReference(textView)
-        AvatarRenderer.buildGlideRequest(glideRequests, user?.avatarUrl).into(target)
+        AvatarRenderer.render(context, glideRequests, user?.avatarUrl, displayName, PILL_AVATAR_SIZE, target)
     }
 
-    @MainThread
-    fun unbind() {
-        glideRequests.clear(target)
-        tv = null
-    }
-
-    @MainThread
-    private fun updateAvatarDrawable(drawable: Drawable?) {
-        pillDrawable.apply {
-            chipIcon = drawable
-        }
-        tv?.get()?.apply {
-            invalidate()
-        }
-    }
+    // ReplacementSpan *****************************************************************************
 
     override fun getSize(paint: Paint, text: CharSequence,
                          start: Int,
@@ -85,7 +82,6 @@ class PillImageSpan(private val glideRequests: GlideRequests,
                       y: Int,
                       bottom: Int,
                       paint: Paint) {
-
         canvas.save()
         val transY = bottom - pillDrawable.bounds.bottom
         canvas.translate(x, transY.toFloat())
@@ -93,37 +89,50 @@ class PillImageSpan(private val glideRequests: GlideRequests,
         canvas.restore()
     }
 
-    private fun createChipDrawable(context: Context, userId: String, user: User?): ChipDrawable {
+    internal fun updateAvatarDrawable(drawable: Drawable?) {
+        pillDrawable.apply {
+            chipIcon = drawable
+        }
+        tv?.get()?.apply {
+            invalidate()
+        }
+    }
+
+    // Private methods *****************************************************************************
+
+    private fun createChipDrawable(): ChipDrawable {
         val textPadding = context.resources.getDimension(R.dimen.pill_text_padding)
-        val displayName = if (user?.displayName.isNullOrEmpty()) userId else user?.displayName!!
         return ChipDrawable.createFromResource(context, R.xml.pill_view).apply {
             setText(displayName)
             textEndPadding = textPadding
             textStartPadding = textPadding
             setChipMinHeightResource(R.dimen.pill_min_height)
             setChipIconSizeResource(R.dimen.pill_avatar_size)
-            chipIcon = AvatarRenderer.buildPlaceholderDrawable(context, displayName)
+            chipIcon = AvatarRenderer.getCachedOrPlaceholder(context, glideRequests, user?.avatarUrl, displayName, PILL_AVATAR_SIZE)
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
     }
 
-    private class PillImageSpanTarget(pillImageSpan: PillImageSpan) : SimpleTarget<Drawable>() {
+}
 
-        private val pillImageSpan = WeakReference(pillImageSpan)
+/**
+ * Glide target to handle avatar retrieval into [PillImageSpan].
+ */
+private class PillImageSpanTarget(pillImageSpan: PillImageSpan) : SimpleTarget<Drawable>() {
 
-        override fun onResourceReady(drawable: Drawable, transition: Transition<in Drawable>?) {
-            updateWith(drawable)
-        }
+    private val pillImageSpan = WeakReference(pillImageSpan)
 
-        override fun onLoadCleared(placeholder: Drawable?) {
-            updateWith(placeholder)
-        }
-
-        private fun updateWith(drawable: Drawable?) {
-            pillImageSpan.get()?.apply {
-                this.updateAvatarDrawable(drawable)
-            }
-        }
+    override fun onResourceReady(drawable: Drawable, transition: Transition<in Drawable>?) {
+        updateWith(drawable)
     }
 
+    override fun onLoadCleared(placeholder: Drawable?) {
+        updateWith(placeholder)
+    }
+
+    private fun updateWith(drawable: Drawable?) {
+        pillImageSpan.get()?.apply {
+            updateAvatarDrawable(drawable)
+        }
+    }
 }
