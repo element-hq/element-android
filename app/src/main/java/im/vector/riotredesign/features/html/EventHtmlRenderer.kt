@@ -19,10 +19,10 @@
 package im.vector.riotredesign.features.html
 
 import android.content.Context
-import android.text.style.ImageSpan
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotredesign.core.glide.GlideRequests
 import org.commonmark.node.BlockQuote
 import org.commonmark.node.HtmlBlock
 import org.commonmark.node.HtmlInline
@@ -49,11 +49,12 @@ import ru.noties.markwon.html.tag.SuperScriptHandler
 import ru.noties.markwon.html.tag.UnderlineHandler
 import java.util.Arrays.asList
 
-class EventHtmlRenderer(private val context: Context,
-                        private val session: Session) {
+class EventHtmlRenderer(glideRequests: GlideRequests,
+                        context: Context,
+                        session: Session) {
 
     private val markwon = Markwon.builder(context)
-            .usePlugin(MatrixPlugin.create(context, session))
+            .usePlugin(MatrixPlugin.create(glideRequests, context, session))
             .build()
 
     fun render(text: String): CharSequence {
@@ -62,7 +63,8 @@ class EventHtmlRenderer(private val context: Context,
 
 }
 
-private class MatrixPlugin private constructor(private val context: Context,
+private class MatrixPlugin private constructor(private val glideRequests: GlideRequests,
+                                               private val context: Context,
                                                private val session: Session) : AbstractMarkwonPlugin() {
 
     override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
@@ -76,7 +78,7 @@ private class MatrixPlugin private constructor(private val context: Context,
                         ImageHandler.create())
                 .addHandler(
                         "a",
-                        MxLinkHandler(context, session))
+                        MxLinkHandler(glideRequests, context, session))
                 .addHandler(
                         "blockquote",
                         BlockquoteHandler())
@@ -128,13 +130,15 @@ private class MatrixPlugin private constructor(private val context: Context,
 
     companion object {
 
-        fun create(context: Context, session: Session): MatrixPlugin {
-            return MatrixPlugin(context, session)
+        fun create(glideRequests: GlideRequests, context: Context, session: Session): MatrixPlugin {
+            return MatrixPlugin(glideRequests, context, session)
         }
     }
 }
 
-private class MxLinkHandler(private val context: Context, private val session: Session) : TagHandler() {
+private class MxLinkHandler(private val glideRequests: GlideRequests,
+                            private val context: Context,
+                            private val session: Session) : TagHandler() {
 
     private val linkHandler = LinkHandler()
 
@@ -144,9 +148,8 @@ private class MxLinkHandler(private val context: Context, private val session: S
             val permalinkData = PermalinkParser.parse(link)
             when (permalinkData) {
                 is PermalinkData.UserLink -> {
-                    val user = session.getUser(permalinkData.userId) ?: return
-                    val drawable = PillDrawableFactory.create(context, permalinkData.userId, user)
-                    val span = ImageSpan(drawable)
+                    val user = session.getUser(permalinkData.userId)
+                    val span = PillImageSpan(glideRequests, context, permalinkData.userId, user)
                     SpannableBuilder.setSpans(
                             visitor.builder(),
                             span,

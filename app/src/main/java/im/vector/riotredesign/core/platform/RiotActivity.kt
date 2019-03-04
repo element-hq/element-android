@@ -16,13 +16,34 @@
 
 package im.vector.riotredesign.core.platform
 
+import android.os.Bundle
+import androidx.annotation.MainThread
 import com.airbnb.mvrx.BaseMvRxActivity
+import com.bumptech.glide.util.Util
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 abstract class RiotActivity : BaseMvRxActivity() {
 
     private val uiDisposables = CompositeDisposable()
+    private val restorables = ArrayList<Restorable>()
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        restorables.forEach { it.onSaveInstanceState(outState) }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        restorables.forEach { it.onRestoreInstanceState(savedInstanceState) }
+        super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    @MainThread
+    protected fun <T : Restorable> T.register(): T {
+        Util.assertMainThread()
+        restorables.add(this)
+        return this
+    }
 
     protected fun Disposable.disposeOnDestroy(): Disposable {
         uiDisposables.add(this)

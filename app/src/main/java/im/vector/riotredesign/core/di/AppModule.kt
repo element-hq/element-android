@@ -18,10 +18,14 @@ package im.vector.riotredesign.core.di
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.group.SelectedGroupStore
+import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
+import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
 import org.koin.dsl.module.module
 
 class AppModule(private val context: Context) {
@@ -47,6 +51,23 @@ class AppModule(private val context: Context) {
         single {
             RoomSelectionRepository(get())
         }
+
+        single {
+            SelectedGroupStore()
+        }
+
+        single {
+            VisibleRoomStore()
+        }
+
+        single {
+            RoomSummaryComparator()
+        }
+
+        factory {
+            Matrix.getInstance().currentSession
+        }
+
 
     }
 }

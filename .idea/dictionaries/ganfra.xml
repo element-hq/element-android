@@ -3,9 +3,14 @@
     <words>
       <w>connectable</w>
       <w>coroutine</w>
+      <w>linkify</w>
+      <w>markon</w>
+      <w>markwon</w>
       <w>merlins</w>
       <w>moshi</w>
       <w>persistor</w>
+      <w>restorable</w>
+      <w>restorables</w>
       <w>synchronizer</w>
       <w>untimelined</w>
     </words>

@@ -19,74 +19,98 @@ package im.vector.riotredesign.features.home
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import androidx.annotation.UiThread
+import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
 import com.amulyakhare.textdrawable.TextDrawable
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.DrawableImageViewTarget
+import com.bumptech.glide.request.target.Target
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixPatterns
+import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.glide.GlideRequest
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import im.vector.riotredesign.core.glide.GlideRequests
 
+/**
+ * This helper centralise ways to retrieve avatar into ImageView or even generic Target<Drawable>
+ */
 object AvatarRenderer {
 
+    @UiThread
     fun render(roomMember: RoomMember, imageView: ImageView) {
         render(roomMember.avatarUrl, roomMember.displayName, imageView)
     }
 
+    @UiThread
     fun render(roomSummary: RoomSummary, imageView: ImageView) {
         render(roomSummary.avatarUrl, roomSummary.displayName, imageView)
     }
 
+    @UiThread
     fun render(avatarUrl: String?, name: String?, imageView: ImageView) {
+        render(imageView.context, GlideApp.with(imageView), avatarUrl, name, imageView.height, DrawableImageViewTarget(imageView))
+    }
+
+    @UiThread
+    fun render(context: Context,
+               glideRequest: GlideRequests,
+               avatarUrl: String?,
+               name: String?,
+               size: Int,
+               target: Target<Drawable>) {
         if (name.isNullOrEmpty()) {
             return
         }
-        val placeholder = buildPlaceholderDrawable(imageView.context, name)
-        buildGlideRequest(imageView.context, avatarUrl)
+        val placeholder = buildPlaceholderDrawable(context, name)
+        buildGlideRequest(glideRequest, avatarUrl, size)
                 .placeholder(placeholder)
-                .into(imageView)
+                .into(target)
     }
 
-    fun load(context: Context, avatarUrl: String?, name: String?, size: Int, callback: Callback) {
-        if (name.isNullOrEmpty()) {
-            return
-        }
-        val request = buildGlideRequest(context, avatarUrl)
-        GlobalScope.launch {
-            val placeholder = buildPlaceholderDrawable(context, name)
-            callback.onDrawableUpdated(placeholder)
-            try {
-                val drawable = request.submit(size, size).get()
-                callback.onDrawableUpdated(drawable)
-            } catch (exception: Exception) {
-                callback.onDrawableUpdated(placeholder)
-            }
+    @WorkerThread
+    fun getCachedOrPlaceholder(context: Context,
+                               glideRequest: GlideRequests,
+                               avatarUrl: String?,
+                               text: String,
+                               size: Int): Drawable {
+        val future = buildGlideRequest(glideRequest, avatarUrl, size).onlyRetrieveFromCache(true).submit()
+        return try {
+            future.get()
+        } catch (exception: Exception) {
+            buildPlaceholderDrawable(context, text)
         }
     }
 
-    private fun buildGlideRequest(context: Context, avatarUrl: String?): GlideRequest<Drawable> {
-        val resolvedUrl = Matrix.getInstance().currentSession.contentUrlResolver().resolveFullSize(avatarUrl)
-        return GlideApp
-                .with(context)
+    // PRIVATE API *********************************************************************************
+
+    private fun buildGlideRequest(glideRequest: GlideRequests, avatarUrl: String?, size: Int): GlideRequest<Drawable> {
+        val resolvedUrl = Matrix.getInstance().currentSession
+                .contentUrlResolver()
+                .resolveThumbnail(avatarUrl, size, size, ContentUrlResolver.ThumbnailMethod.SCALE)
+
+        return glideRequest
                 .load(resolvedUrl)
                 .apply(RequestOptions.circleCropTransform())
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
     }
 
-    private fun buildPlaceholderDrawable(context: Context, name: String): Drawable {
+    private fun buildPlaceholderDrawable(context: Context, text: String): Drawable {
         val avatarColor = ContextCompat.getColor(context, R.color.pale_teal)
-        val isNameUserId = MatrixPatterns.isUserId(name)
-        val firstLetterIndex = if (isNameUserId) 1 else 0
-        val firstLetter = name[firstLetterIndex].toString().toUpperCase()
-        return TextDrawable.builder().buildRound(firstLetter, avatarColor)
-    }
+        return if (text.isEmpty()) {
+            TextDrawable.builder().buildRound("", avatarColor)
+        } else {
+            val isUserId = MatrixPatterns.isUserId(text)
+            val firstLetterIndex = if (isUserId) 1 else 0
+            val firstLetter = text[firstLetterIndex].toString().toUpperCase()
+            TextDrawable.builder().buildRound(firstLetter, avatarColor)
+        }
 
-    interface Callback {
-        fun onDrawableUpdated(drawable: Drawable?)
     }
 
 }

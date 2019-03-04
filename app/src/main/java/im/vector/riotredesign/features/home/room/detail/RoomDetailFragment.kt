@@ -25,18 +25,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
 import org.koin.core.parameter.parametersOf
 
 @Parcelize
@@ -44,6 +47,7 @@ data class RoomDetailArgs(
         val roomId: String,
         val eventId: String? = null
 ) : Parcelable
+
 
 class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
@@ -57,10 +61,9 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     }
 
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
-    private val roomDetailArgs: RoomDetailArgs by args()
+    private val timelineEventController: TimelineEventController by inject { parametersOf(this) }
+    private val homePermalinkHandler: HomePermalinkHandler by inject()
 
-    private val timelineEventController by inject<TimelineEventController> { parametersOf(roomDetailArgs.roomId) }
-    private val homePermalinkHandler by inject<HomePermalinkHandler>()
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,6 +72,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        bindScope(getOrCreateScope(HomeModule.ROOM_DETAIL_SCOPE))
         setupRecyclerView()
         setupToolbar()
         setupSendButton()
@@ -79,6 +83,8 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         super.onResume()
         roomDetailViewModel.process(RoomDetailActions.IsDisplayed)
     }
+
+    // PRIVATE METHODS *****************************************************************************
 
     private fun setupToolbar() {
         val parentActivity = riotActivity
@@ -91,10 +97,14 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
         epoxyVisibilityTracker.attach(recyclerView)
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
+        val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
-        timelineEventController.addModelBuildListener { it.dispatchTo(scrollOnNewMessageCallback) }
+        timelineEventController.addModelBuildListener {
+            it.dispatchTo(stateRestorer)
+            it.dispatchTo(scrollOnNewMessageCallback)
+        }
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
     }

@@ -37,11 +37,11 @@ import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.android.ext.android.inject
-import org.koin.standalone.StandAloneContext.loadKoinModules
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
 
 
 class HomeActivity : RiotActivity(), ToolbarConfigurable {
-
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private val homeNavigator by inject<HomeNavigator>()
@@ -53,10 +53,10 @@ class HomeActivity : RiotActivity(), ToolbarConfigurable {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        loadKoinModules(listOf(HomeModule(this).definition))
-        homeNavigator.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        bindScope(getOrCreateScope(HomeModule.HOME_SCOPE))
+        homeNavigator.activity = this
         drawerLayout.addDrawerListener(drawerListener)
         if (savedInstanceState == null) {
             val homeDrawerFragment = HomeDrawerFragment.newInstance()

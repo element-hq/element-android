@@ -19,7 +19,6 @@ package im.vector.riotredesign.features.home.group
 import arrow.core.Option
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
@@ -34,7 +33,7 @@ class GroupListViewModel(initialState: GroupListViewState,
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: GroupListViewState): GroupListViewModel? {
-            val currentSession = Matrix.getInstance().currentSession
+            val currentSession = viewModelContext.activity.get<Session>()
             val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupStore>()
             return GroupListViewModel(state, selectedGroupHolder, currentSession)
         }

@@ -16,13 +16,18 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline
 
+import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.util.Linkify
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
@@ -146,7 +151,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .informationData(informationData)
     }
 
-    private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {
+    private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): Spannable {
         val spannable = SpannableStringBuilder(body)
         MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
             override fun onUrlClicked(url: String) {
