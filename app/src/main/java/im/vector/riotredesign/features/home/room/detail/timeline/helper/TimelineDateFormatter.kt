@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail.timeline
+package im.vector.riotredesign.features.home.room.detail.timeline.helper
 
 import im.vector.riotredesign.core.resources.LocaleProvider
 import org.threeten.bp.LocalDateTime
@@ -22,12 +22,19 @@ import org.threeten.bp.format.DateTimeFormatter
 
 class TimelineDateFormatter(private val localeProvider: LocaleProvider) {
 
+    private val messageHourFormatter by lazy {
+        DateTimeFormatter.ofPattern("H:mm", localeProvider.current())
+    }
+    private val messageDayFormatter by lazy {
+        DateTimeFormatter.ofPattern("EEE d MMM", localeProvider.current())
+    }
+
     fun formatMessageHour(localDateTime: LocalDateTime): String {
-        return DateTimeFormatter.ofPattern("H:mm", localeProvider.current()).format(localDateTime)
+        return messageHourFormatter.format(localDateTime)
     }
 
     fun formatMessageDay(localDateTime: LocalDateTime): String {
-        return DateTimeFormatter.ofPattern("EEE d MMM", localeProvider.current()).format(localDateTime)
+        return messageDayFormatter.format(localDateTime)
     }
 
 }

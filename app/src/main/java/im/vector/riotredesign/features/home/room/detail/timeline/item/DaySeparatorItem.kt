@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail.timeline
+package im.vector.riotredesign.features.home.room.detail.timeline.item
 
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_default)
-abstract class DefaultItem : RiotEpoxyModel<DefaultItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_timeline_event_day_separator)
+abstract class DaySeparatorItem : EpoxyModelWithHolder<DaySeparatorItem.Holder>() {
 
-    @EpoxyAttribute var text: CharSequence? = null
+    @EpoxyAttribute lateinit var formattedDay: CharSequence
 
     override fun bind(holder: Holder) {
-        holder.messageView.text = text
+        holder.dayTextView.text = formattedDay
     }
 
     class Holder : RiotEpoxyHolder() {
-        val messageView by bind<TextView>(R.id.stateMessageView)
+        val dayTextView by bind<TextView>(R.id.itemDayTextView)
     }
 }

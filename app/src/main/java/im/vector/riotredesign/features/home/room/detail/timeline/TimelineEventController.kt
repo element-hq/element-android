@@ -26,7 +26,10 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.LoadingItemModel_
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
+import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.paging.PagedListEpoxyController
 
 class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
@@ -40,10 +43,6 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     private var isLoadingForward: Boolean = false
     private var isLoadingBackward: Boolean = false
     private var hasReachedEnd: Boolean = true
-
-    init {
-        requestModelBuild()
-    }
 
     var callback: Callback? = null
 

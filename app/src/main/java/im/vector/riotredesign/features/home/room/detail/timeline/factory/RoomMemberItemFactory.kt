@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail.timeline
+package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import android.text.TextUtils
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -23,9 +23,11 @@ import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 
 
-//TODO : complete with call membership events
+//TODO : complete with call membership events¬
 class RoomMemberItemFactory(private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent): NoticeItem? {

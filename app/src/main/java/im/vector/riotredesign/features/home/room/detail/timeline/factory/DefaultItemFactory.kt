@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail.timeline
+package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem_
 
 class DefaultItemFactory {
 

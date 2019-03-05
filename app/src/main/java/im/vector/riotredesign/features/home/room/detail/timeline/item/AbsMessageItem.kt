@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail.timeline
+package im.vector.riotredesign.features.home.room.detail.timeline.item
 
 import android.view.View
 import android.widget.ImageView

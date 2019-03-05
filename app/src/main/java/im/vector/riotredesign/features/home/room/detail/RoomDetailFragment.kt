@@ -35,6 +35,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotredesign.features.home.room.detail.timeline.animation.TimelineItemAnimator
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
@@ -76,6 +77,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         setupRecyclerView()
         setupToolbar()
         setupSendButton()
+        timelineEventController.requestModelBuild()
         roomDetailViewModel.subscribe { renderState(it) }
     }
 
@@ -100,6 +102,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
+        recyclerView.itemAnimator = TimelineItemAnimator()
         recyclerView.setHasFixedSize(true)
         timelineEventController.addModelBuildListener {
             it.dispatchTo(stateRestorer)

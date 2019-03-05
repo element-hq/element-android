@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail.timeline
+package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -33,7 +33,16 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import me.gujun.android.span.span

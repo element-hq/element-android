@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail.timeline
+package im.vector.riotredesign.features.home.room.detail.timeline.animation
 
-data class MessageInformationData(
-        val time: CharSequence? = null,
-        val avatarUrl: String?,
-        val memberName: CharSequence? = null,
-        val showInformation: Boolean = true
-)
+import androidx.recyclerview.widget.DefaultItemAnimator
+
+private const val ANIM_DURATION_IN_MILLIS = 100L
+
+class TimelineItemAnimator : DefaultItemAnimator() {
+
+    init {
+        addDuration = ANIM_DURATION_IN_MILLIS
+        removeDuration = ANIM_DURATION_IN_MILLIS
+        moveDuration = ANIM_DURATION_IN_MILLIS
+        changeDuration = ANIM_DURATION_IN_MILLIS
+    }
+
+}
