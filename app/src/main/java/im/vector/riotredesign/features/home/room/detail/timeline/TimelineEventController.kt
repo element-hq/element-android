@@ -31,6 +31,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.Timeline
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.paging.PagedListEpoxyController
+import im.vector.riotredesign.features.media.MediaContentRenderer
 
 class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                               private val timelineItemFactory: TimelineItemFactory,
@@ -102,6 +103,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     interface Callback {
         fun onEventVisible(event: TimelineEvent, index: Int)
         fun onUrlClicked(url: String)
+        fun onMediaClicked(mediaData: MediaContentRenderer.Data)
     }
 
 }

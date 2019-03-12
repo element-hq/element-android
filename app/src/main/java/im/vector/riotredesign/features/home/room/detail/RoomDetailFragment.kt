@@ -36,6 +36,8 @@ import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.animation.TimelineItemAnimator
+import im.vector.riotredesign.features.media.MediaContentRenderer
+import im.vector.riotredesign.features.media.MediaViewerActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
@@ -162,6 +164,11 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     override fun onEventVisible(event: TimelineEvent, index: Int) {
         roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event, index))
+    }
+
+    override fun onMediaClicked(mediaData: MediaContentRenderer.Data) {
+        val intent = MediaViewerActivity.newIntent(riotActivity, mediaData)
+        startActivity(intent)
     }
 
 }

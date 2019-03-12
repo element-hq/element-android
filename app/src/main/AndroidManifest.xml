@@ -26,6 +26,7 @@
 
         <activity android:name=".features.home.HomeActivity" />
         <activity android:name=".features.login.LoginActivity" />
+        <activity android:name=".features.media.MediaViewerActivity" />
     </application>
 
 </manifest>

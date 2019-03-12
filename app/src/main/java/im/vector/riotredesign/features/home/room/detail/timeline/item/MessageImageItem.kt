@@ -28,10 +28,12 @@ abstract class MessageImageItem : AbsMessageItem<MessageImageItem.Holder>() {
 
     @EpoxyAttribute lateinit var mediaData: MediaContentRenderer.Data
     @EpoxyAttribute override lateinit var informationData: MessageInformationData
+    @EpoxyAttribute var clickListener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         MediaContentRenderer.render(mediaData, MediaContentRenderer.Mode.THUMBNAIL, holder.imageView)
+        holder.imageView.setOnClickListener { clickListener?.invoke() }
     }
 
     class Holder : AbsMessageItem.Holder() {

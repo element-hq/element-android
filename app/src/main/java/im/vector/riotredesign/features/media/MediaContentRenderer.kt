@@ -17,14 +17,20 @@
 package im.vector.riotredesign.features.media
 
 import android.media.ExifInterface
+import android.net.Uri
+import android.os.Parcelable
 import android.widget.ImageView
+import com.github.piasy.biv.view.BigImageView
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.riotredesign.core.glide.GlideApp
+import kotlinx.android.parcel.Parcelize
 
 object MediaContentRenderer {
 
+    @Parcelize
     data class Data(
+            val filename: String,
             val url: String?,
             val height: Int?,
             val maxHeight: Int,
@@ -32,7 +38,7 @@ object MediaContentRenderer {
             val maxWidth: Int,
             val orientation: Int?,
             val rotation: Int?
-    )
+    ) : Parcelable
 
     enum class Mode {
         FULL_SIZE,
@@ -43,19 +49,28 @@ object MediaContentRenderer {
         val (width, height) = processSize(data, mode)
         imageView.layoutParams.height = height
         imageView.layoutParams.width = width
-
         val contentUrlResolver = Matrix.getInstance().currentSession.contentUrlResolver()
         val resolvedUrl = when (mode) {
-                              Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
-                              Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-                          }
-                          ?: return
+            Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
+            Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+        } ?: return
 
         GlideApp
                 .with(imageView)
                 .load(resolvedUrl)
                 .thumbnail(0.3f)
                 .into(imageView)
+    }
+
+    fun render(data: Data, imageView: BigImageView) {
+        val (width, height) = processSize(data, Mode.THUMBNAIL)
+        val contentUrlResolver = Matrix.getInstance().currentSession.contentUrlResolver()
+        val fullSize = contentUrlResolver.resolveFullSize(data.url)
+        val thumbnail = contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+        imageView.showImage(
+                Uri.parse(thumbnail),
+                Uri.parse(fullSize)
+        )
     }
 
     private fun processSize(data: Data, mode: Mode): Pair<Int, Int> {
