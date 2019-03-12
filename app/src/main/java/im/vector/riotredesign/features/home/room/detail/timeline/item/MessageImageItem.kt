@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -28,10 +29,12 @@ abstract class MessageImageItem : AbsMessageItem<MessageImageItem.Holder>() {
 
     @EpoxyAttribute lateinit var mediaData: MediaContentRenderer.Data
     @EpoxyAttribute override lateinit var informationData: MessageInformationData
+    @EpoxyAttribute var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         MediaContentRenderer.render(mediaData, MediaContentRenderer.Mode.THUMBNAIL, holder.imageView)
+        holder.imageView.setOnClickListener(clickListener)
     }
 
     class Holder : AbsMessageItem.Holder() {

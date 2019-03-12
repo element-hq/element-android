@@ -27,7 +27,7 @@ def generateVersionCodeFromVersionName() {
 project.android.buildTypes.all { buildType ->
     buildType.javaCompileOptions.annotationProcessorOptions.arguments =
             [
-                    validateEpoxyModelUsage     : String.valueOf(buildType.name == 'debug')
+                    validateEpoxyModelUsage: String.valueOf(buildType.name == 'debug')
             ]
 }
 
@@ -62,6 +62,8 @@ dependencies {
     def arrow_version = "0.8.2"
     def coroutines_version = "1.0.1"
     def markwon_version = '3.0.0-SNAPSHOT'
+    def big_image_viewer_version = '1.5.6'
+    def glide_version = '4.8.0'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -96,14 +98,19 @@ dependencies {
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 
     // UI
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    kapt 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'me.gujun.android:span:1.7'
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"
 
+    // Image Loading
+    implementation "com.github.piasy:BigImageViewer:$big_image_viewer_version"
+    implementation "com.github.piasy:GlideImageLoader:$big_image_viewer_version"
+    implementation "com.github.piasy:ProgressPieIndicator:$big_image_viewer_version"
+    implementation "com.github.piasy:GlideImageViewFactory:$big_image_viewer_version"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // DI
     implementation "org.koin:koin-android:$koin_version"

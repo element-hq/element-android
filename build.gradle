@@ -19,10 +19,11 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
-        jcenter()
+        maven { url "http://dl.bintray.com/piasy/maven" }
         maven { url 'https://jitpack.io' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        google()
+        jcenter()
     }
 }
 

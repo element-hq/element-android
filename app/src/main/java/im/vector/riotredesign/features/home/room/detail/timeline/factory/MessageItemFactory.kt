@@ -23,26 +23,16 @@ import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem
-import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem_
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageItem
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageItem_
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.*
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import me.gujun.android.span.span
@@ -84,7 +74,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
         return when (messageContent) {
             is MessageTextContent   -> buildTextMessageItem(messageContent, informationData, callback)
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData)
+            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, callback)
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
             else                    -> buildNotHandledMessageItem(messageContent)
@@ -97,10 +87,12 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,
-                                      informationData: MessageInformationData): MessageImageItem? {
+                                      informationData: MessageInformationData,
+                                      callback: TimelineEventController.Callback?): MessageImageItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val data = MediaContentRenderer.Data(
+                messageContent.body,
                 url = messageContent.url,
                 height = messageContent.info?.height,
                 maxHeight = maxHeight,
@@ -112,6 +104,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageImageItem_()
                 .informationData(informationData)
                 .mediaData(data)
+                .clickListener { view -> callback?.onMediaClicked(data, view) }
     }
 
     private fun buildTextMessageItem(messageContent: MessageTextContent,

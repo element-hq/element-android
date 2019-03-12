@@ -20,6 +20,8 @@ import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
 import com.facebook.stetho.Stetho
+import com.github.piasy.biv.BigImageViewer
+import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.BuildConfig
 import im.vector.riotredesign.core.di.AppModule
@@ -38,6 +40,7 @@ class Riot : Application() {
             Stetho.initializeWithDefaults(this)
         }
         AndroidThreeTen.init(this)
+        BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
         val appModule = AppModule(applicationContext).definition
         val homeModule = HomeModule().definition
         startKoin(listOf(appModule, homeModule), logger = EmptyLogger())
