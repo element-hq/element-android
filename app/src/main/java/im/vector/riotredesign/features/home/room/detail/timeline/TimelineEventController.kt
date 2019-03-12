@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyModel
@@ -103,7 +104,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     interface Callback {
         fun onEventVisible(event: TimelineEvent, index: Int)
         fun onUrlClicked(url: String)
-        fun onMediaClicked(mediaData: MediaContentRenderer.Data)
+        fun onMediaClicked(mediaData: MediaContentRenderer.Data, view: View)
     }
 
 }

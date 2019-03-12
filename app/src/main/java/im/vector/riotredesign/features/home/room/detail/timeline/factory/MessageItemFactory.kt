@@ -104,7 +104,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageImageItem_()
                 .informationData(informationData)
                 .mediaData(data)
-                .clickListener { callback?.onMediaClicked(data) }
+                .clickListener { view -> callback?.onMediaClicked(data, view) }
     }
 
     private fun buildTextMessageItem(messageContent: MessageTextContent,

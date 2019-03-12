@@ -45,6 +45,7 @@ import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 import org.koin.core.parameter.parametersOf
 
+
 @Parcelize
 data class RoomDetailArgs(
         val roomId: String,
@@ -166,7 +167,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event, index))
     }
 
-    override fun onMediaClicked(mediaData: MediaContentRenderer.Data) {
+    override fun onMediaClicked(mediaData: MediaContentRenderer.Data, view: View) {
         val intent = MediaViewerActivity.newIntent(riotActivity, mediaData)
         startActivity(intent)
     }
