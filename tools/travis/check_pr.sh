@@ -23,7 +23,7 @@ branch=${TRAVIS_BRANCH}
 # If not on develop, exit, else we cannot get the list of modified files
 # It is ok to check only when on develop branch
 if [[ "${branch}" -eq 'develop' ]]; then
-    echo "Check that the file 'CHANGES.rst' has been modified"
+    echo "Check that the file 'CHANGES.md' has been modified"
 else
     echo "Not on develop branch"
     exit 0
@@ -37,9 +37,9 @@ listOfModifiedFiles=`git diff --name-only HEAD ${branch}`
 # echo ${listOfModifiedFiles}
 
 
-if [[ ${listOfModifiedFiles} = *"CHANGES.rst"* ]]; then
-  echo "CHANGES.rst has been modified!"
+if [[ ${listOfModifiedFiles} = *"CHANGES.md"* ]]; then
+  echo "CHANGES.md has been modified!"
 else
-  echo "❌ Please add a line describing your change in CHANGES.rst"
+  echo "❌ Please add a line describing your change in CHANGES.md"
   exit 1
 fi
