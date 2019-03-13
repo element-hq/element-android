@@ -54,7 +54,7 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
                     val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
 
-                    // The current chunk is the one we will keep all along the merge process.
+                    // The current chunk is the one we will keep all along the merge processChanges.
                     // We try to look for a chunk next to the token,
                     // otherwise we create a whole new one
 

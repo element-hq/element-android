@@ -20,10 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.room.timeline.TimelineEventInterceptor
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.api.session.room.timeline.TimelineData
-import im.vector.matrix.android.api.session.room.timeline.TimelineService
+import im.vector.matrix.android.api.session.room.timeline.*
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -37,6 +34,7 @@ import im.vector.matrix.android.internal.util.PagingRequestHelper
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import io.realm.Realm
 import io.realm.RealmQuery
+import io.realm.Sort
 
 private const val PAGE_SIZE = 100
 private const val PREFETCH_DISTANCE = 30
@@ -77,6 +75,10 @@ internal class DefaultTimelineService(private val roomId: String,
             val isLoadingBackward = status.after == PagingRequestHelper.Status.RUNNING
             TimelineData(events, isLoadingForward, isLoadingBackward)
         }
+    }
+
+    override fun createTimeline(eventId: String?): Timeline {
+        return DefaultTimeline(roomId, eventId, monarchy, taskExecutor, boundaryCallback, contextOfEventTask, roomMemberExtractor)
     }
 
     // PRIVATE FUNCTIONS ***************************************************************************
@@ -137,7 +139,7 @@ internal class DefaultTimelineService(private val roomId: String,
                     .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.BOTH)
                     .`in`("${EventEntityFields.CHUNK}.${ChunkEntityFields.EVENTS.EVENT_ID}", arrayOf(eventId))
         }
-        return query.sort(EventEntityFields.DISPLAY_INDEX)
+        return query.sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     }
 
 

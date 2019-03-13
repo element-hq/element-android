@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
-import im.vector.matrix.android.internal.database.mapper.updateWith
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -76,10 +75,6 @@ internal fun ChunkEntity.addAll(roomId: String,
     }
 }
 
-internal fun ChunkEntity.updateDisplayIndexes() {
-    events.forEachIndexed { index, eventEntity -> eventEntity.displayIndex = index }
-}
-
 internal fun ChunkEntity.add(roomId: String,
                              event: Event,
                              direction: PaginationDirection,
@@ -90,6 +85,12 @@ internal fun ChunkEntity.add(roomId: String,
     if (event.eventId.isNullOrEmpty() || events.fastContains(event.eventId)) {
         return
     }
+    var currentDisplayIndex = lastDisplayIndex(direction, 0)
+    if (direction == PaginationDirection.FORWARDS) {
+        currentDisplayIndex += 1
+    } else {
+        currentDisplayIndex -= 1
+    }
     var currentStateIndex = lastStateIndex(direction, defaultValue = stateIndexOffset)
     if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(event.type)) {
         currentStateIndex += 1
@@ -99,10 +100,13 @@ internal fun ChunkEntity.add(roomId: String,
             currentStateIndex -= 1
         }
     }
-    val eventEntity = event.toEntity(roomId)
-    eventEntity.updateWith(currentStateIndex, isUnlinked)
-    val position = if (direction == PaginationDirection.FORWARDS) 0 else this.events.size
-    events.add(position, eventEntity)
+    val eventEntity = event.toEntity(roomId).apply {
+        this.stateIndex = currentStateIndex
+        this.isUnlinked = isUnlinked
+        this.displayIndex = currentDisplayIndex
+    }
+    // We are not using the order of the list, but will be sorting with displayIndex field
+    events.add(eventEntity)
 }
 
 private fun ChunkEntity.assertIsManaged() {
@@ -111,9 +115,16 @@ private fun ChunkEntity.assertIsManaged() {
     }
 }
 
+internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
+    return when (direction) {
+        PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findFirst()?.displayIndex
+        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING).findFirst()?.displayIndex
+    } ?: defaultValue
+}
+
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
-               PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
+        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
+    } ?: defaultValue
 }

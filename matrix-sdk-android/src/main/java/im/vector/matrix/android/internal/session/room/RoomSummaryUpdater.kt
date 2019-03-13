@@ -44,7 +44,7 @@ internal class RoomSummaryUpdater(monarchy: Monarchy,
 
     override val query = Monarchy.Query<RoomEntity> { RoomEntity.where(it) }
 
-    override fun process(inserted: List<RoomEntity>, updated: List<RoomEntity>, deleted: List<RoomEntity>) {
+    override fun processChanges(inserted: List<RoomEntity>, updated: List<RoomEntity>, deleted: List<RoomEntity>) {
         val rooms = (inserted + updated).map { it.roomId }
         monarchy.writeAsync { realm ->
             rooms.forEach { updateRoom(realm, it) }
@@ -56,7 +56,7 @@ internal class RoomSummaryUpdater(monarchy: Monarchy,
             return
         }
         val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                          ?: realm.createObject(roomId)
+                ?: realm.createObject(roomId)
 
         val lastEvent = EventEntity.latestEvent(realm, roomId, includedTypes = listOf(EventType.MESSAGE))
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).last()?.asDomain()

@@ -59,7 +59,7 @@ internal fun EventEntity.Companion.latestEvent(realm: Realm,
         query?.not()?.`in`(EventEntityFields.TYPE, excludedTypes.toTypedArray())
     }
     return query
-            ?.sort(EventEntityFields.DISPLAY_INDEX)
+            ?.sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
             ?.findFirst()
 }
 

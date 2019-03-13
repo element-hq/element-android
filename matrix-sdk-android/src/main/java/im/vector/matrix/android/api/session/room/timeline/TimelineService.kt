@@ -32,4 +32,6 @@ interface TimelineService {
      */
     fun timeline(eventId: String? = null): LiveData<TimelineData>
 
+    fun createTimeline(eventId: String?): Timeline
+
 }

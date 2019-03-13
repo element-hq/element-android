@@ -42,7 +42,7 @@ internal class UserEntityUpdater(monarchy: Monarchy,
 
     }
 
-    override fun process(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
+    override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
         val roomMembersEvents = inserted.map { it.eventId }
         val taskParams = UpdateUserTask.Params(roomMembersEvents)
         updateUserTask
