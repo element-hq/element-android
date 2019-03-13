@@ -10,3 +10,5 @@
 /build
 /captures
 .externalNativeBuild
+
+/tmp
