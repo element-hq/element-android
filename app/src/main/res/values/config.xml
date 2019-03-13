@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="riot_app_name" translatable="false">Riot.im</string>
+    <string name="app_name" translatable="false">"Riot X"</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url" translatable="false">https://vector.im</string>

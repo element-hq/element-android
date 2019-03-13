@@ -113,7 +113,7 @@
             android:layout_toLeftOf="@id/sendButton"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
-            android:hint="Send a message"
+            android:hint="@string/room_message_placeholder_not_encrypted"
             android:minHeight="48dp"
             android:nextFocusLeft="@id/composerEditText"
             android:nextFocusUp="@id/composerEditText"

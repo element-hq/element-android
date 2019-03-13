@@ -23,13 +23,13 @@
         android:drawableLeft="@drawable/ic_expand_more_white"
         android:drawableTint="@color/bluey_grey_two"
         android:gravity="center_vertical"
-        android:text="DIRECT MESSAGES"
         android:textColor="@color/bluey_grey_two"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/roomCategoryUnreadCounterBadgeView"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/direct_chats_header" />
 
     <im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomCategoryUnreadCounterBadgeView"

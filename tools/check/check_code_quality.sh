@@ -73,7 +73,6 @@ echo "Search for forbidden patterns in resources..."
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_resources.txt \
     ./app/src/main/res/color \
     ./app/src/main/res/layout \
-    ./app/src/main/res/menu \
     ./app/src/main/res/values \
     ./app/src/main/res/values-v21 \
     ./app/src/main/res/xml
@@ -104,7 +103,7 @@ fi
 echo
 echo "Search for long files..."
 
-${checkLongFilesScript} 1000 \
+${checkLongFilesScript} 2000 \
     ./app/src/main/java \
     ./app/src/main/res/layout \
     ./app/src/main/res/values \

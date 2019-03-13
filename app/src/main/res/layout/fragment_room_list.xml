@@ -19,7 +19,7 @@
         android:drawableLeft="@drawable/ic_search_white"
         android:drawablePadding="8dp"
         android:drawableTint="#9fa9ba"
-        android:hint="Filter by name..."
+        android:hint="@string/home_filter_placeholder_rooms"
         android:lines="1"
         android:paddingLeft="8dp"
         app:layout_constraintBottom_toTopOf="@+id/stateView"

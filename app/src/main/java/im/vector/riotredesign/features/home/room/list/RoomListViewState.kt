@@ -57,11 +57,11 @@ data class RoomListViewState(
 typealias RoomSummaries = LinkedHashMap<RoomCategory, List<RoomSummary>>
 
 enum class RoomCategory(@StringRes val titleRes: Int) {
-    FAVOURITE(R.string.room_list_favourites),
-    DIRECT(R.string.room_list_direct),
-    GROUP(R.string.room_list_group),
-    LOW_PRIORITY(R.string.room_list_low_priority),
-    SERVER_NOTICE(R.string.room_list_system_alert)
+    FAVOURITE(R.string.bottom_action_favourites),
+    DIRECT(R.string.bottom_action_people),
+    GROUP(R.string.bottom_action_groups),
+    LOW_PRIORITY(R.string.low_priority_header),
+    SERVER_NOTICE(R.string.system_alerts_header)
 }
 
 fun RoomSummaries?.isNullOrEmpty(): Boolean {

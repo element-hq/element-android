@@ -41,7 +41,10 @@ internal data class PasswordLoginParams(@Json(name = "identifier") val identifie
         val IDENTIFIER_KEY_NUMBER = "number"
 
 
-        fun userIdentifier(user: String, password: String, deviceDisplayName: String? = null, deviceId: String? = null): PasswordLoginParams {
+        fun userIdentifier(user: String,
+                           password: String,
+                           deviceDisplayName: String? = null,
+                           deviceId: String? = null): PasswordLoginParams {
             val identifier = HashMap<String, String>()
             identifier[IDENTIFIER_KEY_TYPE] = IDENTIFIER_KEY_TYPE_USER
             identifier[IDENTIFIER_KEY_USER] = user
@@ -49,7 +52,11 @@ internal data class PasswordLoginParams(@Json(name = "identifier") val identifie
 
         }
 
-        fun thirdPartyIdentifier(medium: String, address: String, password: String, deviceDisplayName: String? = null, deviceId: String? = null): PasswordLoginParams {
+        fun thirdPartyIdentifier(medium: String,
+                                 address: String,
+                                 password: String,
+                                 deviceDisplayName: String? = null,
+                                 deviceId: String? = null): PasswordLoginParams {
             val identifier = HashMap<String, String>()
             identifier[IDENTIFIER_KEY_TYPE] = IDENTIFIER_KEY_TYPE_THIRD_PARTY
             identifier[IDENTIFIER_KEY_MEDIUM] = medium
@@ -58,6 +65,4 @@ internal data class PasswordLoginParams(@Json(name = "identifier") val identifie
 
         }
     }
-
-
 }
