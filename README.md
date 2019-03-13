@@ -5,4 +5,4 @@ It's based on a new Matrix SDK, written in Kotlin.
 
 Download nighly build here: https://matrix.org/jenkins/job/RiotXAndroidDevelop/
 
-RiotX Matrix Room : https://matrix.to/#/!tTIucwUZLRtKnXeurb:matrix.org
+Matrix Room: [#riotx:matrix.org](https://matrix.to/#/#riotx:matrix.org)
