@@ -1,4 +1,4 @@
-# FTR: Configuration on https://travis-ci.org/vector-im/riot-android/settings
+# FTR: Configuration on https://travis-ci.org/vector-im/riotX-android/settings
 #
 # - Build only if .travis.yml is present -> On
 # - Limit concurrent jobs                -> Off
