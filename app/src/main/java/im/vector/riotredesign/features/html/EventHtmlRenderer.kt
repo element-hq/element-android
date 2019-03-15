@@ -73,40 +73,40 @@ private class MatrixPlugin private constructor(private val glideRequests: GlideR
 
     override fun configureHtmlRenderer(builder: MarkwonHtmlRenderer.Builder) {
         builder
-                .addHandler(
+                .setHandler(
                         "img",
                         ImageHandler.create())
-                .addHandler(
+                .setHandler(
                         "a",
                         MxLinkHandler(glideRequests, context, session))
-                .addHandler(
+                .setHandler(
                         "blockquote",
                         BlockquoteHandler())
-                .addHandler(
+                .setHandler(
                         "sub",
                         SubScriptHandler())
-                .addHandler(
+                .setHandler(
                         "sup",
                         SuperScriptHandler())
-                .addHandler(
+                .setHandler(
                         asList<String>("b", "strong"),
                         StrongEmphasisHandler())
-                .addHandler(
+                .setHandler(
                         asList<String>("s", "del"),
                         StrikeHandler())
-                .addHandler(
+                .setHandler(
                         asList<String>("u", "ins"),
                         UnderlineHandler())
-                .addHandler(
+                .setHandler(
                         asList<String>("ul", "ol"),
                         ListHandler())
-                .addHandler(
+                .setHandler(
                         asList<String>("i", "em", "cite", "dfn"),
                         EmphasisHandler())
-                .addHandler(
+                .setHandler(
                         asList<String>("h1", "h2", "h3", "h4", "h5", "h6"),
                         HeadingHandler())
-                .addHandler("mx-reply",
+                .setHandler("mx-reply",
                             MxReplyTagHandler())
 
     }
