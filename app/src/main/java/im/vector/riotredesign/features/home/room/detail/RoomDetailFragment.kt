@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
@@ -36,6 +35,7 @@ import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.animation.TimelineItemAnimator
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import im.vector.riotredesign.features.media.MediaViewerActivity
 import kotlinx.android.parcel.Parcelize
@@ -80,7 +80,6 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         setupRecyclerView()
         setupToolbar()
         setupSendButton()
-        timelineEventController.requestModelBuild()
         roomDetailViewModel.subscribe { renderState(it) }
     }
 
@@ -111,6 +110,11 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
         }
+        recyclerView.addOnScrollListener(object : EndlessRecyclerViewScrollListener(layoutManager, EndlessRecyclerViewScrollListener.LoadOnScrollDirection.BOTTOM) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int) {
+                roomDetailViewModel.process(RoomDetailActions.LoadMore)
+            }
+        })
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
     }
@@ -119,29 +123,16 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         sendButton.setOnClickListener {
             val textMessage = composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
-                composerEditText.text = null
                 roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage))
+                composerEditText.text = null
             }
         }
     }
 
     private fun renderState(state: RoomDetailViewState) {
         renderRoomSummary(state)
-        renderTimeline(state)
-    }
-
-    private fun renderTimeline(state: RoomDetailViewState) {
-        when (state.asyncTimelineData) {
-            is Success -> {
-                val timelineData = state.asyncTimelineData()
-                val lockAutoScroll = timelineData?.let {
-                    it.events == timelineEventController.currentList && it.isLoadingForward
-                } ?: true
-
-                scrollOnNewMessageCallback.isLocked.set(lockAutoScroll)
-                timelineEventController.update(timelineData)
-            }
-        }
+        timelineEventController.setTimeline(state.timeline)
+        //renderTimeline(state)
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
@@ -163,8 +154,8 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         homePermalinkHandler.launch(url)
     }
 
-    override fun onEventVisible(event: TimelineEvent, index: Int) {
-        roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event, index))
+    override fun onEventVisible(event: TimelineEvent) {
+        roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event))
     }
 
     override fun onMediaClicked(mediaData: MediaContentRenderer.Data, view: View) {

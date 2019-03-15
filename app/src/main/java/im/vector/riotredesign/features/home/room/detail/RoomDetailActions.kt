@@ -22,6 +22,7 @@ sealed class RoomDetailActions {
 
     data class SendMessage(val text: String) : RoomDetailActions()
     object IsDisplayed : RoomDetailActions()
-    data class EventDisplayed(val event: TimelineEvent, val index: Int) : RoomDetailActions()
+    data class EventDisplayed(val event: TimelineEvent) : RoomDetailActions()
+    object LoadMore: RoomDetailActions()
 
 }

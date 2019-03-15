@@ -20,13 +20,16 @@ package im.vector.matrix.android.api.session.room.timeline
 
 interface Timeline {
 
+    var listener: Timeline.Listener?
+
+    fun size(): Int
+    fun snapshot(): List<TimelineEvent>
     fun paginate(direction: Direction, count: Int)
-    fun addListener(listener: Listener)
-    fun removeListener(listener: Listener)
-    fun removeAllListeners()
+    fun start()
+    fun dispose()
 
     interface Listener {
-
+        fun onUpdated(snapshot: List<TimelineEvent>)
     }
 
     enum class Direction(val value: String) {

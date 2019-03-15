@@ -16,20 +16,17 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
-import androidx.lifecycle.LiveData
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.room.timeline.*
-import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.api.session.room.timeline.Timeline
+import im.vector.matrix.android.api.session.room.timeline.TimelineEventInterceptor
+import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.LiveDataUtils
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import io.realm.Realm
@@ -43,42 +40,16 @@ private const val EVENT_NOT_FOUND_INDEX = -1
 internal class DefaultTimelineService(private val roomId: String,
                                       private val monarchy: Monarchy,
                                       private val taskExecutor: TaskExecutor,
-                                      private val boundaryCallback: TimelineBoundaryCallback,
                                       private val contextOfEventTask: GetContextOfEventTask,
-                                      private val roomMemberExtractor: RoomMemberExtractor
+                                      private val timelineEventFactory: TimelineEventFactory,
+                                      private val paginationTask: PaginationTask,
+                                      private val helper: PagingRequestHelper
 ) : TimelineService {
 
     private val eventInterceptors = ArrayList<TimelineEventInterceptor>()
 
-    override fun timeline(eventId: String?): LiveData<TimelineData> {
-        clearUnlinkedEvents()
-        val initialLoadKey = getInitialLoadKey(eventId)
-        val realmDataSourceFactory = monarchy.createDataSourceFactory {
-            buildDataSourceFactoryQuery(it, eventId)
-        }
-        val domainSourceFactory = realmDataSourceFactory
-                .map { eventEntity ->
-                    val roomMember = roomMemberExtractor.extractFrom(eventEntity)
-                    TimelineEvent(eventEntity.asDomain(), eventEntity.localId, roomMember)
-                }
-
-        val pagedListConfig = buildPagedListConfig()
-
-        val livePagedListBuilder = LivePagedListBuilder(domainSourceFactory, pagedListConfig)
-                .setBoundaryCallback(boundaryCallback)
-                .setInitialLoadKey(initialLoadKey)
-
-        val eventsLiveData = monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
-
-        return LiveDataUtils.combine(eventsLiveData, boundaryCallback.status) { events, status ->
-            val isLoadingForward = status.before == PagingRequestHelper.Status.RUNNING
-            val isLoadingBackward = status.after == PagingRequestHelper.Status.RUNNING
-            TimelineData(events, isLoadingForward, isLoadingBackward)
-        }
-    }
-
     override fun createTimeline(eventId: String?): Timeline {
-        return DefaultTimeline(roomId, eventId, monarchy, taskExecutor, boundaryCallback, contextOfEventTask, roomMemberExtractor)
+        return DefaultTimeline(roomId, eventId, monarchy.realmConfiguration, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask, helper)
     }
 
     // PRIVATE FUNCTIONS ***************************************************************************
@@ -124,7 +95,8 @@ internal class DefaultTimelineService(private val roomId: String,
     private fun indexOfEvent(eventId: String): Int {
         var displayIndex = EVENT_NOT_FOUND_INDEX
         monarchy.doWithRealm {
-            displayIndex = EventEntity.where(it, eventId = eventId).findFirst()?.displayIndex ?: EVENT_NOT_FOUND_INDEX
+            displayIndex = EventEntity.where(it, eventId = eventId).findFirst()?.displayIndex
+                           ?: EVENT_NOT_FOUND_INDEX
         }
         return displayIndex
     }

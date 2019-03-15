@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.util.PagingRequestHelper
 import im.vector.matrix.android.testCoroutineDispatchers
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

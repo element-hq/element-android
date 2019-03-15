@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicReference
 internal interface LiveEntityObserver {
     fun start()
     fun dispose()
+    fun isStarted(): Boolean
 }
 
 internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val monarchy: Monarchy)
@@ -54,6 +55,10 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
                 results.getAndSet(null).removeAllChangeListeners()
             }
         }
+    }
+
+    override fun isStarted(): Boolean {
+        return isStarted.get()
     }
 
     protected open fun onChanged(realmResults: RealmResults<T>, changeSet: OrderedCollectionChangeSet) {

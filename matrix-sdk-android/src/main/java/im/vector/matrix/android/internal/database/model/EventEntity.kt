@@ -18,12 +18,13 @@ package im.vector.matrix.android.internal.database.model
 
 import io.realm.RealmObject
 import io.realm.RealmResults
+import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 import java.util.*
 
 internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUID().toString(),
-                                var eventId: String = "",
+                                @Index var eventId: String = "",
                                 var roomId: String = "",
                                 var type: String = "",
                                 var content: String? = null,

@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
+import io.realm.kotlin.createObject
 
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Boolean> {
 
@@ -60,7 +61,7 @@ internal class DefaultLoadRoomMembersTask(private val roomAPI: RoomAPI,
                 .tryTransactionSync { realm ->
                     // We ignore all the already known members
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                            ?: throw IllegalStateException("You shouldn't use this method without a room")
+                                     ?: realm.createObject(roomId)
 
                     val roomMembers = RoomMembers(realm, roomId).getLoaded()
                     val eventsToInsert = response.roomMemberEvents.filter { !roomMembers.containsKey(it.stateKey) }
@@ -73,9 +74,9 @@ internal class DefaultLoadRoomMembersTask(private val roomAPI: RoomAPI,
 
     private fun areAllMembersAlreadyLoaded(roomId: String): Boolean {
         return monarchy
-                .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
-                .firstOrNull()
-                ?.areAllMembersLoaded ?: false
+                       .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
+                       .firstOrNull()
+                       ?.areAllMembersLoaded ?: false
     }
 
 }

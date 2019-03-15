@@ -25,7 +25,7 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager)
     var isLocked = AtomicBoolean(true)
 
     override fun onInserted(position: Int, count: Int) {
-        if (isLocked.compareAndSet(false, true) && position == 0 && layoutManager.findFirstVisibleItemPosition() == 0) {
+        if (position == 0 && layoutManager.findFirstVisibleItemPosition() == 0) {
             layoutManager.scrollToPosition(0)
         }
     }

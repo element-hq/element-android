@@ -28,7 +28,7 @@ import im.vector.matrix.android.internal.session.room.send.EventFactory
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.TimelineBoundaryCallback
+import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.PagingRequestHelper
 import java.util.concurrent.Executors
@@ -44,9 +44,9 @@ internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
 
     fun instantiate(roomId: String): Room {
         val helper = PagingRequestHelper(Executors.newSingleThreadExecutor())
-        val timelineBoundaryCallback = TimelineBoundaryCallback(roomId, taskExecutor, paginationTask, monarchy, helper)
         val roomMemberExtractor = RoomMemberExtractor(monarchy, roomId)
-        val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, timelineBoundaryCallback, contextOfEventTask, roomMemberExtractor)
+        val timelineEventFactory = TimelineEventFactory(roomMemberExtractor)
+        val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask, helper)
         val sendService = DefaultSendService(roomId, eventFactory, monarchy)
         val readService = DefaultReadService(roomId, monarchy, setReadMarkersTask, taskExecutor)
         return DefaultRoom(
