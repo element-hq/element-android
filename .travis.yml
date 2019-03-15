@@ -23,10 +23,10 @@ android:
     - platform-tools
 
     # The BuildTools version used by your project
-    - build-tools-27.0.3
+    - build-tools-28.0.3
 
     # The SDK version used to compile your project
-    - android-27
+    - android-28
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -45,9 +45,9 @@ before_script:
 
 # Just build the project for now
 script:
-  # Build app (assembleAppRelease assembleAppfdroidRelease)
+  # Build app (assembleAppgplayRelease assembleAppfdroidRelease)
   # Build Android test (assembleAndroidTest)
-  # Code quality (lintAppRelease lintAppfdroidRelease)
+  # Code quality (lintAppgplayRelease lintAppfdroidRelease)
   - ./gradlew clean assembleAppgplayRelease assembleAppfdroidRelease assembleAndroidTest lintAppgplayRelease lintAppfdroidRelease --stacktrace
   # Run unitary test (Disable for now, see https://travis-ci.org/vector-im/riot-android/builds/502504370)
   # - ./gradlew testAppgplayReleaseUnitTest --stacktrace
