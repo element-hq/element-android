@@ -15,7 +15,7 @@ def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
 
-def getGitTimestamp() {
+static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
     return cmd.execute().text.trim() as Long
 }
