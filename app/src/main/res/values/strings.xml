@@ -1,11 +1,5 @@
 <resources>
 
-    <!-- Strings not defined in Riot -->
-    <string name="global_retry">"Retry"</string>
-    <string name="room_list_empty">"Join a room to start using the app."</string>
-
-    <!-- Strings imported from Riot -->
-
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
