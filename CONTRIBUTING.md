@@ -2,9 +2,9 @@
 
 Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst
 
-Android support can be found in this [![Riot Android Matrix room #riot-android:matrix.org](https://img.shields.io/matrix/riot-android:matrix.org.svg?label=%23riot-android:matrix.org)](https://matrix.to/#/#riot-android:matrix.org) room.
+Android support can be found in this [![Riot Android Matrix room #riot-android:matrix.org](https://img.shields.io/matrix/riot-android:matrix.org.svg?label=%23riot-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#riot-android:matrix.org) room.
 
-Dedicated room for RiotX: [![RiotX Android Matrix room #riot-android:matrix.org](https://img.shields.io/matrix/riotx:matrix.org.svg?label=%23RiotX:matrix.org)](https://matrix.to/#/#riotx:matrix.org)
+Dedicated room for RiotX: [![RiotX Android Matrix room #riot-android:matrix.org](https://img.shields.io/matrix/riotx:matrix.org.svg?label=%23RiotX:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#riotx:matrix.org)
 
 # Specific rules for Matrix Android projects
 
