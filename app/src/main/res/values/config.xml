@@ -8,7 +8,8 @@
     <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
     <string name="default_hs_server_url" translatable="false">https://matrix.org</string>
     <string name="default_identity_server_url" translatable="false">https://vector.im</string>
-    <string name="piwik_server_url" translatable="false">"https://piwik.riot.im"</string>
+    <string name="piwik_server_url" translatable="false">https://piwik.riot.im</string>
+    <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
 
     <!-- Widget urls -->
     <string name="integrations_ui_url" translatable="false">"https://scalar-staging.riot.im/scalar-web/"</string>
