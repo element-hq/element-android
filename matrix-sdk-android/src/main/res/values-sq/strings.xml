@@ -1,2 +1,86 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s dërgoi një figurë.</string>
+    <string name="notice_room_invite">%1$s ftoi %2$s</string>
+    <string name="notice_room_invite_you">%1$s ju ftoi</string>
+    <string name="notice_room_join">%1$s u bë pjesë</string>
+    <string name="notice_room_leave">%1$s iku</string>
+    <string name="notice_room_reject">%1$s hodhi tej ftesën</string>
+    <string name="notice_room_kick">%1$s përzuri %2$s</string>
+    <string name="notice_room_ban">%1$s dëboi %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s ndryshoi avatarin e vet</string>
+    <string name="notice_room_topic_changed">%1$s ndryshoi temën në: %2$s</string>
+    <string name="notice_room_name_changed">%1$s ndryshoi emrin e dhomës në: %2$s</string>
+    <string name="notice_placed_video_call">%s bëri një thirrje video.</string>
+    <string name="notice_placed_voice_call">%s bëri një thirrje zanore.</string>
+    <string name="notice_answered_call">%s iu përgjigj thirrjes.</string>
+    <string name="notice_ended_call">%s e përfundoi thirrjen.</string>
+    <string name="notice_made_future_room_visibility">%1$s e bëri historikun e ardhshëm të dhomës të dukshëm për %2$s</string>
+    <string name="notice_room_visibility_invited">për krejt anëtarët e dhomës, prej çastit kur janë ftuar.</string>
+    <string name="notice_room_visibility_joined">për krejt anëtarët e dhomës, prej çastit kur morën pjesë.</string>
+    <string name="notice_room_visibility_shared">krejt anëtarët e dhomës.</string>
+    <string name="notice_room_visibility_world_readable">cilido.</string>
+    <string name="notice_room_visibility_unknown">e panjohur (%s).</string>
+    <string name="notice_requested_voip_conference">%1$s kërkoi një konferencë VoIP</string>
+    <string name="notice_voip_started">Konferenca VoIP filloi</string>
+    <string name="notice_voip_finished">Konferenca VoIP përfundoi</string>
+
+    <string name="notice_avatar_changed_too">(u ndryshua edhe avatari)</string>
+    <string name="notice_room_name_removed">%1$s hoqi emrin e dhomës</string>
+    <string name="notice_event_redacted_by">" nga %1$s"</string>
+    <string name="notice_event_redacted_reason">" [arsye: %1$s]"</string>
+    <string name="notice_profile_change_redacted">%1$s përditësoi profilin e tij %2$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s pranoi ftesën tuaj për %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** S’arrihet të shfshehtëzohet: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Pajisja e dërguesit nuk na ka dërguar kyçet për këtë mesazh.</string>
+
+    <string name="message_reply_to_prefix">Në përgjigje të</string>
+
+    <string name="could_not_redact">S’u redaktua dot</string>
+    <string name="unable_to_send_message">S’arrihet të dërgohet mesazh</string>
+
+    <string name="message_failed_to_upload">S’u arrit të ngarkohej figurë</string>
+
+    <string name="network_error">Gabim rrjeti</string>
+    <string name="matrix_error">Gabim Matrix</string>
+
+    <string name="room_error_join_failed_empty_room">Hëpërhë s’është e mundur të rihyhet në një dhomë të zbrazët.</string>
+
+    <string name="encrypted_message">U fshehtëzua mesazhi</string>
+
+    <string name="medium_email">Adresë email</string>
+    <string name="medium_phone_number">Numër telefoni</string>
+
+    <string name="reply_to_an_image">dërgoi një figurë.</string>
+    <string name="reply_to_a_video">dërgoi një video.</string>
+    <string name="reply_to_an_audio_file">dërgoi një kartelë audio.</string>
+    <string name="reply_to_a_file">dërgoi një kartelë.</string>
+
+    <string name="room_displayname_invite_from">Ftesë nga %s</string>
+    <string name="room_displayname_room_invite">Ftesë Dhome</string>
+
+    <string name="room_displayname_two_members">%1$s dhe %2$s</string>
+
+    <string name="room_displayname_empty_room">Dhomë e zbrazët</string>
+
+    <string name="summary_user_sent_sticker">%1$s dërgoi një ngjitës.</string>
+
+    <string name="notice_room_invite_no_invitee">Ftesë e %s</string>
+    <string name="notice_room_unban">%1$s hoqi dëbimin për %2$s</string>
+    <string name="notice_room_withdraw">%1$s tërhoqi mbrapsht ftesën për %2$s</string>
+    <string name="notice_display_name_set">%1$s caktoi për veten emër ekrani %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s ndryshoi emrin e tyre në ekran nga %2$s në %3$s</string>
+    <string name="notice_display_name_removed">%1$s hoqi emrin e tij në ekran (%2$s)</string>
+    <string name="notice_end_to_end">%1$s aktivizoi fshehtëzim skaj-më-skaj (%2$s)</string>
+
+    <string name="notice_room_topic_removed">%1$s hoqi temën e dhomës</string>
+    <string name="notice_event_redacted">"redaktoi %1$s "</string>
+    <string name="notice_room_third_party_invite">%1$s dërgoi një ftesë për %2$s që të marrë pjesë në dhomë</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s dhe 1 tjetër</item>
+        <item quantity="other">%1$s dhe %2$d të tjerë</item>
+    </plurals>
+
+</resources>

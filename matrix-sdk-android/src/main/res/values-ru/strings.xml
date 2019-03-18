@@ -1,10 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="matrix_sdk_app_name">Matrix Android SDK</string>
 
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s отправил(а) изображение.</string>
-    
+
     <string name="notice_room_invite_no_invitee">%s приглашение</string>
     <string name="notice_room_invite">%1$s пригласил(а) %2$s</string>
     <string name="notice_room_invite_you">%1$s пригласил(а) вас</string>
@@ -32,11 +31,11 @@
     <string name="notice_room_visibility_world_readable">всем.</string>
     <string name="notice_room_visibility_unknown">неизвестно (%s).</string>
     <string name="notice_end_to_end">%1$s включил(а) сквозное шифрование (%2$s)</string>
-    
+
     <string name="notice_requested_voip_conference">%1$s запросил(а) VoIP конференцию</string>
     <string name="notice_voip_started">VoIP-конференция начата</string>
     <string name="notice_voip_finished">VoIP-конференция завершена</string>
-    
+
     <string name="notice_avatar_changed_too">(аватар также был изменен)</string>
     <string name="notice_room_name_removed">%1$s удалил(а) название комнаты</string>
     <string name="notice_room_topic_removed">%1$s удалил(а) тему комнаты</string>
@@ -46,16 +45,16 @@
     <string name="notice_profile_change_redacted">%1$s обновил(а) свой профиль %2$s</string>
     <string name="notice_room_third_party_invite">%1$s отправил(а) приглашение %2$s присоединиться к комнате</string>
     <string name="notice_room_third_party_registered_invite">%1$s принял(а) приглашение от %2$s</string>
-    
+
     <string name="notice_crypto_unable_to_decrypt">** Невозможно расшифровать: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Устройство отправителя не предоставило нам ключ для расшифровки этого сообщения.</string>
-    
+
     <!-- Room Screen -->
     <string name="could_not_redact">Не удалось изменить</string>
     <string name="unable_to_send_message">Не удалось отправить сообщение</string>
 
     <string name="message_failed_to_upload">Не удалось загрузить изображение</string>
-    
+
     <!-- general errors -->
     <string name="network_error">Сетевая ошибка</string>
     <string name="matrix_error">Ошибка Matrix</string>
@@ -68,9 +67,9 @@
 
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">В настоящее время невозможно вновь присоединиться к пустой комнате.</string>
-    
+
     <string name="encrypted_message">Зашифрованное сообщение</string>
-    
+
     <!-- medium friendly name -->
     <string name="medium_email">Адрес электронной почты</string>
     <string name="medium_phone_number">Номер телефона</string>
@@ -83,5 +82,19 @@
     <string name="reply_to_a_video">отправил видео.</string>
     <string name="reply_to_an_audio_file">отправил аудиофайл.</string>
     <string name="reply_to_a_file">отправил файл.</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Приглашение от %s</string>
+    <string name="room_displayname_room_invite">Приглашение в комнату</string>
+    <string name="room_displayname_two_members">%1$s и %2$s</string>
+    <string name="room_displayname_empty_room">Пустая комната</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s и 1 другой</item>
+        <item quantity="few">%1$s и %2$d другие</item>
+        <item quantity="many">%1$s и %2$d других</item>
+        <item quantity="other" />
+    </plurals>
+
 
 </resources>

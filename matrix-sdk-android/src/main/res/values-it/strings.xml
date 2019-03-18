@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
-
+<resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s ha inviato un\'immagine.</string>
 
@@ -39,8 +38,8 @@
     <string name="notice_avatar_changed_too">(anche l\'avatar è cambiato)</string>
     <string name="notice_room_name_removed">%1$s ha rimosso il nome della stanza</string>
     <string name="notice_room_topic_removed">%1$s ha rimosso l\'argomento della stanza</string>
-    <string name="notice_event_redacted_by">" da %1$s"</string>
-    <string name="notice_event_redacted_reason">" [motivo: %1$s]"</string>
+    <string name="notice_event_redacted_by">da %1$s</string>
+    <string name="notice_event_redacted_reason">[motivo: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s ha aggiornato il profilo %2$s</string>
     <string name="notice_room_third_party_invite">%1$s ha mandato un invito a %2$s per unirsi alla stanza</string>
     <string name="notice_room_third_party_registered_invite">%1$s ha accettato l\'invito per %2$s</string>
@@ -63,7 +62,7 @@
     <string name="medium_email">Indirizzo email</string>
     <string name="medium_phone_number">Numero di telefono</string>
 
-<string name="notice_event_redacted">"revisionato %1$s "</string>
+    <string name="notice_event_redacted">revisionato %1$s</string>
     <string name="summary_user_sent_sticker">%1$s ha inviato un adesivo.</string>
 
     <string name="message_reply_to_prefix">In risposta a</string>
@@ -72,5 +71,17 @@
     <string name="reply_to_a_video">inviato un video.</string>
     <string name="reply_to_an_audio_file">inviato un file audio.</string>
     <string name="reply_to_a_file">inviato un file.</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Invito da %s</string>
+    <string name="room_displayname_room_invite">Invito nella stanza</string>
+    <string name="room_displayname_two_members">%1$s e %2$s</string>
+    <string name="room_displayname_empty_room">Stanza vuota</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s e 1 altro</item>
+        <item quantity="other">%1$s e %2$d altri</item>
+    </plurals>
+
 
 </resources>

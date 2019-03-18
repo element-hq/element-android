@@ -1,0 +1,1317 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">tr</string>
+    <string name="resources_country_code">TR</string>
+
+    <string name="light_theme">Açık Tema</string>
+    <string name="dark_theme">Koyu Tema</string>
+    <string name="black_them">Siyah Tema</string>
+
+    <string name="notification_sync_in_progress">Eşzamanlama (senkronizasyon)</string>
+    <string name="notification_listening_for_events">Olaylar dinleniyor</string>
+    <string name="notification_noisy_notifications">Sesli bildirimler</string>
+    <string name="notification_silent_notifications">Sessiz bildirimler</string>
+
+    <string name="title_activity_home">Mesajlar</string>
+    <string name="title_activity_room">Oda</string>
+    <string name="title_activity_settings">Ayarlar</string>
+    <string name="title_activity_member_details">Üye Ayrıntıları</string>
+    <string name="title_activity_historical">Tarihsel</string>
+    <string name="title_activity_bug_report">Hata raporu</string>
+    <string name="title_activity_group_details">Topluluk ayrıntıları</string>
+
+    <string name="loading">Yükleniyor…</string>
+
+    <string name="ok">Tamam</string>
+    <string name="cancel">İptal</string>
+    <string name="save">Kaydet</string>
+    <string name="room_jump_to_first_unread">Okunmamış ilk mesaja git.</string>
+
+    <string name="title_activity_choose_sticker">Çıkartma gönder</string>
+
+    <string name="dialog_title_third_party_licences">3. parti lisansları</string>
+
+    <string name="leave">Ayrıl</string>
+    <string name="send">Gönder</string>
+    <string name="copy">Kopyala</string>
+    <string name="resend">Tekrar gönder</string>
+    <string name="redact">Sil</string>
+    <string name="quote">Alıntı</string>
+    <string name="download">İndir</string>
+    <string name="share">Paylaş</string>
+    <string name="speak">Konuş</string>
+    <string name="clear">Temizle</string>
+    <string name="later">Sonra</string>
+    <string name="forward">İleri</string>
+    <string name="permalink">Kalıcı bağlantı</string>
+    <string name="view_source">Kaynağı İncele</string>
+    <string name="view_decrypted_source">Deşifre Edilmiş Kaynağı İncele</string>
+    <string name="delete">Sil</string>
+    <string name="rename">Yeniden Adlandır</string>
+    <string name="report_content">İçeriği bildir</string>
+    <string name="active_call">Şu anki görüşme</string>
+    <string name="ongoing_conference_call">Devam eden konferans görüşmesi.\n%1$s veya %2$s katıl.</string>
+    <string name="ongoing_conference_call_voice">Sesli</string>
+    <string name="ongoing_conference_call_video">görüntülü</string>
+    <string name="cannot_start_call">Görüşme başlatılamıyor, lütfen sonra tekrar deneyin</string>
+    <string name="missing_permissions_warning">Eksik izinler nedeni ile bazı özellikler eksik olabilir…</string>
+    <string name="missing_permissions_to_start_conf_call">Bu odada bir konferans başlatma davetiyesi göndermek için izniniz olması gerekmektedir</string>
+    <string name="missing_permissions_title_to_start_conf_call">Arama gerçekleştirilemiyor</string>
+    <string name="device_information">Cihaz ayrıntıları</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferans görüşmeleri şifreli (encrypted) odalarda desteklenmiyor</string>
+    <string name="send_anyway">Ne olursa olsun gönder</string>
+    <string name="or">veya</string>
+    <string name="invite">Davet et</string>
+    <string name="offline">Çevrimdışı</string>
+
+    <string name="action_exit">Çık</string>
+    <string name="actions">Aksiyonlar</string>
+    <string name="action_sign_out">Hesaptan çık</string>
+    <string name="action_voice_call">Sesli Arama</string>
+    <string name="action_video_call">Görüntülü Arama</string>
+    <string name="action_global_search">Global arama</string>
+    <string name="action_mark_all_as_read">Hepsini okunmuş olarak işaretle</string>
+    <string name="action_historical">Tarihsel</string>
+    <string name="action_quick_reply">Hızlı yanıt</string>
+    <string name="action_open">Aç</string>
+    <string name="action_close">Kapa</string>
+    <string name="copied_to_clipboard">Panoya kopyalandı</string>
+    <string name="disable">Etkisizleştir</string>
+
+    <string name="dialog_title_confirmation">Onay</string>
+    <string name="dialog_title_warning">Uyarı</string>
+
+    <string name="bottom_action_home">Ev</string>
+    <string name="bottom_action_favourites">Favoriler</string>
+    <string name="bottom_action_people">Kişiler</string>
+    <string name="bottom_action_rooms">Odalar</string>
+    <string name="bottom_action_groups">Topluluklar</string>
+
+    <string name="home_filter_placeholder_home">Odaları ara</string>
+    <string name="home_filter_placeholder_favorites">Favorileri ara</string>
+    <string name="home_filter_placeholder_people">Kişileri ara</string>
+    <string name="home_filter_placeholder_rooms">Odaları ara</string>
+    <string name="home_filter_placeholder_groups">Toplulukları ara</string>
+
+    <string name="invitations_header">Davetler</string>
+    <string name="low_priority_header">Düşük öncelik</string>
+
+    <string name="direct_chats_header">Konuşmalar</string>
+    <string name="local_address_book_header">Yerel adres defteri</string>
+    <string name="user_directory_header">Kullanıcı sözlüğü</string>
+    <string name="matrix_only_filter">Sadece Matrix kullanıcıları</string>
+    <string name="no_conversation_placeholder">Konuşma yok</string>
+    <string name="no_contact_access_placeholder">Riot\'un yerel rehbere erişmesine izin vermediniz</string>
+    <string name="no_result_placeholder">Sonuç yok</string>
+
+    <string name="rooms_header">Odalar</string>
+    <string name="rooms_directory_header">Odalar dizini</string>
+    <string name="no_room_placeholder">Oda yok</string>
+    <string name="no_public_room_placeholder">Hiç girilebilir oda yok</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">kullanıcı</item>
+        <item quantity="other">kullanıcı</item>
+    </plurals>
+
+    <string name="groups_invite_header">Davet</string>
+    <string name="groups_header">Topluluk</string>
+    <string name="no_group_placeholder">Grup yok</string>
+
+    <string name="send_bug_report_include_logs">Sistem günlüğünü (log) gönder</string>
+    <string name="send_bug_report_include_crash_logs">Çökme günlüğünü (crash log) gönder</string>
+    <string name="send_bug_report_include_screenshot">Ekran görüntüsünü gönder</string>
+    <string name="send_bug_report">Hata Bildir</string>
+    <string name="send_bug_report_description">Lütfen hatayı tanımlayın. Ne yaptınız? Ne olmasını beklediniz? Ne oldu?</string>
+    <string name="send_bug_report_description_in_english">Mümkünse, lütfen yapacağınız açıklamayı İngilizce yazın.</string>
+    <string name="send_bug_report_placeholder">Sorununu buraya yaz</string>
+    <string name="send_bug_report_logs_description">Sorunları teşhis etmek için bu istemciden gelen sistem günlüğü (log) hata raporu ile gönderilecek. Bu hata raporu -sistem günlüğü ve ekran görüntülere dahil- halka açık bir şekilde görünür olmayacaktır. Eğer sadece alttaki yazıları göndermek istiyorsanız, lütfen şunun işaretini kaldırın:</string>
+    <string name="send_bug_report_alert_message">Telefonunu öfkeyle ile sallıyor gibi görünüyorsun. Hata raporu göndermek ister misin\?</string>
+    <string name="send_bug_report_app_crashed">Uygulama en son çökmüştü, hata raporu göndermek ister misiniz\?</string>
+    <string name="send_bug_report_rage_shake">Hata bildirmek için öfkeyle salla</string>
+
+    <string name="send_bug_report_sent">Hata raporu başarılı bir şekilde gönderildi</string>
+    <string name="send_bug_report_failed">Hata raporu gönderilemedi (%s)</string>
+    <string name="send_bug_report_progress">Süreç (%%%s)</string>
+
+    <string name="read_receipt">Oku</string>
+
+    <string name="join_room">Odaya Katıl</string>
+    <string name="username">Kullanıcı adı</string>
+    <string name="create_account">Kayıt</string>
+    <string name="login">Giriş yap</string>
+    <string name="logout">Çıkış yap</string>
+    <string name="hs_url">Ev Sunucusu URL\'si</string>
+    <string name="search">Ara</string>
+
+    <string name="start_new_chat">Yeni Sohbete Başla</string>
+    <string name="start_voice_call">Sesli Görüşme Başlat</string>
+    <string name="start_video_call">Görüntülü Görüşme Başlat</string>
+
+    <string name="option_send_voice">Sesli mesej gönder</string>
+
+    <string name="start_new_chat_prompt_msg">%s kullanıcısı ile yeni bir sohbet başlatmak istediğinize emin misiniz?</string>
+    <string name="start_voice_call_prompt_msg">Sesli görüşme başlatmak istediğinize emin misiniz?</string>
+    <string name="start_video_call_prompt_msg">Görüntülü görüşme başlatmak istediğinize emin misiniz?</string>
+
+    <string name="option_send_files">Dosya gönder</string>
+    <string name="option_send_sticker">Çıkartma gönder</string>
+    <string name="option_take_photo_video">Video kaydet veya fotoğraf çek</string>
+    <string name="option_take_photo">Fotoğraf çek</string>
+    <string name="option_take_video">Video kaydet</string>
+
+    <string name="no_sticker_application_dialog_content">Etkin bir çıkartma paketine sahip değilsin.
+\n
+\nBirkaç tane eklemek ister misin\?</string>
+
+    <string name="go_on_with">İle devam et…</string>
+    <string name="error_no_external_application_found">Üzgünüm, bu eylemi gerçekleştirebilecek hiçbir harici uygulama bulunamadı.</string>
+
+    <string name="auth_login">Giriş yap</string>
+    <string name="auth_register">Kayıt ol</string>
+    <string name="auth_submit">Tamam</string>
+    <string name="auth_skip">Geç</string>
+    <string name="auth_send_reset_email">Gönder Sıfırla e-posta</string>
+    <string name="auth_return_to_login">Giriş ekranına geri dön</string>
+    <string name="auth_user_id_placeholder">E-posta veya kullanıcı adı</string>
+    <string name="auth_password_placeholder">Şifre</string>
+    <string name="auth_new_password_placeholder">Yeni şifre</string>
+    <string name="auth_user_name_placeholder">Kullanıcı adı</string>
+    <string name="auth_add_email_message">Kullanıcıların seni rahatça bulabilmesi ve şifreni yeniden oluşturabilmen için bir e-posta hesabı ekle.</string>
+    <string name="auth_add_phone_message">Kullanıcıların seni rahatça bulabilmesi için bir telefon numarası ekle.</string>
+    <string name="status_theme">Status.im Teması</string>
+
+    <string name="title_activity_keys_backup_setup">Anahtar Yedekleme</string>
+    <string name="title_activity_keys_backup_restore">Anahtar Yedekleme\'yi Kullan</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Anahtar yedekleme tamamlanmadı, lütfen bekleyiniz…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Oturumu şimdi kapatırsanız şifrelenmiş mesajlarınızı kaybedeceksiniz</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Anahtar yedekleme işlemi sürüyor. Şimdi oturumu kapatırsanız tüm şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Şifrelenmiş mesajlarınızı kaybetmeyi önlemek için Güvenli Anahtar Yedekleme\'nin tüm cihazlarınızda aktif olması gerekmektedir.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Şifrelenmiş mesajlarımı istemiyorum</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Anahtarlar yedekleniyor…</string>
+    <string name="keys_backup_activate">Anahtar Yedekleme Kullan</string>
+    <string name="are_you_sure">Emin misiniz?</string>
+    <string name="backup">Yedekle</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Oturumu kapatmadan önce anahtarlarınızı yedeklemezseniz şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz.</string>
+
+    <string name="stay">Kal</string>
+    <string name="missing_permissions_error">Eksik izinler nedeniyle bu eylem mümkün değil.</string>
+    <string name="call_anyway">Yine de Ara</string>
+    <string name="accept">Kabul Et</string>
+    <string name="skip">Atla</string>
+    <string name="done">Tamamlandı</string>
+    <string name="abort">İptal Et</string>
+
+    <string name="action_sign_out_confirmation_simple">Oturumunuzu kapatmak istediğinizden emin misiniz?</string>
+    <string name="keys_backup_banner_in_progress">Anahtarlar yedekleniyor…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Tüm anahtarlar yedeklendi</string>
+    <string name="keys_backup_banner_recover_line2">Anahtar Yedekleme Kullan</string>
+
+    <string name="keys_backup_banner_update_line1">Yeni şifreli mesaj anahtarları</string>
+    <string name="keys_backup_banner_update_line2">Anahtar Yedekleme\'yi Yönet</string>
+
+    <string name="keys_backup_banner_recover_line1">Şifrelenmiş mesajları asla kaybetmeyin</string>
+    <string name="new_recovery_method_popup_description">Yeni bir güvenli mesaj anahtar yedeklemesi tespit edildi.
+
+Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabınıza erişmeye çalışıyor olabilir. Hesabınızın şifresini değiştirin ve derhal Ayarlar içerisinden yeni bir kurtarma yöntemi belirleyin.</string>
+    <string name="new_recovery_method_popup_was_me">Bu bendim</string>
+    <string name="keys_backup_banner_setup_line1">Şifrelenmiş mesajları asla kaybetmeyin</string>
+    <string name="keys_backup_banner_setup_line2">Anahtar Yedekleme kullanmaya başlayın</string>
+
+    <string name="new_recovery_method_popup_title">Yeni Anahtar Yedekleme</string>
+    <string name="keys_backup_settings_deleting_backup">Yedek siliniyor…</string>
+    <string name="keys_backup_settings_delete_backup_error">Yedek silme başarısız (%s)</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Yedeği Sil</string>
+    <string name="keys_backup_settings_delete_confirm_message">Yedeklenmiş şifreleme anahtarlarınız sunucudan silinsin mi? Bundan sonra şifrelenmiş mesaj geçmişini okumak için kurtarma anahtarınızı kullanamayacaksınız.</string>
+
+    <string name="keys_backup_settings_untrusted_backup">Bu cihazda Anahtar Yedekleme özelliğini kullanmak için şimdi parolanızla veya kurtarma anahtarınızla geri yükleyin.</string>
+    <string name="dialog_title_error">Hata</string>
+
+    <string name="system_alerts_header">Sistem Uyarıları</string>
+
+    <string name="send_files_in">Gönder</string>
+    <string name="identity_url">Kimlik Sunucusu URL\'si</string>
+    <string name="auth_add_email_phone_message">Kullanıcıların sizi bulmasını sağlamak için hesabınıza bir e-posta adresi ve/veya telefon numarası ekleyin.
+
+Ayrıca e-posta adresi, şifrenizi sıfırlamanıza da olanak tanır.</string>
+    <string name="auth_add_email_and_phone_message">Kullanıcıların sizi bulmasını sağlamak için hesabınıza bir e-posta adresi ve/veya telefon numarası ekleyin.
+
+Ayrıca e-posta adresi, şifrenizi sıfırlamanıza da olanak tanır.</string>
+    <string name="auth_email_placeholder">E-posta adresi</string>
+    <string name="auth_opt_email_placeholder">E-posta adresi (isteğe bağlı)</string>
+    <string name="auth_phone_number_placeholder">Telefon numarası</string>
+    <string name="auth_opt_phone_number_placeholder">Telefon numarası (isteğe bağlı)</string>
+    <string name="auth_repeat_password_placeholder">Şifreyi tekrar girin</string>
+    <string name="auth_repeat_new_password_placeholder">Yeni şifrenizi doğrulayın</string>
+    <string name="auth_invalid_login_param">Hatalı kullanıcı adı ve/veya şifre</string>
+    <string name="auth_invalid_user_name">Kullanıcı adları yalnızca harfler, sayılar, noktalar, kısa çizgiler ve alt çizgiler içerebilir</string>
+    <string name="auth_invalid_password">Şifre çok kısa (min 6)</string>
+    <string name="auth_missing_password">Eksik şifre</string>
+    <string name="auth_invalid_email">Bu, geçerli bir e-posta adresi gibi gözükmüyor</string>
+    <string name="auth_invalid_phone">Bu, geçerli bir telefon numarası gibi gözükmüyor</string>
+    <string name="auth_email_already_defined">Bu e-posta adresi zaten tanımlanmış.</string>
+    <string name="auth_missing_email">Eposta adresi eksik</string>
+    <string name="auth_missing_phone">Telefon numarası eksik</string>
+    <string name="auth_missing_email_or_phone">Eposta ya da telefon numarası eksik</string>
+    <string name="auth_invalid_token">Geçersiz belirteç</string>
+    <string name="auth_password_dont_match">Şifreler uyuşmuyor</string>
+    <string name="auth_forgot_password">Şifreni mi unuttun\?</string>
+    <string name="auth_use_server_options">Özel sunucu ayarları kullan (gelişmiş)</string>
+    <string name="auth_email_validation_message">Lütfen kayıda devam etmek için epostanı kontrol et</string>
+    <string name="auth_threepid_warning_message">Eposta ve telefon numarası ile aynı anda kayıt yaptırmak şimdilik API yüzüden desteklenmiyor. Sadece telefon numarası hesaba eklenecektir.
+\n
+\nEpostanı daha sonra profil ayarlarından ekleyebilirsin.</string>
+    <string name="auth_recaptcha_message">Ana Makine senin robot olmadığından emin olmak istiyor</string>
+    <string name="auth_username_in_use">Kullandığın kullanıcı adı</string>
+    <string name="auth_home_server">Ana Makine:</string>
+    <string name="auth_identity_server">Tanımlayıcı Sunucu:</string>
+    <string name="auth_reset_password_next_step_button">Eposta adresimi doğruladım</string>
+    <string name="auth_reset_password_message">Şifrenizi sıfırlamak için, hesabınıza bağlı eposta adresini girin:</string>
+    <string name="auth_reset_password_missing_email">Hesaba bağlı eposta adresi mutlaka girilmeli.</string>
+    <string name="auth_reset_password_missing_password">Yeni şifre mutlaka girilmeli.</string>
+    <string name="auth_reset_password_email_validation_message">Eposta %s adresine gönderildi. Epostadaki yönergeleri takip ettikten sonra, aşağıdaki tuşa tıklayın.</string>
+    <string name="auth_reset_password_error_unauthorized">Eposta doğrulaması başarısız: epostanızdaki bağlantıya tıkladığınızdan emin olun</string>
+    <string name="auth_reset_password_success_message">Şifreniz sıfırlandı.
+\n
+\nTüm cihazlarınızdan çıkış yaptınız ve mesaj bildirimleri almayacaksınız. Tekrar bildirimleri alabilmek için her cihazda tekrar giriş yapmalısınız.</string>
+    <string name="auth_accept_policies">Lütfen anamakinenin ilkelerini gözden geçirin ve kabul edin:</string>
+
+    <string name="login_error_must_start_http">URL http[s]:// ile başlamalıdır</string>
+    <string name="login_error_network_error">Giriş yapılamadı: Ağ hatası</string>
+    <string name="login_error_unable_login">Giriş yapılamadı</string>
+    <string name="login_error_registration_network_error">Kayıt olunamadı: Ağ hatası</string>
+    <string name="login_error_unable_register">Kayıt olunamadı</string>
+    <string name="login_error_unable_register_mail_ownership">Kayıt olunamadı: eposta sahiplik hatası</string>
+    <string name="login_error_invalid_home_server">Geçerli bir URL girin</string>
+    <string name="login_mobile_device">Mobil</string>
+
+    <string name="login_error_forbidden">Geçersiz kullanıcıadı/şifre</string>
+    <string name="login_error_unknown_token">Erişim belirteci belirtildi ancak tanımlanamadı</string>
+    <string name="login_error_bad_json">Hatalı JSON</string>
+    <string name="login_error_not_json">Geçerli JSON içermiyor</string>
+    <string name="login_error_limit_exceeded">Çok fazla istek gönderildi</string>
+    <string name="login_error_user_in_use">Kullanıcı adı zaten kullanımda</string>
+    <string name="login_error_login_email_not_yet">Eposta bağlantısına hala tıklanmadı</string>
+
+    <string name="e2e_need_log_in_again">Bu cihaza özel uçtan uca şifreleme anahtarı oluşturup, herkese açık anahtarı anamakineye yüklemek için giriş yapmanız gerekli.
+\nBu bir kereye mahsus.
+\nRahatsızlık için üzgünüz.</string>
+
+    <string name="e2e_re_request_encryption_key">Diğer cihazlarından <u>şifreleme anahtarlarını tekrar iste</u>.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Anahtar isteği gönderildi.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">İstek gönderildi</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Riot\'u mesajları çözebilen farklı bir cihazda açarsanız ordan anahtarları bu cihaza gönderebilirsiniz.</string>
+
+    <string name="read_receipts_list">Makbuz Listesini Oku</string>
+
+    <string name="groups_list">Grup Listesi</string>
+
+    <plurals name="membership_changes">
+        <item quantity="one">1 üyelik değişimi</item>
+        <item quantity="other">%d üyelik değişimi</item>
+    </plurals>
+
+    <string name="compression_options">Farklı gönder</string>
+    <string name="compression_opt_list_original">Orjinal</string>
+    <string name="compression_opt_list_large">Büyük</string>
+    <string name="compression_opt_list_medium">Orta</string>
+    <string name="compression_opt_list_small">Küçük</string>
+
+    <string name="attachment_cancel_download">İndirme iptal edilsin mi\?</string>
+    <string name="attachment_cancel_upload">Yükleme iptal edilsin mi\?</string>
+    <string name="attachment_remaining_time_seconds">%d sn</string>
+    <string name="attachment_remaining_time_minutes">%1$ddk %2$dsn</string>
+
+    <string name="yesterday">Dün</string>
+    <string name="today">Bugün</string>
+
+    <string name="room_info_room_name">Oda adı</string>
+    <string name="room_info_room_topic">Oda konusu</string>
+
+    <string name="settings_call_category">Aramalar</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Gelen aramalar için varsayılan Riot zil sesini kullan</string>
+    <string name="settings_call_ringtone_title">Gelen arama zil sesi</string>
+    <string name="settings_call_ringtone_dialog_title">Aramalar için zil sesi seç:</string>
+
+    <string name="call">Arama</string>
+    <string name="call_connected">Çağrı bağlandı</string>
+    <string name="call_connecting">Çağrı bağlanıyor…</string>
+    <string name="call_ended">Çağrı sonlandı</string>
+    <string name="call_ring">Aranıyor…</string>
+    <string name="incoming_call">Gelen Arama</string>
+    <string name="incoming_video_call">Gelen Görüntülü Arama</string>
+    <string name="incoming_voice_call">Gelen Sesli Arama</string>
+    <string name="call_in_progress">Çağrıda…</string>
+    <string name="video_call_in_progress">Görüntülü Çağrıda…</string>
+
+    <string name="call_error_user_not_responding">Uzak sunucu alınamadı.</string>
+    <string name="call_error_ice_failed">Medya Bağlantı Hatası</string>
+    <string name="call_error_camera_init_failed">Kamera algılanamadı</string>
+    <string name="call_error_answered_elsewhere">arama başka yerde cevaplandı</string>
+
+    <string name="media_picker_both_capture_title">Resim ya da video çek</string>
+    <string name="media_picker_cannot_record_video">Video kaydedilemiyor</string>
+
+    <string name="permissions_rationale_popup_title">Bilgilendirme</string>
+    <string name="permissions_rationale_msg_storage">Riot\'un ekleri göndermek ya da kaydetmek için galeriye erişmeye ihtiyacı var.
+\n
+\nLütfen çıkacak ekranda telefonunuzdan dosya gönderebilmesine izin verin.</string>
+    <string name="permissions_rationale_msg_camera">Riot\'un resim ya da video çekmek için kameraya erişmeye ihtiyacı var.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nLütfen çıkacak ekranda kameraya erişebilmesine izin verin."</string>
+    <string name="permissions_rationale_msg_record_audio">Riot\'un sesli arama yapması için mikrofonunuza erişmeye ihtiyacı var.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nLütfen çıkacak ekranda mikrofona erişebilmesine izin verin."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot\'un görüntülü arama yapması için kameranıza ve mikrofonunuza erişmeye ihtiyacı var.
+\n
+\nLütfen çıkacak ekranda kamera ve mikrofona erişebilmesine izin verin.</string>
+    <string name="permissions_rationale_msg_contacts">Riot\'un eposta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinize erişmeye ihtiyacı var.
+\n
+\nLütfen çıkacak ekranda rehberinize erişebilmesine izin verin.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot\'un eposta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinize erişmeye ihtiyacı var.
+\n
+\nRiot rehberinize erişebilsin mi\?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Üzgünüz. İsteğiniz, yetersiz izinlerden dolayı gerçekleştirilemedi</string>
+
+    <string name="media_slider_saved">Kaydedildi</string>
+    <string name="media_slider_saved_message">İndirilenlere kaydedilsin mi\?</string>
+    <string name="yes">EVET</string>
+    <string name="no">HAYIR</string>
+    <string name="_continue">Devam et</string>
+
+    <string name="remove">Sil</string>
+    <string name="join">Katıl</string>
+    <string name="preview">Önizleme</string>
+    <string name="reject">Reddet</string>
+
+    <string name="list_members">Üyeleri Listele</string>
+    <string name="open_chat_header">Başlık Aç</string>
+    <string name="room_sync_in_progress">Eşzamanlanıyor…</string>
+    <string name="room_preview_invitation_format">Bu odaya %s tarafından davet edildiniz</string>
+    <string name="room_preview_unlinked_email_warning">Davet %s e/a gönderildi ancak eposta hala ilişkilendirilmemiş.
+\nFarklı bir hesaba giriş yapın, ya da epostayı hesabınıza ekleyin.</string>
+    <string name="room_preview_try_join_an_unknown_room">%s e/a erişmeye çalışıyorsun. Katılıp sohbete dahil olmak ister misin\?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">oda</string>
+    <string name="room_preview_room_interactions_disabled">Bu odanın önizlemesi. Oda etkileşimleri devre dışı bırakıldı.</string>
+
+    <string name="room_creation_title">Yeni Sohbet</string>
+    <string name="room_creation_add_member">Üye ekle</string>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">1 aktif üye</item>
+        <item quantity="other">%d aktif üye</item>
+    </plurals>
+    <plurals name="room_title_members">
+        <item quantity="one">1 üye</item>
+        <item quantity="other">%d üye</item>
+    </plurals>
+    <string name="room_title_one_member">1 üye</string>
+
+    <plurals name="format_time_s">
+        <item quantity="one">1sn</item>
+        <item quantity="other">%dsn</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">1dk</item>
+        <item quantity="other">%ddk</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">1sa</item>
+        <item quantity="other">%dsa</item>
+    </plurals>
+    <plurals name="format_time_d">
+        <item quantity="one">1g</item>
+        <item quantity="other">%dg</item>
+    </plurals>
+
+    <string name="room_participants_leave_prompt_title">Odadan ayrıl</string>
+    <string name="room_participants_leave_prompt_msg">Odadan ayrılmak istediğine emin misin\?</string>
+    <string name="room_participants_remove_prompt_msg">Odadan %s adlı kişiyi atmak istediğine emin misin\?</string>
+    <string name="room_participants_create">Oluştur</string>
+
+    <string name="room_participants_online">Çevrimiçi</string>
+    <string name="room_participants_offline">Çevrimdışı</string>
+    <string name="room_participants_idle">Müsait</string>
+    <string name="room_participants_now">Şuanda %1$s</string>
+    <string name="room_participants_ago">%1$s %2$s önce</string>
+
+    <string name="room_participants_header_admin_tools">YÖNETİCİ ARAÇLARI</string>
+    <string name="room_participants_header_call">ARAMA</string>
+    <string name="room_participants_header_direct_chats">DİREKT SOHBETLER</string>
+    <string name="room_participants_header_devices">CİHAZLAR</string>
+
+    <string name="room_participants_action_invite">Davet</string>
+    <string name="room_participants_action_leave">Odadan ayrıl</string>
+    <string name="room_participants_action_remove">Odadan at</string>
+    <string name="room_participants_action_ban">Engelle</string>
+    <string name="room_participants_action_unban">Engeli kaldır</string>
+    <string name="room_participants_action_kick">At</string>
+    <string name="room_participants_action_set_default_power_level">Normal kullanıcıya döndür</string>
+    <string name="room_participants_action_set_moderator">Moderatör yap</string>
+    <string name="room_participants_action_set_admin">Yönetici yap</string>
+    <string name="room_participants_action_ignore">Bu kullanıcının tüm mesajlarını gizle</string>
+    <string name="room_participants_action_unignore">Bu kullanıcının tüm mesajlarını göster</string>
+    <string name="room_participants_action_unignore_prompt">Bu kullanıcının tüm mesajlarını göster
+\n
+\nBu işlem uygulamayı yeniden başlatak ve biraz zaman alacak.</string>
+    <string name="room_participants_invite_search_another_user">Kullanıcı ID, Ad ya da eposta</string>
+    <string name="room_participants_action_mention">Bahset</string>
+    <string name="room_participants_action_devices_list">Cihaz Listesini Göster</string>
+    <string name="room_participants_power_level_prompt">Bu işlemin geri dönüşü yok kullanıcıyı sen ile aynı erişim seviyesine getiriyorsun.
+\nEmin misin\?</string>
+
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">Kullanıcıyı bu sohbetten atmak istediğine emin misin\?</item>
+        <item quantity="other">Kullanıcıları bu sohbetten atmak istediğine emin misin\?</item>
+    </plurals>
+    <string name="room_participants_ban_prompt_msg">Kullanıcıyı bu sohbetten engellemek istediğine emin misin\?</string>
+    <string name="reason_hint">Neden</string>
+
+    <string name="room_participants_invite_prompt_msg">%s adlı kullanıcılar(ı) bu sohbete davet etmek istediğinden emin misin\?</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s ve %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <string name="people_search_invite_by_id"><u>ID ile davet et</u></string>
+    <string name="people_search_local_contacts">YEREL KİŞİLER (%d)</string>
+    <string name="people_search_user_directory">KULLANICI DİZİNİ (%s)</string>
+    <string name="people_search_filter_text">Sadece Matrix kullanıcıları</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Kullanıcıyı ID ile Davet et</string>
+    <string name="people_search_invite_by_id_dialog_description">Lütfen bir veya daha fazla eposta adresi ya da Matrix ID girin</string>
+    <string name="people_search_invite_by_id_dialog_hint">Eposta ya da Matrix ID</string>
+
+    <string name="room_menu_search">Bul</string>
+    <string name="room_one_user_is_typing">%s yazıyor…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s yazıyor…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; diğerleri yazıyor…</string>
+    <string name="room_message_placeholder_encrypted">Şifrelenmiş mesaj gönder…</string>
+    <string name="room_message_placeholder_not_encrypted">Mesaj gönder (şifrelenmemiş)…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Şifrelenmiş cevap gönder…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Cevap gönder (şifrelenmemiş)…</string>
+    <string name="room_offline_notification">Sunucuya olan bağlantı koptu.</string>
+    <string name="room_unsent_messages_notification">Mesaj gönderilemedi. %1$s ya da %2$s yapılsın mı\?</string>
+    <string name="room_unknown_devices_messages_notification">Mesaj gönderilemedi çünkü bilinmeyen bir cihaz belirlendi. %1$s ya da %2$s yapalım mı\?</string>
+    <string name="room_prompt_resend">Hepsini tekrar gönder</string>
+    <string name="room_prompt_cancel">Hepsini iptal et</string>
+    <string name="room_resend_unsent_messages">Gönderilmeyen mesajları tekrar gönder</string>
+    <string name="room_delete_unsent_messages">Gönderilmeyen mesajları sil</string>
+    <string name="room_message_file_not_found">Dosya bulunamadı</string>
+    <string name="room_do_not_have_permission_to_post">Bu odada mesajlaşmaya yetkin yok</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">1 yeni mesaj</item>
+        <item quantity="other">%d yeni mesaj</item>
+    </plurals>
+
+    <string name="ssl_trust">Güven</string>
+    <string name="ssl_do_not_trust">Güvenme</string>
+    <string name="ssl_logout_account">Çıkış yap</string>
+    <string name="ssl_remain_offline">Göz ardı et</string>
+    <string name="ssl_fingerprint_hash">Parmakizi (%s):</string>
+    <string name="ssl_could_not_verify">Uzak sunucunun kimliğini doğrulayamadı.</string>
+    <string name="ssl_cert_not_trust">Bu ağ trafiğinizin izlendiğinden, ya da telefonunuzun uzak sunucudaki sertifikaya güvenmediğinden dolayı olabilir.</string>
+    <string name="ssl_cert_new_account_expl">Eğer sunucu yöneticisi bunun beklendiğini söylediyse aşağıdaki parmak izi ile sağlanılan parmak izinin uyuştuğunu dogrulayın.</string>
+    <string name="ssl_unexpected_existing_expl">Sertifika telefonunuzun güvendi sertifika ile değiştirildi. Bu çok OLAĞANDIŞI. Bu yeni sertifikayı KABUL ETMEMENİZ tavsiye edilir.</string>
+    <string name="ssl_expected_existing_expl">Bu sertifika önceki güvenilen sertifikadan güvenilmez sertifikaya değiştirildi. Sunucu bu sertifikayı yenileyecek. Farklı bir parmak izi için sunucu yöneticisiyle iletişime geçin.</string>
+    <string name="ssl_only_accept">Sadece sunucu yöneticisinin yukarıdaki yayınladığı parmak izleri ile uyuşan sertifikaları onaylayın.</string>
+
+    <string name="room_details_title">Oda Detayları</string>
+    <string name="room_details_people">Kişiler</string>
+    <string name="room_details_files">Dosyalar</string>
+    <string name="room_details_settings">Ayarlar</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">1 tane seçili</item>
+        <item quantity="other">%d tane seçili</item>
+    </plurals>
+    <string name="malformed_id">Hatalı ID. Eposta adresi ya da Matrix ID\'si olmalıdır \'@localpart:domain\'</string>
+    <string name="room_details_people_invited_group_name">DAVET EDİLDİ</string>
+    <string name="room_details_people_present_group_name">KATILDI</string>
+
+    <string name="room_event_action_report_prompt_reason">İçeriği bildirme nedeni</string>
+    <string name="room_event_action_report_prompt_ignore_user">Bu kullanıcının tüm mesajları gizlemek ister misin\?
+\n
+\nNot bu eylemi gerçekleştirmek uygulamayı yeniden başlatır ve biraz zaman alabilir.</string>
+    <string name="room_event_action_cancel_upload">Yüklemeyi iptal et</string>
+    <string name="room_event_action_cancel_download">İndirmeyi iptal et</string>
+
+    <string name="search_hint">Bul</string>
+    <string name="search_members_hint">Oda üyelerini filtrele</string>
+    <string name="search_no_results">Sonuç yok</string>
+    <string name="tab_title_search_rooms">ODALAR</string>
+    <string name="tab_title_search_messages">MESAJLAR</string>
+    <string name="tab_title_search_people">KİŞİLER</string>
+    <string name="tab_title_search_files">DOSYALAR</string>
+
+    <string name="room_recents_join">KATIL</string>
+    <string name="room_recents_directory">DİZİN</string>
+    <string name="room_recents_favourites">FAVORİLER</string>
+    <string name="room_recents_conversations">ODALAR</string>
+    <string name="room_recents_low_priority">DÜŞÜK ÖNCELİK</string>
+    <string name="room_recents_invites">DAVETLER</string>
+    <string name="room_recents_start_chat">Sohbet başlat</string>
+    <string name="room_recents_create_room">Oda oluştur</string>
+    <string name="room_recents_join_room">Odaya katıl</string>
+    <string name="room_recents_join_room_title">Bir odaya katıl</string>
+    <string name="room_recents_join_room_prompt">Oda ID\'si ya da takma adı girin</string>
+
+    <string name="directory_search_results_title">Dizinlere gözat</string>
+    <plurals name="directory_search_rooms">
+        <item quantity="one">1 oda</item>
+        <item quantity="other">%d oda</item>
+    </plurals>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">%2$s adında %1$s oda bulundu</item>
+        <item quantity="other">%2$s içeren %1$s oda bulundu</item>
+    </plurals>
+    <string name="directory_searching_title">Dizinler taranıyor…</string>
+
+    <string name="room_settings_all_messages_noisy">Tüm mesajlar (sesli)</string>
+    <string name="room_settings_all_messages">Tüm mesajlar</string>
+    <string name="room_settings_mention_only">Sadece bahsetmeler</string>
+    <string name="room_settings_mute">Sustur</string>
+    <string name="room_settings_favourite">Favori</string>
+    <string name="room_settings_de_prioritize">Öncelik düşür</string>
+    <string name="room_settings_direct_chat">Direkt Mesaj</string>
+    <string name="room_settings_leave_conversation">Tartışmadan Ayrıl</string>
+    <string name="room_settings_forget">Unut</string>
+    <string name="room_settings_add_homescreen_shortcut">Ana Ekran Kısayolu Ekle</string>
+
+    <string name="room_sliding_menu_messages">Mesajlar</string>
+    <string name="room_sliding_menu_settings">Ayarlar</string>
+    <string name="room_sliding_menu_version">Sürüm</string>
+    <string name="room_sliding_menu_version_x">Sürüm %s</string>
+    <string name="room_sliding_menu_term_and_conditions">Şartlar &amp; koşullar</string>
+    <string name="room_sliding_menu_third_party_notices">Üçüncü parti uyarıları</string>
+    <string name="room_sliding_menu_copyright">Telif Hakkı</string>
+    <string name="room_sliding_menu_privacy_policy">Gizlilik Politikası</string>
+
+    <string name="settings_profile_picture">Profil Resmi</string>
+    <string name="settings_display_name">Görünür Ad</string>
+    <string name="settings_email_address">Eposta</string>
+    <string name="settings_add_email_address">Eposta ekle</string>
+    <string name="settings_phone_number">Telefon</string>
+    <string name="settings_add_phone_number">Telefon numarası ekle</string>
+    <string name="settings_app_info_link_title">Uygulama bilgisi</string>
+    <string name="settings_app_info_link_summary">Uygulama bilgisini sistem ayarlarında göster.</string>
+
+
+    <string name="settings_notification_advanced">Gelişmiş Bildirim Ayarları</string>
+    <string name="settings_notification_advanced_summary">Bildirim önceliğini duruma göre ses, led ve titreşim olarak ayarla</string>
+    <string name="settings_notification_by_event">Duruma göre bildirim önceliği</string>
+
+    <string name="settings_notification_privacy">Bildirim gizliliği</string>
+    <string name="settings_notification_troubleshoot">Sorun Giderme Bildirimleri</string>
+    <string name="settings_troubleshoot_diagnostic">Sorun giderme tanılaması</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Testleri başlat</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Çalışıyor… (%1$d de/da %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Basit tanılama tamam. Eğer hala bildirim almıyorsanız lütfen araştırmamız için bize hata raporu gönderin.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Bir ya da birden fazla test hata verdi, çözüm(ler) deneniyor.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Bir ya da birden fazla test hata verdi, lütfen araştırmamız için bize hata raporu gönderin.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Sistem Ayarları.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Bildirimler sistem ayarlarında etkinleştirilmiş.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Bildirimler sistem ayarlarında etkin değil.
+\nLütfen sistem ayarlarınızı gözden geçirin.</string>
+    <string name="open_settings">Ayarları Aç</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Hesap Ayarları.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Bildirimler hesabın için etkin durumda.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Bildirimler hesabın için etkin durumda değil.
+\nLütfen hesap ayarlarınızı gözden geçirin.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Etkinleştir</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Cihaz Ayarları.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Bildirimler bu cihaz için etkinleştirilmiş.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Bildirimler bu cihaz için etkin değil.
+\nLütfen Riot ayarlarını gözden geçirin.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Etkinleştir</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Özel Ayarlar.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Bazı mesajların türü sessize ayarlanmıştır (sessiz bir bildirim gönderecektir).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Bazı bildirimler özel ayarlarınızda devre dışı durumda.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Özel kuralları yüklerken hata oluştu, lütfen tekrar deneyin.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Ayarları Gözden Geçir</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Play Hizmetlerini Gözden Geçir</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Hizmetleri APK\'sı kullanılabilir ve güncel.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot bildirimleri göndermek için Google Play Hizmetleri kullanır, ancak düzgün ayarlanmış görünmüyor:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Google Play Hizmetlerini Düzelt</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Firebase Belirteci</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM belirteci başarıyla alındı:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">FCM belirtecini alırken hata meydana geldi:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nBu hata Riot\'un kontrolü dışında Google\'a bağlı ve cihazın çok fazla FCM ile kayıtlı uygulaması olduğunu belirtiyor. Bu hata sadece çok fazla uygulama kullanıldığı zaman olur ve genelde ortalama kullanıcıyı etkilemez.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nBu hata Riot\'un kontrolü dışında ve birçok nedene bağlı olabilir. Belki sonra denediğin zaman çalışır. Ayrıca Google Play Hizmetlerinin veri kullanımı konusunda sistem ayarlarında kısıtlanmamış ya da cihaz saatinin doğru olduğundan emin olun, bu hata özel ROM\'larda meydana gelebiliyor.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nBu hata Riot\'un kontrolü dışında. Telefonda hiç Google hesabı yok. Lütfen hesap yöneticisini açın ve bir tane Google hesabı ekleyin.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Hesap ekle</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Belirteç Kayıtı</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM belirteci başarı ile AnaMakineye kaydedildi.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM belirteci AnaMakineye kaydedilirken hata:
+\n%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Bildirim Hizmetleri</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Bildirim Hizmetleri çalışıyor.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Bildirim Hizmetleri çalışmıyor.
+\nUygulamayı yeniden başlatmayı deneyin.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Hizmeti Başlat</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Bildirim Hizmetleri Otomatik-Yeniden-Başlatma</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Hizmet otomatik olarak sonlandırılıp yeniden başlatıldı.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Hizmet yeniden başlatılamadı</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Açılışta başlat</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Hizmet cihaz yeniden başlatıldığında çalıştırılacak.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Hizmet cihaz yeniden başlatılınca çalıştırılmayacak, Riot\'u açana kadar bildirimleri almakyacaksın.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Açılışta başlatı etkinleştir</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Arkaplan kısıtlamalarını gözden geçir</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Arkaplan kısıtlamaları Riot için devre dışı. Bu test mobil veri kullanacak (WIFI değil).
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Arkaplan kısıtlamaları Riot için etkinleştirilmiş.
+\nUygulamanın arkaplanda iken yapmaya çalıştığı şeyler agresif bir biçimde kısıtlanacak ve bu bildirimleri de etkileyebilir.
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Kısıtlamaları devre dışı bırak</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Pil Optimizasyonu</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot Pil Optimizasyonundan etkilenmedi.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Eğer kullanıcı cihazını prize bağlanmamış sabit ve ekranı kapalı bir şekilde bir süre bırakırsa cihaz Derin uyku moduna geçer. Bu uygulamaların internete erişmesini engeller ve yapılacak işlerini, senkronizasyolarını, alarmını erteler</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Optimizasyonu Göz ardı et</string>
+
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_notification_privacy_reduced">Azaltılmış gizlilik</string>
+    <string name="settings_notification_privacy_need_permission">Uygulamanın arkaplanda çalışması için izne ihtiyacı var</string>
+    <string name="settings_notification_privacy_fcm">• Bildirimler Google Bulut Mesajlaşma ile gönderildi</string>
+    <string name="settings_notification_privacy_metadata">• Bildirimler sadece meta verileri içeriyor</string>
+    <string name="settings_notification_privacy_secure_message_content">• Bildirimin mesaj içeriği <b>direkt Matrix anamakinesinden güvenli bir şekilde bulundu</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Bildirimler <b>meta ve mesaj verileri</b> içeriyor</string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Bildirimler <b>mesaj içeriğini göstermeyecek</b></string>
+
+    <string name="settings_notification_ringtone">Bildirim sesi</string>
+    <string name="settings_enable_all_notif">Bildirim seslerini bu hesap için etkinleştir</string>
+    <string name="settings_enable_this_device">Bildirim seslerini bu cihaz için etkinleştir</string>
+    <string name="settings_turn_screen_on">Ekranı 3 saniyeliğine açık tut</string>
+    <string name="settings_noisy_notifications_preferences">Sesli Bildirimleri Ayarla</string>
+    <string name="settings_call_notifications_preferences">Arama Bildirimlerini Ayarla</string>
+    <string name="settings_silent_notifications_preferences">Sessiz Bildirimleri Ayarla</string>
+    <string name="settings_system_preferences_summary">LED rengi, titreşim ve ses seçin…</string>
+
+
+    <string name="settings_containing_my_display_name">Msjlar görüntü adımı içeriyor</string>
+    <string name="settings_containing_my_user_name">Msjlar kullanıcı adımı içeriyor</string>
+    <string name="settings_messages_in_one_to_one">Bire bir sohbetteki msjlar</string>
+    <string name="settings_messages_in_group_chat">Grup sohbetlerdeki msjlar</string>
+    <string name="settings_invited_to_room">Odaya davet edildiğimde</string>
+    <string name="settings_call_invitations">Arama davetleri</string>
+    <string name="settings_messages_sent_by_bot">Mesajlar bot tarafından gönderildi</string>
+
+    <string name="settings_background_sync">Arkaplanda Eşzamanlama</string>
+    <string name="settings_start_on_boot">Açılışta başlat</string>
+    <string name="settings_enable_background_sync">Arkaplanda eşzamanlamayı etkinleştir</string>
+    <string name="settings_set_sync_timeout">Eşzamanlama talep süresi doldu</string>
+    <string name="settings_set_sync_delay">Her talep arasında gecikme</string>
+    <string name="settings_second">saniye</string>
+    <string name="settings_seconds">saniye</string>
+
+    <string name="settings_version">Sürüm</string>
+    <string name="settings_olm_version">olm sürümü</string>
+    <string name="settings_app_term_conditions">Şartlar &amp; koşullar</string>
+    <string name="settings_third_party_notices">Üçüncü parti uyarıları</string>
+    <string name="settings_copyright">Telif hakkı</string>
+    <string name="settings_privacy_policy">Gizlilik politikası</string>
+    <string name="settings_keep_media">Medyayı tut</string>
+    <string name="settings_clear_cache">Ön belleği temizle</string>
+    <string name="settings_clear_media_cache">Medya ön belleğini temizle</string>
+
+    <string name="settings_user_settings">Kullanıcı ayarları</string>
+    <string name="settings_notifications">Bildirimler</string>
+    <string name="settings_ignored_users">Göz ardı edilmiş kullanıcılar</string>
+    <string name="settings_other">Diğer</string>
+    <string name="settings_advanced">Gelişmiş</string>
+    <string name="settings_cryptography">Kriptografi</string>
+    <string name="settings_cryptography_manage_keys">Kriptografi Anahtar Yönetimi</string>
+    <string name="settings_notifications_targets">Bildirim Hedefleri</string>
+    <string name="settings_contact">Yerel rehber</string>
+    <string name="settings_contacts_app_permission">Rehber izinleri</string>
+    <string name="settings_contacts_phonebook_country">Telefon rehberi ülkesi</string>
+    <string name="settings_home_display">Ana ekran</string>
+    <string name="settings_pin_missed_notifications">Bildirimlerini kaçırdığın odaları öne çıkar</string>
+    <string name="settings_pin_unread_messages">Okunmamış mesajlı odaları öne çıkar</string>
+    <string name="settings_devices_list">Cihazlar</string>
+    <string name="settings_inline_url_preview">Satır içi URL önizlemesi</string>
+    <string name="settings_inline_url_preview_summary">Bağlantıları anamakine destekliyorsa sohbette önizle.</string>
+    <string name="settings_send_typing_notifs">Yazıyor bildirimleri gönder</string>
+    <string name="settings_send_typing_notifs_summary">Diğer kullanıcıların senin ne yazdığını bilmelerine izin ver.</string>
+    <string name="settings_send_markdown">Markdown biçimlendirmesi</string>
+    <string name="settings_send_markdown_summary">Mesajları gönderilmeden önce markdown ile biçimlendir. Bu gelişmiş biçimlendirmeye izin verir örneğin asteriks ile italik yazı yazmak gibi.</string>
+    <string name="settings_always_show_timestamps">Tüm mesajların zaman damgasını göster</string>
+    <string name="settings_12_24_timestamps">Zaman damgasını 12-saat biçiminde göster</string>
+    <string name="settings_show_read_receipts">Makbuz okumayı göster</string>
+    <string name="settings_show_read_receipts_summary">Detaylı liste için makbuz okumaya tıkla.</string>
+    <string name="settings_show_join_leave_messages">Katılma ve ayrılma durumlarını göster</string>
+    <string name="settings_show_join_leave_messages_summary">Davetler, atılanlar ve engellenenler etkilenmemiştir.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Hesap olaylarını göster</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Avatar ve görünür adı değişimlerde içer.</string>
+    <string name="settings_vibrate_on_mention">Bir kullanıcıdan söz ederken titreşim ver</string>
+    <string name="settings_preview_media_before_sending">Medyayı göndermeden önce önizle</string>
+
+    <string name="settings_deactivate_account_section">Hesabı devre dışı bırak</string>
+    <string name="settings_deactivate_my_account">Hesabımı devre dışı bırak</string>
+
+    <string name="startup_notification_privacy_title">Bildirim Gizliliği</string>
+    <string name="startup_notification_privacy_message">Riot bildirimlerinizi güvenli ve gizli bir şekilde yönetmek için arkaplanda çalışır. Bu pil kullanımını etkileyebilir.</string>
+    <string name="startup_notification_privacy_button_grant">İzin ver</string>
+    <string name="startup_notification_privacy_button_other">Farklı bir seçenek seç</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">Arkaplan Bağlantısı</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot güvenilir bildirimlere sahip olmak için düşük arkaplan bağlatısı yapmaya ihtiyaç duyar.
+\nÇıkacak ekranda Riot\'un arkaplanda sürekli çalışması için izin istenecek, lütfen kabul edin.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">İzin ver</string>
+
+    <string name="settings_analytics">Analiz</string>
+    <string name="settings_opt_in_of_analytics">Analiz verilerini gönder</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot uygulamayı geliştirmemiz için anonim analitik veriler toplar.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Lütfen Riot\'u geliştirebilmemiz için analizleri etkinleştirin.</string>
+    <string name="settings_opt_in_of_analytics_ok">Evet, Yardım etmek istiyorum!</string>
+
+    <string name="settings_data_save_mode">Veri kaydetme modu</string>
+    <string name="settings_data_save_mode_summary">Veri kaydetme modu belirli filtreler uygular bu sayede ilerki güncellemeler ve yazıyor bildirimleri filtrelenir.</string>
+
+    <string name="devices_details_dialog_title">Cihaz detayları</string>
+    <string name="devices_details_id_title">ID</string>
+    <string name="devices_details_name_title">Ad</string>
+    <string name="devices_details_device_name">Cihaz Adı</string>
+    <string name="devices_details_last_seen_title">Son görülme</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_delete_dialog_text">Bu işlem ek yetki gerektiriyor.
+\nDevam etmek için lütfen şifrenizi girin.</string>
+    <string name="devices_delete_dialog_title">Yetkilendirme</string>
+    <string name="devices_delete_pswd">Şifre:</string>
+    <string name="devices_delete_submit_button_label">Gönder</string>
+
+    <string name="settings_logged_in">Olarak giriş yaptın</string>
+    <string name="settings_home_server">Ana Makine</string>
+    <string name="settings_identity_server">Kimlik Sunucusu</string>
+
+    <string name="settings_user_interface">Kullanıcı arayüzü</string>
+    <string name="settings_interface_language">Dil</string>
+    <string name="settings_select_language">Dili seç</string>
+
+    <string name="account_email_validation_title">Doğrulama Bekleniyor</string>
+    <string name="account_email_validation_message">Lütfen epostanı kontrol et ve içerdiği bağlantıya tıkla. Bu tamamlandığında, tamama tıkla.</string>
+    <string name="account_email_validation_error">Eposta adresi doğrulanamadı. Lütfen epostanı kontrol et ve içerdiği bağlantıya tıkla. Bu tamamlandığında, tamama tıkla.</string>
+    <string name="account_email_already_used_error">Bu eposta adresi zaten kullanımda.</string>
+    <string name="account_email_not_found_error">Bu eposta adresi bulunamadı.</string>
+    <string name="account_phone_number_already_used_error">Bu telefon numarası zaten kullanımda.</string>
+    <string name="account_email_error">Epostanı doğrularken bir hata meydana geldi.</string>
+
+    <string name="settings_password">Şifre</string>
+    <string name="settings_change_password">Şifreni değiştir</string>
+    <string name="settings_old_password">Eski şifre</string>
+    <string name="settings_new_password">Yeni şifre</string>
+    <string name="settings_confirm_password">Tekrar şifre</string>
+    <string name="settings_fail_to_update_password">Şifreyi güncellerken hata oluştu</string>
+    <string name="settings_password_updated">Şifren güncellendi</string>
+    <string name="settings_unignore_user">%s den/dan tüm mesajlar gösterilsin mi\?
+\n
+\nNot bu eylem uygulamayı yeniden başlatacak ve biraz zaman alabilir.</string>
+
+    <string name="settings_delete_notification_targets_confirmation">Bu bildirim hedefini silmek istediğinden emin misin\?</string>
+
+    <string name="settings_delete_threepid_confirmation">Bunları (%1$s %2$s) silmek istediğinden emin misin\?</string>
+
+    <string name="settings_select_country">Ülke seç</string>
+
+    <string name="settings_phone_number_country_label">Ülke</string>
+    <string name="settings_phone_number_country_error">Lütfen ülke seç</string>
+    <string name="settings_phone_number_label">Telefon numarası</string>
+    <string name="settings_phone_number_error">Seçilen ülkeye göre geçersiz telefon numarası</string>
+    <string name="settings_phone_number_verification">Telefon doğrulaması</string>
+    <string name="settings_phone_number_verification_instruction">Aktivasyon kodu içeren bir SMS gönderdik. Lütfen kodu aşağı girin.</string>
+    <string name="settings_phone_number_verification_error_empty_code">Aktivasyon kodunu gir</string>
+    <string name="settings_phone_number_verification_error">Telefon numaranı doğrularken hata oluştu</string>
+    <string name="settings_phone_number_code">Kod</string>
+    <string name="account_phone_number_error">Telefon numaranı doğrularken hata oluştu.</string>
+    <string name="account_additional_info">Ek bilgi: %s</string>
+
+    <string name="settings_flair">Kabiliyet</string>
+    <string name="settings_without_flair">Hiçbir topluluğun üyesi değilsin.</string>
+
+    <string name="media_saving_period_3_days">3 gün</string>
+    <string name="media_saving_period_1_week">1 hafta</string>
+    <string name="media_saving_period_1_month">1 ay</string>
+    <string name="media_saving_period_forever">Sonsuza dek</string>
+
+    <string name="room_settings_room_photo">Oda Resimi</string>
+    <string name="room_settings_room_name">Oda Adı</string>
+    <string name="room_settings_topic">Konu</string>
+    <string name="room_settings_room_tag">Oda Etiketi</string>
+    <string name="room_settings_tag_pref_dialog_title">Olarak etiketlendi:</string>
+
+    <string name="room_settings_tag_pref_entry_favourite">Favori</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Düşük öncelik</string>
+    <string name="room_settings_tag_pref_entry_none">Yok</string>
+
+    <string name="room_settings_category_access_visibility_title">Erişim ve görünürlük</string>
+    <string name="room_settings_directory_visibility">Bu odayı odalar dizininde göster</string>
+    <string name="room_settings_room_notifications_title">Bildirimler</string>
+    <string name="room_settings_room_access_rules_pref_title">Oda Erişimi</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Oda Geçmiş Okunurluğu</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Kimler geçmişi okuyabilir\?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Kim bu odaya erişebilir\?</string>
+
+    <string name="room_settings_read_history_entry_anyone">Herkes</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Sadece üyeler (bu seçenek seçildiğinden beri)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Sadece üyeler (davet edildiklerinden beri)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Sadece üyeler (katıldıklarından beri)</string>
+
+    <string name="room_settings_room_access_warning">Odaya bağlantı eklemek için adrese sahip olmalıdır.</string>
+    <string name="room_settings_room_access_entry_only_invited">Sadece davet edilenler</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Misafirler dışında odanın bağlantısını bilen herkes</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Misafirler ile birlikte odanın bağlantısını bilen herkes</string>
+
+    <string name="room_settings_banned_users_title">Engellenmiş kullanıcılar</string>
+
+    <string name="room_settings_category_advanced_title">Gelişmiş</string>
+    <string name="room_settings_room_internal_id">Odanın dahili ID\'si</string>
+    <string name="room_settings_addresses_pref_title">Adresler</string>
+    <string name="room_settings_labs_pref_title">Laboratuarlar</string>
+    <string name="room_settings_labs_warning_message">Bu deneysel özellikler beklenmeyen şekilde hata verebilir. Dikkatli kullanın.</string>
+    <string name="room_settings_labs_end_to_end">Uçtan-uca Şifreleme</string>
+    <string name="room_settings_labs_end_to_end_is_active">Uçtan-uca Şifreleme etkin</string>
+    <string name="room_settings_labs_end_to_end_warnings">Şifrelemeyi etkinleştimek için çıkış yapman gerekiyor.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Sadece doğrulanmış cihazlara şifrele</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Asla doğrulanmamış cihaz olan oda da şifrelenmiş mesaj gönderme.</string>
+
+    <string name="room_settings_addresses_no_local_addresses">Bu oda yerel adrese sahip değil</string>
+    <string name="room_settings_addresses_add_new_address">Yeni adres (örn. #foo:matrix.org)</string>
+
+    <string name="room_settings_no_flair">Bu oda topluluklar için hiçbir kabiliyet göstermiyor</string>
+    <string name="room_settings_add_new_group">Yeni topluluk ID\'si (örn. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Geçersiz topluluk ID\'si</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' geçerli bir topluluk ID\'si değil</string>
+
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Geçersiz takma ad biçimi</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' geçerli bir takma ad biçimi değil</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Bu oda için belirtilen bir ana adresin olmayacak.</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Ana adres uyarıları</string>
+
+    <string name="room_settings_set_main_address">Ana Adres Olarak Ayarla</string>
+    <string name="room_settings_unset_main_address">Ana Adres Olarak Ayarlama</string>
+    <string name="room_settings_copy_room_id">Oda ID\'sini Kopyala</string>
+    <string name="room_settings_copy_room_address">Oda Adresini Kopyala</string>
+
+    <string name="room_settings_addresses_e2e_enabled">Şifreleme bu oda için etkinleştirilmiş.</string>
+    <string name="room_settings_addresses_e2e_disabled">Şifreleme bu oda için etkin değil.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Şifrelemeyi etkinleştir
+\n(uyarı: bu işlem geri alınamaz!)</string>
+
+    <string name="directory_title">Dizin</string>
+    <string name="settings_theme">Tema</string>
+
+    <string name="failed_to_load_timeline_position">%s odanın geçmişinde belirli bir yeri yüklemeye çalıştı ama bulamadı.</string>
+
+    <string name="encryption_information_title">Uçtan-uca şifreleme bilgilendirmesi</string>
+
+    <string name="encryption_information_device_info">Olay Bilgilendirmesi</string>
+    <string name="encryption_information_user_id">Kullanıcı idsi</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519 kimlik anahtarı</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Alınmış Ed25519 parmak izi anahtarı</string>
+    <string name="encryption_information_algorithm">Algoritma</string>
+    <string name="encryption_information_session_id">Oturum ID\'si</string>
+    <string name="encryption_information_decryption_error">Çözme hatası</string>
+
+    <string name="encryption_information_sender_device_information">Göndericinin cihaz bilgisi</string>
+    <string name="encryption_information_device_name">Cihaz adı</string>
+    <string name="encryption_information_name">Ad</string>
+    <string name="encryption_information_device_id">Cihaz ID\'si</string>
+    <string name="encryption_information_device_key">Cihaz anahtarı</string>
+    <string name="encryption_information_verification">Doğrulama</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 parmak izi</string>
+
+    <string name="encryption_export_e2e_room_keys">E2E Oda anahtarlarını dışa aktar</string>
+    <string name="encryption_export_room_keys">Oda anahtarlarını dışa aktar</string>
+    <string name="encryption_export_room_keys_summary">Anahtarları yerel dosyaya aktar</string>
+    <string name="encryption_export_export">Dışa aktar</string>
+    <string name="encryption_export_notice">Lütfen dışa aktarılmış anahtarları şifrelemek için parola oluşturun. Tekrar içe aktarmak için aynı parolayı girmeniz gerekli.</string>
+    <string name="encryption_export_saved_as">E2E oda anahtarları şu dizine kaydedildi \'%s\'.
+\n
+\nUyarı: Eğer uygulama kaldırılırsa bu dosya silinebilir.</string>
+
+    <string name="encryption_message_recovery">Şifrelenmiş Mesajları Kurtarma</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Anahtar yedeklemesini yönet</string>
+
+    <string name="encryption_import_e2e_room_keys">E2E oda anahtarlarını içe aktar</string>
+    <string name="encryption_import_room_keys">Oda anahtarlarını içe aktar</string>
+    <string name="encryption_import_room_keys_summary">Oda anahtarını yerel dosyadan içe aktar</string>
+    <string name="encryption_import_import">İçe aktar</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Sadece doğrulanmış cihazlara şifrele</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Asla bu cihazdan doğrulanmamış cihazlara şifrelenmiş mesaj gönderme.</string>
+    <string name="encryption_import_room_keys_success">%1$d/%2$d anahtar başarı ile içe aktarıldı.</string>
+
+    <string name="encryption_information_not_verified">Doğrulanmamış</string>
+    <string name="encryption_information_verified">Doğrulanmış</string>
+    <string name="encryption_information_blocked">Karalistede</string>
+
+    <string name="encryption_information_unknown_device">bilinmeyen cihaz</string>
+    <string name="encryption_information_none">yok</string>
+
+    <string name="encryption_information_verify">Doğrula</string>
+    <string name="encryption_information_unverify">Doğrulamayı kaldır</string>
+    <string name="encryption_information_block">Karalisteye ekle</string>
+    <string name="encryption_information_unblock">Karalisteden sil</string>
+
+    <string name="encryption_information_verify_device">Cihazı doğrula</string>
+    <string name="encryption_information_verify_device_warning">Bu cihazın güvenilir olduğunu doğrulamak için, lütfen sahibi ile iletişime geçin (örn. yüz yüze ya da telefonla arama) ve onlara Kullanıcı Ayarları altında hangi anahtarın aşağıdaki anahtar ile uyuştuğunu sorun:</string>
+    <string name="encryption_information_verify_device_warning2">Eğer uyuşursa aşağıdaki doğrulama tuşuna basın. Eğer uyuşmaz ise biri bu cihazı engelliyor demektir bu durumda sen o kişi karalisteye eklemelisin. Gelecekte doğrulama işlemi daha gelişmiş olacak.</string>
+    <string name="encryption_information_verify_key_match">Anahtarın uyuştuğunu doğruluyorum</string>
+
+    <string name="e2e_enabling_on_app_update">Riot artık uçtan-uca şifrelemeyi destekliyor ancak etkinleştirmen için tekrar giriş yapman gerekli.
+\n
+\nBunu şimdi yada sonra uygulama ayarlarından yapabilirsin.</string>
+
+    <string name="unknown_devices_alert_title">Oda bilinmeyen cihaz barındırıyor</string>
+    <string name="unknown_devices_alert_message">Bu oda doğrulanmamış bilinmeyen cihaz barındırıyor.
+\nBu cihazların kullanıcıların sahip olduğu cihaz olduklarının garantisi yok.
+\nDevam etmeden önce her cihaz için doğrulama işlemi yapmanızı öneririz, fakat isterseniz mesajları doğrulamadan da tekrar gönderebilirsiniz.
+\n
+\nBilinmeyen Cihazlar:</string>
+
+    <string name="select_room_directory">Bir oda dizini seç</string>
+    <string name="directory_server_fail_to_retrieve_server">Sunucu müsait değil ya da aşırı yüklenmiş</string>
+    <string name="directory_server_type_homeserver">Herkese açık odaları listelemek için bir anamakine girin</string>
+    <string name="directory_server_placeholder">Anamakine URL</string>
+    <string name="directory_server_all_rooms_on_server">%s sunucusundaki tüm odalar</string>
+    <string name="directory_server_native_rooms">%s deki/daki tüm yerel odalar</string>
+
+    <string name="lock_screen_hint">Buraya yazın…</string>
+
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">1 okunmamış bildirilmiş mesaj</item>
+        <item quantity="other">%d okunmamış bildirilmiş mesaj</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+        <item quantity="one">1 okunmamış bildirilmiş mesaj</item>
+        <item quantity="other">%d okunmamış bildirilmiş mesaj</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">1 oda</item>
+        <item quantity="other">%d oda</item>
+    </plurals>
+    <string name="notification_unread_notified_messages_in_room">%2$s de/da %1$s</string>
+
+    <string name="historical_placeholder">Geçmişte bul</string>
+
+    <string name="font_size">Font boyutu</string>
+    <string name="tiny">Çok küçük</string>
+    <string name="small">Küçük</string>
+    <string name="normal">Normal</string>
+    <string name="large">Büyük</string>
+    <string name="larger">Çok büyük</string>
+    <string name="largest">Daha büyük</string>
+    <string name="huge">En büyük</string>
+
+    <string name="widget_no_power_to_manage">Bu odada widgetları yönetebilmek için izine ihtiyacın var</string>
+    <string name="widget_creation_failure">Widget oluşturma başarısız</string>
+    <string name="event_formatter_widget_added">%1$s %2$s tarafından eklendi</string>
+    <string name="event_formatter_widget_removed">%1$s %2$s tarafından kaldırıldı</string>
+    <string name="settings_labs_create_conference_with_jitsi">Jitsi ile konferans çağrısı oluştur</string>
+    <string name="widget_delete_message_confirmation">Bu widget\'ı odadan kaldırmak istediğine emin misin\?</string>
+    <plurals name="active_widgets">
+        <item quantity="one">1 etkin widget</item>
+        <item quantity="other">%d etkin widget</item>
+    </plurals>
+
+    <string name="widget_integration_unable_to_create">Widget oluşturulamıyor.</string>
+    <string name="widget_integration_failed_to_send_request">İstek gönderilemedi.</string>
+    <string name="widget_integration_positive_power_level">Erişim seviyesi pozitif tamsayı olmalıdır.</string>
+    <string name="widget_integration_must_be_in_room">Bu oda da değilsin.</string>
+    <string name="widget_integration_no_permission_in_room">Bu oda da bunu yapacak iznin yok.</string>
+    <string name="widget_integration_missing_room_id">room_id istekte eksik.</string>
+    <string name="widget_integration_missing_user_id">user_id istekte eksik.</string>
+    <string name="widget_integration_room_not_visible">%s adlı oda görünür değil.</string>
+    <string name="widget_integration_missing_parameter">Gerekli değerler eksik.</string>
+    <string name="widget_integration_invalid_parameter">Değer geçerli değil.</string>
+    <string name="room_add_matrix_apps">Matrix uygulamaları ekle</string>
+    <string name="settings_labs_native_camera">Yerel kamerayı kullan</string>
+    <string name="settings_labs_native_camera_summary">Özel kamera ekranı açmak yerine sistem kamerasını kullan.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Mesaj göndermek için enter tuşunu kullan</string>
+    <string name="settings_labs_enable_send_voice">Sesli mesaj gönder</string>
+    <string name="settings_labs_enable_send_voice_summary">Bu seçenek mesajları kaydetmek için üçüncü parti bir uygulama gerektiriyor.</string>
+
+    <string name="you_added_a_new_device">%s adlı şifreleme anahatarlarını isteyebilen yeni bir cihaz eklediniz.</string>
+    <string name="your_unverified_device_requesting">%s adlı doğrulanmamış cihaz şifreleme anahtarlarını istiyor.</string>
+    <string name="start_verification">Doğrulamayı başlat</string>
+    <string name="share_without_verifying">Doğrulamadan paylaş</string>
+    <string name="ignore_request">İsteği göz ardı et</string>
+
+    <string name="conference_call_warning_title">Uyarı!</string>
+    <string name="conference_call_warning_message">Konferans çağrısı gelişim sürecinde ve güvenilir olmayabilir.</string>
+
+    <string name="command_error">Komut hatası</string>
+    <string name="unrecognized_command">Tanımlanamayan komut: %s</string>
+    <string name="command_problem_with_parameters">%s adlı komutun daha fazla değişkene ihtiyacı var ya da bazı değişkenler yanlış.</string>
+    <string name="command_description_emote">Eylemi gösteriyor</string>
+    <string name="command_description_ban_user">Verilen id ile kullanıcıları engeller</string>
+    <string name="command_description_unban_user">Verilen id ile kullanıcıların engelini kaldırır</string>
+    <string name="command_description_op_user">Kullanıcının erişim seviyesini belirle</string>
+    <string name="command_description_deop_user">Verilen id ile kullanıcıları operatörlükten çıkarır</string>
+    <string name="command_description_invite_user">Verilen id ile kullanıcıları şuanki odaya davet eder</string>
+    <string name="command_description_join_room">Verilen takma ad ile odalara katıl</string>
+    <string name="command_description_part_room">Odadan ayrıl</string>
+    <string name="command_description_topic">Odanın konusunu belirle</string>
+    <string name="command_description_kick_user">Verilen id ile kullanıcıları atar</string>
+    <string name="command_description_nick">Görünür ismini değiştirir</string>
+    <string name="command_description_markdown">Markdown Aç/Kapat</string>
+    <string name="command_description_clear_scalar_token">Matrix uygulamaları yönetmeyi düzeltmek için</string>
+
+    <string name="markdown_has_been_enabled">Markdown etkinleştirilmiş.</string>
+    <string name="markdown_has_been_disabled">Markdown etkin değil.</string>
+
+    <string name="notification_off">Kapalı</string>
+    <string name="notification_silent">Sessiz</string>
+    <string name="notification_noisy">Sesli</string>
+
+    <string name="encrypted_message">Şifrelenmiş mesaj</string>
+
+    <string name="create">Oluştur</string>
+    <string name="create_community">Topluluk oluştur</string>
+    <string name="community_name">Topluluk adı</string>
+    <string name="community_name_hint">Örnek</string>
+    <string name="community_id">Topluluk ID\'si</string>
+    <string name="community_id_hint">örnek</string>
+
+    <string name="group_details_home">Anasayfa</string>
+    <string name="group_details_people">Kişiler</string>
+    <string name="group_details_rooms">Odalar</string>
+    <string name="no_users_placeholder">Kullanıcı yok</string>
+
+    <string name="rooms">Odalar</string>
+    <string name="joined">Katıldı</string>
+    <string name="invited">Davet edildi</string>
+    <string name="filter_group_members">Grup üyelerini filtrele</string>
+    <string name="filter_group_rooms">Grup Odalarını filtrele</string>
+
+    <plurals name="group_members">
+        <item quantity="one">1 üye</item>
+        <item quantity="other">%d üye</item>
+    </plurals>
+
+    <plurals name="group_rooms">
+        <item quantity="one">1 oda</item>
+        <item quantity="other">%d oda</item>
+    </plurals>
+    <string name="group_no_long_description">Topluluk yöneticisi bu topluluk için uzun bir açıklama sağlamadı.</string>
+
+    <string name="has_been_kicked">%1$s dan/den %2$s tarafından atıldın</string>
+    <string name="has_been_banned">%1$s dan/den %2$s tarafından engellendin</string>
+    <string name="reason_colon">Nedeni: %1$s</string>
+    <string name="rejoin">Tekrar katıl</string>
+    <string name="forget_room">Odayı unut</string>
+
+    <string name="receipt_avatar">Avatar açıklaması</string>
+    <string name="notice_avatar">Avatar uyarısı</string>
+    <string name="avatar">Avatar</string>
+
+    <string name="dialog_user_consent_content">%1$s anamakinesini kullanmaya devam etmek için şart ve koşulları gözden geçirip kabul etmelisiniz.</string>
+    <string name="dialog_user_consent_submit">Şimdi yorumla</string>
+
+    <string name="deactivate_account_title">Hesabı devre dışı bırak</string>
+    <string name="deactivate_account_content">Bu hesabınızın kalıcı bir şekilde kullanılamaz yapar. Giriş yapamazsınız ve kimse tekrar aynı kullanıcı ID\'sini kullanarak kayıt yaptıramaz. Bu hesabınızın tüm odalardan ayrılmasına ve kimlik sunucusundan hesap detaylarınızın silinmesine yok açar. <b>Bu eylem geri çevrilemez</b>.
+\n
+\nHesabınızı devre dışı bırakmak <b>varsayılan olarak gönderdiğiniz mesajlarınızın silinmesini sağlamaz</b>. Eğer mesajlarınızın silinmesini istiyorsanız lütfen alttaki kutuyu işaretleyin.
+\n
+\nMatrixdeki mesaj görünürlüğü eposta ile benzerdir. Silinen mesajlarınız yeni ya da kayıtsız kullanıcılarla paylaşılmaz ama kayıtlı ve zaten mesajlarınıza erişebilen kullanıcılar halen mesajlarınızın bir kopyasına sahip olurlar.</string>
+    <string name="deactivate_account_delete_checkbox">Lütfen hesabım devre dışı olunca gönderdiğim tüm mesajları sil (Uyarı: bu gelecekteki kullanıcıların bitmemiş yarım tartışma görmelerine sebep olur)</string>
+    <string name="deactivate_account_prompt_password">Devam etmek için lütfen şifrenizi girin:</string>
+    <string name="deactivate_account_submit">Hesabı devre dışı bırak</string>
+
+    <string name="error_empty_field_enter_user_name">Lütfen kullanıcı adı girin.</string>
+    <string name="error_empty_field_your_password">Lütfen şifrenizi girin.</string>
+    <string name="room_tombstone_versioned_description">Oda değiştirildi ve artık etkin değil</string>
+    <string name="room_tombstone_continuation_link">Tartışma burada devam ediyor</string>
+    <string name="room_tombstone_continuation_description">Bu oda farklı bir tartışmanın devamı</string>
+    <string name="room_tombstone_predecessor_link">Eski mesajları görmek için tıkla</string>
+
+    <string name="resource_limit_exceeded_title">Kaynak Sınırı Aşıldı</string>
+    <string name="resource_limit_contact_action">Yöneticiyle iletişime geç</string>
+
+    <string name="resource_limit_contact_admin">Hizmet yöneticin iletişime geç</string>
+
+    <string name="resource_limit_soft_default">Bu anamakine kaynak sınırılarından birini aştı <b>bazı kullanıcılar giriş yapamayabilir</b>.</string>
+    <string name="resource_limit_hard_default">Bu anamakine kaynak sınırılarından birini aştı.</string>
+
+    <string name="resource_limit_soft_mau"> Bu anamakine Aylık Etkin Kullanıcı sınırına ulaştı <b>bazı kullanıcılar giriş yapamayabilir</b>.</string>
+    <string name="resource_limit_hard_mau">Bu anamakine Aylık Etkin Kullanıcı sınırına ulaştı.</string>
+
+    <string name="resource_limit_soft_contact">Lütfen limitin arttırılması için %s yapın.</string>
+    <string name="resource_limit_hard_contact">Lütfen bu hizmeti kullanmak için %s yapın.</string>
+
+    <string name="settings_lazy_loading_title">Yavaş yüklenen oda üyeleri</string>
+    <string name="settings_lazy_loading_description">Sadece ilk görüntüdeki oda üyelerini yükleyerek performansı arttırın.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Anamakineniz yavaş oda üyeleri yüklemeyi desteklemiyor daha. Daha sonra tekrar deneyin.</string>
+
+    <string name="unknown_error">Üzgünüz bir hata oluştu</string>
+
+    <string name="merged_events_expand">genişlet</string>
+    <string name="merged_events_collapse">daralt</string>
+
+    <string name="settings_info_area_show">Bilgi alanını göster</string>
+    <string name="show_info_area_always">Her zaman</string>
+    <string name="show_info_area_messages_and_errors">Mesajlar ve hatalar için</string>
+    <string name="show_info_area_only_errors">Sadece hatalar için</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">Geçerli Google Play Hizmetleri APK\'sı bulunamadı. Bildirimler olması gerektiği gibi çalışmayacak.</string>
+
+    <string name="store_title">Riot.im - İletişim, senin yolunda.</string>
+    <string name="store_whats_new">"Biz her zaman Riot.im’e geliştirmeler ve değişimler yapıyoruz.
+Tam değişiklikler listesi burada bulunabilir: %1$s.
+Bir şeyleri kaçırmamak için güncellemeleri açık tutun."</string>
+    <string name="store_short_description">Evrensel senin kontrolün altında güvenli sohbet uygulaması.</string>
+    <string name="store_full_description">"Bir sohbet uygulaması, senin kontrolün altında ve tamamen esnek. Riot senin istediğin şekilde iletişim kurmanı sağlar. [matrix] için yapıldı - açık, merkezi olmayan iletişim için bir standart.
+
+Ücretsiz matrix.org hesabı al, https://modular.im adresinde kendi özel sunucunu al ya da farklı bir Matrix sunucusu kullan.
+
+Neden Riot.im’i seçmeliyim?
+
+• TAMAMEN İLETİŞİM: Takımın, arkadaşların ve topluluğun etrafında odalar oluştur - nasıl istersen! Sohbet et, dosya paylaş, widget ekle ve sesli arama yap ya da görüntülü arama yap - tamamen ücretsiz.
+
+• GÜÇLÜ ENTEGRASYON: Riot.im’i bildiğin ve sevdiğin araçlarla kullan. Riot.im ile farklı sohbet uygulamalarındaki kullanıcılar, gruplarla bile konuşabilirsin.
+
+• GİZLİ VE GÜVENLİ: Tartışmalarını gizli tutar. Uçtan-uca şifreleme gizli iletişimin gizli kalmasını sağlar.
+
+• AÇIK, KAPALI DEĞİL: Açık kaynaklı, ve Matrix üzerinde kuruldu. Kendi verilerine kendi sunucunu kullanarak ya da güvendiğin bir tanesini seçerek sahip ol.
+
+• OLDUĞUN HERYERDE: Tüm cihazlarında ya da çevrimiçi https://riot.im’de tamamen senkronize mesaj geçmişi ile nerede olursan ol iletişimde kal."</string>
+
+    <string name="passphrase_create_passphrase">Parola oluştur</string>
+    <string name="passphrase_confirm_passphrase">Parolayı doğrula</string>
+    <string name="passphrase_enter_passphrase">Parolayı gir</string>
+    <string name="passphrase_passphrase_does_not_match">Parolalar uyuşmuyor</string>
+    <string name="passphrase_empty_error_message">Lütfen bir parola girin</string>
+    <string name="passphrase_passphrase_too_weak">Parola çok zayıf</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Eğer Riot.im\'in kurtarma anahtarı oluşturmasını istiyorsanız lütfen parolayı silin.</string>
+    <string name="keys_backup_no_session_error">Matrix oturumu müsait değil</string>
+
+    <string name="keys_backup_setup_step1_title">Şifrelenmiş mesajları asla kaybetme</string>
+    <string name="keys_backup_setup_step1_description">Şifrelenmiş odalarda mesajlar uçtan-uca şifreleme ile korunur. Sadece sen ve makbuzcular bu mesajları okumak için anahtara sahip.
+\n
+\nAnahtarları kaybetmeden güvenli bir şekilde yedekle.</string>
+    <string name="keys_backup_setup">Anahtar yedeklemeyi başlat</string>
+    <string name="keys_backup_setup_step1_advanced">(Gelişmiş)</string>
+    <string name="keys_backup_setup_step1_manual_export">Elle anahtarları dışa aktar</string>
+
+    <string name="keys_backup_setup_step2_text_title">Yedeklemeni parola ile güvence altına al.</string>
+    <string name="keys_backup_setup_step2_text_description">Anahtarlarının şifrelenmiş bir kopyasını anamakinede depolayacağız. Yedeklemeni parola ile koru ve güvenli tut.
+\n
+\nÜst düzey güvenlik için parolanız hesap şifresinden farklı olmalıdır.</string>
+    <string name="keys_backup_setup_step2_button_title">Parolayı ayarla</string>
+    <string name="keys_backup_setup_creating_backup">Yedekleme Oluştur</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Ya da yedeklemeni kurtarma anahtarı ile güvende tut ve güvenli bir yere kaydet.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Gelişmiş) Kurtarma anahtarı ile kur</string>
+    <string name="keys_backup_setup_step3_success_title">Başarılı !</string>
+    <string name="keys_backup_setup_step3_text_line1">Anahtarların yedekleniyor.</string>
+    <string name="keys_backup_setup_step3_text_line2">Kurtarma anahtarın bir güvenli ağ - onu şifrelenmiş mesajlarına erişmek için kullanabilirsin eğer parolanı unuttuysan.
+\nKurtarma anahtarını çok güvenli bir yerde tut şifre yöneticisi gibi (ya da güvenli)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Kurtarma anahtarını çok güvenli bir yerde tut şifre yöneticisi gibi (ya da güvenli)</string>
+    <string name="keys_backup_setup_step3_button_title">Tamam</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Bir kopya oluşturdum</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Kurtarma Anahtarını Kaydet</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Paylaş</string>
+    <string name="keys_backup_setup_step3_save_button_title">Dosya olarak farklı kaydet</string>
+    <string name="recovery_key_export_saved_as_warning">Kurtarma anahtarı \'%s\' adlı dizine kaydedildi.
+\n
+\nUyarı: uygulama kaldırılırsa dosya silinebilir.</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">Lütfen bir kopya oluşturun</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Kurtarma anahtarını bununla paylaş…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Parola kullanılarak Kurtarma anahtarı oluşturuluyor bu işlem bir kaç saniye sürecek.</string>
+    <string name="recovery_key">Kurtarma Anahtarı</string>
+    <string name="unexpected_error">Beklenmeyen hata</string>
+    <string name="keys_backup_setup_backup_started_title">Yedekleme Başlatıldı</string>
+    <string name="keys_backup_setup_backup_started_message">Şifreleme anahtarın arkaplanda anamakineye yedeklenecek. İlk yedekleme bir kaç dakika sürecek.</string>
+
+
+    <string name="keys_backup_setup_skip_title">Emin misin\?</string>
+    <string name="keys_backup_setup_skip_msg">Eğer cihazı kaybedersen ya da çıkış yaparsan mesajlara erişimini kaybedeceksin.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">Yedekleme sürümü alınıyor…</string>
+    <string name="keys_backup_restore_with_passphrase">Şifrelenmiş mesaj geçmişini açmak için kurtarma parolanı kullan</string>
+    <string name="keys_backup_restore_use_recovery_key">kurtarma anahtarını kullan</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Kurtarma parolanı bilmiyorsan %s kullanabilirsin.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Şifrelenmiş mesaj geçmişini açmak için kurtarma anahtarını kullan</string>
+    <string name="keys_backup_restore_key_enter_hint">Kurtarma Anahtarını Gir</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Mesaj Kurtarma</string>
+
+    <string name="keys_backup_restore_with_key_helper">Kurtarma anahtarını mı kaybettin\? Ayarlardan yeni bir tane oluşturabilirsin.</string>
+    <string name="keys_backup_passphrase_error_decrypt">Yedekleme bu parola ile çözülemez: lütfen doğru kurtarma parolasını girdiğinizi doğrulayın.</string>
+    <string name="network_error_please_check_and_retry">Ağ hatası: lütfen ağ bağlantınızı kontrol edip tekrar deneyin.</string>
+
+    <string name="keys_backup_restoring_waiting_message">Yedekleme işleniyor:</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Kurtarma anahtarı hesaplanıyor…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Anahtarlar indiriliyor…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Anahtarlar içe aktarılıyor…</string>
+    <string name="keys_backup_unlock_button">Geçmişi Aç</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Lütfen bir kurtarma anahtarı girin</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Yedekleme bu kurtarma anahtarı ile çözülemez: lütfen doğru kurtarma anahtarını girdiğinizi doğrulayın.</string>
+
+    <string name="keys_backup_restore_success_title">Yedekleme İşlendi %s !</string>
+    <string name="keys_backup_restore_success_description">%1$d oturum anahtarı onarıldı ve bu cihaz tarafından bilinmeyen %2$d yeni anahtar eklendi</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">Yedekleme %d anahtarı ile işlendi.</item>
+        <item quantity="other">Yedekleme %d anahtarları ile işlendi.</item>
+    </plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">%d tane yeni anahtar bu cihaza eklendi.</item>
+        <item quantity="other">%d tane yeni anahtar bu cihaza eklendi.</item>
+    </plurals>
+
+    <string name="keys_backup_get_version_error">Son sürüm onarma anahtarı alınırken hata oluştu (%s).</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">Kripto oturumu etkin değil</string>
+
+
+    <string name="keys_backup_settings_restore_backup_button">Yedeklemeden onar</string>
+    <string name="keys_backup_settings_delete_backup_button">Yedeklemeyi Sil</string>
+
+    <string name="keys_backup_settings_status_ok">Anahtar Yedekleme bu cihaz için doğru bir şekilde ile ayarlandı.</string>
+    <string name="keys_backup_settings_status_ko">Anahtar Yedekleme bu cihazda etkin değil.</string>
+    <string name="keys_backup_settings_status_not_setup">Anahtarlarınız bu cihazdan yenilenemiyor.</string>
+
+    <string name="keys_backup_settings_signature_from_unknown_device">Yedekleme %s ID\'li bilinmeyen cihazdan gelen bir imzaya sahip.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Yedekleme bu cihazdan geçerli imzaya sahip.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Yedekleme %s adlı doğrulanmış cihazdan geçerli imzaya sahip.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Yedekleme %s adlı doğrulanmamış cihazdan geçerli imzaya sahip</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Yedekleme %s adlı doğrulanmış cihazdan geçersiz imzaya sahip</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Yedekleme %s adlı doğrulanmamış cihazdan geçersiz imzaya sahip</string>
+    <string name="keys_backup_get_trust_error">Yedekleme için güven bilgisi alınırken hata oluştu (%s).</string>
+
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">%d anahtarı yedekleniyor…</item>
+        <item quantity="other">%d anahtarları yedekleniyor…</item>
+    </plurals>
+
+    <string name="keys_backup_info_title_version">Sürüm</string>
+    <string name="keys_backup_info_title_algorithm">Algoritma</string>
+    <string name="keys_backup_info_title_signature">İmza</string>
+
+</resources>

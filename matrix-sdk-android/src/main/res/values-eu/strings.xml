@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
+<resources>
 
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s erabiltzaileak irudi bat bidali du.</string>
@@ -39,9 +39,9 @@
     <string name="notice_avatar_changed_too">(abatarra ere aldatu da)</string>
     <string name="notice_room_name_removed">%1$s erabiltzaileak gelaren izena kendu du</string>
     <string name="notice_room_topic_removed">%1$s erabiltzaileak gelaren mintzagaia kendu du</string>
-    <string name="notice_event_redacted">"kenduta %1$s "</string>
-    <string name="notice_event_redacted_by">" nork: %1$s"</string>
-    <string name="notice_event_redacted_reason">" [arrazoia: %1$s]"</string>
+    <string name="notice_event_redacted">%1$s kenduta</string>
+    <string name="notice_event_redacted_by">nork: %1$s</string>
+    <string name="notice_event_redacted_reason">[arrazoia: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s erabiltzaileak bere profila eguneratu du %2$s</string>
     <string name="notice_room_third_party_invite">%1$s erabiltzaileak gelara elkartzeko gonbidapen bat bidali dio %2$s erabiltzaileari</string>
     <string name="notice_room_third_party_registered_invite">%1$s erabiltzaileak %2$s gelarako gonbidapena onartu du</string>
@@ -56,7 +56,7 @@
 
     <string name="network_error">Sare errorea</string>
     <string name="matrix_error">Matrix errorea</string>
-    
+
     <string name="room_error_join_failed_empty_room">Ezin da oraingoz hutsik dagoen gela batetara berriro sartu.</string>
 
     <string name="encrypted_message">Zifratutako mezua</string>
@@ -64,7 +64,7 @@
     <string name="medium_email">E-mail helbidea</string>
     <string name="medium_phone_number">Telefono zenbakia</string>
 
-<string name="summary_user_sent_sticker">%1$s erabiltzaileak eranskailu bat bidali du.</string>
+    <string name="summary_user_sent_sticker">%1$s erabiltzaileak eranskailu bat bidali du.</string>
 
     <string name="message_reply_to_prefix">Honi erantzunez</string>
 
@@ -72,5 +72,16 @@
     <string name="reply_to_a_video">bideo bat bidali du.</string>
     <string name="reply_to_an_audio_file">audio fitxategi bat bidali du.</string>
     <string name="reply_to_a_file">fitxategi bat bidali du.</string>
+
+    <string name="room_displayname_invite_from">%s gelarako gonbidapena</string>
+    <string name="room_displayname_room_invite">Gela gonbidapena</string>
+    <string name="room_displayname_two_members">%1$s eta %2$s</string>
+    <string name="room_displayname_empty_room">Gela hutsa</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s eta beste bat</item>
+        <item quantity="other">%1$s eta beste %2$d</item>
+    </plurals>
+
 
 </resources>

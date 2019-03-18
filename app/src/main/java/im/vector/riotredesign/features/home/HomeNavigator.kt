@@ -16,7 +16,7 @@
 
 package im.vector.riotredesign.features.home
 
-import android.view.Gravity
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
@@ -39,7 +39,7 @@ class HomeNavigator {
         activity?.let {
             val args = RoomDetailArgs(roomId, eventId)
             val roomDetailFragment = RoomDetailFragment.newInstance(args)
-            it.drawerLayout?.closeDrawer(Gravity.LEFT)
+            it.drawerLayout?.closeDrawer(GravityCompat.START)
             if (addToBackstack) {
                 it.addFragmentToBackstack(roomDetailFragment, R.id.homeDetailFragmentContainer, roomId)
             } else {

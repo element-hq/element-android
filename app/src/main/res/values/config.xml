@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" translatable="false">"Riot X"</string>
+
+    <!-- server urls -->
+    <string name="vector_im_server_url" translatable="false">https://vector.im</string>
+    <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
+    <string name="default_hs_server_url" translatable="false">https://matrix.org</string>
+    <string name="default_identity_server_url" translatable="false">https://vector.im</string>
+    <string name="piwik_server_url" translatable="false">https://piwik.riot.im</string>
+    <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
+
+    <!-- Widget urls -->
+    <string name="integrations_ui_url" translatable="false">"https://scalar-staging.riot.im/scalar-web/"</string>
+    <string name="integrations_rest_url" translatable="false">"https://scalar-staging.riot.im/scalar/api"</string>
+
+    <string-array name="integrations_widgets_urls" translatable="false">
+        <item>https://scalar-staging.riot.im/scalar/api</item>
+        <item>https://scalar.vector.im/api</item>
+    </string-array>
+
+    <!-- empty means to use the active HS url -->
+    <!-- set a valid URL like "https://matrix.org" to use a custom one -->
+    <string name="push_server_url" translatable="false" />
+
+    <string-array name="room_directory_servers" translatable="false">
+        <item>matrix.org</item>
+    </string-array>
+
+</resources>

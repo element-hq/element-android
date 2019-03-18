@@ -115,8 +115,8 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
 
     private fun renderFailure(error: Throwable) {
         val message = when (error) {
-            is Failure.NetworkConnection -> getString(R.string.error_no_network)
-            else                         -> getString(R.string.error_common)
+            is Failure.NetworkConnection -> getString(R.string.network_error_please_check_and_retry)
+            else                         -> getString(R.string.unknown_error)
         }
         stateView.state = StateView.State.Error(message)
     }

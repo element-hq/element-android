@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
-
+<resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s sendi mynd.</string>
     <string name="summary_user_sent_sticker">%1$s sendi límmerki.</string>
@@ -41,7 +40,7 @@
     <string name="medium_email">Tölvupóstfang</string>
     <string name="medium_phone_number">Símanúmer</string>
 
-<string name="notice_room_withdraw">%1$s tók til baka boð frá %2$s</string>
+    <string name="notice_room_withdraw">%1$s tók til baka boð frá %2$s</string>
     <string name="notice_display_name_set">%1$s setti birtingarnafn sitt sem %2$s</string>
     <string name="notice_display_name_changed_from">%1$s breytti birtingarnafni sínu úr %2$s í %3$s</string>
     <string name="notice_display_name_removed">%1$s fjarlægði birtingarnafn sitt (%2$s)</string>
@@ -67,4 +66,15 @@
     <string name="could_not_redact">Gat ekki ritstýrt</string>
     <string name="room_error_join_failed_empty_room">Ekki er í augnablikinu hægt að taka aftur þátt í spjallrás sem er tóm.</string>
 
-    </resources>
+    <string name="room_displayname_room_invite">Boð á spjallrás</string>
+    <string name="room_displayname_two_members">%1$s og %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s og 1 annar</item>
+        <item quantity="other">%1$s og %2$d aðrir</item>
+    </plurals>
+
+    <string name="room_displayname_empty_room">Tóm spjallrás</string>
+    <string name="room_displayname_invite_from">Boð frá %s</string>
+
+</resources>

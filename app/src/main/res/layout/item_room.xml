@@ -10,7 +10,9 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
+    android:paddingStart="8dp"
     android:paddingLeft="8dp"
+    android:paddingEnd="16dp"
     android:paddingRight="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,6 +26,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="notice_room_invite_no_invitee">%s\'s ఆహ్వానం</string>
+<resources>
+    <string name="notice_room_invite_no_invitee">%s\'s ఆహ్వానం</string>
     <string name="notice_room_invite">%1$s ఆహ్వానించారు %2$s</string>
     <string name="notice_room_leave">%1$s వదిలి వెళారు</string>
     <string name="notice_room_reject">%1$s ఆహ్వానాన్ని తిరస్కరించారు</string>
@@ -57,11 +58,17 @@
     <string name="medium_email">ఇమెయిల్ చిరునామా</string>
     <string name="medium_phone_number">ఫోను నంబరు</string>
 
-<string name="matrix_sdk_app_name">మ్యాట్రిక్స్ అండ్రొఇడ్ ఏస్ డి కె</string>
 
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s ఒక చిత్రం పంపారు.</string>
 
     <string name="notice_room_invite_you">%1$s మిమ్మల్ని ఆహ్వానించారు</string>
     <string name="notice_room_join">%1$s చేరారు</string>
-    </resources>
+
+    <string name="room_displayname_invite_from">%s నుండి ఆహ్వానించు</string>
+    <string name="room_displayname_two_members">%1$s మరియు %2$s</string>
+    <string name="room_displayname_room_invite">గదికి ఆహ్వానం</string>
+    <string name="room_displayname_empty_room">ఖాళీ గది</string>
+
+
+</resources>

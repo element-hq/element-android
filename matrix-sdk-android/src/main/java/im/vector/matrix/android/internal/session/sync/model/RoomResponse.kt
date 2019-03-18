@@ -49,7 +49,8 @@ internal data class RoomResponse(
         // The invite event if membership is invite.
         val invite: Event? = null,
 
-        // The presence status of other users (Provided in case of room initial sync @see http://matrix.org/docs/api/client-server/#!/-rooms/get_room_sync_data)).
+        // The presence status of other users
+        // (Provided in case of room initial sync @see http://matrix.org/docs/api/client-server/#!/-rooms/get_room_sync_data)).
         val presence: List<Event>? = null,
 
         // The read receipts (Provided in case of room initial sync).
