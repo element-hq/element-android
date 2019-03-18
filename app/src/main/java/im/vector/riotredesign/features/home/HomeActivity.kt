@@ -19,7 +19,6 @@ package im.vector.riotredesign.features.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -96,8 +95,8 @@ class HomeActivity : RiotActivity(), ToolbarConfigurable {
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            drawerLayout.closeDrawer(Gravity.LEFT)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             val handled = recursivelyDispatchOnBackPressed(supportFragmentManager)
             if (!handled) {

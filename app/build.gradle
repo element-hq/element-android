@@ -111,6 +111,7 @@ android {
         error 'ButtonOrder'
 
         // Layout
+        error 'UnknownIdInLayout'
         error 'StringFormatCount'
         error 'HardcodedText'
         error 'SpUsage'
