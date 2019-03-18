@@ -15,7 +15,7 @@ def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
 
-def generateVersionCodeFromTimestamp() {
+static def generateVersionCodeFromTimestamp() {
     // It's unix timestamp divided by 10: It's incremented by one every 10 seconds.
     return (System.currentTimeMillis() / 1_000 / 10).toInteger()
 }
@@ -24,12 +24,29 @@ def generateVersionCodeFromVersionName() {
     return versionMajor * 10000 + versionMinor * 100 + versionPatch
 }
 
+static def gitRevision() {
+    def cmd = "git rev-parse --short HEAD"
+    return cmd.execute().text.trim()
+}
+
+static def gitRevisionDate() {
+    def cmd = "git show -s --format=%ci HEAD^{commit}"
+    return cmd.execute().text.trim()
+}
+
+static def gitBranchName() {
+    def cmd = "git name-rev --name-only HEAD"
+    return cmd.execute().text.trim()
+}
+
 project.android.buildTypes.all { buildType ->
     buildType.javaCompileOptions.annotationProcessorOptions.arguments =
             [
                     validateEpoxyModelUsage: String.valueOf(buildType.name == 'debug')
             ]
 }
+
+def buildNumber = System.getenv("BUILD_NUMBER") as Integer ?: 0
 
 android {
     compileSdkVersion 28
@@ -40,20 +57,84 @@ android {
         multiDexEnabled true
         versionCode generateVersionCodeFromTimestamp()
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+        resValue "string", "git_revision", "\"${gitRevision()}\""
+        resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+        resValue "string", "git_branch_name", "\"${gitBranchName()}\""
+        resValue "string", "build_number", "\"${buildNumber}\""
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
+        debug {
+            resValue "bool", "debug_mode", "true"
+        }
+
         release {
+            resValue "bool", "debug_mode", "false"
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    flavorDimensions "store"
+
+    productFlavors {
+        appgplay {
+            dimension "store"
+
+            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
+        }
+
+        appfdroid {
+            dimension "store"
+
+            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
+        }
+    }
+
+    lintOptions {
+        warning 'MissingTranslation'
+
+        // Treat some warnings as errors
+        // Resources
+        error 'TypographyEllipsis'
+        warning 'ImpliedQuantity'
+
+        // UX
+        error 'ButtonOrder'
+
+        // Layout
+        error 'UnknownIdInLayout'
+        error 'StringFormatCount'
+        error 'HardcodedText'
+        error 'SpUsage'
+        error 'ObsoleteLayoutParam'
+        error 'InefficientWeight'
+        error 'DisableBaselineAlignment'
+        error 'ScrollViewSize'
+
+        // RTL
+        error 'RtlEnabled'
+        error 'RtlHardcoded'
+        error 'RtlSymmetry'
+
+        // Code
+        error 'SetTextI18n'
+        error 'ViewConstructor'
+        error 'UseValueOf'
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
 }
 
 dependencies {

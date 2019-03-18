@@ -120,7 +120,8 @@ object MatrixPatterns {
      * @return true if the string is a valid event id.
      */
     fun isEventId(str: String?): Boolean {
-        return str != null && (PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER.matcher(str).matches() || PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3.matcher(str).matches())
+        return str != null
+                && (PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER.matcher(str).matches() || PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3.matcher(str).matches())
     }
 
     /**

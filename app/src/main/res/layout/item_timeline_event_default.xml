@@ -4,6 +4,7 @@
     android:id="@+id/stateMessageView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="64dp"
     android:layout_marginLeft="64dp"
     android:gravity="center_vertical"
     android:padding="16dp"

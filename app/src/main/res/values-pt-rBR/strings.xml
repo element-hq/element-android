@@ -1,0 +1,1250 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resources_language">pt</string>
+    <string name="resources_country_code">BR</string>
+
+    <!-- titles -->
+    <string name="title_activity_home">Mensagens</string>
+    <string name="title_activity_room">Sala</string>
+    <string name="title_activity_settings">Configurações</string>
+    <string name="title_activity_member_details">Detalhes dos integrantes</string>
+    <string name="title_activity_historical">Historical</string>
+
+    <!-- button names -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Salvar</string>
+    <string name="leave">Sair da sala</string>
+    <string name="send">Enviar</string>
+    <string name="copy">Copiar</string>
+    <string name="resend">Reenviar</string>
+    <string name="redact">Remover</string>
+    <string name="quote">Citar</string>
+    <string name="share">Compartilhar</string>
+    <string name="later">Depois</string>
+    <string name="forward">Encaminhar</string>
+    <string name="permalink">Link permanente</string>
+    <string name="view_source">Ver fonte</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
+    <string name="delete">Remover</string>
+    <string name="rename">Renomear</string>
+    <string name="report_content">Denunciar conteúdo</string>
+    <string name="active_call">Chamada ativa</string>
+    <string name="ongoing_conference_call">Chamada de voz em andamento.
+\nParticipar como %1$s ou %2$s</string>
+    <string name="ongoing_conference_call_voice">Voz</string>
+    <string name="ongoing_conference_call_video">Vídeo</string>
+    <string name="cannot_start_call">Não consigo iniciar a chamada, favor tentar mais tarde</string>
+    <string name="missing_permissions_warning">Por falta de permissões, algumas funcionalidades podem estar faltando…</string>
+    <string name="missing_permissions_to_start_conf_call">Você necessita permissão para convidar para poder iniciar uma conferência nesta sala</string>
+    <string name="missing_permissions_title_to_start_conf_call">Não consigo iniciar a chamada</string>
+    <string name="device_information">Informações do dispositivo</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Chamadas de conferência não são permitidas em salas encriptografadas</string>
+    <string name="send_anyway">Enviar mesmo assim</string>
+    <string name="or">ou</string>
+    <string name="invite">Convidar</string>
+
+    <!-- actions -->
+    <string name="action_sign_out">Sair da Conta</string>
+    <string name="action_voice_call">Chamada de voz</string>
+    <string name="action_video_call">Chamada de vídeo</string>
+    <string name="action_global_search">Busca global</string>
+    <string name="action_mark_all_as_read">Marcar como lido</string>
+    <string name="action_historical">Histórico</string>
+    <string name="action_quick_reply">Resposta rápida</string>
+    <string name="action_open">Abrir</string>
+    <string name="action_close">Fechar</string>
+    <string name="copied_to_clipboard">Copiado à área de transferência</string>
+    <string name="disable">Desabilitar</string>
+
+    <!-- dialog titles -->
+    <string name="dialog_title_confirmation">Confirmação</string>
+    <string name="dialog_title_warning">Alerta</string>
+
+    <!-- Bottom navigation buttons -->
+    <string name="bottom_action_home">Início</string>
+    <string name="bottom_action_favourites">Favoritos</string>
+    <string name="bottom_action_people">Pessoas</string>
+    <string name="bottom_action_rooms">Salas</string>
+
+    <!-- Home screen -->
+    <string name="home_filter_placeholder_home">Filtrar nomes de salas</string>
+    <string name="home_filter_placeholder_favorites">Filtrar favoritos</string>
+    <string name="home_filter_placeholder_people">Filtrar pessoas</string>
+    <string name="home_filter_placeholder_rooms">Filtrar nomes de salas</string>
+
+    <!-- Home fragment -->
+    <string name="invitations_header">Convites</string>
+    <string name="low_priority_header">Baixa prioridade</string>
+
+    <!-- People fragment -->
+    <string name="direct_chats_header">Conversas</string>
+    <string name="local_address_book_header">Agenda de endereços local</string>
+    <string name="matrix_only_filter">Apenas contatos Matrix</string>
+    <string name="no_conversation_placeholder">Não há conversas</string>
+    <string name="no_contact_access_placeholder">Você não autorizou o Riot a acessar seus contatos locais</string>
+    <string name="no_result_placeholder">Nenhum resultado</string>
+
+    <!-- Rooms fragment -->
+    <string name="rooms_header">Salas</string>
+    <string name="rooms_directory_header">Lista de salas</string>
+    <string name="no_room_placeholder">Não há salas</string>
+    <string name="no_public_room_placeholder">Não há nenhuma sala pública disponível</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">%d usuária/o</item>
+        <item quantity="other">%d usuárias/os</item>
+    </plurals>
+
+    <string name="send_bug_report_include_logs">Enviar logs</string>
+    <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>
+    <string name="send_bug_report_include_screenshot">Enviar print de tela</string>
+    <string name="send_bug_report">Relatar erro</string>
+    <string name="send_bug_report_description">Por favor, descreva o erro (bug). O que você fez? O que você esperava ocorrer? O que aconteceu?</string>
+    <string name="send_bug_report_placeholder">Descreva o seu problema aqui</string>
+    <string name="send_bug_report_logs_description">Para diagnosticar problemas, logs deste cliente serão enviados junto a este relatório de erros (bugs). Este relatório de erros, incluindo os logs e prints da tela, não serão visíveis publicamente. Se você prefere enviar apenas o texto acima, por favor desmarque:</string>
+    <string name="send_bug_report_alert_message">Você parece estar frustrado balançando o telefone. Você gostaria de abrir a tela de relato de erro?</string>
+    <string name="send_bug_report_sent">O relatório de erro (bug) foi enviado com sucesso</string>
+    <string name="send_bug_report_failed">O envio do relatório de erro (bug) falhou (%s)</string>
+    <string name="send_bug_report_progress">Andamento (%s%%)</string>
+    <string name="send_bug_report_app_crashed">O aplicativo encerrou inesperadamente na última vez. Gostaria de abrir a tela de relatos de falhas?</string>
+
+    <string name="send_files_in">Enviar para</string>
+    <string name="read_receipt">Ler</string>
+
+    <string name="join_room">Entrar na sala</string>
+    <string name="username">Nome de usuário</string>
+    <string name="create_account">Criar conta</string>
+    <string name="login">Entrar</string>
+    <string name="logout">Sair da Conta</string>
+    <string name="hs_url">URL do "Home Server"</string>
+    <string name="identity_url">URL do "Identity Server"</string>
+    <string name="search">Pesquisar</string>
+
+    <string name="start_new_chat">Iniciar nova conversa</string>
+    <string name="start_voice_call">Iniciar nova chamada de voz</string>
+    <string name="start_video_call">Iniciar nova chamada de vídeo</string>
+
+    <string name="option_send_files">Enviar arquivos</string>
+    <string name="option_take_photo_video">Tirar foto ou fazer vídeo</string>
+
+    <!-- Authentication -->
+    <string name="auth_login">Entrar</string>
+    <string name="auth_register">Criar conta</string>
+    <string name="auth_submit">Enviar</string>
+    <string name="auth_skip">Pular</string>
+    <string name="auth_send_reset_email">Enviar email para redefinir senha</string>
+    <string name="auth_return_to_login">Voltar à tela de login</string>
+    <string name="auth_user_id_placeholder">Email ou nome de usuário</string>
+    <string name="auth_password_placeholder">Senha</string>
+    <string name="auth_new_password_placeholder">Nova senha</string>
+    <string name="auth_user_name_placeholder">Nome de usuário</string>
+    <string name="auth_add_email_message">"Adicione um endereço de e-mail à sua conta para permitir que outras pessoas achem você, e para que seja possível você redefinir sua senha."</string>
+    <string name="auth_add_phone_message">"Adicione um número de telefone à sua conta para permitir que outras pessoas achem você."</string>
+    <string name="auth_add_email_phone_message">"Adicione um endereço de e-mail e/ou um número de telefone à sua conta para que outras pessoas possam encontrar você.\n\nO e-mail também permite que você possa redefinir sua senha."</string>
+    <string name="auth_add_email_and_phone_message">"Adicione um endereço de e-mail e um número de telefone à sua conta para que outras pessoas possam encontrar você.\n\nO e-mail também permite que você possa redefinir sua senha."</string>
+    <string name="auth_email_placeholder">Endereço de email</string>
+    <string name="auth_opt_email_placeholder">Endereço de email (opcional)</string>
+    <string name="auth_phone_number_placeholder">Número de telefone</string>
+    <string name="auth_opt_phone_number_placeholder">Número de telefone (opcional)</string>
+    <string name="auth_repeat_password_placeholder">Repita a senha</string>
+    <string name="auth_repeat_new_password_placeholder">Confirme sua nova senha</string>
+    <string name="auth_invalid_login_param">Usuário ou senha incorreta</string>
+    <string name="auth_invalid_user_name">Nomes de usuário só podem conter letras, números, pontos, hífens e underscores</string>
+    <string name="auth_invalid_password">Senha muita curta (mín 6)</string>
+    <string name="auth_missing_password">Falta a senha</string>
+    <string name="auth_invalid_email">Isto não parece um endereço de e-mail válido</string>
+    <string name="auth_invalid_phone">Isso não parece um número de telefone válido</string>
+    <string name="auth_email_already_defined">Este e-mail já está cadastrado.</string>
+    <string name="auth_missing_email">Falta endereço de email</string>
+    <string name="auth_missing_phone">Falta número de telefone</string>
+    <string name="auth_missing_email_or_phone">Falta endereço de email ou número de telefone</string>
+    <string name="auth_invalid_token">Token inválido</string>
+    <string name="auth_password_dont_match">As senhas não conferem</string>
+    <string name="auth_forgot_password">Esqueceu sua senha?</string>
+    <string name="auth_use_server_options">Use opções customizadas de servidor (avançado)</string>
+    <string name="auth_email_validation_message">Por favor, verifique o seu e-mail para continuar o cadastro</string>
+    <string name="auth_threepid_warning_message">O registro de nova conta com email e número de telefone não é permitido enquanto o API não é desenvolvido. Apenas o número de telefone será levado em consideração.\n\nVocê poderá depois adicionar um email para o seu perfil nas configurações.</string>
+    <string name="auth_recaptcha_message">Este servidor de base quer ter certeza que você não é um robô</string>
+    <string name="auth_username_in_use">Nome de usuário já existe</string>
+    <string name="auth_home_server">Servidor Principal (Home Server):</string>
+    <string name="auth_identity_server">Servidor de Identidade (Identity Server):</string>
+    <string name="auth_reset_password_next_step_button">Eu verifiquei meu endereço de e-mail</string>
+    <string name="auth_reset_password_message">Para redefinir sua senha, coloque o email ligado à sua conta:</string>
+    <string name="auth_reset_password_missing_email">O email ligado à sua conta tem que ser inserido.</string>
+    <string name="auth_reset_password_missing_password">Uma nova senha tem que ser inserida.</string>
+    <string name="auth_reset_password_email_validation_message">Um e-mail foi enviado para %s. Quando você tiver clicado no link desta mensagem, clique abaixo.</string>
+    <string name="auth_reset_password_error_unauthorized">Falha ao verificar o email: verifique se você clicou no link no email</string>
+    <string name="auth_reset_password_success_message">Sua senha foi resetada.\n\nVocê foi desconectado de todos os aparelhos e não receberá mais notificações. Para reativar as notificações, entre novamente em cada um dos aparelhos.</string>
+
+    <!-- Login Screen -->
+    <string name="login_error_must_start_http">URL tem que começar com http[s]://</string>
+    <string name="login_error_network_error">Não foi possível fazer login: Erro de rede</string>
+    <string name="login_error_unable_login">Não foi possível fazer login</string>
+    <string name="login_error_registration_network_error">Não foi possível criar conta: Erro de rede</string>
+    <string name="login_error_unable_register">Não foi possível criar conta</string>
+    <string name="login_error_unable_register_mail_ownership">Não foi possível criar conta: falha na verificação de posse do email</string>
+    <string name="login_error_invalid_home_server">Por favor, digite uma URL válida</string>
+
+    <string name="login_error_forbidden">Nome de usuário ou senha inválido</string>
+    <string name="login_error_unknown_token">O token de acesso especificado não foi reconhecido</string>
+    <string name="login_error_bad_json">JSON mal formatado</string>
+    <string name="login_error_not_json">Não continha JSON válido</string>
+    <string name="login_error_limit_exceeded">Foram enviadas solicitações demais</string>
+    <string name="login_error_user_in_use">Este nome de usuário já está sendo usado</string>
+    <string name="login_error_login_email_not_yet">O link no email ainda não foi clicado</string>
+
+    <!-- crypto warnings -->
+    <string name="e2e_need_log_in_again">Você precisa fazer login novamente para gerar as chaves de criptografia ponta-a-ponta para este dispositivo e submeter a chave pública para o seu servidor de base ("Home Server").\nVocê só terá que fazer isso uma única vez.\nPedimos desculpas pela inconveniência.</string>
+
+    <!-- read receipts list Screen -->
+    <string name="read_receipts_list">Ler lista de recipientes</string>
+
+    <!-- accounts list Screen -->
+
+    <!-- image size selection -->
+    <string name="compression_options">Enviar como </string>
+    <string name="compression_opt_list_original">Original</string>
+    <string name="compression_opt_list_large">Grande</string>
+    <string name="compression_opt_list_medium">Média</string>
+    <string name="compression_opt_list_small">Pequena</string>
+
+    <!-- media upload / download messages -->
+    <string name="attachment_cancel_download">Cancelar o download?</string>
+    <string name="attachment_cancel_upload">Cancelar o upload?</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+
+    <!-- room creation dialog Screen -->
+    <string name="yesterday">Ontem</string>
+    <string name="today">Hoje</string>
+
+    <!-- room info dialog Screen -->
+    <string name="room_info_room_name">Nome da sala</string>
+    <string name="room_info_room_topic">Tópico da sala</string>
+
+    <!-- call string -->
+    <string name="call_connected">Chamada conectada</string>
+    <string name="call_connecting">Conectando chamada…</string>
+    <string name="call_ended">Chamada terminada</string>
+    <string name="call_ring">Chamando…</string>
+    <string name="incoming_call">Recebendo chamada</string>
+    <string name="incoming_video_call">Recebendo chamada de vídeo</string>
+    <string name="incoming_voice_call">Recebendo chamada de voz</string>
+    <string name="call_in_progress">Chamada em andamento…</string>
+
+    <string name="call_error_user_not_responding">A outra parte não conseguiu atender.</string>
+    <string name="call_error_ice_failed">A conexão à mídia falhou</string>
+    <string name="call_error_camera_init_failed">Não consigo inicializar a câmera</string>
+    <string name="call_error_answered_elsewhere">chamada respondida em outro lugar</string>
+
+    <!-- medias picker string -->
+    <string name="media_picker_both_capture_title">Tomar uma foto ou um vídeo"</string>
+    <string name="media_picker_cannot_record_video">Não consigo gravar vídeo"</string>
+
+    <!-- permissions Android M -->
+    <string name="permissions_rationale_popup_title">Informação</string>
+    <string name="permissions_rationale_msg_storage">Riot necessita permissão para acessar sua galeria de fotos e vídeos para poder enviar e salvar anexos.
+
+Por favor, permita acesso na próxima tela para poder enviar arquivos do seu celular.</string>
+    <string name="permissions_rationale_msg_camera">Riot necessita permissão para acessar sua câmera para poder tirar fotos e fazer chamadas de vídeo.</string>
+    <string name="permissions_rationale_msg_camera_explanation">
+
+Por favor, autorize o acesso na próxima tela para poder fazer a chamada.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot necessita permissão para acessar seu microfone para realizar chamadas de áudio.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">
+
+Por favor, autorize acesso na próxima tela para poder fazer a chamada.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot necessita permissão para acessar sua câmera e seu microfone para realizar chamadas de vídeo.
+
+Por favor, autorize acesso na próxima tela para poder fazer a chamada.</string>
+    <string name="permissions_rationale_msg_contacts">Riot necessita permissão para acessar os seus contatos para poder encontrar outros usuários a partir de seus emails e números de telefone.
+
+Por favor, autorize o acesso na próxima tela para poder encontrar usuários na sua agenda que podem ser contactados pelo Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot necessita sua permissão para acessar os seus contatos para poder encontrar usuários na sua agenda a partir de seus emails e números de telefone.
+
+Você autoriza o Riot a acessar seus contatos?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Desculpe. A ação não foi realizada, por falta de permissão</string>
+
+    <!-- medias slider string -->
+    <string name="media_slider_saved">Salvo</string>
+    <string name="media_slider_saved_message">Salvar nos downloads?</string>
+    <string name="yes">SIM</string>
+    <string name="no">NÃO</string>
+    <string name="_continue">Continuar</string>
+
+    <!-- Actions -->
+    <string name="remove">Remover</string>
+    <string name="join">Entrar</string>
+    <string name="preview">Visualizar</string>
+    <string name="reject">Rejeitar</string>
+
+    <!-- Room -->
+    <string name="room_jump_to_first_unread">Ir para a primeira mensagem não lida.</string>
+
+    <!-- Room Preview -->
+    <string name="room_preview_invitation_format">Você foi convidada(o) a entrar nesta sala por %s</string>
+    <string name="room_preview_unlinked_email_warning">Este convite foi enviado a %s, que não está associada(o) com esta conta.
+\nVocê pode querer fazer login com uma conta diferente, ou adicionar este e-mail à sua conta.</string>
+    <string name="room_preview_try_join_an_unknown_room">Você está tentando acessar %s. Quer entrar na sala para poder participar da conversa?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">uma sala</string>
+    <string name="room_preview_room_interactions_disabled">Esta é uma pré-visualização desta sala. Interações cmo esta sala estão desabilitadas.</string>
+
+    <!-- Chat creation -->
+    <string name="room_creation_title">Nova conversa</string>
+    <string name="room_creation_add_member">Adicionar uma pessoa</string>
+    <string name="room_title_one_member">1 integrante</string>
+
+    <!--  Chat participants -->
+    <string name="room_participants_leave_prompt_title">Deixar a sala</string>
+    <string name="room_participants_leave_prompt_msg">Você tem certeza que deseja se retirar da sala?</string>
+    <string name="room_participants_remove_prompt_msg">Você tem certeza que quer remover %s desta conversa?</string>
+    <string name="room_participants_create">Criar</string>
+
+    <string name="room_participants_online">Online</string>
+    <string name="room_participants_offline">Desconectada/o</string>
+    <string name="room_participants_idle">Ocioso</string>
+
+    <string name="room_participants_header_admin_tools">FERRAMENTAS DE ADMINISTRAÇÃO</string>
+    <string name="room_participants_header_call">CHAMADA</string>
+    <string name="room_participants_header_direct_chats">CONVERSAS DIRETAS</string>
+    <string name="room_participants_header_devices">DISPOSITIVOS</string>
+
+    <string name="room_participants_action_invite">Convidar</string>
+    <string name="room_participants_action_leave">Deixar esta sala</string>
+    <string name="room_participants_action_remove">Remover desta sala</string>
+    <string name="room_participants_action_ban">Banir</string>
+    <string name="room_participants_action_unban">Revogar banimento</string>
+    <string name="room_participants_action_set_default_power_level">Redefinir como usuário normal</string>
+    <string name="room_participants_action_set_moderator">Tornar moderador</string>
+    <string name="room_participants_action_set_admin">Tornar admin</string>
+    <string name="room_participants_action_ignore">Esconder todas as mensagens deste usuário</string>
+    <string name="room_participants_action_unignore">Mostrar todas as mensagens deste usuário</string>
+    <string name="room_participants_invite_search_another_user">ID, Nome ou email</string>
+    <string name="room_participants_action_mention">Menção</string>
+    <string name="room_participants_action_devices_list">Mostrar lista de dispositivos</string>
+    <string name="room_participants_power_level_prompt">Você não poderá desfazer esta mudança, já que você está promovendo este usuário para ter o mesmo nível de permissões que você.\nTem certeza?</string>
+
+    <string name="room_participants_invite_prompt_msg">"Você tem certeza que quer convidar %s para esta conversa?"</string>
+
+    <!-- invitation -->
+    <string name="people_search_invite_by_id"><u>Convidar por ID</u></string>
+    <string name="people_search_local_contacts">CONTATOS LOCAIS (%d)</string>
+    <string name="people_search_filter_text">Apenas usuários Matrix</string>
+
+    <string name="people_search_invite_by_id_dialog_title">Convidar pessoa pelo seu ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Por favor, entre com um ou mais endereços de e-mail ou ID Matrix</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email ou ID Matrix</string>
+
+    <!--  Chat -->
+    <string name="room_menu_search">Pesquisar</string>
+    <string name="room_one_user_is_typing">%s está digitando…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s estão digitando…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; outros estão digitando…</string>
+    <string name="room_message_placeholder_encrypted">Enviar mensagem criptografada…</string>
+    <string name="room_message_placeholder_not_encrypted">Enviar uma mensagem (não criptografada)…</string>
+    <string name="room_offline_notification">A conexão com o servidor se perdeu.</string>
+    <string name="room_unsent_messages_notification">Mensagens não enviadas. %1$s ou %2$s agora?</string>
+    <string name="room_unknown_devices_messages_notification">Mensagens não enviadas por causa da presença de dispositivos desconhecidos presentes. %1$s or %2$s agora?</string>
+    <string name="room_prompt_resend">Reenviar todas</string>
+    <string name="room_prompt_cancel">Cancelar todas</string>
+    <string name="room_resend_unsent_messages">Reenviar mensagens não enviadas</string>
+    <string name="room_delete_unsent_messages">Apagar mensagens não enviadas</string>
+    <string name="room_message_file_not_found">Arquivo não encontrado</string>
+    <string name="room_do_not_have_permission_to_post">Você não tem permissão para enviar mensagens nesta sala</string>
+
+    <!-- unrecognized SSL certificate -->
+    <string name="ssl_trust">Confiar</string>
+    <string name="ssl_do_not_trust">Não confiar</string>
+    <string name="ssl_logout_account">Sair da Conta</string>
+    <string name="ssl_remain_offline">Ignorar</string>
+    <string name="ssl_fingerprint_hash">Impressão digital (%s):</string>
+    <string name="ssl_could_not_verify">Não consegui verificar a identidade do servidor remoto.</string>
+    <string name="ssl_cert_not_trust">Isso pode significar que alguém está interceptando suas mensagens de forma maliciosa, ou então o seu telefone não confia no certificado fornecido pelo servidor remoto.</string>
+    <string name="ssl_cert_new_account_expl">Se o administrador do servidor disse que isso era esperado, verifique se a impressão digital abaixo é a mesma que a impressão digital que ele forneceu a você.</string>
+    <string name="ssl_unexpected_existing_expl">O certificado mudou de um que era confiável no seu telefone. Isso é ALTAMENTE ESTRANHO. Recomendamos que você NÃO ACEITE este novo certificado.</string>
+    <string name="ssl_expected_existing_expl">O certificado mudou de um que era confiável no seu telefone para um que não é considerado confiável pelo seu aparelho. Pode ser que o servidor renovou seu certificado. Entre em contato com o administrador do servidor e peça a impressão digital esperada.</string>
+    <string name="ssl_only_accept">Apenas aceite o certificado se o administrador do servidor publicou uma impressão digital que é idêntica a que está acima.</string>
+
+    <!-- Room Details -->
+    <string name="room_details_title">Detalhes da sala</string>
+    <string name="room_details_people">Pessoas</string>
+    <string name="room_details_files">Arquivos</string>
+    <string name="room_details_settings">Configurações</string>
+    <string name="malformed_id">ID mal formatado. Tem que ser um endereço de e-mail ou um ID Matrix como por exemplo \'@localpart:domain\'</string>
+    <string name="room_details_people_invited_group_name">CONVIDADOS</string>
+    <string name="room_details_people_present_group_name">ENTRARAM</string>
+
+    <!-- Room events -->
+    <string name="room_event_action_report_prompt_reason">Motivo de denunciar este conteúdo</string>
+    <string name="room_event_action_report_prompt_ignore_user">Você deseja ocultar todas as mensagens deste usuário?
+
+Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.</string>
+    <string name="room_event_action_cancel_upload">Cancelar envio</string>
+    <string name="room_event_action_cancel_download">Cancelar download</string>
+
+    <!-- Search -->
+    <string name="search_hint">Pesquisar</string>
+    <string name="search_members_hint">Filtrar integrantes da sala</string>
+    <string name="search_no_results">Nenhum resultado</string>
+    <string name="tab_title_search_rooms">SALAS</string>
+    <string name="tab_title_search_messages">MENSAGENS</string>
+    <string name="tab_title_search_people">PESSOAS</string>
+    <string name="tab_title_search_files">ARQUIVOS</string>
+
+    <!-- Room recents -->
+    <string name="room_recents_join">ENTRAR</string>
+    <string name="room_recents_directory">LISTA PÚBLICA</string>
+    <string name="room_recents_favourites">FAVORITOS</string>
+    <string name="room_recents_conversations">SALAS</string>
+    <string name="room_recents_low_priority">BAIXA PRIORIDADE</string>
+    <string name="room_recents_invites">CONVITES</string>
+    <string name="room_recents_start_chat">Iniciar conversa</string>
+    <string name="room_recents_create_room">Criar sala</string>
+    <string name="room_recents_join_room">Entrar na sala</string>
+    <string name="room_recents_join_room_title">Entrar em uma sala</string>
+    <string name="room_recents_join_room_prompt">Digite o ide ou o apelido de uma sala</string>
+
+    <!-- Directory -->
+    <string name="directory_search_results_title">Pesquisar na lista pública</string>
+    <string name="directory_searching_title">Buscando no diretório…</string>
+
+    <!-- home room settings -->
+    <string name="room_settings_favourite">Favoritar</string>
+    <string name="room_settings_de_prioritize">Despriorizar</string>
+    <string name="room_settings_direct_chat">Conversa direta</string>
+    <string name="room_settings_leave_conversation">Deixar a conversa</string>
+    <string name="room_settings_forget">Esquecer</string>
+
+    <!-- home sliding menu -->
+    <string name="room_sliding_menu_messages">Mensagens</string>
+    <string name="room_sliding_menu_settings">Configurações</string>
+    <string name="room_sliding_menu_version">Versão</string>
+    <string name="room_sliding_menu_term_and_conditions">Termos e condições</string>
+    <string name="room_sliding_menu_third_party_notices">Notas de terceira parte</string>
+    <string name="room_sliding_menu_copyright">Direito autoral</string>
+    <string name="room_sliding_menu_privacy_policy">Política de privacidade</string>
+
+    <!-- Vector Settings -->
+
+    <string name="settings_profile_picture">Imagem do perfil</string>
+    <string name="settings_display_name">Nome público</string>
+    <string name="settings_email_address">Email</string>
+    <string name="settings_add_email_address">Adicionar endereço de email</string>
+    <string name="settings_phone_number">Telefone</string>
+    <string name="settings_add_phone_number">Adicionar número de telefone</string>
+    <string name="settings_app_info_link_summary">Tela de informações sobre o sistema do aplicativo.</string>
+    <string name="settings_app_info_link_title">Informações sobre o aplicativo</string>
+
+    <string name="settings_enable_all_notif">Habilitar notificações para esta conta</string>
+    <string name="settings_enable_this_device">Habilitar notificações para este dispositivo</string>
+    <string name="settings_turn_screen_on">Acender a tela por 3 segundos</string>
+
+    <string name="settings_messages_in_one_to_one">Msgs em conversas diretas</string>
+    <string name="settings_messages_in_group_chat">Msgs em salas</string>
+    <string name="settings_invited_to_room">Quando eu sou convidado a uma sala</string>
+    <string name="settings_call_invitations">Convites para chamadas</string>
+    <string name="settings_messages_sent_by_bot">Mensagens enviadas por "bot"</string>
+
+    <string name="settings_background_sync">Sincronização em segundo plano</string>
+    <string name="settings_enable_background_sync">Habilitar sincronização em segundo plano</string>
+    <string name="settings_set_sync_timeout">Tempo expirado na solicitação de sincronização</string>
+    <string name="settings_set_sync_delay">Demora entre cada solicitação</string>
+    <string name="settings_second">segundo</string>
+    <string name="settings_seconds">segundos</string>
+
+    <string name="settings_version">Versão</string>
+    <string name="settings_olm_version">versão olm</string>
+    <string name="settings_app_term_conditions">Termos e condições</string>
+    <string name="settings_third_party_notices">Notas de terceira parte</string>
+    <string name="settings_copyright">Direitos autorais</string>
+    <string name="settings_privacy_policy">Política de privacidade</string>
+    <string name="settings_clear_cache">Limpar cache</string>
+    <!--string name="settings_room_privacy_label">Privacidade</string-->
+
+
+    <string name="settings_user_settings">Configurações de usuário</string>
+    <string name="settings_notifications">Notificações</string>
+    <string name="settings_ignored_users">Usuárias/os ignorados</string>
+    <string name="settings_other">Outros</string>
+    <string name="settings_advanced">Avançado</string>
+    <string name="settings_cryptography">Criptografia</string>
+    <string name="settings_notifications_targets">Alvos de notificação</string>
+    <string name="settings_contact">Contatos locais</string>
+    <string name="settings_contacts_app_permission">Permissão de acesso a contatos</string>
+    <string name="settings_contacts_phonebook_country">País da agenda de contatos</string>
+    <string name="settings_home_display">Página inicial</string>
+    <string name="settings_pin_missed_notifications">Fixar salas com notificações perdidas</string>
+    <string name="settings_pin_unread_messages">Fixar salas com mensagens não lidas</string>
+    <string name="settings_devices_list">Dispositivos</string>
+    <string name="devices_details_dialog_title">Detalhes de dispositivos</string>
+    <string name="devices_details_id_title">ID</string>
+    <string name="devices_details_name_title">Nome</string>
+    <string name="devices_details_device_name">Nome do dispositivo</string>
+    <string name="devices_details_last_seen_title">Último acesso</string>
+    <string name="devices_details_last_seen_format">%1$s em %2$s</string>
+    <string name="devices_delete_dialog_text">Esta operação exige autenticação adicional.\nPara continuar, digite sua senha.</string>
+    <string name="devices_delete_dialog_title">Autenticação</string>
+    <string name="devices_delete_pswd">Senha:</string>
+    <string name="devices_delete_submit_button_label">Enviar</string>
+
+    <string name="settings_logged_in">Conectado como</string>
+    <string name="settings_home_server">Servidor Principal (Home Server)</string>
+    <string name="settings_identity_server">Servidor de Identidade (Identity Server)</string>
+
+    <string name="account_email_validation_title">Verificação pendente</string>
+    <string name="account_email_validation_message">Por favor verifique o seu email e clique no link que está lá. Feito isso, clique em continuar.</string>
+    <string name="account_email_validation_error">Não consegui averiguar o seu endereço de e-mail. Favor verificar seu e-mail e clicar no link que ele contém. Quando tiver feito isso, clique em continuar.</string>
+
+    <string name="account_email_already_used_error">Este endereço de e-mail já está em uso.</string>
+    <string name="account_email_not_found_error">Este endereço de e-mail não foi encontrado.</string>
+    <string name="account_phone_number_already_used_error">Este número de telefone já está em uso.</string>
+
+    <string name="settings_change_password">Mudar a senha</string>
+    <string name="settings_old_password">Senha atual</string>
+    <string name="settings_new_password">Senha nova</string>
+    <string name="settings_confirm_password">Confirme a nova senha</string>
+    <string name="settings_fail_to_update_password">Não consegui atualizar a senha</string>
+    <string name="settings_password_updated">Sua senha foi atualizada</string>
+    <string name="settings_unignore_user">Mostrar todas as mensagens de %s?
+
+Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.</string>
+
+    <string name="settings_delete_notification_targets_confirmation">Você tem certeza que quer remover este destino de notificação?</string>
+
+    <string name="settings_delete_threepid_confirmation">Você tem certeza que quer remover o %1$s %2$s?</string>
+
+    <string name="settings_select_country">Escolha um país</string>
+
+    <string name="settings_phone_number_country_label">País</string>
+    <string name="settings_phone_number_country_error">Por favor, escolha um país</string>
+    <string name="settings_phone_number_label">Número de telefone</string>
+    <string name="settings_phone_number_error">Número de telefone inválido para o país selecionado</string>
+    <string name="settings_phone_number_verification">Verificação do telefone</string>
+    <string name="settings_phone_number_verification_instruction">"Nós enviamos um SMS com um código de ativação. Por favor, digite este código abaixo."</string>
+    <string name="settings_phone_number_verification_error_empty_code">Digite o código de ativação</string>
+    <string name="settings_phone_number_verification_error">Erro ao validar o seu número de telefone</string>
+    <string name="settings_phone_number_code">Código</string>
+
+    <!-- Room Settings -->
+
+    <!-- room global settings-->
+    <string name="room_settings_room_photo">Foto da sala</string>
+    <string name="room_settings_room_name">Nome da sala</string>
+    <string name="room_settings_topic">Tópico</string>
+    <string name="room_settings_room_tag">Etiqueta da sala</string>
+    <string name="room_settings_tag_pref_dialog_title">Etiquetada como:</string>
+
+    <!-- Room settings: Room tag -->
+    <string name="room_settings_tag_pref_entry_favourite">Favoritar</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Baixa prioridade</string>
+    <string name="room_settings_tag_pref_entry_none">Nenhum</string>
+
+    <!-- room settings : access and visibility -->
+    <string name="room_settings_category_access_visibility_title">Acesso e visibilidade</string>
+    <string name="room_settings_directory_visibility">Exibir esta sala no diretório público de salas</string>
+    <string name="room_settings_room_access_rules_pref_title">Acesso à sala</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Grau de acesso à história da sala</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Quem pode ler o histórico de mensagens?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Quem pode acessar esta sala?</string>
+
+    <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
+    <string name="room_settings_read_history_entry_anyone">Qualquer pessoa</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Apenas integrantes (a partir do momento em que esta opção foi escolhida)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Apenas integrantes (desde que foram convidados)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Apenas integrantes (desde que entraram na sala)</string>
+
+    <!-- Room settings: "Who can access this room?" (access rule) -->
+    <string name="room_settings_room_access_warning">Para fazer um link para uma sala, ela precisa ter um endereço.</string>
+    <string name="room_settings_room_access_entry_only_invited">Apenas as pessoas que foram convidadas</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Qualquer pessoa que saiba o link da sala, exceto visitantes</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualquer pessoa que saiba o link da sala, incluindo visitantes</string>
+
+    <!-- Room settings: banned users -->
+    <string name="room_settings_banned_users_title">Usuários banidos</string>
+
+    <!-- advanced -->
+    <string name="room_settings_category_advanced_title">Avançado</string>
+    <string name="room_settings_room_internal_id">ID interno desta sala</string>
+    <string name="room_settings_addresses_pref_title">Endereços</string>
+    <string name="room_settings_labs_pref_title">Labs</string>
+    <string name="room_settings_labs_warning_message">Estas são funcionalidades experimentais que podem quebrar de forma inesperada. Use com cautela.</string>
+    <string name="room_settings_labs_end_to_end">Criptografia ponta-a-ponta</string>
+    <string name="room_settings_labs_end_to_end_is_active">Criptografia ponta-a-ponta está ativa</string>
+    <string name="room_settings_labs_end_to_end_warnings">Você precisa desconectar para poder habilitar a criptografia.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Criptografar apenas para dispositivos verificados</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Nunca enviar mensagens criptografadas para dispositivos não verificados nesta sala a partir deste dispositivo.</string>
+
+    <!-- Room settings: advanced addresses -->
+    <string name="room_settings_addresses_no_local_addresses">Esta sala não tem endereços locais</string>
+    <string name="room_settings_addresses_add_new_address">Novo endereço (p.ex: #foo:matrix.org")</string>
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Formato inválido de alias</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' não é um formato válido para um alias</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Você não terá endereço principal especificado para esta sala.</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Alertas do endereço principal</string>
+
+    <string name="room_settings_set_main_address">Definir como Endereço Principal</string>
+    <string name="room_settings_unset_main_address">Retirar este endereço como principal</string>
+    <string name="room_settings_copy_room_id">Copiar o ID desta sala</string>
+    <string name="room_settings_copy_room_address">Copiar o endereço desta sala</string>
+
+    <string name="room_settings_addresses_e2e_enabled">Criptografia está habilitada nesta sala.</string>
+    <string name="room_settings_addresses_e2e_disabled">Criptografia está desabilitada nesta sala.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Ativar criptografia \n(atenção: não é possível desabilitar depois!)</string>
+
+    <!-- Directory -->
+    <string name="directory_title">Diretório</string>
+
+    <!-- matrix error -->
+    <string name="failed_to_load_timeline_position">%s estava tentando carregar um ponto específico da linha do tempo desta sala, mas não conseguiu encontrá-lo.</string>
+
+
+    <!-- encryption dialog -->
+    <string name="encryption_information_title">Informação sobre criptografia ponta-a-ponta</string>
+
+    <string name="encryption_information_device_info">Informação do evento</string>
+    <string name="encryption_information_user_id">ID de usuária/o</string>
+    <string name="encryption_information_curve25519_identity_key">Chave de identidade curve25519</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Chave de impressão digital ed25519 reivindicada</string>
+    <string name="encryption_information_algorithm">Algoritmo</string>
+    <string name="encryption_information_session_id">ID de Sessão</string>
+    <string name="encryption_information_decryption_error">Erro de descriptografia</string>
+
+    <string name="encryption_information_sender_device_information">Informação sobre o dispositivo do remetente</string>
+    <string name="encryption_information_device_name">Nome do dispositivo</string>
+    <string name="encryption_information_name">Nome</string>
+    <string name="encryption_information_device_id">ID do dispositivo</string>
+    <string name="encryption_information_device_key">Chave do dispositivo</string>
+    <string name="encryption_information_verification">Verificação</string>
+    <string name="encryption_information_ed25519_fingerprint">Impressão digital ed25519</string>
+
+    <string name="encryption_export_e2e_room_keys">Exportar chaves de sala E2E</string>
+    <string name="encryption_export_room_keys">Exportar chaves de sala</string>
+    <string name="encryption_export_room_keys_summary">Exportar as chaves para um arquivo local</string>
+    <string name="encryption_export_export">Exportar</string>
+    <string name="passphrase_enter_passphrase">Entre com a \'passphrase\'</string>
+    <string name="passphrase_confirm_passphrase">Confirme a \'passphrase\'</string>
+    <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'
+
+Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</string>
+
+    <string name="encryption_import_e2e_room_keys">Importar chaves de sala E2E</string>
+    <string name="encryption_import_room_keys">Importar chaves de sala</string>
+    <string name="encryption_import_room_keys_summary">Importar as chaves de um arquivo local</string>
+    <string name="encryption_import_import">Importar</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Criptografar apenas para dispositivos verificados</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensagens criptografadas para dispositivos não verificados a partir deste dispositivo.</string>
+
+    <string name="encryption_information_not_verified">NÃO verificado</string>
+    <string name="encryption_information_verified">Verificado</string>
+    <string name="encryption_information_blocked">Na lista negra</string>
+
+    <string name="encryption_information_unknown_device">dispositivo desconhecido</string>
+    <string name="encryption_information_none">nenhum</string>
+
+    <string name="encryption_information_verify">Verificar</string>
+    <string name="encryption_information_unverify">Marcar como não verificado</string>
+    <string name="encryption_information_block">Colocar na lista negra</string>
+    <string name="encryption_information_unblock">Retirar da lista negra</string>
+
+    <string name="encryption_information_verify_device">Verificar dispositivo</string>
+    <string name="encryption_information_verify_device_warning">Para confirmar que este dispositivo é confiável, entre em contato com o seu proprietário usando outros meios (por exemplo pessoalmente ou através de uma chamada telefônica) e pergunte a ele se a chave que ele está vendo na sua configuração de usuário para este dispositivo é igual à chave abaixo:</string>
+    <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão verificar abaixo. Se não é igual, então alguém está interceptando este dispositivo e você pode querer clicar no botão bloquear. No futuro, este processo de verificação será mais sofisticado.</string>
+    <string name="encryption_information_verify_key_match">Eu confirmo que as chaves são iguais</string>
+
+    <string name="e2e_enabling_on_app_update">Riot agora permite criptografia ponta-a-ponta mas você precisa fazer login de novo para ativá-la.\n\nVocê pode fazer isso mais tarde a partir das configurações do aplicativo.</string>
+
+    <!-- unknown devices management -->
+    <string name="unknown_devices_alert_title">Esta sala contém dispositivos desconhecidos</string>
+    <string name="unknown_devices_alert_message">Esta sala contém dispositivos desconhecidos que não foram verificados.\nIsso significa que não se pode garantir que estes dispositivos realmente pertencem aos usuários identificados.\nRecomendamos que você faça o processo de verificação para cada dispositivo desconhecido antes de continuar, mas você pode reenviar a mensagem sem verificar o dispositivo se preferir.\n\nDispositivos desconhecidos nesta sala:</string>
+
+    <!-- directory activity  -->
+    <string name="select_room_directory">Escolha uma lista pública de salas</string>
+    <string name="directory_server_fail_to_retrieve_server">O servidor pode estar indisponível ou sobrecarregado</string>
+    <string name="directory_server_type_homeserver">Entre com um servidor principal (homeserver) a partir do qual serão listadas as salas públicas</string>
+    <string name="directory_server_placeholder">URL do Servidor Principal (Homeserver)</string>
+    <string name="directory_server_all_rooms_on_server">Todas as salas com o servidor %s</string>
+    <string name="directory_server_native_rooms">Todas as salas nativas em %s</string>
+
+    <!-- historical -->
+    <string name="historical_placeholder">Pesquisar no histórico</string>
+    <string name="offline">Desconectada(o)</string>
+
+    <string name="user_directory_header">Lista de usuárias(os)</string>
+    <string name="people_search_user_directory">LISTA DE USUÁRIAS(OS) (%s)</string>
+    <string name="settings_start_on_boot">Iniciar na inicialização do celular</string>
+    <string name="settings_clear_media_cache">Esvaziar o cache de mídia</string>
+    <string name="settings_keep_media">Manter mídia</string>
+
+    <string name="settings_always_show_timestamps">Mostrar a hora para todas as mensagens</string>
+    <string name="settings_data_save_mode">Modo de economia de dados</string>
+
+    <string name="settings_user_interface">Interface de usuária(o)</string>
+    <string name="settings_interface_language">Idioma</string>
+    <string name="settings_select_language">Escolha o idioma</string>
+
+    <string name="media_saving_period_3_days">3 dias</string>
+    <string name="media_saving_period_1_week">1 semana</string>
+    <string name="media_saving_period_1_month">1 mês</string>
+    <string name="media_saving_period_forever">Para sempre</string>
+
+    <string name="settings_theme">Tema</string>
+
+    <string name="font_size">Tamanho da fonte</string>
+    <string name="tiny">Minúsculo</string>
+    <string name="small">Pequeno</string>
+    <string name="normal">Normal</string>
+    <string name="large">Grande</string>
+    <string name="larger">Maior</string>
+    <string name="largest">Ainda maior</string>
+    <string name="huge">Gigantesco</string>
+    <string name="light_theme">Tema claro</string>
+    <string name="dark_theme">Tema escuro</string>
+    <string name="black_them">Tema preto</string>
+
+    <string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_listening_for_events">Escutando eventos</string>
+    <string name="notification_noisy_notifications">Notificações ruidosas</string>
+    <string name="notification_silent_notifications">Notificações silenciosas</string>
+
+    <string name="title_activity_bug_report">Relatório de erros</string>
+    <string name="title_activity_group_details">Detalhes da comunidade</string>
+
+    <string name="loading">Carregando…</string>
+
+    <string name="action_exit">Sair do App</string>
+    <string name="bottom_action_groups">Comunidades</string>
+
+    <string name="home_filter_placeholder_groups">Filtrar nomes de comunidades</string>
+
+    <string name="groups_invite_header">Convidar</string>
+    <string name="groups_header">Comunidades</string>
+    <string name="no_group_placeholder">Não há grupos</string>
+
+    <string name="start_new_chat_prompt_msg">Você tem certeza que quer começar uma conversa com %s?</string>
+    <string name="start_voice_call_prompt_msg">Você tem certeza que quer iniciar uma chamada de voz?</string>
+    <string name="start_video_call_prompt_msg">Você tem certeza que quer iniciar uma chamada de vídeo?</string>
+
+    <string name="option_take_photo">Tirar foto</string>
+    <string name="option_take_video">Gravar vídeo</string>
+
+    <string name="login_mobile_device">Celular</string>
+
+    <string name="groups_list">Lista dos grupos</string>
+
+    <string name="call">Chamada</string>
+    <string name="room_participants_ban_prompt_msg">Tem certeza que quer banir esta pessoa desta conversa?</string>
+
+    <string name="room_settings_all_messages_noisy">Notificação sonora para cada mensagem</string>
+    <string name="room_settings_all_messages">Notificação para cada mensagem</string>
+    <string name="room_settings_mention_only">Apenas quando mencionado</string>
+    <string name="room_settings_mute">Silenciar</string>
+    <string name="room_settings_add_homescreen_shortcut">Adicionar atalho na tela inicial</string>
+
+    <string name="settings_notification_ringtone">Som de notificação</string>
+    <string name="settings_containing_my_display_name">Mensagens que contenham o meu nome público</string>
+    <string name="settings_containing_my_user_name">Mensagens que contenham o meu nome de usuária(o)</string>
+    <string name="settings_inline_url_preview">Visualização prévia do URL</string>
+    <string name="settings_12_24_timestamps">Mostrar a hora no formato de 12 horas</string>
+    <string name="settings_vibrate_on_mention">Vibrar ao mencionar um usuário</string>
+
+    <string name="settings_analytics">Estatísticas de uso</string>
+
+    <string name="settings_flair">Insígnias</string>
+
+    <string name="room_settings_room_notifications_title">Notificações</string>
+    <string name="room_settings_no_flair">Esta sala não está mostrando insígnias para nenhuma comunidade</string>
+    <string name="room_settings_add_new_group">Nova ID da comunidade (p.ex: +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">ID de comunidade inválido</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' não é um ID de comunidade válido</string>
+
+
+    <string name="widget_no_power_to_manage">Você necessita ter permissões para poder gerenciar os widgets desta sala</string>
+    <string name="widget_creation_failure">A criação do widget falhou</string>
+    <string name="event_formatter_widget_added">%1$s adicionada/o por %2$s</string>
+    <string name="event_formatter_widget_removed">%1$s removida/o por %2$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
+    <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget desta sala?</string>
+
+    <!-- Widget Integration Manager -->
+    <string name="widget_integration_unable_to_create">Impossível criar o widget.</string>
+    <string name="widget_integration_failed_to_send_request">O envio do pedido falhou.</string>
+    <string name="widget_integration_positive_power_level">O nível de permissões tem que ser um número inteiro positivo.</string>
+    <string name="widget_integration_must_be_in_room">Você não está nesta sala.</string>
+    <string name="widget_integration_no_permission_in_room">Você não tem permissões para fazer isso nesta sala.</string>
+    <string name="widget_integration_missing_room_id">O pedido veio sem o room_id.</string>
+    <string name="widget_integration_missing_user_id">O pedido veio sem o user_id.</string>
+    <string name="widget_integration_room_not_visible">A sala %s não está visível.</string>
+    <string name="room_add_matrix_apps">Adicionar aplicativos Matrix</string>
+    <string name="settings_labs_native_camera">Usar a câmera nativa</string>
+
+    <!-- share keys -->
+    <string name="you_added_a_new_device">Você adicionou um novo dispositivo \'%s\', que está solicitando as chaves de criptografia.</string>
+    <string name="your_unverified_device_requesting">Seu dispositivo não-verificado \'%s\' está solicitando as chaves de criptografia.</string>
+    <string name="start_verification">Iniciar a verificação</string>
+    <string name="share_without_verifying">Compartilhar sem verificar</string>
+    <string name="ignore_request">Ignorar a solicitação</string>
+
+    <!-- conference call -->
+    <string name="conference_call_warning_title">Atenção!</string>
+    <string name="conference_call_warning_message">Chamadas de conferência estão em desenvolvimento e portanto podem não ser confiáveis.</string>
+
+    <!-- slash commands -->
+    <string name="command_error">Erro de comando</string>
+    <string name="unrecognized_command">Comando desconhecido: %s</string>
+
+    <!-- notification statuses -->
+    <string name="notification_off">Desativado</string>
+    <string name="notification_noisy">Alto</string>
+
+    <string name="encrypted_message">Mensagem criptografada</string>
+
+    <!-- groups creation -->
+    <string name="create">Criar</string>
+    <string name="create_community">Criar comunidade</string>
+    <string name="community_name">Nome da comunidade</string>
+    <string name="community_name_hint">Exemplo</string>
+    <string name="community_id">ID da comunidade</string>
+    <string name="community_id_hint">exemplo</string>
+
+    <!-- group details -->
+    <string name="group_details_home">Início</string>
+    <string name="group_details_people">Pessoas</string>
+    <string name="group_details_rooms">Salas</string>
+    <string name="no_users_placeholder">Sem ninguém</string>
+
+    <string name="rooms">Salas</string>
+    <string name="joined">Em que entrou</string>
+    <string name="invited">em que foi convidada/o</string>
+    <string name="filter_group_members">Filtrar integrantes do grupo</string>
+    <string name="filter_group_rooms">Filtrar salas de grupo</string>
+
+    <string name="group_no_long_description">O(A) administrador(a) desta comunidade não definiu uma descrição longa da mesma.</string>
+
+    <string name="has_been_kicked">Você foi excluída/o da sala %1$s por %2$s</string>
+    <string name="has_been_banned">Você foi banida/o da sala %1$s por %2$s</string>
+    <string name="reason_colon">Motivo: %1$s</string>
+    <string name="rejoin">Entrar novamente</string>
+    <string name="forget_room">Esquecer a sala</string>
+    <string name="actions">Ações</string>
+    <string name="open_chat_header">Abrir cabeçalho</string>
+    <string name="room_sync_in_progress">Sincronizando…</string>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">%d membro ativo</item>
+        <item quantity="other">%d membros ativos</item>
+    </plurals>
+    <plurals name="room_title_members">
+        <item quantity="one">%d membro</item>
+        <item quantity="other">%d membros</item>
+    </plurals>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">%d nova mensagem</item>
+        <item quantity="other">%d novas mensagens</item>
+    </plurals>
+
+    <plurals name="directory_search_rooms">
+        <item quantity="one">%d sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">%1$s sala encontrada para %2$s</item>
+        <item quantity="other">%1$s salas encontradas para %2$s</item>
+    </plurals>
+    <plurals name="membership_changes">
+        <item quantity="one">%d alteração de status de participação</item>
+        <item quantity="other">%s alterações de status de participação</item>
+    </plurals>
+
+    <string name="list_members">Lista de integrantes</string>
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">%d mensagem notificada não lida</item>
+        <item quantity="other">%d mensagens notificadas não lidas</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+        <item quantity="one">%d mensagem notificada não lida</item>
+        <item quantity="other">%d mensagens notificadas não lidas</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">%d sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
+    <string name="notification_unread_notified_messages_in_room">%1$s em %2$s</string>
+
+    <plurals name="active_widgets">
+        <item quantity="one">%d widget ativo</item>
+        <item quantity="other">%d widgets ativos</item>
+    </plurals>
+
+    <!-- Widget Integration Manager -->
+    <string name="receipt_avatar">Imagem de recebimento</string>
+    <string name="notice_avatar">Imagem de aviso</string>
+    <string name="avatar">Imagem de perfil</string>
+
+    <string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
+
+    <string name="settings_notification_privacy_normal">Normal</string>
+    <string name="settings_notification_privacy_reduced">Privacidade reduzida</string>
+    <string name="settings_notification_privacy_need_permission">O app necessita de permissão para rodar em segundo plano</string>
+    <string name="title_activity_choose_sticker">Enviar um sticker</string>
+
+    <string name="dialog_title_third_party_licences">Licenças de terceiros</string>
+
+    <string name="download">Baixar</string>
+    <string name="speak">Falar</string>
+    <string name="clear">Apagar</string>
+    <string name="missing_permissions_error">Por falta de permissões, esta ação não é possível.</string>
+    <string name="system_alerts_header">Alertas do sistema</string>
+
+    <string name="send_bug_report_description_in_english">Se possível, favor escrever a descrição em inglês.</string>
+    <string name="option_send_voice">Enviar áudio</string>
+
+    <string name="option_send_sticker">Enviar um sticker</string>
+    <string name="no_sticker_application_dialog_content">Você não tem nenhum pacote de stickers habilitado no momento.
+
+Quer adicionar alguns agora?</string>
+
+    <string name="go_on_with">continuar com…</string>
+    <string name="error_no_external_application_found">Desculpe, mas não encontrei nenhum aplicativo externo para completar esta ação.</string>
+
+    <string name="e2e_re_request_encryption_key"><u>Pedir novamente as chaves de criptografia</u> de seus outros dispositivos.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Pedido de chave enviado.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Pedido enviado</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Por favor, use o Riot em outro dispositivo que possa descriptografar a mensagem de modo que possa enviar as chaves a este dispositivo.</string>
+
+    <plurals name="format_time_s">
+        <item quantity="one">%ds</item>
+        <item quantity="other">%ds</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">%dmin</item>
+        <item quantity="other">%dmin</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">%dh</item>
+        <item quantity="other">%dh</item>
+    </plurals>
+    <plurals name="format_time_d">
+        <item quantity="one">%d dia</item>
+        <item quantity="other">%d dias</item>
+    </plurals>
+
+    <string name="room_participants_now">%1$s agora</string>
+    <string name="room_participants_ago">há %1$s %2$s</string>
+
+    <string name="room_participants_action_unignore_prompt">Exibir todas as mensagens desta(e) usuária(o)?
+
+Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo.</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names_and">%1$s e %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <string name="room_message_placeholder_reply_to_encrypted">Enviar uma resposta criptografada…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Enviar uma resposta (não criptografada)…</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">%d selecionado</item>
+        <item quantity="other">%d selecionados</item>
+    </plurals>
+    <string name="settings_notification_privacy">Privacidade das notificações</string>
+    <string name="settings_notification_privacy_fcm">• As notificações são enviadas pelo \"Google Cloud Messaging\"</string>
+    <string name="settings_notification_privacy_metadata">• As notificações contém apenas metadados</string>
+    <string name="settings_notification_privacy_secure_message_content">• O conteúdo das mensagens da notificação é <b>armazenado de forma segura diretamente no servidor Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• As notificações contém <b>metadados e os dados da mensagem</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• As notificações <b>não exibirão o conteúdo da mensagem</b></string>
+
+    <string name="settings_preview_media_before_sending">Pré-visualizar a mídia antes de enviá-la</string>
+
+    <string name="settings_deactivate_account_section">Desativar a conta</string>
+    <string name="settings_deactivate_my_account">Desativar a minha conta</string>
+
+    <string name="startup_notification_privacy_title">Privacidade das notificações</string>
+    <string name="startup_notification_privacy_message">Riot pode funcionar em segundo plano para gerenciar as suas notificações de forma segura e confidencial. Isso poderá impactar o uso da bateria.</string>
+    <string name="startup_notification_privacy_button_grant">Conceder a permissão</string>
+    <string name="startup_notification_privacy_button_other">Escolha outra opção</string>
+
+    <string name="settings_opt_in_of_analytics">Enviar dados de uso</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot coleta dados de uso anônimos para nos ajudar a melhorar o aplicativo.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Por favor, habilite o envio de dados de uso para nos ajudar a melhorar o Riot.</string>
+    <string name="settings_opt_in_of_analytics_ok">Sim, eu quero ajudar!</string>
+
+    <string name="settings_without_flair">Você não faz parte de nenhuma comunidade atualmente.</string>
+
+    <string name="lock_screen_hint">Escreva aqui…</string>
+
+    <string name="widget_integration_missing_parameter">Um parâmetro obrigatório está faltando.</string>
+    <string name="widget_integration_invalid_parameter">Um parâmetro não é válido.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Use a tecla Enter do teclado para enviar a mensagem</string>
+    <string name="settings_labs_enable_send_voice">Enviar mensagens de voz</string>
+
+    <string name="command_description_emote">Mostra a ação</string>
+    <string name="command_description_ban_user">Remove a(o) usuária(o) com a ID fornecida</string>
+    <string name="command_description_unban_user">Desfaz a remoção de um(a) usuário(a) com um dado ID</string>
+    <string name="command_description_op_user">Define o grau de poder de um(a) usuário(a)</string>
+    <string name="command_description_deop_user">Retira o nível de operador(a) do(a) usuário(a) com o ID fornecido</string>
+    <string name="command_description_invite_user">Convida a(o) usuária(o) com um dado ID para esta sala</string>
+    <string name="command_description_join_room">Entra na sala com o alias fornecido</string>
+    <string name="command_description_part_room">Deixa a sala</string>
+    <string name="command_description_topic">Define o tópico da sala</string>
+    <string name="command_description_kick_user">Expulsa a(o) usuária(o) com o ID fornecido</string>
+    <string name="command_description_nick">Altera o seu nome público de usuária(o)</string>
+    <string name="command_description_markdown">Ativar/Desativar o Markdown</string>
+    <string name="command_description_clear_scalar_token">Reparar a gestão de aplicativos Matrix</string>
+
+    <plurals name="group_members">
+        <item quantity="one">%d participante</item>
+        <item quantity="other">%d participantes</item>
+    </plurals>
+
+    <plurals name="group_rooms">
+        <item quantity="one">%d sala</item>
+        <item quantity="other">%d salas</item>
+    </plurals>
+    <string name="dialog_user_consent_content">Para continuar usando o Servidor de Base %1$s, você precisa revisar e aceitar os termos e condições de uso.</string>
+    <string name="dialog_user_consent_submit">Revisar agora</string>
+
+    <string name="deactivate_account_title">Desativar conta</string>
+    <string name="deactivate_account_content">Sua conta se tornará permanentemente inutilizável. Você não poderá iniciar uma sessão, e ninguém conseguirá registrar o mesmo ID de usuária(o). Isso fará que sua conta abandone todas as salas das quais participa, e eliminará os dados de sua conta do seu servidor de identidade. <b>Esta ação é irreversível</b>.
+
+Desativar a sua conta <b>não implica que as mensagens que você enviou sejam apagadas</b>. Se você quer que apaguemos suas mensagens, favor marcar a opção abaixo.
+
+A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecermos as suas mensagens, isso significa que as mensagens que você enviou a nós não serão mais compartilhadas com novas(os) usuárias(os) ou por usuárias(os) não registradas(os), mas as(os) usuárias(os) registradas(os) que já tiveram acesso a estas mensagens conservarão a cópia das mesmas.</string>
+    <string name="deactivate_account_delete_checkbox">Por favor, esqueça todas as mensagens que enviei quando minha conta for desativada (Atenção: isso vai fazer com que futuras(os) usuárias(os) tenham uma visão incompleta das conversas)</string>
+    <string name="deactivate_account_prompt_password">Para continuar, entre com sua senha:</string>
+    <string name="deactivate_account_submit">Desativar conta</string>
+
+    <string name="error_empty_field_your_password">Por favor, digite sua senha.</string>
+    <string name="room_tombstone_versioned_description">Esta sala foi substituída e não está mais ativa</string>
+    <string name="room_tombstone_continuation_link">A conversa continua aqui</string>
+    <string name="room_tombstone_continuation_description">Esta sala é a continuação de outra conversa</string>
+    <string name="room_tombstone_predecessor_link">Clique aqui para ver as mensagens anteriores</string>
+
+    <string name="resource_limit_exceeded_title">Limite de recursos excedido</string>
+    <string name="resource_limit_contact_action">Entre em contato com o(a) administrador(a)</string>
+
+    <string name="resource_limit_contact_admin">entre em contato com o administrador do seu serviço</string>
+
+    <string name="resource_limit_soft_default">Este homeserver excedeu um dos seus limites de recursos, portanto <b>alguns usuários não conseguirão fazer login</b>.</string>
+    <string name="resource_limit_hard_default">Este homeserver excedeu um de seus limites de recursos.</string>
+
+    <string name="resource_limit_soft_mau"> Este homeserver atingiu o seu limite mensal de usuários ativos, portanto <b>alguns usuários não conseguirão fazer login</b>.</string>
+    <string name="resource_limit_hard_mau">Este homeserver atingiu o seu limite mensal de usuários ativos.</string>
+
+    <string name="resource_limit_soft_contact">Por favor, %s para que este limite seja aumentado.</string>
+    <string name="resource_limit_hard_contact">Por favor, %s para seguir usando este serviço.</string>
+
+    <string name="encryption_export_notice">Por favor, crie uma senha para cifrar as chaves exportadas. Precisará de usar a mesma senha para conseguir importar as chaves.</string>
+    <string name="status_theme">Tema Status.im</string>
+
+    <string name="accept">Aceitar</string>
+
+    <string name="dialog_title_error">Erro</string>
+
+    <string name="auth_accept_policies">Por favor revise e aceite as políticas desse servidor doméstico:</string>
+
+    <string name="settings_call_category">Chamadas</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Use o toque padrão da Riot para chamadas recebidas</string>
+    <string name="settings_call_ringtone_title">Toque de chamada recebida</string>
+    <string name="settings_call_ringtone_dialog_title">Selecione o toque para chamadas:</string>
+
+    <string name="reason_hint">Motivo</string>
+
+    <string name="room_sliding_menu_version_x">Versão %s</string>
+    <string name="settings_notification_troubleshoot">Notificações de Resolução de Problemas</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnóstico de Resolução de Problemas</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Executar Testes</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Executando… (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Diagnóstico básico está ok. Se você ainda não recebe notificações, por favor relate um erro para nos ajudar a investigar.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Um ou mais testes falharam, tente as correções sugeridas.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Um ou mais testes falharam, por favor relate um erro para nos ajudar a investigar.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Configurações do sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Notificações estão habilitadas nas configurações do sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Notificações estão desabilitadas nas configurações do sistema.
+Por favor revise as configurações do sistema.</string>
+    <string name="open_settings">Abra as Configurações</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Configurações da Conta.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Notificações estão habilitadas para sua conta.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Notificações estão desabilitadas para sua conta.
+Por favor revise as configurações da conta.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Habilitar</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Configurações do Dispositivo.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Notificações estão habilitadas para este dispositivo.</string>
+    <string name="room_participants_action_kick">Desconectar</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">Você tem certeza que deseja desconectar este usuário deste chat?</item>
+        <item quantity="other">Você tem certeza que deseja desconectar estes usuários deste chat?</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_device_settings_failed">Notificações não são permitidas para este dispositivo.
+Por favor revise as configurações do Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Habilitar</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Revisão do Play Services</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK está disponível e atualizado.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot usa Google Play Services para entregar mensagens push, mas isto não parece está configurado corretamente:
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Consertar Play Services</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
+    <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperado com sucesso:
+%1$s</string>
+    <string name="call_anyway">Ligar mesmo assim</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Falha ao recuperar o token do FCM:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Registro de Token</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrado com sucesso no HomeServer.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Falha ao registrar o token FCM no HomeServer:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Serviço de Notificações</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Serviço de Notificações está em execução.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Serviço de Notificações não está em execução.
+Tente reiniciar a aplicação.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Iniciar Serviço</string>
+
+    <string name="settings_troubleshoot_test_service_restart_success">Serviço foi finalizado e reiniciado automaticamente.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Falha ao reiniciar Serviço</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Começar na inicialização</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Serviço irá iniciar quando o dispositivo for reiniciado.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">O serviço não irá começar quando o dispositivo for reiniciado, você não irá receber notificações até o Riot for aberto uma vez.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Habilitar Começar na inicialização</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Revisar restrições de segundo plano</string>
+    <string name="settings_troubleshoot_test_battery_title">Otimização de bateria</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot não é afetado pela Otimização de Bateria.</string>
+    <string name="settings_troubleshoot_test_service_restart_title">Reinicialização Automática do Serviço de Notificações</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desabilitar restrições</string>
+
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignorar Otimização</string>
+
+    <string name="settings_inline_url_preview_summary">Prévia de links dentro do chat quando seu homeserver suporta este recurso.</string>
+    <string name="settings_send_typing_notifs">Enviar notificações de digitação</string>
+    <string name="settings_send_typing_notifs_summary">Deixar outros usuários saberem quando você estiver digitando.</string>
+    <string name="settings_show_read_receipts">Mostrar confirmações de leitura</string>
+    <string name="settings_show_read_receipts_summary">Clique nas notificações de leitura para uma lista detalhada.</string>
+    <string name="settings_show_join_leave_messages">Mostrar eventos de entrada e saída de sala</string>
+    <string name="settings_show_join_leave_messages_summary">Convites, chutes e proibições não são afetados.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Mostrar eventos da conta</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Inclui avatar e alterações no nome de exibição.</string>
+    <string name="startup_notification_fdroid_battery_optim_title">Conexão em segundo plano</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot precisa manter um baixo impacto na conexão em segundo plano para ter notificações confiáveis.
+Na próxima tela, você será solicitado a permitir que o Riot funcione sempre em segundo plano, por favor aceite.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Restrições de segundo plano estão desabilitadas para o Riot. este teste deve executar usando os dados móveis (sem WIFI).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Restrições em segundo plano estão habilitadas para o Riot.
+Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enquanto isto estiver em segundo plano, isto poderá afetar as notificações.
+%1$s</string>
+    <string name="settings_send_markdown">Formatação Markdown</string>
+    <string name="settings_send_markdown_summary">Fomatar mensagens usando a sintaxe markdown antes delas serem enviadas. Isto permite uma formatação avançada como usar asteriscos para mostrar texto em itálico.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Conceder permissão</string>
+
+    <string name="account_email_error">Ocorreu um erro ao verificar seu endereço de e-mail.</string>
+
+    <string name="settings_password">Senha</string>
+    <string name="account_phone_number_error">Ocorreu um erro ao verificar seu número de telefone.</string>
+    <string name="account_additional_info">Informação adicional: %s</string>
+
+    <string name="encryption_import_room_keys_success">%1$d/%2$d chave(es) importada(as) com sucesso.</string>
+
+    <string name="settings_labs_native_camera_summary">Inicie a câmera do sistema em vez da tela de câmera personalizada.</string>
+    <string name="settings_labs_enable_send_voice_summary">Esta opção requer um aplicativo de terceiros para gravar as mensagens.</string>
+
+    <string name="command_problem_with_parameters">O comando \"%s\" precisa de mais parâmetros ou alguns parâmetros estão incorretos.</string>
+    <string name="markdown_has_been_enabled">Markdown foi habilitado.</string>
+    <string name="markdown_has_been_disabled">Markdown foi desabilitado.</string>
+
+    <string name="settings_lazy_loading_description">Aumente o desempenho apenas carregando os membros da sala na primeira exibição.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Seu homeserver não suporta o carregamento Lazy de membros da sala ainda. Tente depois.</string>
+
+    <string name="unknown_error">Desculpe, ocorreu um erro</string>
+
+    <string name="merged_events_expand">expandir</string>
+    <string name="merged_events_collapse">colapsar</string>
+
+    <string name="settings_info_area_show">Mostrar a área de informações</string>
+    <string name="show_info_area_always">Sempre</string>
+    <string name="show_info_area_messages_and_errors">Para mensagens e erros</string>
+    <string name="show_info_area_only_errors">Somente para erros</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">Nenhum APK do Google Play Services válido foi encontrado. Notificações podem não funcionar corretamente.</string>
+
+    <string name="store_title">Riot.im - Comunique-se do seu jeito.</string>
+    <string name="store_short_description">Um aplicativo de bate-papo universal seguro totalmente sob seu controle.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão.</string>
+    <string name="passphrase_create_passphrase">Criar passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">Passphrases devem corresponder</string>
+    <string name="settings_lazy_loading_title">Carregamento Lazy dos membros das salas</string>
+    <string name="store_full_description">"Um aplicativo de bate-papo, sob seu controle e totalmente flexível. Riot permite que você se comunique do jeito que você quer. Desenvolvido para o [matrix] - o padrão para comunicação aberta e descentralizada.
+
+Obtenha uma conta matrix.org grátis, obtenha seu próprio servidor em https://modular.im ou use outro servidor Matrix.
+
+Por que escolher o Riot.im?
+
+• COMUNICAÇÃO COMPLETA: Construa salas em torno de suas equipes, seus amigos, sua comunidade - como quiser! Converse, compartilhe arquivos, adicione widgets e faça chamadas de voz e vídeo - tudo de graça.
+
+• INTEGRAÇÕES PODEROSAS: Use o Riot.im com as ferramentas que você conhece e ama. Com Riot.im você pode conversar com usuários e grupos em outros aplicativos de bate-papo.
+
+• PRIVADO E SEGURO: Mantenha suas conversas em segredo. A criptografia de ponta a ponta do estado da arte garante que a comunicação privada permaneça privada.
+
+• ABERTO, NÃO FECHADO: Código aberto e construído sobre o Matrix. Possua seus próprios dados hospedando seu próprio servidor ou selecionando um que você confia.
+
+• EM TODOS OS LUGARES: Mantenha-se em contato onde quer que esteja com o histórico de mensagens totalmente sincronizado em todos os seus dispositivos e online em https://riot.im."</string>
+
+    <string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
+
+    <string name="store_whats_new">"Estamos sempre fazendo alterações e melhorias no Riot.im.
+O changelog completo pode ser encontrado aqui: %1$s.
+Para garantir que você não perca nada, mantenha suas atualizações ativadas."</string>
+    <string name="title_activity_keys_backup_setup">Backup da chave</string>
+    <string name="title_activity_keys_backup_restore">Usar Backup da chave</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Backup de chaves não está terminado, por favor aguarde …</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Você perderá suas mensagens criptografadas se sair agora</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Backup de chave em andamento. Se você sair agora, perderá o acesso às suas mensagens criptografadas.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">O Backup de chave seguro deve estar ativo em todos os seus dispositivos para evitar perder o acesso às suas mensagens criptografadas.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Eu não quero minhas mensagens criptografadas</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Fazendo backup de chaves …</string>
+    <string name="keys_backup_activate">Use o backup de chave</string>
+    <string name="are_you_sure">Você tem certeza?</string>
+    <string name="backup">Realizar o Backup</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Você perderá o acesso às suas mensagens criptografadas, a menos que faça o backup das suas chaves antes de sair.</string>
+
+    <string name="keys_backup_info_title_signature">Assinatura</string>
+
+    <string name="stay">Permaneça</string>
+    <string name="skip">Pular</string>
+    <string name="done">Feito</string>
+    <string name="abort">Abortar</string>
+
+    <string name="action_sign_out_confirmation_simple">Você tem certeza que deseja sair da conta\?</string>
+    <string name="settings_notification_advanced">Configurações Avançadas de Notificação</string>
+    <string name="settings_notification_advanced_summary">Definir a importância da notificação por evento, Configurar som, led, vibração</string>
+    <string name="settings_notification_by_event">Importância da notificação por evento</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Configurações personalizadas.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Observe que alguns tipos de mensagens estão configurados para serem silenciosos (produzirão uma notificação sem som).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Algumas notificações estão desativadas nas suas configurações personalizadas.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Falha ao carregar regras personalizadas, tente novamente.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Verifique as configurações</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nEste erro está fora do controle do Riot e, de acordo com o Google, esse erro indica que o dispositivo tem muitos aplicativos registrados com FCM. O erro só ocorre nos casos em que há números extremos de aplicativos, portanto, isso não deve afetar o usuário comum.</string>
+    <string name="ignore">Ignorar</string>
+
+    <string name="auth_login_sso">Entre com o logon único</string>
+    <string name="login_error_unknown_host">Este URL não está acessível, por favor verifique</string>
+    <string name="login_error_ssl_handshake">Seu dispositivo está usando um protocolo de segurança TLS desatualizado, vulnerável a ataques. Para sua segurança, você não poderá se conectar</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nEste erro está fora de controle da Riot. Isso pode ocorrer por vários motivos. Talvez funcione se você tentar novamente mais tarde. Você também pode verificar se o Google Play Service não está restrito ao uso de dados nas configurações do sistema ou se o relógio do dispositivo está correto ou pode acontecer na ROM personalizada.</string>
+</resources>

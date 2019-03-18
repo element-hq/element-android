@@ -6,11 +6,14 @@ buildscript {
     repositories {
         google()
         jcenter()
-    }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }    }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0'
         classpath "com.airbnb.okreplay:gradle-plugin:1.4.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -29,4 +32,32 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+apply plugin: 'org.sonarqube'
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "RiotX-Android"
+        property "sonar.projectKey", "vector.android.riotx"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.projectVersion", project(":app").android.defaultConfig.versionName
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.links.homepage", "https://github.com/vector-im/riotX-android/"
+        property "sonar.links.ci", "https://matrix.org/jenkins/view/MatrixView/job/RiotXAndroidDevelop/"
+        property "sonar.links.scm", "https://github.com/vector-im/riotX-android/"
+        property "sonar.links.issue", "https://github.com/vector-im/riotX-android/issues"
+        property "sonar.organization", "new_vector_ltd_organization"
+        property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
+    }
+}
+
+project(":app") {
+    sonarqube {
+        properties {
+            property "sonar.sources", project(":app").android.sourceSets.main.java.srcDirs
+            // exclude source code from analyses separated by a colon (:)
+            // property "sonar.exclusions", "**/*.*"
+        }
+    }
 }

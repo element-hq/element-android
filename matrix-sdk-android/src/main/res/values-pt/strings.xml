@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="matrix_sdk_app_name">Matrix Android SDK</string>
 
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s enviou uma imagem.</string>
@@ -74,6 +73,12 @@
     <!-- medium friendly name -->
     <string name="medium_email">Endereço de e-mail</string>
     <string name="medium_phone_number">Número de telefone</string>
-    
-    
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Convite de %s</string>
+    <string name="room_displayname_room_invite">Convite para sala</string>
+    <string name="room_displayname_two_members">%1$s e %2$s</string>
+    <string name="room_displayname_empty_room">Sala vazia</string>
+
+
 </resources>

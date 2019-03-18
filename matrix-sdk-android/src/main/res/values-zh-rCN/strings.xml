@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="summary_user_sent_image">%1$s 发送了一张图片。</string>
+<resources>
+    <string name="summary_user_sent_image">%1$s 发送了一张图片。</string>
 
     <string name="notice_room_invite_no_invitee">%s 的邀请</string>
     <string name="notice_room_invite">%1$s 邀请了 %2$s</string>
     <string name="notice_room_invite_you">%1$s 邀请了您</string>
-    <string name="notice_room_join">%1$s 加入了聊天室</string>
-    <string name="notice_room_leave">%1$s 退出了聊天室</string>
+    <string name="notice_room_join">%1$s 加入了</string>
+    <string name="notice_room_leave">%1$s 离开了</string>
     <string name="notice_room_reject">%1$s 拒绝了邀请</string>
     <string name="notice_room_kick">%1$s 移除了 %2$s</string>
     <string name="notice_room_unban">%1$s 解封了 %2$s</string>
@@ -34,7 +35,7 @@
     <string name="notice_avatar_changed_too">（头像也被更改）</string>
     <string name="notice_room_name_removed">%1$s 移除了聊天室名称</string>
     <string name="notice_room_topic_removed">%1$s 移除了聊天室主题</string>
-    <string name="notice_event_redacted_reason">" [理由：%1$s]"</string>
+    <string name="notice_event_redacted_reason">[理由：%1$s]</string>
     <string name="notice_crypto_unable_to_decrypt">** 无法解密：%s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">发送者的设备没有向我们发送此消息的密钥。</string>
 
@@ -49,19 +50,18 @@
 
     <string name="encrypted_message">已加密消息</string>
 
-    <string name="medium_email">邮箱地址</string>
-    <string name="medium_phone_number">电话号码</string>
+    <string name="medium_email">电子邮箱地址</string>
+    <string name="medium_phone_number">手机号码</string>
 
-<string name="notice_room_withdraw">%1$s 撤销了对 %2$s 的邀请</string>
+    <string name="notice_room_withdraw">%1$s 撤销了对 %2$s 的邀请</string>
     <string name="notice_made_future_room_visibility">%1$s 让之后的聊天室历史记录对 %2$s 可见</string>
-    <string name="notice_event_redacted">"删改了 %1$s "</string>
-    <string name="notice_event_redacted_by">" 被 %1$s"</string>
-    <string name="notice_profile_change_redacted">%1$s 更新了他们的配置文件 %2$s</string>
+    <string name="notice_event_redacted">撤回了 %1$s</string>
+    <string name="notice_event_redacted_by">被 %1$s</string>
+    <string name="notice_profile_change_redacted">%1$s 更新了他们的简介 %2$s</string>
     <string name="notice_room_third_party_invite">%1$s 向 %2$s 发送了加入聊天室的邀请</string>
     <string name="notice_room_third_party_registered_invite">%1$s 接受了 %2$s 的邀请</string>
 
     <string name="could_not_redact">无法撤回</string>
-    <string name="matrix_sdk_app_name">Matrix Android SDK</string>
 
     <string name="summary_message">%1$s：%2$s</string>
     <string name="summary_user_sent_sticker">%1$s 发送了一张贴纸。</string>
@@ -71,6 +71,14 @@
     <string name="reply_to_an_audio_file">发送了一段音频。</string>
     <string name="reply_to_a_file">发送了一个文件。</string>
 
-<string name="message_reply_to_prefix">回复</string>
+    <string name="message_reply_to_prefix">回复</string>
 
-    </resources>
+    <string name="room_displayname_empty_room">空聊天室</string>
+    <string name="room_displayname_invite_from">来自 %s 的邀请</string>
+    <string name="room_displayname_room_invite">聊天室邀请</string>
+    <string name="room_displayname_two_members">%1$s 和 %2$s</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="other">%1$s 与其他 %2$d 位</item>
+    </plurals>
+
+</resources>

@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Username">
+                android:hint="@string/auth_user_name_placeholder">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loginField"
@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Password">
+                android:hint="@string/auth_password_placeholder">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordField"
@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Homeserver url">
+                android:hint="@string/auth_home_server">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/homeServerField"
@@ -87,7 +87,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Authenticate"
+        android:text="@string/auth_login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

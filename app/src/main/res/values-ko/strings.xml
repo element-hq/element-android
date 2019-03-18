@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">ko</string>
+    <string name="resources_country_code">KO</string>
+
+    <string name="light_theme">밝은 테마</string>
+    <string name="dark_theme">어두운 테마</string>
+    <string name="black_them">검정 테마</string>
+
+    <string name="notification_sync_in_progress">동기화</string>
+    <string name="title_activity_home">메시지</string>
+    <string name="title_activity_room">방</string>
+    <string name="title_activity_settings">설정</string>
+    <string name="title_activity_historical">보관</string>
+    <string name="title_activity_bug_report">버그 보고서</string>
+    <string name="title_activity_choose_sticker">스티커 보내기</string>
+
+    <string name="dialog_title_third_party_licences">제3자 라이센스</string>
+
+    <string name="loading">불러오는중…</string>
+
+    <string name="ok">네</string>
+    <string name="cancel">취소</string>
+    <string name="save">저장</string>
+    <string name="leave">떠나기</string>
+    <string name="send">보내기</string>
+    <string name="copy">복사</string>
+    <string name="resend">다시 보내기</string>
+    <string name="redact">삭제하기</string>
+    <string name="quote">인용</string>
+    <string name="download">받기</string>
+    <string name="share">공유</string>
+    <string name="permalink">고유주소</string>
+    <string name="view_source">출처 보기</string>
+    <string name="view_decrypted_source">해독된 출처 보기</string>
+    <string name="delete">지우기</string>
+    <string name="rename">다시 이름짓기</string>
+    <string name="report_content">컨텐츠 신고</string>
+    <string name="ongoing_conference_call_voice">음성</string>
+    <string name="ongoing_conference_call_video">영상</string>
+    <string name="cannot_start_call">전화를 걸 수 없습니다, 나중에 다시 시도해주세요.</string>
+    <string name="missing_permissions_warning">권한이 없어졌기 때문에, 일부 기능이 빠졌을 수 있습니다…</string>
+    <string name="missing_permissions_error">권한이 없어졌기 때문에, 이 행동을 할 수 없습니다.</string>
+    <string name="missing_permissions_title_to_start_conf_call">전화를 걸 수 없습니다</string>
+    <string name="device_information">기기 정보</string>
+    <string name="send_anyway">그래도 보내기</string>
+    <string name="or">또는</string>
+    <string name="invite">초대</string>
+    <string name="offline">미접속</string>
+
+    <string name="action_exit">나가기</string>
+    <string name="actions">행동</string>
+    <string name="action_sign_out">로그아웃</string>
+    <string name="action_voice_call">음성 통화하기</string>
+    <string name="action_video_call">영상 통화하기</string>
+    <string name="action_mark_all_as_read">모두 읽음 표시하기</string>
+    <string name="action_historical">보관</string>
+    <string name="action_quick_reply">빠른 답장</string>
+    <string name="action_open">열기</string>
+    <string name="action_close">닫기</string>
+    <string name="copied_to_clipboard">클립보드에 복사되었습니다</string>
+    <string name="disable">비활성화</string>
+
+    <string name="dialog_title_confirmation">확인</string>
+    <string name="dialog_title_warning">경고</string>
+    <string name="dialog_title_error">오류</string>
+
+    <string name="bottom_action_home">홈</string>
+    <string name="bottom_action_favourites">즐겨찾기</string>
+    <string name="bottom_action_people">사람</string>
+    <string name="bottom_action_rooms">방</string>
+    <string name="bottom_action_groups">커뮤니티</string>
+
+    <string name="home_filter_placeholder_home" />
+    <string name="system_alerts_header">시스템 알림</string>
+
+    <string name="no_result_placeholder">결과가 없습니다</string>
+
+    <string name="rooms_header">방</string>
+    <string name="send_bug_report_include_logs">로그 보내기</string>
+    <string name="send_bug_report_include_crash_logs">충돌 로그 보내기</string>
+    <string name="send_bug_report_include_screenshot">스크린샷 보내기</string>
+    <string name="send_bug_report">버그 보고서</string>
+    <string name="send_bug_report_description">버그에 대해 설명해주세요. 무엇을 했나요? 어떤 일이 일어나길 바라고 한 건가요? 실제로는 어떤 일이 일어났나요?</string>
+    <string name="send_bug_report_description_in_english">가능하다면, 영어로 설명해주세요.</string>
+    <string name="send_bug_report_placeholder">여기에 문제를 설명해주세요</string>
+    <string name="send_bug_report_sent">버그 보고서를 보내는데 성공했습니다</string>
+    <string name="send_bug_report_failed">버그 보고서를 보내는데 실패했습니다 (%s)</string>
+    <string name="create_account">등록하기</string>
+    <string name="login">로그인</string>
+    <string name="logout">로그아웃</string>
+    <string name="hs_url">홈서버 URL</string>
+    <string name="identity_url">아이덴티티 서버 URL</string>
+    <string name="search">찾기</string>
+
+    <string name="start_new_chat">새 대화 시작하기</string>
+    <string name="start_voice_call">음성 통화 시작하기</string>
+    <string name="start_video_call">영상 통화 시작하기</string>
+
+    <string name="start_new_chat_prompt_msg">정말로 %s와 대화하고 싶으세요?</string>
+    <string name="start_voice_call_prompt_msg">정말 음성통화를 시작하시겠어요?</string>
+    <string name="start_video_call_prompt_msg">정말 영상통화를 시작하시겠어요?</string>
+
+    <string name="option_send_files">파일 보내기</string>
+    <string name="option_send_sticker">스티커 보내기</string>
+    <string name="option_take_photo_video">사진이나 영상 찍기</string>
+    <string name="option_take_photo">사진 찍기</string>
+    <string name="option_take_video">영상 찍기</string>
+
+    <string name="auth_login">로그인</string>
+    <string name="auth_register">등록하기</string>
+    <string name="auth_submit">제출하기</string>
+    <string name="auth_skip">건너뛰기</string>
+    <string name="auth_user_id_placeholder">이메일이나 이용자 이름</string>
+    <string name="auth_password_placeholder">비밀번호</string>
+    <string name="auth_new_password_placeholder">새 비밀번호</string>
+    <string name="auth_user_name_placeholder">이용자 이름</string>
+    <string name="auth_add_email_message">이용자가 당신을 찾고 재설정 비밀번호를 보낼 수 있게 이메일 주소를 적어주세요.</string>
+    <string name="auth_add_phone_message">이용자가 당신을 찾을 수 있게 계정에 전화번호를 추가해주세요.</string>
+</resources>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="matrix_sdk_app_name">عُدّة تطوير البرمجيات لِ‍«ماترِكس» على أندرويد</string>
+<resources>
 
     <string name="summary_user_sent_image">أرسل ⁨%1$s⁩ صورة.</string>
 
@@ -10,12 +10,12 @@
     <string name="notice_room_leave">غادر ⁨%1$s⁩</string>
     <string name="notice_room_reject">رفض ⁨%1$s⁩ الدعوة</string>
     <string name="notice_room_kick">طرد ⁨%1$s⁩ ⁨%2$s⁩</string>
-    <string name="notice_room_unban">رفع ⁨%1$s⁩ المنع عن ⁨%2$s⁩</string>
+    <string name="notice_room_unban">رفع ⁨%1$s⁩ الحظر عن ⁨%2$s⁩</string>
     <string name="notice_room_ban">منع ⁨%1$s⁩ ⁨%2$s⁩</string>
     <string name="notice_avatar_url_changed">غيّر ⁨%1$s⁩ صورته</string>
     <string name="notice_display_name_set">ضبط ⁨%1$s⁩ اسم العرض على ⁨%2$s⁩</string>
-    <string name="notice_display_name_changed_from">غيّر ⁨%1$s⁩ اسم العرض من ⁨%2$s⁩ إلى ⁨%3$s⁩</string>
-    <string name="notice_display_name_removed">أزال ⁨%1$s⁩ اسم العرض (⁨%2$s⁩)</string>
+    <string name="notice_display_name_changed_from">غيّر ⁨%1$s⁩ اسم الحساب المعروض من %2$s⁩ إلى %3$s⁩</string>
+    <string name="notice_display_name_removed">أزال ⁨%1$s⁩ اسم الحساب المعروض (⁨%2$s⁩)</string>
     <string name="notice_room_topic_changed">غيّر ⁨%1$s⁩ الموضوع إلى: ⁨%2$s⁩</string>
     <string name="notice_room_name_changed">غيّر ⁨%1$s⁩ اسم الغرفة إلى: ⁨%2$s⁩</string>
     <string name="notice_answered_call">ردّ ⁨%s⁩ على المكالمة.</string>
@@ -54,8 +54,8 @@
     <string name="medium_email">عنوان البريد الإلكتروني</string>
     <string name="medium_phone_number">رقم الهاتف</string>
 
-<string name="summary_message">‏‏⁨%1$s⁩: ‏⁨%2$s⁩</string>
-    <string name="notice_room_withdraw">انسحب ⁨%1$s⁩ من دعوة ⁨%2$s⁩</string>
+    <string name="summary_message">‏‏⁨%1$s⁩: ‏⁨%2$s⁩</string>
+    <string name="notice_room_withdraw">انسحب ⁨%1$s⁩ من الدعوة ⁨%2$s⁩</string>
     <string name="notice_placed_video_call">أجرى ⁨%s⁩ مكالمة مرئية.</string>
     <string name="notice_placed_voice_call">أجرى ⁨%s⁩ مكالمة صوتية.</string>
     <string name="notice_event_redacted">"هُذّبت ⁨%1$s⁩ "</string>
@@ -72,5 +72,20 @@
     <string name="reply_to_a_video">أرسل فديوهًا.</string>
     <string name="reply_to_an_audio_file">أرسل ملف صوت.</string>
     <string name="reply_to_a_file">أرسل ملفًا.</string>
+
+    <string name="room_displayname_invite_from">دعوة من ⁨%s⁩</string>
+    <string name="room_displayname_empty_room">غرفة فارغة</string>
+
+    <string name="room_displayname_two_members">‏⁨%1$s⁩ و ⁨%2$s⁩</string>
+    <string name="room_displayname_room_invite">دعوة إلى غرفة</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="zero">صفر</item>
+        <item quantity="one">واحد</item>
+        <item quantity="two">اثنان</item>
+        <item quantity="few">قليل</item>
+        <item quantity="many">كثير</item>
+        <item quantity="other">اخرى</item>
+    </plurals>
 
 </resources>

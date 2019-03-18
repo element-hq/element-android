@@ -43,7 +43,11 @@ class RoomSummaryController(private val stringProvider: StringProvider
         }
     }
 
-    private fun buildRoomCategory(viewState: RoomListViewState, summaries: List<RoomSummary>, @StringRes titleRes: Int, isExpanded: Boolean, mutateExpandedState: () -> Unit) {
+    private fun buildRoomCategory(viewState: RoomListViewState,
+                                  summaries: List<RoomSummary>,
+                                  @StringRes titleRes: Int,
+                                  isExpanded: Boolean,
+                                  mutateExpandedState: () -> Unit) {
         if (summaries.isEmpty()) {
             return
         }

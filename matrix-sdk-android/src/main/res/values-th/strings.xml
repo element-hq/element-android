@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
-
+<resources>
     <string name="summary_message">%1$s: %2$s</string>
-    </resources>
+</resources>

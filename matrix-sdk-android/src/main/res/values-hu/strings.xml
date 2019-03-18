@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
-
+<resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s küldött egy képet.</string>
 
@@ -40,8 +39,8 @@
     <string name="notice_room_name_removed">%1$s eltávolította a szoba nevét</string>
     <string name="notice_room_topic_removed">%1$s eltávolította a szoba témáját</string>
     <string name="notice_event_redacted">"szerkesztett %1$s "</string>
-    <string name="notice_event_redacted_by">" %1$s által"</string>
-    <string name="notice_event_redacted_reason">" [ok: %1$s]"</string>
+    <string name="notice_event_redacted_by">%1$s által</string>
+    <string name="notice_event_redacted_reason">[ok: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s megváltoztatták a profiljukat %2$s</string>
     <string name="notice_room_third_party_invite">"%1$s meghívót küldött %2$s -nak/-nek  hogy csatlakozzon a szobához"</string>
     <string name="notice_room_third_party_registered_invite">%1$s elfogadta a meghívót a %2$s -hoz</string>
@@ -64,7 +63,7 @@
     <string name="medium_email">Email cím</string>
     <string name="medium_phone_number">Telefonszám</string>
 
-<string name="summary_user_sent_sticker">%1$s küldött egy matricát.</string>
+    <string name="summary_user_sent_sticker">%1$s küldött egy matricát.</string>
 
     <string name="message_reply_to_prefix">Válasz erre:</string>
 
@@ -72,5 +71,16 @@
     <string name="reply_to_a_video">videó elküldve.</string>
     <string name="reply_to_an_audio_file">hangfájl elküldve.</string>
     <string name="reply_to_a_file">fájl elküldve.</string>
+
+    <string name="room_displayname_invite_from">%s meghívott</string>
+    <string name="room_displayname_room_invite">Meghívó egy szobába</string>
+    <string name="room_displayname_two_members">%1$s és %2$s</string>
+    <string name="room_displayname_empty_room">Üres szoba</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s és 1 másik</item>
+        <item quantity="other">%1$s és %2$d másik</item>
+    </plurals>
+
 
 </resources>
