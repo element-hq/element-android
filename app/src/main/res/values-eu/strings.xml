@@ -846,13 +846,9 @@ Gailu ezezagunak:</string>
     <string name="avatar">Abatarra</string>
 
     <string name="settings_notification_privacy">Jakinarazpenen pribatutasuna</string>
-    <string name="settings_notification_privacy_warning">Riot.im bigarren planoan dabil zure jakinarazpen mezuaren edukia pribatu mantentzeko. Aukera hau aldatu dezakezu bateria aurrezteko.</string>
     <string name="settings_notification_privacy_normal">Arrunta</string>
-    <string name="settings_notification_privacy_power_saving">Energia aurrezteko aukerak</string>
-    <string name="settings_notification_privacy_low_detail">Xehetasun gutxiko jakinarazpenak</string>
     <string name="settings_notification_privacy_reduced">Pribatutasun murriztua</string>
     <string name="settings_notification_privacy_need_permission">Aplikazioak bigarren planoan aritzeko baimenak behar ditu</string>
-    <string name="settings_notification_privacy_no_permission">Aplikazioak <b>ez</b> du bigarren planoan aritzeko baimenik behar</string>
     <string name="settings_notification_privacy_fcm">• Jakinarazpenak Google Cloud Messaging bidez bidaltzen dira</string>
     <string name="settings_notification_privacy_metadata">• Jakinarazpenek meta-datuak besterik ez dituzte</string>
     <string name="settings_notification_privacy_secure_message_content">• Jakinarazpen mezuaren edukia <b>Matrix hasiera-zerbitzarian gorde da seguru</b></string>

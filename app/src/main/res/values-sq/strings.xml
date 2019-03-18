@@ -390,7 +390,6 @@
     <string name="settings_add_phone_number">Shtoni numër telefoni</string>
     <string name="settings_app_info_link_title">Të dhëna aplikacioni</string>
     <string name="settings_notification_privacy_normal">Normale</string>
-    <string name="settings_notification_privacy_power_saving">Mundësi Kursimi Energjie</string>
     <string name="settings_notification_privacy_reduced">Me privatësi të zvogëluar</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Njoftimet <b>s’do të shfaqin lëndë mesazhi</b></string>
 
@@ -775,7 +774,6 @@ Email-in tuaj mund ta shtoni te profili juaj, te rregullimet.</string>
     <string name="malformed_id">ID e keqformuar. Duhet të jetë një adresë email ose ID Matrix, si \'@localpart:domain\'</string>
     <string name="room_settings_de_prioritize">Hiqi përparësinë</string>
     <string name="settings_notification_privacy">Privatësi njoftimesh</string>
-    <string name="settings_notification_privacy_low_detail">Njoftime me pak hollësi</string>
     <string name="settings_olm_version">version olm</string>
     <string name="settings_pin_missed_notifications">Fikso dhomat me njoftime të humbura</string>
 
@@ -969,9 +967,7 @@ Na ndjeni për belanë.</string>
 
     <string name="settings_app_info_link_summary">Shfaq te rregullimet e sistemit të dhëna të aplikacionit.</string>
 
-    <string name="settings_notification_privacy_warning">Riot.im xhiron në prapaskenë për ta mbajtur private lëndën e mesazheve të njoftimeve tuaja. Për të ulur harxhimin e baterisë, mund të ndryshoni këtë mundësi.</string>
     <string name="settings_notification_privacy_need_permission">Aplikacioni lyp leje për xhirim në prapaskenë</string>
-    <string name="settings_notification_privacy_no_permission">Aplikacionet <b>nuk</b> lypin leje për të xhiruar në prapaskenë</string>
     <string name="settings_notification_privacy_fcm">• Njoftimet dërgohen përmes Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Njoftimet përmbajnë vetëm tejtëdhëna</string>
     <string name="settings_notification_privacy_secure_message_content">• Lënda e mesazhit të njoftimit <b>gjendet e siguruar drejt e nga shërbyesi home Matrix</b></string>

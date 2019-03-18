@@ -925,13 +925,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="deactivate_account_submit">Desactivar Cuenta</string>
 
     <string name="settings_notification_privacy">Privacidad de notificaciones</string>
-    <string name="settings_notification_privacy_warning">Riot.im se ejecuta en segundo plano para mantener privado el contenido del mensaje de la notificación. Puedes cambiar esta opción para reducir el uso de la batería.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opciones de Ahorro de Energía</string>
-    <string name="settings_notification_privacy_low_detail">Notificaciones simples</string>
     <string name="settings_notification_privacy_reduced">Privacidad reducida</string>
     <string name="settings_notification_privacy_need_permission">La aplicación necesita permiso para ejecutarse en segundo plano</string>
-    <string name="settings_notification_privacy_no_permission">La aplicación <b> no </b> necesita permiso para ejecutarse en segundo plano</string>
     <string name="settings_notification_privacy_fcm">• Las notificaciones se envían a través de Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Las notificaciones solo contienen metadatos</string>
     <string name="settings_notification_privacy_secure_message_content">• El contenido del mensaje de la notificación está <b>ubicado de forma segura directamente desde el servidor doméstico de Matrix</b></string>

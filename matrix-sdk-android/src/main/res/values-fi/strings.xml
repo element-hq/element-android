@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="summary_user_sent_image">%1$s lähetti kuvan.</string>
+<resources>
+    <string name="summary_user_sent_image">%1$s lähetti kuvan.</string>
 
     <string name="notice_room_invite_no_invitee">%s:n kutsu</string>
     <string name="notice_room_invite">%1$s kutsui %2$s</string>
@@ -27,7 +28,7 @@
     <string name="notice_room_visibility_shared">kaikki huoneen jäsenet.</string>
     <string name="notice_room_visibility_world_readable">kaikki.</string>
     <string name="notice_room_visibility_unknown">tuntematon (%s).</string>
-    <string name="notice_end_to_end">%1$s kytki päälle päästä päähän-salauksen (%2$s)</string>
+    <string name="notice_end_to_end">%1$s otti käyttöön osapuolten välisen salauksen (%2$s)</string>
 
     <string name="notice_requested_voip_conference">%1$s lähetti VoIP konferenssi-pyynnön</string>
     <string name="notice_voip_started">VoIP konferenssi alkoi</string>
@@ -36,7 +37,7 @@
     <string name="notice_avatar_changed_too">(profiilikuva muuttui myös)</string>
     <string name="notice_room_name_removed">%1$s poisti huoneen nimen</string>
     <string name="notice_room_topic_removed">%1$s poisti huoneen aiheen</string>
-    <string name="notice_event_redacted_reason">" [syy: %1$s]"</string>
+    <string name="notice_event_redacted_reason">[syy: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s päivitti profiilinsa %2$s</string>
     <string name="notice_room_third_party_invite">%1$s lähetti liittymiskutsun käyttäjälle %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s hyväksyi kutsun käyttäjän %2$s puolesta</string>
@@ -57,10 +58,31 @@
     <string name="medium_email">Sähköpostiosoite</string>
     <string name="medium_phone_number">Puhelinnumero</string>
 
-<string name="matrix_sdk_app_name">Matrix Android SDK</string>
 
-    <string name="notice_event_redacted_by">" käyttäjän %1$s toimesta"</string>
+    <string name="notice_event_redacted_by">käyttäjän %1$s toimesta</string>
     <string name="could_not_redact">Takaisinveto epäonnistui</string>
     <string name="summary_message">%1$s: %2$s</string>
-    <string name="notice_event_redacted">"veti takaisin %1$s "</string>
+    <string name="notice_event_redacted">veti takaisin %1$s</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Kutsu käyttäjältä %s</string> <!-- Grammar problem -->
+    <string name="room_displayname_room_invite">Huonekutsu</string>
+    <string name="room_displayname_two_members">%1$s ja %2$s</string>
+    <string name="room_displayname_empty_room">Tyhjä huone</string>
+
+
+<string name="summary_user_sent_sticker">%1$s lähetti tarran.</string>
+
+    <string name="message_reply_to_prefix">Vastauksena käyttäjälle</string>
+
+    <string name="reply_to_an_image">lähetti kuvan.</string>
+    <string name="reply_to_a_video">lähetti videon.</string>
+    <string name="reply_to_an_audio_file">lähetti äänitiedoston.</string>
+    <string name="reply_to_a_file">lähetti tiedoston.</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+	<item quantity="one">%1$s ja yksi muu</item>
+	<item quantity="other">%1$s ja %2$d muuta</item>
+</plurals>
+
     </resources>

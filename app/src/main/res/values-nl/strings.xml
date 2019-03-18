@@ -889,13 +889,9 @@ Je kan het nu, of later, doen vanuit de programma-instellingen.</string>
 Wil je er nu een paar toevoegen?</string>
 
     <string name="settings_notification_privacy">Notificatie privacy</string>
-    <string name="settings_notification_privacy_warning">Riot.im werkt in de achtergrond om de inhoud van de berichten in de notificatie privé te houden. Je kan deze optie uitzetten om batterijverbruik te verminderen.</string>
     <string name="settings_notification_privacy_normal">Normaal</string>
-    <string name="settings_notification_privacy_power_saving">Energie-besparende Opties</string>
-    <string name="settings_notification_privacy_low_detail">Notificaties met weinig details</string>
     <string name="settings_notification_privacy_reduced">Gereduceerde privacy</string>
     <string name="settings_notification_privacy_need_permission">De applicatie heeft toestemming nodig om in de achtergrond te werken</string>
-    <string name="settings_notification_privacy_no_permission">De apps hebben <b>geen</b> toestemming nodig om in de achtergrond te werken</string>
     <string name="settings_notification_privacy_fcm">• Notifications worden verstuurd via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Notificaties bevatten alleen metadata</string>
     <string name="settings_notification_privacy_secure_message_content">• De inhoud van de berichten in de notificatie is <b>veilig overgebracht rechtstreeks vanaf de Matrix thuisserver</b></string>

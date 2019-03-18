@@ -1,20 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="summary_message">%1$s: %2$s</string>
+<resources>
+    <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s ha enviat una imatge.</string>
 
     <string name="notice_room_leave">%1s ha sortit</string>
     <string name="notice_room_join">%1s ha entrat</string>
     <string name="medium_phone_number">Número de telèfon</string>
 
-<string name="medium_email">Correu electrònic</string>
+    <string name="medium_email">Correu electrònic</string>
     <string name="encrypted_message">Missatge encriptat</string>
 
     <string name="notice_room_invite_no_invitee">la invitació de %s</string>
     <string name="notice_room_invite">%1$s ha convidat a %2$s</string>
-    <string name="notice_room_invite_you">%1$s vos ha convidat</string>
+    <string name="notice_room_invite_you">%1$s us ha convidat</string>
     <string name="notice_room_reject">%1$s ha rebutjat la invitació</string>
     <string name="notice_room_kick">%1$s ha fet fora a %2$s</string>
-    <string name="matrix_sdk_app_name">Android SDK de Matrix</string>
+
 
     <string name="notice_display_name_changed_from">%1$s ha canviat el seu nom visible de %2$s a %3$s</string>
     <string name="notice_display_name_removed">%1$s ha eliminat el seu nom visible (%2$s)</string>
@@ -33,7 +34,7 @@
     <string name="notice_room_withdraw">%1$s ha retirat la invitació de %2$s</string>
     <string name="notice_avatar_url_changed">%1$s ha canviat el seu avatar</string>
     <string name="notice_made_future_room_visibility">%1$s ha permès a %2$s veure l\'historial que es generi a partir d\'ara</string>
-    <string name="notice_room_visibility_joined">tots els membres de la sala des del punt en què hi entrin.</string>
+    <string name="notice_room_visibility_joined">tots els membres de la sala, des del punt en què hi entrin.</string>
     <string name="notice_room_visibility_world_readable">qualsevol.</string>
     <string name="notice_voip_started">S\'ha iniciat la conferència VoIP</string>
     <string name="notice_voip_finished">S\'ha finalitzat la conferència VoIP</string>
@@ -46,10 +47,10 @@
     <string name="notice_event_redacted_reason">" [raó: %1$s]"</string>
     <string name="notice_profile_change_redacted">%1$s ha actualitzat el seu perfil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s ha enviat una invitació a l\'usuari %2$s per a entrar a la sala</string>
-    <string name="notice_room_third_party_registered_invite">%1$s ha acceptat la invitació de l\'usuari %2$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s ha acceptat la invitació per a %2$s</string>
 
     <string name="notice_crypto_unable_to_decrypt">** No s\'ha pogut desencriptar: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">El dispositiu del remitent no ha enviat les claus per aquest missatge.</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">El dispositiu del remitent no ens ha enviat les claus per aquest missatge.</string>
 
     <string name="could_not_redact">No s\'ha pogut redactar</string>
     <string name="unable_to_send_message">No s\'ha pogut enviar el missatge</string>
@@ -64,4 +65,25 @@
     <string name="notice_display_name_set">%1$s a canviat el seu nom visible a %2$s</string>
     <string name="notice_placed_video_call">%s ha iniciat una trucada de vídeo.</string>
     <string name="notice_placed_voice_call">%s ha iniciat una trucada de veu.</string>
-    </resources>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Convidat per %s</string>
+    <string name="room_displayname_room_invite">Convideu a la sala</string>
+    <string name="room_displayname_two_members">%1$s i %2$s</string>
+    <string name="room_displayname_empty_room">Sala buida</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s i 1 altre</item>
+        <item quantity="other">%1$s i %2$d altres</item>
+    </plurals>
+
+
+    <string name="summary_user_sent_sticker">%1$s ha enviat un adhesiu.</string>
+
+    <string name="message_reply_to_prefix">En resposta a</string>
+
+    <string name="reply_to_an_image">ha enviat una imatge.</string>
+    <string name="reply_to_a_video">ha enviat un vídeo.</string>
+    <string name="reply_to_an_audio_file">ha enviat un fitxer d\'àudio.</string>
+    <string name="reply_to_a_file">ha enviat un fitxer.</string>
+
+</resources>

@@ -868,13 +868,9 @@ Neznáme zariadenia:</string>
     <string name="avatar">Obrázok</string>
 
     <string name="settings_notification_privacy">Súkromie oznámení</string>
-    <string name="settings_notification_privacy_warning">Riot.im ostane spustený na pozadí, aby bol obsah správ oznámení zachovaný v súkromí. Zmenou tejto voľby môžete predlžiť výdrž pri napájaní z batérie.</string>
-    <string name="settings_notification_privacy_power_saving">Nastavenia šetrenia energie</string>
-    <string name="settings_notification_privacy_low_detail">Stručné oznámenia</string>
     <string name="settings_notification_privacy_reduced">Nižšia úroveň súkromia</string>
     <string name="settings_notification_privacy_normal">Normálne</string>
     <string name="settings_notification_privacy_need_permission">Aplikácia vyžaduje povolenie bežať na pozadí</string>
-    <string name="settings_notification_privacy_no_permission">Aplikácia <b>ne</b>vyžaduje povolenie bežať na pozadí</string>
     <string name="settings_notification_privacy_fcm">• Oznámenia sú zasielané prostredníctvom cloudových služieb Google</string>
     <string name="settings_notification_privacy_metadata">• Oznámenia neobsahujú text správy, len meta údaje</string>
     <string name="settings_notification_privacy_secure_message_content">• Obsah správy oznámení je <b>bezpečne prevzatý priamo z domovského servera Matrix</b></string>

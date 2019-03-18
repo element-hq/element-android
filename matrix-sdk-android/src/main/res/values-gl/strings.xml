@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="medium_email">Enderezo de correo</string>
+<resources>
+    <string name="medium_email">Enderezo de correo</string>
     <string name="message_failed_to_upload">Fallo ao subir a páxina</string>
 
-    <string name="matrix_sdk_app_name">Matrix Android SDK</string>
 
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s enviou unha imaxe.</string>
@@ -67,9 +67,12 @@
 
     <string name="medium_phone_number">Número de teléfono</string>
 
-<string name="reply_to_an_image">Responder a</string>
+    <string name="reply_to_an_image">Responder a</string>
     <string name="reply_to_a_video">enviar un vídeo.</string>
     <string name="reply_to_an_audio_file">enviar un ficheiro de son.</string>
     <string name="reply_to_a_file">enviar un ficheiro.</string>
+
+    <string name="room_displayname_two_members">%1$s e %2$s</string>
+
 
 </resources>

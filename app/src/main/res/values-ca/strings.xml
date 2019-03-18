@@ -936,12 +936,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     </plurals>
     <string name="room_sliding_menu_version_x">Versió %s</string>
     <string name="settings_notification_privacy">Notificació de privacitat</string>
-    <string name="settings_notification_privacy_warning">Riot.im funciona en segon pla per mantenir el contingut de les notificacions dels missatges privats. Podeu canviar aquesta opció per tal de reduir l\'ús de bateria.</string>
-    <string name="settings_notification_privacy_power_saving">Opcions d\'estalvi d\'energia</string>
-    <string name="settings_notification_privacy_low_detail">Notificacions poc detallades</string>
     <string name="settings_notification_privacy_reduced">Privacitat reduïda</string>
     <string name="settings_notification_privacy_need_permission">L\'aplicació necessita permisos per funcionar en segon pla</string>
-    <string name="settings_notification_privacy_no_permission">L\'aplicació <b>no</b> necessita cap permís per funcionar en segon pla</string>
     <string name="settings_notification_privacy_fcm">• Les notificacions s\'envien via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Les notificacions contenen només meta dades</string>
     <string name="settings_notification_privacy_secure_message_content">• El contingut dels missatges de les notificacions s\'obté <b>de forma segura des del servidor de Matrix</b></string>

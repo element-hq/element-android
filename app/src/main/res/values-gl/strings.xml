@@ -643,13 +643,9 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     </plurals>
     <string name="room_sliding_menu_term_and_conditions">Termos e condicións</string>
     <string name="settings_notification_privacy">Segredo das notificacións</string>
-    <string name="settings_notification_privacy_warning">Riot.im traballa agochado, en segundo plano, para garantir que o contido das súas mensaxes sexa segredo. Pode cambiar esta opción para que reducir o consumo das baterías.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opcións de aforro de batería</string>
-    <string name="settings_notification_privacy_low_detail">Notificacións con pouco detalle</string>
     <string name="settings_notification_privacy_reduced">Reducir a privacidade</string>
     <string name="settings_notification_privacy_need_permission">Esta aplicación necesita de permisos para traballar en segundo plano</string>
-    <string name="settings_notification_privacy_no_permission">Esta aplicación <b>non</b> ten permisos para traballar en segundo plano</string>
     <string name="settings_notification_privacy_fcm">• Notificacións enviadas a través de Cloud Messaging de Google</string>
     <string name="settings_notification_privacy_metadata">• Notificacións que só conteñen metadatos</string>
     <string name="settings_notification_privacy_secure_message_content">• O contido da mensaxe das notificacións está <b>provén dun xeito seguro e directo do servidor local de Matrix</b></string>

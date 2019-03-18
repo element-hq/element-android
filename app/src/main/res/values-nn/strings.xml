@@ -505,13 +505,9 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_app_info_link_title">Æppinfo</string>
 
     <string name="settings_notification_privacy">Varselpersonvern</string>
-    <string name="settings_notification_privacy_warning">Riot.im køyrer i bakgrunnen for å halde varselinnhaldet ditt privat. Du kan forandra på denne innstillinga for å senka batteribruket.</string>
     <string name="settings_notification_privacy_normal">Vanleg</string>
-    <string name="settings_notification_privacy_power_saving">Straumsparings-Innstillingar</string>
-    <string name="settings_notification_privacy_low_detail">Lågdetaljerte varsel</string>
     <string name="settings_notification_privacy_reduced">Minska personvern</string>
     <string name="settings_notification_privacy_need_permission">Æppen treng tilgang til å køyra i bakgrunnen</string>
-    <string name="settings_notification_privacy_no_permission">Æppen treng <b>ikkje</b> tillating til å køyra i bakgrunnen</string>
     <string name="settings_notification_privacy_fcm">• Varsel vert sende gjennom Google Cloud-Meldingar</string>
     <string name="settings_notification_privacy_metadata">• Varsel inneheld berre metadata</string>
     <string name="settings_notification_privacy_secure_message_content">• Meldingsinnhald i varselet <b>hentast trygt direkte frå Matrix-heimtenaren</b></string>

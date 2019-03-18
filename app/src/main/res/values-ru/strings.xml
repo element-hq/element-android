@@ -921,11 +921,8 @@ Email также позволит вам при необходимости во�
 
     <string name="room_settings_no_flair">Эта комната не показывает лычки сообществ</string>
     <string name="settings_notification_privacy">Конфиденциальность уведомлений</string>
-    <string name="settings_notification_privacy_warning">Riot.im работает в фоновом режиме для сохранения приватности ваших уведомлений. Вы можете изменить этот параметр, чтобы уменьшить потребление заряда батареи.</string>
     <string name="settings_notification_privacy_normal">Нормальный</string>
-    <string name="settings_notification_privacy_power_saving">Варианты энергосбережения</string>
     <string name="settings_notification_privacy_need_permission">Приложение нуждается в разрешении на работу в фоновом режиме</string>
-    <string name="settings_notification_privacy_no_permission">Приложениям <b>не</b> требуется разрешение на работу в фоновом режиме</string>
     <string name="settings_notification_privacy_fcm">• Уведомления отправляются через Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Уведомления содержат только метаданные</string>
     <string name="settings_notification_privacy_nosecure_message_content">• Уведомления содержат <b>метаданные и данные сообщения</b></string>
@@ -936,7 +933,6 @@ Email также позволит вам при необходимости во�
     <string name="startup_notification_privacy_button_grant">Предоставить разрешение</string>
     <string name="startup_notification_privacy_button_other">Выбрать другой вариант</string>
 
-    <string name="settings_notification_privacy_low_detail">Уведомления без подробностей</string>
     <string name="settings_notification_privacy_reduced">Ограниченная конфиденциальность</string>
     <string name="settings_notification_privacy_secure_message_content"><b> надежно от Matrix-Homeserver получено </b></string>
     <string name="title_activity_choose_sticker">Отправить стикер</string>

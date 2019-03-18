@@ -826,11 +826,8 @@
         <item quantity="other" />
     </plurals>
 
-    <string name="settings_notification_privacy_power_saving">"Варіанти  енергозабезпечення"</string>
-    <string name="settings_notification_privacy_low_detail">Повідомлення без подробиць</string>
     <string name="settings_notification_privacy_reduced">Обмежена конфіденційність</string>
     <string name="settings_notification_privacy_need_permission">Програма потребує дозвіл на роботу у фоновому режимі</string>
-    <string name="settings_notification_privacy_no_permission">"Програма  "<b>не</b> потребує дозвіл на роботу у фоновому режимі</string>
     <string name="settings_notification_privacy_fcm">• Повідомлення відправляються через Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Повідомлення містять тільки метаданні</string>
     <string name="settings_notification_privacy_secure_message_content">• Зміст сповіщення був <b> надійно віднайдений просто на домашньому сервері Matrix </b></string>
@@ -930,7 +927,6 @@
         <item quantity="other" />
     </plurals>
     <string name="room_sliding_menu_version_x">Версія %s</string>
-    <string name="settings_notification_privacy_warning">Riot.im запущено у фоновому режимі для забезпечення конфіденційності ваших сповіщень. Ви можете змінити цю опцію, щоб зменшити навантаження на батарею.</string>
     <string name="settings_notification_privacy_nosecure_message_content">• Сповіщення містять <b>метадані та дані повідомлення</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Сповіщення <b>не будуть показувати вміст повідомлень</b></string>
 

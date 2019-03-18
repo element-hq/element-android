@@ -894,14 +894,10 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
         <item quantity="other">%d cambi d\'appartenenza</item>
     </plurals>
 
-    <string name="settings_notification_privacy_warning">Riot.im funziona in sottofondo per mantenere privato il contenuto delle notifiche. Puoi cambiare questa opzione per ridurre il consumo della batteria.</string>
     <string name="settings_notification_privacy">Privacy delle notifiche</string>
     <string name="settings_notification_privacy_normal">Normale</string>
-    <string name="settings_notification_privacy_power_saving">Opzioni risparmio energetico</string>
-    <string name="settings_notification_privacy_low_detail">Notifiche poco dettagliate</string>
     <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
     <string name="settings_notification_privacy_need_permission">L\'app richiede il permesso per funzionare in sottofondo</string>
-    <string name="settings_notification_privacy_no_permission">Le app <b>non</b> richiedono il permesso per funzionare in sottofondo</string>
     <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Le notifiche contengono solo metadati</string>
     <string name="settings_notification_privacy_secure_message_content">• Il contenuto del messaggio di una notifica <b>si trova al sicuro direttamente dal server home di Matrix</b></string>

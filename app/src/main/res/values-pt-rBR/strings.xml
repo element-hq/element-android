@@ -886,11 +886,8 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opções de economia de energia</string>
-    <string name="settings_notification_privacy_low_detail">Notificações de baixo detalhe</string>
     <string name="settings_notification_privacy_reduced">Privacidade reduzida</string>
     <string name="settings_notification_privacy_need_permission">O app necessita de permissão para rodar em segundo plano</string>
-    <string name="settings_notification_privacy_no_permission">Os aplicativos <b>não</b> precisam de permissão para rodar em segundo plano</string>
     <string name="title_activity_choose_sticker">Enviar um sticker</string>
 
     <string name="dialog_title_third_party_licences">Licenças de terceiros</string>
@@ -953,7 +950,6 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
         <item quantity="other">%d selecionados</item>
     </plurals>
     <string name="settings_notification_privacy">Privacidade das notificações</string>
-    <string name="settings_notification_privacy_warning">Riot.im funciona em segundo plano para manter sua mensagem de notificação privada. Você pode alterar esta opção para reduzir o uso da bateria.</string>
     <string name="settings_notification_privacy_fcm">• As notificações são enviadas pelo \"Google Cloud Messaging\"</string>
     <string name="settings_notification_privacy_metadata">• As notificações contém apenas metadados</string>
     <string name="settings_notification_privacy_secure_message_content">• O conteúdo das mensagens da notificação é <b>armazenado de forma segura diretamente no servidor Matrix</b></string>

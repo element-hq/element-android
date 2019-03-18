@@ -881,13 +881,9 @@
     <string name="room_participants_idle">خامل</string>
 
     <string name="settings_notification_privacy">خصوصيّة الإخطارات</string>
-    <string name="settings_notification_privacy_warning">يعمل Riot.im في الخلفية ليُبقي محتوى رسائل الإخطارات خاصًّا. يمكنك تغيير هذا الخيار لتقليل استخدام البطارية.</string>
     <string name="settings_notification_privacy_normal">طبيعية</string>
-    <string name="settings_notification_privacy_power_saving">خيارات حِفظ الطاقة</string>
-    <string name="settings_notification_privacy_low_detail">إخطارات بتفاصيل أقل</string>
     <string name="settings_notification_privacy_reduced">خصوصية أقل</string>
     <string name="settings_notification_privacy_need_permission">يحتاج التطبيق تصريحًا ليعمل في الخلفية</string>
-    <string name="settings_notification_privacy_no_permission"><b>لا</b> تحتاج التطبيقات تصريحًا لتعمل في الخلفية</string>
     <string name="settings_notification_privacy_fcm">• تُرسل الإخطارات عبر «رسائل غوغل السحابية Google Cloud Messaging»</string>
     <string name="settings_notification_privacy_metadata">• تحتوي الإخطارات بيانات وصفية فحسب</string>
     <string name="settings_notification_privacy_nosecure_message_content">• تحتوي الإخطارات <b>بيانات وصفية وبيانات الرسائل</b></string>

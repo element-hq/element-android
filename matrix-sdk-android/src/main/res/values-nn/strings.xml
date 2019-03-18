@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="encrypted_message">Kryptert melding</string>
+<resources>
+    <string name="encrypted_message">Kryptert melding</string>
 
-    <string name="matrix_sdk_app_name">Matrix-Android-SDK</string>
 
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s sende eit bilete.</string>
@@ -71,5 +71,16 @@
     <string name="reply_to_a_video">sende ein video.</string>
     <string name="reply_to_an_audio_file">sende ein ljodfil.</string>
     <string name="reply_to_a_file">sende ei fil.</string>
+
+    <string name="room_displayname_invite_from">Byd inn frå %s</string>
+    <string name="room_displayname_room_invite">Rominnbyding</string>
+    <string name="room_displayname_two_members">%1$s og %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s og 1 til</item>
+        <item quantity="other">%1$s og %2$d til</item>
+    </plurals>
+
+    <string name="room_displayname_empty_room">Tomt rom</string>
 
 </resources>

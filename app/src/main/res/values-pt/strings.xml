@@ -881,13 +881,9 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
 
     <string name="room_sliding_menu_version_x">Versão %s</string>
     <string name="settings_notification_privacy">Privacidade das notificações</string>
-    <string name="settings_notification_privacy_warning">O Riot.im funciona em segundo plano para manter o conteúdo das notificações das mensagens privado. Poderá alterar esta opção se pretender reduzir a utilização da bateria.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opções de economia de energia</string>
-    <string name="settings_notification_privacy_low_detail">Notificações com pouco detalhe</string>
     <string name="settings_notification_privacy_reduced">Privacidade reduzida</string>
     <string name="settings_notification_privacy_need_permission">A aplicação precisa de permissão para executar em segundo plano</string>
-    <string name="settings_notification_privacy_no_permission">As aplicações <b>não</b> precisam de permissão para executar em segundo plano</string>
     <string name="settings_notification_privacy_fcm">• As notificações são enviadas pelo Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• As notificações contêm apenas metadados</string>
     <string name="settings_notification_privacy_secure_message_content">• O conteúdo das mensagens da notificação <b>obtém-se de forma segura directamente do servidor Matrix doméstico</b></string>

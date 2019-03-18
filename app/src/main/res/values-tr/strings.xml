@@ -690,13 +690,9 @@ Ayrıca e-posta adresi, şifrenizi sıfırlamanıza da olanak tanır.</string>
     <string name="settings_troubleshoot_test_battery_failed">Eğer kullanıcı cihazını prize bağlanmamış sabit ve ekranı kapalı bir şekilde bir süre bırakırsa cihaz Derin uyku moduna geçer. Bu uygulamaların internete erişmesini engeller ve yapılacak işlerini, senkronizasyolarını, alarmını erteler</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimizasyonu Göz ardı et</string>
 
-    <string name="settings_notification_privacy_warning">Riot.im arkaplanda çalışarak bildirim mesajlarının içeriğini gizler. Bu ayarı değiştirerek batarya kullanımını azaltabilirsin.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Güç-tasarrufu Seçenekleri</string>
-    <string name="settings_notification_privacy_low_detail">Düşük detaylı bildirimler</string>
     <string name="settings_notification_privacy_reduced">Azaltılmış gizlilik</string>
     <string name="settings_notification_privacy_need_permission">Uygulamanın arkaplanda çalışması için izne ihtiyacı var</string>
-    <string name="settings_notification_privacy_no_permission">Uygulamanın arkaplanda çalışması için izne ihtiyacı <b>yok</b></string>
     <string name="settings_notification_privacy_fcm">• Bildirimler Google Bulut Mesajlaşma ile gönderildi</string>
     <string name="settings_notification_privacy_metadata">• Bildirimler sadece meta verileri içeriyor</string>
     <string name="settings_notification_privacy_secure_message_content">• Bildirimin mesaj içeriği <b>direkt Matrix anamakinesinden güvenli bir şekilde bulundu</b></string>

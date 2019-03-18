@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="matrix_sdk_app_name">SDK de Matrix Android</string>
 
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s envió una imagen.</string>
@@ -26,10 +25,10 @@
     <string name="notice_answered_call">%s contestó la llamada.</string>
     <string name="notice_ended_call">%s finalizó la llamada.</string>
     <string name="notice_made_future_room_visibility">%1$s hizo visible el historial futuro de la sala para %2$s</string>
-    <string name="notice_room_visibility_invited">todos los miembros de la sala, desde el momento en que son invitados.</string>
+    <string name="notice_room_visibility_invited">todos los miembros de la sala, desde su invitación.</string>
     <string name="notice_room_visibility_joined">todos los miembros de la sala, desde el momento en que se unieron.</string>
     <string name="notice_room_visibility_shared">todos los miembros de la sala.</string>
-    <string name="notice_room_visibility_world_readable">cualquier persona.</string>
+    <string name="notice_room_visibility_world_readable">todos.</string>
     <string name="notice_room_visibility_unknown">desconocido (%s).</string>
     <string name="notice_end_to_end">%1$s activó el cifrado de extremo a extremo (%2$s)</string>
 
@@ -83,5 +82,17 @@
     <string name="reply_to_a_video">envió un vídeo.</string>
     <string name="reply_to_an_audio_file">envió un archivo de audio.</string>
     <string name="reply_to_a_file">envió un archivo.</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Invitación de %s</string>
+    <string name="room_displayname_room_invite">Invitación a Sala</string>
+    <string name="room_displayname_two_members">%1$s y %2$s</string>
+    <string name="room_displayname_empty_room">Sala vacía</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s y 1 otro</item>
+        <item quantity="other">%1$s y %2$d otros</item>
+    </plurals>
+
 
 </resources>

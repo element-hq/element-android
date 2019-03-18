@@ -1083,13 +1083,9 @@ Haluatko lisätä paketteja?</string>
     <string name="settings_troubleshoot_test_battery_failed">Jos käyttäjä jättää laitteen ilman latausjohtoa niin, että näyttö on pois päältä, laite siirtyy torkkutilaan. Tämä estää sovelluksia käyttämästä verkkoyhteyksiä ja lykkää niiden töitä, synkronointeja ja perushälytyksiä.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Jätä optimointi huomiotta</string>
 
-    <string name="settings_notification_privacy_warning">Riot.im käyttää taustapalvelua pitääksesi viestisi sisällön yksityisenä. Voit vaihtaa tämän asetuksen vähentääksesi akun käyttöä.</string>
     <string name="settings_notification_privacy_normal">Normaali</string>
-    <string name="settings_notification_privacy_power_saving">Virransäästöasetukset</string>
-    <string name="settings_notification_privacy_low_detail">Epätarkat ilmoitukset</string>
     <string name="settings_notification_privacy_reduced">Heikentynyt yksityisyys</string>
     <string name="settings_notification_privacy_need_permission">Tämä sovellus tarvitsee oikeuden ajaakseen taustapalveluaan</string>
-    <string name="settings_notification_privacy_no_permission">Tämä sovellus <b>ei</b> tarvitse oikeutta ajaakseen taustapalveluaan</string>
     <string name="settings_notification_privacy_fcm">• ilmoitukset lähetetään Google Cloud Messaging -palvelun kautta</string>
     <string name="settings_notification_privacy_metadata">• ilmoitukset sisältävät vain metadataa</string>
     <string name="settings_notification_privacy_secure_message_content">• ilmoituksessa olevan viestin sisältö <b>haetaan turvallisesti suoraan Matrix-kotipalvelimelta</b></string>

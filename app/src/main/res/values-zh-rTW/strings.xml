@@ -496,13 +496,9 @@
     <string name="settings_app_info_link_title">應用程式資訊</string>
 
     <string name="settings_notification_privacy">通知隱私</string>
-    <string name="settings_notification_privacy_warning">Riot.im 將在後臺運行以保持通知訊息內容的私密。您可以更改此選項以減少電池使用量。</string>
     <string name="settings_notification_privacy_normal">標準</string>
-    <string name="settings_notification_privacy_power_saving">節電選項</string>
-    <string name="settings_notification_privacy_low_detail">簡單模式</string>
     <string name="settings_notification_privacy_reduced">低隱私模式</string>
     <string name="settings_notification_privacy_need_permission">應用程式需要權限以在後臺運行</string>
-    <string name="settings_notification_privacy_no_permission">此應用程式<b>不</b>需要權限在後臺運行</string>
     <string name="settings_notification_privacy_fcm">•通知將通過 GCM(Google Cloud Messaging) 發送</string>
     <string name="settings_notification_privacy_metadata">·通知僅包含中繼資料</string>
     <string name="settings_notification_privacy_secure_message_content">• 通知的消息內容<b>將從 Matrix 主服務器安全獲取</b></string>

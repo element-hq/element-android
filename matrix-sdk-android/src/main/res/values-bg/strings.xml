@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="matrix_sdk_app_name">Matrix Android SDK</string>
+<resources>
 
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s изпрати снимка.</string>
@@ -39,9 +39,9 @@
     <string name="notice_avatar_changed_too">(профилната снимка също беше сменена)</string>
     <string name="notice_room_name_removed">%1$s премахна името на стаята</string>
     <string name="notice_room_topic_removed">%1$s премахна темата на стаята</string>
-    <string name="notice_event_redacted">"изтрито %1$s "</string>
-    <string name="notice_event_redacted_by">" от %1$s"</string>
-    <string name="notice_event_redacted_reason">" [причина: %1$s]"</string>
+    <string name="notice_event_redacted">премахнато %1$s</string>
+    <string name="notice_event_redacted_by">от %1$s</string>
+    <string name="notice_event_redacted_reason">[причина: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s обнови своя профил %2$s</string>
     <string name="notice_room_third_party_invite">%1$s изпрати покана на %2$s да се присъедини към стаята</string>
     <string name="notice_room_third_party_registered_invite">%1$s прие поканата за %2$s</string>
@@ -62,7 +62,7 @@
     <string name="medium_email">Имейл адрес</string>
     <string name="medium_phone_number">Телефонен номер</string>
 
-<string name="notice_crypto_error_unkwown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>
 
     <string name="summary_user_sent_sticker">%1$s изпрати стикер.</string>
 
@@ -72,5 +72,16 @@
     <string name="reply_to_a_video">изпрати видео.</string>
     <string name="reply_to_an_audio_file">изпрати аудио файл.</string>
     <string name="reply_to_a_file">изпрати файл.</string>
+
+    <string name="room_displayname_invite_from">Покана от %s</string>
+    <string name="room_displayname_room_invite">Покана за стая</string>
+    <string name="room_displayname_two_members">%1$s и %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s и 1 друг</item>
+        <item quantity="other">%1$s и %2$d други</item>
+    </plurals>
+
+    <string name="room_displayname_empty_room">Празна стая</string>
 
 </resources>

@@ -834,13 +834,9 @@
     <string name="receipt_avatar">Профилна снимка</string>
     <string name="notice_avatar">Профилна снимка</string>
     <string name="open_chat_header">Отвори заглавие</string>
-    <string name="settings_notification_privacy_warning">Riot.im работи във фонов режим за да е конфиденциално съдържанието на известията. Може да смените тази настройка, за да намалите консумацията на енергия.</string>
-    <string name="settings_notification_privacy_power_saving">Настройки за енергоспестяване</string>
-    <string name="settings_notification_privacy_low_detail">Известия без подробности</string>
     <string name="settings_notification_privacy_reduced">Намалена конфиденциалност</string>
     <string name="settings_notification_privacy_need_permission">Приложението се нуждае от достъп за работа във фонов режим</string>
-    <string name="settings_notification_privacy_no_permission">Приложението <b>не</b> се нуждае от достъп за работа във фонов режим</string>
-    <string name="settings_notification_privacy_fcm">• Известията се изпращат чрез Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Уведомления се изпращат чрез Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Уведомленията съдържат само метаданни</string>
     <string name="settings_notification_privacy_secure_message_content">• Съдържанието на известията се <b>извлича по защитен път директно от Matrix сървъра</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Уведомленията съдържат <b>метаданни и съдържания на съобщения</b></string>

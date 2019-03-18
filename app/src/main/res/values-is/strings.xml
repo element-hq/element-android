@@ -591,7 +591,6 @@
 
     <string name="settings_notification_privacy">Friðhelgi tilkynninga</string>
     <string name="settings_notification_privacy_normal">Venjulegt</string>
-    <string name="settings_notification_privacy_power_saving">Valkostir aflstjórnunar</string>
     <string name="settings_notification_privacy_reduced">Minnkuð friðhelgi</string>
     <string name="settings_notification_ringtone">Hljóð með tilkynningu</string>
     <string name="settings_enable_all_notif">Virkja tilkynningar fyrir þennan notandaaðgang</string>
@@ -681,7 +680,6 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
         <item quantity="other">%1$s spjallrásir fundust fyrir %2$s</item>
     </plurals>
     <string name="settings_notification_privacy_need_permission">Forritið þarf heimild til að keyra í bakgrunni</string>
-    <string name="settings_notification_privacy_no_permission">Forritið <b>þarf ekki</b> heimild til að keyra í bakgrunni</string>
     <string name="settings_notification_privacy_fcm">• Tilkynningar eru sendar í gegnum Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Tilkynningar innihalda einungis lýsigögn</string>
     <string name="settings_notification_privacy_secure_message_content">• Efni skilaboða í tilkynningum er <b>staðsett beint og öruggt á Matrix heimavefþjóninum</b></string>
@@ -717,8 +715,6 @@ Ertu alveg viss?</string>
     <string name="people_search_invite_by_id_dialog_description">Settu inn eitt eða fleir tölvupóstföng eða Matrix auðkenni</string>
     <string name="room_unsent_messages_notification">Skilaboð ekki send. %1$s eða %2$s núna?</string>
     <string name="room_unknown_devices_messages_notification">Skilaboð ekki send vegna þess að vart var við óþekkt tæki. %1$s eða %2$s núna?</string>
-    <string name="settings_notification_privacy_warning">Riot.im keyrir í bakgrunni til að halda efni tilkynninga út af fyrir sig. YÞú getur breytt þessum valkosti til að minnka rafhlöðunotkun.</string>
-    <string name="settings_notification_privacy_low_detail">Tilkynningar án smáatriða</string>
     <string name="settings_set_sync_delay">Hlé milli tveggja samstillingarbeiðna</string>
     <string name="settings_keep_media">Halda gögnum</string>
 

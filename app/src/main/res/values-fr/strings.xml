@@ -849,13 +849,9 @@ Appareils inconnus :</string>
     <string name="open_chat_header">Développer l’entête</string>
     <string name="receipt_avatar">Avatar de réception</string>
     <string name="settings_notification_privacy">Confidentialité des notifications</string>
-    <string name="settings_notification_privacy_warning">Riot.im fonctionne en arrière-plan pour que le contenu du message de notification reste privé. Vous pouvez désactiver cette option pour réduire l’utilisation de la batterie.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Options d’économie d’énergie</string>
-    <string name="settings_notification_privacy_low_detail">Notifications avec peu de détails</string>
     <string name="settings_notification_privacy_reduced">Confidentialité réduite</string>
-    <string name="settings_notification_privacy_need_permission">L’application a besoin de la permission de fonctionner en arrière-plan</string>
-    <string name="settings_notification_privacy_no_permission">L’application <b>n’</b>a <b>pas</b> besoin de la permission pour fonctionner en arrière-plan</string>
+    <string name="settings_notification_privacy_need_permission">L\'application a besoin de la permission de fonctionner en arrière-plan</string>
     <string name="settings_notification_privacy_fcm">• Les notifications sont envoyées via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Les notifications ne contiennent que des métadonnées</string>
     <string name="settings_notification_privacy_secure_message_content">• Le contenu du message de notification est <b>issu directement du serveur d’accueil Matrix</b></string>

@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
@@ -690,14 +690,11 @@
     <string name="settings_troubleshoot_test_battery_failed">If a user leaves a device unplugged and stationary for a period of time, with the screen off, the device enters Doze mode. This prevents apps from accessing the network and defers their jobs, syncs, and standard alarms. </string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignore Optimization</string>
 
-    <string name="settings_notification_privacy_warning">Riot.im runs in the background to keep your notification message content private. You can change this option to reduce battery usage.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Power-saving Options</string>
-    <string name="settings_notification_privacy_low_detail">Low detail notifications</string>
     <string name="settings_notification_privacy_reduced">Reduced privacy</string>
     <string name="settings_notification_privacy_need_permission">The app needs permission to run in the background</string>
-    <string name="settings_notification_privacy_no_permission">The apps does <b>not</b> need permission to run in the background</string>
-    <string name="settings_notification_privacy_fcm">• Notifications are sent via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_no_background_sync">The apps does <b>not</b> need to connect to the HomeServer in the background, it should reduce battery usage</string>
+    <string name="settings_notification_privacy_fcm">• Notifications are sent via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Notifications only contain meta data</string>
     <string name="settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Notifications contain <b>meta and message data</b></string>
@@ -1035,7 +1032,23 @@
         <item quantity="one">1 room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 message</item>
+        <item quantity="other">%1$s: %2$d messages</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d notification</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
+
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
+    <string name="notification_unknown_new_event">New Event</string>
+    <string name="notification_unknown_room_name">Room</string>
+    <string name="notification_new_messages">New Messages</string>
+    <string name="notification_new_invitation">New Invitation</string>
+    <string name="notification_sender_me">Me</string>
+    <string name="notification_inline_reply_failed">** Failed to send - please open room</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>

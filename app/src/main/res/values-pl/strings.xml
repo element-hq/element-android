@@ -754,13 +754,9 @@ Jesteś pewien?</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Uruchom proszę Riot na innym urządzeniu, które może odszyfrować wiadomość, aby wysłać klucze do tego urządzenia.</string>
 
     <string name="settings_notification_privacy">Prywatność powiadomień</string>
-    <string name="settings_notification_privacy_warning">Riot.im działa w tle aby zachować prywatność Twoich powiadomień. Możesz zmienić tę opcję aby zmniejszyć zużycie baterii.</string>
     <string name="settings_notification_privacy_normal">Standardowa</string>
-    <string name="settings_notification_privacy_power_saving">Opcje oszczędzania energii</string>
-    <string name="settings_notification_privacy_low_detail">Mało szczegółowe powiadomienia</string>
     <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
     <string name="settings_notification_privacy_need_permission">Aplikacja wymaga uprawnień do działania w tle</string>
-    <string name="settings_notification_privacy_no_permission">Aplikacja <b>nie</b> wymaga uprawnień do działania w tle</string>
     <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Powiadomienia zawierają tylko meta-dane</string>
     <string name="settings_notification_privacy_secure_message_content">• Treść powiadomienia jest <b>bezpiecznie pobierana z domowego serwera Matrix</b></string>
