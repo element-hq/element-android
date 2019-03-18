@@ -15,9 +15,14 @@ def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
 
+def getGitTimestamp() {
+    def cmd = 'git show -s --format=%ct'
+    return cmd.execute().text.trim() as Long
+}
+
 static def generateVersionCodeFromTimestamp() {
     // It's unix timestamp divided by 10: It's incremented by one every 10 seconds.
-    return (System.currentTimeMillis() / 1_000 / 10).toInteger()
+    return (getGitTimestamp() / 10).toInteger()
 }
 
 def generateVersionCodeFromVersionName() {
