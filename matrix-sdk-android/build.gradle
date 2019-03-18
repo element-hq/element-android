@@ -104,7 +104,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.0.2'
     testImplementation "org.koin:koin-test:$koin_version"
-    testImplementation 'org.robolectric:shadows-support-v4:3.0'
+    //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     testImplementation "io.mockk:mockk:1.8.13.kotlin13"
     testImplementation 'org.amshove.kluent:kluent-android:1.44'
     testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
