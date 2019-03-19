@@ -19,14 +19,14 @@ package im.vector.matrix.android.internal.di
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.internal.network.*
-import im.vector.matrix.android.internal.network.UnitConverterFactory
+import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
+import im.vector.matrix.android.internal.network.interceptors.FormattedJsonHttpLogger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okreplay.OkReplayInterceptor
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class NetworkModule {
@@ -46,10 +46,14 @@ class NetworkModule {
         }
 
         single {
-            val logger = HttpLoggingInterceptor.Logger { message -> Timber.v(message) }
+            val logger = FormattedJsonHttpLogger()
             val interceptor = HttpLoggingInterceptor(logger)
-            interceptor.level = HttpLoggingInterceptor.Level.BASIC
+            interceptor.level = BuildConfig.OKHTTP_LOGGING_LEVEL
             interceptor
+        }
+
+        single {
+            CurlLoggingInterceptor()
         }
 
         single {
@@ -69,6 +73,11 @@ class NetworkModule {
                     .addInterceptor(get<UserAgentInterceptor>())
                     .addInterceptor(get<AccessTokenInterceptor>())
                     .addInterceptor(get<HttpLoggingInterceptor>())
+                    .apply {
+                        if (BuildConfig.LOG_PRIVATE_DATA) {
+                            addInterceptor(get<CurlLoggingInterceptor>())
+                        }
+                    }
                     .addInterceptor(get<OkReplayInterceptor>())
                     .build()
         }
