@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
 import im.vector.matrix.android.internal.di.MatrixModule
 import im.vector.matrix.android.internal.di.NetworkModule
+import im.vector.matrix.android.internal.network.UserAgentHolder
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import org.koin.standalone.inject
 import java.util.concurrent.atomic.AtomicBoolean
@@ -38,6 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class Matrix private constructor(context: Context) : MatrixKoinComponent {
 
     private val authenticator by inject<Authenticator>()
+    private val userAgent by inject<UserAgentHolder>()
     private val backgroundDetectionObserver by inject<BackgroundDetectionObserver>()
     lateinit var currentSession: Session
 
@@ -57,6 +59,13 @@ class Matrix private constructor(context: Context) : MatrixKoinComponent {
 
     fun authenticator(): Authenticator {
         return authenticator
+    }
+
+    /**
+     * Set application flavor, to alter user agent.
+     */
+    fun setApplicationFlavor(flavor: String) {
+        userAgent.setApplicationFlavor(flavor)
     }
 
     companion object {
