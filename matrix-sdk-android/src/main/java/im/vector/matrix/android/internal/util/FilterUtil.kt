@@ -28,7 +28,8 @@ internal object FilterUtil {
      *
      *
      * If data save mode is on, FilterBody will contains
-     * "{\"room\": {\"ephemeral\": {\"types\": [\"m.receipt\"]}}, \"presence\":{\"notTypes\": [\"*\"]}}"
+     * FIXME New expected filter:
+     * "{\"room\": {\"ephemeral\": {\"notTypes\": [\"m.typing\"]}}, \"presence\":{\"notTypes\": [\"*\"]}}"
      *
      * @param filterBody      filterBody to patch
      * @param useDataSaveMode true to enable data save mode
