@@ -42,13 +42,13 @@ Make sure the following commands execute without any error:
 
 > ./tools/check/check_code_quality.sh
 
-> ./gradlew lintAppgplayRelease
+> ./gradlew lintGplayRelease
 
 ### Unit tests
 
 Make sure the following commands execute without any error:
 
-> ./gradlew testAppgplayReleaseUnitTest
+> ./gradlew testGplayReleaseUnitTest
 
 ### Tests
 

@@ -87,7 +87,7 @@ android {
     flavorDimensions "store"
 
     productFlavors {
-        appgplay {
+        gplay {
             dimension "store"
 
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
@@ -95,7 +95,7 @@ android {
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
 
-        appfdroid {
+        fdroid {
             dimension "store"
 
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"

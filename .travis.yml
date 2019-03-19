@@ -45,14 +45,14 @@ before_script:
 
 # Just build the project for now
 script:
-  # Build app (assembleAppgplayRelease assembleAppfdroidRelease)
+  # Build app (assembleGplayRelease assembleFdroidRelease)
   # Build Android test (assembleAndroidTest) (disabled for now)
-  # Code quality (lintAppgplayRelease lintAppfdroidRelease)
-  - ./gradlew clean assembleAppgplayRelease assembleAppfdroidRelease lintAppgplayRelease lintAppfdroidRelease --stacktrace
+  # Code quality (lintGplayRelease lintFdroidRelease)
+  - ./gradlew clean assembleGplayRelease assembleFdroidRelease lintGplayRelease lintFdroidRelease --stacktrace
   # Run unitary test (Disable for now, see https://travis-ci.org/vector-im/riot-android/builds/502504370)
-  # - ./gradlew testAppgplayReleaseUnitTest --stacktrace
+  # - ./gradlew testGplayReleaseUnitTest --stacktrace
   # Other code quality check
   - ./tools/check/check_code_quality.sh
   - ./tools/travis/check_pr.sh
   # Check that indonesians file are identical. Due to Android issue, the resource folder must be value-in/, and Weblate export data into value-id/.
-  - diff ./app/src/main/res/values-id/strings.xml ./app/src/main/res/values-in/strings.xml
+  - diff ./vector/src/main/res/values-id/strings.xml ./vector/src/main/res/values-in/strings.xml
