@@ -22,6 +22,8 @@ interface Timeline {
 
     var listener: Timeline.Listener?
 
+    fun hasMoreToLoad(direction: Direction): Boolean
+    fun hasReachedEnd(direction: Direction): Boolean
     fun size(): Int
     fun snapshot(): List<TimelineEvent>
     fun paginate(direction: Direction, count: Int)
@@ -44,14 +46,6 @@ interface Timeline {
          * These events come from a back pagination.
          */
         BACKWARDS("b");
-
-        fun reversed(): Direction {
-            return when (this) {
-                FORWARDS  -> BACKWARDS
-                BACKWARDS -> FORWARDS
-            }
-        }
-
     }
 
 

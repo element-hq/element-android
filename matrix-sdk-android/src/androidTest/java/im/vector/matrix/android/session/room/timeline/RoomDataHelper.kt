@@ -48,7 +48,7 @@ object RoomDataHelper {
             val chunkEntity = realm.createObject<ChunkEntity>().apply {
                 nextToken = null
                 prevToken = Random.nextLong(System.currentTimeMillis()).toString()
-                isLast = true
+                isLastForward = true
             }
             chunkEntity.addAll("roomId", eventList, PaginationDirection.FORWARDS)
             roomEntity.addOrUpdate(chunkEntity)

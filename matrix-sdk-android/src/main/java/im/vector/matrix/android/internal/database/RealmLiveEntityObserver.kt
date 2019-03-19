@@ -43,7 +43,6 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
                 queryResults.addChangeListener { t, changeSet ->
                     onChanged(t, changeSet)
                 }
-                processInitialResults(queryResults)
                 results = AtomicReference(queryResults)
             }
         }
@@ -61,7 +60,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
         return isStarted.get()
     }
 
-    protected open fun onChanged(realmResults: RealmResults<T>, changeSet: OrderedCollectionChangeSet) {
+    private fun onChanged(realmResults: RealmResults<T>, changeSet: OrderedCollectionChangeSet) {
         val insertionIndexes = changeSet.insertions
         val updateIndexes = changeSet.changes
         val deletionIndexes = changeSet.deletions
@@ -71,12 +70,6 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
         processChanges(inserted, updated, deleted)
     }
 
-    protected open fun processInitialResults(results: RealmResults<T>) {
-        // no-op
-    }
-
-    protected open fun processChanges(inserted: List<T>, updated: List<T>, deleted: List<T>) {
-        //no-op
-    }
+    protected abstract fun processChanges(inserted: List<T>, updated: List<T>, deleted: List<T>)
 
 }

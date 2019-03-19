@@ -23,8 +23,9 @@ import io.realm.annotations.LinkingObjects
 
 internal open class ChunkEntity(var prevToken: String? = null,
                                 var nextToken: String? = null,
-                                var isLast: Boolean = false,
-                                var events: RealmList<EventEntity> = RealmList()
+                                var events: RealmList<EventEntity> = RealmList(),
+                                var isLastForward: Boolean = false,
+                                var isLastBackward: Boolean = false
 ) : RealmObject() {
 
     @LinkingObjects("chunks")

@@ -134,13 +134,13 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk2: ChunkEntity = realm.createObject()
             val eventsForChunk1 = createFakeListOfEvents(30)
             val eventsForChunk2 = eventsForChunk1 + createFakeListOfEvents(10)
-            chunk1.isLast = true
-            chunk2.isLast = false
+            chunk1.isLastForward = true
+            chunk2.isLastForward = false
             chunk1.addAll("roomId", eventsForChunk1, PaginationDirection.FORWARDS)
             chunk2.addAll("roomId", eventsForChunk2, PaginationDirection.BACKWARDS)
             chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
             chunk1.events.size shouldEqual 40
-            chunk1.isLast.shouldBeTrue()
+            chunk1.isLastForward.shouldBeTrue()
         }
     }
 

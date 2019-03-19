@@ -27,16 +27,16 @@ import im.vector.matrix.android.internal.database.query.fastContains
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import io.realm.Sort
 
-internal fun ChunkEntity.deleteOnCascade() {
-    assertIsManaged()
-    this.events.deleteAllFromRealm()
-    this.deleteFromRealm()
-}
-
 // By default if a chunk is empty we consider it unlinked
 internal fun ChunkEntity.isUnlinked(): Boolean {
     assertIsManaged()
     return events.where().equalTo(EventEntityFields.IS_UNLINKED, false).findAll().isEmpty()
+}
+
+internal fun ChunkEntity.deleteOnCascade() {
+    assertIsManaged()
+    this.events.deleteAllFromRealm()
+    this.deleteFromRealm()
 }
 
 internal fun ChunkEntity.merge(roomId: String,
@@ -53,10 +53,11 @@ internal fun ChunkEntity.merge(roomId: String,
     val eventsToMerge: List<EventEntity>
     if (direction == PaginationDirection.FORWARDS) {
         this.nextToken = chunkToMerge.nextToken
-        this.isLast = chunkToMerge.isLast
+        this.isLastForward = chunkToMerge.isLastForward
         eventsToMerge = chunkToMerge.events.reversed()
     } else {
         this.prevToken = chunkToMerge.prevToken
+        this.isLastBackward = chunkToMerge.isLastBackward
         eventsToMerge = chunkToMerge.events
     }
     eventsToMerge.forEach {
@@ -117,14 +118,14 @@ private fun ChunkEntity.assertIsManaged() {
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findFirst()?.displayIndex
-        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING).findFirst()?.displayIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findFirst()?.displayIndex
+               PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING).findFirst()?.displayIndex
+           } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
-        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
+               PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
+           } ?: defaultValue
 }

@@ -19,26 +19,24 @@ package im.vector.riotredesign.features.home.room.detail.timeline.helper;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import im.vector.matrix.android.api.session.room.timeline.Timeline;
 
-// Todo rework that, it has been copy/paste at the moment
 public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
     // Sets the starting page index
     private static final int startingPageIndex = 0;
     // The minimum amount of items to have below your current scroll position
     // before loading more.
-    private int visibleThreshold = 30;
-    // The current offset index of data you have loaded
-    private int currentPage = 0;
+    private int visibleThreshold = 50;
     // The total number of items in the dataset after the last load
     private int previousTotalItemCount = 0;
     // True if we are still waiting for the last set of data to load.
     private boolean loading = true;
     private LinearLayoutManager mLayoutManager;
-    private LoadOnScrollDirection mDirection;
+    private Timeline.Direction mDirection;
 
-    public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager, LoadOnScrollDirection direction) {
+    public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager, Timeline.Direction direction) {
         this.mLayoutManager = layoutManager;
-        mDirection = direction;
+        this.mDirection = direction;
     }
 
 
@@ -55,11 +53,10 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
         firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
 
         switch (mDirection) {
-            case BOTTOM:
+            case BACKWARDS:
                 // If the total item count is zero and the previous isn't, assume the
                 // list is invalidated and should be reset back to initial state
                 if (totalItemCount < previousTotalItemCount) {
-                    this.currentPage = startingPageIndex;
                     this.previousTotalItemCount = totalItemCount;
                     if (totalItemCount == 0) {
                         this.loading = true;
@@ -78,16 +75,14 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
                 // If we do need to reload some more data, we execute onLoadMore to fetch the data.
                 // threshold should reflect how many total columns there are too
                 if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
-                    currentPage++;
-                    onLoadMore(currentPage, totalItemCount);
+                    onLoadMore();
                     loading = true;
                 }
                 break;
-            case TOP:
+            case FORWARDS:
                 // If the total item count is zero and the previous isn't, assume the
                 // list is invalidated and should be reset back to initial state
                 if (totalItemCount < previousTotalItemCount) {
-                    this.currentPage = startingPageIndex;
                     this.previousTotalItemCount = totalItemCount;
                     if (totalItemCount == 0) {
                         this.loading = true;
@@ -106,42 +101,14 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
                 // If we do need to reload some more data, we execute onLoadMore to fetch the data.
                 // threshold should reflect how many total columns there are too
                 if (!loading && firstVisibleItemPosition < visibleThreshold) {
-                    currentPage++;
-                    onLoadMore(currentPage, totalItemCount);
+                    onLoadMore();
                     loading = true;
                 }
                 break;
         }
     }
 
-    private int getLastVisibleItem(int[] lastVisibleItemPositions) {
-        int maxSize = 0;
-        for (int i = 0; i < lastVisibleItemPositions.length; i++) {
-            if (i == 0) {
-                maxSize = lastVisibleItemPositions[i];
-            } else if (lastVisibleItemPositions[i] > maxSize) {
-                maxSize = lastVisibleItemPositions[i];
-            }
-        }
-        return maxSize;
-    }
-
-    private int getFirstVisibleItem(int[] firstVisibleItemPositions) {
-        int maxSize = 0;
-        for (int i = 0; i < firstVisibleItemPositions.length; i++) {
-            if (i == 0) {
-                maxSize = firstVisibleItemPositions[i];
-            } else if (firstVisibleItemPositions[i] > maxSize) {
-                maxSize = firstVisibleItemPositions[i];
-            }
-        }
-        return maxSize;
-    }
-
     // Defines the process for actually loading more data based on page
-    public abstract void onLoadMore(int page, int totalItemsCount);
+    public abstract void onLoadMore();
 
-    public enum LoadOnScrollDirection {
-        TOP, BOTTOM
-    }
 }

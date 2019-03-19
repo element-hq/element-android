@@ -51,7 +51,6 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         data class INVITED(val data: Map<String, InvitedRoomSync>) : HandlingStrategy()
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
-
     fun handle(roomsSyncResponse: RoomsSyncResponse) {
         monarchy.runTransactionSync { realm ->
             handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.JOINED(roomsSyncResponse.join))
@@ -164,8 +163,8 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
             realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
         }
 
-        lastChunk?.isLast = false
-        chunkEntity.isLast = true
+        lastChunk?.isLastForward = false
+        chunkEntity.isLastForward = true
         chunkEntity.addAll(roomId, eventList, PaginationDirection.FORWARDS, stateIndexOffset)
         return chunkEntity
     }

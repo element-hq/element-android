@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail
+package im.vector.matrix.android.api.util
 
-import im.vector.matrix.android.api.session.room.timeline.Timeline
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+class CancelableBag : Cancelable {
 
-sealed class RoomDetailActions {
+    private val cancelableList = ArrayList<Cancelable>()
 
-    data class SendMessage(val text: String) : RoomDetailActions()
-    object IsDisplayed : RoomDetailActions()
-    data class EventDisplayed(val event: TimelineEvent) : RoomDetailActions()
-    data class LoadMore(val direction: Timeline.Direction) : RoomDetailActions()
+    fun add(cancelable: Cancelable) {
+        cancelableList.add(cancelable)
+    }
 
+    override fun cancel() {
+        cancelableList.forEach { it.cancel() }
+    }
+
+}
+
+fun Cancelable.addTo(cancelables: CancelableBag) {
+    cancelables.add(this)
 }

@@ -36,13 +36,15 @@ import io.realm.kotlin.createObject
 
 internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
 
+    enum class Result {
+        SHOULD_FETCH_MORE,
+        SUCCESS
+    }
+
     fun insertInDb(receivedChunk: TokenChunkEvent,
                    roomId: String,
-                   direction: PaginationDirection): Try<Boolean> {
+                   direction: PaginationDirection): Try<Result> {
 
-        if (receivedChunk.events.isEmpty() && receivedChunk.stateEvents.isEmpty()) {
-            return Try.just(false)
-        }
         return monarchy
                 .tryTransactionSync { realm ->
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
@@ -71,27 +73,36 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
                         nextChunk?.apply { this.prevToken = prevToken }
                         ?: ChunkEntity.create(realm, prevToken, nextToken)
                     }
-
-                    currentChunk.addAll(roomId, receivedChunk.events, direction, isUnlinked = currentChunk.isUnlinked())
-
-                    // Then we merge chunks if needed
-                    if (currentChunk != prevChunk && prevChunk != null) {
-                        currentChunk = handleMerge(roomEntity, direction, currentChunk, prevChunk)
-                    } else if (currentChunk != nextChunk && nextChunk != null) {
-                        currentChunk = handleMerge(roomEntity, direction, currentChunk, nextChunk)
+                    if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
+                        currentChunk.isLastBackward = true
                     } else {
-                        val newEventIds = receivedChunk.events.mapNotNull { it.eventId }
-                        ChunkEntity
-                                .findAllIncludingEvents(realm, newEventIds)
-                                .filter { it != currentChunk }
-                                .forEach { overlapped ->
-                                    currentChunk = handleMerge(roomEntity, direction, currentChunk, overlapped)
-                                }
+                        currentChunk.addAll(roomId, receivedChunk.events, direction, isUnlinked = currentChunk.isUnlinked())
+
+                        // Then we merge chunks if needed
+                        if (currentChunk != prevChunk && prevChunk != null) {
+                            currentChunk = handleMerge(roomEntity, direction, currentChunk, prevChunk)
+                        } else if (currentChunk != nextChunk && nextChunk != null) {
+                            currentChunk = handleMerge(roomEntity, direction, currentChunk, nextChunk)
+                        } else {
+                            val newEventIds = receivedChunk.events.mapNotNull { it.eventId }
+                            ChunkEntity
+                                    .findAllIncludingEvents(realm, newEventIds)
+                                    .filter { it != currentChunk }
+                                    .forEach { overlapped ->
+                                        currentChunk = handleMerge(roomEntity, direction, currentChunk, overlapped)
+                                    }
+                        }
+                        roomEntity.addOrUpdate(currentChunk)
+                        roomEntity.addStateEvents(receivedChunk.stateEvents, isUnlinked = currentChunk.isUnlinked())
                     }
-                    roomEntity.addOrUpdate(currentChunk)
-                    roomEntity.addStateEvents(receivedChunk.stateEvents, isUnlinked = currentChunk.isUnlinked())
                 }
-                .map { true }
+                .map {
+                    if (receivedChunk.events.isEmpty() && receivedChunk.stateEvents.isEmpty() && receivedChunk.start != receivedChunk.end) {
+                        Result.SHOULD_FETCH_MORE
+                    } else {
+                        Result.SUCCESS
+                    }
+                }
     }
 
     private fun handleMerge(roomEntity: RoomEntity,

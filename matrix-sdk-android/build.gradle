@@ -76,9 +76,6 @@ dependencies {
     implementation 'com.github.Zhuinden:realm-monarchy:0.5.1'
     kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
 
-    // Paging
-    implementation 'androidx.paging:paging-runtime:2.0.0'
-
     // Work
     implementation "android.arch.work:work-runtime-ktx:1.0.0-beta02"
 

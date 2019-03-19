@@ -22,12 +22,12 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class RoomDetailViewModel(initialState: RoomDetailViewState,
@@ -64,7 +64,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             is RoomDetailActions.SendMessage    -> handleSendMessage(action)
             is RoomDetailActions.IsDisplayed    -> handleIsDisplayed()
             is RoomDetailActions.EventDisplayed -> handleEventDisplayed(action)
-            is RoomDetailActions.LoadMore       -> timeline.paginate(Timeline.Direction.BACKWARDS, 50)
+            is RoomDetailActions.LoadMore       -> handleLoadMore(action)
         }
     }
 
@@ -80,6 +80,10 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     private fun handleIsDisplayed() {
         visibleRoomHolder.post(roomId)
+    }
+
+    private fun handleLoadMore(action: RoomDetailActions.LoadMore) {
+        timeline.paginate(action.direction, 50)
     }
 
     private fun observeDisplayedEvents() {
@@ -100,13 +104,14 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private fun observeRoomSummary() {
         room.rx().liveRoomSummary()
                 .execute { async ->
+                    Timber.v("Room summary updated: $async")
                     copy(asyncRoomSummary = async)
                 }
     }
 
     override fun onCleared() {
-        super.onCleared()
         timeline.dispose()
+        super.onCleared()
     }
 
 }

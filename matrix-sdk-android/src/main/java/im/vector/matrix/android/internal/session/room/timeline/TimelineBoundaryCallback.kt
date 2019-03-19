@@ -95,8 +95,8 @@ internal class TimelineBoundaryCallback(private val roomId: String,
 
         paginationTask.configureWith(params)
                 .enableRetry()
-                .dispatchTo(object : MatrixCallback<Boolean> {
-                    override fun onSuccess(data: Boolean) {
+                .dispatchTo(object : MatrixCallback<TokenChunkEventPersistor.Result> {
+                    override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                         requestCallback.recordSuccess()
                     }
 
