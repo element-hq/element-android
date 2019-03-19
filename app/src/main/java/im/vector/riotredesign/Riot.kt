@@ -23,7 +23,7 @@ import com.facebook.stetho.Stetho
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
-import im.vector.matrix.android.BuildConfig
+import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.di.AppModule
 import im.vector.riotredesign.features.home.HomeModule
 import org.koin.log.EmptyLogger
@@ -44,6 +44,8 @@ class Riot : Application() {
         val appModule = AppModule(applicationContext).definition
         val homeModule = HomeModule().definition
         startKoin(listOf(appModule, homeModule), logger = EmptyLogger())
+
+        Matrix.getInstance().setApplicationFlavor(BuildConfig.FLAVOR_DESCRIPTION)
     }
 
     override fun attachBaseContext(base: Context) {

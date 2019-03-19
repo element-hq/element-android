@@ -16,23 +16,22 @@
 
 package im.vector.matrix.android.internal.network
 
-import im.vector.matrix.android.internal.auth.SessionParamsStore
 import okhttp3.Interceptor
 import okhttp3.Response
 
-internal class AccessTokenInterceptor(private val sessionParamsStore: SessionParamsStore) : Interceptor {
+internal class UserAgentInterceptor(private val userAgentHolder: UserAgentHolder) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
         val newRequestBuilder = request.newBuilder()
-        // Add the access token to all requests if it is set
-        val sessionParams = sessionParamsStore.get()
-        sessionParams?.let {
-            newRequestBuilder.addHeader(HttpHeaders.Authorization, "Bearer " + it.credentials.accessToken)
-        }
+        // Add the user agent to all requests if it is set
+        userAgentHolder.userAgent
+                .takeIf { it.isNotBlank() }
+                ?.let {
+                    newRequestBuilder.addHeader(HttpHeaders.UserAgent, it)
+                }
         request = newRequestBuilder.build()
         return chain.proceed(request)
     }
-
 
 }

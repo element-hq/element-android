@@ -17,8 +17,8 @@
 package im.vector.matrix.android.internal.di
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import im.vector.matrix.android.internal.network.AccessTokenInterceptor
-import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.BuildConfig
+import im.vector.matrix.android.internal.network.*
 import im.vector.matrix.android.internal.network.UnitConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,6 +32,14 @@ import java.util.concurrent.TimeUnit
 class NetworkModule {
 
     val definition = module {
+
+        single {
+            UserAgentHolder(get())
+        }
+
+        single {
+            UserAgentInterceptor(get())
+        }
 
         single {
             AccessTokenInterceptor(get())
@@ -58,6 +66,7 @@ class NetworkModule {
                     .readTimeout(30, TimeUnit.SECONDS)
                     .writeTimeout(30, TimeUnit.SECONDS)
                     .addNetworkInterceptor(get<StethoInterceptor>())
+                    .addInterceptor(get<UserAgentInterceptor>())
                     .addInterceptor(get<AccessTokenInterceptor>())
                     .addInterceptor(get<HttpLoggingInterceptor>())
                     .addInterceptor(get<OkReplayInterceptor>())
