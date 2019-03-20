@@ -16,11 +16,13 @@
 
 package im.vector.matrix.android.internal.auth
 
+import android.content.Context
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
 import im.vector.matrix.android.internal.auth.db.SessionParamsMapper
 import io.realm.RealmConfiguration
 import org.koin.dsl.module.module
+import java.io.File
 
 class AuthModule {
 
@@ -31,8 +33,18 @@ class AuthModule {
         }
 
         single {
+            val context: Context = get()
+            val old = File(context.filesDir, "matrix-sdk-auth")
+
+            if (old.exists()) {
+                old.renameTo(File(context.filesDir, "matrix-sdk-auth.realm"))
+            }
+
             val mapper = SessionParamsMapper((get()))
-            val realmConfiguration = RealmConfiguration.Builder().name("matrix-sdk-auth").deleteRealmIfMigrationNeeded().build()
+            val realmConfiguration = RealmConfiguration.Builder()
+                    .name("matrix-sdk-auth.realm")
+                    .deleteRealmIfMigrationNeeded()
+                    .build()
             RealmSessionParamsStore(mapper, realmConfiguration) as SessionParamsStore
         }
 
