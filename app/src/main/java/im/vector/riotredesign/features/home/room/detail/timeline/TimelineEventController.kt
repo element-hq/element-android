@@ -80,6 +80,10 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     private var timeline: Timeline? = null
     var callback: Callback? = null
 
+    init {
+        requestModelBuild()
+    }
+
     fun setTimeline(timeline: Timeline?) {
         if (this.timeline != timeline) {
             this.timeline = timeline

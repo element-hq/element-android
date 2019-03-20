@@ -47,7 +47,7 @@ android {
 dependencies {
 
     def arrow_version = "0.8.0"
-    def support_version = '1.1.0-alpha01'
+    def support_version = '1.1.0-alpha03'
     def moshi_version = '1.8.0'
     def lifecycle_version = '2.0.0'
     def coroutines_version = "1.0.1"
@@ -66,7 +66,7 @@ dependencies {
     // Network
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.4.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.novoda:merlin:1.1.6'
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
@@ -77,7 +77,7 @@ dependencies {
     kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
 
     // Work
-    implementation "android.arch.work:work-runtime-ktx:1.0.0-beta02"
+    implementation "android.arch.work:work-runtime-ktx:1.0.0"
 
     // FP
     implementation "io.arrow-kt:arrow-core:$arrow_version"

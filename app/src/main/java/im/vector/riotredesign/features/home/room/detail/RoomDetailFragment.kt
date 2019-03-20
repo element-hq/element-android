@@ -138,7 +138,6 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     private fun renderState(state: RoomDetailViewState) {
         renderRoomSummary(state)
         timelineEventController.setTimeline(state.timeline)
-        //renderTimeline(state)
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {

@@ -27,7 +27,6 @@ import im.vector.riotredesign.core.platform.RiotViewModel
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class RoomDetailViewModel(initialState: RoomDetailViewState,
@@ -104,7 +103,6 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private fun observeRoomSummary() {
         room.rx().liveRoomSummary()
                 .execute { async ->
-                    Timber.v("Room summary updated: $async")
                     copy(asyncRoomSummary = async)
                 }
     }
