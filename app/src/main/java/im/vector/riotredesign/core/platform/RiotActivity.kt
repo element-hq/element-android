@@ -20,10 +20,15 @@ import android.os.Bundle
 import androidx.annotation.MainThread
 import com.airbnb.mvrx.BaseMvRxActivity
 import com.bumptech.glide.util.Util
+import im.vector.riotredesign.BuildConfig
+import im.vector.riotredesign.receivers.DebugReceiver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 abstract class RiotActivity : BaseMvRxActivity() {
+
+    // For debug only
+    private var debugReceiver: DebugReceiver? = null
 
     private val uiDisposables = CompositeDisposable()
     private val restorables = ArrayList<Restorable>()
@@ -48,6 +53,27 @@ abstract class RiotActivity : BaseMvRxActivity() {
     protected fun Disposable.disposeOnDestroy(): Disposable {
         uiDisposables.add(this)
         return this
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        DebugReceiver
+                .getIntentFilter(this)
+                .takeIf { BuildConfig.DEBUG }
+                ?.let {
+                    debugReceiver = DebugReceiver()
+                    registerReceiver(debugReceiver, it)
+                }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        debugReceiver?.let {
+            unregisterReceiver(debugReceiver)
+            debugReceiver = null
+        }
     }
 
 }
