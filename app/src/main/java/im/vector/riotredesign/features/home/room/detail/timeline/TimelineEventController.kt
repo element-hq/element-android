@@ -17,6 +17,7 @@
 package im.vector.riotredesign.features.home.room.detail.timeline
 
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
@@ -30,10 +31,7 @@ import im.vector.riotredesign.core.epoxy.LoadingItemModel_
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineAsyncHelper
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.*
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.riotredesign.features.media.MediaContentRenderer
 
@@ -43,25 +41,41 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                               private val backgroundHandler: Handler = TimelineAsyncHelper.getBackgroundHandler()
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
+    interface Callback {
+        fun onEventVisible(event: TimelineEvent)
+        fun onUrlClicked(url: String)
+        fun onMediaClicked(mediaData: MediaContentRenderer.Data, view: View)
+    }
+
     private val modelCache = arrayListOf<List<EpoxyModel<*>>>()
     private var currentSnapshot: List<TimelineEvent> = emptyList()
+    private var inSubmitList: Boolean = false
+    private var timeline: Timeline? = null
+
+    var callback: Callback? = null
 
     private val listUpdateCallback = object : ListUpdateCallback {
 
         @Synchronized
         override fun onChanged(position: Int, count: Int, payload: Any?) {
+            assertUpdateCallbacksAllowed()
             (position until (position + count)).forEach {
                 modelCache[it] = emptyList()
             }
             requestModelBuild()
         }
 
+        @Synchronized
         override fun onMoved(fromPosition: Int, toPosition: Int) {
-            //no-op
+            assertUpdateCallbacksAllowed()
+            val model = modelCache.removeAt(fromPosition)
+            modelCache.add(toPosition, model)
+            requestModelBuild()
         }
 
         @Synchronized
-        override fun onInserted(position: Int, count: Int) = synchronized(modelCache) {
+        override fun onInserted(position: Int, count: Int) {
+            assertUpdateCallbacksAllowed()
             if (modelCache.isNotEmpty() && position == modelCache.size) {
                 modelCache[position - 1] = emptyList()
             }
@@ -71,14 +85,15 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
             requestModelBuild()
         }
 
+        @Synchronized
         override fun onRemoved(position: Int, count: Int) {
-            //no-op
+            assertUpdateCallbacksAllowed()
+            (0 until count).forEach {
+                modelCache.removeAt(position)
+            }
+            requestModelBuild()
         }
-
     }
-
-    private var timeline: Timeline? = null
-    var callback: Callback? = null
 
     init {
         requestModelBuild()
@@ -101,18 +116,34 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                 .id("forward_loading_item")
                 .addWhen(Timeline.Direction.FORWARDS)
 
-        add(getModels())
+
+        val timelineModels = getModels()
+        add(timelineModels)
 
         LoadingItemModel_()
                 .id("backward_loading_item")
                 .addWhen(Timeline.Direction.BACKWARDS)
     }
 
-    private fun LoadingItemModel_.addWhen(direction: Timeline.Direction) {
-        val shouldAdd = timeline?.let {
-            it.hasMoreToLoad(direction) || !it.hasReachedEnd(direction)
-        } ?: false
-        addIf(shouldAdd, this@TimelineEventController)
+    // Timeline.LISTENER ***************************************************************************
+
+    override fun onUpdated(snapshot: List<TimelineEvent>) {
+        submitSnapshot(snapshot)
+    }
+
+    private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {
+        backgroundHandler.post {
+            inSubmitList = true
+            val diffCallback = TimelineEventDiffUtilCallback(currentSnapshot, newSnapshot)
+            currentSnapshot = newSnapshot
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(listUpdateCallback)
+            inSubmitList = false
+        }
+    }
+
+    private fun assertUpdateCallbacksAllowed() {
+        require(inSubmitList || Looper.myLooper() == backgroundHandler.looper)
     }
 
     @Synchronized
@@ -128,7 +159,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     private fun buildItemModels(currentPosition: Int, items: List<TimelineEvent>): List<EpoxyModel<*>> {
         val epoxyModels = ArrayList<EpoxyModel<*>>()
         val event = items[currentPosition]
-        val nextEvent = if (currentPosition + 1 < items.size) items[currentPosition + 1] else null
+        val nextEvent = items.nextDisplayableEvent(currentPosition)
 
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
@@ -147,26 +178,11 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         return epoxyModels
     }
 
-    // Timeline.LISTENER ***************************************************************************
-
-    override fun onUpdated(snapshot: List<TimelineEvent>) {
-        submitSnapshot(snapshot)
-    }
-
-    private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {
-        backgroundHandler.post {
-            val diffCallback = TimelineEventDiffUtilCallback(currentSnapshot, newSnapshot)
-            currentSnapshot = newSnapshot
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(listUpdateCallback)
-        }
-    }
-
-
-    interface Callback {
-        fun onEventVisible(event: TimelineEvent)
-        fun onUrlClicked(url: String)
-        fun onMediaClicked(mediaData: MediaContentRenderer.Data, view: View)
+    private fun LoadingItemModel_.addWhen(direction: Timeline.Direction) {
+        val shouldAdd = timeline?.let {
+            it.hasMoreToLoad(direction)
+        } ?: false
+        addIf(shouldAdd, this@TimelineEventController)
     }
 
 }

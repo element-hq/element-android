@@ -16,20 +16,19 @@
 
 package im.vector.matrix.android.internal.session.room.members
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.query.last
 import im.vector.matrix.android.internal.database.query.next
+import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
+import io.realm.Realm
 import io.realm.RealmQuery
 
-internal class RoomMemberExtractor(private val monarchy: Monarchy,
-                                   private val roomId: String) {
+internal class RoomMemberExtractor(private val roomId: String) {
 
     private val cached = HashMap<String, RoomMember?>()
 
@@ -44,30 +43,25 @@ internal class RoomMemberExtractor(private val monarchy: Monarchy,
         // When stateIndex is negative, we try to get the next stateEvent prevContent()
         // If prevContent is null we fallback to the Int.MIN state events content()
         val content = if (event.stateIndex <= 0) {
-            baseQuery(monarchy, roomId, sender, unlinked).next(from = event.stateIndex)?.prevContent
-            ?: baseQuery(monarchy, roomId, sender, unlinked).last(since = event.stateIndex)?.content
+            baseQuery(event.realm, roomId, sender, unlinked).next(from = event.stateIndex)?.prevContent
+                    ?: baseQuery(event.realm, roomId, sender, unlinked).prev(since = event.stateIndex)?.content
         } else {
-            baseQuery(monarchy, roomId, sender, unlinked).last(since = event.stateIndex)?.content
+            baseQuery(event.realm, roomId, sender, unlinked).prev(since = event.stateIndex)?.content
         }
         val roomMember: RoomMember? = ContentMapper.map(content).toModel()
         cached[cacheKey] = roomMember
         return roomMember
     }
 
-    private fun baseQuery(monarchy: Monarchy,
+    private fun baseQuery(realm: Realm,
                           roomId: String,
                           sender: String,
                           isUnlinked: Boolean): RealmQuery<EventEntity> {
 
-        lateinit var query: RealmQuery<EventEntity>
         val filterMode = if (isUnlinked) EventEntity.LinkFilterMode.UNLINKED_ONLY else EventEntity.LinkFilterMode.LINKED_ONLY
-        monarchy.doWithRealm { realm ->
-            query = EventEntity
-                    .where(realm, roomId = roomId, type = EventType.STATE_ROOM_MEMBER, linkFilterMode = filterMode)
-                    .equalTo(EventEntityFields.STATE_KEY, sender)
-        }
-        return query
+        return EventEntity
+                .where(realm, roomId = roomId, type = EventType.STATE_ROOM_MEMBER, linkFilterMode = filterMode)
+                .equalTo(EventEntityFields.STATE_KEY, sender)
     }
-
 
 }

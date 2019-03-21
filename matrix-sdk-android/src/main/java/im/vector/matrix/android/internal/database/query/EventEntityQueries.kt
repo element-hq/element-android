@@ -77,7 +77,7 @@ internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = t
             .findFirst()
 }
 
-internal fun RealmQuery<EventEntity>.last(since: Int? = null, strict: Boolean = false): EventEntity? {
+internal fun RealmQuery<EventEntity>.prev(since: Int? = null, strict: Boolean = false): EventEntity? {
     if (since != null) {
         if (strict) {
             this.lessThan(EventEntityFields.STATE_INDEX, since)

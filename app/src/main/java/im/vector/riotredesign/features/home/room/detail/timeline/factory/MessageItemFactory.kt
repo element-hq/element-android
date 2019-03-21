@@ -42,8 +42,6 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                          private val timelineDateFormatter: TimelineDateFormatter,
                          private val htmlRenderer: EventHtmlRenderer) {
 
-    private val messagesDisplayedWithInformation = HashSet<String?>()
-
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                callback: TimelineEventController.Callback?
@@ -58,15 +56,12 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
                 ?: false
 
-        if (addDaySeparator
+        val showInformation = addDaySeparator
                 || nextRoomMember != roomMember
                 || nextEvent?.root?.type != EventType.MESSAGE
-                || isNextMessageReceivedMoreThanOneHourAgo) {
-            messagesDisplayedWithInformation.add(event.root.eventId)
-        }
+                || isNextMessageReceivedMoreThanOneHourAgo
 
         val messageContent: MessageContent = event.root.content.toModel() ?: return null
-        val showInformation = messagesDisplayedWithInformation.contains(event.root.eventId)
         val time = timelineDateFormatter.formatMessageHour(date)
         val avatarUrl = roomMember?.avatarUrl
         val memberName = roomMember?.displayName ?: event.root.sender

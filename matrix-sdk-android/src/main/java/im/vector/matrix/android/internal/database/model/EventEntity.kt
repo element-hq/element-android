@@ -26,17 +26,17 @@ import java.util.*
 internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUID().toString(),
                                 @Index var eventId: String = "",
                                 var roomId: String = "",
-                                var type: String = "",
+                                @Index var type: String = "",
                                 var content: String? = null,
                                 var prevContent: String? = null,
-                                var stateKey: String? = null,
+                                @Index var stateKey: String? = null,
                                 var originServerTs: Long? = null,
-                                var sender: String? = null,
+                                @Index var sender: String? = null,
                                 var age: Long? = 0,
                                 var redacts: String? = null,
-                                var stateIndex: Int = 0,
-                                var displayIndex: Int = 0,
-                                var isUnlinked: Boolean = false
+                                @Index var stateIndex: Int = 0,
+                                @Index var displayIndex: Int = 0,
+                                @Index var isUnlinked: Boolean = false
 ) : RealmObject() {
 
     enum class LinkFilterMode {

@@ -21,6 +21,13 @@ package im.vector.matrix.android.api.session.room.timeline
  */
 interface TimelineService {
 
-    fun createTimeline(eventId: String?): Timeline
+    /**
+     * Instantiate a [Timeline] with an optional initial eventId, to be used with permalink.
+     * You can filter the type you want to grab with the allowedTypes param.
+     * @param eventId the optional initial eventId.
+     * @param allowedTypes the optional filter types
+     * @return the instantiated timeline
+     */
+    fun createTimeline(eventId: String?, allowedTypes: List<String>? = null): Timeline
 
 }

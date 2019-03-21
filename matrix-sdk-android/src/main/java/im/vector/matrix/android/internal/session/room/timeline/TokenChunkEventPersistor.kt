@@ -18,12 +18,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.database.helper.addAll
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
-import im.vector.matrix.android.internal.database.helper.addStateEvents
-import im.vector.matrix.android.internal.database.helper.deleteOnCascade
-import im.vector.matrix.android.internal.database.helper.isUnlinked
-import im.vector.matrix.android.internal.database.helper.merge
+import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.create
@@ -32,6 +27,7 @@ import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
+import timber.log.Timber
 
 
 internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
@@ -47,8 +43,10 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
 
         return monarchy
                 .tryTransactionSync { realm ->
+                    Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
+
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                                     ?: realm.createObject(roomId)
+                            ?: realm.createObject(roomId)
 
                     val nextToken: String?
                     val prevToken: String?
@@ -68,16 +66,16 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
 
                     var currentChunk = if (direction == PaginationDirection.FORWARDS) {
                         prevChunk?.apply { this.nextToken = nextToken }
-                        ?: ChunkEntity.create(realm, prevToken, nextToken)
+                                ?: ChunkEntity.create(realm, prevToken, nextToken)
                     } else {
                         nextChunk?.apply { this.prevToken = prevToken }
-                        ?: ChunkEntity.create(realm, prevToken, nextToken)
+                                ?: ChunkEntity.create(realm, prevToken, nextToken)
                     }
                     if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
                         currentChunk.isLastBackward = true
                     } else {
+                        Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken}-${currentChunk.prevToken}")
                         currentChunk.addAll(roomId, receivedChunk.events, direction, isUnlinked = currentChunk.isUnlinked())
-
                         // Then we merge chunks if needed
                         if (currentChunk != prevChunk && prevChunk != null) {
                             currentChunk = handleMerge(roomEntity, direction, currentChunk, prevChunk)
@@ -111,6 +109,7 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
                             otherChunk: ChunkEntity): ChunkEntity {
 
         // We always merge the bottom chunk into top chunk, so we are always merging backwards
+        Timber.v("Merge ${currentChunk.prevToken}-${currentChunk.nextToken} with ${otherChunk.prevToken}-${otherChunk.nextToken}")
         return if (direction == PaginationDirection.BACKWARDS) {
             currentChunk.merge(roomEntity.roomId, otherChunk, PaginationDirection.BACKWARDS)
             roomEntity.deleteOnCascade(otherChunk)

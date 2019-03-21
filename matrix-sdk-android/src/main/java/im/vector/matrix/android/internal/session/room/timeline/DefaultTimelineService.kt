@@ -19,68 +19,18 @@ package im.vector.matrix.android.internal.session.room.timeline
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.PagingRequestHelper
-import im.vector.matrix.android.internal.util.tryTransactionAsync
-
-private const val EVENT_NOT_FOUND_INDEX = -1
 
 internal class DefaultTimelineService(private val roomId: String,
                                       private val monarchy: Monarchy,
                                       private val taskExecutor: TaskExecutor,
                                       private val contextOfEventTask: GetContextOfEventTask,
                                       private val timelineEventFactory: TimelineEventFactory,
-                                      private val paginationTask: PaginationTask,
-                                      private val helper: PagingRequestHelper
+                                      private val paginationTask: PaginationTask
 ) : TimelineService {
 
-    override fun createTimeline(eventId: String?): Timeline {
-        return DefaultTimeline(roomId, eventId, monarchy.realmConfiguration, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask, helper)
+    override fun createTimeline(eventId: String?, allowedTypes: List<String>?): Timeline {
+        return DefaultTimeline(roomId, eventId, monarchy.realmConfiguration, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask, allowedTypes)
     }
-
-    // PRIVATE FUNCTIONS ***************************************************************************
-
-    private fun getInitialLoadKey(eventId: String?): Int {
-        var initialLoadKey = 0
-        if (eventId != null) {
-            val indexOfEvent = indexOfEvent(eventId)
-            if (indexOfEvent == EVENT_NOT_FOUND_INDEX) {
-                fetchEvent(eventId)
-            } else {
-                initialLoadKey = indexOfEvent
-            }
-        }
-        return initialLoadKey
-    }
-
-
-    private fun fetchEvent(eventId: String) {
-        val params = GetContextOfEventTask.Params(roomId, eventId)
-        contextOfEventTask.configureWith(params).executeBy(taskExecutor)
-    }
-
-    private fun clearUnlinkedEvents() {
-        monarchy.tryTransactionAsync { realm ->
-            val unlinkedEvents = EventEntity
-                    .where(realm, roomId = roomId)
-                    .equalTo(EventEntityFields.IS_UNLINKED, true)
-                    .findAll()
-            unlinkedEvents.deleteAllFromRealm()
-        }
-    }
-
-    private fun indexOfEvent(eventId: String): Int {
-        var displayIndex = EVENT_NOT_FOUND_INDEX
-        monarchy.doWithRealm {
-            displayIndex = EventEntity.where(it, eventId = eventId).findFirst()?.displayIndex
-                           ?: EVENT_NOT_FOUND_INDEX
-        }
-        return displayIndex
-    }
-
 
 }

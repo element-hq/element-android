@@ -25,23 +25,16 @@ private const val THREAD_NAME = "Timeline_Building_Thread"
 
 object TimelineAsyncHelper {
 
-    private var backgroundHandlerThread: HandlerThread? = null
     private var backgroundHandler: Handler? = null
 
     fun getBackgroundHandler(): Handler {
-        if (backgroundHandler != null) {
-            backgroundHandler?.removeCallbacksAndMessages(null)
-        }
-        if (backgroundHandlerThread != null) {
-            backgroundHandlerThread?.quit()
-        }
+        return backgroundHandler ?: createBackgroundHandler().also { backgroundHandler = it }
+    }
+
+    private fun createBackgroundHandler(): Handler {
         val handlerThread = HandlerThread(THREAD_NAME)
-                .also {
-                    backgroundHandlerThread = it
-                    it.start()
-                }
-        val looper = handlerThread.looper
-        return Handler(looper).also { backgroundHandler = it }
+        handlerThread.start()
+        return Handler(handlerThread.looper)
     }
 
 }

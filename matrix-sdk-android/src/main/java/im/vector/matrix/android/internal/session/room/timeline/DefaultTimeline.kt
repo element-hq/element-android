@@ -20,6 +20,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -30,19 +31,21 @@ import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.query.findIncludingEvent
+import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.PagingRequestHelper
 import io.realm.*
+import timber.log.Timber
 import java.util.*
-import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.collections.ArrayList
 
 
 private const val INITIAL_LOAD_SIZE = 20
+private const val MIN_FETCHING_COUNT = 30
+private const val DISPLAY_INDEX_UNKNOWN = Int.MIN_VALUE
 private const val THREAD_NAME = "TIMELINE_DB_THREAD"
 
 internal class DefaultTimeline(
@@ -53,153 +56,237 @@ internal class DefaultTimeline(
         private val contextOfEventTask: GetContextOfEventTask,
         private val timelineEventFactory: TimelineEventFactory,
         private val paginationTask: PaginationTask,
-        private val helper: PagingRequestHelper
+        private val allowedTypes: List<String>?
 ) : Timeline {
 
     override var listener: Timeline.Listener? = null
         set(value) {
             field = value
-            listener?.onUpdated(snapshot())
+            backgroundHandler.get()?.post {
+                val snapshot = snapshot()
+                mainHandler.post { listener?.onUpdated(snapshot) }
+            }
         }
 
     private val isStarted = AtomicBoolean(false)
-    private val handlerThread = AtomicReference<HandlerThread>()
-    private val handler = AtomicReference<Handler>()
-    private val realm = AtomicReference<Realm>()
-
+    private val isReady = AtomicBoolean(false)
+    private val backgroundHandlerThread = AtomicReference<HandlerThread>()
+    private val backgroundHandler = AtomicReference<Handler>()
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val backgroundRealm = AtomicReference<Realm>()
     private val cancelableBag = CancelableBag()
+
     private lateinit var liveEvents: RealmResults<EventEntity>
-    private var prevDisplayIndex: Int = 0
-    private var nextDisplayIndex: Int = 0
+
+    private var prevDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
+    private var nextDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
     private val isLive = initialEventId == null
     private val builtEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
 
+    private val backwardsPaginationState = AtomicReference(PaginationState())
+    private val forwardsPaginationState = AtomicReference(PaginationState())
+
     private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<EventEntity>> { _, changeSet ->
-        if (changeSet.state == OrderedCollectionChangeSet.State.INITIAL) {
-            handleInitialLoad()
-        } else {
-            changeSet.insertionRanges.forEach {
-                val (startDisplayIndex, direction) = if (it.startIndex == 0) {
-                    Pair(liveEvents[it.length - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
-                } else {
-                    Pair(liveEvents[it.startIndex]!!.displayIndex, Timeline.Direction.BACKWARDS)
-                }
-                insertFromLiveResults(startDisplayIndex, direction, it.length.toLong())
+        // TODO HANDLE CHANGES
+        changeSet.insertionRanges.forEach { range ->
+            val (startDisplayIndex, direction) = if (range.startIndex == 0) {
+                Pair(liveEvents[range.length - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
+            } else {
+                Pair(liveEvents[range.startIndex]!!.displayIndex, Timeline.Direction.BACKWARDS)
+            }
+            val state = getPaginationState(direction)
+            if (state.isPaginating) {
+                // We are getting new items from pagination
+                paginateInternal(startDisplayIndex, direction, state.requestedCount)
+            } else {
+                // We are getting new items from sync
+                buildTimelineEvents(startDisplayIndex, direction, range.length.toLong())
             }
         }
     }
 
+    // Public methods ******************************************************************************
+
     override fun paginate(direction: Timeline.Direction, count: Int) {
-        handler.get()?.post {
-            if (!hasMoreToLoadLive(direction) && hasReachedEndLive(direction)) {
+        backgroundHandler.get()?.post {
+            if (!canPaginate(direction)) {
                 return@post
             }
+            Timber.v("Paginate $direction of $count items")
             val startDisplayIndex = if (direction == Timeline.Direction.BACKWARDS) prevDisplayIndex else nextDisplayIndex
-            val builtCountItems = insertFromLiveResults(startDisplayIndex, direction, count.toLong())
-            if (builtCountItems < count) {
-                val limit = count - builtCountItems
-                val token = getTokenLive(direction) ?: return@post
-                helper.runIfNotRunning(direction.toRequestType()) { executePaginationTask(it, token, direction, limit) }
-            }
+            paginateInternal(startDisplayIndex, direction, count)
         }
     }
 
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
-            val handlerThread = HandlerThread(THREAD_NAME)
+            Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
+            val handlerThread = HandlerThread(THREAD_NAME + hashCode())
             handlerThread.start()
             val handler = Handler(handlerThread.looper)
-            this.handlerThread.set(handlerThread)
-            this.handler.set(handler)
+            this.backgroundHandlerThread.set(handlerThread)
+            this.backgroundHandler.set(handler)
             handler.post {
                 val realm = Realm.getInstance(realmConfiguration)
-                this.realm.set(realm)
-                liveEvents = buildEventQuery(realm).findAllAsync()
-                liveEvents.addChangeListener(eventsChangeListener)
+                backgroundRealm.set(realm)
+                clearUnlinkedEvents(realm)
+                isReady.set(true)
+                liveEvents = buildEventQuery(realm)
+                        .sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+                        .findAll()
+                        .also { it.addChangeListener(eventsChangeListener) }
+                handleInitialLoad()
             }
         }
-
     }
 
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
-            handler.get()?.post {
+            Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
+            backgroundHandler.get()?.post {
                 cancelableBag.cancel()
                 liveEvents.removeAllChangeListeners()
-                realm.getAndSet(null)?.close()
-                handler.set(null)
-                handlerThread.getAndSet(null)?.quit()
+                backgroundRealm.getAndSet(null).also {
+                    it.close()
+                }
+                backgroundHandler.set(null)
+                backgroundHandlerThread.getAndSet(null)?.quit()
             }
         }
     }
 
-    override fun snapshot(): List<TimelineEvent> = synchronized(builtEvents) {
+    override fun hasMoreToLoad(direction: Timeline.Direction): Boolean {
+        return hasMoreInCache(direction) || !hasReachedEnd(direction)
+    }
+
+    // Private methods *****************************************************************************
+
+    private fun hasMoreInCache(direction: Timeline.Direction): Boolean {
+        val localRealm = Realm.getInstance(realmConfiguration)
+        val eventEntity = buildEventQuery(localRealm).findFirst(direction) ?: return false
+        val hasMoreInCache = if (direction == Timeline.Direction.FORWARDS) {
+            val firstEvent = builtEvents.firstOrNull() ?: return true
+            firstEvent.displayIndex < eventEntity.displayIndex
+        } else {
+            val lastEvent = builtEvents.lastOrNull() ?: return true
+            lastEvent.displayIndex > eventEntity.displayIndex
+        }
+        localRealm.close()
+        return hasMoreInCache
+    }
+
+    private fun hasReachedEnd(direction: Timeline.Direction): Boolean {
+        val localRealm = Realm.getInstance(realmConfiguration)
+        val currentChunk = findCurrentChunk(localRealm) ?: return false
+        val hasReachedEnd = if (direction == Timeline.Direction.FORWARDS) {
+            currentChunk.isLastForward
+        } else {
+            val eventEntity = buildEventQuery(localRealm).findFirst(direction)
+            currentChunk.isLastBackward || eventEntity?.type == EventType.STATE_ROOM_CREATE
+        }
+        localRealm.close()
+        return hasReachedEnd
+    }
+
+
+    /**
+     * This has to be called on TimelineThread as it access realm live results
+     */
+    private fun paginateInternal(startDisplayIndex: Int,
+                                 direction: Timeline.Direction,
+                                 count: Int) {
+        updatePaginationState(direction) { it.copy(requestedCount = count, isPaginating = true) }
+        val builtCount = buildTimelineEvents(startDisplayIndex, direction, count.toLong())
+        if (builtCount < count && !hasReachedEnd(direction)) {
+            val newRequestedCount = count - builtCount
+            updatePaginationState(direction) { it.copy(requestedCount = newRequestedCount) }
+            val fetchingCount = Math.max(MIN_FETCHING_COUNT, newRequestedCount)
+            executePaginationTask(direction, fetchingCount)
+        } else {
+            updatePaginationState(direction) { it.copy(isPaginating = false, requestedCount = 0) }
+        }
+    }
+
+    private fun snapshot(): List<TimelineEvent> {
         return builtEvents.toList()
     }
 
-    override fun size(): Int = synchronized(builtEvents) {
-        return builtEvents.size
+    private fun canPaginate(direction: Timeline.Direction): Boolean {
+        return isReady.get() && !getPaginationState(direction).isPaginating && hasMoreToLoad(direction)
     }
 
-    override fun hasReachedEnd(direction: Timeline.Direction): Boolean {
-        return handler.get()?.postAndWait {
-            hasReachedEndLive(direction)
-        } ?: false
+    private fun getPaginationState(direction: Timeline.Direction): PaginationState {
+        return when (direction) {
+            Timeline.Direction.FORWARDS  -> forwardsPaginationState.get()
+            Timeline.Direction.BACKWARDS -> backwardsPaginationState.get()
+        }
     }
 
-    override fun hasMoreToLoad(direction: Timeline.Direction): Boolean {
-        return handler.get()?.postAndWait {
-            hasMoreToLoadLive(direction)
-        } ?: false
+    private fun updatePaginationState(direction: Timeline.Direction, update: (PaginationState) -> PaginationState) {
+        val stateReference = when (direction) {
+            Timeline.Direction.FORWARDS  -> forwardsPaginationState
+            Timeline.Direction.BACKWARDS -> backwardsPaginationState
+        }
+        val currentValue = stateReference.get()
+        val newValue = update(currentValue)
+        stateReference.set(newValue)
     }
 
     /**
      * This has to be called on TimelineThread as it access realm live results
      */
-    private fun handleInitialLoad() = synchronized(builtEvents) {
+    private fun handleInitialLoad() {
+        var shouldFetchInitialEvent = false
         val initialDisplayIndex = if (isLive) {
             liveEvents.firstOrNull()?.displayIndex
         } else {
-            liveEvents.where().equalTo(EventEntityFields.EVENT_ID, initialEventId).findFirst()?.displayIndex
-        } ?: 0
+            val initialEvent = liveEvents.where().equalTo(EventEntityFields.EVENT_ID, initialEventId).findFirst()
+            shouldFetchInitialEvent = initialEvent == null
+            initialEvent?.displayIndex
+        } ?: DISPLAY_INDEX_UNKNOWN
+
         prevDisplayIndex = initialDisplayIndex
         nextDisplayIndex = initialDisplayIndex
-        val count = Math.min(INITIAL_LOAD_SIZE, liveEvents.size).toLong()
-        if (count == 0L) {
-            return@synchronized
-        }
-        if (isLive) {
-            insertFromLiveResults(initialDisplayIndex, Timeline.Direction.BACKWARDS, count)
+        if (initialEventId != null && shouldFetchInitialEvent) {
+            fetchEvent(initialEventId)
         } else {
-            val forwardCount = count / 2L
-            val backwardCount = count - forwardCount
-            insertFromLiveResults(initialDisplayIndex, Timeline.Direction.BACKWARDS, backwardCount)
-            insertFromLiveResults(initialDisplayIndex, Timeline.Direction.BACKWARDS, forwardCount)
+            val count = Math.min(INITIAL_LOAD_SIZE, liveEvents.size)
+            if (isLive) {
+                paginate(Timeline.Direction.BACKWARDS, count)
+            } else {
+                paginate(Timeline.Direction.FORWARDS, count / 2)
+                paginate(Timeline.Direction.BACKWARDS, count / 2)
+            }
         }
     }
 
-    private fun executePaginationTask(requestCallback: PagingRequestHelper.Request.Callback,
-                                      from: String,
-                                      direction: Timeline.Direction,
-                                      limit: Int) {
-
+    /**
+     * This has to be called on TimelineThread as it access realm live results
+     */
+    private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
+        val token = getTokenLive(direction) ?: return
         val params = PaginationTask.Params(roomId = roomId,
-                from = from,
+                from = token,
                 direction = direction.toPaginationDirection(),
                 limit = limit)
 
+        Timber.v("Should fetch $limit items $direction")
         paginationTask.configureWith(params)
                 .enableRetry()
                 .dispatchTo(object : MatrixCallback<TokenChunkEventPersistor.Result> {
                     override fun onSuccess(data: TokenChunkEventPersistor.Result) {
-                        requestCallback.recordSuccess()
-                        if (data == TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE) {
-                            paginate(direction, limit)
+                        if (data == TokenChunkEventPersistor.Result.SUCCESS) {
+                            Timber.v("Success fetching $limit items $direction from pagination request")
+                        } else {
+                            // Database won't be updated, so we force pagination request
+                            backgroundHandler.get()?.post {
+                                executePaginationTask(direction, limit)
+                            }
                         }
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        requestCallback.recordFailure(failure)
+                        Timber.v("Failure fetching $limit items $direction from pagination request")
                     }
                 })
                 .executeBy(taskExecutor)
@@ -209,36 +296,12 @@ internal class DefaultTimeline(
     /**
      * This has to be called on TimelineThread as it access realm live results
      */
+
     private fun getTokenLive(direction: Timeline.Direction): String? {
         val chunkEntity = getLiveChunk() ?: return null
         return if (direction == Timeline.Direction.BACKWARDS) chunkEntity.prevToken else chunkEntity.nextToken
     }
 
-    /**
-     * This has to be called on TimelineThread as it access realm live results
-     */
-    private fun hasReachedEndLive(direction: Timeline.Direction): Boolean {
-        val liveChunk = getLiveChunk() ?: return false
-        return if (direction == Timeline.Direction.FORWARDS) {
-            liveChunk.isLastForward
-        } else {
-            liveChunk.isLastBackward || liveEvents.lastOrNull()?.type == EventType.STATE_ROOM_CREATE
-        }
-    }
-
-    /**
-     * This has to be called on TimelineThread as it access realm live results
-     */
-    private fun hasMoreToLoadLive(direction: Timeline.Direction): Boolean {
-        if (liveEvents.isEmpty()) {
-            return true
-        }
-        return if (direction == Timeline.Direction.FORWARDS) {
-            builtEvents.firstOrNull()?.displayIndex != liveEvents.firstOrNull()?.displayIndex
-        } else {
-            builtEvents.lastOrNull()?.displayIndex != liveEvents.lastOrNull()?.displayIndex
-        }
-    }
 
     /**
      * This has to be called on TimelineThread as it access realm live results
@@ -251,11 +314,11 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it access realm live results
      * @return number of items who have been added
      */
-    private fun insertFromLiveResults(startDisplayIndex: Int,
-                                      direction: Timeline.Direction,
-                                      count: Long): Int = synchronized(builtEvents) {
+    private fun buildTimelineEvents(startDisplayIndex: Int,
+                                    direction: Timeline.Direction,
+                                    count: Long): Int {
         if (count < 1) {
-            throw java.lang.IllegalStateException("You should provide a count superior to 0")
+            return 0
         }
         val offsetResults = getOffsetResults(startDisplayIndex, direction, count)
         if (offsetResults.isEmpty()) {
@@ -272,7 +335,9 @@ internal class DefaultTimeline(
             val position = if (direction == Timeline.Direction.FORWARDS) 0 else builtEvents.size
             builtEvents.add(position, timelineEvent)
         }
-        listener?.onUpdated(snapshot())
+        Timber.v("Built ${offsetResults.size} items from db")
+        val snapshot = snapshot()
+        mainHandler.post { listener?.onUpdated(snapshot) }
         return offsetResults.size
     }
 
@@ -292,11 +357,15 @@ internal class DefaultTimeline(
                     .sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
                     .greaterThanOrEqualTo(EventEntityFields.DISPLAY_INDEX, startDisplayIndex)
         }
-        return offsetQuery.limit(count).findAll()
+        return offsetQuery
+                .filterAllowedTypes()
+                .limit(count)
+                .findAll()
     }
 
+
     private fun buildEventQuery(realm: Realm): RealmQuery<EventEntity> {
-        val query = if (initialEventId == null) {
+        return if (initialEventId == null) {
             EventEntity
                     .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.LINKED_ONLY)
                     .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST_FORWARD}", true)
@@ -305,30 +374,56 @@ internal class DefaultTimeline(
                     .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.BOTH)
                     .`in`("${EventEntityFields.CHUNK}.${ChunkEntityFields.EVENTS.EVENT_ID}", arrayOf(initialEventId))
         }
-        query.sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-        return query
-
     }
 
-    private fun <T> Handler.postAndWait(runnable: () -> T): T {
-        val lock = CountDownLatch(1)
-        val atomicReference = AtomicReference<T>()
-        post {
-            val result = runnable()
-            atomicReference.set(result)
-            lock.countDown()
+    private fun findCurrentChunk(realm: Realm): ChunkEntity? {
+        return if (initialEventId == null) {
+            ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
+        } else {
+            ChunkEntity.findIncludingEvent(realm, initialEventId)
         }
-        lock.await()
-        return atomicReference.get()
     }
 
-    private fun Timeline.Direction.toRequestType(): PagingRequestHelper.RequestType {
-        return if (this == Timeline.Direction.BACKWARDS) PagingRequestHelper.RequestType.BEFORE else PagingRequestHelper.RequestType.AFTER
+    private fun clearUnlinkedEvents(realm: Realm) {
+        realm.executeTransaction {
+            val unlinkedChunks = ChunkEntity
+                    .where(it, roomId = roomId)
+                    .equalTo(ChunkEntityFields.EVENTS.IS_UNLINKED, true)
+                    .findAll()
+            unlinkedChunks.deleteAllFromRealm()
+        }
     }
 
-    //Todo : remove that
+    private fun fetchEvent(eventId: String) {
+        val params = GetContextOfEventTask.Params(roomId, eventId)
+        contextOfEventTask.configureWith(params).executeBy(taskExecutor)
+    }
+
+// Extension methods ***************************************************************************
+
     private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
         return if (this == Timeline.Direction.BACKWARDS) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS
     }
 
+    private fun RealmQuery<EventEntity>.findFirst(direction: Timeline.Direction): EventEntity? {
+        return if (direction == Timeline.Direction.FORWARDS) {
+            sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+        } else {
+            sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+        }
+                .filterAllowedTypes()
+                .findFirst()
+    }
+
+    private fun RealmQuery<EventEntity>.filterAllowedTypes(): RealmQuery<EventEntity> {
+        if (allowedTypes != null) {
+            `in`(EventEntityFields.TYPE, allowedTypes.toTypedArray())
+        }
+        return this
+    }
 }
+
+private data class PaginationState(
+        val isPaginating: Boolean = false,
+        val requestedCount: Int = 0
+)

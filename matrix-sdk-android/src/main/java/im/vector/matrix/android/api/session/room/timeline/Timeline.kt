@@ -18,35 +18,67 @@
 
 package im.vector.matrix.android.api.session.room.timeline
 
+/**
+ * A Timeline instance represents a contiguous sequence of events in a room.
+ * <p>
+ * There are two kinds of timeline:
+ * <p>
+ * - live timelines: they process live events from the sync. You can paginate
+ * backwards but not forwards.
+ * <p>
+ * - past timelines: they start in the past from an `initialEventId`. You can paginate
+ * backwards and forwards.
+ *
+ */
 interface Timeline {
 
     var listener: Timeline.Listener?
 
-    fun hasMoreToLoad(direction: Direction): Boolean
-    fun hasReachedEnd(direction: Direction): Boolean
-    fun size(): Int
-    fun snapshot(): List<TimelineEvent>
-    fun paginate(direction: Direction, count: Int)
+    /**
+     * This should be called before any other method after creating the timeline. It ensures the underlying database is open
+     */
     fun start()
+
+    /**
+     * This should be called when you don't need the timeline. It ensures the underlying database get closed.
+     */
     fun dispose()
 
+    /**
+     * Check if the timeline can be enriched by paginating.
+     * @param the direction to check in
+     * @return true if timeline can be enriched
+     */
+    fun hasMoreToLoad(direction: Direction): Boolean
+
+    /**
+     * This is the main method to enrich the timeline with new data.
+     * It will call the onUpdated method from [Listener] when the data will be processed.
+     * It also ensures only one pagination by direction is launched at a time, so you can safely call this multiple time in a row.
+     */
+    fun paginate(direction: Direction, count: Int)
+
+
     interface Listener {
+        /**
+         * Call when the timeline has been updated through pagination or sync.
+         * @param snapshot the most uptodate snapshot
+         */
         fun onUpdated(snapshot: List<TimelineEvent>)
     }
 
-    enum class Direction(val value: String) {
+    /**
+     * This is used to paginate in one or another direction.
+     */
+    enum class Direction {
         /**
-         * Forwards when the event is added to the end of the timeline.
-         * These events come from the /sync stream or from forwards pagination.
+         * It represents future events.
          */
-        FORWARDS("f"),
-
+        FORWARDS,
         /**
-         * Backwards when the event is added to the start of the timeline.
-         * These events come from a back pagination.
+         * It represents past events.
          */
-        BACKWARDS("b");
+        BACKWARDS
     }
-
 
 }

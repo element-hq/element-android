@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
 import java.util.concurrent.TimeUnit
@@ -38,9 +39,11 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
     private val displayedEventsObservable = BehaviorRelay.create<RoomDetailActions.EventDisplayed>()
-    private val timeline = room.createTimeline(eventId)
+    private val timeline = room.createTimeline(eventId, TimelineDisplayableEvents.DISPLAYABLE_TYPES)
 
     companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
+
+        const val PAGINATION_COUNT = 50
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
@@ -52,7 +55,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     init {
         observeRoomSummary()
-        observeDisplayedEvents()
+        observeEventDisplayedActions()
         room.loadRoomMembersIfNeeded()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
@@ -82,10 +85,10 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     }
 
     private fun handleLoadMore(action: RoomDetailActions.LoadMore) {
-        timeline.paginate(action.direction, 50)
+        timeline.paginate(action.direction, PAGINATION_COUNT)
     }
 
-    private fun observeDisplayedEvents() {
+    private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second
         // and keep the most recent one to set the read receipt on.
         displayedEventsObservable
@@ -111,5 +114,4 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         timeline.dispose()
         super.onCleared()
     }
-
 }

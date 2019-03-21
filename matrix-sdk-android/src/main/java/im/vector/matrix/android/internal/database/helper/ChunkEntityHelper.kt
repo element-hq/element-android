@@ -54,11 +54,11 @@ internal fun ChunkEntity.merge(roomId: String,
     if (direction == PaginationDirection.FORWARDS) {
         this.nextToken = chunkToMerge.nextToken
         this.isLastForward = chunkToMerge.isLastForward
-        eventsToMerge = chunkToMerge.events.reversed()
+        eventsToMerge = chunkToMerge.events.sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
     } else {
         this.prevToken = chunkToMerge.prevToken
         this.isLastBackward = chunkToMerge.isLastBackward
-        eventsToMerge = chunkToMerge.events
+        eventsToMerge = chunkToMerge.events.sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     }
     eventsToMerge.forEach {
         add(roomId, it.asDomain(), direction, isUnlinked = isUnlinked)
@@ -107,7 +107,8 @@ internal fun ChunkEntity.add(roomId: String,
         this.displayIndex = currentDisplayIndex
     }
     // We are not using the order of the list, but will be sorting with displayIndex field
-    events.add(eventEntity)
+    val position = if (direction == PaginationDirection.FORWARDS) 0 else this.events.size
+    events.add(position, eventEntity)
 }
 
 private fun ChunkEntity.assertIsManaged() {
@@ -118,14 +119,14 @@ private fun ChunkEntity.assertIsManaged() {
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findFirst()?.displayIndex
-               PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING).findFirst()?.displayIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findFirst()?.displayIndex
+        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING).findFirst()?.displayIndex
+    } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
-               PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
+        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
+    } ?: defaultValue
 }

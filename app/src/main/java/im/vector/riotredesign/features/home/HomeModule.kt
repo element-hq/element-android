@@ -19,16 +19,9 @@ package im.vector.riotredesign.features.home
 import androidx.fragment.app.Fragment
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.features.home.group.GroupSummaryController
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.CallItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.DefaultItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.MessageItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.RoomHistoryVisibilityItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.RoomMemberItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.RoomNameItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.RoomTopicItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.factory.*
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.list.RoomSummaryController
 import im.vector.riotredesign.features.html.EventHtmlRenderer
@@ -57,28 +50,28 @@ class HomeModule {
 
         // Fragment scopes
 
-        scope(ROOM_DETAIL_SCOPE) { (fragment: Fragment) ->
+        factory { (fragment: Fragment) ->
             val eventHtmlRenderer = EventHtmlRenderer(GlideApp.with(fragment), fragment.requireContext(), get())
             val timelineDateFormatter = TimelineDateFormatter(get())
             val timelineMediaSizeProvider = TimelineMediaSizeProvider()
             val messageItemFactory = MessageItemFactory(get(), timelineMediaSizeProvider, timelineDateFormatter, eventHtmlRenderer)
 
             val timelineItemFactory = TimelineItemFactory(messageItemFactory = messageItemFactory,
-                                                          roomNameItemFactory = RoomNameItemFactory(get()),
-                                                          roomTopicItemFactory = RoomTopicItemFactory(get()),
-                                                          roomMemberItemFactory = RoomMemberItemFactory(get()),
-                                                          roomHistoryVisibilityItemFactory = RoomHistoryVisibilityItemFactory(get()),
-                                                          callItemFactory = CallItemFactory(get()),
-                                                          defaultItemFactory = DefaultItemFactory()
+                    roomNameItemFactory = RoomNameItemFactory(get()),
+                    roomTopicItemFactory = RoomTopicItemFactory(get()),
+                    roomMemberItemFactory = RoomMemberItemFactory(get()),
+                    roomHistoryVisibilityItemFactory = RoomHistoryVisibilityItemFactory(get()),
+                    callItemFactory = CallItemFactory(get()),
+                    defaultItemFactory = DefaultItemFactory()
             )
             TimelineEventController(timelineDateFormatter, timelineItemFactory, timelineMediaSizeProvider)
         }
 
-        scope(ROOM_LIST_SCOPE) {
+        factory {
             RoomSummaryController(get())
         }
 
-        scope(GROUP_LIST_SCOPE) {
+        factory {
             GroupSummaryController()
         }
 

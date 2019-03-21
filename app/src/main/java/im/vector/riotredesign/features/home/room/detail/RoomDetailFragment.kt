@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.fragmentViewModel
-import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
@@ -111,16 +110,11 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
         }
-        recyclerView.addOnScrollListener(object : EndlessRecyclerViewScrollListener(layoutManager, Timeline.Direction.BACKWARDS) {
-            override fun onLoadMore() {
-                roomDetailViewModel.process(RoomDetailActions.LoadMore(Timeline.Direction.BACKWARDS))
-            }
-        })
-        recyclerView.addOnScrollListener(object : EndlessRecyclerViewScrollListener(layoutManager, Timeline.Direction.FORWARDS) {
-            override fun onLoadMore() {
-                roomDetailViewModel.process(RoomDetailActions.LoadMore(Timeline.Direction.FORWARDS))
-            }
-        })
+
+        recyclerView.addOnScrollListener(
+                EndlessRecyclerViewScrollListener(layoutManager, RoomDetailViewModel.PAGINATION_COUNT) { direction ->
+                    roomDetailViewModel.process(RoomDetailActions.LoadMore(direction))
+                })
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
     }
@@ -153,7 +147,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         }
     }
 
-    // TimelineEventController.Callback ************************************************************
+// TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String) {
         homePermalinkHandler.launch(url)

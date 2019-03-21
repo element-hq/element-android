@@ -30,7 +30,7 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.last
+import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
 
 /**
@@ -58,19 +58,19 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
         var name: CharSequence? = null
         monarchy.doWithRealm { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_NAME).last()?.asDomain()
+            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_NAME).prev()?.asDomain()
             name = roomName?.content.toModel<RoomNameContent>()?.name
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val canonicalAlias = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).last()?.asDomain()
+            val canonicalAlias = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).prev()?.asDomain()
             name = canonicalAlias?.content.toModel<RoomCanonicalAliasContent>()?.canonicalAlias
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val aliases = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).last()?.asDomain()
+            val aliases = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()?.asDomain()
             name = aliases?.content.toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
@@ -111,16 +111,16 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
                         val member1 = memberIds[0]
                         val member2 = memberIds[1]
                         name = context.getString(R.string.room_displayname_two_members,
-                                                 roomMemberDisplayNameResolver.resolve(member1, otherRoomMembers),
-                                                 roomMemberDisplayNameResolver.resolve(member2, otherRoomMembers)
+                                roomMemberDisplayNameResolver.resolve(member1, otherRoomMembers),
+                                roomMemberDisplayNameResolver.resolve(member2, otherRoomMembers)
                         )
                     }
                     else -> {
                         val member = memberIds[0]
                         name = context.resources.getQuantityString(R.plurals.room_displayname_three_and_more_members,
-                                                                   roomMembers.getNumberOfJoinedMembers() - 1,
-                                                                   roomMemberDisplayNameResolver.resolve(member, otherRoomMembers),
-                                                                   roomMembers.getNumberOfJoinedMembers() - 1)
+                                roomMembers.getNumberOfJoinedMembers() - 1,
+                                roomMemberDisplayNameResolver.resolve(member, otherRoomMembers),
+                                roomMembers.getNumberOfJoinedMembers() - 1)
                     }
                 }
             }
