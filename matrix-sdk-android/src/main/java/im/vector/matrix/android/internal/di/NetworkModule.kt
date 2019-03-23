@@ -65,10 +65,15 @@ class NetworkModule {
         }
 
         single {
+            TLSSocketFactory()
+        }
+
+        single {
             OkHttpClient.Builder()
                     .connectTimeout(30, TimeUnit.SECONDS)
                     .readTimeout(30, TimeUnit.SECONDS)
                     .writeTimeout(30, TimeUnit.SECONDS)
+                    .sslSocketFactory(get<TLSSocketFactory>())
                     .addNetworkInterceptor(get<StethoInterceptor>())
                     .addInterceptor(get<UserAgentInterceptor>())
                     .addInterceptor(get<AccessTokenInterceptor>())
