@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.fastContains
+import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import io.realm.Sort
 
@@ -69,6 +70,7 @@ internal fun ChunkEntity.addAll(roomId: String,
                                 events: List<Event>,
                                 direction: PaginationDirection,
                                 stateIndexOffset: Int = 0,
+                                // Set to true for Event retrieved from a Permalink (i.e. not linked to live Chunk)
                                 isUnlinked: Boolean = false) {
     assertIsManaged()
     events.forEach { event ->
@@ -103,12 +105,6 @@ internal fun ChunkEntity.add(roomId: String,
     eventEntity.updateWith(currentStateIndex, isUnlinked)
     val position = if (direction == PaginationDirection.FORWARDS) 0 else this.events.size
     events.add(position, eventEntity)
-}
-
-private fun ChunkEntity.assertIsManaged() {
-    if (!isManaged) {
-        throw IllegalStateException("Chunk entity should be managed to use this function")
-    }
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {

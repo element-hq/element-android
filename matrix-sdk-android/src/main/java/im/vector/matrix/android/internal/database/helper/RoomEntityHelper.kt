@@ -22,6 +22,7 @@ import im.vector.matrix.android.internal.database.mapper.updateWith
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.fastContains
+import im.vector.matrix.android.internal.extensions.assertIsManaged
 
 
 internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
@@ -40,9 +41,8 @@ internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
                                        stateIndex: Int = Int.MIN_VALUE,
                                        filterDuplicates: Boolean = false,
                                        isUnlinked: Boolean = false) {
-    if (!isManaged) {
-        throw IllegalStateException("Chunk entity should be managed to use fast contains")
-    }
+    assertIsManaged()
+
     stateEvents.forEach { event ->
         if (event.eventId == null || (filterDuplicates && fastContains(event.eventId))) {
             return@forEach

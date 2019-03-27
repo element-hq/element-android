@@ -27,9 +27,73 @@ import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.tryTransactionSync
 
-
+/**
+ * Insert Chunk in DB, and eventually merge with existing chunk event
+ */
 internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
 
+    /**
+     * <pre>
+     * ========================================================================================================
+     * | Backward case                                                                                        |
+     * ========================================================================================================
+     *
+     *                               *--------------------------*        *--------------------------*
+     *                               | startToken1              |        | startToken1              |
+     *                               *--------------------------*        *--------------------------*
+     *                               |                          |        |                          |
+     *                               |                          |        |                          |
+     *                               |  receivedChunk backward  |        |                          |
+     *                               |         Events           |        |                          |
+     *                               |                          |        |                          |
+     *                               |                          |        |                          |
+     *                               |                          |        |                          |
+     * *--------------------------*  *--------------------------*        |                          |
+     * | startToken0              |  | endToken1                |   =>   |       Merged chunk       |
+     * *--------------------------*  *--------------------------*        |          Events          |
+     * |                          |                                      |                          |
+     * |                          |                                      |                          |
+     * |      Current Chunk       |                                      |                          |
+     * |         Events           |                                      |                          |
+     * |                          |                                      |                          |
+     * |                          |                                      |                          |
+     * |                          |                                      |                          |
+     * *--------------------------*                                      *--------------------------*
+     * | endToken0                |                                      | endToken0                |
+     * *--------------------------*                                      *--------------------------*
+     *
+     *
+     * ========================================================================================================
+     * | Forward case                                                                                         |
+     * ========================================================================================================
+     *
+     * *--------------------------*                                      *--------------------------*
+     * | startToken0              |                                      | startToken0              |
+     * *--------------------------*                                      *--------------------------*
+     * |                          |                                      |                          |
+     * |                          |                                      |                          |
+     * |      Current Chunk       |                                      |                          |
+     * |         Events           |                                      |                          |
+     * |                          |                                      |                          |
+     * |                          |                                      |                          |
+     * |                          |                                      |                          |
+     * *--------------------------*  *--------------------------*        |                          |
+     * | endToken0                |  | startToken1              |   =>   |       Merged chunk       |
+     * *--------------------------*  *--------------------------*        |          Events          |
+     *                               |                          |        |                          |
+     *                               |                          |        |                          |
+     *                               |  receivedChunk forward   |        |                          |
+     *                               |         Events           |        |                          |
+     *                               |                          |        |                          |
+     *                               |                          |        |                          |
+     *                               |                          |        |                          |
+     *                               *--------------------------*        *--------------------------*
+     *                               | endToken1                |        | endToken1                |
+     *                               *--------------------------*        *--------------------------*
+     *
+     * ========================================================================================================
+     * </pre>
+     */
     fun insertInDb(receivedChunk: TokenChunkEvent,
                    roomId: String,
                    direction: PaginationDirection): Try<Boolean> {
@@ -60,11 +124,10 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
 
                     var currentChunk = if (direction == PaginationDirection.FORWARDS) {
                         prevChunk?.apply { this.nextToken = nextToken }
-                                ?: ChunkEntity.create(realm, prevToken, nextToken)
                     } else {
                         nextChunk?.apply { this.prevToken = prevToken }
-                                ?: ChunkEntity.create(realm, prevToken, nextToken)
                     }
+                            ?: ChunkEntity.create(realm, prevToken, nextToken)
 
                     currentChunk.addAll(roomId, receivedChunk.events, direction, isUnlinked = currentChunk.isUnlinked())
 
