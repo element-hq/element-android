@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="im.vector.riotredesign">
 
 
@@ -7,12 +8,13 @@
 
     <application
         android:name=".Riot"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.Light">
+        android:theme="@style/AppTheme.Light"
+        tools:replace="android:allowBackup">
 
         <activity
             android:name=".features.MainActivity"
@@ -27,7 +29,9 @@
         <activity android:name=".features.home.HomeActivity" />
         <activity android:name=".features.login.LoginActivity" />
         <activity android:name=".features.media.MediaViewerActivity" />
-        <activity android:name=".features.rageshake.BugReportActivity" />
+        <activity
+            android:name=".features.rageshake.BugReportActivity"
+            android:label="@string/title_activity_bug_report" />
     </application>
 
 </manifest>
