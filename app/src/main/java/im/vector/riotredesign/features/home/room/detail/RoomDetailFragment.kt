@@ -34,7 +34,6 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotredesign.features.home.room.detail.timeline.animation.TimelineItemAnimator
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import im.vector.riotredesign.features.media.MediaViewerActivity
@@ -104,7 +103,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
         recyclerView.layoutManager = layoutManager
-        recyclerView.itemAnimator = TimelineItemAnimator()
+        recyclerView.itemAnimator = null
         recyclerView.setHasFixedSize(true)
         timelineEventController.addModelBuildListener {
             it.dispatchTo(stateRestorer)
