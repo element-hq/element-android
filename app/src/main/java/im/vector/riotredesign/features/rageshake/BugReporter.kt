@@ -25,9 +25,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.os.Build
-import android.os.Environment
 import android.text.TextUtils
 import android.view.View
+import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.toOnOff
@@ -81,11 +81,8 @@ object BugReporter {
             "-v", // formatting
             "threadtime", // include timestamps
             "AndroidRuntime:E " + ///< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
-
                     "libcommunicator:V " + ///< All libcommunicator logging
-
                     "DEBUG:V " + ///< All DEBUG logging - which includes native land crashes (seg faults, etc)
-
                     "*:S" ///< Everything else silent, so don't pick it..
     )
 
@@ -155,7 +152,7 @@ object BugReporter {
                 val gzippedFiles = ArrayList<File>()
 
                 if (withDevicesLogs) {
-                    val files = VectorFileLogger.addLogFiles(ArrayList<File>())
+                    val files = VectorFileLogger.getLogFiles()
 
                     for (f in files) {
                         if (!mIsCancelled) {
@@ -166,8 +163,6 @@ object BugReporter {
                             }
                         }
                     }
-
-                    // TODO Delete the sent files?
                 }
 
                 if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
@@ -195,29 +190,24 @@ object BugReporter {
                     }
                 }
 
-                // TODO MXSession session = Matrix.getInstance(context).getDefaultSession();
+                var deviceId = "undefined"
+                var userId = "undefined"
+                var matrixSdkVersion = "undefined"
+                var olmVersion = "undefined"
 
-                val deviceId = "undefined"
-                val userId = "undefined"
-                val matrixSdkVersion = "undefined"
-                val olmVersion = "undefined"
-
-                /*
-                TODO
-                if (null != session) {
-                    userId = session.getMyUserId();
-                    deviceId = session.getCredentials().deviceId;
-                    matrixSdkVersion = session.getVersion(true);
-                    olmVersion = session.getCryptoVersion(context, true);
+                Matrix.getInstance().currentSession?.let { session ->
+                    userId = session.sessionParams.credentials.userId
+                    deviceId = session.sessionParams.credentials.deviceId ?: "undefined"
+                    // TODO matrixSdkVersion = session.getVersion(true);
+                    // TODO olmVersion = session.getCryptoVersion(context, true);
                 }
-                */
 
                 if (!mIsCancelled) {
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", "[RiotX] $bugDescription")
                             .addFormDataPart("app", "riot-android")
-                            // TODO .addFormDataPart("user_agent", RestClient.getUserAgent())
+                            .addFormDataPart("user_agent", Matrix.getInstance().getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("device_id", deviceId)
                             // TODO .addFormDataPart("version", Matrix.getInstance(context).getVersion(true, false))

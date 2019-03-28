@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.logging.*
 import java.util.logging.Formatter
+import kotlin.collections.ArrayList
 
 object VectorFileLogger : Timber.DebugTree() {
 
@@ -92,7 +93,9 @@ object VectorFileLogger : Timber.DebugTree() {
      * @param files The list of files to add to.
      * @return The same list with more files added.
      */
-    fun addLogFiles(files: MutableList<File>): List<File> {
+    fun getLogFiles(): List<File> {
+        val files = ArrayList<File>()
+
         try {
             // reported by GA
             if (null != sFileHandler) {

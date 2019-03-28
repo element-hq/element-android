@@ -81,7 +81,7 @@ object FontScale {
                 putString(APPLICATION_FONT_SCALE_KEY, scalePreferenceValue)
             }
         } else {
-            scalePreferenceValue = preferences.getString(APPLICATION_FONT_SCALE_KEY, FONT_SCALE_NORMAL)
+            scalePreferenceValue = preferences.getString(APPLICATION_FONT_SCALE_KEY, FONT_SCALE_NORMAL)!!
         }
 
         return scalePreferenceValue

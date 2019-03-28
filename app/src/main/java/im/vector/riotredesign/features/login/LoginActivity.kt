@@ -63,8 +63,7 @@ class LoginActivity : RiotActivity() {
         progressBar.visibility = View.VISIBLE
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session) {
-                Matrix.getInstance().currentSession = data
-                Matrix.getInstance().currentSession.open()
+                Matrix.getInstance().currentSession = data.apply { open() }
                 goToHome()
             }
 

@@ -65,7 +65,7 @@ class AppModule(private val context: Context) {
         }
 
         factory {
-            Matrix.getInstance().currentSession
+            Matrix.getInstance().currentSession!!
         }
 
 

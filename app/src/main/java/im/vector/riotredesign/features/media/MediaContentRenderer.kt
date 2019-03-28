@@ -49,7 +49,7 @@ object MediaContentRenderer {
         val (width, height) = processSize(data, mode)
         imageView.layoutParams.height = height
         imageView.layoutParams.width = width
-        val contentUrlResolver = Matrix.getInstance().currentSession.contentUrlResolver()
+        val contentUrlResolver = Matrix.getInstance().currentSession!!.contentUrlResolver()
         val resolvedUrl = when (mode) {
             Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
             Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
@@ -64,7 +64,7 @@ object MediaContentRenderer {
 
     fun render(data: Data, imageView: BigImageView) {
         val (width, height) = processSize(data, Mode.THUMBNAIL)
-        val contentUrlResolver = Matrix.getInstance().currentSession.contentUrlResolver()
+        val contentUrlResolver = Matrix.getInstance().currentSession!!.contentUrlResolver()
         val fullSize = contentUrlResolver.resolveFullSize(data.url)
         val thumbnail = contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
         imageView.showImage(
