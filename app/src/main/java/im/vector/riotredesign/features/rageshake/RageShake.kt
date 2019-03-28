@@ -94,7 +94,7 @@ class RageShake(val activity: Activity) : ShakeDetector.Listener {
     }
 
     private fun openBugReportScreen() {
-        BugReporter.sendBugReport(activity)
+        BugReporter.openBugReportScreen(activity)
     }
 
     companion object {

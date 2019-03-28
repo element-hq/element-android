@@ -70,8 +70,8 @@ class BugReportActivity : RiotActivity() {
     override fun initUiAndData() {
         configureToolbar()
 
-        if (BugReporter.getScreenshot() != null) {
-            mScreenShotPreview.setImageBitmap(BugReporter.getScreenshot())
+        if (BugReporter.screenshot != null) {
+            mScreenShotPreview.setImageBitmap(BugReporter.screenshot)
         } else {
             mScreenShotPreview.isVisible = false
             mIncludeScreenShotButton.isChecked = false
@@ -189,7 +189,7 @@ class BugReportActivity : RiotActivity() {
 
     @OnCheckedChanged(R.id.bug_report_button_include_screenshot)
     internal fun onSendScreenshotChanged() {
-        mScreenShotPreview.isVisible = mIncludeScreenShotButton.isChecked && BugReporter.getScreenshot() != null
+        mScreenShotPreview.isVisible = mIncludeScreenShotButton.isChecked && BugReporter.screenshot != null
     }
 
     override fun onBackPressed() {

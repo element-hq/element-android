@@ -16,9 +16,11 @@
 
 package im.vector.riotredesign.core.platform
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.annotation.*
 import androidx.appcompat.widget.Toolbar
 import butterknife.BindView
@@ -28,12 +30,15 @@ import com.airbnb.mvrx.BaseMvRxActivity
 import com.bumptech.glide.util.Util
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
+import im.vector.riotredesign.features.rageshake.BugReportActivity
+import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.RageShake
+import im.vector.riotredesign.features.themes.ThemeUtils
 import im.vector.riotredesign.receivers.DebugReceiver
 import im.vector.ui.themes.ActivityOtherThemes
-import im.vector.ui.themes.ThemeUtils
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import timber.log.Timber
 
 
 abstract class RiotActivity : BaseMvRxActivity() {
@@ -113,10 +118,19 @@ abstract class RiotActivity : BaseMvRxActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        unBinder?.unbind()
+        unBinder = null
+    }
+
     override fun onResume() {
         super.onResume()
 
-        rageShake?.start()
+        if (this !is BugReportActivity) {
+            rageShake?.start()
+        }
 
         DebugReceiver
                 .getIntentFilter(this)
@@ -136,6 +150,38 @@ abstract class RiotActivity : BaseMvRxActivity() {
             unregisterReceiver(debugReceiver)
             debugReceiver = null
         }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        if (hasFocus && displayInFullscreen()) {
+            setFullScreen()
+        }
+    }
+
+    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration?) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
+
+        Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: $isInMultiWindowMode")
+        BugReporter.inMultiWindowMode = isInMultiWindowMode
+    }
+
+
+    /* ==========================================================================================
+     * PRIVATE METHODS
+     * ========================================================================================== */
+
+    /**
+     * Force to render the activity in fullscreen
+     */
+    private fun setFullScreen() {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
 
     /* ==========================================================================================

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.ui.themes
+package im.vector.riotredesign.features.themes
 
 
 import android.app.Activity
@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
 import im.vector.riotredesign.R
+import im.vector.ui.themes.ActivityOtherThemes
 import timber.log.Timber
 import java.util.*
 
@@ -36,8 +37,6 @@ import java.util.*
  * Util class for managing themes.
  */
 object ThemeUtils {
-    const val LOG_TAG = "ThemeUtils"
-
     // preference key
     const val APPLICATION_THEME_KEY = "APPLICATION_THEME_KEY"
 

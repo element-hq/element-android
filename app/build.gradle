@@ -167,7 +167,11 @@ dependencies {
     implementation 'androidx.paging:paging-runtime:2.0.0'
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
+
+    // Log
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // Debug
     implementation 'com.facebook.stetho:stetho:1.5.0'
 
     // rx

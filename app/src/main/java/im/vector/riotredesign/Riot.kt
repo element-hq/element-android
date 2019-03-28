@@ -26,6 +26,8 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.di.AppModule
 import im.vector.riotredesign.features.home.HomeModule
+import im.vector.riotredesign.features.rageshake.VectorFileLogger
+import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import org.koin.log.EmptyLogger
 import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
@@ -35,10 +37,17 @@ class Riot : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        VectorUncaughtExceptionHandler.activate(this)
+
+        // Log
+        VectorFileLogger.init(this)
+        Timber.plant(Timber.DebugTree(), VectorFileLogger)
+
         if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
             Stetho.initializeWithDefaults(this)
         }
+
         AndroidThreeTen.init(this)
         BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
         val appModule = AppModule(applicationContext).definition
