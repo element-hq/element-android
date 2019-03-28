@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Riot">
+        android:theme="@style/AppTheme.Light">
 
         <activity
             android:name=".features.MainActivity"
@@ -27,6 +27,7 @@
         <activity android:name=".features.home.HomeActivity" />
         <activity android:name=".features.login.LoginActivity" />
         <activity android:name=".features.media.MediaViewerActivity" />
+        <activity android:name=".features.rageshake.BugReportActivity" />
     </application>
 
 </manifest>

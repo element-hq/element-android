@@ -21,7 +21,6 @@ package im.vector.riotredesign.features.media
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator
 import com.github.piasy.biv.view.GlideImageViewFactory
@@ -53,17 +52,6 @@ class MediaViewerActivity : RiotActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
-        return true
-    }
-
 
     companion object {
 
