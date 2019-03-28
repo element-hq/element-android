@@ -39,7 +39,7 @@ object TimelineDisplayableEvents {
 }
 
 fun TimelineEvent.isDisplayable(): Boolean {
-    return TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.type)
+    return TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.type) && !root.content.isNullOrEmpty()
 }
 
 fun List<TimelineEvent>.filterDisplayableEvents(): List<TimelineEvent> {
