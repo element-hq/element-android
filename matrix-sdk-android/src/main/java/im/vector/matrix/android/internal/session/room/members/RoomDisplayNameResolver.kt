@@ -36,7 +36,8 @@ import im.vector.matrix.android.internal.database.query.where
 /**
  * This class computes room display name
  */
-internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
+internal class RoomDisplayNameResolver(private val context: Context,
+                                       private val monarchy: Monarchy,
                                        private val roomMemberDisplayNameResolver: RoomMemberDisplayNameResolver,
                                        private val credentials: Credentials
 ) {
@@ -44,11 +45,10 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
     /**
      * Compute the room display name
      *
-     * @param context
      * @param roomId: the roomId to resolve the name of.
      * @return the room display name
      */
-    fun resolve(context: Context, roomId: String): CharSequence {
+    fun resolve(roomId: String): CharSequence {
         // this algorithm is the one defined in
         // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
         // calculateRoomName(room, userId)
@@ -111,16 +111,16 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
                         val member1 = memberIds[0]
                         val member2 = memberIds[1]
                         name = context.getString(R.string.room_displayname_two_members,
-                                roomMemberDisplayNameResolver.resolve(member1, otherRoomMembers),
-                                roomMemberDisplayNameResolver.resolve(member2, otherRoomMembers)
+                                                 roomMemberDisplayNameResolver.resolve(member1, otherRoomMembers),
+                                                 roomMemberDisplayNameResolver.resolve(member2, otherRoomMembers)
                         )
                     }
                     else -> {
                         val member = memberIds[0]
                         name = context.resources.getQuantityString(R.plurals.room_displayname_three_and_more_members,
-                                roomMembers.getNumberOfJoinedMembers() - 1,
-                                roomMemberDisplayNameResolver.resolve(member, otherRoomMembers),
-                                roomMembers.getNumberOfJoinedMembers() - 1)
+                                                                   roomMembers.getNumberOfJoinedMembers() - 1,
+                                                                   roomMemberDisplayNameResolver.resolve(member, otherRoomMembers),
+                                                                   roomMembers.getNumberOfJoinedMembers() - 1)
                     }
                 }
             }

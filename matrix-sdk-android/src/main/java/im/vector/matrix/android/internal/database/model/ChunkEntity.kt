@@ -26,7 +26,11 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
                                 @Index var nextToken: String? = null,
                                 var events: RealmList<EventEntity> = RealmList(),
                                 @Index var isLastForward: Boolean = false,
-                                @Index var isLastBackward: Boolean = false
+                                @Index var isLastBackward: Boolean = false,
+                                var backwardsDisplayIndex: Int? = null,
+                                var forwardsDisplayIndex: Int? = null,
+                                var backwardsStateIndex: Int? = null,
+                                var forwardsStateIndex: Int? = null
 ) : RealmObject() {
 
     @LinkingObjects("chunks")

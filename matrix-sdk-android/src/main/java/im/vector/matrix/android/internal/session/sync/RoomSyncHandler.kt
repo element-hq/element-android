@@ -17,20 +17,29 @@
 package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.helper.lastStateIndex
+import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.latestEvent
+import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
+import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.members.RoomMembers
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
@@ -44,6 +53,9 @@ import io.realm.kotlin.createObject
 
 internal class RoomSyncHandler(private val monarchy: Monarchy,
                                private val readReceiptHandler: ReadReceiptHandler,
+                               private val roomDisplayNameResolver: RoomDisplayNameResolver,
+                               private val roomAvatarResolver: RoomAvatarResolver,
+                               private val credentials: Credentials,
                                private val roomTagHandler: RoomTagHandler) {
 
     sealed class HandlingStrategy {
@@ -51,6 +63,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         data class INVITED(val data: Map<String, InvitedRoomSync>) : HandlingStrategy()
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
+
     fun handle(roomsSyncResponse: RoomsSyncResponse) {
         monarchy.runTransactionSync { realm ->
             handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.JOINED(roomsSyncResponse.join))
@@ -107,9 +120,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
             roomEntity.addOrUpdate(chunkEntity)
         }
 
-        if (roomSync.summary != null) {
-            handleRoomSummary(realm, roomId, roomSync.summary)
-        }
+        handleRoomSummary(realm, roomId, roomSync.summary)
 
         if (roomSync.unreadNotifications != null) {
             handleUnreadNotifications(realm, roomId, roomSync.unreadNotifications)
@@ -171,20 +182,33 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
     private fun handleRoomSummary(realm: Realm,
                                   roomId: String,
-                                  roomSummary: RoomSyncSummary) {
+                                  roomSummary: RoomSyncSummary?) {
 
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
                                 ?: RoomSummaryEntity(roomId)
 
-        if (roomSummary.heroes.isNotEmpty()) {
-            roomSummaryEntity.heroes.clear()
-            roomSummaryEntity.heroes.addAll(roomSummary.heroes)
-        }
-        if (roomSummary.invitedMembersCount != null) {
-            roomSummaryEntity.invitedMembersCount = roomSummary.invitedMembersCount
-        }
-        if (roomSummary.joinedMembersCount != null) {
-            roomSummaryEntity.joinedMembersCount = roomSummary.joinedMembersCount
+        val lastEvent = EventEntity.latestEvent(realm, roomId, includedTypes = listOf(EventType.MESSAGE))
+        val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()?.asDomain()
+
+        val otherRoomMembers = RoomMembers(realm, roomId).getLoaded().filterKeys { it != credentials.userId }
+        roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
+        roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
+        roomSummaryEntity.topic = lastTopicEvent?.content.toModel<RoomTopicContent>()?.topic
+        roomSummaryEntity.lastMessage = lastEvent
+        roomSummaryEntity.otherMemberIds.clear()
+        roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers.keys)
+
+        if (roomSummary != null) {
+            if (roomSummary.heroes.isNotEmpty()) {
+                roomSummaryEntity.heroes.clear()
+                roomSummaryEntity.heroes.addAll(roomSummary.heroes)
+            }
+            if (roomSummary.invitedMembersCount != null) {
+                roomSummaryEntity.invitedMembersCount = roomSummary.invitedMembersCount
+            }
+            if (roomSummary.joinedMembersCount != null) {
+                roomSummaryEntity.joinedMembersCount = roomSummary.joinedMembersCount
+            }
         }
         realm.insertOrUpdate(roomSummaryEntity)
     }

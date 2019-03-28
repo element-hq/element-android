@@ -89,16 +89,20 @@ internal fun ChunkEntity.add(roomId: String,
     var currentDisplayIndex = lastDisplayIndex(direction, 0)
     if (direction == PaginationDirection.FORWARDS) {
         currentDisplayIndex += 1
+        forwardsDisplayIndex = currentDisplayIndex
     } else {
         currentDisplayIndex -= 1
+        backwardsDisplayIndex = currentDisplayIndex
     }
     var currentStateIndex = lastStateIndex(direction, defaultValue = stateIndexOffset)
     if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(event.type)) {
         currentStateIndex += 1
+        forwardsStateIndex = currentStateIndex
     } else if (direction == PaginationDirection.BACKWARDS && events.isNotEmpty()) {
         val lastEventType = events.last()?.type ?: ""
         if (EventType.isStateEvent(lastEventType)) {
             currentStateIndex -= 1
+            backwardsStateIndex = currentStateIndex
         }
     }
     val eventEntity = event.toEntity(roomId).apply {
@@ -119,14 +123,14 @@ private fun ChunkEntity.assertIsManaged() {
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findFirst()?.displayIndex
-        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING).findFirst()?.displayIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> forwardsDisplayIndex
+               PaginationDirection.BACKWARDS -> backwardsDisplayIndex
+           } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
-        PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> forwardsStateIndex
+               PaginationDirection.BACKWARDS -> backwardsStateIndex
+           } ?: defaultValue
 }
