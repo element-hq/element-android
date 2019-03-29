@@ -129,8 +129,7 @@ object ThemeUtils {
             layout.setSelectedTabIndicatorColor(underlineColor)
             layout.setBackgroundColor(backgroundColor)
         }
-    }
-    */
+    }    */
 
     /**
      * Translates color attributes to colors

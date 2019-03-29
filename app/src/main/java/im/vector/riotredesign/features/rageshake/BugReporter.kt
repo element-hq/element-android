@@ -139,7 +139,7 @@ object BugReporter {
             // enumerate files to delete
             val mBugReportFiles: MutableList<File> = ArrayList()
 
-            override fun doInBackground(vararg voids: Void): String? {
+            override fun doInBackground(vararg voids: Void?): String? {
                 var bugDescription = theBugDescription
                 var serverError: String? = null
                 val crashCallStack = getCrashDescription(context)
@@ -214,7 +214,7 @@ object BugReporter {
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
                             .addFormDataPart("matrix_sdk_version", matrixSdkVersion)
                             .addFormDataPart("olm_version", olmVersion)
-                            .addFormDataPart("device", Build.MODEL.trim { it <= ' ' })
+                            .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("lazy_loading", true.toOnOff())
                             .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
                             .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") "
