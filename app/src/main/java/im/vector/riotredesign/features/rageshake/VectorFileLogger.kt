@@ -31,10 +31,10 @@ import kotlin.collections.ArrayList
 
 object VectorFileLogger : Timber.DebugTree() {
 
-    private val LOG_SIZE_BYTES = 50 * 1024 * 1024 // 50MB
+    private const val LOG_SIZE_BYTES = 50 * 1024 * 1024 // 50MB
 
     // relatively large rotation count because closing > opening the app rotates the log (!)
-    private val LOG_ROTATION_COUNT = 15
+    private const val LOG_ROTATION_COUNT = 15
 
     private val sLogger = Logger.getLogger("im.vector.riotredesign")
     private lateinit var sFileHandler: FileHandler
@@ -118,7 +118,6 @@ object VectorFileLogger : Timber.DebugTree() {
     }
 
     class LogFormatter : Formatter() {
-        private val LINE_SEPARATOR = System.getProperty("line.separator") ?: "\n"
 
         override fun format(r: LogRecord): String {
             if (!mIsTimeZoneSet) {
@@ -147,6 +146,7 @@ object VectorFileLogger : Timber.DebugTree() {
         }
 
         companion object {
+            private val LINE_SEPARATOR = System.getProperty("line.separator") ?: "\n"
             private val DATE_FORMAT = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US)
             private var mIsTimeZoneSet = false
         }
