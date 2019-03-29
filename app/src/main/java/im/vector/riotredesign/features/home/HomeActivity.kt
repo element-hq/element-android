@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -34,6 +35,8 @@ import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
+import im.vector.riotredesign.features.rageshake.BugReporter
+import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
@@ -72,6 +75,21 @@ class HomeActivity : RiotActivity(), ToolbarConfigurable {
         drawerLayout.removeDrawerListener(drawerListener)
         homeNavigator.activity = null
         super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (VectorUncaughtExceptionHandler.didAppCrash(this)) {
+            VectorUncaughtExceptionHandler.clearAppCrashStatus(this)
+
+            AlertDialog.Builder(this)
+                    .setMessage(R.string.send_bug_report_app_crashed)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.yes) { _, _ -> BugReporter.openBugReportScreen(this) }
+                    .setNegativeButton(R.string.no) { _, _ -> BugReporter.deleteCrashFile(this) }
+                    .show()
+        }
     }
 
     override fun configure(toolbar: Toolbar) {

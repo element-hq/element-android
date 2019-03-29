@@ -167,7 +167,11 @@ dependencies {
     implementation 'androidx.paging:paging-runtime:2.0.0'
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
+
+    // Log
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // Debug
     implementation 'com.facebook.stetho:stetho:1.5.0'
 
     // rx
@@ -183,12 +187,22 @@ dependencies {
     // FP
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 
+    // Pref
+    implementation 'androidx.preference:preference:1.0.0'
+
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'me.gujun.android:span:1.7'
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"
+
+    // Butterknife
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.1.0'
+
+    // Shake detection
+    implementation 'com.squareup:seismic:1.0.2'
 
     // Image Loading
     implementation "com.github.piasy:BigImageViewer:$big_image_viewer_version"

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- BLACK THEME COLORS -->
+
+    <style name="AppTheme.Base.Black" parent="AppTheme.Base.Dark">
+        <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
+
+        <item name="colorPrimaryDark">@color/primary_color_dark_black</item>
+        <item name="colorPrimary">@color/primary_color_black</item>
+
+        <!-- list colors -->
+        <!--Header/Panel Background-->
+        <item name="vctr_list_header_background_color">#FF090A0C</item>
+        <!--Header/Panel Text Primary-->
+        <item name="vctr_tab_home">@color/primary_color_black</item>
+        <!--Header/Panel Text Secondary-->
+        <item name="vctr_tab_home_secondary">@color/primary_color_dark_black</item>
+        <item name="vctr_list_divider_color">@color/list_divider_color_black</item>
+
+        <!-- color for dividers in settings -->
+        <item name="vctr_preference_divider_color">@color/list_divider_color_black</item>
+
+        <item name="android:colorBackground">@color/riot_primary_background_color_black</item>
+        <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
+
+        <!-- activities background -->
+        <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
+        <item name="vctr_bottom_nav_background_color">@color/primary_color_black</item>
+
+        <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_black</item>
+    </style>
+
+    <style name="AppTheme.Black" parent="AppTheme.Base.Black" />
+
+    <style name="Theme.Vector.Lock.Black" parent="Theme.Vector.Lock.Dark">
+        <item name="colorPrimary">@color/riot_primary_background_color_black</item>
+        <item name="android:colorBackground">@color/riot_primary_background_color_black</item>
+    </style>
+
+    <!-- home activity -->
+    <style name="HomeActivityTheme.Black" parent="AppTheme.Black">
+        <item name="editTextColor">?android:attr/textColorPrimary</item>
+        <item name="android:editTextColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColorHint">?attr/vctr_default_text_hint_color</item>
+    </style>
+
+    <!-- call activity -->
+    <style name="CallActivityTheme.Black" parent="AppTheme.Black">
+        <!-- status bar color -->
+        <item name="colorPrimaryDark">@android:color/black</item>
+    </style>
+
+    <!-- NoActionBar + FullScreen -->
+    <style name="AppTheme.NoActionBar.FullScreen.Black" parent="AppTheme.Black">
+        <item name="android:windowFullscreen">true</item>
+        <!-- activities background -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!-- Picker activities -->
+    <style name="CountryPickerTheme.Black" parent="AppTheme.Black">
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">?attr/vctr_activity_bottom_gradient_color</item>
+    </style>
+
+    <!-- searches activity -->
+    <style name="SearchesAppTheme.Black" parent="AppTheme.Black">
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
+        <item name="actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
+
+        <!-- no divider -->
+        <item name="android:actionBarDivider">@null</item>
+
+        <!-- edit text -->
+        <item name="android:editTextStyle">@style/VectorSearches.EditText</item>
+
+        <!-- actionbar icons color -->
+        <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
+    </style>
+
+    <style name="CallAppTheme.Black" parent="AppTheme.Black">
+        <item name="android:colorBackground">?attr/colorBackgroundFloating</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowTitleStyle">@style/RtlOverlay.DialogWindowTitle.AppCompat</item>
+        <item name="android:windowTitleBackgroundStyle">
+            @style/Base.DialogWindowTitleBackground.AppCompat
+        </item>
+        <item name="android:windowBackground">@drawable/abc_dialog_material_background</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/Animation.AppCompat.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+
+        <item name="windowActionModeOverlay">true</item>
+
+        <item name="listPreferredItemPaddingLeft">24dip</item>
+        <item name="listPreferredItemPaddingRight">24dip</item>
+
+        <item name="android:listDivider">@null</item>
+    </style>
+
+    <style name="GroupAppTheme.Black" parent="AppTheme.Black">
+        <item name="colorPrimaryDark">@color/tab_groups_secondary</item>
+
+        <item name="android:actionBarTabStyle">@style/Vector.TabView.Group</item>
+        <item name="actionBarTabStyle">@style/Vector.TabView.Group</item>
+    </style>
+
+</resources>

@@ -90,7 +90,7 @@ object AvatarRenderer {
     // PRIVATE API *********************************************************************************
 
     private fun buildGlideRequest(glideRequest: GlideRequests, avatarUrl: String?, size: Int): GlideRequest<Drawable> {
-        val resolvedUrl = Matrix.getInstance().currentSession
+        val resolvedUrl = Matrix.getInstance().currentSession!!
                 .contentUrlResolver()
                 .resolveThumbnail(avatarUrl, size, size, ContentUrlResolver.ThumbnailMethod.SCALE)
 

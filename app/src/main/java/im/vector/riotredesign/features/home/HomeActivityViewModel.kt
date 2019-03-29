@@ -41,7 +41,7 @@ class HomeActivityViewModel(state: EmptyState,
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: EmptyState): HomeActivityViewModel? {
-            val session = Matrix.getInstance().currentSession
+            val session = Matrix.getInstance().currentSession!!
             val roomSelectionRepository = viewModelContext.activity.get<RoomSelectionRepository>()
             return HomeActivityViewModel(state, session, roomSelectionRepository)
         }

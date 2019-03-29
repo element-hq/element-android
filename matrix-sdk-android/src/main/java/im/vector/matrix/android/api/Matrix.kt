@@ -39,9 +39,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 class Matrix private constructor(context: Context) : MatrixKoinComponent {
 
     private val authenticator by inject<Authenticator>()
-    private val userAgent by inject<UserAgentHolder>()
+    private val userAgentHolder by inject<UserAgentHolder>()
     private val backgroundDetectionObserver by inject<BackgroundDetectionObserver>()
-    lateinit var currentSession: Session
+    var currentSession: Session? = null
 
     init {
         Monarchy.init(context)
@@ -52,8 +52,9 @@ class Matrix private constructor(context: Context) : MatrixKoinComponent {
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
         val lastActiveSession = authenticator.getLastActiveSession()
         if (lastActiveSession != null) {
-            currentSession = lastActiveSession
-            currentSession.open()
+            currentSession = lastActiveSession.apply {
+                open()
+            }
         }
     }
 
@@ -65,8 +66,10 @@ class Matrix private constructor(context: Context) : MatrixKoinComponent {
      * Set application flavor, to alter user agent.
      */
     fun setApplicationFlavor(flavor: String) {
-        userAgent.setApplicationFlavor(flavor)
+        userAgentHolder.setApplicationFlavor(flavor)
     }
+
+    fun getUserAgent() = userAgentHolder.userAgent
 
     companion object {
         private lateinit var instance: Matrix
