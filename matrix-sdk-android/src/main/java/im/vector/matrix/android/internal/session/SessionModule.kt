@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
 import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
+import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
@@ -87,6 +88,10 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             RoomAvatarResolver(get(), sessionParams.credentials)
+        }
+
+        scope(DefaultSession.SCOPE) {
+            RoomSummaryUpdater(get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

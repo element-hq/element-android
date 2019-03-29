@@ -22,11 +22,7 @@ import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTas
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.send.EventFactory
-import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
-import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
+import im.vector.matrix.android.internal.session.room.timeline.*
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 
@@ -41,7 +37,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultLoadRoomMembersTask(get(), get(), get()) as LoadRoomMembersTask
+            DefaultLoadRoomMembersTask(get(), get(), get(), get()) as LoadRoomMembersTask
         }
 
         scope(DefaultSession.SCOPE) {
@@ -57,7 +53,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultSetReadMarkersTask(get(), get(),get()) as SetReadMarkersTask
+            DefaultSetReadMarkersTask(get(), get(), get()) as SetReadMarkersTask
         }
 
         scope(DefaultSession.SCOPE) {
