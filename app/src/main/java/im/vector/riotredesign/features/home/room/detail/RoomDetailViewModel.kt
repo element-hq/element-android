@@ -23,9 +23,9 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.rx.rx
-import im.vector.riotredesign.core.extensions.lastMinBy
 import im.vector.riotredesign.core.platform.RiotViewModel
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
 import java.util.concurrent.TimeUnit
@@ -38,10 +38,12 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private val room = session.getRoom(initialState.roomId)!!
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
-
     private val displayedEventsObservable = BehaviorRelay.create<RoomDetailActions.EventDisplayed>()
+    private val timeline = room.createTimeline(eventId, TimelineDisplayableEvents.DISPLAYABLE_TYPES)
 
     companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
+
+        const val PAGINATION_COUNT = 50
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
@@ -53,9 +55,10 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     init {
         observeRoomSummary()
-        observeTimeline()
-        observeDisplayedEvents()
+        observeEventDisplayedActions()
         room.loadRoomMembersIfNeeded()
+        timeline.start()
+        setState { copy(timeline = this@RoomDetailViewModel.timeline) }
     }
 
     fun process(action: RoomDetailActions) {
@@ -63,6 +66,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             is RoomDetailActions.SendMessage    -> handleSendMessage(action)
             is RoomDetailActions.IsDisplayed    -> handleIsDisplayed()
             is RoomDetailActions.EventDisplayed -> handleEventDisplayed(action)
+            is RoomDetailActions.LoadMore       -> handleLoadMore(action)
         }
     }
 
@@ -80,14 +84,18 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         visibleRoomHolder.post(roomId)
     }
 
-    private fun observeDisplayedEvents() {
+    private fun handleLoadMore(action: RoomDetailActions.LoadMore) {
+        timeline.paginate(action.direction, PAGINATION_COUNT)
+    }
+
+    private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second
         // and keep the most recent one to set the read receipt on.
-        displayedEventsObservable.hide()
+        displayedEventsObservable
                 .buffer(1, TimeUnit.SECONDS)
                 .filter { it.isNotEmpty() }
                 .subscribeBy(onNext = { actions ->
-                    val mostRecentEvent = actions.lastMinBy { it.index }
+                    val mostRecentEvent = actions.maxBy { it.event.displayIndex }
                     mostRecentEvent?.event?.root?.eventId?.let { eventId ->
                         room.setReadReceipt(eventId, callback = object : MatrixCallback<Void> {})
                     }
@@ -102,12 +110,8 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                 }
     }
 
-    private fun observeTimeline() {
-        room.rx().timeline(eventId)
-                .execute { timelineData ->
-                    copy(asyncTimelineData = timelineData)
-                }
+    override fun onCleared() {
+        timeline.dispose()
+        super.onCleared()
     }
-
-
 }

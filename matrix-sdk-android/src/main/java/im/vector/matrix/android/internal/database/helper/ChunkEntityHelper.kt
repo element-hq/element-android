@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
-import im.vector.matrix.android.internal.database.mapper.updateWith
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -29,16 +28,16 @@ import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import io.realm.Sort
 
-internal fun ChunkEntity.deleteOnCascade() {
-    assertIsManaged()
-    this.events.deleteAllFromRealm()
-    this.deleteFromRealm()
-}
-
 // By default if a chunk is empty we consider it unlinked
 internal fun ChunkEntity.isUnlinked(): Boolean {
     assertIsManaged()
     return events.where().equalTo(EventEntityFields.IS_UNLINKED, false).findAll().isEmpty()
+}
+
+internal fun ChunkEntity.deleteOnCascade() {
+    assertIsManaged()
+    this.events.deleteAllFromRealm()
+    this.deleteFromRealm()
 }
 
 internal fun ChunkEntity.merge(roomId: String,
@@ -55,11 +54,16 @@ internal fun ChunkEntity.merge(roomId: String,
     val eventsToMerge: List<EventEntity>
     if (direction == PaginationDirection.FORWARDS) {
         this.nextToken = chunkToMerge.nextToken
-        this.isLast = chunkToMerge.isLast
-        eventsToMerge = chunkToMerge.events.reversed()
+        this.isLastForward = chunkToMerge.isLastForward
+        this.forwardsStateIndex = chunkToMerge.forwardsStateIndex
+        this.forwardsDisplayIndex = chunkToMerge.forwardsDisplayIndex
+        eventsToMerge = chunkToMerge.events.sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
     } else {
         this.prevToken = chunkToMerge.prevToken
-        eventsToMerge = chunkToMerge.events
+        this.isLastBackward = chunkToMerge.isLastBackward
+        this.backwardsStateIndex = chunkToMerge.backwardsStateIndex
+        this.backwardsDisplayIndex = chunkToMerge.backwardsDisplayIndex
+        eventsToMerge = chunkToMerge.events.sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     }
     eventsToMerge.forEach {
         add(roomId, it.asDomain(), direction, isUnlinked = isUnlinked)
@@ -70,16 +74,12 @@ internal fun ChunkEntity.addAll(roomId: String,
                                 events: List<Event>,
                                 direction: PaginationDirection,
                                 stateIndexOffset: Int = 0,
-                                // Set to true for Event retrieved from a Permalink (i.e. not linked to live Chunk)
+        // Set to true for Event retrieved from a Permalink (i.e. not linked to live Chunk)
                                 isUnlinked: Boolean = false) {
     assertIsManaged()
     events.forEach { event ->
         add(roomId, event, direction, stateIndexOffset, isUnlinked)
     }
-}
-
-internal fun ChunkEntity.updateDisplayIndexes() {
-    events.forEachIndexed { index, eventEntity -> eventEntity.displayIndex = index }
 }
 
 internal fun ChunkEntity.add(roomId: String,
@@ -92,24 +92,44 @@ internal fun ChunkEntity.add(roomId: String,
     if (event.eventId.isNullOrEmpty() || events.fastContains(event.eventId)) {
         return
     }
+    var currentDisplayIndex = lastDisplayIndex(direction, 0)
+    if (direction == PaginationDirection.FORWARDS) {
+        currentDisplayIndex += 1
+        forwardsDisplayIndex = currentDisplayIndex
+    } else {
+        currentDisplayIndex -= 1
+        backwardsDisplayIndex = currentDisplayIndex
+    }
     var currentStateIndex = lastStateIndex(direction, defaultValue = stateIndexOffset)
     if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(event.type)) {
         currentStateIndex += 1
+        forwardsStateIndex = currentStateIndex
     } else if (direction == PaginationDirection.BACKWARDS && events.isNotEmpty()) {
         val lastEventType = events.last()?.type ?: ""
         if (EventType.isStateEvent(lastEventType)) {
             currentStateIndex -= 1
+            backwardsStateIndex = currentStateIndex
         }
     }
-    val eventEntity = event.toEntity(roomId)
-    eventEntity.updateWith(currentStateIndex, isUnlinked)
-    val position = if (direction == PaginationDirection.FORWARDS) 0 else this.events.size
-    events.add(position, eventEntity)
+    val eventEntity = event.toEntity(roomId).apply {
+        this.stateIndex = currentStateIndex
+        this.isUnlinked = isUnlinked
+        this.displayIndex = currentDisplayIndex
+    }
+    // We are not using the order of the list, but will be sorting with displayIndex field
+    events.add(eventEntity)
+}
+
+internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
+    return when (direction) {
+               PaginationDirection.FORWARDS  -> forwardsDisplayIndex
+               PaginationDirection.BACKWARDS -> backwardsDisplayIndex
+           } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING).findFirst()?.stateIndex
-               PaginationDirection.BACKWARDS -> events.where().sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING).findFirst()?.stateIndex
+               PaginationDirection.FORWARDS  -> forwardsStateIndex
+               PaginationDirection.BACKWARDS -> backwardsStateIndex
            } ?: defaultValue
 }

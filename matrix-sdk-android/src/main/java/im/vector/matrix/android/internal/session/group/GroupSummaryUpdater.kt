@@ -23,6 +23,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
+import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
@@ -38,7 +39,7 @@ internal class GroupSummaryUpdater(monarchy: Monarchy
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-    override fun process(inserted: List<GroupEntity>, updated: List<GroupEntity>, deleted: List<GroupEntity>) {
+    override fun processChanges(inserted: List<GroupEntity>, updated: List<GroupEntity>, deleted: List<GroupEntity>) {
         val newGroupIds = inserted.map { it.groupId }
         val getGroupDataWorkerParams = GetGroupDataWorker.Params(newGroupIds)
         val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)

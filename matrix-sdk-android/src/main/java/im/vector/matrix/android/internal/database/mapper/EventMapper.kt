@@ -57,11 +57,6 @@ internal object EventMapper {
 
 }
 
-internal fun EventEntity.updateWith(stateIndex: Int, isUnlinked: Boolean) {
-    this.stateIndex = stateIndex
-    this.isUnlinked = isUnlinked
-}
-
 internal fun EventEntity.asDomain(): Event {
     return EventMapper.map(this)
 }

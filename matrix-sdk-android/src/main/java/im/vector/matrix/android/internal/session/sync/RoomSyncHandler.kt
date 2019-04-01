@@ -28,22 +28,17 @@ import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.helper.lastStateIndex
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
-import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
-import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
+import im.vector.matrix.android.internal.session.sync.model.*
 import io.realm.Realm
 import io.realm.kotlin.createObject
 
 internal class RoomSyncHandler(private val monarchy: Monarchy,
                                private val readReceiptHandler: ReadReceiptHandler,
+                               private val roomSummaryUpdater: RoomSummaryUpdater,
                                private val roomTagHandler: RoomTagHandler) {
 
     sealed class HandlingStrategy {
@@ -76,7 +71,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                  roomSync: RoomSync): RoomEntity {
 
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+                ?: realm.createObject(roomId)
 
         if (roomEntity.membership == MyMembership.INVITED) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -107,14 +102,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
             )
             roomEntity.addOrUpdate(chunkEntity)
         }
-
-        if (roomSync.summary != null) {
-            handleRoomSummary(realm, roomId, roomSync.summary)
-        }
-
-        if (roomSync.unreadNotifications != null) {
-            handleUnreadNotifications(realm, roomId, roomSync.unreadNotifications)
-        }
+        roomSummaryUpdater.update(realm, roomId, roomSync.summary, roomSync.unreadNotifications)
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
             handleEphemeral(realm, roomId, roomSync.ephemeral)
@@ -164,30 +152,10 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
             realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
         }
 
-        lastChunk?.isLast = false
-        chunkEntity.isLast = true
+        lastChunk?.isLastForward = false
+        chunkEntity.isLastForward = true
         chunkEntity.addAll(roomId, eventList, PaginationDirection.FORWARDS, stateIndexOffset)
         return chunkEntity
-    }
-
-    private fun handleRoomSummary(realm: Realm,
-                                  roomId: String,
-                                  roomSummary: RoomSyncSummary) {
-
-        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: RoomSummaryEntity(roomId)
-
-        if (roomSummary.heroes.isNotEmpty()) {
-            roomSummaryEntity.heroes.clear()
-            roomSummaryEntity.heroes.addAll(roomSummary.heroes)
-        }
-        if (roomSummary.invitedMembersCount != null) {
-            roomSummaryEntity.invitedMembersCount = roomSummary.invitedMembersCount
-        }
-        if (roomSummary.joinedMembersCount != null) {
-            roomSummaryEntity.joinedMembersCount = roomSummary.joinedMembersCount
-        }
-        realm.insertOrUpdate(roomSummaryEntity)
     }
 
     private fun handleEphemeral(realm: Realm,
@@ -197,20 +165,6 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                 .filter { it.type == EventType.RECEIPT }
                 .map { it.content.toModel<ReadReceiptContent>() }
                 .flatMap { readReceiptHandler.handle(realm, roomId, it) }
-    }
-
-    private fun handleUnreadNotifications(realm: Realm, roomId: String, unreadNotifications: RoomSyncUnreadNotifications) {
-        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: RoomSummaryEntity(roomId)
-
-        if (unreadNotifications.highlightCount != null) {
-            roomSummaryEntity.highlightCount = unreadNotifications.highlightCount
-        }
-        if (unreadNotifications.notificationCount != null) {
-            roomSummaryEntity.notificationCount = unreadNotifications.notificationCount
-        }
-        realm.insertOrUpdate(roomSummaryEntity)
-
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {

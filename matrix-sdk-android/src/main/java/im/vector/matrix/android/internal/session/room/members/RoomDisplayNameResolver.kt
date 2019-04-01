@@ -30,13 +30,14 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.last
+import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
 
 /**
  * This class computes room display name
  */
-internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
+internal class RoomDisplayNameResolver(private val context: Context,
+                                       private val monarchy: Monarchy,
                                        private val roomMemberDisplayNameResolver: RoomMemberDisplayNameResolver,
                                        private val credentials: Credentials
 ) {
@@ -44,11 +45,10 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
     /**
      * Compute the room display name
      *
-     * @param context
      * @param roomId: the roomId to resolve the name of.
      * @return the room display name
      */
-    fun resolve(context: Context, roomId: String): CharSequence {
+    fun resolve(roomId: String): CharSequence {
         // this algorithm is the one defined in
         // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
         // calculateRoomName(room, userId)
@@ -58,19 +58,19 @@ internal class RoomDisplayNameResolver(private val monarchy: Monarchy,
         var name: CharSequence? = null
         monarchy.doWithRealm { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_NAME).last()?.asDomain()
+            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_NAME).prev()?.asDomain()
             name = roomName?.content.toModel<RoomNameContent>()?.name
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val canonicalAlias = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).last()?.asDomain()
+            val canonicalAlias = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).prev()?.asDomain()
             name = canonicalAlias?.content.toModel<RoomCanonicalAliasContent>()?.canonicalAlias
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val aliases = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).last()?.asDomain()
+            val aliases = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()?.asDomain()
             name = aliases?.content.toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm

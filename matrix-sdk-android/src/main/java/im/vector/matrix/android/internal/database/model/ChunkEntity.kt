@@ -19,12 +19,18 @@ package im.vector.matrix.android.internal.database.model
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.RealmResults
+import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
 
-internal open class ChunkEntity(var prevToken: String? = null,
-                                var nextToken: String? = null,
-                                var isLast: Boolean = false,
-                                var events: RealmList<EventEntity> = RealmList()
+internal open class ChunkEntity(@Index var prevToken: String? = null,
+                                @Index var nextToken: String? = null,
+                                var events: RealmList<EventEntity> = RealmList(),
+                                @Index var isLastForward: Boolean = false,
+                                @Index var isLastBackward: Boolean = false,
+                                var backwardsDisplayIndex: Int? = null,
+                                var forwardsDisplayIndex: Int? = null,
+                                var backwardsStateIndex: Int? = null,
+                                var forwardsStateIndex: Int? = null
 ) : RealmObject() {
 
     @LinkingObjects("chunks")

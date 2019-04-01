@@ -3,7 +3,7 @@
 
     <!-- DARK THEME COLORS -->
 
-    <style name="AppTheme.Base.Dark" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme.Base.Dark" parent="Theme.MaterialComponents.NoActionBar.Bridge">
         <item name="colorPrimaryDark">@color/primary_color_dark_dark</item>
         <item name="colorPrimary">@color/primary_color_dark</item>
         <item name="colorAccent">@color/accent_color_dark</item>

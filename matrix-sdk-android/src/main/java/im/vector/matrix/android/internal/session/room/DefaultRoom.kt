@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
@@ -45,18 +46,16 @@ internal class DefaultRoom(
 
 
 ) : Room,
-    TimelineService by timelineService,
-    SendService by sendService,
-    ReadService by readService {
+        TimelineService by timelineService,
+        SendService by sendService,
+        ReadService by readService {
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
-        val liveData = monarchy
-                .findAllMappedWithChanges(
-                        { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
-                        { from -> from.asDomain() })
-
-        Transformations.map(liveData) {
-            it.first()
+        val liveRealmData = RealmLiveData<RoomSummaryEntity>(monarchy.realmConfiguration) { realm ->
+            RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
+        }
+        Transformations.map(liveRealmData) { results ->
+            results.map { it.asDomain() }.first()
         }
     }
 

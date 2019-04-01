@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.sync
 import arrow.core.Try
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import timber.log.Timber
+import kotlin.system.measureTimeMillis
 
 internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
                                    private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
@@ -26,16 +27,19 @@ internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
 
     fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
         return Try {
-            Timber.v("Handle sync response")
-            if (syncResponse.rooms != null) {
-                roomSyncHandler.handle(syncResponse.rooms)
+            Timber.v("Start handling sync")
+            val measure = measureTimeMillis {
+                if (syncResponse.rooms != null) {
+                    roomSyncHandler.handle(syncResponse.rooms)
+                }
+                if (syncResponse.groups != null) {
+                    groupSyncHandler.handle(syncResponse.groups)
+                }
+                if (syncResponse.accountData != null) {
+                    userAccountDataSyncHandler.handle(syncResponse.accountData)
+                }
             }
-            if (syncResponse.groups != null) {
-                groupSyncHandler.handle(syncResponse.groups)
-            }
-            if (syncResponse.accountData != null) {
-                userAccountDataSyncHandler.handle(syncResponse.accountData)
-            }
+            Timber.v("Finish handling sync in $measure ms")
             syncResponse
         }
     }

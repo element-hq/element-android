@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.database.helper
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.database.mapper.toEntity
-import im.vector.matrix.android.internal.database.mapper.updateWith
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.fastContains
@@ -31,7 +30,6 @@ internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
 }
 
 internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {
-    chunkEntity.updateDisplayIndexes()
     if (!chunks.contains(chunkEntity)) {
         chunks.add(chunkEntity)
     }
@@ -47,8 +45,10 @@ internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
         if (event.eventId == null || (filterDuplicates && fastContains(event.eventId))) {
             return@forEach
         }
-        val eventEntity = event.toEntity(roomId)
-        eventEntity.updateWith(stateIndex, isUnlinked)
+        val eventEntity = event.toEntity(roomId).apply {
+            this.stateIndex = stateIndex
+            this.isUnlinked = isUnlinked
+        }
         untimelinedStateEvents.add(eventEntity)
     }
 }

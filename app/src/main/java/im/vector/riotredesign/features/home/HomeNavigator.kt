@@ -37,7 +37,8 @@ class HomeNavigator {
                        addToBackstack: Boolean = false) {
         Timber.v("Open room detail $roomId - $eventId - $addToBackstack")
         activity?.let {
-            val args = RoomDetailArgs(roomId, eventId)
+            //TODO enable eventId permalink. It doesn't work enough at the moment.
+            val args = RoomDetailArgs(roomId)
             val roomDetailFragment = RoomDetailFragment.newInstance(args)
             it.drawerLayout?.closeDrawer(GravityCompat.START)
             if (addToBackstack) {

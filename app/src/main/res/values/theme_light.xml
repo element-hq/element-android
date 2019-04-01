@@ -3,7 +3,7 @@
 
     <!-- LIGHT THEME COLORS -->
 
-    <style name="AppTheme.Base.Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="colorPrimaryDark">@color/primary_color_dark_light</item>
         <item name="colorPrimary">@color/primary_color_light</item>
         <item name="colorAccent">@color/accent_color_light</item>

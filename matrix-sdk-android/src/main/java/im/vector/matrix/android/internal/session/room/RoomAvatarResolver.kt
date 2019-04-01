@@ -25,7 +25,7 @@ import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.last
+import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.members.RoomMembers
 
@@ -41,7 +41,7 @@ internal class RoomAvatarResolver(private val monarchy: Monarchy,
         var res: String? = null
         monarchy.doWithRealm { realm ->
             val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_AVATAR).last()?.asDomain()
+            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_AVATAR).prev()?.asDomain()
             res = roomName?.content.toModel<RoomAvatarContent>()?.avatarUrl
             if (!res.isNullOrEmpty()) {
                 return@doWithRealm

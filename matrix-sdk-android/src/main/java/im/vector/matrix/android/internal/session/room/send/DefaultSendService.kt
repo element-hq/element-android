@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.helper.add
-import im.vector.matrix.android.internal.database.helper.updateDisplayIndexes
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
@@ -49,7 +48,6 @@ internal class DefaultSendService(private val roomId: String,
             val chunkEntity = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
                     ?: return@tryTransactionAsync
             chunkEntity.add(roomId, event, PaginationDirection.FORWARDS)
-            chunkEntity.updateDisplayIndexes()
         }
 
         val sendContentWorkerParams = SendEventWorker.Params(roomId, event)

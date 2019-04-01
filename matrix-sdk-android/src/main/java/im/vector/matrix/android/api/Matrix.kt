@@ -50,11 +50,9 @@ class Matrix private constructor(context: Context) : MatrixKoinComponent {
         val authModule = AuthModule().definition
         MatrixKoinHolder.instance.loadModules(listOf(matrixModule, networkModule, authModule))
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
-        val lastActiveSession = authenticator.getLastActiveSession()
-        if (lastActiveSession != null) {
-            currentSession = lastActiveSession.apply {
-                open()
-            }
+        authenticator.getLastActiveSession()?.also {
+            currentSession = it
+            it.open()
         }
     }
 

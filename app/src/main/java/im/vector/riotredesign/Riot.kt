@@ -19,6 +19,8 @@ package im.vector.riotredesign
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
+import com.airbnb.epoxy.EpoxyAsyncUtil
+import com.airbnb.epoxy.EpoxyController
 import com.facebook.stetho.Stetho
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
@@ -50,6 +52,8 @@ class Riot : Application() {
 
         AndroidThreeTen.init(this)
         BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
+        EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+        EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         val appModule = AppModule(applicationContext).definition
         val homeModule = HomeModule().definition
         startKoin(listOf(appModule, homeModule), logger = EmptyLogger())

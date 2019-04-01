@@ -16,20 +16,18 @@
 
 package im.vector.matrix.android.api.session.room.timeline
 
-import androidx.lifecycle.LiveData
-
 /**
  * This interface defines methods to interact with the timeline. It's implemented at the room level.
  */
 interface TimelineService {
 
     /**
-     * This is the main method of the service. It allows to listen for live [TimelineData].
-     * It's automatically refreshed as soon as timeline data gets updated, through sync or pagination.
-     *
-     * @param eventId: an optional eventId to start loading timeline around.
-     * @return the [LiveData] of [TimelineData]
+     * Instantiate a [Timeline] with an optional initial eventId, to be used with permalink.
+     * You can filter the type you want to grab with the allowedTypes param.
+     * @param eventId the optional initial eventId.
+     * @param allowedTypes the optional filter types
+     * @return the instantiated timeline
      */
-    fun timeline(eventId: String? = null): LiveData<TimelineData>
+    fun createTimeline(eventId: String?, allowedTypes: List<String>? = null): Timeline
 
 }

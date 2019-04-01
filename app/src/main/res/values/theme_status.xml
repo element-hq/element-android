@@ -3,7 +3,7 @@
 
     <!-- STATUS.IM THEME COLORS -->
 
-    <style name="AppTheme.Base.Status" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.Base.Status" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="colorPrimaryDark">@color/primary_color_dark_status</item>
         <item name="colorPrimary">@color/primary_color_status</item>
         <item name="colorAccent">@color/accent_color_status</item>
@@ -21,7 +21,8 @@
 
         <!-- default background color -->
         <item name="android:colorBackground">@color/riot_primary_background_color_status</item>
-        <item name="vctr_bottom_nav_background_color">@color/riot_primary_background_color_status</item>
+        <item name="vctr_bottom_nav_background_color">@color/riot_primary_background_color_status
+        </item>
 
         <!-- waiting view background -->
         <item name="vctr_waiting_background_color">#AAAAAAAA</item>
@@ -108,7 +109,8 @@
         <item name="vctr_tabbar_background">@drawable/vector_tabbar_background_status</item>
 
         <item name="vctr_pill_background_user_id">@drawable/pill_background_user_id_status</item>
-        <item name="vctr_pill_background_room_alias">@drawable/pill_background_room_alias_status</item>
+        <item name="vctr_pill_background_room_alias">@drawable/pill_background_room_alias_status
+        </item>
 
         <item name="vctr_pill_text_color_user_id">@color/riot_primary_text_color_status</item>
         <item name="vctr_pill_text_color_room_alias">@android:color/white</item>

@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail
+package im.vector.matrix.android.api.util
 
-import androidx.recyclerview.widget.LinearLayoutManager
-import im.vector.riotredesign.core.platform.DefaultListUpdateCallback
+class CancelableBag : Cancelable {
 
-class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager) : DefaultListUpdateCallback {
+    private val cancelableList = ArrayList<Cancelable>()
 
-    override fun onInserted(position: Int, count: Int) {
-        if (position == 0 && layoutManager.findFirstVisibleItemPosition() == 0) {
-            layoutManager.scrollToPosition(0)
-        }
+    fun add(cancelable: Cancelable) {
+        cancelableList.add(cancelable)
     }
 
+    override fun cancel() {
+        cancelableList.forEach { it.cancel() }
+    }
+
+}
+
+fun Cancelable.addTo(cancelables: CancelableBag) {
+    cancelables.add(this)
 }

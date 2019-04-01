@@ -16,10 +16,9 @@
 
 package im.vector.matrix.android.session.room.timeline
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.isUnlinked
@@ -27,6 +26,9 @@ import im.vector.matrix.android.internal.database.helper.lastStateIndex
 import im.vector.matrix.android.internal.database.helper.merge
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
+import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeListOfEvents
+import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeMessageEvent
+import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeRoomMemberEvent
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
@@ -35,9 +37,10 @@ import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
-import kotlin.random.Random
+import org.junit.runner.RunWith
 
 
+@RunWith(AndroidJUnit4::class)
 internal class ChunkEntityTest : InstrumentedTest {
 
     private lateinit var monarchy: Monarchy
@@ -54,7 +57,7 @@ internal class ChunkEntityTest : InstrumentedTest {
     fun add_shouldAdd_whenNotAlreadyIncluded() {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeEvent(false)
+            val fakeEvent = createFakeMessageEvent()
             chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.events.size shouldEqual 1
         }
@@ -64,7 +67,7 @@ internal class ChunkEntityTest : InstrumentedTest {
     fun add_shouldNotAdd_whenAlreadyIncluded() {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeEvent(false)
+            val fakeEvent = createFakeMessageEvent()
             chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.events.size shouldEqual 1
@@ -75,7 +78,7 @@ internal class ChunkEntityTest : InstrumentedTest {
     fun add_shouldStateIndexIncremented_whenStateEventIsAddedForward() {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeEvent(true)
+            val fakeEvent = createFakeRoomMemberEvent()
             chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.lastStateIndex(PaginationDirection.FORWARDS) shouldEqual 1
         }
@@ -85,7 +88,7 @@ internal class ChunkEntityTest : InstrumentedTest {
     fun add_shouldStateIndexNotIncremented_whenNoStateEventIsAdded() {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeEvent(false)
+            val fakeEvent = createFakeMessageEvent()
             chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.lastStateIndex(PaginationDirection.FORWARDS) shouldEqual 0
         }
@@ -134,13 +137,13 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk2: ChunkEntity = realm.createObject()
             val eventsForChunk1 = createFakeListOfEvents(30)
             val eventsForChunk2 = eventsForChunk1 + createFakeListOfEvents(10)
-            chunk1.isLast = true
-            chunk2.isLast = false
+            chunk1.isLastForward = true
+            chunk2.isLastForward = false
             chunk1.addAll("roomId", eventsForChunk1, PaginationDirection.FORWARDS)
             chunk2.addAll("roomId", eventsForChunk2, PaginationDirection.BACKWARDS)
             chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
             chunk1.events.size shouldEqual 40
-            chunk1.isLast.shouldBeTrue()
+            chunk1.isLastForward.shouldBeTrue()
         }
     }
 
@@ -194,17 +197,6 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
             chunk1.nextToken shouldEqual nextToken
         }
-    }
-
-
-    private fun createFakeListOfEvents(size: Int = 10): List<Event> {
-        return (0 until size).map { createFakeEvent(Random.nextBoolean()) }
-    }
-
-    private fun createFakeEvent(asStateEvent: Boolean = false): Event {
-        val eventId = Random.nextLong(System.currentTimeMillis()).toString()
-        val type = if (asStateEvent) EventType.STATE_ROOM_NAME else EventType.MESSAGE
-        return Event(type, eventId)
     }
 
 }

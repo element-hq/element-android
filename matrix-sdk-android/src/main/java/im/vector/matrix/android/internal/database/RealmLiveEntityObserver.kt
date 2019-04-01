@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicReference
 internal interface LiveEntityObserver {
     fun start()
     fun dispose()
+    fun isStarted(): Boolean
 }
 
 internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val monarchy: Monarchy)
@@ -55,7 +56,9 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
         }
     }
 
-    // PRIVATE
+    override fun isStarted(): Boolean {
+        return isStarted.get()
+    }
 
     private fun onChanged(realmResults: RealmResults<T>, changeSet: OrderedCollectionChangeSet) {
         val insertionIndexes = changeSet.insertions
@@ -64,9 +67,9 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
         val inserted = realmResults.filterIndexed { index, _ -> insertionIndexes.contains(index) }
         val updated = realmResults.filterIndexed { index, _ -> updateIndexes.contains(index) }
         val deleted = realmResults.filterIndexed { index, _ -> deletionIndexes.contains(index) }
-        process(inserted, updated, deleted)
+        processChanges(inserted, updated, deleted)
     }
 
-    abstract fun process(inserted: List<T>, updated: List<T>, deleted: List<T>)
+    protected abstract fun processChanges(inserted: List<T>, updated: List<T>, deleted: List<T>)
 
 }

@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMember
 data class TimelineEvent(
         val root: Event,
         val localId: String,
+        val displayIndex: Int,
         val roomMember: RoomMember?
 ) {
 

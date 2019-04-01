@@ -24,9 +24,11 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
+import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
+import io.realm.kotlin.createObject
 
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Boolean> {
 
@@ -38,17 +40,17 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Boolea
 
 internal class DefaultLoadRoomMembersTask(private val roomAPI: RoomAPI,
                                           private val monarchy: Monarchy,
-                                          private val syncTokenStore: SyncTokenStore
+                                          private val syncTokenStore: SyncTokenStore,
+                                          private val roomSummaryUpdater: RoomSummaryUpdater
 ) : LoadRoomMembersTask {
 
     override fun execute(params: LoadRoomMembersTask.Params): Try<Boolean> {
         return if (areAllMembersAlreadyLoaded(params.roomId)) {
             Try.just(true)
         } else {
-            //TODO use this token
             val lastToken = syncTokenStore.getLastToken()
             executeRequest<RoomMembersResponse> {
-                apiCall = roomAPI.getMembers(params.roomId, null, null, params.excludeMembership?.value)
+                apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
             }.flatMap { response ->
                 insertInDb(response, params.roomId)
             }.map { true }
@@ -60,22 +62,24 @@ internal class DefaultLoadRoomMembersTask(private val roomAPI: RoomAPI,
                 .tryTransactionSync { realm ->
                     // We ignore all the already known members
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                            ?: throw IllegalStateException("You shouldn't use this method without a room")
+                                     ?: realm.createObject(roomId)
 
                     val roomMembers = RoomMembers(realm, roomId).getLoaded()
                     val eventsToInsert = response.roomMemberEvents.filter { !roomMembers.containsKey(it.stateKey) }
 
                     roomEntity.addStateEvents(eventsToInsert)
                     roomEntity.areAllMembersLoaded = true
+
+                    roomSummaryUpdater.update(realm, roomId)
                 }
                 .map { response }
     }
 
     private fun areAllMembersAlreadyLoaded(roomId: String): Boolean {
         return monarchy
-                .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
-                .firstOrNull()
-                ?.areAllMembersLoaded ?: false
+                       .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
+                       .firstOrNull()
+                       ?.areAllMembersLoaded ?: false
     }
 
 }

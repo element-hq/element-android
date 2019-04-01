@@ -23,7 +23,7 @@ import kotlin.random.Random
 
 internal class FakePaginationTask(private val tokenChunkEventPersistor: TokenChunkEventPersistor) : PaginationTask {
 
-    override fun execute(params: PaginationTask.Params): Try<Boolean> {
+    override fun execute(params: PaginationTask.Params): Try<TokenChunkEventPersistor.Result> {
         val fakeEvents = RoomDataHelper.createFakeListOfEvents(30)
         val tokenChunkEvent = FakeTokenChunkEvent(params.from, Random.nextLong(System.currentTimeMillis()).toString(), fakeEvents)
         return tokenChunkEventPersistor.insertInDb(tokenChunkEvent, params.roomId, params.direction)

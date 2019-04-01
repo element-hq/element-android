@@ -56,8 +56,8 @@ internal class DefaultSetReadMarkersTask(private val roomAPI: RoomAPI,
             markers[READ_MARKER] = params.fullyReadEventId
         }
         if (params.readReceiptEventId != null
-            && MatrixPatterns.isEventId(params.readReceiptEventId)
-            && !isEventRead(params.roomId, params.readReceiptEventId)) {
+                && MatrixPatterns.isEventId(params.readReceiptEventId)
+                && !isEventRead(params.roomId, params.readReceiptEventId)) {
 
             updateNotificationCountIfNecessary(params.roomId, params.readReceiptEventId)
             markers[READ_RECEIPT] = params.readReceiptEventId
@@ -76,7 +76,7 @@ internal class DefaultSetReadMarkersTask(private val roomAPI: RoomAPI,
             val isLatestReceived = EventEntity.latestEvent(realm, roomId)?.eventId == eventId
             if (isLatestReceived) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                  ?: return@tryTransactionAsync
+                        ?: return@tryTransactionAsync
                 roomSummary.notificationCount = 0
                 roomSummary.highlightCount = 0
             }
@@ -87,13 +87,14 @@ internal class DefaultSetReadMarkersTask(private val roomAPI: RoomAPI,
         var isEventRead = false
         monarchy.doWithRealm {
             val readReceipt = ReadReceiptEntity.where(it, roomId, credentials.userId).findFirst()
-                              ?: return@doWithRealm
+                    ?: return@doWithRealm
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(it, roomId)
-                            ?: return@doWithRealm
+                    ?: return@doWithRealm
             val readReceiptIndex = liveChunk.events.find(readReceipt.eventId)?.displayIndex
-                                   ?: Int.MAX_VALUE
-            val eventToCheckIndex = liveChunk.events.find(eventId)?.displayIndex ?: -1
-            isEventRead = eventToCheckIndex >= readReceiptIndex
+                    ?: Int.MIN_VALUE
+            val eventToCheckIndex = liveChunk.events.find(eventId)?.displayIndex
+                    ?: Int.MAX_VALUE
+            isEventRead = eventToCheckIndex <= readReceiptIndex
         }
         return isEventRead
     }

@@ -25,7 +25,7 @@ import kotlin.random.Random
 
 internal class FakeGetContextOfEventTask(private val tokenChunkEventPersistor: TokenChunkEventPersistor) : GetContextOfEventTask {
 
-    override fun execute(params: GetContextOfEventTask.Params): Try<TokenChunkEvent> {
+    override fun execute(params: GetContextOfEventTask.Params): Try<TokenChunkEventPersistor.Result> {
         val fakeEvents = RoomDataHelper.createFakeListOfEvents(30)
         val tokenChunkEvent = FakeTokenChunkEvent(
                 Random.nextLong(System.currentTimeMillis()).toString(),
@@ -33,7 +33,6 @@ internal class FakeGetContextOfEventTask(private val tokenChunkEventPersistor: T
                 fakeEvents
         )
         return tokenChunkEventPersistor.insertInDb(tokenChunkEvent, params.roomId, PaginationDirection.BACKWARDS)
-                .map { tokenChunkEvent }
     }
 
 

@@ -35,7 +35,6 @@ import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayN
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.user.DefaultUserService
 import im.vector.matrix.android.internal.session.user.UserEntityUpdater
-import im.vector.matrix.android.internal.session.user.UserModule
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import org.koin.dsl.module.module
@@ -84,11 +83,15 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomDisplayNameResolver(get(), get(), sessionParams.credentials)
+            RoomDisplayNameResolver(get(), get(), get(), sessionParams.credentials)
         }
 
         scope(DefaultSession.SCOPE) {
             RoomAvatarResolver(get(), sessionParams.credentials)
+        }
+
+        scope(DefaultSession.SCOPE) {
+            RoomSummaryUpdater(get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -112,11 +115,10 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            val roomSummaryUpdater = RoomSummaryUpdater(get(), get(), get(), get(), sessionParams.credentials)
             val groupSummaryUpdater = GroupSummaryUpdater(get())
             val eventsPruner = EventsPruner(get())
             val userEntityUpdater = UserEntityUpdater(get(), get(), get())
-            listOf<LiveEntityObserver>(roomSummaryUpdater, groupSummaryUpdater, eventsPruner, userEntityUpdater)
+            listOf<LiveEntityObserver>(groupSummaryUpdater, eventsPruner, userEntityUpdater)
         }
 
 
