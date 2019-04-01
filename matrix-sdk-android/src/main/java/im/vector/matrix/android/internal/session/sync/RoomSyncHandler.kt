@@ -32,9 +32,14 @@ import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoo
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
-import im.vector.matrix.android.internal.session.sync.model.*
+import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
+import im.vector.matrix.android.internal.session.sync.model.RoomSync
+import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
+import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
+import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import timber.log.Timber
 
 internal class RoomSyncHandler(private val monarchy: Monarchy,
                                private val readReceiptHandler: ReadReceiptHandler,
@@ -70,8 +75,10 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                  roomId: String,
                                  roomSync: RoomSync): RoomEntity {
 
+        Timber.v("Handle join sync for room $roomId")
+
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                         ?: realm.createObject(roomId)
 
         if (roomEntity.membership == MyMembership.INVITED) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -119,6 +126,9 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                   roomId: String,
                                   roomSync:
                                   InvitedRoomSync): RoomEntity {
+
+        Timber.v("Handle invited sync for room $roomId")
+
         val roomEntity = RoomEntity()
         roomEntity.roomId = roomId
         roomEntity.membership = MyMembership.INVITED
@@ -164,7 +174,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         ephemeral.events
                 .filter { it.type == EventType.RECEIPT }
                 .map { it.content.toModel<ReadReceiptContent>() }
-                .flatMap { readReceiptHandler.handle(realm, roomId, it) }
+                .forEach { readReceiptHandler.handle(realm, roomId, it) }
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {

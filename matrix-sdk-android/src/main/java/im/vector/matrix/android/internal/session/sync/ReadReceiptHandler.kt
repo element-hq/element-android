@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import io.realm.Realm
+import timber.log.Timber
 
 
 // the receipts dictionnaries
@@ -29,26 +30,32 @@ typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, D
 
 internal class ReadReceiptHandler {
 
-    fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?): List<ReadReceiptEntity> {
+    fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?) {
         if (content == null) {
-            return emptyList()
+            return
         }
-        val readReceipts = content
+        try {
+            val readReceipts = mapContentToReadReceiptEntities(roomId, content)
+            realm.insertOrUpdate(readReceipts)
+        } catch (exception: Exception) {
+            Timber.e("Fail to handle read receipt for room $roomId")
+        }
+    }
+
+    private fun mapContentToReadReceiptEntities(roomId: String, content: ReadReceiptContent): List<ReadReceiptEntity> {
+        return content
                 .flatMap { (eventId, receiptDict) ->
                     receiptDict
                             .filterKeys { it == "m.read" }
                             .flatMap { (_, userIdsDict) ->
                                 userIdsDict.map { (userId, paramsDict) ->
                                     val ts = paramsDict.filterKeys { it == "ts" }
-                                            .values
-                                            .firstOrNull() ?: 0.0
+                                                     .values
+                                                     .firstOrNull() ?: 0.0
                                     val primaryKey = roomId + userId
                                     ReadReceiptEntity(primaryKey, userId, eventId, roomId, ts)
                                 }
                             }
                 }
-        realm.insertOrUpdate(readReceipts)
-        return readReceipts
     }
-
 }
