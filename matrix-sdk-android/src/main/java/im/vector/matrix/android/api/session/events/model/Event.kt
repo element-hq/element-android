@@ -36,6 +36,18 @@ inline fun <reified T> Content?.toModel(): T? {
 }
 
 /**
+ * This methods is a facility method to map a model to a json Content
+ */
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T> T?.toContent(): Content? {
+    return this?.let {
+        val moshi = MoshiProvider.providesMoshi()
+        val moshiAdapter = moshi.adapter(T::class.java)
+        return moshiAdapter.toJsonValue(it) as Content
+    }
+}
+
+/**
  * Generic event class with all possible fields for events.
  * The content and prevContent json fields can easily be mapped to a model with [toModel] method.
  */

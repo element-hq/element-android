@@ -36,7 +36,12 @@ import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoo
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import io.realm.*
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import io.realm.Sort
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -97,10 +102,14 @@ internal class DefaultTimeline(
             val state = getPaginationState(direction)
             if (state.isPaginating) {
                 // We are getting new items from pagination
-                paginateInternal(startDisplayIndex, direction, state.requestedCount)
+                val shouldPostSnapshot = paginateInternal(startDisplayIndex, direction, state.requestedCount)
+                if (shouldPostSnapshot) {
+                    postSnapshot()
+                }
             } else {
                 // We are getting new items from sync
                 buildTimelineEvents(startDisplayIndex, direction, range.length.toLong())
+                postSnapshot()
             }
         }
     }
@@ -114,7 +123,10 @@ internal class DefaultTimeline(
             }
             Timber.v("Paginate $direction of $count items")
             val startDisplayIndex = if (direction == Timeline.Direction.BACKWARDS) prevDisplayIndex else nextDisplayIndex
-            paginateInternal(startDisplayIndex, direction, count)
+            val shouldPostSnapshot = paginateInternal(startDisplayIndex, direction, count)
+            if (shouldPostSnapshot) {
+                postSnapshot()
+            }
         }
     }
 
@@ -191,13 +203,15 @@ internal class DefaultTimeline(
 
     /**
      * This has to be called on TimelineThread as it access realm live results
+     * @return true if snapshot should be posted
      */
     private fun paginateInternal(startDisplayIndex: Int,
                                  direction: Timeline.Direction,
-                                 count: Int) {
+                                 count: Int): Boolean {
         updatePaginationState(direction) { it.copy(requestedCount = count, isPaginating = true) }
         val builtCount = buildTimelineEvents(startDisplayIndex, direction, count.toLong())
-        if (builtCount < count && !hasReachedEnd(direction)) {
+        val shouldFetchMore = builtCount < count && !hasReachedEnd(direction)
+        if (shouldFetchMore) {
             val newRequestedCount = count - builtCount
             updatePaginationState(direction) { it.copy(requestedCount = newRequestedCount) }
             val fetchingCount = Math.max(MIN_FETCHING_COUNT, newRequestedCount)
@@ -205,6 +219,7 @@ internal class DefaultTimeline(
         } else {
             updatePaginationState(direction) { it.copy(isPaginating = false, requestedCount = 0) }
         }
+        return !shouldFetchMore
     }
 
     private fun snapshot(): List<TimelineEvent> {
@@ -252,12 +267,13 @@ internal class DefaultTimeline(
         } else {
             val count = Math.min(INITIAL_LOAD_SIZE, liveEvents.size)
             if (isLive) {
-                paginate(Timeline.Direction.BACKWARDS, count)
+                paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count)
             } else {
-                paginate(Timeline.Direction.FORWARDS, count / 2)
-                paginate(Timeline.Direction.BACKWARDS, count / 2)
+                paginateInternal(initialDisplayIndex, Timeline.Direction.FORWARDS, count / 2)
+                paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count / 2)
             }
         }
+        postSnapshot()
     }
 
     /**
@@ -266,9 +282,9 @@ internal class DefaultTimeline(
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
         val token = getTokenLive(direction) ?: return
         val params = PaginationTask.Params(roomId = roomId,
-                from = token,
-                direction = direction.toPaginationDirection(),
-                limit = limit)
+                                           from = token,
+                                           direction = direction.toPaginationDirection(),
+                                           limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         paginationTask.configureWith(params)
@@ -336,8 +352,6 @@ internal class DefaultTimeline(
             builtEvents.add(position, timelineEvent)
         }
         Timber.v("Built ${offsetResults.size} items from db")
-        val snapshot = snapshot()
-        mainHandler.post { listener?.onUpdated(snapshot) }
         return offsetResults.size
     }
 
@@ -397,6 +411,11 @@ internal class DefaultTimeline(
     private fun fetchEvent(eventId: String) {
         val params = GetContextOfEventTask.Params(roomId, eventId)
         contextOfEventTask.configureWith(params).executeBy(taskExecutor)
+    }
+
+    private fun postSnapshot() {
+        val snapshot = snapshot()
+        mainHandler.post { listener?.onUpdated(snapshot) }
     }
 
 // Extension methods ***************************************************************************

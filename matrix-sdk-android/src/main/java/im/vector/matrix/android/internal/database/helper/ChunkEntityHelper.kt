@@ -54,10 +54,14 @@ internal fun ChunkEntity.merge(roomId: String,
     if (direction == PaginationDirection.FORWARDS) {
         this.nextToken = chunkToMerge.nextToken
         this.isLastForward = chunkToMerge.isLastForward
+        this.forwardsStateIndex = chunkToMerge.forwardsStateIndex
+        this.forwardsDisplayIndex = chunkToMerge.forwardsDisplayIndex
         eventsToMerge = chunkToMerge.events.sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
     } else {
         this.prevToken = chunkToMerge.prevToken
         this.isLastBackward = chunkToMerge.isLastBackward
+        this.backwardsStateIndex = chunkToMerge.backwardsStateIndex
+        this.backwardsDisplayIndex = chunkToMerge.backwardsDisplayIndex
         eventsToMerge = chunkToMerge.events.sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     }
     eventsToMerge.forEach {
@@ -111,8 +115,7 @@ internal fun ChunkEntity.add(roomId: String,
         this.displayIndex = currentDisplayIndex
     }
     // We are not using the order of the list, but will be sorting with displayIndex field
-    val position = if (direction == PaginationDirection.FORWARDS) 0 else this.events.size
-    events.add(position, eventEntity)
+    events.add(eventEntity)
 }
 
 private fun ChunkEntity.assertIsManaged() {

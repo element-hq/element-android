@@ -48,7 +48,6 @@ internal class DefaultLoadRoomMembersTask(private val roomAPI: RoomAPI,
         return if (areAllMembersAlreadyLoaded(params.roomId)) {
             Try.just(true)
         } else {
-            //TODO use this token
             val lastToken = syncTokenStore.getLastToken()
             executeRequest<RoomMembersResponse> {
                 apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
@@ -63,7 +62,7 @@ internal class DefaultLoadRoomMembersTask(private val roomAPI: RoomAPI,
                 .tryTransactionSync { realm ->
                     // We ignore all the already known members
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                            ?: realm.createObject(roomId)
+                                     ?: realm.createObject(roomId)
 
                     val roomMembers = RoomMembers(realm, roomId).getLoaded()
                     val eventsToInsert = response.roomMemberEvents.filter { !roomMembers.containsKey(it.stateKey) }
@@ -78,9 +77,9 @@ internal class DefaultLoadRoomMembersTask(private val roomAPI: RoomAPI,
 
     private fun areAllMembersAlreadyLoaded(roomId: String): Boolean {
         return monarchy
-                .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
-                .firstOrNull()
-                ?.areAllMembersLoaded ?: false
+                       .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
+                       .firstOrNull()
+                       ?.areAllMembersLoaded ?: false
     }
 
 }
