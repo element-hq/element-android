@@ -1123,7 +1123,7 @@ A la pantalla següent se us demanarà que permeteu al Riot executar-se sempre a
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
 
-    <string name="store_title">Riot.im - Comunica\'t, a la teva manera.</string>
+    <string name="store_title">Riot.im - Comunica\'t, a la teva manera</string>
     <string name="store_whats_new">"Sempre hi som fent canvis i millores al Riot.im.
 Podeu trobar el registre de canvis complet aquí: %1$s.
 Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades."</string>
@@ -1382,4 +1382,25 @@ Per què triar Riot.im?
     <string name="new_recovery_method_popup_description">S\'ha trobat una còpia de seguretat nova de la clau.
 \n
 \nSi no heu configurat el mètode de recuperació nou, un atacant podria estar intentant accedir al vostre compte. Canvieu la contrasenya del vostre compte i configureu-hi un mètode de recuperació nou immediatament a la configuració.</string>
+    <string name="notification_sync_init">Inicialitzar servei</string>
+    <string name="ignore">Ignorar</string>
+
+    <string name="auth_login_sso">Registrar-se amb Single Sign-on</string>
+    <string name="login_error_unknown_host">Aquesta URL no està disponible , si us plau verifiqueu-la</string>
+    <string name="login_error_ssl_handshake">El vostre dispositiu està usant una versió obsoleta del protocol de seguretat TLS, vulnerable a atacs. Per a la vostra seguretat no us podreu connectar</string>
+    <string name="settings_send_message_with_enter">Envieu un missatge amb Enter</string>
+    <string name="settings_send_message_with_enter_summary">La tecla Enter del teclat virtual enviarà un missatge en comptes d\'afegir un salt de línia</string>
+
+    <string name="settings_change_password_submit">Actualitzar la contrasenya</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">La contrasenya no és vàlida</string>
+    <string name="passwords_do_not_match">Les contrasenyes no coincideixen</string>
+
+    <string name="settings_media">Medis</string>
+    <string name="settings_default_compression">Compressió estàndard</string>
+    <string name="compression_opt_list_choose">Escollir</string>
+    <string name="settings_default_media_source">Origen de medis per defecte</string>
+    <string name="media_source_choose">Escollir</string>
+    <string name="autodiscover_invalid_response">Resposta no vàlida en descobrir homeservers</string>
+    <string name="autodiscover_well_known_autofill_confirm">Usar Config</string>
+
 </resources>

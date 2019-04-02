@@ -1180,7 +1180,7 @@ Ayrıca e-posta adresi, şifrenizi sıfırlamanıza da olanak tanır.</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Geçerli Google Play Hizmetleri APK\'sı bulunamadı. Bildirimler olması gerektiği gibi çalışmayacak.</string>
 
-    <string name="store_title">Riot.im - İletişim, senin yolunda.</string>
+    <string name="store_title">Riot.im - İletişim, senin yolunda</string>
     <string name="store_whats_new">"Biz her zaman Riot.im’e geliştirmeler ve değişimler yapıyoruz.
 Tam değişiklikler listesi burada bulunabilir: %1$s.
 Bir şeyleri kaçırmamak için güncellemeleri açık tutun."</string>

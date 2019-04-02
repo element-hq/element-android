@@ -838,7 +838,7 @@
     <string name="startup_notification_privacy_button_grant">获取权限</string>
     <string name="startup_notification_privacy_button_other">选择其他选项</string>
 
-    <string name="settings_notification_privacy_fcm">• 通知通过 Google Cloud Messaging 发送</string>
+    <string name="settings_notification_privacy_fcm">• 通知通过 Firebase Cloud Messaging 发送</string>
     <string name="settings_notification_privacy_metadata">• 通知只含有元数据</string>
     <string name="settings_notification_privacy_message_content_not_shown">• 通知<b>不会显示消息内容</b></string>
 
@@ -1092,7 +1092,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="plus_x">+%d</string>
     <string name="generic_label_and_value">%1$s：%2$s</string>
     <string name="generic_label">%1$s：</string>
-    <string name="store_title">Riot.im - 沟通，由你掌控。</string>
+    <string name="store_title">Riot.im - 沟通，由你掌控</string>
     <string name="store_short_description">一款完全由你掌控的通用安全聊天应用。</string>
     <string name="show_info_area_always">总是</string>
     <string name="show_info_area_messages_and_errors">消息与错误</string>
@@ -1354,5 +1354,29 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="autodiscover_well_known_autofill_dialog_message">Riot 侦测到您的 userId 域名 \"%s\" 有自定义的服务器设置：
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">使用设置</string>
+
+    <string name="notification_sync_init">正在初始化服务</string>
+    <string name="settings_media">媒体</string>
+    <string name="settings_default_compression">默认压缩</string>
+    <string name="compression_opt_list_choose">选择</string>
+    <string name="settings_default_media_source">默认媒体来源</string>
+    <string name="media_source_choose">选择</string>
+    <string name="settings_play_shutter_sound">播放快门声</string>
+
+    <string name="action_mark_room_read">标记为已读</string>
+    <string name="settings_notification_privacy_no_background_sync">本应用 <b>不</b> 需要在后台连接主服务器，应能减少电量消耗</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="other">%1$s: %2$d 条消息</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="other">%d 条通知</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">新活动</string>
+    <string name="notification_unknown_room_name">聊天室</string>
+    <string name="notification_new_messages">新消息</string>
+    <string name="notification_new_invitation">新邀请</string>
+    <string name="notification_sender_me">我</string>
+    <string name="notification_inline_reply_failed">** 发送失败 - 请打开聊天室</string>
 
 </resources>

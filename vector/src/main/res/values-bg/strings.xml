@@ -1134,7 +1134,7 @@
 
     <string name="no_valid_google_play_services_apk">Не беше открит валиден APK пакет за Google Play услугите. Уведомленията може да не работят правилно.</string>
 
-    <string name="store_title">Riot.im - комуникирайте по свой начин.</string>
+    <string name="store_title">Riot.im - комуникирайте по свой начин</string>
     <string name="store_short_description">Универсален и сигурен чат изцяло под ваш контрол.</string>
     <string name="store_full_description">"Чат приложение, което е изцяло гъвкаво и под Ваш контрол. Riot позволява да комуникирате по начина, по който искате. Направено за [matrix] - стандарт за отворена и децентрализирана комуникация.
 
@@ -1361,5 +1361,31 @@
     <string name="autodiscover_well_known_autofill_dialog_message">Riot откри конфигурация за собствен сървър за домейна от потребителското Ви име \"%s\":
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Използвай конфигурацията</string>
+
+    <string name="notification_sync_init">Инициализиране на услугата</string>
+    <string name="settings_media">Медия</string>
+    <string name="settings_default_compression">Компресия по подразбиране</string>
+    <string name="compression_opt_list_choose">Избери</string>
+    <string name="settings_default_media_source">Източник на медия по подразбиране</string>
+    <string name="media_source_choose">Избери</string>
+    <string name="settings_play_shutter_sound">Издавай звук при снимане</string>
+
+    <string name="action_mark_room_read">Маркирай като прочетено</string>
+    <string name="settings_notification_privacy_no_background_sync">Приложението <b>няма</b> нужда да се свързва със сървъра във фонов режим, което трябва да намали използването на енергия</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 съобщение</item>
+        <item quantity="other">%1$s: %2$d съобщения</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d известие</item>
+        <item quantity="other">%d известия</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Ново събитие</string>
+    <string name="notification_unknown_room_name">Стая</string>
+    <string name="notification_new_messages">Нови съобщения</string>
+    <string name="notification_new_invitation">Нова покана</string>
+    <string name="notification_sender_me">Аз</string>
+    <string name="notification_inline_reply_failed">** Неуспешно изпращане - моля, отворете стаята</string>
 
 </resources>

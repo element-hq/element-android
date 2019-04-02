@@ -43,8 +43,8 @@
     <string name="notice_room_name_removed">%1$s ha eliminat el nom de la sala</string>
     <string name="notice_room_topic_removed">%1$s ha eliminat el tema de la sala</string>
     <string name="notice_event_redacted">"ha redactat %1$s "</string>
-    <string name="notice_event_redacted_by">" per %1$s"</string>
-    <string name="notice_event_redacted_reason">" [raó: %1$s]"</string>
+    <string name="notice_event_redacted_by">per %1$s</string>
+    <string name="notice_event_redacted_reason">[raó: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s ha actualitzat el seu perfil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s ha enviat una invitació a l\'usuari %2$s per a entrar a la sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s ha acceptat la invitació per a %2$s</string>

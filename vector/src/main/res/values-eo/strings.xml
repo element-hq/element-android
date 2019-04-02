@@ -6,7 +6,7 @@
     <string name="black_them">Nigra haŭto</string>
 
     <string name="notification_sync_in_progress">Sinkroniganta</string>
-    <string name="notification_listening_for_events">Atenti pri eventoj</string>
+    <string name="notification_listening_for_events">Atentanta pri eventoj</string>
     <string name="notification_noisy_notifications">Laŭtaj sciigoj</string>
     <string name="notification_silent_notifications">Silentaj sciigoj</string>
 
@@ -72,4 +72,25 @@
     <string name="action_close">Fermi</string>
     <string name="room_message_placeholder_reply_to_encrypted">Sendi ĉifritan respondon…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Sendi respondon (neĉifritan)…</string>
+    <string name="bottom_action_people">Homoj</string>
+    <string name="bottom_action_rooms">Babilejoj</string>
+    <string name="bottom_action_groups">Komunumoj</string>
+
+    <string name="home_filter_placeholder_home">Filtri nomojn de babilejoj</string>
+    <string name="home_filter_placeholder_people">Filtri homojn</string>
+    <string name="home_filter_placeholder_rooms">Filtri nomojn de babilejoj</string>
+    <string name="room_details_people">Homoj</string>
+    <string name="room_details_files">Dosieroj</string>
+    <string name="room_details_settings">Agordoj</string>
+    <string name="tab_title_search_people">HOMOJ</string>
+    <string name="tab_title_search_files">DOSIEROJ</string>
+
+    <string name="room_recents_join">ALIĜI</string>
+    <string name="group_details_people">Homoj</string>
+    <string name="group_details_rooms">Babilejoj</string>
+    <string name="no_users_placeholder">Neniu uzantoj</string>
+
+    <string name="rooms">Babilejoj</string>
+    <string name="room_jump_to_first_unread">Salti al unua nelegita mesaĝo.</string>
+
 </resources>

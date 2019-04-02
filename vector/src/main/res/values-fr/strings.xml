@@ -852,7 +852,7 @@ Appareils inconnus :</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_reduced">Confidentialité réduite</string>
     <string name="settings_notification_privacy_need_permission">L\'application a besoin de la permission de fonctionner en arrière-plan</string>
-    <string name="settings_notification_privacy_fcm">• Les notifications sont envoyées via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Les notifications sont envoyées via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Les notifications ne contiennent que des métadonnées</string>
     <string name="settings_notification_privacy_secure_message_content">• Le contenu du message de notification est <b>issu directement du serveur d’accueil Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Les notifications contiennent <b>des métadonnées et des messages</b></string>
@@ -1149,7 +1149,7 @@ Sur l’écran suivant on vous demandera d’autoriser Riot à toujours fonction
 
     <string name="no_valid_google_play_services_apk">Aucun APK des services Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement.</string>
 
-    <string name="store_title">Riot.im - Communiquez, à votre façon.</string>
+    <string name="store_title">Riot.im - Communiquez, à votre façon</string>
     <string name="store_short_description">Une application de discussion sécurisée universelle que vous contrôlez.</string>
     <string name="store_full_description">"Une application de discussion, que vous contrôlez et entièrement flexible. Riot vous laisse communiquer comme vous le souhaitez. Conçu pour [matrix], le standard pour les communications libres et décentralisées.
 
@@ -1384,5 +1384,23 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="settings_default_media_source">Source de médias par défaut</string>
     <string name="media_source_choose">Choisir</string>
     <string name="settings_play_shutter_sound">Jouer le son de l’obturateur</string>
+
+    <string name="action_mark_room_read">Marquer comme lu</string>
+    <string name="settings_notification_privacy_no_background_sync">Les applications &lt;b&gt;n’&lt;/a&gt;ont &lt;b&gt;pas&lt;/b&gt; besoin d’être connectées au serveur d’accueil en arrière-plan, cela devrait diminuer l’utilisation de la batterie<b>not</b> need to connect to the HomeServer in the background, it should reduce battery usage</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s : 1 message</item>
+        <item quantity="other">%1$s : %2$d messages</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d notification</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Nouvel évènement</string>
+    <string name="notification_unknown_room_name">Salon</string>
+    <string name="notification_new_messages">Nouveaux messages</string>
+    <string name="notification_new_invitation">Nouvelle invitation</string>
+    <string name="notification_sender_me">Moi</string>
+    <string name="notification_inline_reply_failed">** Échec de l’envoi − veuillez ouvrir le salon</string>
 
 </resources>

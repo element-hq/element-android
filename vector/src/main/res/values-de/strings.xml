@@ -509,9 +509,9 @@ Um fortzufahren, gib dein Passwort ein.</string>
     <string name="account_phone_number_already_used_error">Diese Telefonnummer wird bereits verwendet.</string>
 
     <string name="settings_change_password">Passwort ändern</string>
-    <string name="settings_old_password">Altes Passwort</string>
+    <string name="settings_old_password">Aktuelles Passwort</string>
     <string name="settings_new_password">Neues Passwort</string>
-    <string name="settings_confirm_password">Passwort bestätigen</string>
+    <string name="settings_confirm_password">Neues Passwort bestätigen</string>
     <string name="settings_fail_to_update_password">Ändern des Passworts fehlgeschlagen</string>
     <string name="settings_password_updated">Dein Passwort wurde aktualisiert</string>
     <string name="settings_unignore_user">Alle Nachrichten von %s anzeigen?
@@ -901,7 +901,7 @@ Unbekannte Geräte:</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_reduced">Verringerter Datenschutz</string>
     <string name="settings_notification_privacy_need_permission">Dies App braucht die Berechtigung im Hintergrund zu laufen</string>
-    <string name="settings_notification_privacy_fcm">• Benachrichtigungen werden über Google Cloud Messaging versendet</string>
+    <string name="settings_notification_privacy_fcm">• Benachrichtigungen werden über Firebase Cloud Messaging versendet</string>
     <string name="settings_notification_privacy_metadata">• Benachrichtigungen enthalten nur Metadaten</string>
     <string name="settings_notification_privacy_secure_message_content">• Der Nachrichteninhalt der Benachrichtigung wird <b>sicher vom Matrix-Heimserver abgerufen</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Benachrichtigungen enthalten <b>Metadaten und Nachrichteninhalte</b></string>
@@ -933,10 +933,10 @@ Willst du welche hinzufügen?</string>
     <string name="dialog_user_consent_submit">Jetzt prüfen</string>
 
     <string name="deactivate_account_title">Account deaktiveren</string>
-    <string name="deactivate_account_content">Dies wir dein Konto permanent unbenutzbar machen. Du wirst dich nicht anmelden können und keiner wird den selben Nutzernamen erneut registrieren können. Dies wird dein Konto aus allen Räumen austreten lassen, an denen es teilnimmt und es wird deine Kontoangaben vom Identitätsserver löschen. <b>Diese Aktion ist unumkehrbar</b>.
-\n
-\nDie Deaktivierung deines Konto wird standardmäßig <b>keine deiner gesendeten Nachrichten löschen</b>. Wenn du möchtest, dass auch deine Nachrichten gelöscht werden, wähle zusätzlich die untere Option.
-\n
+    <string name="deactivate_account_content">Dies wir dein Konto permanent unbenutzbar machen. Du wirst dich nicht anmelden können und keiner wird denselben Nutzernamen erneut registrieren können. Dies wird dein Konto aus allen Räumen austreten lassen, an denen es teilnimmt und es wird deine Kontoangaben vom Identitätsserver löschen. <b>Diese Aktion ist unumkehrbar</b>. 
+\n 
+\nDie Deaktivierung deines Konto wird standardmäßig <b>keine deiner gesendeten Nachrichten löschen</b>. Wenn du möchtest, dass auch deine Nachrichten gelöscht werden, wähle zusätzlich die untere Option. 
+\n 
 \nDie Sichtbarkeit deiner Nachrichten ist ähnlich wie bei E-Mails: Wenn deine Nachrichten gelöscht werden, bedeutet dies, dass von dir verschickte Nachrichten nicht mit neuen oder unregistrierten Nutzern geteilt werden. Aber registrierte Nutzer, die bereits Zugang zu diesen Nachrichten haben, behalten weiterhin Zugriff auf ihr Exemplar.</string>
     <string name="deactivate_account_delete_checkbox">Bitte alle Nachrichten, die ich gesendet habe, löschen, wenn mein Account deaktiviert wird (Warnung: Unterhaltungen werden für zukünftige Nutzer unvollständig erscheinen)</string>
     <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Password eingeben:</string>
@@ -985,7 +985,7 @@ Willst du welche hinzufügen?</string>
     <string name="command_description_kick_user">Kickt Benutzer mit angegebener ID</string>
     <string name="command_description_nick">Ändert deinen Anzeigenamen</string>
     <string name="command_description_markdown">(De-)Aktiviert Markdown</string>
-    <string name="command_description_clear_scalar_token">Setzt Matrix-App-Token zurück</string>
+    <string name="command_description_clear_scalar_token">Um das Matrix-App-Management zu reparieren</string>
 
     <string name="room_tombstone_versioned_description">Dieser Raum wurde ersetzt und ist nicht länger aktiv</string>
     <string name="room_tombstone_continuation_link">Die Konversation wird hier fortgesetzt</string>
@@ -1182,7 +1182,7 @@ Versuche die Anwendung neuzustarten.</string>
     <string name="settings_troubleshoot_test_play_services_title">Prüfung der Play-Dienste</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play-Dienste-APK ist verfügbar und aktuell.</string>
     <string name="settings_troubleshoot_test_token_registration_title">Token-Registrierung</string>
-    <string name="settings_troubleshoot_test_battery_failed">"Wenn ein Benutzer ein abgestecktes Gerät mit ausgeschaltetem Bildschirm eine Weile nicht bewegt, wechselt es in den Doze-Modus. Dies hindert Apps daran, auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen. "</string>
+    <string name="settings_troubleshoot_test_battery_failed">Wenn ein Benutzer ein abgestecktes Gerät mit ausgeschaltetem Bildschirm eine Weile nicht bewegt, wechselt es in den Doze-Modus. Dies hindert Apps daran, auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoriere Optimierungen</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Hintergrundverbindung</string>
@@ -1197,7 +1197,7 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="no_valid_google_play_services_apk">Keine validen Google-Play-Dienste gefunden. Benachrichtigungen könnten nicht richtig funktionieren.</string>
 
-    <string name="store_title">Riot.im - Kommunizierte auf deine Weise.</string>
+    <string name="store_title">Riot.im - Kommunizierte auf deine Weise</string>
     <string name="store_short_description">Eine universelle, sichere Chat-App - komplett unter deiner Kontrolle.</string>
     <string name="store_full_description">"Eine Chat-App unter deiner Kontrolle und total flexibel. Riot lässt dich auf die Art kommunizieren wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
 
@@ -1341,7 +1341,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_get_trust_error">Konnte Vertrauensinformationen für die Sicherung nicht abrufen (%s).</string>
 
     <string name="keys_backup_settings_untrusted_backup">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, gebe jetzt deine Wiederherstellungspassphrase oder -schlüssel ein.</string>
-    <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen um deinen verschlüsselten Chatverlauf zu lesen.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen\? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen können, um deinen verschlüsselten Chatverlauf zu lesen.</string>
 
     <string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen ihre verschlüsselten Nachrichten verloren</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Schlüssel-Sicherung wird durchgeführt. Wenn sie sich jetzt ausloggen, dann gehen ihre verschlüsselten Nachrichten verloren.</string>
@@ -1421,10 +1421,9 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_fail_to_update_password_invalid_current_password">Das Passwort ist ungültig</string>
     <string name="passwords_do_not_match">Passwörter stimmen nicht überein</string>
 
-    <string name="autodiscover_invalid_response">Ungültige Rückmeldung bei Heimserver-Entdeckung</string>
+    <string name="autodiscover_invalid_response">Ungültige Antwort beim Entdecken des Heimservers</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden
-\n\"%s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%s\": 
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Nutze Konfiguration</string>
 
@@ -1435,5 +1434,23 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_default_media_source">Standard-Medienquelle</string>
     <string name="media_source_choose">Wählen</string>
     <string name="settings_play_shutter_sound">Auslöseton abspielen</string>
+
+    <string name="action_mark_room_read">Als gelesen markieren</string>
+    <string name="settings_notification_privacy_no_background_sync">Die App muss <b>nicht</b> im Hintergrund zum Heimserver verbinden, dies sollte die Akkunutzung reduzieren</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 Nachricht</item>
+        <item quantity="other">%1$s: %2$d Nachrichten</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d Nachricht</item>
+        <item quantity="other">%d Nachrichten</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Neues Ereignis</string>
+    <string name="notification_unknown_room_name">Raum</string>
+    <string name="notification_new_messages">Neue Nachrichten</string>
+    <string name="notification_new_invitation">Neue Einladung</string>
+    <string name="notification_sender_me">Ich</string>
+    <string name="notification_inline_reply_failed">** Fehler beim Senden - bitte Raum öffnen</string>
 
 </resources>
