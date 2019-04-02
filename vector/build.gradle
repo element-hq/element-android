@@ -74,10 +74,12 @@ android {
     buildTypes {
         debug {
             resValue "bool", "debug_mode", "true"
+            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
         }
 
         release {
             resValue "bool", "debug_mode", "false"
+            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -181,6 +183,9 @@ dependencies {
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
     implementation 'com.airbnb.android:mvrx:0.7.0'
 
+    // Work
+    implementation "android.arch.work:work-runtime-ktx:1.0.0"
+
     // FP
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 
@@ -209,9 +214,16 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
+    // Badge for compatibility
+    implementation 'me.leolin:ShortcutBadger:1.1.2@aar'
+
     // DI
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-scope:$koin_version"
+
+    // gplay flavor only
+    gplayImplementation 'com.google.firebase:firebase-core:16.0.8'
+    gplayImplementation 'com.google.firebase:firebase-messaging:17.5.0'
 
     // TESTS
     testImplementation 'junit:junit:4.12'
@@ -219,4 +231,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
 
-
+if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid")) {
+    apply plugin: 'com.google.gms.google-services'
+}

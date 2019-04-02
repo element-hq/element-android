@@ -19,6 +19,7 @@ package im.vector.matrix.android.api.session
 import androidx.annotation.MainThread
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.user.UserService
@@ -27,7 +28,7 @@ import im.vector.matrix.android.api.session.user.UserService
  * This interface defines interactions with a session.
  * An instance of a session will be provided by the SDK.
  */
-interface Session : RoomService, GroupService, UserService {
+interface Session : RoomService, GroupService, UserService, CryptoService {
 
     /**
      * The params associated to the session
@@ -68,6 +69,5 @@ interface Session : RoomService, GroupService, UserService {
      */
     // Not used at the moment
     interface Listener
-
 
 }

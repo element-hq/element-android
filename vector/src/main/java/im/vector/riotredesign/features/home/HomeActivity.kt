@@ -37,6 +37,7 @@ import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotredesign.features.settings.VectorSettingsActivity
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
@@ -101,10 +102,16 @@ class HomeActivity : RiotActivity(), ToolbarConfigurable {
         drawerToggle.syncState()
     }
 
+    override fun getMenuRes() = R.menu.home
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 drawerLayout.openDrawer(GravityCompat.START)
+                return true
+            }
+            R.id.sliding_menu_settings -> {
+                startActivity(VectorSettingsActivity.getIntent(this, "TODO"))
                 return true
             }
         }
