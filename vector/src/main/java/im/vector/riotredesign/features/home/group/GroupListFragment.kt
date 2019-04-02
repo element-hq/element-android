@@ -17,9 +17,6 @@
 package im.vector.riotredesign.features.home.group
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -44,9 +41,7 @@ class GroupListFragment : RiotFragment(), GroupSummaryController.Callback {
     private val viewModel: GroupListViewModel by fragmentViewModel()
     private val groupController by inject<GroupSummaryController>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_group_list, container, false)
-    }
+    override fun getLayoutResId() = R.layout.fragment_group_list
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
