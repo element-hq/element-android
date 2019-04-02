@@ -21,15 +21,23 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.dialogs.DialogListItem
+import im.vector.riotredesign.core.dialogs.DialogSendItemAdapter
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
+import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
+import im.vector.riotredesign.core.utils.checkPermissions
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
@@ -79,6 +87,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         setupRecyclerView()
         setupToolbar()
         setupSendButton()
+        setupAttachmentButton()
         roomDetailViewModel.subscribe { renderState(it) }
     }
 
@@ -124,6 +133,61 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
             if (textMessage.isNotBlank()) {
                 roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage))
                 composerEditText.text = null
+            }
+        }
+    }
+
+    private fun setupAttachmentButton() {
+        attachmentButton.setOnClickListener {
+            val items = ArrayList<DialogListItem>()
+            // Send file
+            items.add(DialogListItem.SendFile)
+            // Send voice
+            /*
+            if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
+                items.add(DialogListItem.SendVoice.INSTANCE)
+            }
+            */
+
+            // Send sticker
+            items.add(DialogListItem.SendSticker)
+            // Camera
+
+            //if (PreferencesManager.useNativeCamera(this)) {
+            items.add(DialogListItem.TakePhoto)
+            items.add(DialogListItem.TakeVideo)
+            //} else {
+//                items.add(DialogListItem.TakePhotoVideo.INSTANCE)
+            //          }
+            val adapter = DialogSendItemAdapter(requireContext(), items)
+            AlertDialog.Builder(requireContext())
+                    .setAdapter(adapter, { dialog, which ->
+                        onSendChoiceClicked(items[which])
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+        }
+    }
+
+    private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
+        when (dialogListItem) {
+            is DialogListItem.SendFile       -> {
+                //launchFileSelectionIntent()
+            }
+            is DialogListItem.SendVoice      -> {
+                //launchAudioRecorderIntent()
+            }
+            is DialogListItem.SendSticker    -> {
+                //startStickerPickerActivity()
+            }
+            is DialogListItem.TakePhotoVideo -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                //    launchCamera()
+            }
+            is DialogListItem.TakePhoto      -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
+                //    launchNativeCamera()
+            }
+            is DialogListItem.TakeVideo      -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
+                //  launchNativeVideoRecorder()
             }
         }
     }

@@ -94,6 +94,17 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
+            android:id="@+id/attachmentButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/sendButton"
+            android:layout_toLeftOf="@id/sendButton"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_attach_file_white"
+            android:tint="?attr/colorAccent" />
+
+        <ImageButton
             android:id="@+id/sendButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -111,8 +122,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/sendButton"
-            android:layout_toLeftOf="@id/sendButton"
+            android:layout_toStartOf="@id/attachmentButton"
+            android:layout_toLeftOf="@id/attachmentButton"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:hint="@string/room_message_placeholder_not_encrypted"
