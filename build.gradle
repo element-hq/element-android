@@ -41,7 +41,7 @@ sonarqube {
         property "sonar.projectName", "RiotX-Android"
         property "sonar.projectKey", "vector.android.riotx"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.projectVersion", project(":app").android.defaultConfig.versionName
+        property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.links.homepage", "https://github.com/vector-im/riotX-android/"
         property "sonar.links.ci", "https://matrix.org/jenkins/view/MatrixView/job/RiotXAndroidDevelop/"
@@ -52,10 +52,10 @@ sonarqube {
     }
 }
 
-project(":app") {
+project(":vector") {
     sonarqube {
         properties {
-            property "sonar.sources", project(":app").android.sourceSets.main.java.srcDirs
+            property "sonar.sources", project(":vector").android.sourceSets.main.java.srcDirs
             // exclude source code from analyses separated by a colon (:)
             // property "sonar.exclusions", "**/*.*"
         }
