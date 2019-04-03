@@ -18,7 +18,7 @@
 
         <activity
             android:name=".features.MainActivity"
-            android:theme="@style/Theme.Riot.Splash">
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
