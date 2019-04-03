@@ -47,6 +47,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.extensions.withArgs
 import im.vector.riotredesign.core.platform.SimpleTextWatcher
+import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.ProgressBarPreference
 import im.vector.riotredesign.core.preference.UserAvatarPreference
@@ -57,7 +58,7 @@ import org.koin.android.ext.android.inject
 import java.lang.ref.WeakReference
 import java.util.*
 
-class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     // members
     private val mSession by inject<Session>()

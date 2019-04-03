@@ -24,19 +24,19 @@ import android.os.Parcelable
 import android.view.View
 import androidx.core.content.edit
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.withArgs
 import im.vector.riotredesign.core.platform.RiotActivity
+import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.BingRulePreference
 import im.vector.riotredesign.features.notifications.NotificationUtils
 import im.vector.riotredesign.features.notifications.supportNotificationChannels
 import org.koin.android.ext.android.inject
 
-class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentCompat() {
+class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFragment() {
 
     // members
     private val mSession by inject<Session>()
