@@ -107,35 +107,7 @@ android {
     }
 
     lintOptions {
-        warning 'MissingTranslation'
-
-        // Treat some warnings as errors
-        // Resources
-        error 'TypographyEllipsis'
-        warning 'ImpliedQuantity'
-
-        // UX
-        error 'ButtonOrder'
-
-        // Layout
-        error 'UnknownIdInLayout'
-        error 'StringFormatCount'
-        error 'HardcodedText'
-        error 'SpUsage'
-        error 'ObsoleteLayoutParam'
-        error 'InefficientWeight'
-        error 'DisableBaselineAlignment'
-        error 'ScrollViewSize'
-
-        // RTL
-        error 'RtlEnabled'
-        error 'RtlHardcoded'
-        error 'RtlSymmetry'
-
-        // Code
-        error 'SetTextI18n'
-        error 'ViewConstructor'
-        error 'UseValueOf'
+        lintConfig file("lint.xml")
     }
 
     compileOptions {

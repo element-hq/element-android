@@ -58,6 +58,10 @@ android {
     adbOptions {
         installOptions "-g"
     }
+
+    lintOptions {
+        lintConfig file("lint.xml")
+    }
 }
 
 static def gitRevision() {

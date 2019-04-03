@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:orientation="horizontal" >
+    android:paddingBottom="10dp">
 
     <ImageView
         android:id="@+id/imageView_icon_and_text"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/matrix_user"/>
+        android:src="@drawable/matrix_user" />
 
     <TextView
         android:id="@+id/textView_icon_and_text"
@@ -24,7 +25,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:singleLine="true"
-        android:text = "A text here"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white"
+        tools:text="A text here" />
 
 </LinearLayout>
