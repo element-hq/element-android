@@ -11,7 +11,7 @@
     </style>
 
     <!-- toolbar styles-->
-    <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
+    <style name="VectorToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:background">?colorPrimary</item>
         <item name="background">?colorPrimary</item>
 

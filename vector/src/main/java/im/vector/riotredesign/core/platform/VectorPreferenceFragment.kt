@@ -18,6 +18,8 @@ package im.vector.riotredesign.core.platform
 
 import androidx.annotation.CallSuper
 import androidx.preference.PreferenceFragmentCompat
+import im.vector.riotredesign.R
+import im.vector.riotredesign.core.utils.toast
 import timber.log.Timber
 
 abstract class VectorPreferenceFragment : PreferenceFragmentCompat() {
@@ -35,6 +37,16 @@ abstract class VectorPreferenceFragment : PreferenceFragmentCompat() {
         super.onResume()
 
         Timber.d("onResume Fragment ${this.javaClass.simpleName}")
+    }
+
+    /* ==========================================================================================
+     * Protected
+     * ========================================================================================== */
+
+    protected fun notImplemented() {
+        // Snackbar cannot be display on PreferenceFragment
+        // Snackbar.make(view!!, R.string.not_implemented, Snackbar.LENGTH_SHORT)
+        activity?.toast(R.string.not_implemented)
     }
 
 }

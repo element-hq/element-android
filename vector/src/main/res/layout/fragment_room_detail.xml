@@ -7,6 +7,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        style="@style/VectorToolbarStyle"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
         android:background="?attr/colorPrimary"
@@ -40,6 +41,7 @@
                 android:layout_marginEnd="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:textColor="?vctr_toolbar_primary_text_color"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/toolbarSubtitleView"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -57,6 +59,7 @@
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:textColor="?vctr_toolbar_secondary_text_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -76,13 +79,14 @@
         app:layout_constraintBottom_toTopOf="@+id/composerDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:listitem="@layout/item_timeline_event_text_message" />
 
     <View
         android:id="@+id/composerDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/pale_grey"
+        android:background="?vctr_list_divider_color"
         app:layout_constraintBottom_toTopOf="@+id/composerLayout" />
 
     <RelativeLayout
