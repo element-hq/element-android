@@ -53,7 +53,9 @@ object MediaContentRenderer {
         val resolvedUrl = when (mode) {
             Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
             Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-        } ?: return
+        }
+        //Fallback to base url
+                ?: data.url
 
         GlideApp
                 .with(imageView)
@@ -68,8 +70,8 @@ object MediaContentRenderer {
         val fullSize = contentUrlResolver.resolveFullSize(data.url)
         val thumbnail = contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
         imageView.showImage(
-                Uri.parse(thumbnail),
-                Uri.parse(fullSize)
+                Uri.parse(thumbnail ?: data.url),
+                Uri.parse(fullSize ?: data.url)
         )
     }
 

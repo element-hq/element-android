@@ -17,27 +17,45 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
-import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.room.media.MediaAttachment
 
 internal class EventFactory(private val credentials: Credentials) {
 
-    private val moshi = MoshiProvider.providesMoshi()
-
     fun createTextEvent(roomId: String, text: String): Event {
         val content = MessageTextContent(type = MessageType.MSGTYPE_TEXT, body = text)
+        return createEvent(roomId, content)
+    }
 
+    fun createImageEvent(roomId: String, attachment: MediaAttachment): Event {
+        val content = MessageImageContent(
+                type = MessageType.MSGTYPE_IMAGE,
+                body = attachment.name ?: "image",
+                url = attachment.path
+        )
+        return createEvent(roomId, content)
+    }
+
+    fun updateImageEvent(event: Event, url: String): Event {
+        val imageContent = event.content.toModel<MessageImageContent>() ?: return event
+        val updatedContent = imageContent.copy(url = url)
+        return event.copy(content = updatedContent.toContent())
+    }
+
+    fun createEvent(roomId: String, content: Any? = null): Event {
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 sender = credentials.userId,
                 eventId = dummyEventId(roomId),
                 type = EventType.MESSAGE,
-                content = toContent(content)
+                content = content.toContent()
         )
     }
 
@@ -48,13 +66,4 @@ internal class EventFactory(private val credentials: Credentials) {
     private fun dummyEventId(roomId: String): String {
         return roomId + "-" + dummyOriginServerTs()
     }
-
-    @Suppress("UNCHECKED_CAST")
-    private inline fun <reified T> toContent(data: T?): Content? {
-        val moshiAdapter = moshi.adapter(T::class.java)
-        val jsonValue = moshiAdapter.toJsonValue(data)
-        return jsonValue as? Content?
-    }
-
-
 }

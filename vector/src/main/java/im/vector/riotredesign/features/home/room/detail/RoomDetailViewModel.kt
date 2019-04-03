@@ -22,6 +22,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.internal.session.room.media.MediaAttachment
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
@@ -64,6 +65,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     fun process(action: RoomDetailActions) {
         when (action) {
             is RoomDetailActions.SendMessage    -> handleSendMessage(action)
+            is RoomDetailActions.SendMedia      -> handleSendMedia(action)
             is RoomDetailActions.IsDisplayed    -> handleIsDisplayed()
             is RoomDetailActions.EventDisplayed -> handleEventDisplayed(action)
             is RoomDetailActions.LoadMore       -> handleLoadMore(action)
@@ -74,6 +76,25 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     private fun handleSendMessage(action: RoomDetailActions.SendMessage) {
         room.sendTextMessage(action.text, callback = object : MatrixCallback<Event> {})
+    }
+
+    private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
+        val attachment = action.mediaFiles.firstOrNull()
+                ?.let {
+                    MediaAttachment(
+                            it.size,
+                            it.duration,
+                            it.date,
+                            it.height,
+                            it.width,
+                            it.name,
+                            it.thumbnail,
+                            it.path,
+                            it.mimeType
+                    )
+                }
+                ?: return
+        room.sendMedia(attachment, callback = object : MatrixCallback<Event> {})
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {

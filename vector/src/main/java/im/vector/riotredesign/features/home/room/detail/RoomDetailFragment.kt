@@ -16,6 +16,8 @@
 
 package im.vector.riotredesign.features.home.room.detail
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -26,6 +28,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.fragmentViewModel
+import com.jaiselrahman.filepicker.activity.FilePickerActivity
+import com.jaiselrahman.filepicker.config.Configurations
+import com.jaiselrahman.filepicker.model.MediaFile
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.dialogs.DialogListItem
@@ -33,11 +38,7 @@ import im.vector.riotredesign.core.dialogs.DialogSendItemAdapter
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
-import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
-import im.vector.riotredesign.core.utils.checkPermissions
+import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
@@ -51,6 +52,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 
 @Parcelize
@@ -59,6 +61,10 @@ data class RoomDetailArgs(
         val eventId: String? = null
 ) : Parcelable
 
+
+private const val CAMERA_VALUE_TITLE = "attachment"
+private const val REQUEST_FILES_REQUEST_CODE = 0
+private const val TAKE_IMAGE_REQUEST_CODE = 1
 
 class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
@@ -90,6 +96,16 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         setupAttachmentButton()
         roomDetailViewModel.subscribe { renderState(it) }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && data != null) {
+            when (requestCode) {
+                REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
+            }
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -150,7 +166,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
             */
 
             // Send sticker
-            items.add(DialogListItem.SendSticker)
+            //items.add(DialogListItem.SendSticker)
             // Camera
 
             //if (PreferencesManager.useNativeCamera(this)) {
@@ -161,18 +177,24 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
             //          }
             val adapter = DialogSendItemAdapter(requireContext(), items)
             AlertDialog.Builder(requireContext())
-                    .setAdapter(adapter, { dialog, which ->
-                        onSendChoiceClicked(items[which])
-                    })
+                    .setAdapter(adapter) { _, position ->
+                        onSendChoiceClicked(items[position])
+                    }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
         }
     }
 
     private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
+        Timber.v("On send choice clicked: $dialogListItem")
         when (dialogListItem) {
             is DialogListItem.SendFile       -> {
-                //launchFileSelectionIntent()
+                val intent = Intent(requireContext(), FilePickerActivity::class.java)
+                intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
+                        .setCheckPermission(true)
+                        .setSkipZeroSizeFiles(true)
+                        .build())
+                startActivityForResult(intent, REQUEST_FILES_REQUEST_CODE)
             }
             is DialogListItem.SendVoice      -> {
                 //launchAudioRecorderIntent()
@@ -184,12 +206,17 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
                 //    launchCamera()
             }
             is DialogListItem.TakePhoto      -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
-                //    launchNativeCamera()
+                openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
             }
             is DialogListItem.TakeVideo      -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
                 //  launchNativeVideoRecorder()
             }
         }
+    }
+
+    private fun handleMediaIntent(data: Intent) {
+        val files: ArrayList<MediaFile> = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES)
+        roomDetailViewModel.process(RoomDetailActions.SendMedia(files))
     }
 
     private fun renderState(state: RoomDetailViewState) {
