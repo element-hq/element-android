@@ -27,6 +27,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.viewModel
+import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
@@ -38,6 +39,7 @@ import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragmen
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
+import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
@@ -112,6 +114,10 @@ class HomeActivity : RiotActivity(), ToolbarConfigurable {
             }
             R.id.sliding_menu_settings -> {
                 startActivity(VectorSettingsActivity.getIntent(this, "TODO"))
+                return true
+            }
+            R.id.sliding_menu_sign_out -> {
+                SignOutUiWorker(this).perform(Matrix.getInstance().currentSession!!)
                 return true
             }
         }

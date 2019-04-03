@@ -14,28 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api
+package im.vector.matrix.android.api.session.signout
+
+import im.vector.matrix.android.api.MatrixCallback
 
 /**
- * Generic callback interface for asynchronously.
- * @param <T> the type of data to return on success
+ * This interface defines a method to sign out. It's implemented at the session level.
  */
-interface MatrixCallback<in T> {
+interface SignOutService {
 
     /**
-     * On success method, default to no-op
-     * @param data the data successfully returned from the async function
+     * Sign out
      */
-    fun onSuccess(data: T) {
-        //no-op
-    }
-
-    /**
-     * On failure method, default to no-op
-     * @param failure the failure data returned from the async function
-     */
-    fun onFailure(failure: Throwable) {
-        //no-op
-    }
+    fun signOut(callback: MatrixCallback<Unit>)
 
 }

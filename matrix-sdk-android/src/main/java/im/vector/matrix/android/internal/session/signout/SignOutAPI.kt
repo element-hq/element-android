@@ -14,28 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api
+package im.vector.matrix.android.internal.session.signout
 
-/**
- * Generic callback interface for asynchronously.
- * @param <T> the type of data to return on success
- */
-interface MatrixCallback<in T> {
+import im.vector.matrix.android.internal.network.NetworkConstants
+import retrofit2.Call
+import retrofit2.http.POST
 
-    /**
-     * On success method, default to no-op
-     * @param data the data successfully returned from the async function
-     */
-    fun onSuccess(data: T) {
-        //no-op
-    }
+internal interface SignOutAPI {
 
     /**
-     * On failure method, default to no-op
-     * @param failure the failure data returned from the async function
+     * Invalidate the access token, so that it can no longer be used for authorization.
      */
-    fun onFailure(failure: Throwable) {
-        //no-op
-    }
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "logout")
+    fun signOut(): Call<Unit>
 
 }

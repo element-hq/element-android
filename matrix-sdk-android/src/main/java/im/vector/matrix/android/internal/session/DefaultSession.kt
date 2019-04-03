@@ -20,6 +20,7 @@ import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
@@ -29,13 +30,16 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
 import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
+import im.vector.matrix.android.internal.session.signout.SignOutModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.user.UserModule
@@ -57,6 +61,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val roomService by inject<RoomService>()
     private val groupService by inject<GroupService>()
     private val userService by inject<UserService>()
+    private val signOutService by inject<SignOutService>()
     private val syncThread by inject<SyncThread>()
     private val contentUrlResolver by inject<ContentUrlResolver>()
     private var isOpen = false
@@ -70,8 +75,9 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         val syncModule = SyncModule().definition
         val roomModule = RoomModule().definition
         val groupModule = GroupModule().definition
+        val signOutModule = SignOutModule().definition
         val userModule = UserModule().definition
-        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule, userModule))
+        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule, signOutModule, userModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         if (!monarchy.isMonarchyThreadOpen) {
             monarchy.openManually()
@@ -92,6 +98,23 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         }
         scope.close()
         isOpen = false
+    }
+
+    @MainThread
+    override fun signOut(callback: MatrixCallback<Unit>) {
+        assert(isOpen)
+        return signOutService.signOut(object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                // Close the session
+                close()
+
+                callback.onSuccess(data)
+            }
+
+            override fun onFailure(failure: Throwable) {
+                callback.onFailure(failure)
+            }
+        })
     }
 
     override fun contentUrlResolver(): ContentUrlResolver {

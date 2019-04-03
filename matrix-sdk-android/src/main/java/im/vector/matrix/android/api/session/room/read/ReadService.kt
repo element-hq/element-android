@@ -26,16 +26,16 @@ interface ReadService {
     /**
      * Force the read marker to be set on the latest event.
      */
-    fun markAllAsRead(callback: MatrixCallback<Void>)
+    fun markAllAsRead(callback: MatrixCallback<Unit>)
 
     /**
      * Set the read receipt on the event with provided eventId.
      */
-    fun setReadReceipt(eventId: String, callback: MatrixCallback<Void>)
+    fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>)
 
     /**
      * Set the read marker on the event with provided eventId.
      */
-    fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Void>)
+    fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>)
 
 }

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginBottom="8dp"
+        android:text="@string/action_sign_out"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/bottom_sheet_signout_warning_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginBottom="8dp"
+        android:textColor="?android:attr/textColorSecondary"
+        tools:text="@string/sign_out_bottom_sheet_warning_no_backup" />
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_signout_backingup_status_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/bottom_sheet_signout_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/unit_test_ok"
+            tools:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/bottom_sheet_signout_icon_progress_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="visible"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/bottom_sheet_backup_status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            tools:text="@string/keys_backup_info_keys_all_backup_up" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/keys_backup_setup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/layout_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingRight="@dimen/layout_horizontal_margin"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/backup_keys"
+            android:tint="?android:attr/textColorTertiary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/keys_backup_setup"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/keys_backup_activate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/layout_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingRight="@dimen/layout_horizontal_margin"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/backup_keys"
+            android:tint="?android:attr/textColorTertiary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/keys_backup_activate"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/keys_backup_dont_want"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/layout_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingRight="@dimen/layout_horizontal_margin"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_material_leave"
+            android:tint="@color/vector_error_color" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/sign_out_bottom_sheet_dont_want_secure_messages"
+            android:textColor="@color/vector_error_color"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_signout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/layout_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingRight="@dimen/layout_horizontal_margin"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_material_exit_to_app"
+            android:tint="@color/vector_error_color" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/action_sign_out"
+            android:textColor="@color/vector_error_color"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+</LinearLayout>

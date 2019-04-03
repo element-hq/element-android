@@ -17,13 +17,13 @@
 package im.vector.matrix.android.internal.auth.db
 
 import arrow.core.Try
-import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.internal.auth.SessionParamsStore
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
 internal class RealmSessionParamsStore(private val mapper: SessionParamsMapper,
-                              private val realmConfiguration: RealmConfiguration) : SessionParamsStore {
+                                       private val realmConfiguration: RealmConfiguration) : SessionParamsStore {
 
     override fun save(sessionParams: SessionParams): Try<SessionParams> {
         return Try {
@@ -48,6 +48,16 @@ internal class RealmSessionParamsStore(private val mapper: SessionParamsMapper,
                 .lastOrNull()
         realm.close()
         return sessionParams
+    }
+
+    override fun delete() {
+        val realm = Realm.getInstance(realmConfiguration)
+        realm.executeTransaction {
+            it.where(SessionParamsEntity::class.java)
+                    .findAll()
+                    .deleteAllFromRealm()
+        }
+        realm.close()
     }
 
 }
