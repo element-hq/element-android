@@ -691,7 +691,7 @@ Ismeretlen eszközök:</string>
     <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
     <string name="notification_listening_for_events">Események figyelése</string>
 
-    <string name="notification_sync_in_progress">Szinkronizálás</string>
+    <string name="notification_sync_in_progress">Szinkronizálás…</string>
     <string name="call">Hívás</string>
     <string name="settings_containing_my_display_name">Profilnevemet tartalmazó üzenetek</string>
     <string name="settings_containing_my_user_name">Felhasználónevemet tartalmazó üzenetek</string>

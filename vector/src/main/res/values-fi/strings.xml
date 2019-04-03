@@ -713,7 +713,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="dark_theme">Tumma teema</string>
     <string name="black_them">Musta teema</string>
 
-    <string name="notification_sync_in_progress">Synkronoidaan</string>
+    <string name="notification_sync_in_progress">Synkronoidaan…</string>
     <string name="notification_listening_for_events">Seuraa tapahtumia</string>
     <string name="notification_noisy_notifications">Korostetut ilmoitukset</string>
     <string name="notification_silent_notifications">Hiljaiset ilmoitukset</string>

@@ -19,8 +19,8 @@
 # Exit on any error
 set -e
 
-echo "Copy strings to SDK"
 echo
+echo "Copy strings to SDK"
 
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values/strings.xml        ./matrix-sdk-android/src/main/res/values/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-ar/strings.xml     ./matrix-sdk-android/src/main/res/values-ar/strings.xml
@@ -61,8 +61,7 @@ cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-zh-rCN/strings.xml ./mat
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-zh-rTW/strings.xml ./matrix-sdk-android/src/main/res/values-zh-rTW/strings.xml
 
 echo
-echo "Copy strings to Riot"
-echo
+echo "Copy strings to RiotX"
 
 cp ../riot-android/vector/src/main/res/values/strings.xml        ./vector/src/main/res/values/strings.xml
 cp ../riot-android/vector/src/main/res/values-ar/strings.xml     ./vector/src/main/res/values-ar/strings.xml
@@ -107,6 +106,39 @@ cp ../riot-android/vector/src/main/res/values-uk/strings.xml     ./vector/src/ma
 cp ../riot-android/vector/src/main/res/values-zh-rCN/strings.xml ./vector/src/main/res/values-zh-rCN/strings.xml
 cp ../riot-android/vector/src/main/res/values-zh-rTW/strings.xml ./vector/src/main/res/values-zh-rTW/strings.xml
 
+echo
+echo "Copy drawables to RiotX"
+
+cp ../riot-android/vector/src/main/res/drawable/* ./vector/src/main/res/drawable/
+cp ../riot-android/vector/src/main/res/drawable-hdpi/* ./vector/src/main/res/drawable-hdpi/
+cp ../riot-android/vector/src/main/res/drawable-mdpi/* ./vector/src/main/res/drawable-mdpi/
+cp ../riot-android/vector/src/main/res/drawable-xhdpi/* ./vector/src/main/res/drawable-xhdpi/
+cp ../riot-android/vector/src/main/res/drawable-xxhdpi/* ./vector/src/main/res/drawable-xxhdpi/
+cp ../riot-android/vector/src/main/res/drawable-xxxhdpi/* ./vector/src/main/res/drawable-xxxhdpi/
+
+echo
+echo "Copy icon to RiotX"
+
+cp ../riot-android/vector/src/main/res/mipmap-anydpi-v26/* ./vector/src/main/res/mipmap-anydpi-v26/
+cp ../riot-android/vector/src/main/res/mipmap-hdpi/* ./vector/src/main/res/mipmap-hdpi/
+cp ../riot-android/vector/src/main/res/mipmap-mdpi/* ./vector/src/main/res/mipmap-mdpi/
+cp ../riot-android/vector/src/main/res/mipmap-xhdpi/* ./vector/src/main/res/mipmap-xhdpi/
+cp ../riot-android/vector/src/main/res/mipmap-xxhdpi/* ./vector/src/main/res/mipmap-xxhdpi/
+cp ../riot-android/vector/src/main/res/mipmap-xxxhdpi/* ./vector/src/main/res/mipmap-xxxhdpi/
+
+
+echo
+echo "Copy other elements to RiotX"
+
+cp ../riot-android/vector/src/main/res/anim/* ./vector/src/main/res/anim/
+cp ../riot-android/vector/src/main/res/color/* ./vector/src/main/res/color/
+cp ../riot-android/vector/src/main/res/menu/* ./vector/src/main/res/menu/
+cp ../riot-android/vector/src/main/res/menu/* ./vector/src/main/res/menu/
+cp ../riot-android/vector/src/main/res/values-v17/* ./vector/src/main/res/values-v17/
+cp ../riot-android/vector/src/main/res/values-v21/* ./vector/src/main/res/values-v21/
+cp ../riot-android/vector/src/main/res/values-w480dp/* ./vector/src/main/res/values-w480dp/
+cp ../riot-android/vector/src/main/res/values-w820dp/* ./vector/src/main/res/values-w820dp/
+cp ../riot-android/vector/src/main/res/raw/* ./vector/src/main/res/raw/
 
 echo
 echo "Success!"

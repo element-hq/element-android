@@ -64,7 +64,7 @@
     <!-- Last seen time -->
 
     <!-- room error messages -->
-    <string name="room_error_join_failed_empty_room">Het is momenteel niet mogelijk om een lege kamer opnieuw toe te treden.</string>
+    <string name="room_error_join_failed_empty_room">Het is momenteel niet mogelijk om een leeg gesprek opnieuw toe te treden.</string>
 
     <string name="encrypted_message">Versleuteld bericht</string>
 
@@ -85,7 +85,7 @@
     <string name="room_displayname_invite_from">Uitnodiging van %s</string>
     <string name="room_displayname_room_invite">Gespreksuitnodiging</string>
     <string name="room_displayname_two_members">%1$s en %2$s</string>
-    <string name="room_displayname_empty_room">Lege kamer</string>
+    <string name="room_displayname_empty_room">Leeg gesprek</string>
 
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s en 1 andere</item>

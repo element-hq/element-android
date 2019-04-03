@@ -669,7 +669,7 @@ Appareils inconnus :</string>
     <string name="dark_theme">Thème sombre</string>
     <string name="black_them">Thème noir</string>
 
-    <string name="notification_sync_in_progress">Synchronisation</string>
+    <string name="notification_sync_in_progress">Synchronisation…</string>
     <string name="notification_listening_for_events">Écoute d’évènements</string>
 
     <string name="login_mobile_device">Portable</string>

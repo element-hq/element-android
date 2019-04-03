@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/ic_action_vector_set_as_main_address"
+        android:icon="@drawable/ic_material_star_black"
+        android:title="@string/room_settings_set_main_address"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_unset_main_address"
+        android:icon="@drawable/ic_material_star_border_black"
+        android:title="@string/room_settings_unset_main_address"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_copy_alias"
+        android:icon="@drawable/ic_material_copy"
+        android:title="@string/room_settings_copy_room_id"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_room_url"
+        android:icon="@drawable/ic_material_link_black"
+        android:title="@string/room_settings_copy_room_address"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_delete_alias"
+        android:icon="@drawable/ic_material_delete"
+        android:title="@string/delete"
+        app:showAsAction="never" />
+</menu>
