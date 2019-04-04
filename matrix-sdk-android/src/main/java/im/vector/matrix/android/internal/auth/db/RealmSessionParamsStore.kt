@@ -50,14 +50,16 @@ internal class RealmSessionParamsStore(private val mapper: SessionParamsMapper,
         return sessionParams
     }
 
-    override fun delete() {
-        val realm = Realm.getInstance(realmConfiguration)
-        realm.executeTransaction {
-            it.where(SessionParamsEntity::class.java)
-                    .findAll()
-                    .deleteAllFromRealm()
+    override fun delete(): Try<Unit> {
+        return Try {
+            val realm = Realm.getInstance(realmConfiguration)
+            realm.executeTransaction {
+                it.where(SessionParamsEntity::class.java)
+                        .findAll()
+                        .deleteAllFromRealm()
+            }
+            realm.close()
         }
-        realm.close()
     }
 
 }

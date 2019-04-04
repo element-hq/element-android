@@ -30,7 +30,7 @@ internal class DefaultSignOutTask(private val signOutAPI: SignOutAPI,
     override fun execute(params: Unit): Try<Unit> {
         return executeRequest<Unit> {
             apiCall = signOutAPI.signOut()
-        }.map {
+        }.flatMap {
             // TODO Clear DB, media cache, etc.
             sessionParamsStore.delete()
         }
