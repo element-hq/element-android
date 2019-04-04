@@ -17,38 +17,38 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.ImageInfo
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
-import im.vector.matrix.android.internal.session.room.media.MediaAttachment
 
-internal class EventFactory(private val credentials: Credentials) {
+internal class LocalEchoEventFactory(private val credentials: Credentials) {
 
     fun createTextEvent(roomId: String, text: String): Event {
         val content = MessageTextContent(type = MessageType.MSGTYPE_TEXT, body = text)
         return createEvent(roomId, content)
     }
 
-    fun createImageEvent(roomId: String, attachment: MediaAttachment): Event {
+    fun createMediaEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val content = MessageImageContent(
                 type = MessageType.MSGTYPE_IMAGE,
                 body = attachment.name ?: "image",
+                info = ImageInfo(
+                        mimeType = attachment.mimeType ?: "image/png",
+                        width = attachment.width.toInt(),
+                        height = attachment.height.toInt(),
+                        size = attachment.size.toInt()
+                ),
                 url = attachment.path
         )
         return createEvent(roomId, content)
     }
 
-    fun updateImageEvent(event: Event, url: String): Event {
-        val imageContent = event.content.toModel<MessageImageContent>() ?: return event
-        val updatedContent = imageContent.copy(url = url)
-        return event.copy(content = updatedContent.toContent())
-    }
-
-    fun createEvent(roomId: String, content: Any? = null): Event {
+    private fun createEvent(roomId: String, content: Any? = null): Event {
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),

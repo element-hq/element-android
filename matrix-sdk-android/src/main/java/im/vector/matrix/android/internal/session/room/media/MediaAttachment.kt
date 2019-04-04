@@ -18,7 +18,6 @@
 
 package im.vector.matrix.android.internal.session.room.media
 
-import android.net.Uri
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
@@ -30,7 +29,6 @@ data class MediaAttachment(
         val height: Long = 0,
         val width: Long = 0,
         val name: String? = null,
-        val thumbnail: Uri? = null,
         val path: String? = null,
         val mimeType: String? = null
 ) : Parcelable

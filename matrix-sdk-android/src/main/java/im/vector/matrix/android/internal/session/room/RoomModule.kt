@@ -17,12 +17,12 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.session.DefaultSession
-import im.vector.matrix.android.internal.session.room.media.MediaUploader
+import im.vector.matrix.android.internal.session.content.ContentUploader
 import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
-import im.vector.matrix.android.internal.session.room.send.EventFactory
+import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.timeline.*
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -58,11 +58,11 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            EventFactory(get())
+            LocalEchoEventFactory(get())
         }
 
         scope(DefaultSession.SCOPE) {
-            MediaUploader(get(), get())
+            ContentUploader(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

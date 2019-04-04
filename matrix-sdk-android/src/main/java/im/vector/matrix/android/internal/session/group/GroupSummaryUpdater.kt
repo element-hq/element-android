@@ -23,7 +23,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
-import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.WorkerParamsFactory

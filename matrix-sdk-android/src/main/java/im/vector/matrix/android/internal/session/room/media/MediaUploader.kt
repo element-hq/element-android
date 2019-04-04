@@ -20,11 +20,13 @@ package im.vector.matrix.android.internal.session.room.media
 
 import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.internal.session.content.URI_PREFIX_CONTENT_API
+import okhttp3.HttpUrl
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import java.io.File
 import java.io.IOException
 
@@ -32,21 +34,28 @@ import java.io.IOException
 internal class MediaUploader(private val okHttpClient: OkHttpClient,
                              private val sessionParams: SessionParams) {
 
-    fun uploadFile(attachment: MediaAttachment): Try<String> {
+    fun uploadFile(attachment: ContentAttachmentData): Try<String> {
         if (attachment.path == null || attachment.mimeType == null) {
             return Try.raise(RuntimeException())
         }
-        val urlString = sessionParams.homeServerConnectionConfig.homeServerUri.toString() + URI_PREFIX_CONTENT_API + "upload"
         val file = File(attachment.path)
+        val urlString = sessionParams.homeServerConnectionConfig.homeServerUri.toString() + URI_PREFIX_CONTENT_API + "upload"
 
-        // create RequestBody instance from file
-        val requestFile = RequestBody.create(
+        val urlBuilder = HttpUrl.parse(urlString)?.newBuilder()
+                         ?: return Try.raise(RuntimeException())
+
+        val httpUrl = urlBuilder
+                .addQueryParameter(
+                        "filename", attachment.name
+                ).build()
+
+        val requestBody = MultipartBody.create(
                 MediaType.parse(attachment.mimeType),
                 file
         )
         val request = Request.Builder()
-                .url(urlString)
-                .post(requestFile)
+                .url(httpUrl)
+                .post(requestBody)
                 .build()
 
         return okHttpClient.newCall(request).execute().use { response ->

@@ -49,16 +49,17 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                      ?: return Result.failure()
 
-        if (params.event.eventId == null) {
+        val event = params.event
+        if (event.eventId == null) {
             return Result.failure()
         }
 
         val result = executeRequest<SendResponse> {
             apiCall = roomAPI.send(
-                    params.event.eventId,
+                    event.eventId,
                     params.roomId,
-                    params.event.type,
-                    params.event.content
+                    event.type,
+                    event.content
             )
         }
         result.flatMap { sendResponse ->
@@ -69,6 +70,4 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
         }
         return result.fold({ Result.retry() }, { Result.success() })
     }
-
-
 }

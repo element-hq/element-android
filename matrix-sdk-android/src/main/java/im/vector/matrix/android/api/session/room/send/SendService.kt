@@ -19,7 +19,7 @@ package im.vector.matrix.android.api.session.room.send
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.session.room.media.MediaAttachment
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 
 /**
  * This interface defines methods to send events in a room. It's implemented at the room level.
@@ -34,6 +34,6 @@ interface SendService {
      */
     fun sendTextMessage(text: String, callback: MatrixCallback<Event>): Cancelable
 
-    fun sendMedia(attachment: MediaAttachment, callback: MatrixCallback<Event>): Cancelable
+    fun sendMedia(attachment: ContentAttachmentData, callback: MatrixCallback<Event>): Cancelable
 
 }

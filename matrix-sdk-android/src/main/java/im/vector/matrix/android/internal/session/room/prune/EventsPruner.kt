@@ -35,7 +35,9 @@ internal class EventsPruner(monarchy: Monarchy) :
     override val query = Monarchy.Query<EventEntity> { EventEntity.where(it, type = EventType.REDACTION) }
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
-        val redactionEvents = inserted.map { it.asDomain() }
+        val redactionEvents = inserted
+                .mapNotNull { it.asDomain().redacts }
+
         val pruneEventWorkerParams = PruneEventWorker.Params(redactionEvents)
         val workData = WorkerParamsFactory.toData(pruneEventWorkerParams)
 

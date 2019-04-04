@@ -23,17 +23,19 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.internal.session.content.ContentUploader
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import org.koin.standalone.inject
 
 internal class UploadMediaWorker(context: Context, params: WorkerParameters)
     : Worker(context, params), MatrixKoinComponent {
 
-    private val mediaUploader by inject<MediaUploader>()
+    private val mediaUploader by inject<ContentUploader>()
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            val attachment: MediaAttachment
+            val attachment: ContentAttachmentData
     )
 
     override fun doWork(): Result {

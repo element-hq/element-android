@@ -23,7 +23,7 @@ import im.vector.matrix.android.internal.session.room.members.RoomMemberExtracto
 import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
-import im.vector.matrix.android.internal.session.room.send.EventFactory
+import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
@@ -35,7 +35,7 @@ internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
                            private val paginationTask: PaginationTask,
                            private val contextOfEventTask: GetContextOfEventTask,
                            private val setReadMarkersTask: SetReadMarkersTask,
-                           private val eventFactory: EventFactory,
+                           private val eventFactory: LocalEchoEventFactory,
                            private val taskExecutor: TaskExecutor) {
 
     fun instantiate(roomId: String): Room {
