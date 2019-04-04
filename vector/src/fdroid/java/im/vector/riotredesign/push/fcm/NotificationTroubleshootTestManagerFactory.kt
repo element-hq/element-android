@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.push.fcm
+package im.vector.riotredesign.push.fcm
 
 import androidx.fragment.app.Fragment
 import im.vector.fragments.troubleshoot.TestAccountSettings
-import im.vector.fragments.troubleshoot.TestDeviceSettings
 import im.vector.matrix.android.api.session.Session
-import im.vector.push.fcm.troubleshoot.TestAutoStartBoot
-import im.vector.push.fcm.troubleshoot.TestBackgroundRestrictions
 import im.vector.riotredesign.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.riotredesign.features.settings.troubleshoot.TestBingRulesSettings
+import im.vector.riotredesign.features.settings.troubleshoot.TestDeviceSettings
 import im.vector.riotredesign.features.settings.troubleshoot.TestSystemSettings
+import im.vector.riotredesign.push.fcm.troubleshoot.TestAutoStartBoot
+import im.vector.riotredesign.push.fcm.troubleshoot.TestBackgroundRestrictions
 
 class NotificationTroubleshootTestManagerFactory {
 

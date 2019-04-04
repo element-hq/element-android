@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="im.vector.riotredesign">
 
     <application>
 
@@ -8,7 +9,7 @@
             android:name="firebase_analytics_collection_deactivated"
             android:value="true" />
 
-        <service android:name="im.vector.push.fcm.VectorFirebaseMessagingService">
+        <service android:name=".push.fcm.VectorFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

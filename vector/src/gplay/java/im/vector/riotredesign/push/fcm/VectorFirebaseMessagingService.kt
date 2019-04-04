@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package im.vector.push.fcm
+package im.vector.riotredesign.push.fcm
 
 import android.os.Handler
 import android.os.Looper

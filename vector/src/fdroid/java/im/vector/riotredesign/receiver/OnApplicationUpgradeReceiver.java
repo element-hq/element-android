@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.receiver;
+package im.vector.riotredesign.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

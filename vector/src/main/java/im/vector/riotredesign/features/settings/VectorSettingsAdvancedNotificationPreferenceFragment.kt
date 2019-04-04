@@ -49,8 +49,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
             refreshPreferences()
             refreshDisplay()
         }
-    }
-    */
+    }    */
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // define the layout

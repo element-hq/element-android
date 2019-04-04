@@ -1867,8 +1867,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                     }
                     .show()
         }
-    }
-    */
+    }    */
 
     //==============================================================================================================
     // Phone number management
@@ -1950,8 +1949,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             }
 
             addPhoneBtn.order = order
-        }
-    */
+        }    */
     }
 
     //==============================================================================================================

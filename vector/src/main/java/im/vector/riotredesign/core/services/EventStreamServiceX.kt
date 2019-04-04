@@ -122,8 +122,7 @@ class EventStreamServiceX : VectorService() {
                 }
             }
         }
-    }
-    */
+    }    */
 
     /**
      * Service internal state

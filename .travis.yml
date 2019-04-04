@@ -48,7 +48,9 @@ script:
   # Build app (assembleGplayRelease assembleFdroidRelease)
   # Build Android test (assembleAndroidTest) (disabled for now)
   # Code quality (lintGplayRelease lintFdroidRelease)
-  - ./gradlew clean assembleGplayRelease assembleFdroidRelease lintGplayRelease lintFdroidRelease --stacktrace
+  # Split into two steps because if a task contain Fdroid, PlayService will be disabled
+  - ./gradlew clean assembleGplayRelease lintGplayRelease --stacktrace
+  - ./gradlew clean assembleFdroidRelease lintFdroidRelease --stacktrace
   # Run unitary test (Disable for now, see https://travis-ci.org/vector-im/riot-android/builds/502504370)
   # - ./gradlew testGplayReleaseUnitTest --stacktrace
   # Other code quality check

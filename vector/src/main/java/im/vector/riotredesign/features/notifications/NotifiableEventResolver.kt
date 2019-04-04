@@ -182,7 +182,6 @@ class NotifiableEventResolver(val context: Context) {
             //TODO generic handling?
         }
         return null
-    }
-    */
+    }    */
 }
 

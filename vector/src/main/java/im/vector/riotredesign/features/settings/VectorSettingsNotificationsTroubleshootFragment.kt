@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import im.vector.matrix.android.api.session.Session
-import im.vector.push.fcm.NotificationTroubleshootTestManagerFactory
+import im.vector.riotredesign.push.fcm.NotificationTroubleshootTestManagerFactory
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.withArgs
 import im.vector.riotredesign.core.platform.RiotActivity

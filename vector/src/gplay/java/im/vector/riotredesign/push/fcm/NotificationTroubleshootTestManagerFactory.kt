@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.push.fcm
+package im.vector.riotredesign.push.fcm
 
 import androidx.fragment.app.Fragment
 import im.vector.fragments.troubleshoot.TestAccountSettings
 import im.vector.matrix.android.api.session.Session
-import im.vector.push.fcm.troubleshoot.TestFirebaseToken
-import im.vector.push.fcm.troubleshoot.TestPlayServices
-import im.vector.push.fcm.troubleshoot.TestTokenRegistration
+import im.vector.riotredesign.push.fcm.troubleshoot.TestFirebaseToken
+import im.vector.riotredesign.push.fcm.troubleshoot.TestPlayServices
+import im.vector.riotredesign.push.fcm.troubleshoot.TestTokenRegistration
 import im.vector.riotredesign.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.riotredesign.features.settings.troubleshoot.TestBingRulesSettings
 import im.vector.riotredesign.features.settings.troubleshoot.TestDeviceSettings

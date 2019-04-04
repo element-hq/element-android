@@ -203,6 +203,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
 
-if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid")) {
+if (!getGradle().getStartParameter().getTaskRequests().toString().contains("Fdroid")) {
     apply plugin: 'com.google.gms.google-services'
 }
