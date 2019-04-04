@@ -26,6 +26,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import im.vector.riotredesign.R
+import im.vector.riotredesign.features.notifications.supportNotificationChannels
 import im.vector.riotredesign.features.settings.VectorLocale
 import timber.log.Timber
 import java.util.*
@@ -124,10 +125,6 @@ fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
     fragment.startActivityForResult(intent, requestCode)
 }
 
-// TODO This comes from NotificationUtils
-fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-
-
 /**
  * Shows notification system settings for the given channel id.
  */
@@ -183,4 +180,9 @@ fun startImportTextFromFileIntent(fragment: Fragment, requestCode: Int) {
 // Not in KTX anymore
 fun Context.toast(resId: Int) {
     Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+}
+
+// Not in KTX anymore
+fun Context.toast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

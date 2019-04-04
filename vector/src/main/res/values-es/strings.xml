@@ -32,9 +32,10 @@
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">Llamada de conferencia en curso.\nUnirse con %1$s o %2$s.</string>
-    <string name="ongoing_conference_call_voice">voz</string>
-    <string name="ongoing_conference_call_video">vídeo</string>
+    <string name="ongoing_conference_call">Llamada de conferencia en curso.
+\nUnirse con %1$s o %2$s</string>
+    <string name="ongoing_conference_call_voice">Voz</string>
+    <string name="ongoing_conference_call_video">Vídeo</string>
     <string name="cannot_start_call">No se puede iniciar la llamada, por favor inténtalo de nuevo más tarde</string>
     <string name="missing_permissions_warning">Debido a que faltan permisos, pueden faltar algunas características…</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para invitar a iniciar una conferencia en esta sala</string>
@@ -69,10 +70,10 @@
     <string name="bottom_action_rooms">Salas</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Buscar salas</string>
-    <string name="home_filter_placeholder_favorites">Buscar favoritos</string>
-    <string name="home_filter_placeholder_people">Buscar personas</string>
-    <string name="home_filter_placeholder_rooms">Buscar salas</string>
+    <string name="home_filter_placeholder_home">Filtrar salas</string>
+    <string name="home_filter_placeholder_favorites">Filtrar favoritos</string>
+    <string name="home_filter_placeholder_people">Filtrar personas</string>
+    <string name="home_filter_placeholder_rooms">Filtrar salas</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invitaciones</string>
@@ -107,14 +108,14 @@
     <string name="send_bug_report_sent">El informe de error ha sido enviado con éxito</string>
     <string name="send_bug_report_failed">No se pudo enviar el informe de error (%s)</string>
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
-    <string name="send_bug_report_app_crashed">La aplicación falló en la última sesión. ¿Te gustaría enviar un informe de fallas?</string>
+    <string name="send_bug_report_app_crashed">La aplicación falló en la última sesión. ¿Te gustaría enviar un informe de error\?</string>
 
     <string name="send_files_in">Enviar en</string>
     <string name="read_receipt">Leído</string>
 
     <string name="join_room">Unirse a la Sala</string>
     <string name="username">Nombre de usuario</string>
-    <string name="create_account">Registrar</string>
+    <string name="create_account">Crear cuenta</string>
     <string name="login">Iniciar sesión</string>
     <string name="logout">Cerrar sesión</string>
     <string name="hs_url">URL del Servidor Doméstico</string>
@@ -130,7 +131,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Iniciar sesión</string>
-    <string name="auth_register">Registrar</string>
+    <string name="auth_register">Crear cuenta</string>
     <string name="auth_submit">Enviar</string>
     <string name="auth_skip">Omitir</string>
     <string name="auth_send_reset_email">Enviar Correo Electrónico de Restauración</string>
@@ -192,7 +193,7 @@ Se ha cerrado sesión en todos tus dispositivos y ya no recibirás notificacione
     <string name="login_error_registration_network_error">No es posible registrarse: Error de red</string>
     <string name="login_error_unable_register">No es posible registrarse</string>
     <string name="login_error_unable_register_mail_ownership">No es posible registrarse : falló la propiedad del correo electrónico</string>
-    <string name="login_error_invalid_home_server">Ingresa una URL válida</string>
+    <string name="login_error_invalid_home_server">Por favor introduce una URL válida</string>
 
     <string name="login_error_forbidden">Nombre de usuario/contraseña inválidos</string>
     <string name="login_error_unknown_token">No se reconoció el código de acceso especificado</string>
@@ -446,7 +447,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_add_email_address">Añadir dirección de correo electrónico</string>
     <string name="settings_phone_number">Teléfono</string>
     <string name="settings_add_phone_number">Añadir número telefónico</string>
-    <string name="settings_app_info_link_summary">Pantalla de información del sistema de la aplicación</string>
+    <string name="settings_app_info_link_summary">Mostrar la pantalla de información de la aplicación de los ajustes del sistema.</string>
     <string name="settings_app_info_link_title">Información de la aplicación</string>
 
     <string name="settings_enable_all_notif">Habilitar notificaciones para esta cuenta</string>
@@ -791,7 +792,7 @@ Dispositivos desconocidos:</string>
     <string name="action_exit">Salir</string>
     <string name="bottom_action_groups">Comunidades</string>
 
-    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
+    <string name="home_filter_placeholder_groups">Filtrar comunidades</string>
 
     <string name="groups_invite_header">Invitar</string>
     <string name="groups_header">Comunidades</string>
@@ -904,8 +905,8 @@ Dispositivos desconocidos:</string>
     <string name="title_activity_choose_sticker">Enviar una pegatina</string>
 
     <string name="no_sticker_application_dialog_content">Actualmente no tienes ningún paquete de pegatinas habilitado.
-
-¿Añadir algunos ahora?</string>
+\n
+\n¿Añadir algunos ahora\?</string>
 
     <string name="deactivate_account_title">Desactivar Cuenta</string>
     <string name="avatar">Avatar</string>
@@ -1075,13 +1076,13 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="merged_events_collapse">colapsar</string>
 
     <string name="call_anyway">llamar de cada manera</string>
-    <string name="accept">Acceptar</string>
+    <string name="accept">Aceptar</string>
 
-    <string name="auth_accept_policies">Por favor revisar y aceptar las reglas de este servidor doméstico:</string>
+    <string name="auth_accept_policies">Por favor revisa y acepta las reglas de este servidor doméstico:</string>
 
     <string name="settings_call_category">Llamadas</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usar Riot sonido normal por entrando llamadas</string>
-    <string name="settings_call_ringtone_title">Sonido de entrando llamadas</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Riot para llamadas entrantes</string>
+    <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
     <string name="settings_call_ringtone_dialog_title">Eligir sonido de llamadas:</string>
 
     <string name="video_call_in_progress">Llamada de video en proceso…</string>
@@ -1094,7 +1095,58 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="reason_hint">Razón</string>
 
     <string name="settings_notification_troubleshoot">Diagnóstico de fallas</string>
-    <string name="settings_troubleshoot_diagnostic">Diagnóstico de fallas</string>
-    <string name="settings_troubleshoot_diagnostic_run_button_title">Inicia pruebas</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnóstico de errores</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Iniciar pruebas</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Haciendo… (%1$d of %2$d)</string>
+    <string name="notification_sync_init">Iniciando servicio</string>
+    <string name="title_activity_keys_backup_setup">Copia de seguridad de la clave</string>
+    <string name="title_activity_keys_backup_restore">Usar copia de seguridad de la clave</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">La copia de seguridad de la clave no ha finalizado, por favor espere…</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">No quiero mis mensajes cifrados</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Creando copia de seguridad de las claves…</string>
+    <string name="keys_backup_activate">Usar copia de seguridad de la clave</string>
+    <string name="are_you_sure">¿Esta seguro\?</string>
+    <string name="backup">Copia de seguridad</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perderá el acceso a sus mensajes cifrados si cierra sesión sin hacer una copia de seguridad de sus claves.</string>
+
+    <string name="stay">Quedarse</string>
+    <string name="skip">Saltar</string>
+    <string name="done">Hecho</string>
+    <string name="abort">Cancelar</string>
+    <string name="ignore">Ignorar</string>
+
+    <string name="action_mark_room_read">Marcar como leído</string>
+    <string name="auth_login_sso">Iniciar sesión con single-sign-on</string>
+    <string name="login_error_ssl_handshake">Tu dispositivo usa una versión anticuada e insegura del protocolo de seguridad TLS. Por tu seguridad no puedes conectarte</string>
+    <string name="settings_notification_advanced">Ajustes avanzados de notificaciones</string>
+    <string name="settings_notification_advanced_summary">Ajusta la importancia de las notificaciones por evento, configura el sonido, LED y vibración</string>
+    <string name="settings_notification_by_event">Importancia de notificación por evento</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Ajustes de sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Las notificaciones están activadas en los ajustes de sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Las notificaciones están desactivadas en los ajustes del sistema.
+\nPor favor comprueba los ajustes de sistema.</string>
+    <string name="open_settings">Abrir ajustes</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Ajustes de cuenta.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Las notificaciones están activadas para tu cuenta.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Las notificaciones están desactivadas para tu cuenta.
+\nPor favor comprueba los ajustes de cuenta.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Activar</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Ajustes de dispositivo.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Las notificaciones están activadas para este dispositivo.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Las notificaciones no están permitidos para este dispositivo.
+\nPor favor comprueba los ajustes Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Activar</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Ajustes personalizados.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Ten en cuenta que algunos mensajes son silenciosos (producen una notificación sin sonido).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Algunas notificaciones están desactivadas en tus ajustes personalizados.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Error al cargar reglas personalizadas, por favor prueba de nuevo.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Comprueba ajustes</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Prueba de servicios Google Play</string>
+    <string name="settings_troubleshoot_test_play_services_success">APK de servicios de Google Play esta disponible y actualizado.</string>
 </resources>

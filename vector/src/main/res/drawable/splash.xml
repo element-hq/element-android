@@ -8,10 +8,10 @@
     <item android:drawable="@color/riot_primary_background_color_light" />
 
     <!-- Centered logo -->
-    <!--item>
+    <item>
         <bitmap
             android:gravity="center"
             android:src="@drawable/riot_splash_0_blue" />
-    </item-->
+    </item>
 
 </layer-list>

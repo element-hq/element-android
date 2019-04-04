@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.RoomActivity">
+
+    <item
+        android:id="@+id/ic_action_search_in_room"
+        android:icon="@drawable/ic_material_search_white"
+        android:title="@string/room_menu_search"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/ic_action_matrix_apps"
+        android:icon="@drawable/apps_icon"
+        android:title="@string/room_add_matrix_apps"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/ic_action_room_resend_unsent"
+        android:icon="@drawable/ic_material_send_black"
+        android:title="@string/room_resend_unsent_messages"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/ic_action_room_delete_unsent"
+        android:icon="@drawable/ic_material_delete"
+        android:title="@string/room_delete_unsent_messages"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/ic_action_room_settings"
+        android:icon="@drawable/ic_material_settings_small"
+        android:title="@string/room_details_title"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/ic_action_room_leave"
+        android:icon="@drawable/vector_leave_room_black"
+        android:title="@string/leave"
+        app:showAsAction="collapseActionView" />
+
+</menu>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- define an empty title else lint fails -->
+    <item
+        android:id="@+id/bottom_action_home"
+        android:contentDescription="@string/bottom_action_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="" />
+
+    <item
+        android:id="@+id/bottom_action_favourites"
+        android:contentDescription="@string/bottom_action_favourites"
+        android:enabled="true"
+        android:icon="@drawable/ic_star_black_24dp"
+        android:title="" />
+
+    <item
+        android:id="@+id/bottom_action_people"
+        android:contentDescription="@string/bottom_action_people"
+        android:enabled="true"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="" />
+
+    <item
+        android:id="@+id/bottom_action_rooms"
+        android:contentDescription="@string/bottom_action_rooms"
+        android:enabled="true"
+        android:icon="@drawable/riot_tab_rooms"
+        android:title="" />
+
+    <item
+        android:id="@+id/bottom_action_groups"
+        android:contentDescription="@string/bottom_action_groups"
+        android:enabled="true"
+        android:icon="@drawable/riot_tab_groups"
+        android:title="" />
+
+</menu>

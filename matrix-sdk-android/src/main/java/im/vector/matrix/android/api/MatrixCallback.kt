@@ -24,7 +24,7 @@ interface MatrixCallback<in T> {
 
     /**
      * On success method, default to no-op
-     * @param data the data successfuly returned from the async function
+     * @param data the data successfully returned from the async function
      */
     fun onSuccess(data: T) {
         //no-op

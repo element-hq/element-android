@@ -35,7 +35,7 @@
     <string name="notice_ended_call">%s zakończył(a) rozmowę.</string>
     <string name="notice_room_name_removed">%1$s usunął(-ęła) nazwę pokoju</string>
     <string name="notice_room_topic_removed">%1$s usunął(-ęła) temat pokoju</string>
-    <string name="notice_event_redacted_reason">" [powód: %1$s]"</string>
+    <string name="notice_event_redacted_reason">[powód: %1$s]</string>
     <string name="summary_user_sent_sticker">%1$s wysłał(a) naklejkę.</string>
 
     <string name="notice_end_to_end">%1$s włączył(a) szyfrowanie end-to-end (%2$s)</string>
@@ -54,7 +54,7 @@
         <item quantity="one">%1$s i jeden inny</item>
         <item quantity="few">%1$s i kilku innych</item>
         <item quantity="many">%1$s i %2$d innych</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="notice_crypto_unable_to_decrypt">** Nie można odszyfrować: %s **</string>
@@ -68,8 +68,8 @@
     <string name="notice_voip_started">Rozpoczęto grupowe połączenie głosowe VoIP</string>
     <string name="notice_voip_finished">Zakończono grupowe połączenie głosowe VoIP</string>
 
-    <string name="notice_event_redacted">"zredagowane %1$s… "</string>
-    <string name="notice_event_redacted_by">" przez %1$s"</string>
+    <string name="notice_event_redacted">zredagowane %1$s</string>
+    <string name="notice_event_redacted_by">przez %1$s</string>
     <string name="notice_profile_change_redacted">%1$s zaktualizował swój profil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s wysłał(a) zaproszenie do %2$s aby dołączył(a) do tego pokoju</string>
     <string name="notice_room_third_party_registered_invite">%1$s zaakceptował(a) zaproszenie dla %2$s</string>

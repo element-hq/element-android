@@ -35,7 +35,8 @@
     <string name="rename">Premenovať</string>
     <string name="report_content">Ohlásiť obsah</string>
     <string name="active_call">Aktívny hovor</string>
-    <string name="ongoing_conference_call">Prebiehajúci konferenčný hovor.\nPripojte sa ako %1$s alebo %2$s.</string>
+    <string name="ongoing_conference_call">Prebiehajúci konferenčný hovor.
+\nPripojte sa ako %1$s alebo %2$s</string>
     <string name="ongoing_conference_call_voice">audio</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Nie je možné začať hovor. Prosím, skúste to neskôr</string>
@@ -69,10 +70,10 @@
     <string name="bottom_action_people">ľudia</string>
     <string name="bottom_action_rooms">Miestnosti</string>
 
-    <string name="home_filter_placeholder_home">Hľadať miestnosti</string>
-    <string name="home_filter_placeholder_favorites">Hľadať obľúbené</string>
-    <string name="home_filter_placeholder_people">Hľadať ľudí</string>
-    <string name="home_filter_placeholder_rooms">Hľadať miestnosti</string>
+    <string name="home_filter_placeholder_home">Filtrovať názvy miestností</string>
+    <string name="home_filter_placeholder_favorites">Filtrovať obľúbené</string>
+    <string name="home_filter_placeholder_people">Filtrovať ľudí</string>
+    <string name="home_filter_placeholder_rooms">Filtrovať názvy miestností</string>
 
     <string name="invitations_header">Pozvania</string>
     <string name="low_priority_header">Nízka priorita</string>
@@ -82,7 +83,7 @@
     <string name="user_directory_header">Adresár používateľov</string>
     <string name="matrix_only_filter">Len Matrix kontakty</string>
     <string name="no_conversation_placeholder">Žiadne konverzácie</string>
-    <string name="no_contact_access_placeholder">Aplikácia Riot nemá udelené právo čítať lokálne kontakty</string>
+    <string name="no_contact_access_placeholder">Aplikácii Riot ste nepovolili prístup k lokálnym kontaktom</string>
     <string name="no_result_placeholder">Žiadne výsledky</string>
 
     <string name="rooms_header">Miestnosti</string>
@@ -115,7 +116,7 @@
 
     <string name="join_room">Vstúpiť do miestnosti</string>
     <string name="username">Meno používateľa</string>
-    <string name="create_account">Registrovať</string>
+    <string name="create_account">Vytvoriť účet</string>
     <string name="login">Prihlásiť sa</string>
     <string name="logout">Odhlásiť sa</string>
     <string name="hs_url">Adresa domovského servera</string>
@@ -130,7 +131,7 @@
     <string name="option_take_photo_video">Poslať fotku alebo video</string>
 
     <string name="auth_login">Prihlásiť sa</string>
-    <string name="auth_register">Registrovať</string>
+    <string name="auth_register">Vytvoriť účet</string>
     <string name="auth_submit">Odoslať</string>
     <string name="auth_skip">Preskočiť</string>
     <string name="auth_send_reset_email">Poslať obnovovací email</string>
@@ -179,7 +180,7 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="auth_reset_password_message">Ak chcete obnoviť vaše heslo, zadajte emailovú adresu prepojenú s vašim účtom:</string>
     <string name="auth_reset_password_missing_email">Musíte zadať emailovú adresu prepojenú s vašim účtom.</string>
     <string name="auth_reset_password_missing_password">Musíte zadať nové heslo.</string>
-    <string name="auth_reset_password_email_validation_message">Na adresu %s bola odoslaná správa. Potom, čo prejdete na odkaz z tejto správy, kliknite nižšie.</string>
+    <string name="auth_reset_password_email_validation_message">Na adresu %s bola odoslaná správa. Potom, čo prejdete na odkaz z tejto správy, pokračujte kliknutím nižšie.</string>
     <string name="auth_reset_password_error_unauthorized">Nepodarilo sa overiť emailovú adresu: Uistite sa, že ste správne klikli na odkaz v emailovej správe</string>
     <string name="auth_reset_password_success_message">Vaše heslo bolo obnovené.
 
@@ -208,7 +209,7 @@ Ospravedlňujeme sa za spôsobené ťažkosti.</string>
 
     <string name="read_receipts_list">Zoznam potvrdení o prečítaní</string>
 
-    <string name="compression_options">"Odoslať ako "</string>
+    <string name="compression_options">Odoslať ako</string>
     <string name="compression_opt_list_original">Pôvodný</string>
     <string name="compression_opt_list_large">Veľký</string>
     <string name="compression_opt_list_medium">Stredný</string>
@@ -281,8 +282,8 @@ Chcete aplikácii Riot povoliť prístup k vašim kontaktom?</string>
     <string name="room_jump_to_first_unread">Preskočiť na prvú neprečítanú správu.</string>
 
     <string name="room_preview_invitation_format">Používateľ %s vás pozval vstúpiť do tejto miestnosti</string>
-    <string name="room_preview_unlinked_email_warning">Toto pozvanie bolo odoslané na emailovú adresu, ktorá nie je priradená k tomuto účtu: %s.
-Môžete sa prihlásiť k inému účtu, alebo pridať emailovú adresu do práve prihláseného účtu.</string>
+    <string name="room_preview_unlinked_email_warning">Toto pozvanie bolo odoslané na emailovú adresu %s, ktorá nie je priradená k tomuto účtu.
+\nMôžete sa prihlásiť k inému účtu, alebo pridať emailovú adresu do práve prihláseného účtu.</string>
     <string name="room_preview_try_join_an_unknown_room">Pokúšate sa zobraziť %s. Chcete vstúpiť a pridať sa k diskusii?</string>
     <string name="room_preview_try_join_an_unknown_room_default">miestnosť</string>
     <string name="room_preview_room_interactions_disabled">Toto je náhľad na miestnosť. Všetky akcie pre túto miestnosť sú zakázané.</string>
@@ -501,7 +502,7 @@ Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="settings_change_password">Zmeniť heslo</string>
     <string name="settings_old_password">Súčasné heslo</string>
     <string name="settings_new_password">Nové heslo</string>
-    <string name="settings_confirm_password">Potvrdiť heslo</string>
+    <string name="settings_confirm_password">Potvrdiť nové heslo</string>
     <string name="settings_fail_to_update_password">Nepodarilo sa zmeniť heslo</string>
     <string name="settings_password_updated">Úspešne ste si zmenili heslo</string>
     <string name="settings_unignore_user">Zobraziť všetky správy od používateľa %s?
@@ -553,8 +554,8 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
 
     <string name="room_settings_room_access_warning">Ak chcete vytvoriť odkaz do miestnosti, musíte najprv nastaviť jej adresu.</string>
     <string name="room_settings_room_access_entry_only_invited">Len pozvaní ľudia</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Ktokoľvek, kto pozná odkaz do miestnosti (okrem hostí)</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Ktokoľvek, kto pozná odkaz do miestnosti (vrátane hostí)</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Ktokoľvek, kto pozná odkaz do miestnosti, okrem hostí</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Ktokoľvek, kto pozná odkaz do miestnosti, vrátane hostí</string>
 
     <string name="room_settings_banned_users_title">Používatelia, ktorým bol zakázaný vstup</string>
 
@@ -642,8 +643,7 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
 
     <string name="encryption_information_verify_device">Overiť zariadenie</string>
     <string name="encryption_information_verify_device_warning">Ak chcete overiť, či toto zariadenie je skutočne dôverihodné, kontaktujte jeho vlastníka iným spôsobom (napr. osobne alebo cez telefón) a opýtajte sa ho, či kľúč, ktorý má pre toto zariadenie zobrazený v nastaveniach sa zhoduje s kľúčom zobrazeným nižšie:</string>
-    <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a v takomto prípade by ste asi mali namiesto toho stlačiť tlačidlo Pridať na čiernu listinu.
-V budúcnosti plánujeme tento proces overovania zariadení zjednodušiť.</string>
+    <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a mali by ste ho pridať na čiernu listinu. V budúcnosti plánujeme tento proces overovania zariadení zjednodušiť.</string>
     <string name="encryption_information_verify_key_match">Overil som, kľúče sa zhodujú</string>
 
     <string name="e2e_enabling_on_app_update">Riot od teraz podporuje E2E šifrovanie. Ak si ho želáte povoliť, musíte sa teraz odhlásiť a následne prihlásiť znovu.
@@ -733,7 +733,7 @@ Neznáme zariadenia:</string>
     <string name="action_exit">Ukončiť</string>
     <string name="bottom_action_groups">Komunity</string>
 
-    <string name="home_filter_placeholder_groups">Hľadať komunity</string>
+    <string name="home_filter_placeholder_groups">Filtrovať názvy komunít</string>
 
     <string name="groups_invite_header">Pozvanie</string>
     <string name="groups_header">Komunity</string>
@@ -871,7 +871,7 @@ Neznáme zariadenia:</string>
     <string name="settings_notification_privacy_reduced">Nižšia úroveň súkromia</string>
     <string name="settings_notification_privacy_normal">Normálne</string>
     <string name="settings_notification_privacy_need_permission">Aplikácia vyžaduje povolenie bežať na pozadí</string>
-    <string name="settings_notification_privacy_fcm">• Oznámenia sú zasielané prostredníctvom cloudových služieb Google</string>
+    <string name="settings_notification_privacy_fcm">• Oznámenia sú zasielané prostredníctvom cloudových služieb spoločnosti Google</string>
     <string name="settings_notification_privacy_metadata">• Oznámenia neobsahujú text správy, len meta údaje</string>
     <string name="settings_notification_privacy_secure_message_content">• Obsah správy oznámení je <b>bezpečne prevzatý priamo z domovského servera Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Oznámenia obsahujú <b>meta údaje aj obsah správy</b></string>
@@ -886,8 +886,8 @@ Neznáme zariadenia:</string>
 
     <string name="option_send_sticker">Odoslať nálepku</string>
     <string name="no_sticker_application_dialog_content">Momentálne nemáte aktívne žiadne balíčky s nálepkami.
-
-Chcete si nejaké pridať teraz?</string>
+\n
+\nChcete si nejaké pridať teraz\?</string>
 
     <string name="settings_deactivate_account_section">Deaktivovať účet</string>
     <string name="settings_deactivate_my_account">Deaktivovať môj účet</string>
@@ -1110,7 +1110,7 @@ Prosím, skontrolujte nastavenia Riot.</string>
     <string name="settings_troubleshoot_test_play_services_title">Kontrola aplikácii Služby Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">Aplikácia Služby Google Playje k dispozícii a aktualizovaná.</string>
     <string name="settings_troubleshoot_test_play_services_failed">Riot používa aplikáciu Služby Google Play na doručovanie oznámení. No zdá sa, že táto nie je správne nakonfigurovaná:
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Opraviť Služby Play</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
@@ -1149,7 +1149,7 @@ Prosím skúste reštartovať aplikáciu.</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimalizácia batérie</string>
     <string name="settings_troubleshoot_test_battery_success">Chod Riot nie je ovplyvnený nastavením optimalizácie batérie.</string>
-    <string name="settings_troubleshoot_test_battery_failed">"Ak používateľ na nejaký čas ponechá zariadenie s vypnutou obrazovkou odložené odpojené od napájania, na zariadení sa použije režim Doze. Toto aplikáciám zabráni pristupovať k sieti, pozastaví ich naplánované úlohy, synchronizáciu aj bežné signály. "</string>
+    <string name="settings_troubleshoot_test_battery_failed">Ak používateľ na nejaký čas ponechá zariadenie s vypnutou obrazovkou odložené odpojené od napájania, na zariadení sa použije režim Doze. Toto aplikáciám zabráni pristupovať k sieti, pozastaví ich naplánované úlohy, synchronizáciu aj bežné signály.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorovať optimalizáciu</string>
 
     <string name="settings_inline_url_preview_summary">Zobraziť náhľady odkazov v konverzáciách (ak sú podporované domovským serverom).</string>
@@ -1185,11 +1185,11 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
 
     <string name="no_valid_google_play_services_apk">Nenájdená aktívna aplikácia Služby Google Play. Je možné, že nebude správne fungovať doručovanie oznámení.</string>
 
-    <string name="store_title">Riot.im - otvorená spolupráca pre tímy</string>
+    <string name="store_title">Riot.im - Komunikujte, Podľa seba</string>
     <string name="store_whats_new">"Riot.im neustále aktualizujeme s vylepšeniami a zmenami.
 Podrobný zoznam zmien (anglicky) nájdete na adrese: %1$s.
 Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</string>
-    <string name="store_short_description">Vitajte v aplikácii Riot.im: v novom svete otvorenej komunikácii!</string>
+    <string name="store_short_description">Univerzálna a bezpečná aplikácia na okamžitú komunikáciu úplne pod vašou kontrolou.</string>
     <string name="store_full_description">Riot.im je jednoduché a elegantné prostredie určené na vzájomnú spoluprácu, ktoré združuje vaše rôzne konverzácie a integrácie do jedinej aplikácii.
 
 Postavený nad skupinovými konverzáciami, Riot.im vám umožňuje zdieľať správy, obrázky, videá aj akékoľvek súbory - pracovať s vlastnými nástrojmi a pristupovať ku všetkým vašim komunitám pod jednou strechou. S jednou jedinou totožnosťou si vystačíte pre všetky vaše tímy: nie je potrebné prepínať sa medzi viacerými účtami, môžete komunikovať s ľuďmi s rôznych organizácií vo verejných alebo súkromných miestnostiach: od profesionálnych projektov až po školské výlety, Riot.im sa stane centrom všetkych vašich diskusií!
@@ -1221,4 +1221,95 @@ Pre vývojárov:
 
 Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
 
+    <string name="notification_sync_init">Inicializácia služby</string>
+    <string name="title_activity_keys_backup_setup">Zálohovanie kľúčov</string>
+    <string name="title_activity_keys_backup_restore">Obnoviť kľúče zo zálohy</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Zálohovanie kľúčov nie je dokončené, prosím čakajte…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Ak sa teraz odhlásite, prídete o zašifrované správy</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Prebieha zálohovanie kľúčov. Ak sa teraz odhlásite, prídete o zašifrované správy.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Bezpečné zálohovanie kľúčov by ste mali mať aktivované na všetkých zariadeniach, aby ste neprišli o prístup k zašifrovaným správam.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nezáleží mi na zašifrovaných správach</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Zálohovanie kľúčov…</string>
+    <string name="keys_backup_activate">Použiť zálohovanie kľúčov</string>
+    <string name="are_you_sure">Ste si istí\?</string>
+    <string name="backup">Zálohovať</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Skôr než sa odhlásite, zálohujte si šifrovacie kľúče, inak prídete o prístup k zašifrovaným správam.</string>
+
+    <string name="stay">Zostať</string>
+    <string name="skip">Vynechať</string>
+    <string name="done">Hotovo</string>
+    <string name="abort">Prerušiť</string>
+    <string name="ignore">Ignorovať</string>
+
+    <string name="action_sign_out_confirmation_simple">Ste si istí, že sa chcete odhlásiť\?</string>
+    <string name="action_mark_room_read">Označiť ako prečítané</string>
+    <string name="auth_login_sso">Prihlásiť sa použitím jediného prihlásenia</string>
+    <string name="login_error_unknown_host">Na tejto adrese nie je dostupný žiadny obsah. Prosím, skontrolujte jej správnosť</string>
+    <string name="login_error_ssl_handshake">Vaše zariadenie používa zastaralú verziu protokolu TLS, ktorá je náchylná na zraniteľnosti. Z dôvodu zachovania maximálnej bezpečnosti sa nebudete môcť pripojiť</string>
+    <string name="settings_notification_advanced">Pokročilé nastavenia oznámení</string>
+    <string name="settings_notification_advanced_summary">Nastavenie dôležitosti oznámení pre udalosti, konfigurácia zvukových, vibračných a LED upozornení</string>
+    <string name="settings_notification_by_event">Dôležitosť oznámení pre udalosti</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Vlastné nastavenia.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Pozor, Pre typi udalostí, ktoré majú dôležitosť nastavenú na Tiché, sa zobrazí oznámenie bez zvukového upozornenia.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Niektoré oznámenia máte zakázané v rozšírených nastaveniach.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Nepodarilo sa načítať pravidlá oznámení. Prosím, skúste znovu.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Skontrolovať nastavenia</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia Riot nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nKonfigurácia Riot nemá vplyv na zobrazenie tejto chyby. Táto chyba sa môže zobraziť z niekoľkých dôvodov. Uistite sa že máte správne nastavený systémový čas a že ste v nastaveniach systému aplikácii služby Google play neobmedzili používanie prístupu na internet. Chyba sa tiež môže zobrazovať na vlastných zostaveniach (ROM), alebo sa chyba môže samovoľne prestať zobrazovať neskôr.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia Riot nemá vplyv na zobrazenie tejto chyby.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Pridať účet</string>
+
+    <string name="settings_notification_privacy_no_background_sync">Aplikácia sa <b>ne</b>potrebuje pripájať k domovskému serveru, keď beží na pozadí, čo môže predĺžiť výdrž batérie.</string>
+    <string name="settings_noisy_notifications_preferences">Nastaviť hlučné oznámenia</string>
+    <string name="settings_call_notifications_preferences">Nastaviť oznámenia prichádzajúceho hovoru</string>
+    <string name="settings_silent_notifications_preferences">Nastaviť tiché oznámenia</string>
+    <string name="settings_system_preferences_summary">Vybrať farbu upozornení LED, vibrácie, zvuky…</string>
+
+
+    <string name="settings_cryptography_manage_keys">Správa šifrovacích kľúčov</string>
+    <string name="settings_send_message_with_enter">Odosielať správy enterom</string>
+    <string name="settings_send_message_with_enter_summary">Stlačením klávesu enter na dotykovej klávesnici odošlete správu namiesto odriadkovania</string>
+
+    <string name="settings_data_save_mode_summary">Režim šetrenia údajov aplikuje filter, ktorý potlačí aktualizácie prítomnosti a oznámenia pri písaní.</string>
+
+    <string name="settings_change_password_submit">Aktualizovať heslo</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">Heslo nie je správne</string>
+    <string name="passwords_do_not_match">Heslá sa nezhodujú</string>
+
+    <string name="settings_media">Médiá</string>
+    <string name="settings_default_compression">Predvolená kompresia</string>
+    <string name="compression_opt_list_choose">Vybrať</string>
+    <string name="settings_default_media_source">Predvolený zdroj médií</string>
+    <string name="media_source_choose">Vybrať</string>
+    <string name="settings_play_shutter_sound">Prehrať zvuk spúšte fotoaparátu</string>
+
+    <string name="encryption_message_recovery">Obnovenie zašifrovaných správ</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Spravovať zálohovanie kľúčov</string>
+
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 správa</item>
+        <item quantity="few">%1$s: %2$d správy</item>
+        <item quantity="other">%1$s: %2$d správ</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d oznámenie</item>
+        <item quantity="few">%d oznámenia</item>
+        <item quantity="other">%d oznámení</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Nová udalosť</string>
+    <string name="notification_unknown_room_name">Miestnosť</string>
+    <string name="notification_new_messages">Nové správy</string>
+    <string name="notification_new_invitation">Nové pozvanie</string>
+    <string name="notification_sender_me">Ja</string>
+    <string name="notification_inline_reply_failed">** Nepodarilo sa odoslať - otvorte prosím miestnosť</string>
+
+    <string name="notification_silent">Tiché</string>
+    <string name="error_empty_field_enter_user_name">Prosím zadajte meno používateľa.</string>
 </resources>

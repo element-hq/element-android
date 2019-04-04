@@ -898,7 +898,7 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="settings_notification_privacy_normal">Normale</string>
     <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
     <string name="settings_notification_privacy_need_permission">L\'app richiede il permesso per funzionare in sottofondo</string>
-    <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Le notifiche contengono solo metadati</string>
     <string name="settings_notification_privacy_secure_message_content">• Il contenuto del messaggio di una notifica <b>si trova al sicuro direttamente dal server home di Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Le notifiche contengono <b>dati e metadati sul messaggio</b></string>
@@ -1195,22 +1195,22 @@ Nella schermata successiva ti verrà chiesto di consentire a Riot di funzionare 
 
     <string name="no_valid_google_play_services_apk">Nessun valido APK Google Play Services è stato trovato. Le notifiche non funzioneranno correttamente.</string>
 
-    <string name="store_title">Riot.im - Comunica, a modo tuo.</string>
+    <string name="store_title">Riot.im - Comunica, a modo tuo</string>
     <string name="store_short_description">Un\'app universale di chat sicure interamente sotto il tuo controllo.</string>
-    <string name="store_full_description">Un\'app di chat, sotto il tuo controllo e interamente flessibile. Riot ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate.
-\n
-\nOttieni un account matrix.org gratuito, ottieni il tuo server su https://modular.im, o usa un altro server Matrix.
-\n
-\nPerchè scegliere Riot.im\?
-\n
-\n• COMUNICAZIONE COMPLETA: crea stanze per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai videochiamate vocali - tutto gratuito.
-\n
-\n• GRANDI INTEGRAZIONI: usa Riot.im con gli strumenti che conosci ed ami. Con Riot.im puoi addirittura chattare con utenti e gruppi su altre app di chat.
-\n
-\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino tali.
-\n
-\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Possiedi i tuoi dati ospitando il tuo server personale, o scegliendone uno di cui ti fidi.
-\n
+    <string name="store_full_description">Un\'app di chat, sotto il tuo controllo e interamente flessibile. Riot ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate. 
+\n 
+\nOttieni un account matrix.org gratuito, ottieni il tuo server su https://modular.im, o usa un altro server Matrix. 
+\n 
+\nPerché scegliere Riot.im\? 
+\n 
+\n• COMUNICAZIONE COMPLETA: crea stanze per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai videochiamate vocali - tutto gratuito. 
+\n 
+\n• GRANDI INTEGRAZIONI: usa Riot.im con gli strumenti che conosci ed ami. Con Riot.im puoi addirittura chattare con utenti e gruppi su altre app di chat. 
+\n 
+\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino tali. 
+\n 
+\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Possiedi i tuoi dati ospitando il tuo server personale, o scegliendone uno di cui ti fidi. 
+\n 
 \n• OVUNQUE TU SIA: resta in contatto ovunque tu sia con la cronologia dei messaggi totalmente sincronizzata tra i tuoi dispositivi ed online su https://riot.im.</string>
 
     <string name="video_call_in_progress">Videochiamata in corso…</string>
@@ -1420,5 +1420,31 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="autodiscover_well_known_autofill_dialog_message">Riot ha rilevato una configurazione server personalizzata per il tuo dominio userId \"%s\":
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Usa configurazione</string>
+
+    <string name="notification_sync_init">Inizializzazione del servizio</string>
+    <string name="settings_media">Multimedia</string>
+    <string name="settings_default_compression">Compressione predefinita</string>
+    <string name="compression_opt_list_choose">Scegli</string>
+    <string name="settings_default_media_source">Sorgente multimediale predefinita</string>
+    <string name="media_source_choose">Scegli</string>
+    <string name="settings_play_shutter_sound">Riproduci suono otturatore</string>
+
+    <string name="action_mark_room_read">Segna come letto</string>
+    <string name="settings_notification_privacy_no_background_sync">L\'app <b>non</b> ha bisogno di connettersi in background all\'homeserver, dovrebbe ridurre il consumo della batteria</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 messaggio</item>
+        <item quantity="other">%1$s: %2$d messaggi</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d notifica</item>
+        <item quantity="other">%d notifiche</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Nuovo evento</string>
+    <string name="notification_unknown_room_name">Stanza</string>
+    <string name="notification_new_messages">Nuovi messaggi</string>
+    <string name="notification_new_invitation">Nuovo invito</string>
+    <string name="notification_sender_me">Io</string>
+    <string name="notification_inline_reply_failed">** Invio fallito - per favore apri la stanza</string>
 
 </resources>

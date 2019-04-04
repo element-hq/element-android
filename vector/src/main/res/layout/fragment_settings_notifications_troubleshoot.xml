@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/troubleshoot_test_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/troubleshoot_bottom_view"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_notification_troubleshoot" />
+
+    <LinearLayout
+        android:id="@+id/troubleshoot_bottom_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackground"
+        android:minHeight="80dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/vctr_list_divider_color" />
+
+        <TextView
+            android:id="@+id/troubleshoot_summ_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/settings_troubleshoot_diagnostic"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/toubleshoot_summ_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:textColor="?android:attr/textColorSecondary"
+            tools:text="@string/settings_troubleshoot_diagnostic_running_status" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/troubleshoot_run_button"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="16dp"
+                android:background="?attr/colorAccent"
+                android:padding="8dp"
+                android:text="@string/settings_troubleshoot_diagnostic_run_button_title"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                tools:enabled="false"
+                tools:visibility="visible" />
+
+            <Button
+                android:id="@+id/troubleshoot_summ_button"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="16dp"
+                android:background="?attr/colorAccent"
+                android:padding="8dp"
+                android:text="@string/send_bug_report"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

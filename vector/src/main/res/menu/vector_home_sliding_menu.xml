@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/account_group">
+        <item
+            android:id="@+id/sliding_menu_messages"
+            android:icon="@drawable/logo_transparent"
+            android:title="@string/room_sliding_menu_messages" />
+
+        <item
+            android:id="@+id/sliding_menu_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/room_sliding_menu_settings" />
+
+        <item
+            android:id="@+id/sliding_menu_send_bug_report"
+            android:icon="@drawable/ic_material_bug_report"
+            android:title="@string/send_bug_report" />
+
+        <item
+            android:id="@+id/sliding_menu_exit"
+            android:icon="@drawable/ic_power_settings"
+            android:title="@string/action_exit" />
+
+        <item
+            android:id="@+id/sliding_menu_sign_out"
+            android:icon="@drawable/ic_material_exit_to_app"
+            android:title="@string/action_sign_out" />
+    </group>
+
+    <group android:id="@+id/app_group">
+        <item
+            android:id="@+id/sliding_menu_version"
+            android:title="@string/room_sliding_menu_version" />
+
+        <item
+            android:id="@+id/sliding_copyright_terms"
+            android:title="@string/room_sliding_menu_copyright" />
+
+        <item
+            android:id="@+id/sliding_menu_app_tac"
+            android:title="@string/room_sliding_menu_term_and_conditions" />
+
+        <item
+            android:id="@+id/sliding_menu_privacy_policy"
+            android:title="@string/room_sliding_menu_privacy_policy" />
+
+        <item
+            android:id="@+id/sliding_menu_third_party_notices"
+            android:title="@string/room_sliding_menu_third_party_notices" />
+    </group>
+
+    <group android:visible="@bool/debug_mode">
+        <item
+            android:id="@+id/sliding_menu_debug"
+            android:title="@string/debug_screen" />
+    </group>
+</menu>

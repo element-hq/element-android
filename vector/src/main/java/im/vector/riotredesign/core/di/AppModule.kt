@@ -26,6 +26,7 @@ import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
 import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
+import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import org.koin.dsl.module.module
 
 class AppModule(private val context: Context) {
@@ -62,6 +63,10 @@ class AppModule(private val context: Context) {
 
         single {
             RoomSummaryComparator()
+        }
+
+        single {
+            NotificationDrawerManager(context)
         }
 
         factory {

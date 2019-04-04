@@ -18,9 +18,7 @@ package im.vector.riotredesign.features.home.room.detail
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
@@ -69,9 +67,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_room_detail, container, false)
-    }
+    override fun getLayoutResId() = R.layout.fragment_room_detail
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -19,9 +19,6 @@ package im.vector.riotredesign.features.home.room.list
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -54,9 +51,7 @@ class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
     private val homeNavigator by inject<HomeNavigator>()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_room_list, container, false)
-    }
+    override fun getLayoutResId() = R.layout.fragment_room_list
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

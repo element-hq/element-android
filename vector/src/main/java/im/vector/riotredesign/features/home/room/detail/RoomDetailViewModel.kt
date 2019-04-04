@@ -97,7 +97,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                 .subscribeBy(onNext = { actions ->
                     val mostRecentEvent = actions.maxBy { it.event.displayIndex }
                     mostRecentEvent?.event?.root?.eventId?.let { eventId ->
-                        room.setReadReceipt(eventId, callback = object : MatrixCallback<Void> {})
+                        room.setReadReceipt(eventId, callback = object : MatrixCallback<Unit> {})
                     }
                 })
                 .disposeOnClear()

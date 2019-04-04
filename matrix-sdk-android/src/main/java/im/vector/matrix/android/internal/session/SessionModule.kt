@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.content.DefaultContentUrlResolver
@@ -33,6 +34,7 @@ import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
+import im.vector.matrix.android.internal.session.signout.DefaultSignOutService
 import im.vector.matrix.android.internal.session.user.DefaultUserService
 import im.vector.matrix.android.internal.session.user.UserEntityUpdater
 import im.vector.matrix.android.internal.util.md5
@@ -100,6 +102,10 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             DefaultGroupService(get()) as GroupService
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultSignOutService(get(), get()) as SignOutService
         }
 
         scope(DefaultSession.SCOPE) {

@@ -92,7 +92,7 @@
 
     <!-- Rooms fragment -->
     <string name="rooms_header">Huoneet</string>
-    <string name="rooms_directory_header">Huonehakemisto</string>
+    <string name="rooms_directory_header">Huoneluettelo</string>
     <string name="no_room_placeholder">Ei huoneita</string>
     <string name="no_public_room_placeholder">Ei julkisia huoneita saatavilla</string>
     <plurals name="public_room_nb_users">
@@ -183,7 +183,7 @@
     <string name="auth_reset_password_missing_email">Anna tilisi sähköpostiosoite.</string>
     <string name="auth_reset_password_missing_password">Anna uusi salasana.</string>
     <string name="auth_reset_password_email_validation_message">Osoitteeseen %s on lähetetty sähköposti. Sen jälkeen, kun olet seurannut siinä olevaa linkkiä, paina alla olevaa nappia.</string> <!-- ???? -->
-    <string name="auth_reset_password_error_unauthorized">Ei voitu vahvistaa sähköpostiosoitetta, seuraa linkkiä sähköpostissa jonka sait</string>
+    <string name="auth_reset_password_error_unauthorized">Sähköpostiosoitteesi vahvitaminen epäonnistui. Varmistathan, että seurasit sähköpostissasi olevaa linkkiä</string>
     <string name="auth_reset_password_success_message">Salasanasi on vaihdettu.\n\nSinut on kirjauduttu ulos kaikista laitteistasi, etkä enää saa viesti-ilmoituksia. Ottaaksesi käyttöön ilmoitukset uudelleen, kirjaudu sisään uudelleen kaikilla laitteillasi.</string>
 
     <!-- Login Screen -->
@@ -365,7 +365,7 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="ssl_logout_account">Kirjaudu ulos</string>
     <string name="ssl_remain_offline">Jätä huomiotta</string> <!-- ??? -->
     <string name="ssl_fingerprint_hash">Sormenjälki (%s):</string>
-    <string name="ssl_could_not_verify">Palvelimen identiteettiä ei voitu varmistaa.</string> <!-- ??? -->
+    <string name="ssl_could_not_verify">Palvelimen identiteettiä ei voitu vahvistaa.</string> <!-- ??? -->
     <string name="ssl_cert_not_trust">Tämä voi tarkoittaa että joku yrittää kaapata sinun viestintääsi tai että laitteesi ei luota palvelimen varmenteeseen.</string>
     <string name="ssl_cert_new_account_expl">Jos palvelimen ylläpitäjä sanoo että tämä on odotettua, varmista että alla oleva sormenjälki on sama kuin hänen antama.</string>
     <string name="ssl_unexpected_existing_expl">Sertifikaatti johon laitteesi luotti aikaisemmin on vaihtunut. Tämä on HYVIN EPÄTAVALLISTA. Suositellaan että ET hyväksy tätä uutta sertifikaattia.</string>
@@ -413,7 +413,7 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="room_recents_join_room_prompt">Syötä huonetunniste tai -alias</string>
 
     <!-- Directory -->
-    <string name="directory_search_results_title">Selaa hakemistoa</string>
+    <string name="directory_search_results_title">Selaa luetteloa</string>
     <string name="directory_searching_title">Haetaan luettelosta…</string>
 
     <!-- home room settings -->
@@ -481,8 +481,8 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="settings_contacts_app_permission">Oikeus yhteystietoihin</string>
     <string name="settings_contacts_phonebook_country">Yhteystiedot (maa)</string>
     <string name="settings_home_display">Koti</string>
-    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
-    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
+    <string name="settings_pin_missed_notifications">Kiinnitä huoneet, joissa on huomaamatta jääneitä ilmoituksia</string>
+    <string name="settings_pin_unread_messages">Kiinnitä huoneet, joissa on lukemattomia viestejä</string>
     <string name="settings_devices_list">Laitteet</string>
     <string name="devices_details_dialog_title">Laitteen tiedot</string>
     <string name="devices_details_id_title">ID</string>
@@ -527,7 +527,7 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="settings_phone_number_country_error">Valitse maa</string>
     <string name="settings_phone_number_label">Puhelinnumero</string>
     <string name="settings_phone_number_error">Väärän muotoinen puhelinnumero valitulle maalle</string>
-    <string name="settings_phone_number_verification">Puhelinvarmennus</string>
+    <string name="settings_phone_number_verification">Puhelinnumeron varmennus</string>
     <string name="settings_phone_number_verification_instruction">Lähetimme aktivointikoodin tekstiviestinä. Syötä aktivointikoodi alapuolelle.</string>
     <string name="settings_phone_number_verification_error_empty_code">Anna aktivointikoodi</string>
     <string name="settings_phone_number_verification_error">Puhelinnumeron aktivointi epäonnistui</string>
@@ -659,7 +659,7 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="encryption_information_verify_device_warning">Vahvistaaksesi että tähän laitteeseen voi luottaa, ota yhteyttä sen omistajaan jollain muulla tavalla (esimerkiksi soittamalla tai tapaamalla) ja varmista että hänen laitteen avain on sama kuin alla oleva:</string> <!-- ??? -->
     <string name="encryption_information_verify_device_warning2">Jos avain täsmää, paina painiketta “vahvista”. Jos avain ei täsmää, se tarkoittaa, että jokin tuntematon osapuoli lukee keskustelujanne. Tässä tapauksessa paina painiketta “kiellä”.
 \nTulevaisuudessa tämä varmennusprosessi tulee olemaan hienostuneempi.</string>
-    <string name="encryption_information_verify_key_match">Vahvistan että avaimet täsmäävät</string>
+    <string name="encryption_information_verify_key_match">Vahvistan, että avaimet täsmäävät</string>
 
     <string name="e2e_enabling_on_app_update">Riot tukee viestien salausta. Kirjaudu sisään uudelleen ottaaksesi salaus käyttöön.
 
@@ -670,7 +670,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="unknown_devices_alert_message">Huoneessa on tuntemattomia laitteita joita ei ole vahvistettu.\nLaitteet eivät välttämättä kuulu väitetyille omistajilleen.\nJokainen uusi laite kannattaa vahvistaa ennen kuin jatkat, mutta voit myös lähettää viestit vahvistamattomille laitteille.\n\nTuntemattomat laitteet:</string>
 
     <!-- directory activity  -->
-    <string name="select_room_directory">Valitse huonehakemisto</string>
+    <string name="select_room_directory">Valitse huoneluettelo</string>
     <string name="directory_server_fail_to_retrieve_server">Palvelin saattaa olla tavoittamattomissa tai ylikuormitettu</string>
     <string name="directory_server_type_homeserver">Syötä kotipalvelin jolta listataan julkiset huoneet</string>
     <string name="directory_server_placeholder">Kotipalvelimen URL</string>
@@ -679,7 +679,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Etsi historiasta</string>
-    <string name="user_directory_header">Käyttäjähakemisto</string>
+    <string name="user_directory_header">Käyttäjäluettelo</string>
     <string name="people_search_user_directory">KÄYTTÄJÄHAKEMISTO (%s)</string>
     <string name="settings_start_on_boot">Käynnistä automaattisesti</string>
     <string name="settings_clear_media_cache">Tyhjennä mediavälimuisti</string>
@@ -713,7 +713,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="dark_theme">Tumma teema</string>
     <string name="black_them">Musta teema</string>
 
-    <string name="notification_sync_in_progress">Synkronoidaan</string>
+    <string name="notification_sync_in_progress">Synkronoidaan…</string>
     <string name="notification_listening_for_events">Seuraa tapahtumia</string>
     <string name="notification_noisy_notifications">Korostetut ilmoitukset</string>
     <string name="notification_silent_notifications">Hiljaiset ilmoitukset</string>
@@ -1086,7 +1086,7 @@ Haluatko lisätä paketteja?</string>
     <string name="settings_notification_privacy_normal">Normaali</string>
     <string name="settings_notification_privacy_reduced">Heikentynyt yksityisyys</string>
     <string name="settings_notification_privacy_need_permission">Tämä sovellus tarvitsee oikeuden ajaakseen taustapalveluaan</string>
-    <string name="settings_notification_privacy_fcm">• ilmoitukset lähetetään Google Cloud Messaging -palvelun kautta</string>
+    <string name="settings_notification_privacy_fcm">• ilmoitukset lähetetään Firebase Cloud Messaging -palvelun kautta</string>
     <string name="settings_notification_privacy_metadata">• ilmoitukset sisältävät vain metadataa</string>
     <string name="settings_notification_privacy_secure_message_content">• ilmoituksessa olevan viestin sisältö <b>haetaan turvallisesti suoraan Matrix-kotipalvelimelta</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• ilmoitus sisältää <b>metadataa ja itse viestin</b></string>
@@ -1218,7 +1218,7 @@ Haluatko lisätä paketteja?</string>
     <string name="resource_limit_hard_contact">Tee %s jatkaaksesi palvelun käyttöä.</string>
 
     <string name="settings_lazy_loading_title">Lataa huoneen käyttäjät laiskasti</string>
-    <string name="settings_lazy_loading_description">Paranna suorituskykyä lataamalla huoneen jäsenet ensimmäisellä kerralla.</string>
+    <string name="settings_lazy_loading_description">Paranna suorituskykyä lataamalla huoneen jäsenet vasta, kun huone näytetään ensimmäisen kerran.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Kotipalvelimesi ei tue huoneen jäsenten laiskaa latausta. Yritä myöhemmin.</string>
 
     <string name="unknown_error">Törmäsimme virheeseen</string>
@@ -1237,7 +1237,7 @@ Haluatko lisätä paketteja?</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Kelvollista Google Play Services APK:ta ei löytynyt. Ilmoitukset eivät ehkä toimi oikein.</string>
 
-    <string name="store_title">Riot.im - Kommunikoi, sinun tavallasi.</string>
+    <string name="store_title">Riot.im - Kommunikoi, sinun tavallasi</string>
     <string name="store_whats_new">"Olemme aina tekemässä muutoksia ja parannuksia Riot.im:ään.
 Täydellisen muutoslokin löydät täältä: %1$s.
 Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytössä."</string>
@@ -1412,5 +1412,31 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="autodiscover_well_known_autofill_dialog_message">Riot löysi mukautetun palvelinasetuksen userId:si domainille ”%s”:
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Käytä asetuksia</string>
+
+    <string name="notification_sync_init">Alustetaan palvelua</string>
+    <string name="settings_media">Media</string>
+    <string name="settings_default_compression">Oletuksena oleva pakkauksen määrä</string>
+    <string name="compression_opt_list_choose">Valitse</string>
+    <string name="settings_default_media_source">Oletuksena oleva medialähde</string>
+    <string name="media_source_choose">Valitse</string>
+    <string name="settings_play_shutter_sound">Toista sulkimen ääni</string>
+
+    <string name="action_mark_room_read">Merkitse luetuksi</string>
+    <string name="settings_notification_privacy_no_background_sync">Sovelluksen <b>ei</b> tarvitse pitää yhteyttä kotipalvelimeen, jonka pitäisi vähentää akunkäyttöä</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: yksi viesti</item>
+        <item quantity="other">%1$s: %2$d viestiä</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">yksi ilmoitus</item>
+        <item quantity="other">%d ilmoitusta</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Uusi tapahtuma</string>
+    <string name="notification_unknown_room_name">Huone</string>
+    <string name="notification_new_messages">Uusia viestejä</string>
+    <string name="notification_new_invitation">Uusi kutsu</string>
+    <string name="notification_sender_me">Minä</string>
+    <string name="notification_inline_reply_failed">** Lähetys epäonnistui — avaathan huoneen</string>
 
 </resources>

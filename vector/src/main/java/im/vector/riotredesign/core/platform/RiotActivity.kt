@@ -23,11 +23,13 @@ import android.view.MenuItem
 import android.view.View
 import androidx.annotation.*
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxActivity
 import com.bumptech.glide.util.Util
+import com.google.android.material.snackbar.Snackbar
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.rageshake.BugReportActivity
@@ -47,8 +49,14 @@ abstract class RiotActivity : BaseMvRxActivity() {
      * ========================================================================================== */
 
     @Nullable
+    @JvmField
     @BindView(R.id.toolbar)
-    protected lateinit var toolbar: Toolbar
+    var toolbar: Toolbar? = null
+
+    @Nullable
+    @JvmField
+    @BindView(R.id.vector_coordinator_layout)
+    var coordinatorLayout: CoordinatorLayout? = null
 
     /* ==========================================================================================
      * DATA
@@ -269,4 +277,23 @@ abstract class RiotActivity : BaseMvRxActivity() {
      * Return a object containing other themes for this activity
      */
     open fun getOtherThemes(): ActivityOtherThemes = ActivityOtherThemes.Default
+
+    /* ==========================================================================================
+     * PUBLIC METHODS
+     * ========================================================================================== */
+
+    protected fun showSnackbar(message: String) {
+        coordinatorLayout?.let {
+            Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
+        }
+    }
+
+    /* ==========================================================================================
+     * Temporary method
+     * ========================================================================================== */
+
+    protected fun notImplemented() {
+        showSnackbar(getString(R.string.not_implemented))
+    }
+
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.VectorHomeActivity">
+
+    <item
+        android:id="@+id/ic_action_global_search"
+        android:icon="@drawable/ic_material_search_white"
+        android:title="@string/action_global_search"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/ic_action_historical"
+        android:icon="@drawable/ic_material_history_white"
+        android:title="@string/action_historical"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/ic_action_mark_all_as_read"
+        android:icon="@drawable/ic_material_done_all_white"
+        android:title="@string/action_mark_all_as_read"
+        app:showAsAction="collapseActionView" />
+</menu>

@@ -1179,7 +1179,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nenhum APK do Google Play Services válido foi encontrado. Notificações podem não funcionar corretamente.</string>
 
-    <string name="store_title">Riot.im - Comunique-se do seu jeito.</string>
+    <string name="store_title">Riot.im - Comunique-se do seu jeito</string>
     <string name="store_short_description">Um aplicativo de bate-papo universal seguro totalmente sob seu controle.</string>
     <string name="settings_troubleshoot_test_battery_failed">Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão.</string>
     <string name="passphrase_create_passphrase">Criar passphrase</string>
@@ -1247,4 +1247,16 @@ Para garantir que você não perca nada, mantenha suas atualizações ativadas."
     <string name="login_error_ssl_handshake">Seu dispositivo está usando um protocolo de segurança TLS desatualizado, vulnerável a ataques. Para sua segurança, você não poderá se conectar</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nEste erro está fora de controle da Riot. Isso pode ocorrer por vários motivos. Talvez funcione se você tentar novamente mais tarde. Você também pode verificar se o Google Play Service não está restrito ao uso de dados nas configurações do sistema ou se o relógio do dispositivo está correto ou pode acontecer na ROM personalizada.</string>
+    <string name="notification_sync_init">Inicializando o serviço</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nEste erro está fora de controle do Riot. Não há conta do Google no telefone. Por favor, abra o gerenciador de contas e adicione uma conta do Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar Conta</string>
+
+    <string name="settings_noisy_notifications_preferences">Configurar notificações ruidosas</string>
+    <string name="settings_call_notifications_preferences">Configurar notificações de chamada</string>
+    <string name="settings_silent_notifications_preferences">Configurar notificações silenciosas</string>
+    <string name="settings_system_preferences_summary">Escolha a cor do LED, vibração, som…</string>
+
+
+    <string name="settings_cryptography_manage_keys">Gerenciamento de Chaves de Criptografia</string>
+    <string name="settings_send_message_with_enter">Enviar mensagem com a tecla enter</string>
 </resources>

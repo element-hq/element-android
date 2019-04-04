@@ -59,10 +59,10 @@
     <string name="bottom_action_people">Ludzie</string>
     <string name="bottom_action_rooms">Pokoje</string>
 
-    <string name="home_filter_placeholder_home">Szukaj pokojów</string>
-    <string name="home_filter_placeholder_favorites">Szukaj w ulubionych</string>
-    <string name="home_filter_placeholder_people">Szukaj ludzi</string>
-    <string name="home_filter_placeholder_rooms">Szukaj pokojów</string>
+    <string name="home_filter_placeholder_home">Filtruj nazwy pokojów</string>
+    <string name="home_filter_placeholder_favorites">Filtruj ulubione</string>
+    <string name="home_filter_placeholder_people">Filtruj ludzi</string>
+    <string name="home_filter_placeholder_rooms">Filtruj nazwy pokojów</string>
 
     <string name="invitations_header">Zaproszenia</string>
     <string name="low_priority_header">Niski priorytet</string>
@@ -105,7 +105,7 @@
 
     <string name="join_room">Dołącz do pokoju</string>
     <string name="username">Nazwa użytkownika</string>
-    <string name="create_account">Zarejestruj</string>
+    <string name="create_account">Stwórz konto</string>
     <string name="login">Zaloguj się</string>
     <string name="logout">Wyloguj</string>
     <string name="hs_url">Adres serwera</string>
@@ -123,7 +123,7 @@
     <string name="option_take_photo_video">Zrób zdjęcie lub film</string>
 
     <string name="auth_login">Zaloguj się</string>
-    <string name="auth_register">Zarejestruj</string>
+    <string name="auth_register">Stwórz konto</string>
     <string name="auth_submit">Wyślij</string>
     <string name="auth_skip">Pomiń</string>
     <string name="auth_send_reset_email">Wyślij e-mail przywracający</string>
@@ -415,9 +415,9 @@ Wprowadź hasło, aby kontynuować.</string>
     <string name="account_phone_number_already_used_error">Ten numer telefonu jest już używany.</string>
 
     <string name="settings_change_password">Zmień hasło</string>
-    <string name="settings_old_password">Stare hasło</string>
+    <string name="settings_old_password">Bieżące hasło</string>
     <string name="settings_new_password">Nowe hasło</string>
-    <string name="settings_confirm_password">Potwierdź hasło</string>
+    <string name="settings_confirm_password">Potwierdź nowe hasło</string>
     <string name="settings_fail_to_update_password">Nie udało się zmienić hasła</string>
     <string name="settings_password_updated">Twoje hasło zostało zmienione</string>
     <string name="settings_unignore_user">Pokazywać wszystkie wiadomości od %s?
@@ -556,7 +556,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="actions">Działania</string>
     <string name="bottom_action_groups">Społeczności</string>
 
-    <string name="home_filter_placeholder_groups">Odszukaj społeczności</string>
+    <string name="home_filter_placeholder_groups">Filtruj nazwy społeczności</string>
 
     <string name="groups_invite_header">Zaproś</string>
     <string name="groups_header">Społeczności</string>
@@ -623,8 +623,8 @@ Zezwolić Riot na dostęp do kontaktów?</string>
     <string name="list_members">Lista uczestników</string>
     <string name="open_chat_header">Otwarty nagłówek</string>
     <string name="room_sync_in_progress">Synchronizacja…</string>
-    <string name="room_preview_unlinked_email_warning">Zaproszenie zostało wysłane do %s, który nie jest powiązany z zalogowanym kontem. 
-Możesz zalogować się z wykorzystaniem innego konta, albo dodać ten adres e-mail do swoich kontaktów.</string>
+    <string name="room_preview_unlinked_email_warning">Zaproszenie zostało wysłane do %s, który nie jest powiązany z zalogowanym kontem.
+\nMożesz zalogować się z wykorzystaniem innego konta, albo dodać ten adres e-mail do swojego konta.</string>
     <plurals name="room_header_active_members_count">
         <item quantity="one">Jeden aktywny członek</item>
         <item quantity="few">Kilku aktywnych członków</item>
@@ -693,7 +693,7 @@ Jesteś pewien?</string>
 
     <string name="settings_contacts_phonebook_country">Kraj książki adresowej</string>
     <string name="settings_home_display">Ekran domowy</string>
-    <string name="settings_inline_url_preview">Zezwól na domyślny podgląd zawartości URL</string>
+    <string name="settings_inline_url_preview">Podgląd zawartości URL</string>
     <string name="settings_12_24_timestamps">Pokaż czas w formacie 12-godzinnym</string>
     <string name="settings_vibrate_on_mention">Wibruj gdy ktoś wspomni o tobie</string>
 
@@ -757,7 +757,7 @@ Jesteś pewien?</string>
     <string name="settings_notification_privacy_normal">Standardowa</string>
     <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
     <string name="settings_notification_privacy_need_permission">Aplikacja wymaga uprawnień do działania w tle</string>
-    <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Powiadomienia zawierają tylko meta-dane</string>
     <string name="settings_notification_privacy_secure_message_content">• Treść powiadomienia jest <b>bezpiecznie pobierana z domowego serwera Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Powiadomienia zawierają <b>meta-dane oraz treść wiadomości</b></string>
@@ -1133,7 +1133,7 @@ Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktuali
 Spróbuj uruchomić ponownie aplikację.</string>
     <string name="video_call_in_progress">W trakcie połączenia wideo…</string>
 
-    <string name="title_activity_keys_backup_setup">Przywracanie wiadomości</string>
+    <string name="title_activity_keys_backup_setup">Kopia Zapasowa Klucza</string>
     <string name="keys_backup_is_not_finished_please_wait">Kopia zapasowa kluczy nie jest zakończona, proszę czekać…</string>
     <string name="skip">Pomiń</string>
     <string name="settings_notification_advanced">Zaawansowane ustawienia powiadomień</string>
@@ -1145,4 +1145,20 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="abort">Przerwij</string>
 
     <string name="action_sign_out_confirmation_simple">Czy na pewno chcesz się wylogować?</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Trwa tworzenie kopii zapasowej klucza. Jeśli wylogujesz się teraz utracisz dostęp do zaszyfrowanych wiadomości.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nie chcę moich zaszyfrowanych wiadomości</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Utracisz dostęp do zaszyfrowanych wiadomości, chyba że wykonasz kopię zapasową kluczy przed wylogowaniem się.</string>
+
+    <string name="stay">Zostań</string>
+    <string name="ignore">Ignoruj</string>
+
+    <string name="settings_default_compression">Domyślna kompresja</string>
+    <string name="settings_noisy_notifications_preferences">Konfiguruj głośne powiadomienia</string>
+    <string name="settings_silent_notifications_preferences">Konfiguruj ciche powiadomienia</string>
+    <string name="notification_silent">Ciche</string>
+    <string name="keys_backup_settings_restore_backup_button">Przywróć z kopii zapasowej</string>
+    <string name="keys_backup_settings_delete_backup_button">Usuń kopię zapasową</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Usuń kopię zapasową</string>
+    <string name="keys_backup_info_title_version">Wersja</string>
 </resources>

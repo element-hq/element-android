@@ -18,7 +18,7 @@
 
         <activity
             android:name=".features.MainActivity"
-            android:theme="@style/Theme.Riot.Splash">
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,6 +32,15 @@
         <activity
             android:name=".features.rageshake.BugReportActivity"
             android:label="@string/title_activity_bug_report" />
+        <activity
+            android:name=".features.settings.VectorSettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:windowSoftInputMode="adjustResize" />
+
+        <service
+            android:name=".core.services.CallService"
+            android:exported="false" />
+
     </application>
 
 </manifest>

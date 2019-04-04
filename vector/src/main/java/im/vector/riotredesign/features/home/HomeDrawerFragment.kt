@@ -17,9 +17,6 @@
 package im.vector.riotredesign.features.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceChildFragment
 import im.vector.riotredesign.core.platform.RiotFragment
@@ -35,9 +32,7 @@ class HomeDrawerFragment : RiotFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_home_drawer, container, false)
-    }
+    override fun getLayoutResId() = R.layout.fragment_home_drawer
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

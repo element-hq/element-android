@@ -30,20 +30,20 @@ internal class DefaultReadService(private val roomId: String,
                                   private val setReadMarkersTask: SetReadMarkersTask,
                                   private val taskExecutor: TaskExecutor) : ReadService {
 
-    override fun markAllAsRead(callback: MatrixCallback<Void>) {
+    override fun markAllAsRead(callback: MatrixCallback<Unit>) {
         val latestEvent = getLatestEvent()
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = latestEvent?.eventId, readReceiptEventId = latestEvent?.eventId)
-        setReadMarkersTask.configureWith(params).executeBy(taskExecutor)
+        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
     }
 
-    override fun setReadReceipt(eventId: String, callback: MatrixCallback<Void>) {
+    override fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = null, readReceiptEventId = eventId)
-        setReadMarkersTask.configureWith(params).executeBy(taskExecutor)
+        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
     }
 
-    override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Void>) {
+    override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = fullyReadEventId, readReceiptEventId = null)
-        setReadMarkersTask.configureWith(params).executeBy(taskExecutor)
+        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
     }
 
     private fun getLatestEvent(): EventEntity? {
