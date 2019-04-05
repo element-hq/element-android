@@ -18,18 +18,32 @@ package im.vector.matrix.android.internal.session.room
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchManaged
 
 internal class DefaultRoomService(private val monarchy: Monarchy,
-                                  private val roomFactory: RoomFactory) : RoomService {
+                                  private val createRoomTask: CreateRoomTask,
+                                  private val roomFactory: RoomFactory,
+                                  private val taskExecutor: TaskExecutor) : RoomService {
+
+    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>) {
+        createRoomTask
+                .configureWith(createRoomParams)
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
+    }
 
     override fun getRoom(roomId: String): Room? {
         monarchy.fetchManaged { RoomEntity.where(it, roomId).findFirst() } ?: return null

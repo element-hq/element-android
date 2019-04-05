@@ -97,7 +97,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultRoomService(get(), get()) as RoomService
+            DefaultRoomService(get(), get(), get(), get()) as RoomService
         }
 
         scope(DefaultSession.SCOPE) {

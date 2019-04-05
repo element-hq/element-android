@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,6 +27,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
@@ -51,15 +53,18 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private val homeNavigator by inject<HomeNavigator>()
 
+    private var progress: ProgressDialog? = null
+
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
         }
     }
 
+    override fun getLayoutRes() = R.layout.activity_home
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
         bindScope(getOrCreateScope(HomeModule.HOME_SCOPE))
         homeNavigator.activity = this
         drawerLayout.addDrawerListener(drawerListener)
@@ -72,6 +77,17 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         homeActivityViewModel.openRoomLiveData.observeEvent(this) {
             homeNavigator.openRoomDetail(it, null)
         }
+        homeActivityViewModel.isLoading.observe(this, Observer<Boolean> {
+            // TODO better UI
+            if (it) {
+                progress?.dismiss()
+                progress = ProgressDialog(this)
+                progress?.setMessage(getString(R.string.room_recents_create_room))
+                progress?.show()
+            } else {
+                progress?.dismiss()
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -118,6 +134,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
             R.id.sliding_menu_sign_out -> {
                 SignOutUiWorker(this).perform(Matrix.getInstance().currentSession!!)
+                return true
+            }
+            // TODO Temporary code here to create a room
+            R.id.tmp_menu_create_room -> {
+                homeActivityViewModel.createRoom()
                 return true
             }
         }

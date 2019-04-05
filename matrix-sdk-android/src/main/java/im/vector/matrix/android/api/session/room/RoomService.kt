@@ -17,12 +17,20 @@
 package im.vector.matrix.android.api.session.room
 
 import androidx.lifecycle.LiveData
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 
 /**
  * This interface defines methods to get rooms. It's implemented at the session level.
  */
 interface RoomService {
+
+    /**
+     * Create a room
+     */
+    fun createRoom(createRoomParams: CreateRoomParams,
+                   callback: MatrixCallback<String>)
 
     /**
      * Get a room from a roomId

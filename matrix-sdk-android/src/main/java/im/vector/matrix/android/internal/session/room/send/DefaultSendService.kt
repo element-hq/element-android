@@ -41,6 +41,7 @@ internal class DefaultSendService(private val roomId: String,
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
+    // TODO callback is not used
     override fun sendTextMessage(text: String, callback: MatrixCallback<Event>): Cancelable {
         val event = eventFactory.createTextEvent(roomId, text)
 

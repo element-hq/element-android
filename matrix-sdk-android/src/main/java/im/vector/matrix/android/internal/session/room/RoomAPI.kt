@@ -18,20 +18,26 @@ package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 internal interface RoomAPI {
+
+    /**
+     * Create a room.
+     * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-createroom
+     *
+     * @param param the creation room parameter
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "createRoom")
+    fun createRoom(@Body param: CreateRoomParams): Call<CreateRoomResponse>
 
     /**
      * Get a list of messages starting from a reference.

@@ -30,10 +30,10 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
@@ -130,6 +130,11 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     }
 
     // ROOM SERVICE
+
+    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>) {
+        assert(isOpen)
+        return roomService.createRoom(createRoomParams, callback)
+    }
 
     override fun getRoom(roomId: String): Room? {
         assert(isOpen)
