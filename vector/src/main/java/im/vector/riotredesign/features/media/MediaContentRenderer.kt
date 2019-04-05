@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.riotredesign.core.glide.GlideApp
 import kotlinx.android.parcel.Parcelize
+import java.io.File
 
 object MediaContentRenderer {
 
@@ -38,7 +39,12 @@ object MediaContentRenderer {
             val maxWidth: Int,
             val orientation: Int?,
             val rotation: Int?
-    ) : Parcelable
+    ) : Parcelable {
+
+        fun isLocalFile(): Boolean {
+            return url != null && File(url).exists()
+        }
+    }
 
     enum class Mode {
         FULL_SIZE,
@@ -51,11 +57,11 @@ object MediaContentRenderer {
         imageView.layoutParams.width = width
         val contentUrlResolver = Matrix.getInstance().currentSession!!.contentUrlResolver()
         val resolvedUrl = when (mode) {
-            Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
-            Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-        }
-        //Fallback to base url
-                ?: data.url
+                              Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
+                              Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+                          }
+                          //Fallback to base url
+                          ?: data.url
 
         GlideApp
                 .with(imageView)
@@ -67,12 +73,16 @@ object MediaContentRenderer {
     fun render(data: Data, imageView: BigImageView) {
         val (width, height) = processSize(data, Mode.THUMBNAIL)
         val contentUrlResolver = Matrix.getInstance().currentSession!!.contentUrlResolver()
-        val fullSize = contentUrlResolver.resolveFullSize(data.url)
-        val thumbnail = contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-        imageView.showImage(
-                Uri.parse(thumbnail ?: data.url),
-                Uri.parse(fullSize ?: data.url)
-        )
+        if (data.isLocalFile()) {
+            imageView.showImage(Uri.parse(data.url))
+        } else {
+            val fullSize = contentUrlResolver.resolveFullSize(data.url)
+            val thumbnail = contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+            imageView.showImage(
+                    Uri.parse(thumbnail),
+                    Uri.parse(fullSize)
+            )
+        }
     }
 
     private fun processSize(data: Data, mode: Mode): Pair<Int, Int> {

@@ -28,6 +28,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : RiotEpoxyModel<H>() {
     abstract val informationData: MessageInformationData
 
     override fun bind(holder: H) {
+        super.bind(holder)
         if (informationData.showInformation) {
             holder.avatarImageView.visibility = View.VISIBLE
             holder.memberNameView.visibility = View.VISIBLE

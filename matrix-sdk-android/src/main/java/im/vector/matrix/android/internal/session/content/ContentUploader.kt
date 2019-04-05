@@ -21,6 +21,7 @@ import arrow.core.Try.Companion.raise
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.network.ProgressRequestBody
 import okhttp3.HttpUrl
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -31,12 +32,13 @@ import java.io.IOException
 
 
 internal class ContentUploader(private val okHttpClient: OkHttpClient,
-                               private val sessionParams: SessionParams) {
+                               private val sessionParams: SessionParams,
+                               private val contentUploadProgressTracker: DefaultContentUploadStateTracker) {
 
     private val moshi = MoshiProvider.providesMoshi()
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
-    fun uploadFile(attachment: ContentAttachmentData): Try<ContentUploadResponse> {
+    fun uploadFile(eventId: String, attachment: ContentAttachmentData): Try<ContentUploadResponse> {
         if (attachment.path == null || attachment.mimeType == null) {
             return raise(RuntimeException())
         }
@@ -55,12 +57,18 @@ internal class ContentUploader(private val okHttpClient: OkHttpClient,
                 MediaType.parse(attachment.mimeType),
                 file
         )
+        val progressRequestBody = ProgressRequestBody(requestBody, object : ProgressRequestBody.Listener {
+            override fun onProgress(current: Long, total: Long) {
+                contentUploadProgressTracker.setProgress(eventId, current, total)
+            }
+        })
+
         val request = Request.Builder()
                 .url(httpUrl)
-                .post(requestBody)
+                .post(progressRequestBody)
                 .build()
 
-        return Try {
+        val result = Try {
             okHttpClient.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
                     throw IOException()
@@ -72,5 +80,11 @@ internal class ContentUploader(private val okHttpClient: OkHttpClient,
                 }
             }
         }
+        if (result.isFailure()) {
+            contentUploadProgressTracker.setFailure(eventId)
+        } else {
+            contentUploadProgressTracker.setSuccess(eventId)
+        }
+        return result
     }
 }

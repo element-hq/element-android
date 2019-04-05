@@ -17,7 +17,7 @@
 package im.vector.matrix.android.internal.session.content
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
@@ -32,7 +32,7 @@ import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import org.koin.standalone.inject
 
 internal class UploadContentWorker(context: Context, params: WorkerParameters)
-    : Worker(context, params), MatrixKoinComponent {
+    : CoroutineWorker(context, params), MatrixKoinComponent {
 
     private val mediaUploader by inject<ContentUploader>()
 
@@ -43,12 +43,15 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters)
             val attachment: ContentAttachmentData
     )
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                      ?: return Result.failure()
 
+        if (params.event.eventId == null) {
+            return Result.failure()
+        }
         return mediaUploader
-                .uploadFile(params.attachment)
+                .uploadFile(params.event.eventId, params.attachment)
                 .fold({ handleFailure() }, { handleSuccess(params, it) })
     }
 

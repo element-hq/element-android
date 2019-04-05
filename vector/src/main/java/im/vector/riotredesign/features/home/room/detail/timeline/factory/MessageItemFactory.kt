@@ -23,7 +23,11 @@ import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
@@ -32,7 +36,13 @@ import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.riotredesign.features.home.room.detail.timeline.item.*
+import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import me.gujun.android.span.span
@@ -47,6 +57,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                callback: TimelineEventController.Callback?
     ): RiotEpoxyModel<*>? {
 
+        val eventId = event.root.eventId ?: return null
         val roomMember = event.roomMember
         val nextRoomMember = nextEvent?.roomMember
 
@@ -54,12 +65,12 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                ?: false
+                                                      ?: false
 
         val showInformation = addDaySeparator
-                || nextRoomMember != roomMember
-                || nextEvent?.root?.type != EventType.MESSAGE
-                || isNextMessageReceivedMoreThanOneHourAgo
+                              || nextRoomMember != roomMember
+                              || nextEvent?.root?.type != EventType.MESSAGE
+                              || isNextMessageReceivedMoreThanOneHourAgo
 
         val messageContent: MessageContent = event.root.content.toModel() ?: return null
         val time = timelineDateFormatter.formatMessageHour(date)
@@ -69,7 +80,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
         return when (messageContent) {
             is MessageTextContent   -> buildTextMessageItem(messageContent, informationData, callback)
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, callback)
+            is MessageImageContent  -> buildImageMessageItem(eventId, messageContent, informationData, callback)
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
             else                    -> buildNotHandledMessageItem(messageContent)
@@ -81,7 +92,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return DefaultItem_().text(text)
     }
 
-    private fun buildImageMessageItem(messageContent: MessageImageContent,
+    private fun buildImageMessageItem(eventId: String,
+                                      messageContent: MessageImageContent,
                                       informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageItem? {
 
@@ -97,6 +109,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 orientation = messageContent.info?.orientation
         )
         return MessageImageItem_()
+                .eventId(eventId)
                 .informationData(informationData)
                 .mediaData(data)
                 .clickListener { view -> callback?.onMediaClicked(data, view) }
@@ -107,10 +120,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val bodyToUse = messageContent.formattedBody
-                ?.let {
-                    htmlRenderer.render(it)
-                }
-                ?: messageContent.body
+                                ?.let {
+                                    htmlRenderer.render(it)
+                                }
+                        ?: messageContent.body
 
         val linkifiedBody = linkifyBody(bodyToUse, callback)
         return MessageTextItem_()
