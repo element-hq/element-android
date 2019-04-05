@@ -49,9 +49,6 @@
     <string name="notice_avatar_changed_too">(アバターも変更された)</string>
     <string name="notice_room_name_removed">%1$s が部屋名を削除しました</string>
     <string name="notice_room_topic_removed">%1$s がルームトピックを削除しました</string>
-    <string name="notice_event_redacted">"編集した %1$s "</string>
-    <string name="notice_event_redacted_by">" %1$s により"</string>
-    <string name="notice_event_redacted_reason">" [理由: %1$s]"</string>
     <string name="notice_profile_change_redacted">%1$s がプロフィール %2$s を更新しました</string>
     <string name="notice_room_third_party_invite">%1$s は %2$s に部屋に参加するよう招待状を送りました</string>
     <string name="notice_room_third_party_registered_invite">%1$sは%2$sの招待を受け入れました</string>

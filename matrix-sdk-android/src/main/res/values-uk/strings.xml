@@ -49,9 +49,6 @@
     <string name="notice_avatar_changed_too">(аватар також змінено)</string>
     <string name="notice_room_name_removed">%1$s прибрав(ла) назву кімнати</string>
     <string name="notice_room_topic_removed">%1$s прибрав(ла) тему кімнати</string>
-    <string name="notice_event_redacted">"відредаговано %1$s "</string>
-    <string name="notice_event_redacted_by">" %1$s"</string>
-    <string name="notice_event_redacted_reason">" [причина: %1$s]"</string>
     <string name="notice_profile_change_redacted">%1$s оновив(ла) свій профіль %2$s</string>
     <string name="notice_room_third_party_invite">%1$s надіслав(ла) запрошення %2$s приєднатися до кімнати</string>
     <string name="notice_room_third_party_registered_invite">%1$s прийняв(ла) запрошення у %2$s</string>

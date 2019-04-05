@@ -39,9 +39,6 @@
     <string name="notice_avatar_changed_too">(профилната снимка също беше сменена)</string>
     <string name="notice_room_name_removed">%1$s премахна името на стаята</string>
     <string name="notice_room_topic_removed">%1$s премахна темата на стаята</string>
-    <string name="notice_event_redacted">премахнато %1$s</string>
-    <string name="notice_event_redacted_by">от %1$s</string>
-    <string name="notice_event_redacted_reason">[причина: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s обнови своя профил %2$s</string>
     <string name="notice_room_third_party_invite">%1$s изпрати покана на %2$s да се присъедини към стаята</string>
     <string name="notice_room_third_party_registered_invite">%1$s прие поканата за %2$s</string>

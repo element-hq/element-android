@@ -39,9 +39,6 @@
     <string name="notice_avatar_changed_too">(avatar is ook veranderd)</string>
     <string name="notice_room_name_removed">%1$s heeft de gespreksnaam verwijderd</string>
     <string name="notice_room_topic_removed">%1$s heeft het gespreksonderwerp verwijderd</string>
-    <string name="notice_event_redacted">heeft %1$s verwijderd</string>
-    <string name="notice_event_redacted_by"> door %1$s</string>
-    <string name="notice_event_redacted_reason">  [reden: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s heeft zijn/haar profiel %2$s bijgewerkt</string>
     <string name="notice_room_third_party_invite">%1$s heeft een uitnodiging naar %2$s gestuurd om het gesprek toe te treden</string>
     <string name="notice_room_third_party_registered_invite">%1$s heeft de uitnodiging voor %2$s aanvaard</string>

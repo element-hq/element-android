@@ -38,9 +38,6 @@
     <string name="notice_avatar_changed_too">(profilképp is meg lett változtatva)</string>
     <string name="notice_room_name_removed">%1$s eltávolította a szoba nevét</string>
     <string name="notice_room_topic_removed">%1$s eltávolította a szoba témáját</string>
-    <string name="notice_event_redacted">"szerkesztett %1$s "</string>
-    <string name="notice_event_redacted_by">%1$s által</string>
-    <string name="notice_event_redacted_reason">[ok: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s megváltoztatták a profiljukat %2$s</string>
     <string name="notice_room_third_party_invite">"%1$s meghívót küldött %2$s -nak/-nek  hogy csatlakozzon a szobához"</string>
     <string name="notice_room_third_party_registered_invite">%1$s elfogadta a meghívót a %2$s -hoz</string>

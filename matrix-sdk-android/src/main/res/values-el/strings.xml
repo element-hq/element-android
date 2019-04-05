@@ -34,8 +34,6 @@
     <string name="notice_avatar_changed_too">(έγινε αλλαγή και του εικονιδίου χρήστη)</string>
     <string name="notice_room_name_removed">Ο/Η %1$s αφαίρεσε το όνομα του δωματίου</string>
     <string name="notice_room_topic_removed">Ο/Η %1$s αφαίρεσε το θέμα του δωματίου</string>
-    <string name="notice_event_redacted_by">" από τον/την %1$s"</string>
-    <string name="notice_event_redacted_reason">" [λόγος: %1$s]"</string>
     <string name="notice_profile_change_redacted">Ο/Η %1$s ανανέωσε το προφίλ του/της %2$s</string>
     <string name="notice_room_third_party_registered_invite">Ο/Η %1$s δέχτηκε την πρόσκληση για το %2$s</string>
 

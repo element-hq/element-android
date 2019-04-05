@@ -38,9 +38,6 @@
     <string name="notice_avatar_changed_too">(arī profila attēls mainījās)</string>
     <string name="notice_room_name_removed">%1$s dzēsa istabas nosaukumu</string>
     <string name="notice_room_topic_removed">%1$s dzēsa istabas tēmas nosaukumu</string>
-    <string name="notice_event_redacted">"rediģēts %1$s "</string>
-    <string name="notice_event_redacted_by">" no %1$s"</string>
-    <string name="notice_event_redacted_reason">" [iemesls: %1$s]"</string>
     <string name="notice_profile_change_redacted">%1$s atjaunoja profila informāciju %2$s</string>
     <string name="notice_room_third_party_invite">%1$s nosūtīja uzaicinājumu %2$s pievienoties istabai</string>
     <string name="notice_room_third_party_registered_invite">%1$s apstiprināja uzaicinājumu priekš %2$s</string>

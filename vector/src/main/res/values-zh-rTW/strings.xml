@@ -7,12 +7,12 @@
     <string name="dark_theme">深色主題</string>
     <string name="black_them">黑色主題</string>
 
-    <string name="notification_sync_in_progress">同步中</string>
+    <string name="notification_sync_in_progress">正在同步……</string>
     <string name="notification_listening_for_events">聆聽事件</string>
 
     <string name="title_activity_home">訊息</string>
     <string name="title_activity_room">聊天室</string>
-    <string name="title_activity_settings">設置</string>
+    <string name="title_activity_settings">設定</string>
     <string name="title_activity_member_details">會員訊息</string>
     <string name="title_activity_bug_report">錯誤回報</string>
     <string name="cancel">取消</string>
@@ -42,7 +42,7 @@
     <string name="rename">重新命名</string>
     <string name="report_content">回報內容</string>
     <string name="active_call">進行中的通話</string>
-    <string name="ongoing_conference_call">正在進行電話會議。
+    <string name="ongoing_conference_call">正在進行會議通話。 
 \n以 %1$s 或 %2$s 加入</string>
     <string name="ongoing_conference_call_voice">語音</string>
     <string name="ongoing_conference_call_video">視訊</string>
@@ -332,7 +332,7 @@
 
     <string name="room_participants_header_admin_tools">管理者工具</string>
     <string name="room_participants_header_call">通話</string>
-    <string name="room_participants_header_direct_chats">私聊</string>
+    <string name="room_participants_header_direct_chats">私人訊息</string>
     <string name="room_participants_header_devices">裝置</string>
 
     <string name="room_participants_action_invite">邀請</string>
@@ -473,7 +473,7 @@
     <string name="room_settings_mute">靜音</string>
     <string name="room_settings_favourite">我的最愛</string>
     <string name="room_settings_de_prioritize">降低優先順序</string>
-    <string name="room_settings_direct_chat">私人聊天</string>
+    <string name="room_settings_direct_chat">私人訊息</string>
     <string name="room_settings_leave_conversation">離開對話</string>
     <string name="room_settings_forget">忘記</string>
     <string name="room_settings_add_homescreen_shortcut">添加主熒幕快捷方式</string>
@@ -499,9 +499,9 @@
     <string name="settings_notification_privacy_normal">標準</string>
     <string name="settings_notification_privacy_reduced">低隱私模式</string>
     <string name="settings_notification_privacy_need_permission">應用程式需要權限以在後臺運行</string>
-    <string name="settings_notification_privacy_fcm">•通知將通過 Firebase Cloud Messaging 發送</string>
-    <string name="settings_notification_privacy_metadata">·通知僅包含中繼資料</string>
-    <string name="settings_notification_privacy_secure_message_content">• 通知的消息內容<b>將從 Matrix 主服務器安全獲取</b></string>
+    <string name="settings_notification_privacy_fcm">• 通知將透過 Firebase Cloud Messaging 發送</string>
+    <string name="settings_notification_privacy_metadata">• 通知僅包含中繼資料</string>
+    <string name="settings_notification_privacy_secure_message_content">• 通知的消息內容<b>將從 Matrix 主服務器安全取得</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• 通知含有<b>訊息與中繼資料</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• 通知<b>不會顯示訊息內容</b></string>
 
@@ -754,9 +754,9 @@
     <string name="encryption_information_verify_device_warning2">如果符合的話，按下下方的驗證按鈕。若果沒有得話，那麼其他地方的某個人可能正在攔截這個裝置，您應該將其列入黑名單。未來，這個驗證程序會變得更加複雜。</string>
     <string name="encryption_information_verify_key_match">我驗證金鑰相符</string>
 
-    <string name="e2e_enabling_on_app_update">Riot 目前支援點對點加密，但您需要重新登入來啟用他。
-
-您可以現在重新登入或稍後在應用程式設定中進行。</string>
+    <string name="e2e_enabling_on_app_update">Riot 目前支援端到端加密，但您需要重新登入以啟用。
+\n
+\n您可以現在重新登入或稍後在應用程式設定中進行。</string>
 
     <string name="unknown_devices_alert_title">聊天室包含未知裝置</string>
     <string name="unknown_devices_alert_message">此聊天室包含未經驗證的裝置。
@@ -800,7 +800,7 @@
     <string name="widget_creation_failure">創建小部件失敗</string>
     <string name="event_formatter_widget_added">%1$s 已由 %2$s 新增</string>
     <string name="event_formatter_widget_removed">%1$s 被 %2$s 移除</string>
-    <string name="settings_labs_create_conference_with_jitsi">使用 jitsi 建立會議電話</string>
+    <string name="settings_labs_create_conference_with_jitsi">使用 jitsi 建立會議通話</string>
     <string name="widget_delete_message_confirmation">您確定要從聊天室刪除小工具嗎？</string>
     <plurals name="active_widgets">
         <item quantity="other">已啓用 %d 個小部件</item>
@@ -1040,7 +1040,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_troubleshoot_test_account_settings_title">帳號設定。</string>
     <string name="settings_troubleshoot_test_account_settings_success">通知已為您的帳號啟用。</string>
     <string name="settings_troubleshoot_test_account_settings_failed">通知已為您的帳號停用。
-請檢查帳號設定。</string>
+\n請檢查帳號設定。</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">啟用</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">裝置設定。</string>
@@ -1307,8 +1307,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_settings_untrusted_backup">要在此裝置上使用金鑰備份，現在就使用您的通關密語或復原金鑰復原。</string>
     <string name="new_recovery_method_popup_title">新的金鑰備份</string>
     <string name="new_recovery_method_popup_description">已偵測到新的安全訊息金鑰備份。
-
-如果您並沒有設定新的復原方法，那麼可能是有攻擊者在嘗試存取您的帳號。在設定中變更您的帳號密碼並立刻設定新的復原方法。</string>
+\n
+\n如果您並沒有設定新的復原方法，那麼可能是有攻擊者在嘗試存取您的帳號。在設定中變更您的帳號密碼並立刻設定新的復原方法。</string>
     <string name="new_recovery_method_popup_was_me">這是我</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">正在計算復原金鑰……</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">正在下載金鑰……</string>
@@ -1354,5 +1354,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="notification_new_invitation">新邀請</string>
     <string name="notification_sender_me">我</string>
     <string name="notification_inline_reply_failed">** 傳送失敗 - 請開啟聊天室</string>
+
+    <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 5.0 的裝置）</string>
 
 </resources>

@@ -39,9 +39,6 @@
     <string name="notice_avatar_changed_too">(profilový obrázek byl také změněn)</string>
     <string name="notice_room_name_removed">%1$s odstranil název místnosti</string>
     <string name="notice_room_topic_removed">%1$s odstranil téma místnosti</string>
-    <string name="notice_event_redacted">"sloučeno %1$s "</string>
-    <string name="notice_event_redacted_by">" uživatelem %1$s"</string>
-    <string name="notice_event_redacted_reason">" [důvod: %1$s]"</string>
     <string name="notice_profile_change_redacted">%1$s aktualizoval svůj profil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s pozval %2$s aby se připojil do místnosti</string>
     <string name="notice_room_third_party_registered_invite">%1$s přijal pozvání do %2$s</string>

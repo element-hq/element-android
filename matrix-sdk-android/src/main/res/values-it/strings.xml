@@ -38,8 +38,6 @@
     <string name="notice_avatar_changed_too">(anche l\'avatar è cambiato)</string>
     <string name="notice_room_name_removed">%1$s ha rimosso il nome della stanza</string>
     <string name="notice_room_topic_removed">%1$s ha rimosso l\'argomento della stanza</string>
-    <string name="notice_event_redacted_by">da %1$s</string>
-    <string name="notice_event_redacted_reason">[motivo: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s ha aggiornato il profilo %2$s</string>
     <string name="notice_room_third_party_invite">%1$s ha mandato un invito a %2$s per unirsi alla stanza</string>
     <string name="notice_room_third_party_registered_invite">%1$s ha accettato l\'invito per %2$s</string>
@@ -62,7 +60,6 @@
     <string name="medium_email">Indirizzo email</string>
     <string name="medium_phone_number">Numero di telefono</string>
 
-    <string name="notice_event_redacted">revisionato %1$s</string>
     <string name="summary_user_sent_sticker">%1$s ha inviato un adesivo.</string>
 
     <string name="message_reply_to_prefix">In risposta a</string>

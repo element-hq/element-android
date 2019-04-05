@@ -37,7 +37,6 @@
     <string name="notice_avatar_changed_too">(profiilikuva muuttui myös)</string>
     <string name="notice_room_name_removed">%1$s poisti huoneen nimen</string>
     <string name="notice_room_topic_removed">%1$s poisti huoneen aiheen</string>
-    <string name="notice_event_redacted_reason">[syy: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s päivitti profiilinsa %2$s</string>
     <string name="notice_room_third_party_invite">%1$s lähetti liittymiskutsun käyttäjälle %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s hyväksyi kutsun käyttäjän %2$s puolesta</string>
@@ -59,10 +58,8 @@
     <string name="medium_phone_number">Puhelinnumero</string>
 
 
-    <string name="notice_event_redacted_by">käyttäjän %1$s toimesta</string>
     <string name="could_not_redact">Takaisinveto epäonnistui</string>
     <string name="summary_message">%1$s: %2$s</string>
-    <string name="notice_event_redacted">veti takaisin %1$s</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Kutsu käyttäjältä %s</string> <!-- Grammar problem -->

@@ -34,7 +34,6 @@
 
     <string name="notice_room_name_removed">أزال ⁨%1$s⁩ اسم الغرفة</string>
     <string name="notice_room_topic_removed">أزال ⁨%1$s⁩ موضوع الغرفة</string>
-    <string name="notice_event_redacted_reason">" [السبب: ⁨%1$s⁩]"</string>
     <string name="notice_profile_change_redacted">حدّث ⁨%1$s⁩ اللاحة ⁨%2$s⁩</string>
     <string name="notice_room_third_party_invite">أرسل ⁨%1$s⁩ دعوة إلى ⁨%2$s⁩ للانضمام إلى الغرفة</string>
     <string name="notice_crypto_unable_to_decrypt">** تعذّر فك التعمية: ⁨%s⁩ **</string>
@@ -58,8 +57,6 @@
     <string name="notice_room_withdraw">انسحب ⁨%1$s⁩ من الدعوة ⁨%2$s⁩</string>
     <string name="notice_placed_video_call">أجرى ⁨%s⁩ مكالمة مرئية.</string>
     <string name="notice_placed_voice_call">أجرى ⁨%s⁩ مكالمة صوتية.</string>
-    <string name="notice_event_redacted">"هُذّبت ⁨%1$s⁩ "</string>
-    <string name="notice_event_redacted_by">" على يد ⁨%1$s⁩"</string>
     <string name="notice_room_third_party_registered_invite">قبل ⁨%1$s⁩ دعوة ⁨%2$s⁩</string>
 
     <string name="could_not_redact">تعذر التهذيب</string>

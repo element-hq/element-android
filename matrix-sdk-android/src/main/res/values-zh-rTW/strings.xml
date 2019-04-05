@@ -38,9 +38,6 @@
     <string name="notice_avatar_changed_too">（大頭貼也變更了）</string>
     <string name="notice_room_name_removed">%1$s 移除了房間名稱</string>
     <string name="notice_room_topic_removed">%1$s 移除了房間主題</string>
-    <string name="notice_event_redacted">"已編輯 %1$s "</string>
-    <string name="notice_event_redacted_by">由 %1$s</string>
-    <string name="notice_event_redacted_reason">[理由： %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s 更新了他們的基本資料 %2$s</string>
     <string name="notice_room_third_party_invite">%1$s 傳送加入房間的邀請給 %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s 接受 %2$s 的邀請</string>

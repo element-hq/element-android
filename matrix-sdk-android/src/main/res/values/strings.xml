@@ -39,9 +39,10 @@
     <string name="notice_avatar_changed_too">(avatar was changed too)</string>
     <string name="notice_room_name_removed">%1$s removed the room name</string>
     <string name="notice_room_topic_removed">%1$s removed the room topic</string>
-    <string name="notice_event_redacted">redacted %1$s </string>
-    <string name="notice_event_redacted_by"> by %1$s</string>
-    <string name="notice_event_redacted_reason">  [reason: %1$s]</string>
+    <string name="notice_event_redacted">Message removed</string>
+    <string name="notice_event_redacted_by">Message removed by %1$s</string>
+    <string name="notice_event_redacted_with_reason">Message removed [reason: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Message removed by %1$s [reason: %2$s]</string>
     <string name="notice_profile_change_redacted">%1$s updated their profile %2$s</string>
     <string name="notice_room_third_party_invite">%1$s sent an invitation to %2$s to join the room</string>
     <string name="notice_room_third_party_registered_invite">%1$s accepted the invitation for %2$s</string>

@@ -38,9 +38,6 @@
     <string name="notice_avatar_changed_too">(a tiež obrázok v profile)</string>
     <string name="notice_room_name_removed">%1$s odstránil názov miestnosti</string>
     <string name="notice_room_topic_removed">%1$s odstránil tému miestnosti</string>
-    <string name="notice_event_redacted">"vymazané %1$s "</string>
-    <string name="notice_event_redacted_by">používateľom %1$s</string>
-    <string name="notice_event_redacted_reason">[dôvod: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s aktualizoval svoj profil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s pozval %2$s vstúpiť do miestnosti</string>
     <string name="notice_room_third_party_registered_invite">%1$s prijal pozvanie do %2$s</string>

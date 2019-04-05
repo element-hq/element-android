@@ -39,9 +39,6 @@
     <string name="notice_avatar_changed_too">(аватар также был изменен)</string>
     <string name="notice_room_name_removed">%1$s удалил(а) название комнаты</string>
     <string name="notice_room_topic_removed">%1$s удалил(а) тему комнаты</string>
-    <string name="notice_event_redacted">"отредактировано %1$s "</string>
-    <string name="notice_event_redacted_by"> %1$s</string>
-    <string name="notice_event_redacted_reason">  [причина: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s обновил(а) свой профиль %2$s</string>
     <string name="notice_room_third_party_invite">%1$s отправил(а) приглашение %2$s присоединиться к комнате</string>
     <string name="notice_room_third_party_registered_invite">%1$s принял(а) приглашение от %2$s</string>

@@ -35,7 +35,6 @@
     <string name="notice_avatar_changed_too">（头像也被更改）</string>
     <string name="notice_room_name_removed">%1$s 移除了聊天室名称</string>
     <string name="notice_room_topic_removed">%1$s 移除了聊天室主题</string>
-    <string name="notice_event_redacted_reason">[理由：%1$s]</string>
     <string name="notice_crypto_unable_to_decrypt">** 无法解密：%s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">发送者的设备没有向我们发送此消息的密钥。</string>
 
@@ -55,8 +54,6 @@
 
     <string name="notice_room_withdraw">%1$s 撤销了对 %2$s 的邀请</string>
     <string name="notice_made_future_room_visibility">%1$s 让之后的聊天室历史记录对 %2$s 可见</string>
-    <string name="notice_event_redacted">撤回了 %1$s</string>
-    <string name="notice_event_redacted_by">被 %1$s</string>
     <string name="notice_profile_change_redacted">%1$s 更新了他们的简介 %2$s</string>
     <string name="notice_room_third_party_invite">%1$s 向 %2$s 发送了加入聊天室的邀请</string>
     <string name="notice_room_third_party_registered_invite">%1$s 接受了 %2$s 的邀请</string>

@@ -43,9 +43,6 @@
     <string name="notice_avatar_changed_too">(o avatar tamén foi cambiado)</string>
     <string name="notice_room_name_removed">%1$s borrou o nome da sala</string>
     <string name="notice_room_topic_removed">%1$s removeu o tema da sala</string>
-    <string name="notice_event_redacted">"redactou %1$s "</string>
-    <string name="notice_event_redacted_by">" de %1s"</string>
-    <string name="notice_event_redacted_reason">" [motivo: %1$s]"</string>
     <string name="notice_profile_change_redacted">%1$s actualizou o seu perfil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s envioulle un convite a %2$s para que entre na sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceptou o convite para %2$s</string>

@@ -42,9 +42,6 @@
     <string name="notice_avatar_changed_too">(avataren vart endra òg)</string>
     <string name="notice_room_name_removed">%1$s fjerna romnamnet</string>
     <string name="notice_room_topic_removed">%1$s fjerna romemnet</string>
-    <string name="notice_event_redacted">"gjorde om på %1$s "</string>
-    <string name="notice_event_redacted_by">" av %1$s"</string>
-    <string name="notice_event_redacted_reason">" [grunnlag: %1$s]"</string>
     <string name="notice_profile_change_redacted">%1$s oppdaterte profilbiletet sitt %2$s</string>
     <string name="notice_room_third_party_invite">%1$s baud %2$s inn i rommet</string>
     <string name="notice_room_third_party_registered_invite">%1$s sa ja til innbydinga til %2$s</string>

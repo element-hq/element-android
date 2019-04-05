@@ -33,9 +33,6 @@
     <string name="notice_avatar_changed_too">(అవతార్ మార్చబడింది)</string>
     <string name="notice_room_name_removed">%1$s గది పేరు తొలగించబడింది</string>
     <string name="notice_room_topic_removed">%1$s గది అంశాన్ని తీసివేసారు</string>
-    <string name="notice_event_redacted">"శోధించాడు %1$s "</string>
-    <string name="notice_event_redacted_by">" ద్వారా %1$s"</string>
-    <string name="notice_event_redacted_reason">" [కారణం:%1$s]"</string>
     <string name="notice_profile_change_redacted">%1$s వారి ప్రొఫైల్ నవీకరించబడింది %2$s</string>
     <string name="notice_room_third_party_invite">%1$s గదిలో చేరడానికి %2$s కు ఆహ్వానాన్ని పంపారు</string>
     <string name="notice_room_third_party_registered_invite">%2$sకోసం %1$s ఆహ్వానాన్ని అంగీకరించారు</string>

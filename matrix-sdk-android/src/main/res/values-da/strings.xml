@@ -39,9 +39,6 @@
     <string name="notice_avatar_changed_too">(avatar blev også ændret)</string>
     <string name="notice_room_name_removed">%1$s fjernede navnet på rummet</string>
     <string name="notice_room_topic_removed">%1$s fjernede emnet for rummet</string>
-    <string name="notice_event_redacted">"hemmeligholdte %1$s "</string>
-    <string name="notice_event_redacted_by">" af %1$s"</string>
-    <string name="notice_event_redacted_reason">" [årsag: %1$s]"</string>
     <string name="notice_profile_change_redacted">%1$s opdaterede sin profil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s inviterede %2$s til rummet</string>
     <string name="notice_room_third_party_registered_invite">%1$s accepterede invitationen til %2$s</string>

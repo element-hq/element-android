@@ -1454,4 +1454,6 @@
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuratie gebruiken</string>
 
+    <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 5.0)</string>
+
 </resources>

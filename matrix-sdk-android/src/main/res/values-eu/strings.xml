@@ -39,9 +39,6 @@
     <string name="notice_avatar_changed_too">(abatarra ere aldatu da)</string>
     <string name="notice_room_name_removed">%1$s erabiltzaileak gelaren izena kendu du</string>
     <string name="notice_room_topic_removed">%1$s erabiltzaileak gelaren mintzagaia kendu du</string>
-    <string name="notice_event_redacted">%1$s kenduta</string>
-    <string name="notice_event_redacted_by">nork: %1$s</string>
-    <string name="notice_event_redacted_reason">[arrazoia: %1$s]</string>
     <string name="notice_profile_change_redacted">%1$s erabiltzaileak bere profila eguneratu du %2$s</string>
     <string name="notice_room_third_party_invite">%1$s erabiltzaileak gelara elkartzeko gonbidapen bat bidali dio %2$s erabiltzaileari</string>
     <string name="notice_room_third_party_registered_invite">%1$s erabiltzaileak %2$s gelarako gonbidapena onartu du</string>
