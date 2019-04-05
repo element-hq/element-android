@@ -19,11 +19,11 @@ package im.vector.riotredesign.features.home.room.detail.timeline.item
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
+import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
 
-abstract class AbsMessageItem<H : AbsMessageItem.Holder> : RiotEpoxyModel<H>() {
+abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>() {
 
     abstract val informationData: MessageInformationData
 
@@ -42,7 +42,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : RiotEpoxyModel<H>() {
         }
     }
 
-    abstract class Holder : RiotEpoxyHolder() {
+    abstract class Holder : VectorEpoxyHolder() {
         abstract val avatarImageView: ImageView
         abstract val memberNameView: TextView
         abstract val timeView: TextView

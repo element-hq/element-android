@@ -21,12 +21,12 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
+import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_notice)
-abstract class NoticeItem : RiotEpoxyModel<NoticeItem.Holder>() {
+abstract class NoticeItem : VectorEpoxyModel<NoticeItem.Holder>() {
 
     @EpoxyAttribute var noticeText: CharSequence? = null
     @EpoxyAttribute var avatarUrl: String? = null
@@ -37,7 +37,7 @@ abstract class NoticeItem : RiotEpoxyModel<NoticeItem.Holder>() {
         AvatarRenderer.render(avatarUrl, memberName?.toString(), holder.avatarImageView)
     }
 
-    class Holder : RiotEpoxyHolder() {
+    class Holder : VectorEpoxyHolder() {
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
     }

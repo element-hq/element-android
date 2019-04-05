@@ -24,11 +24,11 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator
 import com.github.piasy.biv.view.GlideImageViewFactory
-import im.vector.riotredesign.core.platform.RiotActivity
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_media_viewer.*
 
 
-class MediaViewerActivity : RiotActivity() {
+class MediaViewerActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -27,7 +27,7 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.rx.rx
-import im.vector.riotredesign.core.platform.RiotViewModel
+import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
@@ -44,7 +44,7 @@ class RoomListViewModel(initialState: RoomListViewState,
                         private val visibleRoomHolder: VisibleRoomStore,
                         private val roomSelectionRepository: RoomSelectionRepository,
                         private val roomSummaryComparator: RoomSummaryComparator)
-    : RiotViewModel<RoomListViewState>(initialState) {
+    : VectorViewModel<RoomListViewState>(initialState) {
 
     companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
 

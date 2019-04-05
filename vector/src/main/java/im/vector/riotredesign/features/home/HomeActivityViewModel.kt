@@ -24,7 +24,7 @@ import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
-import im.vector.riotredesign.core.platform.RiotViewModel
+import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
 import io.reactivex.rxkotlin.subscribeBy
@@ -35,7 +35,7 @@ class EmptyState : MvRxState
 class HomeActivityViewModel(state: EmptyState,
                             private val session: Session,
                             roomSelectionRepository: RoomSelectionRepository
-) : RiotViewModel<EmptyState>(state) {
+) : VectorViewModel<EmptyState>(state) {
 
     companion object : MvRxViewModelFactory<HomeActivityViewModel, EmptyState> {
 

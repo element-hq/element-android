@@ -23,13 +23,13 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.platform.RiotActivity
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import org.koin.android.ext.android.inject
 
 /**
  * Displays the client settings.
  */
-class VectorSettingsActivity : RiotActivity(),
+class VectorSettingsActivity : VectorBaseActivity(),
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
         FragmentManager.OnBackStackChangedListener,
         VectorSettingsFragmentInteractionListener {

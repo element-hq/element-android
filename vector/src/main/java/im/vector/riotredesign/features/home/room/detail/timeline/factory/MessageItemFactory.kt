@@ -26,7 +26,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
@@ -45,7 +45,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                callback: TimelineEventController.Callback?
-    ): RiotEpoxyModel<*>? {
+    ): VectorEpoxyModel<*>? {
 
         val roomMember = event.roomMember
         val nextRoomMember = nextEvent?.roomMember

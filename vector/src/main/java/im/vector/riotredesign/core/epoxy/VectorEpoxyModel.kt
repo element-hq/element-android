@@ -19,7 +19,7 @@ package im.vector.riotredesign.core.epoxy
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.airbnb.epoxy.VisibilityState
 
-abstract class RiotEpoxyModel<H : RiotEpoxyHolder> : EpoxyModelWithHolder<H>() {
+abstract class VectorEpoxyModel<H : VectorEpoxyHolder> : EpoxyModelWithHolder<H>() {
 
     private var onModelVisibilityStateChangedListener: OnVisibilityStateChangedListener? = null
 
@@ -28,7 +28,7 @@ abstract class RiotEpoxyModel<H : RiotEpoxyHolder> : EpoxyModelWithHolder<H>() {
         super.onVisibilityStateChanged(visibilityState, view)
     }
 
-    fun setOnVisibilityStateChanged(listener: OnVisibilityStateChangedListener): RiotEpoxyModel<H> {
+    fun setOnVisibilityStateChanged(listener: OnVisibilityStateChangedListener): VectorEpoxyModel<H> {
         this.onModelVisibilityStateChangedListener = listener
         return this
     }

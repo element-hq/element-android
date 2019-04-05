@@ -24,8 +24,8 @@ import timber.log.Timber
 
 abstract class VectorPreferenceFragment : PreferenceFragmentCompat() {
 
-    val vectorActivity: RiotActivity by lazy {
-        activity as RiotActivity
+    val vectorActivity: VectorBaseActivity by lazy {
+        activity as VectorBaseActivity
     }
 
     /* ==========================================================================================

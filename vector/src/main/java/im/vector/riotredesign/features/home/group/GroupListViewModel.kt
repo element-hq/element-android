@@ -21,13 +21,13 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
-import im.vector.riotredesign.core.platform.RiotViewModel
+import im.vector.riotredesign.core.platform.VectorViewModel
 import org.koin.android.ext.android.get
 
 class GroupListViewModel(initialState: GroupListViewState,
                          private val selectedGroupHolder: SelectedGroupStore,
                          private val session: Session
-) : RiotViewModel<GroupListViewState>(initialState) {
+) : VectorViewModel<GroupListViewState>(initialState) {
 
     companion object : MvRxViewModelFactory<GroupListViewModel, GroupListViewState> {
 

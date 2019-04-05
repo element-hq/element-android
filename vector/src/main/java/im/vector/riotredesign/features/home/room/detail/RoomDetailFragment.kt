@@ -26,8 +26,8 @@ import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
-import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
+import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
@@ -50,7 +50,7 @@ data class RoomDetailArgs(
 ) : Parcelable
 
 
-class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
+class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callback {
 
     companion object {
 
@@ -86,7 +86,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     // PRIVATE METHODS *****************************************************************************
 
     private fun setupToolbar() {
-        val parentActivity = riotActivity
+        val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
             parentActivity.configure(toolbar)
         }
@@ -153,7 +153,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
     }
 
     override fun onMediaClicked(mediaData: MediaContentRenderer.Data, view: View) {
-        val intent = MediaViewerActivity.newIntent(riotActivity, mediaData)
+        val intent = MediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
         startActivity(intent)
     }
 

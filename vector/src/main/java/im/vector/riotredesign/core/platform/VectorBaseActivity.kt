@@ -43,7 +43,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
 
-abstract class RiotActivity : BaseMvRxActivity() {
+abstract class VectorBaseActivity : BaseMvRxActivity() {
     /* ==========================================================================================
      * UI
      * ========================================================================================== */

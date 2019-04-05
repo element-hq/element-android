@@ -21,7 +21,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
+import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_day_separator)
 abstract class DaySeparatorItem : EpoxyModelWithHolder<DaySeparatorItem.Holder>() {
@@ -32,7 +32,7 @@ abstract class DaySeparatorItem : EpoxyModelWithHolder<DaySeparatorItem.Holder>(
         holder.dayTextView.text = formattedDay
     }
 
-    class Holder : RiotEpoxyHolder() {
+    class Holder : VectorEpoxyHolder() {
         val dayTextView by bind<TextView>(R.id.itemDayTextView)
     }
 }

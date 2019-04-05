@@ -20,10 +20,10 @@ import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.View
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.platform.RiotFragment
+import im.vector.riotredesign.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_loading_room_detail.*
 
-class LoadingRoomDetailFragment : RiotFragment() {
+class LoadingRoomDetailFragment : VectorBaseFragment() {
 
     companion object {
 

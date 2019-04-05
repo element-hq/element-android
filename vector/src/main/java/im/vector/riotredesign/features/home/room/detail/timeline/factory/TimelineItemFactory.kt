@@ -19,7 +19,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline.factory
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.EmptyItem_
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 
 class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
@@ -32,7 +32,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
-               callback: TimelineEventController.Callback?): RiotEpoxyModel<*> {
+               callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
 
         val computedModel = try {
             when (event.root.type) {

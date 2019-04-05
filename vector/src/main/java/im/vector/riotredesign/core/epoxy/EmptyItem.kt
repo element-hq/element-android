@@ -22,6 +22,6 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 
 @EpoxyModelClass(layout = R.layout.item_empty)
-abstract class EmptyItem : RiotEpoxyModel<EmptyItem.Holder>() {
-    class Holder : RiotEpoxyHolder()
+abstract class EmptyItem : VectorEpoxyModel<EmptyItem.Holder>() {
+    class Holder : VectorEpoxyHolder()
 }

@@ -21,10 +21,10 @@ import androidx.appcompat.app.AlertDialog
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.platform.RiotActivity
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.MainActivity
 
-class SignOutUiWorker(val activity: RiotActivity) {
+class SignOutUiWorker(val activity: VectorBaseActivity) {
 
     fun perform(session: Session) {
         if (SignOutViewModel.doYouNeedToBeDisplayed(session)) {

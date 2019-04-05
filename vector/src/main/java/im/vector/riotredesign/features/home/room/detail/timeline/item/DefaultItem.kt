@@ -20,11 +20,11 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
+import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_default)
-abstract class DefaultItem : RiotEpoxyModel<DefaultItem.Holder>() {
+abstract class DefaultItem : VectorEpoxyModel<DefaultItem.Holder>() {
 
     @EpoxyAttribute var text: CharSequence? = null
 
@@ -32,7 +32,7 @@ abstract class DefaultItem : RiotEpoxyModel<DefaultItem.Holder>() {
         holder.messageView.text = text
     }
 
-    class Holder : RiotEpoxyHolder() {
+    class Holder : VectorEpoxyHolder() {
         val messageView by bind<TextView>(R.id.stateMessageView)
     }
 }

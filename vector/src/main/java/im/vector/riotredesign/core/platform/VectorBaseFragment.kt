@@ -29,13 +29,13 @@ import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
 import timber.log.Timber
 
-abstract class RiotFragment : BaseMvRxFragment(), OnBackPressed {
+abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
 
     // Butterknife unbinder
     private var mUnBinder: Unbinder? = null
 
-    val riotActivity: RiotActivity by lazy {
-        activity as RiotActivity
+    val vectorBaseActivity: VectorBaseActivity by lazy {
+        activity as VectorBaseActivity
     }
 
     /* ==========================================================================================

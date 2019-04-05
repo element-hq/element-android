@@ -29,17 +29,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import im.vector.matrix.android.api.session.Session
-import im.vector.riotredesign.push.fcm.NotificationTroubleshootTestManagerFactory
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.withArgs
-import im.vector.riotredesign.core.platform.RiotActivity
-import im.vector.riotredesign.core.platform.RiotFragment
+import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.riotredesign.features.settings.troubleshoot.TroubleshootTest
+import im.vector.riotredesign.push.fcm.NotificationTroubleshootTestManagerFactory
 import org.koin.android.ext.android.inject
 
-class VectorSettingsNotificationsTroubleshootFragment : RiotFragment() {
+class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     @BindView(R.id.troubleshoot_test_recycler_view)
     lateinit var mRecyclerView: RecyclerView
@@ -163,7 +163,7 @@ class VectorSettingsNotificationsTroubleshootFragment : RiotFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as? RiotActivity)?.supportActionBar?.setTitle(R.string.settings_notification_troubleshoot)
+        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_notification_troubleshoot)
     }
 
     override fun onAttach(context: Context) {

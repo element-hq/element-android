@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.rx.rx
-import im.vector.riotredesign.core.platform.RiotViewModel
+import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import io.reactivex.rxkotlin.subscribeBy
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit
 class RoomDetailViewModel(initialState: RoomDetailViewState,
                           private val session: Session,
                           private val visibleRoomHolder: VisibleRoomStore
-) : RiotViewModel<RoomDetailViewState>(initialState) {
+) : VectorViewModel<RoomDetailViewState>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val roomId = initialState.roomId

@@ -21,14 +21,14 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
+import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.platform.CheckableFrameLayout
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 
 @EpoxyModelClass(layout = R.layout.item_room)
-abstract class RoomSummaryItem : RiotEpoxyModel<RoomSummaryItem.Holder>() {
+abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     @EpoxyAttribute lateinit var roomName: CharSequence
     @EpoxyAttribute var avatarUrl: String? = null
@@ -47,7 +47,7 @@ abstract class RoomSummaryItem : RiotEpoxyModel<RoomSummaryItem.Holder>() {
         AvatarRenderer.render(avatarUrl, roomName.toString(), holder.avatarImageView)
     }
 
-    class Holder : RiotEpoxyHolder() {
+    class Holder : VectorEpoxyHolder() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
         val titleView by bind<TextView>(R.id.roomNameView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)

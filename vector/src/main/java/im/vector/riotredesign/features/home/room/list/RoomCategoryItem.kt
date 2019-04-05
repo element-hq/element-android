@@ -23,11 +23,11 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
+import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 
 @EpoxyModelClass(layout = R.layout.item_room_category)
-abstract class RoomCategoryItem : RiotEpoxyModel<RoomCategoryItem.Holder>() {
+abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
     @EpoxyAttribute lateinit var title: CharSequence
     @EpoxyAttribute var expanded: Boolean = false
@@ -48,7 +48,7 @@ abstract class RoomCategoryItem : RiotEpoxyModel<RoomCategoryItem.Holder>() {
     }
 
 
-    class Holder : RiotEpoxyHolder() {
+    class Holder : VectorEpoxyHolder() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomCategoryUnreadCounterBadgeView)
         val titleView by bind<TextView>(R.id.roomCategoryTitleView)
         val rootView by bind<ViewGroup>(R.id.roomCategoryRootView)

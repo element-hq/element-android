@@ -30,8 +30,8 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.setupAsSearch
-import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.StateView
+import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomeNavigator
 import kotlinx.android.synthetic.main.fragment_room_list.*
@@ -39,7 +39,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 
-class RoomListFragment : RiotFragment(), RoomSummaryController.Callback {
+class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
 
     companion object {
         fun newInstance(): RoomListFragment {

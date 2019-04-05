@@ -33,8 +33,8 @@ import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
-import im.vector.riotredesign.core.platform.RiotActivity
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
@@ -46,7 +46,7 @@ import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 
 
-class HomeActivity : RiotActivity(), ToolbarConfigurable {
+class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private val homeNavigator by inject<HomeNavigator>()

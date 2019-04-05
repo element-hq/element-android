@@ -20,13 +20,13 @@ import android.widget.ImageView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.RiotEpoxyHolder
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
+import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.platform.CheckableFrameLayout
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_group)
-abstract class GroupSummaryItem : RiotEpoxyModel<GroupSummaryItem.Holder>() {
+abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
 
     @EpoxyAttribute lateinit var groupName: CharSequence
     @EpoxyAttribute var avatarUrl: String? = null
@@ -40,7 +40,7 @@ abstract class GroupSummaryItem : RiotEpoxyModel<GroupSummaryItem.Holder>() {
         AvatarRenderer.render(avatarUrl, groupName.toString(), holder.avatarImageView)
     }
 
-    class Holder : RiotEpoxyHolder() {
+    class Holder : VectorEpoxyHolder() {
         val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
         val rootView by bind<CheckableFrameLayout>(R.id.itemGroupLayout)
     }

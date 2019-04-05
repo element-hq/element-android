@@ -35,7 +35,7 @@ import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
 
 
-class Riot : Application() {
+class VectorApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

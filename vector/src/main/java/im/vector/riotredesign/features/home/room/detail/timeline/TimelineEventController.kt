@@ -28,7 +28,7 @@ import com.airbnb.epoxy.VisibilityState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.LoadingItemModel_
-import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.*
@@ -189,7 +189,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
 
 private class TimelineEventVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?,
                                                           private val event: TimelineEvent)
-    : RiotEpoxyModel.OnVisibilityStateChangedListener {
+    : VectorEpoxyModel.OnVisibilityStateChangedListener {
 
     override fun onVisibilityStateChanged(visibilityState: Int) {
         if (visibilityState == VisibilityState.VISIBLE) {

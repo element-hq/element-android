@@ -19,11 +19,11 @@ package im.vector.riotredesign.features.home
 import android.os.Bundle
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceChildFragment
-import im.vector.riotredesign.core.platform.RiotFragment
+import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.group.GroupListFragment
 import im.vector.riotredesign.features.home.room.list.RoomListFragment
 
-class HomeDrawerFragment : RiotFragment() {
+class HomeDrawerFragment : VectorBaseFragment() {
 
     companion object {
 

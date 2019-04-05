@@ -26,13 +26,13 @@ import butterknife.BindView
 import butterknife.OnCheckedChanged
 import butterknife.OnTextChanged
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.platform.RiotActivity
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import timber.log.Timber
 
 /**
  * Form to send a bug report
  */
-class BugReportActivity : RiotActivity() {
+class BugReportActivity : VectorBaseActivity() {
 
     /* ==========================================================================================
      * UI

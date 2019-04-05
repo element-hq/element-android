@@ -28,7 +28,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.platform.RiotActivity
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -39,7 +39,7 @@ private const val DEFAULT_HOME_SERVER_URI = "https://matrix.org"
 private const val DEFAULT_IDENTITY_SERVER_URI = "https://vector.im"
 private const val DEFAULT_ANTIVIRUS_SERVER_URI = "https://matrix.org"
 
-class LoginActivity : RiotActivity() {
+class LoginActivity : VectorBaseActivity() {
 
     private val authenticator = Matrix.getInstance().authenticator()
 

@@ -22,15 +22,15 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.StateView
+import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.HomeModule
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 
-class GroupListFragment : RiotFragment(), GroupSummaryController.Callback {
+class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback {
 
     companion object {
         fun newInstance(): GroupListFragment {

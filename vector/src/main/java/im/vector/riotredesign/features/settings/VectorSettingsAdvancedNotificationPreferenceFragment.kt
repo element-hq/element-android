@@ -28,7 +28,7 @@ import androidx.preference.PreferenceManager
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.withArgs
-import im.vector.riotredesign.core.platform.RiotActivity
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.BingRulePreference
@@ -177,7 +177,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
 
     override fun onResume() {
         super.onResume()
-        (activity as? RiotActivity)?.supportActionBar?.setTitle(R.string.settings_notification_advanced)
+        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_notification_advanced)
         // find the view from parent activity
         mLoadingView = activity!!.findViewById(R.id.vector_settings_spinner_views)
 
