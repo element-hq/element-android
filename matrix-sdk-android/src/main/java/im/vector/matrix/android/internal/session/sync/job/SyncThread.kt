@@ -19,15 +19,16 @@ package im.vector.matrix.android.internal.session.sync.job
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
-import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import timber.log.Timber
+import java.net.SocketTimeoutException
 import java.util.concurrent.CountDownLatch
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
@@ -109,7 +110,14 @@ internal class SyncThread(private val syncTask: SyncTask,
                             }
 
                             override fun onFailure(failure: Throwable) {
-                                Timber.e(failure)
+                                if (failure is Failure.NetworkConnection
+                                        && failure.cause is SocketTimeoutException) {
+                                    // Timeout are not critical
+                                    Timber.d("Timeout")
+                                } else {
+                                    Timber.e(failure)
+                                }
+
                                 if (failure !is Failure.NetworkConnection) {
                                     // Wait 10s before retrying
                                     sleep(RETRY_WAIT_TIME_MS)
