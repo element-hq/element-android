@@ -14,29 +14,37 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.autocomplete.command
+package im.vector.riotredesign.features.autocomplete.user
 
 import android.content.Context
 import com.airbnb.epoxy.EpoxyController
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Success
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.features.autocomplete.EpoxyViewPresenter
-import im.vector.riotredesign.features.command.Command
 
-class AutocompleteCommandPresenter(context: Context,
-                                   private val controller: AutocompleteCommandController
-) : EpoxyViewPresenter<Command>(context) {
+class AutocompleteUserPresenter(context: Context,
+                                private val controller: AutocompleteUserController
+) : EpoxyViewPresenter<User>(context) {
+
+    var callback: Callback? = null
 
     override fun providesController(): EpoxyController {
         return controller
     }
 
     override fun onQuery(query: CharSequence?) {
-        val data = Command.values().filter {
-            if (query.isNullOrEmpty()) {
-                true
-            } else {
-                it.command.startsWith(query, 1, true)
-            }
-        }
-        controller.setData(data)
+        callback?.onQueryUsers(query)
     }
+
+    fun render(users: Async<List<User>>) {
+        if (users is Success) {
+            controller.setData(users())
+        }
+    }
+
+    interface Callback {
+        fun onQueryUsers(query: CharSequence?)
+    }
+
 }

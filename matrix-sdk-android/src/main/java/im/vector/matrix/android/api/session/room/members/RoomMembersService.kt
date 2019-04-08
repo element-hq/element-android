@@ -42,11 +42,11 @@ interface RoomMembersService {
     fun getRoomMember(userId: String): RoomMember?
 
     /**
-     * Return all the roomMembers of the room
+     * Return all the roomMembers ids of the room
      *
      * @return a [LiveData] of roomMember list.
      */
-    fun getRoomMembersLive(): LiveData<List<RoomMember>>
+    fun getRoomMemberIdsLive(): LiveData<List<String>>
 
 
 }

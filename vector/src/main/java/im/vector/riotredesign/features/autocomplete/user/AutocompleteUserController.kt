@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.autocomplete.command
+package im.vector.riotredesign.features.autocomplete.user
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.riotredesign.core.resources.StringProvider
-import im.vector.riotredesign.features.command.Command
+import im.vector.matrix.android.api.session.user.model.User
 
-class AutocompleteCommandController(private val stringProvider: StringProvider) : TypedEpoxyController<List<Command>>() {
+class AutocompleteUserController() : TypedEpoxyController<List<User>>() {
 
-    override fun buildModels(data: List<Command>?) {
+    override fun buildModels(data: List<User>?) {
         if (data.isNullOrEmpty()) {
             return
         }
         data.forEach {
-            autocompleteCommandItem {
-                id(it.command)
-                name(it.command)
-                parameters(it.parameters)
-                description(stringProvider.getString(it.description))
+            autocompleteUserItem {
+                id(it.userId)
+                name(it.displayName)
+                avatarUrl(it.avatarUrl)
             }
         }
     }

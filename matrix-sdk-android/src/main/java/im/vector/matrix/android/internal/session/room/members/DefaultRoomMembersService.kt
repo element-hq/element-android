@@ -48,13 +48,13 @@ internal class DefaultRoomMembersService(private val roomId: String,
         return eventEntity?.asDomain()?.content.toModel()
     }
 
-    override fun getRoomMembersLive(): LiveData<List<RoomMember>> {
+    override fun getRoomMemberIdsLive(): LiveData<List<String>> {
         return monarchy.findAllMappedWithChanges(
                 {
                     RoomMembers(it, roomId).queryRoomMembersEvent()
                 },
                 {
-                    it.asDomain().content.toModel<RoomMember>()!!
+                    it.stateKey!!
                 }
         )
     }

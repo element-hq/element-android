@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.rx
+package im.vector.riotredesign.features.home.room.detail.composer
 
-import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import io.reactivex.Observable
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.user.model.User
+import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 
-class RxRoom(private val room: Room) {
 
-    fun liveRoomSummary(): Observable<RoomSummary> {
-        return room.roomSummary.asObservable()
-    }
+data class TextComposerViewState(val roomId: String,
+                                 val asyncUsers: Async<List<User>> = Uninitialized
+) : MvRxState {
 
-    fun liveRoomMemberIds(): Observable<List<String>> {
-        return room.getRoomMemberIdsLive().asObservable()
-    }
+    constructor(args: RoomDetailArgs) : this(roomId = args.roomId)
 
-}
-
-fun Room.rx(): RxRoom {
-    return RxRoom(this)
 }

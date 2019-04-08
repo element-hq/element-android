@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.autocomplete.command
+package im.vector.riotredesign.features.command
 
 import androidx.annotation.StringRes
 import im.vector.riotredesign.R
