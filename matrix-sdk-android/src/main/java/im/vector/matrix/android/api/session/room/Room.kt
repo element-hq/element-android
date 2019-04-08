@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.room
 
 import androidx.lifecycle.LiveData
+import im.vector.matrix.android.api.session.room.members.RoomMembersService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
@@ -26,7 +27,7 @@ import im.vector.matrix.android.api.util.Cancelable
 /**
  * This interface defines methods to interact within a room.
  */
-interface Room : TimelineService, SendService, ReadService {
+interface Room : TimelineService, SendService, ReadService, RoomMembersService {
 
     /**
      * The roomId of this room
@@ -38,11 +39,5 @@ interface Room : TimelineService, SendService, ReadService {
      * You can observe this summary to get dynamic data from this room.
      */
     val roomSummary: LiveData<RoomSummary>
-
-    /**
-     * This methods load all room members if it was done yet.
-     * @return a [Cancelable]
-     */
-    fun loadRoomMembersIfNeeded(): Cancelable
 
 }

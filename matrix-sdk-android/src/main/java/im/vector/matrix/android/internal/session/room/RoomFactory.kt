@@ -17,8 +17,8 @@
 package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.internal.session.room.members.DefaultRoomMembersService
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.read.DefaultReadService
@@ -33,7 +33,6 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 
 internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
                            private val monarchy: Monarchy,
-                           private val credentials: Credentials,
                            private val paginationTask: PaginationTask,
                            private val contextOfEventTask: GetContextOfEventTask,
                            private val setReadMarkersTask: SetReadMarkersTask,
@@ -45,15 +44,16 @@ internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
         val timelineEventFactory = TimelineEventFactory(roomMemberExtractor)
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask)
         val sendService = DefaultSendService(roomId, eventFactory, monarchy)
+        val roomMembersService = DefaultRoomMembersService(roomId, monarchy, loadRoomMembersTask, taskExecutor)
         val readService = DefaultReadService(roomId, monarchy, setReadMarkersTask, taskExecutor)
+
         return DefaultRoom(
                 roomId,
-                loadRoomMembersTask,
                 monarchy,
                 timelineService,
                 sendService,
                 readService,
-                taskExecutor
+                roomMembersService
         )
     }
 
