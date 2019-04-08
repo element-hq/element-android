@@ -22,7 +22,9 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
@@ -46,6 +48,10 @@ class HomeActivityViewModel(state: EmptyState,
             return HomeActivityViewModel(state, session, roomSelectionRepository)
         }
     }
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
     private val _openRoomLiveData = MutableLiveData<LiveEvent<String>>()
     val openRoomLiveData: LiveData<LiveEvent<String>>
@@ -71,6 +77,23 @@ class HomeActivityViewModel(state: EmptyState,
                     }
                 }
                 .disposeOnClear()
+    }
+
+    fun createRoom(createRoomParams: CreateRoomParams = CreateRoomParams()) {
+        _isLoading.value = true
+
+        session.createRoom(createRoomParams, object : MatrixCallback<String> {
+            override fun onSuccess(data: String) {
+                _isLoading.value = false
+                // Open room id
+                _openRoomLiveData.postValue(LiveEvent(data))
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _isLoading.value = false
+                super.onFailure(failure)
+            }
+        })
     }
 
 

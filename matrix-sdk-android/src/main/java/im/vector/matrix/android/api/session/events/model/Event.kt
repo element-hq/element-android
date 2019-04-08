@@ -54,7 +54,7 @@ inline fun <reified T> T?.toContent(): Content? {
 @JsonClass(generateAdapter = true)
 data class Event(
         @Json(name = "type") val type: String,
-        @Json(name = "event_id") val eventId: String?,
+        @Json(name = "event_id") val eventId: String? = null,
         @Json(name = "content") val content: Content? = null,
         @Json(name = "prev_content") val prevContent: Content? = null,
         @Json(name = "origin_server_ts") val originServerTs: Long? = null,

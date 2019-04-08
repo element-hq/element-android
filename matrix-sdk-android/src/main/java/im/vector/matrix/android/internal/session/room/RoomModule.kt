@@ -17,6 +17,8 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.session.DefaultSession
+import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
+import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
 import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
@@ -62,6 +64,10 @@ class RoomModule {
 
         scope(DefaultSession.SCOPE) {
             RoomFactory(get(), get(), get(), get(), get(), get(), get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultCreateRoomTask(get(), get()) as CreateRoomTask
         }
 
     }
