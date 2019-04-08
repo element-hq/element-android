@@ -8,6 +8,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <!-- Localhost -->
         <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
         <!-- Localhost for Android emulator -->
         <domain includeSubdomains="true">10.0.2.2</domain>
     </domain-config>
