@@ -24,8 +24,9 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.AutocompletePresenter
+import im.vector.riotredesign.core.listener.Listener
 
-abstract class EpoxyViewPresenter<T>(context: Context) : AutocompletePresenter<T>(context) {
+abstract class EpoxyAutocompletePresenter<T>(context: Context) : AutocompletePresenter<T>(context), Listener<T> {
 
     private var recyclerView: EpoxyRecyclerView? = null
     private var clicks: AutocompletePresenter.ClickProvider<T>? = null
@@ -71,6 +72,10 @@ abstract class EpoxyViewPresenter<T>(context: Context) : AutocompletePresenter<T
 
     protected fun dispatchLayoutChange() {
         observer?.onChanged()
+    }
+
+    override fun onEvent(t: T) {
+        dispatchClick(t)
     }
 
 

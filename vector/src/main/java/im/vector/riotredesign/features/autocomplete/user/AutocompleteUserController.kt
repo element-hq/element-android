@@ -18,18 +18,24 @@ package im.vector.riotredesign.features.autocomplete.user
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.riotredesign.core.listener.Listener
 
-class AutocompleteUserController() : TypedEpoxyController<List<User>>() {
+class AutocompleteUserController : TypedEpoxyController<List<User>>() {
+
+    var listener: Listener<User>? = null
 
     override fun buildModels(data: List<User>?) {
         if (data.isNullOrEmpty()) {
             return
         }
-        data.forEach {
+        data.forEach { user ->
             autocompleteUserItem {
-                id(it.userId)
-                name(it.displayName)
-                avatarUrl(it.avatarUrl)
+                id(user.userId)
+                name(user.displayName)
+                avatarUrl(user.avatarUrl)
+                clickListener { _ ->
+                    listener?.onEvent(user)
+                }
             }
         }
     }

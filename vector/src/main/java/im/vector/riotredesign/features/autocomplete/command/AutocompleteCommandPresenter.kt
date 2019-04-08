@@ -18,12 +18,16 @@ package im.vector.riotredesign.features.autocomplete.command
 
 import android.content.Context
 import com.airbnb.epoxy.EpoxyController
-import im.vector.riotredesign.features.autocomplete.EpoxyViewPresenter
+import im.vector.riotredesign.features.autocomplete.EpoxyAutocompletePresenter
 import im.vector.riotredesign.features.command.Command
 
 class AutocompleteCommandPresenter(context: Context,
-                                   private val controller: AutocompleteCommandController
-) : EpoxyViewPresenter<Command>(context) {
+                                   private val controller: AutocompleteCommandController) :
+        EpoxyAutocompletePresenter<Command>(context) {
+
+    init {
+        controller.listener = this
+    }
 
     override fun providesController(): EpoxyController {
         return controller

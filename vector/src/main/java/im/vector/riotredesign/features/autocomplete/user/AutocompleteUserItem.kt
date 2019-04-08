@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.autocomplete.user
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -32,8 +33,12 @@ abstract class AutocompleteUserItem : VectorEpoxyModel<AutocompleteUserItem.Hold
     var name: String? = null
     @EpoxyAttribute
     var avatarUrl: String? = null
+    @EpoxyAttribute
+    var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
+        holder.view.setOnClickListener(clickListener)
+
         holder.nameView.text = name
         AvatarRenderer.render(avatarUrl, name, holder.avatarImageView)
     }

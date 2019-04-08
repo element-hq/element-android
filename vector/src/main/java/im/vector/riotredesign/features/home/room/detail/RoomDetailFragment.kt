@@ -20,12 +20,14 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.fragmentViewModel
 import com.otaliastudios.autocomplete.Autocomplete
+import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
@@ -34,6 +36,7 @@ import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
+import im.vector.riotredesign.features.autocomplete.command.CommandPolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotredesign.features.command.Command
 import im.vector.riotredesign.features.home.AvatarRenderer
@@ -133,10 +136,22 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         val elevation = 6f
         val backgroundDrawable = ColorDrawable(Color.WHITE)
         Autocomplete.on<Command>(composerEditText)
-                .with(CharPolicy('/', false))
+                .with(CommandPolicy())
                 .with(autocompleteCommandPresenter)
                 .with(elevation)
                 .with(backgroundDrawable)
+                .with(object : AutocompleteCallback<Command> {
+                    override fun onPopupItemClicked(editable: Editable?, item: Command?): Boolean {
+                        editable?.clear()
+                        editable
+                                ?.append(item?.command)
+                                ?.append(" ")
+                        return true
+                    }
+
+                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    }
+                })
                 .build()
 
         autocompleteUserPresenter.callback = this
@@ -145,6 +160,17 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
                 .with(autocompleteUserPresenter)
                 .with(elevation)
                 .with(backgroundDrawable)
+                .with(object : AutocompleteCallback<User> {
+                    override fun onPopupItemClicked(editable: Editable?, item: User?): Boolean {
+                        // TODO
+                        editable?.append(item?.displayName)
+                                ?.append(" ")
+                        return true
+                    }
+
+                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    }
+                })
                 .build()
 
         sendButton.setOnClickListener {

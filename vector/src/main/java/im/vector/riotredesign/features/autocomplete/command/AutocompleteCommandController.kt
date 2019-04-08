@@ -17,21 +17,27 @@
 package im.vector.riotredesign.features.autocomplete.command
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.riotredesign.core.listener.Listener
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.command.Command
 
 class AutocompleteCommandController(private val stringProvider: StringProvider) : TypedEpoxyController<List<Command>>() {
 
+    var listener: Listener<Command>? = null
+
     override fun buildModels(data: List<Command>?) {
         if (data.isNullOrEmpty()) {
             return
         }
-        data.forEach {
+        data.forEach { command ->
             autocompleteCommandItem {
-                id(it.command)
-                name(it.command)
-                parameters(it.parameters)
-                description(stringProvider.getString(it.description))
+                id(command.command)
+                name(command.command)
+                parameters(command.parameters)
+                description(stringProvider.getString(command.description))
+                clickListener { _ ->
+                    listener?.onEvent(command)
+                }
             }
         }
     }

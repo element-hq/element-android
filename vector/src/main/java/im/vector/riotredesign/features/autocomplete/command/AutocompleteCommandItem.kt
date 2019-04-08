@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.autocomplete.command
 
+import android.view.View
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -32,8 +33,12 @@ abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandIte
     var parameters: CharSequence? = null
     @EpoxyAttribute
     var description: CharSequence? = null
+    @EpoxyAttribute
+    var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
+        holder.view.setOnClickListener(clickListener)
+
         holder.nameView.text = name
         holder.parametersView.text = parameters
         holder.descriptionView.text = description
