@@ -171,6 +171,8 @@ dependencies {
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"
 
+    implementation 'com.otaliastudios:autocomplete:1.1.0'
+
     // Butterknife
     implementation 'com.jakewharton:butterknife:10.1.0'
     kapt 'com.jakewharton:butterknife-compiler:10.1.0'
