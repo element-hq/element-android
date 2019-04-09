@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/userAutocompleteAvatar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/userAutocompleteName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:maxLines="1"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="name" />
+
+</LinearLayout>

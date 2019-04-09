@@ -18,6 +18,10 @@ package im.vector.riotredesign.features.home
 
 import androidx.fragment.app.Fragment
 import im.vector.riotredesign.core.glide.GlideApp
+import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandController
+import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
+import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserController
+import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotredesign.features.home.group.GroupSummaryController
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.*
@@ -75,6 +79,15 @@ class HomeModule {
             GroupSummaryController()
         }
 
+        scope(ROOM_DETAIL_SCOPE) { (fragment: Fragment) ->
+            val commandController = AutocompleteCommandController(get())
+            AutocompleteCommandPresenter(fragment.requireContext(), commandController)
+        }
+
+        scope(ROOM_DETAIL_SCOPE) { (fragment: Fragment) ->
+            val userController = AutocompleteUserController()
+            AutocompleteUserPresenter(fragment.requireContext(), userController)
+        }
 
     }
 }

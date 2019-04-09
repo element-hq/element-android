@@ -36,7 +36,6 @@ import java.lang.ref.WeakReference
  * This span is able to replace a text by a [ChipDrawable]
  * It's needed to call [bind] method to start requesting avatar, otherwise only the placeholder icon will be displayed if not already cached.
  */
-
 class PillImageSpan(private val glideRequests: GlideRequests,
                     private val context: Context,
                     private val userId: String,

@@ -16,23 +16,43 @@
 
 package im.vector.riotredesign.features.home.room.detail
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable
+import android.text.Spannable
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.fragmentViewModel
+import com.otaliastudios.autocomplete.Autocomplete
+import com.otaliastudios.autocomplete.AutocompleteCallback
+import com.otaliastudios.autocomplete.CharPolicy
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
+import im.vector.riotredesign.core.extensions.observeEvent
+import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
+import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
+import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
+import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
+import im.vector.riotredesign.features.command.Command
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
+import im.vector.riotredesign.features.home.room.detail.composer.TextComposerActions
+import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewModel
+import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
+import im.vector.riotredesign.features.html.PillImageSpan
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import im.vector.riotredesign.features.media.MediaViewerActivity
 import kotlinx.android.parcel.Parcelize
@@ -50,7 +70,7 @@ data class RoomDetailArgs(
 ) : Parcelable
 
 
-class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callback {
+class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callback, AutocompleteUserPresenter.Callback {
 
     companion object {
 
@@ -61,8 +81,16 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         }
     }
 
+    private val session by inject<Session>()
+    private val glideRequests by lazy {
+        GlideApp.with(this)
+    }
+
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
+    private val textComposerViewModel: TextComposerViewModel by fragmentViewModel()
     private val timelineEventController: TimelineEventController by inject { parametersOf(this) }
+    private val autocompleteCommandPresenter: AutocompleteCommandPresenter by inject { parametersOf(this) }
+    private val autocompleteUserPresenter: AutocompleteUserPresenter by inject { parametersOf(this) }
     private val homePermalinkHandler: HomePermalinkHandler by inject()
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
@@ -74,8 +102,10 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         bindScope(getOrCreateScope(HomeModule.ROOM_DETAIL_SCOPE))
         setupRecyclerView()
         setupToolbar()
-        setupSendButton()
+        setupComposer()
         roomDetailViewModel.subscribe { renderState(it) }
+        textComposerViewModel.subscribe { renderTextComposerState(it) }
+        roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
     }
 
     override fun onResume() {
@@ -114,12 +144,73 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         timelineEventController.callback = this
     }
 
-    private fun setupSendButton() {
+    private fun setupComposer() {
+        val elevation = 6f
+        val backgroundDrawable = ColorDrawable(Color.WHITE)
+        Autocomplete.on<Command>(composerEditText)
+                .with(CommandAutocompletePolicy())
+                .with(autocompleteCommandPresenter)
+                .with(elevation)
+                .with(backgroundDrawable)
+                .with(object : AutocompleteCallback<Command> {
+                    override fun onPopupItemClicked(editable: Editable, item: Command): Boolean {
+                        editable.clear()
+                        editable
+                                .append(item.command)
+                                .append(" ")
+                        return true
+                    }
+
+                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    }
+                })
+                .build()
+
+        autocompleteUserPresenter.callback = this
+        Autocomplete.on<User>(composerEditText)
+                .with(CharPolicy('@', true))
+                .with(autocompleteUserPresenter)
+                .with(elevation)
+                .with(backgroundDrawable)
+                .with(object : AutocompleteCallback<User> {
+                    override fun onPopupItemClicked(editable: Editable, item: User): Boolean {
+                        // Detect last '@' and remove it
+                        var startIndex = editable.lastIndexOf("@")
+                        if (startIndex == -1) {
+                            startIndex = 0
+                        }
+
+                        // Detect next word separator
+                        var endIndex = editable.indexOf(" ", startIndex)
+                        if (endIndex == -1) {
+                            endIndex = editable.length
+                        }
+
+                        // Replace the word by its completion
+                        val displayName = item.displayName ?: item.userId
+
+                        // with a trailing space
+                        editable.replace(startIndex, endIndex, "$displayName ")
+
+                        // Add the span
+                        val user = session.getUser(item.userId)
+                        val span = PillImageSpan(glideRequests, context!!, item.userId, user)
+                        span.bind(composerEditText)
+
+                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                        return true
+                    }
+
+                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    }
+                })
+                .build()
+
         sendButton.setOnClickListener {
             val textMessage = composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage))
-                composerEditText.text = null
             }
         }
     }
@@ -142,7 +233,44 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         }
     }
 
-// TimelineEventController.Callback ************************************************************
+    private fun renderTextComposerState(state: TextComposerViewState) {
+        autocompleteUserPresenter.render(state.asyncUsers)
+    }
+
+    private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
+        when (sendMessageResult) {
+            is SendMessageResult.MessageSent,
+            is SendMessageResult.SlashCommandHandled -> {
+                // Clear composer
+                composerEditText.text = null
+            }
+            is SendMessageResult.SlashCommandError -> {
+                displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
+            }
+            is SendMessageResult.SlashCommandUnknown -> {
+                displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
+            }
+            is SendMessageResult.SlashCommandResultOk -> {
+                // Ignore
+            }
+            is SendMessageResult.SlashCommandResultError -> {
+                displayCommandError(sendMessageResult.throwable.localizedMessage)
+            }
+            is SendMessageResult.SlashCommandNotImplemented -> {
+                displayCommandError(getString(R.string.not_implemented))
+            }
+        }
+    }
+
+    private fun displayCommandError(message: String) {
+        AlertDialog.Builder(activity!!)
+                .setTitle(R.string.command_error)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, null)
+                .show()
+    }
+
+    // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String) {
         homePermalinkHandler.launch(url)
@@ -157,4 +285,9 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         startActivity(intent)
     }
 
+    // AutocompleteUserPresenter.Callback
+
+    override fun onQueryUsers(query: CharSequence?) {
+        textComposerViewModel.process(TextComposerActions.QueryUsers(query))
+    }
 }

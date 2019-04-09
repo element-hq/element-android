@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.internal.network.NetworkConstants
+import im.vector.matrix.android.internal.session.room.invite.InviteBody
 import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
@@ -120,5 +121,14 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/read_markers")
     fun sendReadMarker(@Path("roomId") roomId: String, @Body markers: Map<String, String>): Call<Unit>
 
+    /**
+     * Invite a user to the given room.
+     * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-rooms-roomid-invite
+     *
+     * @param roomId the room id
+     * @param body   a object that just contains a user id
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
+    fun invite(@Path("roomId") roomId: String, @Body body: InviteBody): Call<Unit>
 
 }

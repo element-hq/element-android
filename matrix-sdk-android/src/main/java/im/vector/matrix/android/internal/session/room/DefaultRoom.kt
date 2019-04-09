@@ -20,35 +20,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.members.RoomMembersService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
-import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
 
 internal class DefaultRoom(
         override val roomId: String,
-        private val loadRoomMembersTask: LoadRoomMembersTask,
         private val monarchy: Monarchy,
         private val timelineService: TimelineService,
         private val sendService: SendService,
         private val readService: ReadService,
-        private val taskExecutor: TaskExecutor
+        private val roomMembersService: RoomMembersService
 
 
 ) : Room,
         TimelineService by timelineService,
         SendService by sendService,
-        ReadService by readService {
+        ReadService by readService,
+        RoomMembersService by roomMembersService {
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
         val liveRealmData = RealmLiveData<RoomSummaryEntity>(monarchy.realmConfiguration) { realm ->
@@ -59,8 +55,4 @@ internal class DefaultRoom(
         }
     }
 
-    override fun loadRoomMembersIfNeeded(): Cancelable {
-        val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
-        return loadRoomMembersTask.configureWith(params).executeBy(taskExecutor)
-    }
 }

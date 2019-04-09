@@ -27,7 +27,7 @@ import kotlin.reflect.KProperty
  * See [SampleKotlinModelWithHolder] for a usage example.
  */
 abstract class VectorEpoxyHolder : EpoxyHolder() {
-    private lateinit var view: View
+    lateinit var view: View
 
     override fun bindView(itemView: View) {
         view = itemView

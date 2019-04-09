@@ -14,24 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.rx
+package im.vector.riotredesign.features.home.room.detail.composer
 
-import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import io.reactivex.Observable
-
-class RxRoom(private val room: Room) {
-
-    fun liveRoomSummary(): Observable<RoomSummary> {
-        return room.roomSummary.asObservable()
-    }
-
-    fun liveRoomMemberIds(): Observable<List<String>> {
-        return room.getRoomMemberIdsLive().asObservable()
-    }
-
-}
-
-fun Room.rx(): RxRoom {
-    return RxRoom(this)
+sealed class TextComposerActions {
+    data class QueryUsers(val query: CharSequence?) : TextComposerActions()
 }

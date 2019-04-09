@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
+import io.realm.RealmQuery
 import io.realm.Sort
 
 internal class RoomMembers(private val realm: Realm,
@@ -47,10 +48,21 @@ internal class RoomMembers(private val realm: Realm,
                 }
     }
 
-    fun getLoaded(): Map<String, RoomMember> {
+    fun queryRoomMembersEvent(): RealmQuery<EventEntity> {
         return EventEntity
                 .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-                .sort(EventEntityFields.STATE_INDEX)
+                .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
+                .distinct(EventEntityFields.STATE_KEY)
+                .isNotNull(EventEntityFields.CONTENT)
+    }
+
+    fun queryRoomMemberEvent(userId: String): RealmQuery<EventEntity> {
+        return queryRoomMembersEvent()
+                .equalTo(EventEntityFields.STATE_KEY, userId)
+    }
+
+    fun getLoaded(): Map<String, RoomMember> {
+        return queryRoomMembersEvent()
                 .findAll()
                 .map { it.asDomain() }
                 .associateBy { it.stateKey!! }
