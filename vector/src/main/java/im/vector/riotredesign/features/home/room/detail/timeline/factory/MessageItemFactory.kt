@@ -18,7 +18,6 @@ package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.util.Linkify
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -28,6 +27,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
+import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
@@ -68,11 +68,11 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val informationData = MessageInformationData(time, avatarUrl, memberName, showInformation)
 
         return when (messageContent) {
-            is MessageTextContent   -> buildTextMessageItem(messageContent, informationData, callback)
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, callback)
-            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, callback)
+            is MessageTextContent -> buildTextMessageItem(messageContent, informationData, callback)
+            is MessageImageContent -> buildImageMessageItem(messageContent, informationData, callback)
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
-            else                    -> buildNotHandledMessageItem(messageContent)
+            else -> buildNotHandledMessageItem(messageContent)
         }
     }
 
@@ -155,7 +155,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 callback?.onUrlClicked(url)
             }
         })
-        Linkify.addLinks(spannable, Linkify.ALL)
+        VectorLinkify.addLinks(spannable, true)
         return spannable
     }
 

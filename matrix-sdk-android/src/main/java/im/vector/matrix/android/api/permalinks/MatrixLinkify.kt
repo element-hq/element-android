@@ -89,6 +89,4 @@ object MatrixLinkify {
             }
         }
     }
-
-
 }
