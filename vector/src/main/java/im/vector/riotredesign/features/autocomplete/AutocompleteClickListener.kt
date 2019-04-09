@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.core.listener
+package im.vector.riotredesign.features.autocomplete
 
 /**
  * Simple generic listener interface
  */
-interface Listener<T> {
+interface AutocompleteClickListener<T> {
 
-    fun onEvent(t: T)
+    fun onItemClick(t: T)
 }
