@@ -26,6 +26,8 @@ import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.send.EventFactory
+import im.vector.matrix.android.internal.session.room.state.DefaultStateService
+import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
@@ -34,6 +36,7 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 
 internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
                            private val inviteTask: InviteTask,
+                           private val sendStateTask: SendStateTask,
                            private val monarchy: Monarchy,
                            private val paginationTask: PaginationTask,
                            private val contextOfEventTask: GetContextOfEventTask,
@@ -46,6 +49,7 @@ internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
         val timelineEventFactory = TimelineEventFactory(roomMemberExtractor)
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask)
         val sendService = DefaultSendService(roomId, eventFactory, monarchy)
+        val stateService = DefaultStateService(roomId, sendStateTask, taskExecutor)
         val roomMembersService = DefaultRoomMembersService(roomId, monarchy, loadRoomMembersTask, inviteTask, taskExecutor)
         val readService = DefaultReadService(roomId, monarchy, setReadMarkersTask, taskExecutor)
 
@@ -54,6 +58,7 @@ internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
                 monarchy,
                 timelineService,
                 sendService,
+                stateService,
                 readService,
                 roomMembersService
         )

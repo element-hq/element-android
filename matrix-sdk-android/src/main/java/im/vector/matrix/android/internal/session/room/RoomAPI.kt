@@ -131,4 +131,29 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
     fun invite(@Path("roomId") roomId: String, @Body body: InviteBody): Call<Unit>
 
+    /**
+     * Send a generic state events
+     *
+     * @param roomId         the room id.
+     * @param stateEventType the state event type
+     * @param params         the request parameters
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{state_event_type}")
+    fun sendStateEvent(@Path("roomId") roomId: String,
+                       @Path("state_event_type") stateEventType: String,
+                       @Body params: Map<String, String>): Call<Unit>
+
+    /**
+     * Send a generic state events
+     *
+     * @param roomId         the room id.
+     * @param stateEventType the state event type
+     * @param stateKey       the state keys
+     * @param params         the request parameters
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{state_event_type}/{state_key}")
+    fun sendStateEvent(@Path("roomId") roomId: String,
+                       @Path("state_event_type") stateEventType: String,
+                       @Path("state_key") stateKey: String,
+                       @Body params: Map<String, String>): Call<Unit>
 }

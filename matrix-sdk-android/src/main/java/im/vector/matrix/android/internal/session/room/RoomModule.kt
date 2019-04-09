@@ -26,6 +26,8 @@ import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTas
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.send.EventFactory
+import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
+import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.*
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -65,7 +67,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get())
+            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -74,6 +76,10 @@ class RoomModule {
 
         scope(DefaultSession.SCOPE) {
             DefaultInviteTask(get()) as InviteTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultSendStateTask(get()) as SendStateTask
         }
 
     }
