@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.model.message
+package im.vector.matrix.android.api.session.room.send
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+enum class SendState {
+    UNKNOWN,
+    UNSENT,
+    ENCRYPTING,
+    SENDING,
+    SENT,
+    SYNCED;
 
-@JsonClass(generateAdapter = true)
-data class VideoInfo(
-        @Json(name = "mimetype") val mimeType: String,
-        @Json(name = "w") val width: Int = 0,
-        @Json(name = "h") val height: Int = 0,
-        @Json(name = "size") val size: Long = 0,
-        @Json(name = "duration") val duration: Int = 0,
-        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,
-        @Json(name = "thumbnail_url") val thumbnailUrl: String? = null
-)
+    fun isSent(): Boolean {
+        return this == SENT || this == SYNCED
+    }
+
+}

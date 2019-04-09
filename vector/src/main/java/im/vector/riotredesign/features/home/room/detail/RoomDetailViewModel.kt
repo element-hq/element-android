@@ -21,7 +21,6 @@ import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.RiotViewModel
@@ -75,25 +74,24 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSendMessage(action: RoomDetailActions.SendMessage) {
-        room.sendTextMessage(action.text, callback = object : MatrixCallback<Event> {})
+        room.sendTextMessage(action.text)
     }
 
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
-        val attachment = action.mediaFiles.firstOrNull()
-                ?.let {
-                    ContentAttachmentData(
-                            it.size,
-                            it.duration,
-                            it.date,
-                            it.height,
-                            it.width,
-                            it.name,
-                            it.path,
-                            it.mimeType
-                    )
-                }
-                ?: return
-        room.sendMedia(attachment, callback = object : MatrixCallback<Event> {})
+        val attachments = action.mediaFiles.map {
+            ContentAttachmentData(
+                    size = it.size,
+                    duration = it.duration,
+                    date = it.date,
+                    height = it.height,
+                    width = it.width,
+                    name = it.name,
+                    path = it.path,
+                    mimeType = it.mimeType,
+                    type = ContentAttachmentData.Type.values()[it.mediaType]
+            )
+        }
+        room.sendMedias(attachments)
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
@@ -134,4 +132,5 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         timeline.dispose()
         super.onCleared()
     }
+
 }

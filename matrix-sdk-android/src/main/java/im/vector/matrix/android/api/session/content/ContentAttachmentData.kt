@@ -22,11 +22,21 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class ContentAttachmentData(
         val size: Long = 0,
-        val duration: Long = 0,
+        val duration: Long? = 0,
         val date: Long = 0,
-        val height: Long = 0,
-        val width: Long = 0,
+        val height: Long? = 0,
+        val width: Long? = 0,
         val name: String? = null,
         val path: String? = null,
-        val mimeType: String? = null
-) : Parcelable
+        val mimeType: String? = null,
+        val type: Type
+) : Parcelable {
+
+    enum class Type {
+        FILE,
+        IMAGE,
+        AUDIO,
+        VIDEO
+    }
+
+}

@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.database.helper
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -89,9 +90,10 @@ internal fun ChunkEntity.add(roomId: String,
                              isUnlinked: Boolean = false) {
 
     assertIsManaged()
-    if (event.eventId.isNullOrEmpty() || events.fastContains(event.eventId)) {
+    if (event.eventId.isNullOrEmpty() || this.events.fastContains(event.eventId)) {
         return
     }
+
     var currentDisplayIndex = lastDisplayIndex(direction, 0)
     if (direction == PaginationDirection.FORWARDS) {
         currentDisplayIndex += 1
@@ -115,6 +117,7 @@ internal fun ChunkEntity.add(roomId: String,
         this.stateIndex = currentStateIndex
         this.isUnlinked = isUnlinked
         this.displayIndex = currentDisplayIndex
+        this.sendState = SendState.SYNCED
     }
     // We are not using the order of the list, but will be sorting with displayIndex field
     events.add(eventEntity)
@@ -122,14 +125,14 @@ internal fun ChunkEntity.add(roomId: String,
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> forwardsDisplayIndex
-               PaginationDirection.BACKWARDS -> backwardsDisplayIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> forwardsDisplayIndex
+        PaginationDirection.BACKWARDS -> backwardsDisplayIndex
+    } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> forwardsStateIndex
-               PaginationDirection.BACKWARDS -> backwardsStateIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> forwardsStateIndex
+        PaginationDirection.BACKWARDS -> backwardsStateIndex
+    } ?: defaultValue
 }

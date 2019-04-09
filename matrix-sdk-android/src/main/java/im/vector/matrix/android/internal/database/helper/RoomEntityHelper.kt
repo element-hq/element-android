@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.database.helper
 
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
@@ -49,6 +50,16 @@ internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
             this.stateIndex = stateIndex
             this.isUnlinked = isUnlinked
         }
-        untimelinedStateEvents.add(eventEntity)
+        untimelinedStateEvents.add(0, eventEntity)
     }
+}
+
+internal fun RoomEntity.addSendingEvent(event: Event,
+                                        stateIndex: Int) {
+    assertIsManaged()
+    val eventEntity = event.toEntity(roomId).apply {
+        this.sendState = SendState.UNSENT
+        this.stateIndex = stateIndex
+    }
+    sendingTimelineEvents.add(0, eventEntity)
 }

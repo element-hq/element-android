@@ -21,10 +21,7 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.api.session.room.model.message.ImageInfo
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.*
 
 internal class LocalEchoEventFactory(private val credentials: Credentials) {
 
@@ -34,14 +31,65 @@ internal class LocalEchoEventFactory(private val credentials: Credentials) {
     }
 
     fun createMediaEvent(roomId: String, attachment: ContentAttachmentData): Event {
+        return when (attachment.type) {
+            ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment)
+            ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment)
+            ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment)
+            ContentAttachmentData.Type.FILE  -> createFileEvent(roomId, attachment)
+        }
+    }
+
+    private fun createImageEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val content = MessageImageContent(
                 type = MessageType.MSGTYPE_IMAGE,
                 body = attachment.name ?: "image",
                 info = ImageInfo(
                         mimeType = attachment.mimeType ?: "image/png",
-                        width = attachment.width.toInt(),
-                        height = attachment.height.toInt(),
+                        width = attachment.width?.toInt() ?: 0,
+                        height = attachment.height?.toInt() ?: 0,
                         size = attachment.size.toInt()
+                ),
+                url = attachment.path
+        )
+        return createEvent(roomId, content)
+    }
+
+    private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData): Event {
+        val content = MessageVideoContent(
+                type = MessageType.MSGTYPE_VIDEO,
+                body = attachment.name ?: "video",
+                info = VideoInfo(
+                        mimeType = attachment.mimeType ?: "video/mpeg",
+                        width = attachment.width?.toInt() ?: 0,
+                        height = attachment.height?.toInt() ?: 0,
+                        size = attachment.size,
+                        duration = attachment.duration?.toInt() ?: 0
+                ),
+                url = attachment.path
+        )
+        return createEvent(roomId, content)
+    }
+
+    private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData): Event {
+        val content = MessageAudioContent(
+                type = MessageType.MSGTYPE_AUDIO,
+                body = attachment.name ?: "audio",
+                info = AudioInfo(
+                        mimeType = attachment.mimeType ?: "audio/mpeg",
+                        size = attachment.size
+                ),
+                url = attachment.path
+        )
+        return createEvent(roomId, content)
+    }
+
+    private fun createFileEvent(roomId: String, attachment: ContentAttachmentData): Event {
+        val content = MessageFileContent(
+                type = MessageType.MSGTYPE_FILE,
+                body = attachment.name ?: "file",
+                info = FileInfo(
+                        mimeType = attachment.mimeType ?: "application/octet-stream",
+                        size = attachment.size
                 ),
                 url = attachment.path
         )

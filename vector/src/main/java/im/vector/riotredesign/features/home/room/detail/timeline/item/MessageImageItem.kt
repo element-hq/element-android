@@ -37,8 +37,10 @@ abstract class MessageImageItem : AbsMessageItem<MessageImageItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         MediaContentRenderer.render(mediaData, MediaContentRenderer.Mode.THUMBNAIL, holder.imageView)
-        ContentUploadStateTrackerBinder.bind(eventId, holder.progressLayout)
+        ContentUploadStateTrackerBinder.bind(eventId, mediaData, holder.progressLayout)
         holder.imageView.setOnClickListener(clickListener)
+        holder.imageView.isEnabled = !mediaData.isLocalFile()
+        holder.imageView.alpha = if (mediaData.isLocalFile()) 0.5f else 1f
     }
 
     override fun unbind(holder: Holder) {

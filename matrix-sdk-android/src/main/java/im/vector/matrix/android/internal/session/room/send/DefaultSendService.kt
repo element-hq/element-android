@@ -24,22 +24,25 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.helper.add
+import im.vector.matrix.android.api.util.CancelableBag
+import im.vector.matrix.android.api.util.addTo
+import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
-import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import java.util.concurrent.TimeUnit
 
 private const val SEND_WORK = "SEND_WORK"
+private const val UPLOAD_WORK = "UPLOAD_WORK"
 private const val BACKOFF_DELAY = 10_000L
 
 private val WORK_CONSTRAINTS = Constraints.Builder()
@@ -48,21 +51,30 @@ private val WORK_CONSTRAINTS = Constraints.Builder()
 
 internal class DefaultSendService(private val roomId: String,
                                   private val eventFactory: LocalEchoEventFactory,
-                                  private val monarchy: Monarchy) : SendService {
+                                  private val monarchy: Monarchy)
+    : SendService {
 
-
-    override fun sendTextMessage(text: String, callback: MatrixCallback<Event>): Cancelable {
-        val event = eventFactory.createTextEvent(roomId, text)
-        saveLocalEcho(event)
+    override fun sendTextMessage(text: String): Cancelable {
+        val event = eventFactory.createTextEvent(roomId, text).also {
+            saveLocalEcho(it)
+        }
         val sendWork = createSendEventWork(event)
         WorkManager.getInstance()
-                .beginUniqueWork(SEND_WORK, ExistingWorkPolicy.APPEND, sendWork)
+                .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, sendWork)
                 .enqueue()
 
         return CancelableWork(sendWork.id)
     }
 
-    override fun sendMedia(attachment: ContentAttachmentData, callback: MatrixCallback<Event>): Cancelable {
+    override fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable {
+        val cancelableBag = CancelableBag()
+        attachments.forEach {
+            sendMedia(it).addTo(cancelableBag)
+        }
+        return cancelableBag
+    }
+
+    override fun sendMedia(attachment: ContentAttachmentData): Cancelable {
         // Create an event with the media file path
         val event = eventFactory.createMediaEvent(roomId, attachment).also {
             saveLocalEcho(it)
@@ -71,18 +83,26 @@ internal class DefaultSendService(private val roomId: String,
         val sendWork = createSendEventWork(event)
 
         WorkManager.getInstance()
-                .beginUniqueWork(SEND_WORK, ExistingWorkPolicy.APPEND, uploadWork)
+                .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
                 .then(sendWork)
                 .enqueue()
+
         return CancelableWork(sendWork.id)
     }
 
     private fun saveLocalEcho(event: Event) {
         monarchy.tryTransactionAsync { realm ->
-            val chunkEntity = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
-                              ?: return@tryTransactionAsync
-            chunkEntity.add(roomId, event, PaginationDirection.FORWARDS)
+            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
+                             ?: return@tryTransactionAsync
+            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
+                            ?: return@tryTransactionAsync
+
+            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
         }
+    }
+
+    private fun buildWorkIdentifier(identifier: String): String {
+        return "${roomId}_$identifier"
     }
 
     private fun createSendEventWork(event: Event): OneTimeWorkRequest {

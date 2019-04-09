@@ -26,6 +26,7 @@ import kotlin.properties.Delegates
 internal open class RoomEntity(@PrimaryKey var roomId: String = "",
                                var chunks: RealmList<ChunkEntity> = RealmList(),
                                var untimelinedStateEvents: RealmList<EventEntity> = RealmList(),
+                               var sendingTimelineEvents: RealmList<EventEntity> = RealmList(),
                                var areAllMembersLoaded: Boolean = false
 ) : RealmObject() {
 

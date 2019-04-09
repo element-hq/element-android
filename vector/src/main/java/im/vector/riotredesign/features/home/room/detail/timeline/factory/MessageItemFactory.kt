@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageEmoteConte
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.RiotEpoxyModel
@@ -79,7 +80,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val informationData = MessageInformationData(time, avatarUrl, memberName, showInformation)
 
         return when (messageContent) {
-            is MessageTextContent   -> buildTextMessageItem(messageContent, informationData, callback)
+            is MessageTextContent   -> buildTextMessageItem(event.sendState, messageContent, informationData, callback)
             is MessageImageContent  -> buildImageMessageItem(eventId, messageContent, informationData, callback)
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
@@ -115,17 +116,24 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .clickListener { view -> callback?.onMediaClicked(data, view) }
     }
 
-    private fun buildTextMessageItem(messageContent: MessageTextContent,
+    private fun buildTextMessageItem(sendState: SendState,
+                                     messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
-        val bodyToUse = messageContent.formattedBody
-                                ?.let {
-                                    htmlRenderer.render(it)
-                                }
-                        ?: messageContent.body
+        val bodyToUse = messageContent.formattedBody?.let {
+            htmlRenderer.render(it)
+        } ?: messageContent.body
 
-        val linkifiedBody = linkifyBody(bodyToUse, callback)
+        val textColor = if (sendState.isSent()) {
+            R.color.dark_grey
+        } else {
+            R.color.brown_grey
+        }
+        val formattedBody = span(bodyToUse) {
+            this.textColor = colorProvider.getColor(textColor)
+        }
+        val linkifiedBody = linkifyBody(formattedBody, callback)
         return MessageTextItem_()
                 .message(linkifiedBody)
                 .informationData(informationData)

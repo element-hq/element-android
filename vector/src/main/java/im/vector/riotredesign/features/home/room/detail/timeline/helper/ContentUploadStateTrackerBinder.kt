@@ -25,15 +25,20 @@ import android.widget.TextView
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.riotredesign.R
+import im.vector.riotredesign.features.media.MediaContentRenderer
+import java.io.File
 
 object ContentUploadStateTrackerBinder {
 
     private val updateListeners = mutableMapOf<String, ContentUploadStateTracker.UpdateListener>()
 
-    fun bind(eventId: String, progressLayout: ViewGroup) {
+    fun bind(eventId: String,
+             mediaData: MediaContentRenderer.Data,
+             progressLayout: ViewGroup) {
+
         Matrix.getInstance().currentSession?.also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
-            val updateListener = ContentMediaProgressUpdater(progressLayout)
+            val updateListener = ContentMediaProgressUpdater(progressLayout, mediaData)
             updateListeners[eventId] = updateListener
             uploadStateTracker.track(eventId, updateListener)
         }
@@ -50,22 +55,40 @@ object ContentUploadStateTrackerBinder {
 
 }
 
-private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup) : ContentUploadStateTracker.UpdateListener {
+private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
+                                          private val mediaData: MediaContentRenderer.Data) : ContentUploadStateTracker.UpdateListener {
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
-            is ContentUploadStateTracker.State.Idle,
-            is ContentUploadStateTracker.State.Failure,
-            is ContentUploadStateTracker.State.Success      -> hideProgress()
-            is ContentUploadStateTracker.State.ProgressData -> showProgress(state)
+            is ContentUploadStateTracker.State.Idle         -> handleIdle(state)
+            is ContentUploadStateTracker.State.Failure      -> handleFailure(state)
+            is ContentUploadStateTracker.State.Success      -> handleSuccess(state)
+            is ContentUploadStateTracker.State.ProgressData -> handleProgress(state)
         }
     }
 
-    private fun hideProgress() {
-        progressLayout.visibility = View.GONE
+    private fun handleIdle(state: ContentUploadStateTracker.State.Idle) {
+        if (mediaData.isLocalFile()) {
+            val file = File(mediaData.url)
+            progressLayout.visibility = View.VISIBLE
+            val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
+            val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+            progressBar?.progress = 0
+            progressTextView?.text = formatStats(progressLayout.context, 0L, file.length())
+        } else {
+            progressLayout.visibility = View.GONE
+        }
     }
 
-    private fun showProgress(state: ContentUploadStateTracker.State.ProgressData) {
+    private fun handleFailure(state: ContentUploadStateTracker.State.Failure) {
+
+    }
+
+    private fun handleSuccess(state: ContentUploadStateTracker.State.Success) {
+
+    }
+
+    private fun handleProgress(state: ContentUploadStateTracker.State.ProgressData) {
         progressLayout.visibility = View.VISIBLE
         val percent = 100L * (state.current.toFloat() / state.total.toFloat())
         val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)

@@ -23,7 +23,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
@@ -34,7 +33,6 @@ import com.jaiselrahman.filepicker.model.MediaFile
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.dialogs.DialogListItem
-import im.vector.riotredesign.core.dialogs.DialogSendItemAdapter
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.platform.RiotFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
@@ -155,15 +153,24 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
 
     private fun setupAttachmentButton() {
         attachmentButton.setOnClickListener {
+            val intent = Intent(requireContext(), FilePickerActivity::class.java)
+            intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
+                    .setCheckPermission(true)
+                    .setShowFiles(true)
+                    .setShowAudios(true)
+                    .setSkipZeroSizeFiles(true)
+                    .build())
+            startActivityForResult(intent, REQUEST_FILES_REQUEST_CODE)
+            /*
             val items = ArrayList<DialogListItem>()
             // Send file
             items.add(DialogListItem.SendFile)
             // Send voice
-            /*
+
             if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
                 items.add(DialogListItem.SendVoice.INSTANCE)
             }
-            */
+
 
             // Send sticker
             //items.add(DialogListItem.SendSticker)
@@ -182,6 +189,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
+                    */
         }
     }
 
@@ -189,12 +197,7 @@ class RoomDetailFragment : RiotFragment(), TimelineEventController.Callback {
         Timber.v("On send choice clicked: $dialogListItem")
         when (dialogListItem) {
             is DialogListItem.SendFile       -> {
-                val intent = Intent(requireContext(), FilePickerActivity::class.java)
-                intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
-                        .setCheckPermission(true)
-                        .setSkipZeroSizeFiles(true)
-                        .build())
-                startActivityForResult(intent, REQUEST_FILES_REQUEST_CODE)
+                // launchFileIntent
             }
             is DialogListItem.SendVoice      -> {
                 //launchAudioRecorderIntent()
