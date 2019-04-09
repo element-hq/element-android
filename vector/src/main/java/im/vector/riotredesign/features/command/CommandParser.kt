@@ -205,7 +205,7 @@ object CommandParser {
                 }
                 Command.CLEAR_SCALAR_TOKEN.command -> {
                     return if (messageParts.size == 1) {
-                        ParsedCommand.ClearSclalarToken
+                        ParsedCommand.ClearScalarToken
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CLEAR_SCALAR_TOKEN)
                     }

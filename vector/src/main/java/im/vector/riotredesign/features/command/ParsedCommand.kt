@@ -44,5 +44,5 @@ sealed class ParsedCommand {
     class KickUser(val userId: String, val reason: String) : ParsedCommand()
     class ChangeDisplayName(val displayName: String) : ParsedCommand()
     class SetMarkdown(val enable: Boolean) : ParsedCommand()
-    object ClearSclalarToken : ParsedCommand()
+    object ClearScalarToken : ParsedCommand()
 }

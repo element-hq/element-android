@@ -103,7 +103,48 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             is ParsedCommand.Invite -> {
                 handleInviteSlashCommand(slashCommandResult)
             }
-            else -> {
+            is ParsedCommand.SetUserPowerLevel -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.ClearScalarToken -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.SetMarkdown -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.UnbanUser -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.BanUser -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.KickUser -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.JoinRoom -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.PartRoom -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.SendEmote -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.ChangeTopic -> {
+                // TODO
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+            is ParsedCommand.ChangeDisplayName -> {
+                // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
         }
