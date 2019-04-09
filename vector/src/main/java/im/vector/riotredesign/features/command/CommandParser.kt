@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.command
 
+import im.vector.matrix.android.api.MatrixPatterns
 import timber.log.Timber
 
 object CommandParser {
@@ -60,10 +61,10 @@ object CommandParser {
 
             when (slashCommand) {
                 Command.CHANGE_DISPLAY_NAME.command -> {
-                    val newDisplayname = textMessage.substring(Command.CHANGE_DISPLAY_NAME.command.length).trim()
+                    val newDisplayName = textMessage.substring(Command.CHANGE_DISPLAY_NAME.command.length).trim()
 
-                    return if (newDisplayname.isNotEmpty()) {
-                        ParsedCommand.ChangeDisplayName(newDisplayname)
+                    return if (newDisplayName.isNotEmpty()) {
+                        ParsedCommand.ChangeDisplayName(newDisplayName)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME)
                     }
@@ -102,52 +103,76 @@ object CommandParser {
                 }
                 Command.INVITE.command -> {
                     return if (messageParts.size == 2) {
-                        ParsedCommand.Invite(messageParts[1])
+                        val userId = messageParts[1]
+
+                        if (MatrixPatterns.isUserId(userId)) {
+                            ParsedCommand.Invite(userId)
+                        } else {
+                            ParsedCommand.ErrorSyntax(Command.INVITE)
+                        }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.INVITE)
                     }
                 }
                 Command.KICK_USER.command -> {
                     return if (messageParts.size >= 2) {
-                        val user = messageParts[1]
-                        val reason = textMessage.substring(Command.KICK_USER.command.length
-                                + 1
-                                + user.length).trim()
+                        val userId = messageParts[1]
+                        if (MatrixPatterns.isUserId(userId)) {
+                            val reason = textMessage.substring(Command.KICK_USER.command.length
+                                    + 1
+                                    + userId.length).trim()
 
-                        ParsedCommand.KickUser(user, reason)
+                            ParsedCommand.KickUser(userId, reason)
+                        } else {
+                            ParsedCommand.ErrorSyntax(Command.KICK_USER)
+                        }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.KICK_USER)
                     }
                 }
                 Command.BAN_USER.command -> {
                     return if (messageParts.size >= 2) {
-                        val user = messageParts[1]
-                        val reason = textMessage.substring(Command.BAN_USER.command.length
-                                + 1
-                                + user.length).trim()
+                        val userId = messageParts[1]
+                        if (MatrixPatterns.isUserId(userId)) {
+                            val reason = textMessage.substring(Command.BAN_USER.command.length
+                                    + 1
+                                    + userId.length).trim()
 
-                        ParsedCommand.BanUser(user, reason)
+                            ParsedCommand.BanUser(userId, reason)
+                        } else {
+                            ParsedCommand.ErrorSyntax(Command.BAN_USER)
+                        }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.BAN_USER)
                     }
                 }
                 Command.UNBAN_USER.command -> {
                     return if (messageParts.size == 2) {
-                        ParsedCommand.UnbanUser(messageParts[1])
+                        val userId = messageParts[1]
+
+                        if (MatrixPatterns.isUserId(userId)) {
+                            ParsedCommand.UnbanUser(userId)
+                        } else {
+                            ParsedCommand.ErrorSyntax(Command.UNBAN_USER)
+                        }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.UNBAN_USER)
                     }
                 }
                 Command.SET_USER_POWER_LEVEL.command -> {
                     return if (messageParts.size == 3) {
-                        val userID = messageParts[1]
-                        val powerLevelsAsString = messageParts[2]
+                        val userId = messageParts[1]
+                        if (MatrixPatterns.isUserId(userId)) {
+                            val powerLevelsAsString = messageParts[2]
 
-                        try {
-                            val powerLevelsAsInt = Integer.parseInt(powerLevelsAsString)
+                            try {
+                                val powerLevelsAsInt = Integer.parseInt(powerLevelsAsString)
 
-                            ParsedCommand.SetUserPowerLevel(userID, powerLevelsAsInt)
-                        } catch (e: Exception) {
+                                ParsedCommand.SetUserPowerLevel(userId, powerLevelsAsInt)
+                            } catch (e: Exception) {
+                                ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
+                            }
+                        } else {
                             ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
                         }
                     } else {
@@ -158,7 +183,11 @@ object CommandParser {
                     return if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
-                        ParsedCommand.SetUserPowerLevel(userId, 0)
+                        if (MatrixPatterns.isUserId(userId)) {
+                            ParsedCommand.SetUserPowerLevel(userId, 0)
+                        } else {
+                            ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
+                        }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
                     }
