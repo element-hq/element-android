@@ -42,8 +42,8 @@ internal class DefaultSendService(private val roomId: String,
             .build()
 
     // TODO callback is not used
-    override fun sendTextMessage(text: String, callback: MatrixCallback<Event>): Cancelable {
-        val event = eventFactory.createTextEvent(roomId, text)
+    override fun sendTextMessage(text: String, msgType: String, callback: MatrixCallback<Event>): Cancelable {
+        val event = eventFactory.createTextEvent(roomId, msgType, text)
 
         monarchy.tryTransactionAsync { realm ->
             val chunkEntity = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)

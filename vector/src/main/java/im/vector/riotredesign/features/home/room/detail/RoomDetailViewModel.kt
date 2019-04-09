@@ -24,6 +24,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
@@ -136,8 +137,8 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
             is ParsedCommand.SendEmote -> {
-                // TODO
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE, callback = object : MatrixCallback<Event> {})
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
             }
             is ParsedCommand.ChangeTopic -> {
                 // TODO
