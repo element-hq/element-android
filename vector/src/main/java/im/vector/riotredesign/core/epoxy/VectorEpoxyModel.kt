@@ -19,6 +19,9 @@ package im.vector.riotredesign.core.epoxy
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.airbnb.epoxy.VisibilityState
 
+/**
+ * EpoxyModelWithHolder which can listen to visibility state change
+ */
 abstract class VectorEpoxyModel<H : VectorEpoxyHolder> : EpoxyModelWithHolder<H>() {
 
     private var onModelVisibilityStateChangedListener: OnVisibilityStateChangedListener? = null

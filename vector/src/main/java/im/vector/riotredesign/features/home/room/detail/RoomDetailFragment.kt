@@ -21,6 +21,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
+import android.text.Spannable
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,14 +30,16 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
+import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
-import im.vector.riotredesign.features.autocomplete.command.CommandPolicy
+import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotredesign.features.command.Command
 import im.vector.riotredesign.features.home.AvatarRenderer
@@ -47,6 +50,7 @@ import im.vector.riotredesign.features.home.room.detail.composer.TextComposerVie
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
+import im.vector.riotredesign.features.html.PillImageSpan
 import im.vector.riotredesign.features.media.MediaContentRenderer
 import im.vector.riotredesign.features.media.MediaViewerActivity
 import kotlinx.android.parcel.Parcelize
@@ -73,6 +77,12 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
                 setArguments(args)
             }
         }
+    }
+
+    private val session by inject<Session>()
+    // TODO Inject?
+    private val glideRequests by lazy {
+        GlideApp.with(this)
     }
 
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
@@ -136,16 +146,16 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         val elevation = 6f
         val backgroundDrawable = ColorDrawable(Color.WHITE)
         Autocomplete.on<Command>(composerEditText)
-                .with(CommandPolicy())
+                .with(CommandAutocompletePolicy())
                 .with(autocompleteCommandPresenter)
                 .with(elevation)
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<Command> {
-                    override fun onPopupItemClicked(editable: Editable?, item: Command?): Boolean {
-                        editable?.clear()
+                    override fun onPopupItemClicked(editable: Editable, item: Command): Boolean {
+                        editable.clear()
                         editable
-                                ?.append(item?.command)
-                                ?.append(" ")
+                                .append(item.command)
+                                .append(" ")
                         return true
                     }
 
@@ -156,15 +166,37 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
 
         autocompleteUserPresenter.callback = this
         Autocomplete.on<User>(composerEditText)
-                .with(CharPolicy('@', false))
+                .with(CharPolicy('@', true))
                 .with(autocompleteUserPresenter)
                 .with(elevation)
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<User> {
-                    override fun onPopupItemClicked(editable: Editable?, item: User?): Boolean {
-                        // TODO
-                        editable?.append(item?.displayName)
-                                ?.append(" ")
+                    override fun onPopupItemClicked(editable: Editable, item: User): Boolean {
+                        // Detect last '@' and remove it
+                        var startIndex = editable.lastIndexOf("@")
+                        if (startIndex == -1) {
+                            startIndex = 0
+                        }
+
+                        // Detect next word separator
+                        var endIndex = editable.indexOf(" ", startIndex)
+                        if (endIndex == -1) {
+                            endIndex = editable.length
+                        }
+
+                        // Replace the word by its completion
+                        val displayName = item.displayName ?: item.userId
+
+                        // with a trailing space
+                        editable.replace(startIndex, endIndex, "$displayName ")
+
+                        // Add the span
+                        val user = session.getUser(item.userId)
+                        // FIXME avatar is not displayed
+                        val span = PillImageSpan(glideRequests, context!!, item.userId, user)
+
+                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
                         return true
                     }
 
@@ -224,5 +256,4 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
     }
-
 }

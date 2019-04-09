@@ -19,7 +19,7 @@ package im.vector.riotredesign.features.autocomplete.command
 import android.text.Spannable
 import com.otaliastudios.autocomplete.AutocompletePolicy
 
-class CommandPolicy : AutocompletePolicy {
+class CommandAutocompletePolicy : AutocompletePolicy {
     override fun getQuery(text: Spannable): CharSequence {
         if (text.length > 0) {
             return text.substring(1, text.length)

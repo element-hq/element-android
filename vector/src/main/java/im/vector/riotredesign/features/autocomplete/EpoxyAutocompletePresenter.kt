@@ -22,7 +22,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
-import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.AutocompletePresenter
 import im.vector.riotredesign.core.listener.Listener
 
@@ -60,24 +59,14 @@ abstract class EpoxyAutocompletePresenter<T>(context: Context) : AutocompletePre
     }
 
     abstract fun providesController(): EpoxyController
-    /**
-     * Dispatch click event to [AutocompleteCallback].
-     * Should be called when items are clicked.
-     *
-     * @param item the clicked item.
-     */
-    protected fun dispatchClick(item: T) {
-        clicks?.click(item)
-    }
 
     protected fun dispatchLayoutChange() {
         observer?.onChanged()
     }
 
     override fun onEvent(t: T) {
-        dispatchClick(t)
+        clicks?.click(t)
     }
-
 
     private class Observer internal constructor(private val root: DataSetObserver) : RecyclerView.AdapterDataObserver() {
 
