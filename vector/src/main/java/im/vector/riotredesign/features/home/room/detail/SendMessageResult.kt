@@ -23,6 +23,8 @@ sealed class SendMessageResult {
     class SlashCommandError(val command: Command) : SendMessageResult()
     class SlashCommandUnknown(val command: String) : SendMessageResult()
     object SlashCommandHandled : SendMessageResult()
+    object SlashCommandResultOk : SendMessageResult()
+    class SlashCommandResultError(val throwable: Throwable) : SendMessageResult()
     // TODO Remove
     object SlashCommandNotImplemented : SendMessageResult()
 }

@@ -19,6 +19,7 @@
 package im.vector.matrix.android.api.session.room.members
 
 import androidx.lifecycle.LiveData
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -48,5 +49,9 @@ interface RoomMembersService {
      */
     fun getRoomMemberIdsLive(): LiveData<List<String>>
 
+    /**
+     * Invite a user in the room
+     */
+    fun invite(userId: String, callback: MatrixCallback<Unit>)
 
 }

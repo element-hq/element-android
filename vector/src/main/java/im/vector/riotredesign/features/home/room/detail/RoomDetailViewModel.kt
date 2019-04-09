@@ -100,22 +100,27 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             is ParsedCommand.ErrorUnknownSlashCommand -> {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand)))
             }
-            else -> {
-                handleValidSlashCommand(slashCommandResult)
-            }
-        }
-    }
-
-    private fun handleValidSlashCommand(parsedCommand: ParsedCommand) {
-        when (parsedCommand) {
             is ParsedCommand.Invite -> {
-                //room.invite(parsedCommand.userId)
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+                handleInviteSlashCommand(slashCommandResult)
             }
             else -> {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
         }
+    }
+
+    private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
+        _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+
+        room.invite(invite.userId, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultOk))
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultError(failure)))
+            }
+        })
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {

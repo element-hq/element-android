@@ -40,7 +40,6 @@ import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
@@ -240,23 +239,30 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
 
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
-            is SendMessageResult.MessageSent, is SendMessageResult.SlashCommandHandled -> {
+            is SendMessageResult.MessageSent,
+            is SendMessageResult.SlashCommandHandled -> {
                 // Clear composer
                 composerEditText.text = null
             }
             is SendMessageResult.SlashCommandError -> {
-                displayError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
+                displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
             }
             is SendMessageResult.SlashCommandUnknown -> {
-                displayError(getString(R.string.unrecognized_command, sendMessageResult.command))
+                displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
+            }
+            is SendMessageResult.SlashCommandResultOk -> {
+                // Ignore
+            }
+            is SendMessageResult.SlashCommandResultError -> {
+                displayCommandError(sendMessageResult.throwable.localizedMessage)
             }
             is SendMessageResult.SlashCommandNotImplemented -> {
-                activity!!.toast(R.string.not_implemented)
+                displayCommandError(getString(R.string.not_implemented))
             }
         }
     }
 
-    private fun displayError(message: String) {
+    private fun displayCommandError(message: String) {
         AlertDialog.Builder(activity!!)
                 .setTitle(R.string.command_error)
                 .setMessage(message)
