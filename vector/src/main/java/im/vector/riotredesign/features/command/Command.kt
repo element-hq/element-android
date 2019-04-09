@@ -19,6 +19,11 @@ package im.vector.riotredesign.features.command
 import androidx.annotation.StringRes
 import im.vector.riotredesign.R
 
+/**
+ * Defines the command line operations
+ * the user can write theses messages to perform some actions
+ * the list will be displayed in this order
+ */
 enum class Command(val command: String, val parameters: String, @StringRes val description: Int) {
     EMOTE("/me", "<message>", R.string.command_description_emote),
     BAN_USER("/ban", "<user-id> [reason]", R.string.command_description_ban_user),

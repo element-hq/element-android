@@ -23,6 +23,7 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
@@ -35,9 +36,11 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
+import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
@@ -80,7 +83,6 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
     }
 
     private val session by inject<Session>()
-    // TODO Inject?
     private val glideRequests by lazy {
         GlideApp.with(this)
     }
@@ -104,6 +106,7 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         setupComposer()
         roomDetailViewModel.subscribe { renderState(it) }
         textComposerViewModel.subscribe { renderTextComposerState(it) }
+        roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
     }
 
     override fun onResume() {
@@ -192,8 +195,8 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
 
                         // Add the span
                         val user = session.getUser(item.userId)
-                        // FIXME avatar is not displayed
                         val span = PillImageSpan(glideRequests, context!!, item.userId, user)
+                        span.bind(composerEditText)
 
                         editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
@@ -209,7 +212,6 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
             val textMessage = composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage))
-                composerEditText.text = null
             }
         }
     }
@@ -234,6 +236,32 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
 
     private fun renderTextComposerState(state: TextComposerViewState) {
         autocompleteUserPresenter.render(state.asyncUsers)
+    }
+
+    private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
+        when (sendMessageResult) {
+            is SendMessageResult.MessageSent, is SendMessageResult.SlashCommandHandled -> {
+                // Clear composer
+                composerEditText.text = null
+            }
+            is SendMessageResult.SlashCommandError -> {
+                displayError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
+            }
+            is SendMessageResult.SlashCommandUnknown -> {
+                displayError(getString(R.string.unrecognized_command, sendMessageResult.command))
+            }
+            is SendMessageResult.SlashCommandNotImplemented -> {
+                activity!!.toast(R.string.not_implemented)
+            }
+        }
+    }
+
+    private fun displayError(message: String) {
+        AlertDialog.Builder(activity!!)
+                .setTitle(R.string.command_error)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     // TimelineEventController.Callback ************************************************************

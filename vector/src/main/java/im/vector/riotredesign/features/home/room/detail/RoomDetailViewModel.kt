@@ -16,6 +16,8 @@
 
 package im.vector.riotredesign.features.home.room.detail
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
@@ -24,6 +26,9 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
+import im.vector.riotredesign.core.utils.LiveEvent
+import im.vector.riotredesign.features.command.CommandParser
+import im.vector.riotredesign.features.command.ParsedCommand
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import io.reactivex.rxkotlin.subscribeBy
@@ -63,17 +68,54 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     fun process(action: RoomDetailActions) {
         when (action) {
-            is RoomDetailActions.SendMessage    -> handleSendMessage(action)
-            is RoomDetailActions.IsDisplayed    -> handleIsDisplayed()
+            is RoomDetailActions.SendMessage -> handleSendMessage(action)
+            is RoomDetailActions.IsDisplayed -> handleIsDisplayed()
             is RoomDetailActions.EventDisplayed -> handleEventDisplayed(action)
-            is RoomDetailActions.LoadMore       -> handleLoadMore(action)
+            is RoomDetailActions.LoadMore -> handleLoadMore(action)
         }
     }
+
+    private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
+    val sendMessageResultLiveData: LiveData<LiveEvent<SendMessageResult>>
+        get() = _sendMessageResultLiveData
 
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSendMessage(action: RoomDetailActions.SendMessage) {
-        room.sendTextMessage(action.text, callback = object : MatrixCallback<Event> {})
+        // Handle slash command
+        val slashCommandResult = CommandParser.parseSplashCommand(action.text)
+
+        when (slashCommandResult) {
+            is ParsedCommand.ErrorNotACommand -> {
+                // Send the text message to the room
+                room.sendTextMessage(action.text, callback = object : MatrixCallback<Event> {})
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+            }
+            is ParsedCommand.ErrorSyntax -> {
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command)))
+            }
+            is ParsedCommand.ErrorEmptySlashCommand -> {
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown("/")))
+            }
+            is ParsedCommand.ErrorUnknownSlashCommand -> {
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand)))
+            }
+            else -> {
+                handleValidSlashCommand(slashCommandResult)
+            }
+        }
+    }
+
+    private fun handleValidSlashCommand(parsedCommand: ParsedCommand) {
+        when (parsedCommand) {
+            is ParsedCommand.Invite -> {
+                //room.invite(parsedCommand.userId)
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+            }
+            else -> {
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+            }
+        }
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
