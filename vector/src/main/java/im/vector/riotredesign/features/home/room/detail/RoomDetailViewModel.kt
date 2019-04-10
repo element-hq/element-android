@@ -24,6 +24,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
@@ -136,18 +137,31 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
             is ParsedCommand.SendEmote -> {
-                // TODO
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE, callback = object : MatrixCallback<Event> {})
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
             }
             is ParsedCommand.ChangeTopic -> {
-                // TODO
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                handleChangeTopicSlashCommand(slashCommandResult)
             }
             is ParsedCommand.ChangeDisplayName -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
         }
+    }
+
+    private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
+        _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+
+        room.updateTopic(changeTopic.topic, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultOk))
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultError(failure)))
+            }
+        })
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {

@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.room.send
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.util.Cancelable
 
 /**
@@ -28,10 +29,13 @@ interface SendService {
     /**
      * Method to send a text message asynchronously.
      * @param text the text message to send
+     * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE
      * @param callback the callback to be notified.
      * @return a [Cancelable]
      */
-    fun sendTextMessage(text: String, callback: MatrixCallback<Event>): Cancelable
+    fun sendTextMessage(text: String,
+                        msgType: String = MessageType.MSGTYPE_TEXT,
+                        callback: MatrixCallback<Event>): Cancelable
 
 
 }

@@ -21,12 +21,13 @@ import im.vector.matrix.android.api.session.room.members.RoomMembersService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
+import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 
 /**
  * This interface defines methods to interact within a room.
  */
-interface Room : TimelineService, SendService, ReadService, RoomMembersService {
+interface Room : TimelineService, SendService, ReadService, RoomMembersService, StateService {
 
     /**
      * The roomId of this room

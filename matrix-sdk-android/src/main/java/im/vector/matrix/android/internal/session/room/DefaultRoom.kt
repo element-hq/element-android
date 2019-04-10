@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.members.RoomMembersService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
+import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -36,13 +37,13 @@ internal class DefaultRoom(
         private val monarchy: Monarchy,
         private val timelineService: TimelineService,
         private val sendService: SendService,
+        private val stateService: StateService,
         private val readService: ReadService,
         private val roomMembersService: RoomMembersService
-
-
 ) : Room,
         TimelineService by timelineService,
         SendService by sendService,
+        StateService by stateService,
         ReadService by readService,
         RoomMembersService by roomMembersService {
 

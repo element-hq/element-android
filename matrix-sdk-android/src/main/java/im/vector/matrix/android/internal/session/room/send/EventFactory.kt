@@ -21,15 +21,14 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.internal.di.MoshiProvider
 
 internal class EventFactory(private val credentials: Credentials) {
 
     private val moshi = MoshiProvider.providesMoshi()
 
-    fun createTextEvent(roomId: String, text: String): Event {
-        val content = MessageTextContent(type = MessageType.MSGTYPE_TEXT, body = text)
+    fun createTextEvent(roomId: String, msgType: String, text: String): Event {
+        val content = MessageTextContent(type = msgType, body = text)
 
         return Event(
                 roomId = roomId,
