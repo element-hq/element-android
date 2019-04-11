@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.helper.lastStateIndex
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
@@ -108,6 +109,15 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                     timelineStateOffset
             )
             roomEntity.addOrUpdate(chunkEntity)
+
+            // Try to remove local echo
+            val transactionIds = roomSync.timeline.events.mapNotNull { it.unsignedData?.transactionId }
+            transactionIds.forEach {
+                val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)
+                if (sendingEventEntity != null) {
+                    roomEntity.sendingTimelineEvents.remove(sendingEventEntity)
+                }
+            }
         }
         roomSummaryUpdater.update(realm, roomId, roomSync.summary, roomSync.unreadNotifications)
 
@@ -161,7 +171,6 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         } else {
             realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
         }
-
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true
         chunkEntity.addAll(roomId, eventList, PaginationDirection.FORWARDS, stateIndexOffset)

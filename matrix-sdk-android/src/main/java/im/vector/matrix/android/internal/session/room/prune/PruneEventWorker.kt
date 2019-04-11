@@ -21,7 +21,6 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -37,8 +36,8 @@ internal class PruneEventWorker(context: Context,
 ) : Worker(context, workerParameters), MatrixKoinComponent {
 
     @JsonClass(generateAdapter = true)
-    internal data class Params(
-            val redactionEvents: List<Event>
+    internal class Params(
+            val eventIdsToRedact: List<String>
     )
 
     private val monarchy by inject<Monarchy>()
@@ -48,18 +47,19 @@ internal class PruneEventWorker(context: Context,
                      ?: return Result.failure()
 
         val result = monarchy.tryTransactionSync { realm ->
-            params.redactionEvents.forEach { event ->
-                pruneEvent(realm, event)
+            params.eventIdsToRedact.forEach { eventId ->
+                pruneEvent(realm, eventId)
             }
         }
         return result.fold({ Result.retry() }, { Result.success() })
     }
 
-    private fun pruneEvent(realm: Realm, redactionEvent: Event?) {
-        if (redactionEvent == null || redactionEvent.redacts.isNullOrEmpty()) {
+    private fun pruneEvent(realm: Realm, eventIdToRedact: String) {
+        if (eventIdToRedact.isEmpty()) {
             return
         }
-        val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
+
+        val eventToPrune = EventEntity.where(realm, eventId = eventIdToRedact).findFirst()
                            ?: return
 
         val allowedKeys = computeAllowedKeys(eventToPrune.type)
@@ -87,7 +87,7 @@ internal class PruneEventWorker(context: Context,
             EventType.STATE_ROOM_ALIASES      -> listOf("aliases")
             EventType.STATE_CANONICAL_ALIAS   -> listOf("alias")
             EventType.FEEDBACK                -> listOf("type", "target_event_id")
-            else                                                                                -> emptyList()
+            else                              -> emptyList()
         }
     }
 

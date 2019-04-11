@@ -29,7 +29,8 @@ internal class TimelineEventFactory(private val roomMemberExtractor: RoomMemberE
                 eventEntity.asDomain(),
                 eventEntity.localId,
                 eventEntity.displayIndex,
-                roomMember
+                roomMember,
+                eventEntity.sendState
         )
     }
 

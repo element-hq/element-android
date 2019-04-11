@@ -123,7 +123,7 @@ dependencies {
     def coroutines_version = "1.0.1"
     def markwon_version = '3.0.0-SNAPSHOT'
     def big_image_viewer_version = '1.5.6'
-    def glide_version = '4.8.0'
+    def glide_version = '4.9.0'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -190,6 +190,9 @@ dependencies {
 
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.2@aar'
+
+    // File picker
+    implementation 'com.github.jaiselrahman:FilePicker:1.2.2'
 
     // DI
     implementation "org.koin:koin-android:$koin_version"

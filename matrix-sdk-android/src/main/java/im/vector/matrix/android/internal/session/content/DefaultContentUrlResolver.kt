@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 
 
 private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
-private const val URI_PREFIX_CONTENT_API = "/_matrix/media/v1/"
+internal const val URI_PREFIX_CONTENT_API = "/_matrix/media/v1/"
 
 internal class DefaultContentUrlResolver(private val homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
 

@@ -16,6 +16,8 @@
 
 package im.vector.riotredesign.features.home.room.detail
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -28,6 +30,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.fragmentViewModel
+import com.jaiselrahman.filepicker.activity.FilePickerActivity
+import com.jaiselrahman.filepicker.config.Configurations
+import com.jaiselrahman.filepicker.model.MediaFile
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
@@ -35,11 +40,18 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.dialogs.DialogListItem
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
+import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
+import im.vector.riotredesign.core.utils.checkPermissions
+import im.vector.riotredesign.core.utils.openCamera
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
@@ -61,6 +73,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 
 @Parcelize
@@ -69,6 +82,10 @@ data class RoomDetailArgs(
         val eventId: String? = null
 ) : Parcelable
 
+
+private const val CAMERA_VALUE_TITLE = "attachment"
+private const val REQUEST_FILES_REQUEST_CODE = 0
+private const val TAKE_IMAGE_REQUEST_CODE = 1
 
 class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callback, AutocompleteUserPresenter.Callback {
 
@@ -103,17 +120,28 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         setupRecyclerView()
         setupToolbar()
         setupComposer()
+        setupAttachmentButton()
         roomDetailViewModel.subscribe { renderState(it) }
         textComposerViewModel.subscribe { renderTextComposerState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && data != null) {
+            when (requestCode) {
+                REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
+            }
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
         roomDetailViewModel.process(RoomDetailActions.IsDisplayed)
     }
 
-    // PRIVATE METHODS *****************************************************************************
+// PRIVATE METHODS *****************************************************************************
 
     private fun setupToolbar() {
         val parentActivity = vectorBaseActivity
@@ -215,6 +243,77 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         }
     }
 
+    private fun setupAttachmentButton() {
+        attachmentButton.setOnClickListener {
+            val intent = Intent(requireContext(), FilePickerActivity::class.java)
+            intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
+                    .setCheckPermission(true)
+                    .setShowFiles(true)
+                    .setShowAudios(true)
+                    .setSkipZeroSizeFiles(true)
+                    .build())
+            startActivityForResult(intent, REQUEST_FILES_REQUEST_CODE)
+            /*
+            val items = ArrayList<DialogListItem>()
+            // Send file
+            items.add(DialogListItem.SendFile)
+            // Send voice
+
+            if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
+                items.add(DialogListItem.SendVoice.INSTANCE)
+            }
+
+
+            // Send sticker
+            //items.add(DialogListItem.SendSticker)
+            // Camera
+
+            //if (PreferencesManager.useNativeCamera(this)) {
+            items.add(DialogListItem.TakePhoto)
+            items.add(DialogListItem.TakeVideo)
+            //} else {
+    //                items.add(DialogListItem.TakePhotoVideo.INSTANCE)
+            //          }
+            val adapter = DialogSendItemAdapter(requireContext(), items)
+            AlertDialog.Builder(requireContext())
+                    .setAdapter(adapter) { _, position ->
+                        onSendChoiceClicked(items[position])
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+                    */
+        }
+    }
+
+    private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
+        Timber.v("On send choice clicked: $dialogListItem")
+        when (dialogListItem) {
+            is DialogListItem.SendFile       -> {
+                // launchFileIntent
+            }
+            is DialogListItem.SendVoice      -> {
+                //launchAudioRecorderIntent()
+            }
+            is DialogListItem.SendSticker    -> {
+                //startStickerPickerActivity()
+            }
+            is DialogListItem.TakePhotoVideo -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                //    launchCamera()
+            }
+            is DialogListItem.TakePhoto      -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
+                openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
+            }
+            is DialogListItem.TakeVideo      -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
+                //  launchNativeVideoRecorder()
+            }
+        }
+    }
+
+    private fun handleMediaIntent(data: Intent) {
+        val files: ArrayList<MediaFile> = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES)
+        roomDetailViewModel.process(RoomDetailActions.SendMedia(files))
+    }
+
     private fun renderState(state: RoomDetailViewState) {
         renderRoomSummary(state)
         timelineEventController.setTimeline(state.timeline)
@@ -240,20 +339,20 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
             is SendMessageResult.MessageSent,
-            is SendMessageResult.SlashCommandHandled -> {
+            is SendMessageResult.SlashCommandHandled        -> {
                 // Clear composer
                 composerEditText.text = null
             }
-            is SendMessageResult.SlashCommandError -> {
+            is SendMessageResult.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
             }
-            is SendMessageResult.SlashCommandUnknown -> {
+            is SendMessageResult.SlashCommandUnknown        -> {
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
-            is SendMessageResult.SlashCommandResultOk -> {
+            is SendMessageResult.SlashCommandResultOk       -> {
                 // Ignore
             }
-            is SendMessageResult.SlashCommandResultError -> {
+            is SendMessageResult.SlashCommandResultError    -> {
                 displayCommandError(sendMessageResult.throwable.localizedMessage)
             }
             is SendMessageResult.SlashCommandNotImplemented -> {
@@ -270,7 +369,7 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
                 .show()
     }
 
-    // TimelineEventController.Callback ************************************************************
+// TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String) {
         homePermalinkHandler.launch(url)
@@ -285,7 +384,7 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         startActivity(intent)
     }
 
-    // AutocompleteUserPresenter.Callback
+// AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))

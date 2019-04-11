@@ -27,25 +27,19 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.api.util.addTo
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.ChunkEntityFields
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmQuery
-import io.realm.RealmResults
-import io.realm.Sort
+import im.vector.matrix.android.internal.util.Debouncer
+import io.realm.*
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.collections.ArrayList
 
 
 private const val INITIAL_LOAD_SIZE = 20
@@ -68,8 +62,7 @@ internal class DefaultTimeline(
         set(value) {
             field = value
             backgroundHandler.get()?.post {
-                val snapshot = snapshot()
-                mainHandler.post { listener?.onUpdated(snapshot) }
+                postSnapshot()
             }
         }
 
@@ -80,41 +73,46 @@ internal class DefaultTimeline(
     private val mainHandler = Handler(Looper.getMainLooper())
     private val backgroundRealm = AtomicReference<Realm>()
     private val cancelableBag = CancelableBag()
+    private val debouncer = Debouncer(mainHandler)
 
     private lateinit var liveEvents: RealmResults<EventEntity>
+    private var roomEntity: RoomEntity? = null
 
     private var prevDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
     private var nextDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
     private val isLive = initialEventId == null
     private val builtEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
-
     private val backwardsPaginationState = AtomicReference(PaginationState())
     private val forwardsPaginationState = AtomicReference(PaginationState())
 
+
     private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<EventEntity>> { _, changeSet ->
-        // TODO HANDLE CHANGES
-        changeSet.insertionRanges.forEach { range ->
-            val (startDisplayIndex, direction) = if (range.startIndex == 0) {
-                Pair(liveEvents[range.length - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
-            } else {
-                Pair(liveEvents[range.startIndex]!!.displayIndex, Timeline.Direction.BACKWARDS)
-            }
-            val state = getPaginationState(direction)
-            if (state.isPaginating) {
-                // We are getting new items from pagination
-                val shouldPostSnapshot = paginateInternal(startDisplayIndex, direction, state.requestedCount)
-                if (shouldPostSnapshot) {
+        if (changeSet.state == OrderedCollectionChangeSet.State.INITIAL) {
+            handleInitialLoad()
+        } else {
+            changeSet.insertionRanges.forEach { range ->
+                val (startDisplayIndex, direction) = if (range.startIndex == 0) {
+                    Pair(liveEvents[range.length - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
+                } else {
+                    Pair(liveEvents[range.startIndex]!!.displayIndex, Timeline.Direction.BACKWARDS)
+                }
+                val state = getPaginationState(direction)
+                if (state.isPaginating) {
+                    // We are getting new items from pagination
+                    val shouldPostSnapshot = paginateInternal(startDisplayIndex, direction, state.requestedCount)
+                    if (shouldPostSnapshot) {
+                        postSnapshot()
+                    }
+                } else {
+                    // We are getting new items from sync
+                    buildTimelineEvents(startDisplayIndex, direction, range.length.toLong())
                     postSnapshot()
                 }
-            } else {
-                // We are getting new items from sync
-                buildTimelineEvents(startDisplayIndex, direction, range.length.toLong())
-                postSnapshot()
             }
         }
     }
 
-    // Public methods ******************************************************************************
+// Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
         backgroundHandler.get()?.post {
@@ -142,12 +140,19 @@ internal class DefaultTimeline(
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
                 clearUnlinkedEvents(realm)
-                isReady.set(true)
+
+                roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()?.also {
+                    it.sendingTimelineEvents.addChangeListener { _ ->
+                        postSnapshot()
+                    }
+                }
+
                 liveEvents = buildEventQuery(realm)
                         .sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-                        .findAll()
+                        .findAllAsync()
                         .also { it.addChangeListener(eventsChangeListener) }
-                handleInitialLoad()
+
+                isReady.set(true)
             }
         }
     }
@@ -171,7 +176,7 @@ internal class DefaultTimeline(
         return hasMoreInCache(direction) || !hasReachedEnd(direction)
     }
 
-    // Private methods *****************************************************************************
+// Private methods *****************************************************************************
 
     private fun hasMoreInCache(direction: Timeline.Direction): Boolean {
         val localRealm = Realm.getInstance(realmConfiguration)
@@ -203,7 +208,7 @@ internal class DefaultTimeline(
 
     /**
      * This has to be called on TimelineThread as it access realm live results
-     * @return true if snapshot should be posted
+     * @return true if createSnapshot should be posted
      */
     private fun paginateInternal(startDisplayIndex: Int,
                                  direction: Timeline.Direction,
@@ -222,8 +227,19 @@ internal class DefaultTimeline(
         return !shouldFetchMore
     }
 
-    private fun snapshot(): List<TimelineEvent> {
-        return builtEvents.toList()
+    private fun createSnapshot(): List<TimelineEvent> {
+        return buildSendingEvents() + builtEvents.toList()
+    }
+
+    private fun buildSendingEvents(): List<TimelineEvent> {
+        val sendingEvents = ArrayList<TimelineEvent>()
+        if (hasReachedEnd(Timeline.Direction.FORWARDS)) {
+            roomEntity?.sendingTimelineEvents?.forEach {
+                val timelineEvent = timelineEventFactory.create(it)
+                sendingEvents.add(timelineEvent)
+            }
+        }
+        return sendingEvents
     }
 
     private fun canPaginate(direction: Timeline.Direction): Boolean {
@@ -282,9 +298,9 @@ internal class DefaultTimeline(
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
         val token = getTokenLive(direction) ?: return
         val params = PaginationTask.Params(roomId = roomId,
-                                           from = token,
-                                           direction = direction.toPaginationDirection(),
-                                           limit = limit)
+                from = token,
+                direction = direction.toPaginationDirection(),
+                limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         paginationTask.configureWith(params)
@@ -414,8 +430,9 @@ internal class DefaultTimeline(
     }
 
     private fun postSnapshot() {
-        val snapshot = snapshot()
-        mainHandler.post { listener?.onUpdated(snapshot) }
+        val snapshot = createSnapshot()
+        val runnable = Runnable { listener?.onUpdated(snapshot) }
+        debouncer.debounce("post_snapshot", runnable, 50)
     }
 
 // Extension methods ***************************************************************************

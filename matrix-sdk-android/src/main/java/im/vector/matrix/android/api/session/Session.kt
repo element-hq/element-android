@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session
 
 import androidx.annotation.MainThread
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.group.GroupService
@@ -57,6 +58,11 @@ interface Session :
      * Returns the ContentUrlResolver associated to the session.
      */
     fun contentUrlResolver(): ContentUrlResolver
+
+    /**
+     * Returns the ContentUploadProgressTracker associated with the session
+     */
+    fun contentUploadProgressTracker(): ContentUploadStateTracker
 
     /**
      * Add a listener to the session.

@@ -19,13 +19,11 @@ package im.vector.matrix.android.internal.session
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
-import im.vector.matrix.android.internal.session.content.DefaultContentUrlResolver
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
@@ -114,10 +112,6 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             SessionListeners()
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultContentUrlResolver(sessionParams.homeServerConnectionConfig) as ContentUrlResolver
         }
 
         scope(DefaultSession.SCOPE) {

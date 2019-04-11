@@ -23,7 +23,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
@@ -69,10 +69,11 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     fun process(action: RoomDetailActions) {
         when (action) {
-            is RoomDetailActions.SendMessage -> handleSendMessage(action)
-            is RoomDetailActions.IsDisplayed -> handleIsDisplayed()
+            is RoomDetailActions.SendMessage    -> handleSendMessage(action)
+            is RoomDetailActions.IsDisplayed    -> handleIsDisplayed()
+            is RoomDetailActions.SendMedia      -> handleSendMedia(action)
             is RoomDetailActions.EventDisplayed -> handleEventDisplayed(action)
-            is RoomDetailActions.LoadMore -> handleLoadMore(action)
+            is RoomDetailActions.LoadMore       -> handleLoadMore(action)
         }
     }
 
@@ -87,63 +88,63 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         val slashCommandResult = CommandParser.parseSplashCommand(action.text)
 
         when (slashCommandResult) {
-            is ParsedCommand.ErrorNotACommand -> {
+            is ParsedCommand.ErrorNotACommand         -> {
                 // Send the text message to the room
-                room.sendTextMessage(action.text, callback = object : MatrixCallback<Event> {})
+                room.sendTextMessage(action.text)
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
             }
-            is ParsedCommand.ErrorSyntax -> {
+            is ParsedCommand.ErrorSyntax              -> {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command)))
             }
-            is ParsedCommand.ErrorEmptySlashCommand -> {
+            is ParsedCommand.ErrorEmptySlashCommand   -> {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown("/")))
             }
             is ParsedCommand.ErrorUnknownSlashCommand -> {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand)))
             }
-            is ParsedCommand.Invite -> {
+            is ParsedCommand.Invite                   -> {
                 handleInviteSlashCommand(slashCommandResult)
             }
-            is ParsedCommand.SetUserPowerLevel -> {
+            is ParsedCommand.SetUserPowerLevel        -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.ClearScalarToken -> {
+            is ParsedCommand.ClearScalarToken         -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.SetMarkdown -> {
+            is ParsedCommand.SetMarkdown              -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.UnbanUser -> {
+            is ParsedCommand.UnbanUser                -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.BanUser -> {
+            is ParsedCommand.BanUser                  -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.KickUser -> {
+            is ParsedCommand.KickUser                 -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.JoinRoom -> {
+            is ParsedCommand.JoinRoom                 -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.PartRoom -> {
+            is ParsedCommand.PartRoom                 -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.SendEmote -> {
-                room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE, callback = object : MatrixCallback<Event> {})
+            is ParsedCommand.SendEmote                -> {
+                room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
             }
-            is ParsedCommand.ChangeTopic -> {
+            is ParsedCommand.ChangeTopic              -> {
                 handleChangeTopicSlashCommand(slashCommandResult)
             }
-            is ParsedCommand.ChangeDisplayName -> {
+            is ParsedCommand.ChangeDisplayName        -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
@@ -176,6 +177,23 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultError(failure)))
             }
         })
+    }
+
+    private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
+        val attachments = action.mediaFiles.map {
+            ContentAttachmentData(
+                    size = it.size,
+                    duration = it.duration,
+                    date = it.date,
+                    height = it.height,
+                    width = it.width,
+                    name = it.name,
+                    path = it.path,
+                    mimeType = it.mimeType,
+                    type = ContentAttachmentData.Type.values()[it.mediaType]
+            )
+        }
+        room.sendMedias(attachments)
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
@@ -216,4 +234,5 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         timeline.dispose()
         super.onCleared()
     }
+
 }

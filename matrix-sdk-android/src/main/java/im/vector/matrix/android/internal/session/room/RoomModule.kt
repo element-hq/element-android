@@ -25,10 +25,14 @@ import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMem
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
-import im.vector.matrix.android.internal.session.room.send.EventFactory
+import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
-import im.vector.matrix.android.internal.session.room.timeline.*
+import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 
@@ -63,7 +67,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            EventFactory(get())
+            LocalEchoEventFactory(get())
         }
 
         scope(DefaultSession.SCOPE) {

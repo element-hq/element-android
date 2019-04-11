@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.room.timeline
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.send.SendState
 
 /**
  * This data class is a wrapper around an Event. It allows to get useful data in the context of a timeline.
@@ -28,7 +29,8 @@ data class TimelineEvent(
         val root: Event,
         val localId: String,
         val displayIndex: Int,
-        val roomMember: RoomMember?
+        val roomMember: RoomMember?,
+        val sendState: SendState
 ) {
 
     val metadata = HashMap<String, Any>()

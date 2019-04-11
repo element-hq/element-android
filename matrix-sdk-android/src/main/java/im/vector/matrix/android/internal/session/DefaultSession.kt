@@ -23,6 +23,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
@@ -37,6 +38,7 @@ import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
+import im.vector.matrix.android.internal.session.content.ContentModule
 import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.signout.SignOutModule
@@ -64,6 +66,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val signOutService by inject<SignOutService>()
     private val syncThread by inject<SyncThread>()
     private val contentUrlResolver by inject<ContentUrlResolver>()
+    private val contentUploadProgressTracker by inject<ContentUploadStateTracker>()
     private var isOpen = false
 
     @MainThread
@@ -77,7 +80,8 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         val groupModule = GroupModule().definition
         val signOutModule = SignOutModule().definition
         val userModule = UserModule().definition
-        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule, signOutModule, userModule))
+        val contentModule = ContentModule().definition
+        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule, userModule, signOutModule, contentModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         if (!monarchy.isMonarchyThreadOpen) {
             monarchy.openManually()
@@ -119,6 +123,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     override fun contentUrlResolver(): ContentUrlResolver {
         return contentUrlResolver
+    }
+
+    override fun contentUploadProgressTracker(): ContentUploadStateTracker {
+        return contentUploadProgressTracker
     }
 
     override fun addListener(listener: Session.Listener) {

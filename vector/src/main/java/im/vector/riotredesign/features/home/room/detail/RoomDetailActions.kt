@@ -16,12 +16,14 @@
 
 package im.vector.riotredesign.features.home.room.detail
 
+import com.jaiselrahman.filepicker.model.MediaFile
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 sealed class RoomDetailActions {
 
     data class SendMessage(val text: String) : RoomDetailActions()
+    data class SendMedia(val mediaFiles: List<MediaFile>) : RoomDetailActions()
     object IsDisplayed : RoomDetailActions()
     data class EventDisplayed(val event: TimelineEvent) : RoomDetailActions()
     data class LoadMore(val direction: Timeline.Direction) : RoomDetailActions()
