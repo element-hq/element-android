@@ -18,6 +18,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import androidx.annotation.ColorRes
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -76,14 +77,16 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val messageContent: MessageContent = event.root.content.toModel() ?: return null
         val time = timelineDateFormatter.formatMessageHour(date)
         val avatarUrl = roomMember?.avatarUrl
-        val memberName = roomMember?.displayName ?: event.root.sender
-        val informationData = MessageInformationData(time, avatarUrl, memberName, showInformation)
+        val memberName = roomMember?.displayName ?: event.root.sender ?: ""
+        val formattedMemberName = span(memberName) {
+            textColor = colorProvider.getColor(colorIndexForSender(memberName))
+        }
+        val informationData = MessageInformationData(time, avatarUrl, formattedMemberName, showInformation)
 
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, callback)
             is MessageTextContent   -> buildTextMessageItem(event.sendState, messageContent, informationData, callback)
             is MessageImageContent  -> buildImageMessageItem(eventId, messageContent, informationData, callback)
-            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
             else                    -> buildNotHandledMessageItem(messageContent)
         }
@@ -180,5 +183,33 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         VectorLinkify.addLinks(spannable, true)
         return spannable
     }
+
+    @ColorRes
+    private fun colorIndexForSender(sender: String): Int {
+        var hash = 0
+        var i = 0
+        var chr: Char
+        if (sender.isEmpty()) {
+            return R.color.username_1
+        }
+        while (i < sender.length) {
+            chr = sender[i]
+            hash = (hash shl 5) - hash + chr.toInt()
+            hash = hash or 0
+            i++
+        }
+        val cI = Math.abs(hash) % 8 + 1
+        return when (cI) {
+            1    -> R.color.username_1
+            2    -> R.color.username_2
+            3    -> R.color.username_3
+            4    -> R.color.username_4
+            5    -> R.color.username_5
+            6    -> R.color.username_6
+            7    -> R.color.username_7
+            else -> R.color.username_8
+        }
+    }
+
 
 }
