@@ -28,7 +28,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageEmoteConte
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
@@ -40,13 +40,13 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.Timeline
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem_
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageItem
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageVideoItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageVideoItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotredesign.features.html.EventHtmlRenderer
-import im.vector.riotredesign.features.media.MediaContentRenderer
+import im.vector.riotredesign.features.media.ImageContentRenderer
 import me.gujun.android.span.span
 
 class MessageItemFactory(private val colorProvider: ColorProvider,
@@ -79,15 +79,22 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val avatarUrl = roomMember?.avatarUrl
         val memberName = roomMember?.displayName ?: event.root.sender ?: ""
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(colorIndexForSender(memberName))
+            textColor = colorProvider.getColor(getColorFor(event.root.sender ?: ""))
         }
-        val informationData = MessageInformationData(time, avatarUrl, formattedMemberName, showInformation)
+        val informationData = MessageInformationData(eventId = eventId,
+                                                     senderId = event.root.sender ?: "",
+                                                     sendState = event.sendState,
+                                                     time = time,
+                                                     avatarUrl = avatarUrl,
+                                                     memberName = formattedMemberName,
+                                                     showInformation = showInformation)
 
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, callback)
-            is MessageTextContent   -> buildTextMessageItem(event.sendState, messageContent, informationData, callback)
-            is MessageImageContent  -> buildImageMessageItem(eventId, messageContent, informationData, callback)
+            is MessageTextContent   -> buildTextMessageItem(messageContent, informationData, callback)
+            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
+            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, callback)
             else                    -> buildNotHandledMessageItem(messageContent)
         }
     }
@@ -97,31 +104,49 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return DefaultItem_().text(text)
     }
 
-    private fun buildImageMessageItem(eventId: String,
-                                      messageContent: MessageImageContent,
+    private fun buildImageMessageItem(messageContent: MessageImageContent,
                                       informationData: MessageInformationData,
-                                      callback: TimelineEventController.Callback?): MessageImageItem? {
+                                      callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
-        val data = MediaContentRenderer.Data(
-                messageContent.body,
+        val data = ImageContentRenderer.Data(
+                filename = messageContent.body,
                 url = messageContent.url,
                 height = messageContent.info?.height,
                 maxHeight = maxHeight,
                 width = messageContent.info?.width,
                 maxWidth = maxWidth,
-                rotation = messageContent.info?.rotation,
-                orientation = messageContent.info?.orientation
+                orientation = messageContent.info?.orientation,
+                rotation = messageContent.info?.rotation
         )
-        return MessageImageItem_()
-                .eventId(eventId)
+        return MessageImageVideoItem_()
+                .playable(messageContent.info?.mimeType == "image/gif")
                 .informationData(informationData)
                 .mediaData(data)
-                .clickListener { view -> callback?.onMediaClicked(data, view) }
+                .clickListener { view -> callback?.onImageMessageClicked(messageContent, data, view) }
     }
 
-    private fun buildTextMessageItem(sendState: SendState,
-                                     messageContent: MessageTextContent,
+    private fun buildVideoMessageItem(messageContent: MessageVideoContent,
+                                      informationData: MessageInformationData,
+                                      callback: TimelineEventController.Callback?): MessageImageVideoItem? {
+
+        val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
+        val data = ImageContentRenderer.Data(
+                filename = messageContent.body,
+                url = messageContent.info?.thumbnailUrl,
+                height = messageContent.info?.height,
+                maxHeight = maxHeight,
+                width = messageContent.info?.width,
+                maxWidth = maxWidth
+        )
+        return MessageImageVideoItem_()
+                .playable(true)
+                .informationData(informationData)
+                .mediaData(data)
+                .clickListener { view -> callback?.onVideoMessageClicked(messageContent, data, view) }
+    }
+
+    private fun buildTextMessageItem(messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
@@ -129,15 +154,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             htmlRenderer.render(it)
         } ?: messageContent.body
 
-        val textColor = if (sendState.isSent()) {
-            R.color.dark_grey
-        } else {
-            R.color.brown_grey
-        }
-        val formattedBody = span(bodyToUse) {
-            this.textColor = colorProvider.getColor(textColor)
-        }
-        val linkifiedBody = linkifyBody(formattedBody, callback)
+        val linkifiedBody = linkifyBody(bodyToUse, callback)
         return MessageTextItem_()
                 .message(linkifiedBody)
                 .informationData(informationData)
@@ -184,8 +201,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return spannable
     }
 
+    //Based on riot-web implementation
     @ColorRes
-    private fun colorIndexForSender(sender: String): Int {
+    private fun getColorFor(sender: String): Int {
         var hash = 0
         var i = 0
         var chr: Char
@@ -210,6 +228,4 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             else -> R.color.username_8
         }
     }
-
-
 }

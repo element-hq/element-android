@@ -31,6 +31,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     @EpoxyAttribute lateinit var roomName: CharSequence
+    @EpoxyAttribute lateinit var roomId: String
     @EpoxyAttribute var avatarUrl: String? = null
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var unreadCount: Int = 0
@@ -44,7 +45,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.rootView.isChecked = selected
         holder.rootView.setOnClickListener { listener?.invoke() }
         holder.titleView.text = roomName
-        AvatarRenderer.render(avatarUrl, roomName.toString(), holder.avatarImageView)
+        AvatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

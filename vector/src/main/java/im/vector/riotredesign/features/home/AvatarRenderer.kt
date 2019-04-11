@@ -29,7 +29,6 @@ import com.bumptech.glide.request.target.Target
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.glide.GlideApp
@@ -44,39 +43,41 @@ object AvatarRenderer {
 
     private const val THUMBNAIL_SIZE = 250
 
-    @UiThread
-    fun render(roomMember: RoomMember, imageView: ImageView) {
-        render(roomMember.avatarUrl, roomMember.displayName, imageView)
-    }
+    private val AVATAR_COLOR_LIST = listOf(
+            R.color.avatar_color_1,
+            R.color.avatar_color_2,
+            R.color.avatar_color_3
+    )
 
     @UiThread
     fun render(roomSummary: RoomSummary, imageView: ImageView) {
-        render(roomSummary.avatarUrl, roomSummary.displayName, imageView)
+        render(roomSummary.avatarUrl, roomSummary.roomId, roomSummary.displayName, imageView)
     }
 
     @UiThread
-    fun render(avatarUrl: String?, name: String?, imageView: ImageView) {
-        render(imageView.context, GlideApp.with(imageView), avatarUrl, name, DrawableImageViewTarget(imageView))
+    fun render(avatarUrl: String?, identifier: String, name: String?, imageView: ImageView) {
+        render(imageView.context, GlideApp.with(imageView), avatarUrl, identifier, name, DrawableImageViewTarget(imageView))
     }
 
     @UiThread
     fun render(context: Context,
                glideRequest: GlideRequests,
                avatarUrl: String?,
+               identifier: String,
                name: String?,
                target: Target<Drawable>) {
         if (name.isNullOrEmpty()) {
             return
         }
-        val placeholder = getPlaceholderDrawable(context, name)
+        val placeholder = getPlaceholderDrawable(context, identifier, name)
         buildGlideRequest(glideRequest, avatarUrl)
                 .placeholder(placeholder)
                 .into(target)
     }
 
     @AnyThread
-    fun getPlaceholderDrawable(context: Context, text: String): Drawable {
-        val avatarColor = ContextCompat.getColor(context, R.color.pale_teal)
+    fun getPlaceholderDrawable(context: Context, identifier: String, text: String): Drawable {
+        val avatarColor = ContextCompat.getColor(context, getAvatarColor(identifier))
         return if (text.isEmpty()) {
             TextDrawable.builder().buildRound("", avatarColor)
         } else {
@@ -87,8 +88,20 @@ object AvatarRenderer {
         }
     }
 
-
     // PRIVATE API *********************************************************************************
+
+
+    private fun getAvatarColor(text: String? = null): Int {
+        var colorIndex: Long = 0
+        if (!text.isNullOrEmpty()) {
+            var sum: Long = 0
+            for (i in 0 until text.length) {
+                sum += text[i].toLong()
+            }
+            colorIndex = sum % AVATAR_COLOR_LIST.size
+        }
+        return AVATAR_COLOR_LIST[colorIndex.toInt()]
+    }
 
     private fun buildGlideRequest(glideRequest: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
         val resolvedUrl = Matrix.getInstance().currentSession!!.contentUrlResolver()

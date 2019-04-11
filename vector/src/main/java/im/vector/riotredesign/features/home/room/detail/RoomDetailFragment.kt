@@ -37,6 +37,8 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
@@ -65,7 +67,7 @@ import im.vector.riotredesign.features.home.room.detail.composer.TextComposerVie
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotredesign.features.html.PillImageSpan
-import im.vector.riotredesign.features.media.MediaContentRenderer
+import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.MediaViewerActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
@@ -379,10 +381,15 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event))
     }
 
-    override fun onMediaClicked(mediaData: MediaContentRenderer.Data, view: View) {
+    override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {
         val intent = MediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
         startActivity(intent)
     }
+
+    override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: ImageContentRenderer.Data, view: View) {
+        //TODO handle
+    }
+
 
 // AutocompleteUserPresenter.Callback
 

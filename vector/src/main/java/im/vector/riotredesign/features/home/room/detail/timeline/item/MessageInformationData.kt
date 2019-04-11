@@ -16,7 +16,12 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
+import im.vector.matrix.android.api.session.room.send.SendState
+
 data class MessageInformationData(
+        val eventId: String,
+        val senderId: String,
+        val sendState: SendState,
         val time: CharSequence? = null,
         val avatarUrl: String?,
         val memberName: CharSequence? = null,

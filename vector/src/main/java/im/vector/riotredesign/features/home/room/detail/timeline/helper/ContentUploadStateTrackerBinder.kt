@@ -25,7 +25,7 @@ import android.widget.TextView
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.riotredesign.R
-import im.vector.riotredesign.features.media.MediaContentRenderer
+import im.vector.riotredesign.features.media.ImageContentRenderer
 import java.io.File
 
 object ContentUploadStateTrackerBinder {
@@ -33,7 +33,7 @@ object ContentUploadStateTrackerBinder {
     private val updateListeners = mutableMapOf<String, ContentUploadStateTracker.UpdateListener>()
 
     fun bind(eventId: String,
-             mediaData: MediaContentRenderer.Data,
+             mediaData: ImageContentRenderer.Data,
              progressLayout: ViewGroup) {
 
         Matrix.getInstance().currentSession?.also { session ->
@@ -56,7 +56,7 @@ object ContentUploadStateTrackerBinder {
 }
 
 private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
-                                          private val mediaData: MediaContentRenderer.Data) : ContentUploadStateTracker.UpdateListener {
+                                          private val mediaData: ImageContentRenderer.Data) : ContentUploadStateTracker.UpdateListener {
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {

@@ -33,18 +33,18 @@ class MediaViewerActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(im.vector.riotredesign.R.layout.activity_media_viewer)
-        val mediaData = intent.getParcelableExtra<MediaContentRenderer.Data>(EXTRA_MEDIA_DATA)
+        val mediaData = intent.getParcelableExtra<ImageContentRenderer.Data>(EXTRA_MEDIA_DATA)
         if (mediaData.url.isNullOrEmpty()) {
             finish()
         } else {
             configureToolbar(mediaViewerToolbar, mediaData)
             mediaViewerImageView.setImageViewFactory(GlideImageViewFactory())
             mediaViewerImageView.setProgressIndicator(ProgressPieIndicator())
-            MediaContentRenderer.render(mediaData, mediaViewerImageView)
+            ImageContentRenderer.render(mediaData, mediaViewerImageView)
         }
     }
 
-    private fun configureToolbar(toolbar: Toolbar, mediaData: MediaContentRenderer.Data) {
+    private fun configureToolbar(toolbar: Toolbar, mediaData: ImageContentRenderer.Data) {
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             title = mediaData.filename
@@ -57,7 +57,7 @@ class MediaViewerActivity : VectorBaseActivity() {
 
         private const val EXTRA_MEDIA_DATA = "EXTRA_MEDIA_DATA"
 
-        fun newIntent(context: Context, mediaData: MediaContentRenderer.Data): Intent {
+        fun newIntent(context: Context, mediaData: ImageContentRenderer.Data): Intent {
             return Intent(context, MediaViewerActivity::class.java).apply {
                 putExtra(EXTRA_MEDIA_DATA, mediaData)
             }

@@ -31,6 +31,7 @@ class AutocompleteUserController : TypedEpoxyController<List<User>>() {
         data.forEach { user ->
             autocompleteUserItem {
                 id(user.userId)
+                userId(user.userId)
                 name(user.displayName)
                 avatarUrl(user.avatarUrl)
                 clickListener { _ ->

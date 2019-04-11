@@ -30,11 +30,12 @@ abstract class NoticeItem : VectorEpoxyModel<NoticeItem.Holder>() {
 
     @EpoxyAttribute var noticeText: CharSequence? = null
     @EpoxyAttribute var avatarUrl: String? = null
+    @EpoxyAttribute var userId: String = ""
     @EpoxyAttribute var memberName: CharSequence? = null
 
     override fun bind(holder: Holder) {
         holder.noticeTextView.text = noticeText
-        AvatarRenderer.render(avatarUrl, memberName?.toString(), holder.avatarImageView)
+        AvatarRenderer.render(avatarUrl, userId, memberName?.toString(), holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

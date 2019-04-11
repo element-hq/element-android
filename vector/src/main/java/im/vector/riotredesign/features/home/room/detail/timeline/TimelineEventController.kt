@@ -25,15 +25,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.LoadingItemModel_
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.*
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineAsyncHelper
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.nextDisplayableEvent
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem_
-import im.vector.riotredesign.features.media.MediaContentRenderer
+import im.vector.riotredesign.features.media.ImageContentRenderer
 
 class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                               private val timelineItemFactory: TimelineItemFactory,
@@ -44,7 +50,8 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     interface Callback {
         fun onEventVisible(event: TimelineEvent)
         fun onUrlClicked(url: String)
-        fun onMediaClicked(mediaData: MediaContentRenderer.Data, view: View)
+        fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
+        fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: ImageContentRenderer.Data, view: View)
     }
 
     private val modelCache = arrayListOf<List<EpoxyModel<*>>>()
