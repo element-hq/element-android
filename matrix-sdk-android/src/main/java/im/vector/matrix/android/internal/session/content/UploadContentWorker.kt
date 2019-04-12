@@ -24,8 +24,11 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
@@ -69,12 +72,27 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters)
         val messageContent: MessageContent = event.content.toModel() ?: return event
         val updatedContent = when (messageContent) {
             is MessageImageContent -> messageContent.update(url)
+            is MessageVideoContent -> messageContent.update(url)
+            is MessageFileContent  -> messageContent.update(url)
+            is MessageAudioContent -> messageContent.update(url)
             else                   -> messageContent
         }
         return event.copy(content = updatedContent.toContent())
     }
 
     private fun MessageImageContent.update(url: String): MessageImageContent {
+        return copy(url = url)
+    }
+
+    private fun MessageVideoContent.update(url: String): MessageVideoContent {
+        return copy(url = url)
+    }
+
+    private fun MessageFileContent.update(url: String): MessageFileContent {
+        return copy(url = url)
+    }
+
+    private fun MessageAudioContent.update(url: String): MessageAudioContent {
         return copy(url = url)
     }
 

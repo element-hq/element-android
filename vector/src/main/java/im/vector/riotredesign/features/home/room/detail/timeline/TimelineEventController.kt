@@ -42,6 +42,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.Timeline
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.nextDisplayableEvent
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.riotredesign.features.media.ImageContentRenderer
+import im.vector.riotredesign.features.media.VideoContentRenderer
 
 class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                               private val timelineItemFactory: TimelineItemFactory,
@@ -53,7 +54,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         fun onEventVisible(event: TimelineEvent)
         fun onUrlClicked(url: String)
         fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
-        fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: ImageContentRenderer.Data, view: View)
+        fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
         fun onFileMessageClicked(messageFileContent: MessageFileContent)
         fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
     }

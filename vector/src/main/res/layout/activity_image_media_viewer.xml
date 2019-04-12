@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/mediaViewerToolbar"
+        android:id="@+id/imageMediaViewerToolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -15,7 +15,7 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <com.github.piasy.biv.view.BigImageView
-        android:id="@+id/mediaViewerImageView"
+        android:id="@+id/imageMediaViewerImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:failureImageInitScaleType="center"

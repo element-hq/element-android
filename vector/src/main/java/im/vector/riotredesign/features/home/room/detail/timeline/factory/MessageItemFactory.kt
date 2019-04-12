@@ -51,6 +51,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTex
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.ImageContentRenderer
+import im.vector.riotredesign.features.media.VideoContentRenderer
 import me.gujun.android.span.span
 
 class MessageItemFactory(private val colorProvider: ColorProvider,
@@ -157,7 +158,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
-        val data = ImageContentRenderer.Data(
+        val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
                 url = messageContent.info?.thumbnailUrl,
                 height = messageContent.info?.height,
@@ -165,11 +166,18 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 width = messageContent.info?.width,
                 maxWidth = maxWidth
         )
+
+        val videoData = VideoContentRenderer.Data(
+                filename = messageContent.body,
+                videoUrl = messageContent.url,
+                thumbnailMediaData = thumbnailData
+        )
+
         return MessageImageVideoItem_()
                 .playable(true)
                 .informationData(informationData)
-                .mediaData(data)
-                .clickListener { view -> callback?.onVideoMessageClicked(messageContent, data, view) }
+                .mediaData(thumbnailData)
+                .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
     }
 
     private fun buildTextMessageItem(messageContent: MessageTextContent,

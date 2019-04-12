@@ -25,22 +25,22 @@ import androidx.appcompat.widget.Toolbar
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator
 import com.github.piasy.biv.view.GlideImageViewFactory
 import im.vector.riotredesign.core.platform.VectorBaseActivity
-import kotlinx.android.synthetic.main.activity_media_viewer.*
+import kotlinx.android.synthetic.main.activity_image_media_viewer.*
 
 
-class MediaViewerActivity : VectorBaseActivity() {
+class ImageMediaViewerActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(im.vector.riotredesign.R.layout.activity_media_viewer)
+        setContentView(im.vector.riotredesign.R.layout.activity_image_media_viewer)
         val mediaData = intent.getParcelableExtra<ImageContentRenderer.Data>(EXTRA_MEDIA_DATA)
         if (mediaData.url.isNullOrEmpty()) {
             finish()
         } else {
-            configureToolbar(mediaViewerToolbar, mediaData)
-            mediaViewerImageView.setImageViewFactory(GlideImageViewFactory())
-            mediaViewerImageView.setProgressIndicator(ProgressPieIndicator())
-            ImageContentRenderer.render(mediaData, mediaViewerImageView)
+            configureToolbar(imageMediaViewerToolbar, mediaData)
+            imageMediaViewerImageView.setImageViewFactory(GlideImageViewFactory())
+            imageMediaViewerImageView.setProgressIndicator(ProgressPieIndicator())
+            ImageContentRenderer.render(mediaData, imageMediaViewerImageView)
         }
     }
 
@@ -58,7 +58,7 @@ class MediaViewerActivity : VectorBaseActivity() {
         private const val EXTRA_MEDIA_DATA = "EXTRA_MEDIA_DATA"
 
         fun newIntent(context: Context, mediaData: ImageContentRenderer.Data): Intent {
-            return Intent(context, MediaViewerActivity::class.java).apply {
+            return Intent(context, ImageMediaViewerActivity::class.java).apply {
                 putExtra(EXTRA_MEDIA_DATA, mediaData)
             }
         }

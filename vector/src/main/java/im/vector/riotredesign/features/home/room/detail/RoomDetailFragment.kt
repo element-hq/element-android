@@ -70,7 +70,9 @@ import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventCo
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotredesign.features.html.PillImageSpan
 import im.vector.riotredesign.features.media.ImageContentRenderer
-import im.vector.riotredesign.features.media.MediaViewerActivity
+import im.vector.riotredesign.features.media.ImageMediaViewerActivity
+import im.vector.riotredesign.features.media.VideoContentRenderer
+import im.vector.riotredesign.features.media.VideoMediaViewerActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
@@ -384,12 +386,13 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
     }
 
     override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {
-        val intent = MediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
+        val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
         startActivity(intent)
     }
 
-    override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: ImageContentRenderer.Data, view: View) {
-        vectorBaseActivity.notImplemented()
+    override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
+        val intent = VideoMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
+        startActivity(intent)
     }
 
     override fun onFileMessageClicked(messageFileContent: MessageFileContent) {
