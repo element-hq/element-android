@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
@@ -63,7 +64,11 @@ class LoginActivity : VectorBaseActivity() {
         progressBar.visibility = View.VISIBLE
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session) {
-                Matrix.getInstance().currentSession = data.apply { open() }
+                Matrix.getInstance().currentSession = data
+                data.open()
+                data.setFilter(FilterService.FilterPreset.RiotFilter)
+                data.start()
+
                 goToHome()
             }
 

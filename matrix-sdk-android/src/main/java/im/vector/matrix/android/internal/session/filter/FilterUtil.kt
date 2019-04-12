@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.util
-
-import im.vector.matrix.android.internal.session.filter.Filter
-import im.vector.matrix.android.internal.session.filter.FilterBody
-import im.vector.matrix.android.internal.session.filter.RoomEventFilter
-import im.vector.matrix.android.internal.session.filter.RoomFilter
+package im.vector.matrix.android.internal.session.filter
 
 internal object FilterUtil {
 
@@ -120,22 +115,5 @@ internal object FilterUtil {
                 }
             }
         }
-    }
-
-    /**
-     * Create a RoomEventFilter
-     *
-     * @param withLazyLoading true when lazy loading is enabled
-     * @return a RoomEventFilter or null if lazy loading if OFF
-     */
-    fun createRoomEventFilter(withLazyLoading: Boolean): RoomEventFilter? {
-        var roomEventFilter: RoomEventFilter? = null
-
-        if (withLazyLoading) {
-            roomEventFilter = RoomEventFilter()
-            roomEventFilter.lazyLoadMembers = true
-        }
-
-        return roomEventFilter
     }
 }

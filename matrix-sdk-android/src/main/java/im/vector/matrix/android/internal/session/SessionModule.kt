@@ -22,8 +22,10 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
+import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
+import im.vector.matrix.android.internal.session.filter.*
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.DefaultRoomService
@@ -87,7 +89,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomAvatarResolver(get(), sessionParams.credentials)
+            RoomAvatarResolver(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -112,6 +114,23 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             SessionListeners()
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultFilterRepository(get()) as FilterRepository
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultSaveFilterTask(get(), get(), get()) as SaveFilterTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultFilterService(get(), get(), get()) as FilterService
+        }
+
+        scope(DefaultSession.SCOPE) {
+            val retrofit: Retrofit = get()
+            retrofit.create(FilterApi::class.java)
         }
 
         scope(DefaultSession.SCOPE) {

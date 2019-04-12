@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
+import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.user.UserService
 
 /**
@@ -35,7 +36,8 @@ interface Session :
         GroupService,
         UserService,
         CryptoService,
-        SignOutService {
+        SignOutService,
+        FilterService {
 
     /**
      * The params associated to the session
@@ -47,6 +49,18 @@ interface Session :
      */
     @MainThread
     fun open()
+
+    /**
+     * This method start the sync thread.
+     */
+    @MainThread
+    fun start()
+
+    /**
+     * This method stop the sync thread.
+     */
+    @MainThread
+    fun stop()
 
     /**
      * This method allow to close a session. It does stop some services.

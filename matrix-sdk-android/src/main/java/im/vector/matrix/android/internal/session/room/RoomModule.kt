@@ -55,11 +55,11 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultPaginationTask(get(), get()) as PaginationTask
+            DefaultPaginationTask(get(), get(), get()) as PaginationTask
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultGetContextOfEventTask(get(), get()) as GetContextOfEventTask
+            DefaultGetContextOfEventTask(get(), get(), get()) as GetContextOfEventTask
         }
 
         scope(DefaultSession.SCOPE) {

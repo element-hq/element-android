@@ -53,6 +53,7 @@ class Matrix private constructor(context: Context) : MatrixKoinComponent {
         authenticator.getLastActiveSession()?.also {
             currentSession = it
             it.open()
+            it.start()
         }
     }
 

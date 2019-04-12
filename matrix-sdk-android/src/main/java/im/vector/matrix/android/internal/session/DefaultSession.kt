@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.signout.SignOutService
+import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.database.LiveEntityObserver
@@ -63,6 +64,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val roomService by inject<RoomService>()
     private val groupService by inject<GroupService>()
     private val userService by inject<UserService>()
+    private val filterService by inject<FilterService>()
     private val signOutService by inject<SignOutService>()
     private val syncThread by inject<SyncThread>()
     private val contentUrlResolver by inject<ContentUrlResolver>()
@@ -87,15 +89,24 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
             monarchy.openManually()
         }
         liveEntityUpdaters.forEach { it.start() }
+    }
+
+    @MainThread
+    override fun start() {
+        assert(isOpen)
         syncThread.start()
     }
 
+    @MainThread
+    override fun stop() {
+        assert(isOpen)
+        syncThread.kill()
+    }
 
     @MainThread
     override fun close() {
         assertMainThread()
         assert(isOpen)
-        syncThread.kill()
         liveEntityUpdaters.forEach { it.dispose() }
         if (monarchy.isMonarchyThreadOpen) {
             monarchy.closeManually()
@@ -110,6 +121,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return signOutService.signOut(object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // Close the session
+                stop()
                 close()
 
                 callback.onSuccess(data)
@@ -165,6 +177,11 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     override fun liveGroupSummaries(): LiveData<List<GroupSummary>> {
         assert(isOpen)
         return groupService.liveGroupSummaries()
+    }
+
+    override fun setFilter(filterPreset: FilterService.FilterPreset) {
+        assert(isOpen)
+        return filterService.setFilter(filterPreset)
     }
 
     // USER SERVICE
