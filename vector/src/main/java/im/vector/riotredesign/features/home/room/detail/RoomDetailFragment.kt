@@ -37,6 +37,8 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -371,7 +373,7 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
                 .show()
     }
 
-// TimelineEventController.Callback ************************************************************
+    // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String) {
         homePermalinkHandler.launch(url)
@@ -387,11 +389,18 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
     }
 
     override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: ImageContentRenderer.Data, view: View) {
-        //TODO handle
+        vectorBaseActivity.notImplemented()
     }
 
+    override fun onFileMessageClicked(messageFileContent: MessageFileContent) {
+        vectorBaseActivity.notImplemented()
+    }
 
-// AutocompleteUserPresenter.Callback
+    override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {
+        vectorBaseActivity.notImplemented()
+    }
+
+    // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))

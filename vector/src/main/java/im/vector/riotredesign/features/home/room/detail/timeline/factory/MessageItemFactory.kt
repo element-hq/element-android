@@ -23,8 +23,10 @@ import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
@@ -40,6 +42,8 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.Timeline
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageFileItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageVideoItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
@@ -95,8 +99,30 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
             is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, callback)
+            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, callback)
+            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, callback)
             else                    -> buildNotHandledMessageItem(messageContent)
         }
+    }
+
+    private fun buildAudioMessageItem(messageContent: MessageAudioContent,
+                                      informationData: MessageInformationData,
+                                      callback: TimelineEventController.Callback?): MessageFileItem? {
+        return MessageFileItem_()
+                .informationData(informationData)
+                .filename(messageContent.body)
+                .iconRes(R.drawable.filetype_audio)
+                .clickListener { _ -> callback?.onAudioMessageClicked(messageContent) }
+    }
+
+    private fun buildFileMessageItem(messageContent: MessageFileContent,
+                                     informationData: MessageInformationData,
+                                     callback: TimelineEventController.Callback?): MessageFileItem? {
+        return MessageFileItem_()
+                .informationData(informationData)
+                .filename(messageContent.body)
+                .iconRes(R.drawable.filetype_attachment)
+                .clickListener { _ -> callback?.onFileMessageClicked(messageContent) }
     }
 
     private fun buildNotHandledMessageItem(messageContent: MessageContent): DefaultItem? {

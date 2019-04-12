@@ -32,6 +32,7 @@ import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.rageshake.BugReportActivity
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.RageShake
@@ -284,9 +285,9 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
      * PUBLIC METHODS
      * ========================================================================================== */
 
-    protected fun showSnackbar(message: String) {
+    fun showSnackbar(message: String) {
         coordinatorLayout?.let {
-            Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
+            Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
         }
     }
 
@@ -294,8 +295,8 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
      * Temporary method
      * ========================================================================================== */
 
-    protected fun notImplemented() {
-        showSnackbar(getString(R.string.not_implemented))
+    fun notImplemented() {
+        toast(getString(R.string.not_implemented))
     }
 
 }

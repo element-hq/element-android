@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -52,6 +54,8 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         fun onUrlClicked(url: String)
         fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: ImageContentRenderer.Data, view: View)
+        fun onFileMessageClicked(messageFileContent: MessageFileContent)
+        fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
     }
 
     private val modelCache = arrayListOf<List<EpoxyModel<*>>>()
