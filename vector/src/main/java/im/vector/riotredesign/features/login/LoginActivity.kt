@@ -67,7 +67,7 @@ class LoginActivity : VectorBaseActivity() {
                 Matrix.getInstance().currentSession = data
                 data.open()
                 data.setFilter(FilterService.FilterPreset.RiotFilter)
-                data.start()
+                data.startSync()
 
                 goToHome()
             }

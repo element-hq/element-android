@@ -54,13 +54,13 @@ interface Session :
      * This method start the sync thread.
      */
     @MainThread
-    fun start()
+    fun startSync()
 
     /**
      * This method stop the sync thread.
      */
     @MainThread
-    fun stop()
+    fun stopSync()
 
     /**
      * This method allow to close a session. It does stop some services.

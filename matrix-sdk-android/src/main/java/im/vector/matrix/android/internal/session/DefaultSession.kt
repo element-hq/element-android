@@ -92,13 +92,13 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     }
 
     @MainThread
-    override fun start() {
+    override fun startSync() {
         assert(isOpen)
         syncThread.start()
     }
 
     @MainThread
-    override fun stop() {
+    override fun stopSync() {
         assert(isOpen)
         syncThread.kill()
     }
@@ -121,7 +121,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return signOutService.signOut(object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // Close the session
-                stop()
+                stopSync()
                 close()
 
                 callback.onSuccess(data)
