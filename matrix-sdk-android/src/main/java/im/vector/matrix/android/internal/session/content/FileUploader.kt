@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.content
 import arrow.core.Try
 import arrow.core.Try.Companion.raise
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import okhttp3.HttpUrl
@@ -31,44 +30,51 @@ import java.io.File
 import java.io.IOException
 
 
-internal class ContentUploader(private val okHttpClient: OkHttpClient,
-                               private val sessionParams: SessionParams,
-                               private val contentUploadProgressTracker: DefaultContentUploadStateTracker) {
+internal class FileUploader(private val okHttpClient: OkHttpClient,
+                            private val sessionParams: SessionParams) {
+
+    private val uploadUrl = sessionParams.homeServerConnectionConfig.homeServerUri.toString() + URI_PREFIX_CONTENT_API + "upload"
 
     private val moshi = MoshiProvider.providesMoshi()
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
-    fun uploadFile(eventId: String, attachment: ContentAttachmentData): Try<ContentUploadResponse> {
-        if (attachment.path == null || attachment.mimeType == null) {
-            return raise(RuntimeException())
-        }
-        val file = File(attachment.path)
-        val urlString = sessionParams.homeServerConnectionConfig.homeServerUri.toString() + URI_PREFIX_CONTENT_API + "upload"
 
-        val urlBuilder = HttpUrl.parse(urlString)?.newBuilder()
-                         ?: return raise(RuntimeException())
+    fun uploadFile(file: File,
+                   filename: String?,
+                   mimeType: String,
+                   progressListener: ProgressRequestBody.Listener? = null): Try<ContentUploadResponse> {
+
+        val uploadBody = RequestBody.create(MediaType.parse(mimeType), file)
+        return upload(uploadBody, filename, progressListener)
+
+    }
+
+    fun uploadByteArray(byteArray: ByteArray,
+                        filename: String?,
+                        mimeType: String,
+                        progressListener: ProgressRequestBody.Listener? = null): Try<ContentUploadResponse> {
+
+        val uploadBody = RequestBody.create(MediaType.parse(mimeType), byteArray)
+        return upload(uploadBody, filename, progressListener)
+
+    }
+
+
+    private fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): Try<ContentUploadResponse> {
+        val urlBuilder = HttpUrl.parse(uploadUrl)?.newBuilder() ?: return raise(RuntimeException())
 
         val httpUrl = urlBuilder
-                .addQueryParameter(
-                        "filename", attachment.name
-                ).build()
+                .addQueryParameter("filename", filename)
+                .build()
 
-        val requestBody = RequestBody.create(
-                MediaType.parse(attachment.mimeType),
-                file
-        )
-        val progressRequestBody = ProgressRequestBody(requestBody, object : ProgressRequestBody.Listener {
-            override fun onProgress(current: Long, total: Long) {
-                contentUploadProgressTracker.setProgress(eventId, current, total)
-            }
-        })
+        val requestBody = if (progressListener != null) ProgressRequestBody(uploadBody, progressListener) else uploadBody
 
         val request = Request.Builder()
                 .url(httpUrl)
-                .post(progressRequestBody)
+                .post(requestBody)
                 .build()
 
-        val result = Try {
+        return Try {
             okHttpClient.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
                     throw IOException()
@@ -80,11 +86,7 @@ internal class ContentUploader(private val okHttpClient: OkHttpClient,
                 }
             }
         }
-        if (result.isFailure()) {
-            contentUploadProgressTracker.setFailure(eventId)
-        } else {
-            contentUploadProgressTracker.setSuccess(eventId)
-        }
-        return result
+
     }
+
 }

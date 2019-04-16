@@ -18,9 +18,15 @@ package im.vector.matrix.android.api.session.content
 
 interface ContentUploadStateTracker {
 
-    fun track(eventId: String, updateListener: UpdateListener)
+    fun track(key: String, updateListener: UpdateListener)
 
-    fun untrack(eventId: String, updateListener: UpdateListener)
+    fun untrack(key: String, updateListener: UpdateListener)
+
+    fun setFailure(key: String)
+
+    fun setSuccess(key: String)
+
+    fun setProgress(key: String, current: Long, total: Long)
 
     interface UpdateListener {
         fun onUpdate(state: State)

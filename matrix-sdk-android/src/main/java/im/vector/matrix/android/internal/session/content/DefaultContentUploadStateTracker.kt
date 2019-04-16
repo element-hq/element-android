@@ -23,42 +23,42 @@ import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 internal class DefaultContentUploadStateTracker : ContentUploadStateTracker {
 
     private val mainHandler = Handler(Looper.getMainLooper())
-    private val progressByEvent = mutableMapOf<String, ContentUploadStateTracker.State>()
-    private val listenersByEvent = mutableMapOf<String, MutableList<ContentUploadStateTracker.UpdateListener>>()
+    private val states = mutableMapOf<String, ContentUploadStateTracker.State>()
+    private val listeners = mutableMapOf<String, MutableList<ContentUploadStateTracker.UpdateListener>>()
 
-    override fun track(eventId: String, updateListener: ContentUploadStateTracker.UpdateListener) {
-        val listeners = listenersByEvent[eventId] ?: ArrayList()
+    override fun track(key: String, updateListener: ContentUploadStateTracker.UpdateListener) {
+        val listeners = listeners[key] ?: ArrayList()
         listeners.add(updateListener)
-        listenersByEvent[eventId] = listeners
-        val currentState = progressByEvent[eventId] ?: ContentUploadStateTracker.State.Idle
+        this.listeners[key] = listeners
+        val currentState = states[key] ?: ContentUploadStateTracker.State.Idle
         mainHandler.post { updateListener.onUpdate(currentState) }
     }
 
-    override fun untrack(eventId: String, updateListener: ContentUploadStateTracker.UpdateListener) {
-        listenersByEvent[eventId]?.apply {
+    override fun untrack(key: String, updateListener: ContentUploadStateTracker.UpdateListener) {
+        listeners[key]?.apply {
             remove(updateListener)
         }
     }
 
-    internal fun setFailure(eventId: String) {
+    override fun setFailure(key: String) {
         val failure = ContentUploadStateTracker.State.Failure
-        updateState(eventId, failure)
+        updateState(key, failure)
     }
 
-    internal fun setSuccess(eventId: String) {
+    override fun setSuccess(key: String) {
         val success = ContentUploadStateTracker.State.Success
-        updateState(eventId, success)
+        updateState(key, success)
     }
 
-    internal fun setProgress(eventId: String, current: Long, total: Long) {
+    override fun setProgress(key: String, current: Long, total: Long) {
         val progressData = ContentUploadStateTracker.State.ProgressData(current, total)
-        updateState(eventId, progressData)
+        updateState(key, progressData)
     }
 
-    private fun updateState(eventId: String, state: ContentUploadStateTracker.State) {
-        progressByEvent[eventId] = state
+    private fun updateState(key: String, state: ContentUploadStateTracker.State) {
+        states[key] = state
         mainHandler.post {
-            listenersByEvent[eventId]?.also { listeners ->
+            listeners[key]?.also { listeners ->
                 listeners.forEach { it.onUpdate(state) }
             }
         }

@@ -31,7 +31,7 @@ internal class ContentModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            ContentUploader(get(), get(), get<ContentUploadStateTracker>() as DefaultContentUploadStateTracker)
+            FileUploader(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

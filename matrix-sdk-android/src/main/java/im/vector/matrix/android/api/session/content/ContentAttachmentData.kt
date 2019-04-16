@@ -27,8 +27,8 @@ data class ContentAttachmentData(
         val height: Long? = 0,
         val width: Long? = 0,
         val name: String? = null,
-        val path: String? = null,
-        val mimeType: String? = null,
+        val path: String,
+        val mimeType: String,
         val type: Type
 ) : Parcelable {
 
