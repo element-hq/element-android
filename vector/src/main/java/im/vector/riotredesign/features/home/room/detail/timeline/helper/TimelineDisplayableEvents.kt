@@ -48,8 +48,30 @@ fun List<TimelineEvent>.filterDisplayableEvents(): List<TimelineEvent> {
     }
 }
 
+fun TimelineEvent.canBeMerged(): Boolean {
+    return root.type == EventType.STATE_ROOM_MEMBER
+}
+
+fun List<TimelineEvent>.nextSameTypeEvents(index: Int, minSize: Int): List<TimelineEvent> {
+    if (index >= size - 1) {
+        return emptyList()
+    }
+    val timelineEvent = this[index]
+    val nextSubList = subList(index + 1, size)
+    val indexOfFirstDifferentEventType = nextSubList.indexOfFirst { it.root.type != timelineEvent.root.type }
+    val sameTypeEvents = if (indexOfFirstDifferentEventType == -1) {
+        nextSubList
+    } else {
+        nextSubList.subList(0, indexOfFirstDifferentEventType)
+    }
+    if (sameTypeEvents.size < minSize) {
+        return emptyList()
+    }
+    return sameTypeEvents
+}
+
 fun List<TimelineEvent>.nextDisplayableEvent(index: Int): TimelineEvent? {
-    return if (index == size - 1) {
+    return if (index >= size - 1) {
         null
     } else {
         subList(index + 1, this.size).firstOrNull { it.isDisplayable() }

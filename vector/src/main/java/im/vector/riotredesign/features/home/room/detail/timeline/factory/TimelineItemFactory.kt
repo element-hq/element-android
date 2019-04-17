@@ -16,11 +16,14 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
+import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.EmptyItem_
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
+import im.vector.riotredesign.features.home.room.detail.timeline.item.RoomMemberMergedItem
 
 class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                           private val roomNameItemFactory: RoomNameItemFactory,
@@ -31,33 +34,57 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                           private val defaultItemFactory: DefaultItemFactory) {
 
     fun create(event: TimelineEvent,
+               mergeableEvents: List<TimelineEvent>,
                nextEvent: TimelineEvent?,
-               callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
+               callback: TimelineEventController.Callback?,
+               visibilityStateChangedListener: TimelineEventVisibilityStateChangedListener): EpoxyModelWithHolder<*> {
 
         val computedModel = try {
-            when (event.root.type) {
-                EventType.MESSAGE                  -> messageItemFactory.create(event, nextEvent, callback)
-                EventType.STATE_ROOM_NAME          -> roomNameItemFactory.create(event)
-                EventType.STATE_ROOM_TOPIC         -> roomTopicItemFactory.create(event)
-                EventType.STATE_ROOM_MEMBER        -> roomMemberItemFactory.create(event)
-                EventType.STATE_HISTORY_VISIBILITY -> roomHistoryVisibilityItemFactory.create(event)
+            if (mergeableEvents.isNotEmpty()) {
+                createMergedEvent(event, mergeableEvents, visibilityStateChangedListener)
+            } else {
+                when (event.root.type) {
+                    EventType.MESSAGE                  -> messageItemFactory.create(event, nextEvent, callback)
+                    EventType.STATE_ROOM_NAME          -> roomNameItemFactory.create(event)
+                    EventType.STATE_ROOM_TOPIC         -> roomTopicItemFactory.create(event)
+                    EventType.STATE_ROOM_MEMBER        -> roomMemberItemFactory.create(event)
+                    EventType.STATE_HISTORY_VISIBILITY -> roomHistoryVisibilityItemFactory.create(event)
 
-                EventType.CALL_INVITE,
-                EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER              -> callItemFactory.create(event)
+                    EventType.CALL_INVITE,
+                    EventType.CALL_HANGUP,
+                    EventType.CALL_ANSWER              -> callItemFactory.create(event)
 
-                EventType.ENCRYPTED,
-                EventType.ENCRYPTION,
-                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                EventType.STICKER,
-                EventType.STATE_ROOM_CREATE        -> defaultItemFactory.create(event)
+                    EventType.ENCRYPTED,
+                    EventType.ENCRYPTION,
+                    EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                    EventType.STICKER,
+                    EventType.STATE_ROOM_CREATE        -> defaultItemFactory.create(event)
 
-                else                               -> null
+                    else                               -> null
+                }
             }
         } catch (e: Exception) {
             defaultItemFactory.create(event, e)
         }
-        return computedModel ?: EmptyItem_()
+        return (computedModel ?: EmptyItem_()).apply {
+            if (this is VectorEpoxyModel) {
+                this.setOnVisibilityStateChanged(visibilityStateChangedListener)
+            }
+        }
+    }
+
+    private fun createMergedEvent(event: TimelineEvent,
+                                  mergeableEvents: List<TimelineEvent>,
+                                  visibilityStateChangedListener: VectorEpoxyModel.OnVisibilityStateChangedListener): RoomMemberMergedItem {
+
+        val events = listOf(event) + mergeableEvents
+        // We are reversing it as it does add items on a LinearLayout
+        val roomMemberItems = events.reversed().mapNotNull {
+            roomMemberItemFactory.create(it)?.apply {
+                id(it.localId)
+            }
+        }
+        return RoomMemberMergedItem(events, roomMemberItems, visibilityStateChangedListener)
     }
 
 }

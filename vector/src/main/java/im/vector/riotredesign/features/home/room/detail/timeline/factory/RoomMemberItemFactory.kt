@@ -34,6 +34,7 @@ class RoomMemberItemFactory(private val stringProvider: StringProvider) {
         val roomMember = event.roomMember ?: return null
         val noticeText = buildRoomMemberNotice(event) ?: return null
         return NoticeItem_()
+                .userId(event.root.sender ?: "")
                 .noticeText(noticeText)
                 .avatarUrl(roomMember.avatarUrl)
                 .memberName(roomMember.displayName)
@@ -57,9 +58,9 @@ class RoomMemberItemFactory(private val stringProvider: StringProvider) {
             val displayNameText = when {
                 prevEventContent?.displayName.isNullOrEmpty() ->
                     stringProvider.getString(R.string.notice_display_name_set, event.root.sender, eventContent?.displayName)
-                eventContent?.displayName.isNullOrEmpty() ->
+                eventContent?.displayName.isNullOrEmpty()     ->
                     stringProvider.getString(R.string.notice_display_name_removed, event.root.sender, prevEventContent?.displayName)
-                else ->
+                else                                          ->
                     stringProvider.getString(R.string.notice_display_name_changed_from,
                             event.root.sender, prevEventContent?.displayName, eventContent?.displayName)
             }
@@ -86,20 +87,20 @@ class RoomMemberItemFactory(private val stringProvider: StringProvider) {
                 // TODO get userId
                 val selfUserId: String = ""
                 when {
-                    eventContent.thirdPartyInvite != null ->
+                    eventContent.thirdPartyInvite != null             ->
                         stringProvider.getString(R.string.notice_room_third_party_registered_invite,
                                 targetDisplayName, eventContent.thirdPartyInvite?.displayName)
                     TextUtils.equals(event.root.stateKey, selfUserId) ->
                         stringProvider.getString(R.string.notice_room_invite_you, senderDisplayName)
-                    event.root.stateKey.isNullOrEmpty() ->
+                    event.root.stateKey.isNullOrEmpty()               ->
                         stringProvider.getString(R.string.notice_room_invite_no_invitee, senderDisplayName)
-                    else ->
+                    else                                              ->
                         stringProvider.getString(R.string.notice_room_invite, senderDisplayName, targetDisplayName)
                 }
             }
-            Membership.JOIN == eventContent?.membership ->
+            Membership.JOIN == eventContent?.membership   ->
                 stringProvider.getString(R.string.notice_room_join, senderDisplayName)
-            Membership.LEAVE == eventContent?.membership ->
+            Membership.LEAVE == eventContent?.membership  ->
                 // 2 cases here: this member may have left voluntarily or they may have been "left" by someone else ie. kicked
                 return if (TextUtils.equals(event.root.sender, event.root.stateKey)) {
                     if (prevEventContent?.membership == Membership.INVITE) {
@@ -116,11 +117,11 @@ class RoomMemberItemFactory(private val stringProvider: StringProvider) {
                 } else {
                     null
                 }
-            Membership.BAN == eventContent?.membership ->
+            Membership.BAN == eventContent?.membership    ->
                 stringProvider.getString(R.string.notice_room_ban, senderDisplayName, targetDisplayName)
-            Membership.KNOCK == eventContent?.membership ->
+            Membership.KNOCK == eventContent?.membership  ->
                 stringProvider.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
-            else -> null
+            else                                          -> null
         }
     }
 

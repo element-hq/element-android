@@ -50,12 +50,7 @@ import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
-import im.vector.riotredesign.core.utils.checkPermissions
-import im.vector.riotredesign.core.utils.openCamera
+import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
@@ -381,8 +376,8 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         homePermalinkHandler.launch(url)
     }
 
-    override fun onEventVisible(event: TimelineEvent) {
-        roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event))
+    override fun onEventsVisible(events: List<TimelineEvent>) {
+        roomDetailViewModel.process(RoomDetailActions.EventsDisplayed(events))
     }
 
     override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {

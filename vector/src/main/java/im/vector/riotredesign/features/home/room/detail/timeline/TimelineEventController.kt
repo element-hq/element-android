@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
-import com.airbnb.epoxy.VisibilityState
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
@@ -32,15 +31,18 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVideoConte
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.LoadingItemModel_
-import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineAsyncHelper
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.canBeMerged
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.nextDisplayableEvent
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.nextSameTypeEvents
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.RoomMemberMergedItem
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.VideoContentRenderer
 
@@ -51,7 +53,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
     interface Callback {
-        fun onEventVisible(event: TimelineEvent)
+        fun onEventsVisible(events: List<TimelineEvent>)
         fun onUrlClicked(url: String)
         fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
@@ -59,7 +61,8 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
     }
 
-    private val modelCache = arrayListOf<List<EpoxyModel<*>>>()
+
+    private val modelCache = arrayListOf<CacheItemData?>()
     private var currentSnapshot: List<TimelineEvent> = emptyList()
     private var inSubmitList: Boolean = false
     private var timeline: Timeline? = null
@@ -72,7 +75,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         override fun onChanged(position: Int, count: Int, payload: Any?) {
             assertUpdateCallbacksAllowed()
             (position until (position + count)).forEach {
-                modelCache[it] = emptyList()
+                modelCache[it] = null
             }
             requestModelBuild()
         }
@@ -88,11 +91,18 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         @Synchronized
         override fun onInserted(position: Int, count: Int) {
             assertUpdateCallbacksAllowed()
-            if (modelCache.isNotEmpty() && position == modelCache.size) {
-                modelCache[position - 1] = emptyList()
+            // When adding backwards we need to clear some events
+            if (position == modelCache.size) {
+                val previousCachedModel = modelCache.getOrNull(position - 1)
+                if (previousCachedModel != null) {
+                    val numberOfMergedEvents = previousCachedModel.numberOfMergedEvents
+                    for (i in 0..numberOfMergedEvents) {
+                        modelCache[position - 1 - i] = null
+                    }
+                }
             }
             (0 until count).forEach {
-                modelCache.add(position, emptyList())
+                modelCache.add(position, null)
             }
             requestModelBuild()
         }
@@ -161,53 +171,63 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     @Synchronized
     private fun getModels(): List<EpoxyModel<*>> {
         (0 until modelCache.size).forEach { position ->
-            if (modelCache[position].isEmpty()) {
-                modelCache[position] = buildItemModels(position, currentSnapshot)
+            if (modelCache[position] == null) {
+                buildAndCacheItemsAt(position)
             }
         }
-        return modelCache.flatten()
+        return modelCache
+                .map { listOf(it?.eventModel, it?.formattedDayModel) }
+                .flatten()
+                .filterNotNull()
     }
 
-    private fun buildItemModels(currentPosition: Int, items: List<TimelineEvent>): List<EpoxyModel<*>> {
-        val epoxyModels = ArrayList<EpoxyModel<*>>()
+    private fun buildAndCacheItemsAt(position: Int) {
+        val buildItemModelsResult = buildItemModels(position, currentSnapshot)
+        modelCache[position] = buildItemModelsResult
+        val prevResult = modelCache.getOrNull(position + 1)
+        if (prevResult != null && prevResult.eventModel is RoomMemberMergedItem && buildItemModelsResult.eventModel is RoomMemberMergedItem) {
+            buildItemModelsResult.eventModel.isCollapsed = prevResult.eventModel.isCollapsed
+        }
+        for (skipItemPosition in 0 until buildItemModelsResult.numberOfMergedEvents) {
+            val dumbModelsResult = CacheItemData(numberOfMergedEvents = buildItemModelsResult.numberOfMergedEvents)
+            modelCache[position + 1 + skipItemPosition] = dumbModelsResult
+        }
+    }
+
+    private fun buildItemModels(currentPosition: Int, items: List<TimelineEvent>): CacheItemData {
         val event = items[currentPosition]
-        val nextEvent = items.nextDisplayableEvent(currentPosition)
+        val mergeableEvents = if (event.canBeMerged()) items.nextSameTypeEvents(currentPosition, minSize = 2) else emptyList()
+        val mergedEvents = listOf(event) + mergeableEvents
+        val nextDisplayableEvent = items.nextDisplayableEvent(currentPosition + mergeableEvents.size)
 
         val date = event.root.localDateTime()
-        val nextDate = nextEvent?.root?.localDateTime()
+        val nextDate = nextDisplayableEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
+        val visibilityStateChangedListener = TimelineEventVisibilityStateChangedListener(callback, mergedEvents)
+        val epoxyModelId = mergedEvents.joinToString(separator = "_") { it.localId }
 
-        timelineItemFactory.create(event, nextEvent, callback).also {
-            it.id(event.localId)
-            it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
-            epoxyModels.add(it)
+        val eventModel = timelineItemFactory.create(event, mergeableEvents, nextDisplayableEvent, callback, visibilityStateChangedListener).also {
+            it.id(epoxyModelId)
         }
-        if (addDaySeparator) {
+        val daySeparatorItem = if (addDaySeparator) {
             val formattedDay = dateFormatter.formatMessageDay(date)
-            val daySeparatorItem = DaySeparatorItem_().formattedDay(formattedDay).id(formattedDay)
-            epoxyModels.add(daySeparatorItem)
+            DaySeparatorItem_().formattedDay(formattedDay).id(formattedDay)
+        } else {
+            null
         }
-        return epoxyModels
+        return CacheItemData(eventModel, daySeparatorItem, mergeableEvents.size)
     }
 
     private fun LoadingItemModel_.addWhen(direction: Timeline.Direction) {
-        val shouldAdd = timeline?.let {
-            it.hasMoreToLoad(direction)
-        } ?: false
+        val shouldAdd = timeline?.hasMoreToLoad(direction) ?: false
         addIf(shouldAdd, this@TimelineEventController)
     }
 
 }
 
-private class TimelineEventVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?,
-                                                          private val event: TimelineEvent)
-    : VectorEpoxyModel.OnVisibilityStateChangedListener {
+private data class CacheItemData(
+        val eventModel: EpoxyModel<*>? = null,
+        val formattedDayModel: EpoxyModel<*>? = null,
+        val numberOfMergedEvents: Int = 0
+)
 
-    override fun onVisibilityStateChanged(visibilityState: Int) {
-        if (visibilityState == VisibilityState.VISIBLE) {
-            callback?.onEventVisible(event)
-        }
-    }
-
-
-}
