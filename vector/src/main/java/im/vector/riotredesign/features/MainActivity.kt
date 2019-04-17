@@ -16,8 +16,11 @@
 
 package im.vector.riotredesign.features
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
 import im.vector.riotredesign.features.login.LoginActivity
@@ -25,10 +28,52 @@ import im.vector.riotredesign.features.login.LoginActivity
 
 class MainActivity : VectorBaseActivity() {
 
+    companion object {
+        private const val EXTRA_CLEAR_CACHE = "EXTRA_CLEAR_CACHE"
+        private const val EXTRA_CLEAR_CREDENTIALS = "EXTRA_CLEAR_CREDENTIALS"
+
+        // Special action to clear cache and/or clear credentials
+        fun restartApp(activity: Activity, clearCache: Boolean = false, clearCredentials: Boolean = false) {
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+            intent.putExtra(EXTRA_CLEAR_CACHE, clearCache)
+            intent.putExtra(EXTRA_CLEAR_CREDENTIALS, clearCredentials)
+            activity.startActivity(intent)
+        }
+    }
+
     private val authenticator = Matrix.getInstance().authenticator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val session = Matrix.getInstance().currentSession
+
+        val clearCache = intent.getBooleanExtra(EXTRA_CLEAR_CACHE, false)
+        val clearCredentials = intent.getBooleanExtra(EXTRA_CLEAR_CREDENTIALS, false)
+
+        if (session == null) {
+            start()
+        } else {
+            // Handle some wanted cleanup
+            when {
+                clearCredentials -> session.signOut(object : MatrixCallback<Unit> {
+                    override fun onSuccess(data: Unit) {
+                        start()
+                    }
+                })
+                clearCache -> session.clearCache(object : MatrixCallback<Unit> {
+                    override fun onSuccess(data: Unit) {
+                        start()
+                    }
+                })
+                else -> start()
+            }
+        }
+    }
+
+    private fun start() {
         val intent = if (authenticator.hasActiveSessions()) {
             HomeActivity.newIntent(this)
         } else {
@@ -37,5 +82,4 @@ class MainActivity : VectorBaseActivity() {
         startActivity(intent)
         finish()
     }
-
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.signout
+package im.vector.matrix.android.internal.session.cache
 
 import arrow.core.Try
-import im.vector.matrix.android.internal.auth.SessionParamsStore
-import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import io.realm.Realm
+import io.realm.RealmConfiguration
 
-internal interface SignOutTask : Task<Unit, Unit>
+internal interface ClearCacheTask : Task<Unit, Unit>
 
-
-internal class DefaultSignOutTask(private val signOutAPI: SignOutAPI,
-                                  private val sessionParamsStore: SessionParamsStore) : SignOutTask {
+internal class RealmClearCacheTask(val realmConfiguration: RealmConfiguration) : ClearCacheTask {
 
     override fun execute(params: Unit): Try<Unit> {
-        return executeRequest<Unit> {
-            apiCall = signOutAPI.signOut()
-        }.flatMap {
-            sessionParamsStore.delete()
+        return Try {
+            val realm = Realm.getInstance(realmConfiguration)
+
+            realm.executeTransaction {
+                it.deleteAll()
+            }
+
+            realm.close()
         }
     }
 }

@@ -28,7 +28,7 @@ data class RoomSummary(
         val displayName: String = "",
         val topic: String = "",
         val avatarUrl: String = "",
-        val isDirect: Boolean,
+        val isDirect: Boolean = false,
         val lastMessage: Event? = null,
         val otherMemberIds: List<String> = emptyList(),
         var notificationCount: Int = 0,

@@ -38,7 +38,7 @@ class EmptyState : MvRxState
 class HomeActivityViewModel(state: EmptyState,
                             private val session: Session,
                             roomSelectionRepository: RoomSelectionRepository
-) : VectorViewModel<EmptyState>(state) {
+) : VectorViewModel<EmptyState>(state), Session.Listener {
 
     companion object : MvRxViewModelFactory<HomeActivityViewModel, EmptyState> {
 
@@ -59,6 +59,8 @@ class HomeActivityViewModel(state: EmptyState,
         get() = _openRoomLiveData
 
     init {
+        session.addListener(this)
+
         // TODO Move this else where, it's too late when we are here to change the filter
         session.setFilter(FilterService.FilterPreset.RiotFilter)
 
@@ -100,5 +102,18 @@ class HomeActivityViewModel(state: EmptyState,
         })
     }
 
+    override fun onCleared() {
+        super.onCleared()
+
+        session.removeListener(this)
+    }
+
+    /* ==========================================================================================
+     * Session listener
+     * ========================================================================================== */
+
+    override fun onInvalidToken() {
+
+    }
 
 }

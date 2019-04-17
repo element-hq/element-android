@@ -23,6 +23,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.group.Group
@@ -36,6 +37,7 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.MatrixCallbackDelegate
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
@@ -65,6 +67,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val groupService by inject<GroupService>()
     private val userService by inject<UserService>()
     private val filterService by inject<FilterService>()
+    private val cacheService by inject<CacheService>()
     private val signOutService by inject<SignOutService>()
     private val syncThread by inject<SyncThread>()
     private val contentUrlResolver by inject<ContentUrlResolver>()
@@ -118,17 +121,18 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     @MainThread
     override fun signOut(callback: MatrixCallback<Unit>) {
         assert(isOpen)
+        syncThread.kill()
+
         return signOutService.signOut(object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                // Close the session
-                stopSync()
-                close()
-
-                callback.onSuccess(data)
+                // Clear the cache
+                cacheService.clearCache(object : MatrixCallbackDelegate<Unit>(callback) {})
             }
 
             override fun onFailure(failure: Throwable) {
-                callback.onFailure(failure)
+                // Ignore failure
+                onSuccess(Unit)
+                // callback.onFailure(failure)
             }
         })
     }
@@ -182,6 +186,19 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     override fun setFilter(filterPreset: FilterService.FilterPreset) {
         assert(isOpen)
         return filterService.setFilter(filterPreset)
+    }
+
+    override fun clearCache(callback: MatrixCallback<Unit>) {
+        assert(isOpen)
+        syncThread.pause()
+        cacheService.clearCache(object : MatrixCallbackDelegate<Unit>(callback) {
+            override fun onSuccess(data: Unit) {
+                // Restart the sync
+                syncThread.restart()
+
+                super.onSuccess(data)
+            }
+        })
     }
 
     // USER SERVICE

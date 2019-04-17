@@ -53,6 +53,7 @@ import im.vector.riotredesign.core.preference.ProgressBarPreference
 import im.vector.riotredesign.core.preference.UserAvatarPreference
 import im.vector.riotredesign.core.preference.VectorPreference
 import im.vector.riotredesign.core.utils.*
+import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
 import org.koin.android.ext.android.inject
 import java.lang.ref.WeakReference
@@ -751,9 +752,8 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
              */
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                notImplemented()
-                // displayLoadingView()
-                // TODO Matrix.getInstance(appContext).reloadSessions(appContext)
+                displayLoadingView()
+                MainActivity.restartApp(activity!!, clearCache = true, clearCredentials = false)
                 false
             }
         }
