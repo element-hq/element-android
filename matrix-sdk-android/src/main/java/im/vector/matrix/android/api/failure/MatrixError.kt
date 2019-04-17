@@ -33,6 +33,7 @@ data class MatrixError(
         const val FORBIDDEN = "M_FORBIDDEN"
         const val UNKNOWN = "M_UNKNOWN"
         const val UNKNOWN_TOKEN = "M_UNKNOWN_TOKEN"
+        const val MISSING_TOKEN = "M_MISSING_TOKEN"
         const val BAD_JSON = "M_BAD_JSON"
         const val NOT_JSON = "M_NOT_JSON"
         const val NOT_FOUND = "M_NOT_FOUND"

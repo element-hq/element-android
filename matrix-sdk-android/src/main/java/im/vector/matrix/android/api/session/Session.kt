@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session
 
 import androidx.annotation.MainThread
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
@@ -36,6 +37,7 @@ interface Session :
         GroupService,
         UserService,
         CryptoService,
+        CacheService,
         SignOutService,
         FilterService {
 
@@ -93,7 +95,11 @@ interface Session :
     /**
      * A global session listener to get notified for some events.
      */
-    // Not used at the moment
-    interface Listener
+    interface Listener {
+        /**
+         * The access token is not valid anymore
+         */
+        fun onInvalidToken()
+    }
 
 }

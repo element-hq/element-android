@@ -52,7 +52,14 @@ internal class DefaultRoom(
             RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
         }
         Transformations.map(liveRealmData) { results ->
-            results.map { it.asDomain() }.first()
+            val roomSummaries = results.map { it.asDomain() }
+
+            if (roomSummaries.isEmpty()) {
+                // Create a dummy RoomSummary to avoid Crash during Sign Out or clear cache
+                RoomSummary(roomId)
+            } else {
+                roomSummaries.first()
+            }
         }
     }
 

@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
@@ -26,6 +27,9 @@ import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
+import im.vector.matrix.android.internal.session.cache.ClearCacheTask
+import im.vector.matrix.android.internal.session.cache.RealmCacheService
+import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
 import im.vector.matrix.android.internal.session.filter.*
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
@@ -108,6 +112,14 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             DefaultSignOutService(get(), get()) as SignOutService
+        }
+
+        scope(DefaultSession.SCOPE) {
+            RealmCacheService(get(), get()) as CacheService
+        }
+
+        scope(DefaultSession.SCOPE) {
+            RealmClearCacheTask(get()) as ClearCacheTask
         }
 
         scope(DefaultSession.SCOPE) {

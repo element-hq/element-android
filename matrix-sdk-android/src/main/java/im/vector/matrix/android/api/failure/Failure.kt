@@ -19,7 +19,7 @@ package im.vector.matrix.android.api.failure
 import java.io.IOException
 
 /**
- * This class allows to expose differents kind of error to be then handled by the application.
+ * This class allows to expose different kinds of error to be then handled by the application.
  * As it is a sealed class, you typically use it like that :
  * when(failure) {
  *   is NetworkConnection -> Unit

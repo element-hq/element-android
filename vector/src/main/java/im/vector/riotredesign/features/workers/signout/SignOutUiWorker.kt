@@ -16,9 +16,7 @@
 
 package im.vector.riotredesign.features.workers.signout
 
-import android.content.Intent
 import androidx.appcompat.app.AlertDialog
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseActivity
@@ -30,7 +28,7 @@ class SignOutUiWorker(val activity: VectorBaseActivity) {
         if (SignOutViewModel.doYouNeedToBeDisplayed(session)) {
             val signOutDialog = SignOutBottomSheetDialogFragment.newInstance(session.sessionParams.credentials.userId)
             signOutDialog.onSignOut = Runnable {
-                doSignOut(session)
+                doSignOut()
             }
             signOutDialog.show(activity.supportFragmentManager, "SO")
         } else {
@@ -39,31 +37,14 @@ class SignOutUiWorker(val activity: VectorBaseActivity) {
                     .setTitle(R.string.action_sign_out)
                     .setMessage(R.string.action_sign_out_confirmation_simple)
                     .setPositiveButton(R.string.action_sign_out) { _, _ ->
-                        doSignOut(session)
+                        doSignOut()
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
         }
     }
 
-    private fun doSignOut(session: Session) {
-        // TODO showWaitingView()
-
-        session.signOut(object : MatrixCallback<Unit> {
-
-            override fun onSuccess(data: Unit) {
-                // Start MainActivity in a new task
-                val intent = Intent(activity, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-                activity.startActivity(intent)
-            }
-
-            override fun onFailure(failure: Throwable) {
-                // TODO Notify user, or ignore?
-            }
-
-        })
-
+    private fun doSignOut() {
+        MainActivity.restartApp(activity, clearCache = true, clearCredentials = true)
     }
 }

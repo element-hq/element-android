@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.sync.job
 import com.squareup.moshi.JsonEncodingException
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
@@ -59,7 +60,11 @@ internal class SyncThread(private val syncTask: SyncTask,
             if (state != State.PAUSED) {
                 return@synchronized
             }
-            Timber.v("Unpause sync...")
+            Timber.v("Resume sync...")
+
+            // Retrieve the last token, it may have been deleted in case of a clear cache
+            nextBatch = syncTokenStore.getLastToken()
+
             state = State.RUNNING
             lock.notify()
         }
@@ -97,7 +102,7 @@ internal class SyncThread(private val syncTask: SyncTask,
                     lock.wait()
                 }
             } else {
-                Timber.v("Execute sync request...")
+                Timber.v("Execute sync request with token $nextBatch")
                 val latch = CountDownLatch(1)
                 val params = SyncTask.Params(nextBatch)
                 cancelableTask = syncTask.configureWith(params)
@@ -124,6 +129,13 @@ internal class SyncThread(private val syncTask: SyncTask,
                                     // Wait 10s before retrying
                                     sleep(RETRY_WAIT_TIME_MS)
                                 }
+
+                                if (failure is Failure.ServerError
+                                        && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                                    // No token or invalid token, stop the thread
+                                    state = State.KILLING
+                                }
+
                                 latch.countDown()
                             }
 

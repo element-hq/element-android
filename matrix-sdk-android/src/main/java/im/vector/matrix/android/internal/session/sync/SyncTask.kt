@@ -17,6 +17,11 @@
 package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
+import arrow.core.failure
+import arrow.core.recoverWith
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
+import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
@@ -30,7 +35,8 @@ internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
 internal class DefaultSyncTask(private val syncAPI: SyncAPI,
                                private val filterRepository: FilterRepository,
-                               private val syncResponseHandler: SyncResponseHandler
+                               private val syncResponseHandler: SyncResponseHandler,
+                               private val sessionParamsStore: SessionParamsStore
 ) : SyncTask {
 
 
@@ -46,6 +52,15 @@ internal class DefaultSyncTask(private val syncAPI: SyncAPI,
 
         return executeRequest<SyncResponse> {
             apiCall = syncAPI.sync(requestParams)
+        }.recoverWith { throwable ->
+            // Intercept 401
+            if (throwable is Failure.ServerError
+                    && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
+                sessionParamsStore.delete()
+            }
+
+            // Transmit the throwable
+            throwable.failure()
         }.flatMap { syncResponse ->
             syncResponseHandler.handleResponse(syncResponse, params.token, false)
         }
