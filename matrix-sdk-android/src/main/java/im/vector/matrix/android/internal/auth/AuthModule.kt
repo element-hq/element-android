@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.auth
 
 import android.content.Context
 import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
 import im.vector.matrix.android.internal.auth.db.SessionParamsMapper
 import io.realm.RealmConfiguration
@@ -43,6 +44,7 @@ class AuthModule {
             val mapper = SessionParamsMapper((get()))
             val realmConfiguration = RealmConfiguration.Builder()
                     .name("matrix-sdk-auth.realm")
+                    .modules(AuthRealmModule())
                     .deleteRealmIfMigrationNeeded()
                     .build()
             RealmSessionParamsStore(mapper, realmConfiguration) as SessionParamsStore

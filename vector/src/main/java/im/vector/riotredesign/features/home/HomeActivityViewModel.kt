@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
@@ -58,6 +59,9 @@ class HomeActivityViewModel(state: EmptyState,
         get() = _openRoomLiveData
 
     init {
+        // TODO Move this else where, it's too late when we are here to change the filter
+        session.setFilter(FilterService.FilterPreset.RiotFilter)
+
         val lastSelectedRoomId = roomSelectionRepository.lastSelectedRoom()
         if (lastSelectedRoomId == null || session.getRoom(lastSelectedRoomId) == null) {
             getTheFirstRoomWhenAvailable()

@@ -18,9 +18,9 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.FilterUtil
 
 
 internal interface PaginationTask : Task<PaginationTask.Params, TokenChunkEventPersistor.Result> {
@@ -35,11 +35,12 @@ internal interface PaginationTask : Task<PaginationTask.Params, TokenChunkEventP
 }
 
 internal class DefaultPaginationTask(private val roomAPI: RoomAPI,
+                                     private val filterRepository: FilterRepository,
                                      private val tokenChunkEventPersistor: TokenChunkEventPersistor
 ) : PaginationTask {
 
     override fun execute(params: PaginationTask.Params): Try<TokenChunkEventPersistor.Result> {
-        val filter = FilterUtil.createRoomEventFilter(true)?.toJSONString()
+        val filter = filterRepository.getRoomFilter()
         return executeRequest<PaginationResponse> {
             apiCall = roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)
         }.flatMap { chunk ->

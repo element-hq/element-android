@@ -30,9 +30,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.fragmentViewModel
-import com.jaiselrahman.filepicker.activity.FilePickerActivity
-import com.jaiselrahman.filepicker.config.Configurations
-import com.jaiselrahman.filepicker.model.MediaFile
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
@@ -46,12 +43,7 @@ import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
-import im.vector.riotredesign.core.utils.checkPermissions
-import im.vector.riotredesign.core.utils.openCamera
+import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
@@ -288,24 +280,27 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
     private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
         Timber.v("On send choice clicked: $dialogListItem")
         when (dialogListItem) {
-            is DialogListItem.SendFile       -> {
+            is DialogListItem.SendFile -> {
                 // launchFileIntent
             }
-            is DialogListItem.SendVoice      -> {
+            is DialogListItem.SendVoice -> {
                 //launchAudioRecorderIntent()
             }
-            is DialogListItem.SendSticker    -> {
+            is DialogListItem.SendSticker -> {
                 //startStickerPickerActivity()
             }
-            is DialogListItem.TakePhotoVideo -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                //    launchCamera()
-            }
-            is DialogListItem.TakePhoto      -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
-                openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
-            }
-            is DialogListItem.TakeVideo      -> if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
-                //  launchNativeVideoRecorder()
-            }
+            is DialogListItem.TakePhotoVideo ->
+                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                    //    launchCamera()
+                }
+            is DialogListItem.TakePhoto ->
+                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
+                    openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
+                }
+            is DialogListItem.TakeVideo ->
+                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
+                    //  launchNativeVideoRecorder()
+                }
         }
     }
 
@@ -339,20 +334,20 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
             is SendMessageResult.MessageSent,
-            is SendMessageResult.SlashCommandHandled        -> {
+            is SendMessageResult.SlashCommandHandled -> {
                 // Clear composer
                 composerEditText.text = null
             }
-            is SendMessageResult.SlashCommandError          -> {
+            is SendMessageResult.SlashCommandError -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
             }
-            is SendMessageResult.SlashCommandUnknown        -> {
+            is SendMessageResult.SlashCommandUnknown -> {
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
-            is SendMessageResult.SlashCommandResultOk       -> {
+            is SendMessageResult.SlashCommandResultOk -> {
                 // Ignore
             }
-            is SendMessageResult.SlashCommandResultError    -> {
+            is SendMessageResult.SlashCommandResultError -> {
                 displayCommandError(sendMessageResult.throwable.localizedMessage)
             }
             is SendMessageResult.SlashCommandNotImplemented -> {

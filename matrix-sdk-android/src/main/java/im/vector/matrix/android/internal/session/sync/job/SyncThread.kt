@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.sync.job
 
+import com.squareup.moshi.JsonEncodingException
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.util.Cancelable
@@ -118,7 +119,8 @@ internal class SyncThread(private val syncTask: SyncTask,
                                     Timber.e(failure)
                                 }
 
-                                if (failure !is Failure.NetworkConnection) {
+                                if (failure !is Failure.NetworkConnection
+                                        || failure.cause is JsonEncodingException) {
                                     // Wait 10s before retrying
                                     sleep(RETRY_WAIT_TIME_MS)
                                 }
