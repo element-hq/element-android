@@ -24,12 +24,12 @@ import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 
 class TimelineEventVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?,
-                                                  private val events: List<TimelineEvent>)
+                                                  private val event: TimelineEvent)
     : VectorEpoxyModel.OnVisibilityStateChangedListener {
 
     override fun onVisibilityStateChanged(visibilityState: Int) {
         if (visibilityState == VisibilityState.VISIBLE) {
-            callback?.onEventsVisible(events)
+            callback?.onEventVisible(event)
         }
     }
 

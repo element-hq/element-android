@@ -3,6 +3,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -11,8 +13,8 @@
         layout="@layout/vector_message_merge_avatar_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
@@ -25,18 +27,17 @@
         android:id="@+id/itemMergedExpandTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:paddingRight="8dp"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:text="@string/merged_events_expand"
         android:textColor="?attr/colorAccent"
         android:textSize="14sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/itemMergedAvatarListView"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/itemMergedSeparatorView"
@@ -60,14 +61,5 @@
         app:layout_constraintStart_toStartOf="@id/itemMergedAvatarListView"
         app:layout_constraintTop_toBottomOf="@id/itemMergedSeparatorView"
         tools:text="3 membership changes" />
-
-    <LinearLayout
-        android:id="@+id/epoxy_model_group_child_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemMergedSummaryTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

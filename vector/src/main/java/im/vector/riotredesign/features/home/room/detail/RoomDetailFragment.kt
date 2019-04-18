@@ -376,8 +376,8 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         homePermalinkHandler.launch(url)
     }
 
-    override fun onEventsVisible(events: List<TimelineEvent>) {
-        roomDetailViewModel.process(RoomDetailActions.EventsDisplayed(events))
+    override fun onEventVisible(event: TimelineEvent) {
+        roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event))
     }
 
     override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {

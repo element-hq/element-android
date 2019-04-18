@@ -44,7 +44,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private val room = session.getRoom(initialState.roomId)!!
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
-    private val displayedEventsObservable = BehaviorRelay.create<RoomDetailActions.EventsDisplayed>()
+    private val displayedEventsObservable = BehaviorRelay.create<RoomDetailActions.EventDisplayed>()
     private val timeline = room.createTimeline(eventId, TimelineDisplayableEvents.DISPLAYABLE_TYPES)
 
     companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
@@ -69,11 +69,11 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     fun process(action: RoomDetailActions) {
         when (action) {
-            is RoomDetailActions.SendMessage     -> handleSendMessage(action)
-            is RoomDetailActions.IsDisplayed     -> handleIsDisplayed()
-            is RoomDetailActions.SendMedia       -> handleSendMedia(action)
-            is RoomDetailActions.EventsDisplayed -> handleEventDisplayed(action)
-            is RoomDetailActions.LoadMore        -> handleLoadMore(action)
+            is RoomDetailActions.SendMessage    -> handleSendMessage(action)
+            is RoomDetailActions.IsDisplayed    -> handleIsDisplayed()
+            is RoomDetailActions.SendMedia      -> handleSendMedia(action)
+            is RoomDetailActions.EventDisplayed -> handleEventDisplayed(action)
+            is RoomDetailActions.LoadMore       -> handleLoadMore(action)
         }
     }
 
@@ -196,7 +196,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         room.sendMedias(attachments)
     }
 
-    private fun handleEventDisplayed(action: RoomDetailActions.EventsDisplayed) {
+    private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
         displayedEventsObservable.accept(action)
     }
 
@@ -215,8 +215,8 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                 .buffer(1, TimeUnit.SECONDS)
                 .filter { it.isNotEmpty() }
                 .subscribeBy(onNext = { actions ->
-                    val mostRecentEvent = actions.map { it.events }.flatten().maxBy { it.displayIndex }
-                    mostRecentEvent?.root?.eventId?.let { eventId ->
+                    val mostRecentEvent = actions.maxBy { it.event.displayIndex }
+                    mostRecentEvent?.event?.root?.eventId?.let { eventId ->
                         room.setReadReceipt(eventId, callback = object : MatrixCallback<Unit> {})
                     }
                 })

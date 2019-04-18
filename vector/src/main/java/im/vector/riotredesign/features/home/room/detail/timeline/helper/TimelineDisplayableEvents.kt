@@ -18,6 +18,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline.helper
 
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.core.extensions.localDateTime
 
 object TimelineDisplayableEvents {
 
@@ -58,16 +59,34 @@ fun List<TimelineEvent>.nextSameTypeEvents(index: Int, minSize: Int): List<Timel
     }
     val timelineEvent = this[index]
     val nextSubList = subList(index + 1, size)
-    val indexOfFirstDifferentEventType = nextSubList.indexOfFirst { it.root.type != timelineEvent.root.type }
-    val sameTypeEvents = if (indexOfFirstDifferentEventType == -1) {
+    val indexOfNextDay = nextSubList.indexOfFirst {
+        val date = it.root.localDateTime()
+        val nextDate = timelineEvent.root.localDateTime()
+        date.toLocalDate() != nextDate.toLocalDate()
+    }
+    val nextSameDayEvents = if (indexOfNextDay == -1) {
         nextSubList
     } else {
-        nextSubList.subList(0, indexOfFirstDifferentEventType)
+        nextSubList.subList(0, indexOfNextDay)
+    }
+    val indexOfFirstDifferentEventType = nextSameDayEvents.indexOfFirst { it.root.type != timelineEvent.root.type }
+    val sameTypeEvents = if (indexOfFirstDifferentEventType == -1) {
+        nextSameDayEvents
+    } else {
+        nextSameDayEvents.subList(0, indexOfFirstDifferentEventType)
     }
     if (sameTypeEvents.size < minSize) {
         return emptyList()
     }
     return sameTypeEvents
+}
+
+fun List<TimelineEvent>.prevSameTypeEvents(index: Int, minSize: Int): List<TimelineEvent> {
+    val prevSub = subList(0, index + 1)
+    return prevSub
+            .reversed()
+            .nextSameTypeEvents(0, minSize)
+            .reversed()
 }
 
 fun List<TimelineEvent>.nextDisplayableEvent(index: Int): TimelineEvent? {
