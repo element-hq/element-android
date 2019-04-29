@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">reactions</string>
+    <string name="title_activity_emoji_reaction_picker">Reactions</string>
+</resources>
