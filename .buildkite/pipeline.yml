@@ -1,0 +1,27 @@
+# Use Docker file from https://hub.docker.com/r/runmymind/docker-android-sdk
+# Last docker plugin version can be found here:
+# https://github.com/buildkite-plugins/docker-buildkite-plugin/releases
+
+# Build debug version of the RiotX application, from the develop branch and the features branches
+
+steps:
+- label: "Assemble Debug version"
+  agents:
+    # We use a medium sized instance instead of the normal small ones because
+    # gradle build is long
+    queue: "medium"
+  commands:
+  - "./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
+  - "./gradlew lintFdroidRelease assembleFdroidDebug --stacktrace"
+  artifact_paths:
+  - "vector/build/outputs/apk/gplay/debug/*.apk"
+  - "vector/build/outputs/apk/fdroid/debug/*.apk"
+  branches: "develop feature/*"
+  plugins:
+  - docker#v3.1.0:
+      image: "runmymind/docker-android-sdk"
+
+# Code quality
+
+- label: "Code quality"
+  command: "./tools/check/check_code_quality.sh"
