@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.RoomMemberEventHelper
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 
@@ -31,18 +32,20 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 class RoomMemberItemFactory(private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent): NoticeItem? {
-        val roomMember = event.roomMember ?: return null
-        val noticeText = buildRoomMemberNotice(event) ?: return null
+        val eventContent: RoomMember? = event.root.content.toModel()
+        val prevEventContent: RoomMember? = event.root.prevContent.toModel()
+        val noticeText = buildRoomMemberNotice(event, eventContent, prevEventContent) ?: return null
+        val senderAvatar = RoomMemberEventHelper.senderAvatar(eventContent, prevEventContent, event)
+        val senderName = RoomMemberEventHelper.senderName(eventContent, prevEventContent, event)
+
         return NoticeItem_()
                 .userId(event.root.sender ?: "")
                 .noticeText(noticeText)
-                .avatarUrl(roomMember.avatarUrl)
-                .memberName(roomMember.displayName)
+                .avatarUrl(senderAvatar)
+                .memberName(senderName)
     }
 
-    private fun buildRoomMemberNotice(event: TimelineEvent): String? {
-        val eventContent: RoomMember? = event.root.content.toModel()
-        val prevEventContent: RoomMember? = event.root.prevContent.toModel()
+    private fun buildRoomMemberNotice(event: TimelineEvent, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
         val isMembershipEvent = prevEventContent?.membership != eventContent?.membership
         return if (isMembershipEvent) {
             buildMembershipNotice(event, eventContent, prevEventContent)
@@ -62,7 +65,7 @@ class RoomMemberItemFactory(private val stringProvider: StringProvider) {
                     stringProvider.getString(R.string.notice_display_name_removed, event.root.sender, prevEventContent?.displayName)
                 else                                          ->
                     stringProvider.getString(R.string.notice_display_name_changed_from,
-                            event.root.sender, prevEventContent?.displayName, eventContent?.displayName)
+                                             event.root.sender, prevEventContent?.displayName, eventContent?.displayName)
             }
             displayText.append(displayNameText)
         }
@@ -72,7 +75,7 @@ class RoomMemberItemFactory(private val stringProvider: StringProvider) {
                 displayText.append(" ")
                 stringProvider.getString(R.string.notice_avatar_changed_too)
             } else {
-                stringProvider.getString(R.string.notice_avatar_url_changed, event.roomMember?.displayName)
+                stringProvider.getString(R.string.notice_avatar_url_changed, event.senderName)
             }
             displayText.append(displayAvatarText)
         }
@@ -80,16 +83,16 @@ class RoomMemberItemFactory(private val stringProvider: StringProvider) {
     }
 
     private fun buildMembershipNotice(event: TimelineEvent, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
-        val senderDisplayName = event.roomMember?.displayName ?: return null
+        val senderDisplayName = event.senderName ?: event.root.sender
         val targetDisplayName = eventContent?.displayName ?: event.root.sender
         return when {
             Membership.INVITE == eventContent?.membership -> {
                 // TODO get userId
-                val selfUserId: String = ""
+                val selfUserId = ""
                 when {
                     eventContent.thirdPartyInvite != null             ->
                         stringProvider.getString(R.string.notice_room_third_party_registered_invite,
-                                targetDisplayName, eventContent.thirdPartyInvite?.displayName)
+                                                 targetDisplayName, eventContent.thirdPartyInvite?.displayName)
                     TextUtils.equals(event.root.stateKey, selfUserId) ->
                         stringProvider.getString(R.string.notice_room_invite_you, senderDisplayName)
                     event.root.stateKey.isNullOrEmpty()               ->
@@ -106,7 +109,8 @@ class RoomMemberItemFactory(private val stringProvider: StringProvider) {
                     if (prevEventContent?.membership == Membership.INVITE) {
                         stringProvider.getString(R.string.notice_room_reject, senderDisplayName)
                     } else {
-                        stringProvider.getString(R.string.notice_room_leave, senderDisplayName)
+                        val leftDisplayName = RoomMemberEventHelper.senderName(eventContent, prevEventContent, event)
+                        stringProvider.getString(R.string.notice_room_leave, leftDisplayName)
                     }
                 } else if (prevEventContent?.membership == Membership.INVITE) {
                     stringProvider.getString(R.string.notice_room_withdraw, senderDisplayName, targetDisplayName)

@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
@@ -33,7 +35,15 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.LoadingItemModel_
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.*
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.RoomMemberEventHelper
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineAsyncHelper
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.canBeMerged
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.nextDisplayableEvent
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.prevSameTypeEvents
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MergedHeaderItem
@@ -160,8 +170,8 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
             // Should be build if not cached or if cached but contains mergedHeader or formattedDay
             // We then are sure we always have items up to date.
             if (modelCache[position] == null
-                    || modelCache[position]?.mergedHeaderModel != null
-                    || modelCache[position]?.formattedDayModel != null) {
+                || modelCache[position]?.mergedHeaderModel != null
+                || modelCache[position]?.formattedDayModel != null) {
                 modelCache[position] = buildItemModels(position, currentSnapshot)
             }
         }
@@ -217,24 +227,32 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
             if (prevSameTypeEvents.isEmpty()) {
                 null
             } else {
-                val mergedEvents = (listOf(event) + prevSameTypeEvents)
-                val mergedData = mergedEvents.map {
-                    val roomMember = event.roomMember
+                val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
+                val mergedData = mergedEvents.map { mergedEvent ->
+                    val eventContent: RoomMember? = mergedEvent.root.content.toModel()
+                    val prevEventContent: RoomMember? = mergedEvent.root.prevContent.toModel()
+                    val senderAvatar = RoomMemberEventHelper.senderAvatar(eventContent, prevEventContent, mergedEvent)
+                    val senderName = RoomMemberEventHelper.senderName(eventContent, prevEventContent, mergedEvent)
                     MergedHeaderItem.Data(
-                            userId = event.root.sender ?: "",
-                            avatarUrl = roomMember?.avatarUrl,
-                            memberName = roomMember?.displayName ?: "",
-                            eventId = it.localId
+                            userId = mergedEvent.root.sender ?: "",
+                            avatarUrl = senderAvatar,
+                            memberName = senderName ?: "",
+                            eventId = mergedEvent.localId
                     )
                 }
                 val mergedEventIds = mergedEvents.map { it.localId }
-                val mergeId = mergedEventIds.joinToString(separator = "_") { it }
-                val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { true }
+                // We try to find if one of the item id were used as mergeItemCollapseStates key
+                // => handle case where paginating from mergeable events and we get more
+                val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
+                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
+                                           ?: true
+                val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
                 if (isCollapsed) {
                     collapsedEventIds.addAll(mergedEventIds)
                 } else {
                     collapsedEventIds.removeAll(mergedEventIds)
                 }
+                val mergeId = mergedEventIds.joinToString(separator = "_") { it }
                 MergedHeaderItem(isCollapsed, mergeId, mergedData) {
                     mergeItemCollapseStates[event.localId] = it
                     requestModelBuild()

@@ -31,15 +31,14 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 class RoomHistoryVisibilityItemFactory(private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent): NoticeItem? {
-        val roomMember = event.roomMember ?: return null
-        val noticeText = buildNoticeText(event.root, roomMember) ?: return null
+        val noticeText = buildNoticeText(event.root, event.senderName) ?: return null
         return NoticeItem_()
                 .noticeText(noticeText)
-                .avatarUrl(roomMember.avatarUrl)
-                .memberName(roomMember.displayName)
+                .avatarUrl(event.senderAvatar)
+                .memberName(event.senderName)
     }
 
-    private fun buildNoticeText(event: Event, roomMember: RoomMember): CharSequence? {
+    private fun buildNoticeText(event: Event, senderName: String?): CharSequence? {
         val content = event.content.toModel<RoomHistoryVisibilityContent>() ?: return null
         val formattedVisibility = when (content.historyVisibility) {
             RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
@@ -47,7 +46,7 @@ class RoomHistoryVisibilityItemFactory(private val stringProvider: StringProvide
             RoomHistoryVisibility.JOINED         -> stringProvider.getString(R.string.notice_room_visibility_joined)
             RoomHistoryVisibility.WORLD_READABLE -> stringProvider.getString(R.string.notice_room_visibility_world_readable)
         }
-        return stringProvider.getString(R.string.notice_made_future_room_visibility, roomMember.displayName, formattedVisibility)
+        return stringProvider.getString(R.string.notice_made_future_room_visibility, senderName, formattedVisibility)
     }
 
 

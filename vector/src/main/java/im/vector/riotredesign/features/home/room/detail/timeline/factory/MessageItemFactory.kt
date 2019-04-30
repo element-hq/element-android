@@ -65,8 +65,6 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
     ): VectorEpoxyModel<*>? {
 
         val eventId = event.root.eventId ?: return null
-        val roomMember = event.roomMember
-        val nextRoomMember = nextEvent?.roomMember
 
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
@@ -75,14 +73,15 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                                       ?: false
 
         val showInformation = addDaySeparator
-                              || nextRoomMember != roomMember
+                              || event.senderAvatar != nextEvent?.senderAvatar
+                              || event.senderName != nextEvent?.senderName
                               || nextEvent?.root?.type != EventType.MESSAGE
                               || isNextMessageReceivedMoreThanOneHourAgo
 
         val messageContent: MessageContent = event.root.content.toModel() ?: return null
         val time = timelineDateFormatter.formatMessageHour(date)
-        val avatarUrl = roomMember?.avatarUrl
-        val memberName = roomMember?.displayName ?: event.root.sender ?: ""
+        val avatarUrl = event.senderAvatar
+        val memberName = event.senderName ?: event.root.sender ?: ""
         val formattedMemberName = span(memberName) {
             textColor = colorProvider.getColor(getColorFor(event.root.sender ?: ""))
         }

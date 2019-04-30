@@ -48,6 +48,18 @@ internal class RoomMembers(private val realm: Realm,
                 }
     }
 
+    fun isUniqueDisplayName(displayName: String?): Boolean {
+        if(displayName.isNullOrEmpty()){
+            return true
+        }
+        return EventEntity
+                .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
+                .contains(EventEntityFields.CONTENT, displayName)
+                .distinct(EventEntityFields.STATE_KEY)
+                .findAll()
+                .size == 1
+    }
+
     fun queryRoomMembersEvent(): RealmQuery<EventEntity> {
         return EventEntity
                 .where(realm, roomId, EventType.STATE_ROOM_MEMBER)

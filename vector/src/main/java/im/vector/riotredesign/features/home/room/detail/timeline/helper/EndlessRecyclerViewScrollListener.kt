@@ -34,28 +34,18 @@ class EndlessRecyclerViewScrollListener(private val layoutManager: LinearLayoutM
     // This happens many times a second during a scroll, so be wary of the code you place here.
     // We are given a few useful parameters to help us work out if we need to load some more data,
     // but first we check if we are waiting for the previous load to finish.
+
     override fun onScrolled(view: RecyclerView, dx: Int, dy: Int) {
         val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
         val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
         val totalItemCount = layoutManager.itemCount
 
-        // The minimum amount of items to have below your current scroll position
-        // before loading more.
-        // If the total item count is zero and the previous isn't, assume the
-        // list is invalidated and should be reset back to initial state
-        if (totalItemCount < previousTotalItemCount) {
-            previousTotalItemCount = totalItemCount
-            if (totalItemCount == 0) {
-                loadingForwards = true
-                loadingBackwards = true
-            }
-        }
-        // If it’s still loading, we check to see if the dataset count has
+        // We check to see if the dataset count has
         // changed, if so we conclude it has finished loading
-        if (totalItemCount > previousTotalItemCount) {
+        if (totalItemCount != previousTotalItemCount) {
+            previousTotalItemCount = totalItemCount
             loadingBackwards = false
             loadingForwards = false
-            previousTotalItemCount = totalItemCount
         }
         // If it isn’t currently loading, we check to see if we have reached
         // the visibleThreshold and need to reload more data.
