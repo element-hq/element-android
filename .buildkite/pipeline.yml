@@ -18,8 +18,8 @@ steps:
       - "vector/build/outputs/apk/fdroid/debug/*.apk"
     branches: "develop feature/*"
     plugins:
-    - docker#v3.1.0:
-      image: "runmymind/docker-android-sdk"
+      - docker#v3.1.0:
+        image: "runmymind/docker-android-sdk"
 
   - label: "Build Google Play unsigned APK"
     agents:
@@ -32,8 +32,8 @@ steps:
       - "vector/build/outputs/apk/gplay/release/*.apk"
     branches: "master"
     plugins:
-    - docker#v3.1.0:
-      image: "runmymind/docker-android-sdk"
+      - docker#v3.1.0:
+        image: "runmymind/docker-android-sdk"
 
   # Code quality
 
