@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
+import android.media.MediaMetadataRetriever
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
@@ -30,7 +31,9 @@ import im.vector.matrix.android.api.session.room.model.message.MessageImageConte
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.ThumbnailInfo
 import im.vector.matrix.android.api.session.room.model.message.VideoInfo
+import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 
 internal class LocalEchoEventFactory(private val credentials: Credentials) {
 
@@ -53,7 +56,7 @@ internal class LocalEchoEventFactory(private val credentials: Credentials) {
                 type = MessageType.MSGTYPE_IMAGE,
                 body = attachment.name ?: "image",
                 info = ImageInfo(
-                        mimeType = attachment.mimeType ?: "image/png",
+                        mimeType = attachment.mimeType,
                         width = attachment.width?.toInt() ?: 0,
                         height = attachment.height?.toInt() ?: 0,
                         size = attachment.size.toInt()
@@ -64,15 +67,35 @@ internal class LocalEchoEventFactory(private val credentials: Credentials) {
     }
 
     private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData): Event {
+        val mediaDataRetriever = MediaMetadataRetriever()
+        mediaDataRetriever.setDataSource(attachment.path)
+
+        // Use frame to calculate height and width as we are sure to get the right ones
+        val firstFrame = mediaDataRetriever.frameAtTime
+        val height = firstFrame.height
+        val width = firstFrame.width
+        mediaDataRetriever.release()
+
+        val thumbnailInfo = ThumbnailExtractor.extractThumbnail(attachment)?.let {
+            ThumbnailInfo(
+                    width = it.width,
+                    height = it.height,
+                    size = it.size,
+                    mimeType = it.mimeType
+            )
+        }
         val content = MessageVideoContent(
                 type = MessageType.MSGTYPE_VIDEO,
                 body = attachment.name ?: "video",
                 info = VideoInfo(
-                        mimeType = attachment.mimeType ?: "video/mpeg",
-                        width = attachment.width?.toInt() ?: 0,
-                        height = attachment.height?.toInt() ?: 0,
+                        mimeType = attachment.mimeType,
+                        width = width,
+                        height = height,
                         size = attachment.size,
-                        duration = attachment.duration?.toInt() ?: 0
+                        duration = attachment.duration?.toInt() ?: 0,
+                        // Glide will be able to use the local path and extract a thumbnail.
+                        thumbnailUrl = attachment.path,
+                        thumbnailInfo = thumbnailInfo
                 ),
                 url = attachment.path
         )

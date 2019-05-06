@@ -29,7 +29,8 @@ data class TimelineEvent(
         val root: Event,
         val localId: String,
         val displayIndex: Int,
-        val roomMember: RoomMember?,
+        val senderName: String?,
+        val senderAvatar: String?,
         val sendState: SendState
 ) {
 

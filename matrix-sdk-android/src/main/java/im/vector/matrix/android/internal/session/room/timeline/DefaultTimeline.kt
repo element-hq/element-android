@@ -27,14 +27,24 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.api.util.addTo
-import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.ChunkEntityFields
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
-import io.realm.*
+import io.realm.OrderedCollectionChangeSet
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import io.realm.Sort
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -87,9 +97,16 @@ internal class DefaultTimeline(
 
 
     private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<EventEntity>> { _, changeSet ->
-        if (changeSet.state == OrderedCollectionChangeSet.State.INITIAL) {
+        if (changeSet.state == OrderedCollectionChangeSet.State.INITIAL ) {
             handleInitialLoad()
         } else {
+            // If changeSet has deletion we are having a gap, so we clear everything
+            if(changeSet.deletionRanges.isNotEmpty()){
+                prevDisplayIndex = DISPLAY_INDEX_UNKNOWN
+                nextDisplayIndex = DISPLAY_INDEX_UNKNOWN
+                builtEvents.clear()
+                timelineEventFactory.clear()
+            }
             changeSet.insertionRanges.forEach { range ->
                 val (startDisplayIndex, direction) = if (range.startIndex == 0) {
                     Pair(liveEvents[range.length - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
@@ -108,6 +125,7 @@ internal class DefaultTimeline(
                     buildTimelineEvents(startDisplayIndex, direction, range.length.toLong())
                     postSnapshot()
                 }
+
             }
         }
     }
@@ -298,9 +316,9 @@ internal class DefaultTimeline(
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
         val token = getTokenLive(direction) ?: return
         val params = PaginationTask.Params(roomId = roomId,
-                from = token,
-                direction = direction.toPaginationDirection(),
-                limit = limit)
+                                           from = token,
+                                           direction = direction.toPaginationDirection(),
+                                           limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         paginationTask.configureWith(params)

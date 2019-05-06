@@ -24,27 +24,27 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
-import im.vector.riotredesign.features.media.MediaContentRenderer
+import im.vector.riotredesign.features.media.ImageContentRenderer
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_image_message)
-abstract class MessageImageItem : AbsMessageItem<MessageImageItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_timeline_event_image_video_message)
+abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
 
-    @EpoxyAttribute lateinit var mediaData: MediaContentRenderer.Data
-    @EpoxyAttribute lateinit var eventId: String
+    @EpoxyAttribute lateinit var mediaData: ImageContentRenderer.Data
     @EpoxyAttribute override lateinit var informationData: MessageInformationData
+    @EpoxyAttribute var playable: Boolean = false
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        MediaContentRenderer.render(mediaData, MediaContentRenderer.Mode.THUMBNAIL, holder.imageView)
-        ContentUploadStateTrackerBinder.bind(eventId, mediaData, holder.progressLayout)
+        ImageContentRenderer.render(mediaData, ImageContentRenderer.Mode.THUMBNAIL, holder.imageView)
+        ContentUploadStateTrackerBinder.bind(informationData.eventId, mediaData, holder.progressLayout)
         holder.imageView.setOnClickListener(clickListener)
-        holder.imageView.isEnabled = !mediaData.isLocalFile()
-        holder.imageView.alpha = if (mediaData.isLocalFile()) 0.5f else 1f
+        holder.imageView.renderSendState()
+        holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
     }
 
     override fun unbind(holder: Holder) {
-        ContentUploadStateTrackerBinder.unbind(eventId)
+        ContentUploadStateTrackerBinder.unbind(informationData.eventId)
         super.unbind(holder)
     }
 
@@ -52,8 +52,9 @@ abstract class MessageImageItem : AbsMessageItem<MessageImageItem.Holder>() {
         override val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         override val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         override val timeView by bind<TextView>(R.id.messageTimeView)
-        val progressLayout by bind<ViewGroup>(R.id.messageImageUploadProgressLayout)
-        val imageView by bind<ImageView>(R.id.messageImageView)
+        val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
+        val imageView by bind<ImageView>(R.id.messageThumbnailView)
+        val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
     }
 
 }

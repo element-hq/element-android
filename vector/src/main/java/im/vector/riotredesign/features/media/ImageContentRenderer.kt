@@ -27,7 +27,7 @@ import im.vector.riotredesign.core.glide.GlideApp
 import kotlinx.android.parcel.Parcelize
 import java.io.File
 
-object MediaContentRenderer {
+object ImageContentRenderer {
 
     @Parcelize
     data class Data(
@@ -37,8 +37,8 @@ object MediaContentRenderer {
             val maxHeight: Int,
             val width: Int?,
             val maxWidth: Int,
-            val orientation: Int?,
-            val rotation: Int?
+            val orientation: Int? = null,
+            val rotation: Int? = null
     ) : Parcelable {
 
         fun isLocalFile(): Boolean {
@@ -66,6 +66,7 @@ object MediaContentRenderer {
         GlideApp
                 .with(imageView)
                 .load(resolvedUrl)
+                .dontAnimate()
                 .thumbnail(0.3f)
                 .into(imageView)
     }
@@ -73,16 +74,12 @@ object MediaContentRenderer {
     fun render(data: Data, imageView: BigImageView) {
         val (width, height) = processSize(data, Mode.THUMBNAIL)
         val contentUrlResolver = Matrix.getInstance().currentSession!!.contentUrlResolver()
-        if (data.isLocalFile()) {
-            imageView.showImage(Uri.parse(data.url))
-        } else {
-            val fullSize = contentUrlResolver.resolveFullSize(data.url)
-            val thumbnail = contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-            imageView.showImage(
-                    Uri.parse(thumbnail),
-                    Uri.parse(fullSize)
-            )
-        }
+        val fullSize = contentUrlResolver.resolveFullSize(data.url)
+        val thumbnail = contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+        imageView.showImage(
+                Uri.parse(thumbnail),
+                Uri.parse(fullSize)
+        )
     }
 
     private fun processSize(data: Data, mode: Mode): Pair<Int, Int> {

@@ -35,12 +35,17 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>()
             holder.timeView.visibility = View.VISIBLE
             holder.timeView.text = informationData.time
             holder.memberNameView.text = informationData.memberName
-            AvatarRenderer.render(informationData.avatarUrl, informationData.memberName?.toString(), holder.avatarImageView)
+            AvatarRenderer.render(informationData.avatarUrl, informationData.senderId, informationData.memberName?.toString(), holder.avatarImageView)
         } else {
             holder.avatarImageView.visibility = View.GONE
             holder.memberNameView.visibility = View.GONE
             holder.timeView.visibility = View.GONE
         }
+    }
+
+    protected fun View.renderSendState() {
+        isClickable = informationData.sendState.isSent()
+        alpha = if (informationData.sendState.isSent()) 1f else 0.5f
     }
 
     abstract class Holder : VectorEpoxyHolder() {

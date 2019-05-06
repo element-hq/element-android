@@ -29,6 +29,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
 
     @EpoxyAttribute lateinit var groupName: CharSequence
+    @EpoxyAttribute lateinit var groupId: String
     @EpoxyAttribute var avatarUrl: String? = null
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
@@ -37,7 +38,7 @@ abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
         super.bind(holder)
         holder.rootView.isSelected = selected
         holder.rootView.setOnClickListener { listener?.invoke() }
-        AvatarRenderer.render(avatarUrl, groupName.toString(), holder.avatarImageView)
+        AvatarRenderer.render(avatarUrl, groupId, groupName.toString(), holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

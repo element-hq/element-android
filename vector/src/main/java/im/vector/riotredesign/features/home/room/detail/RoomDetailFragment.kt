@@ -37,6 +37,10 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
@@ -60,8 +64,10 @@ import im.vector.riotredesign.features.home.room.detail.composer.TextComposerVie
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotredesign.features.html.PillImageSpan
-import im.vector.riotredesign.features.media.MediaContentRenderer
-import im.vector.riotredesign.features.media.MediaViewerActivity
+import im.vector.riotredesign.features.media.ImageContentRenderer
+import im.vector.riotredesign.features.media.ImageMediaViewerActivity
+import im.vector.riotredesign.features.media.VideoContentRenderer
+import im.vector.riotredesign.features.media.VideoMediaViewerActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
@@ -367,7 +373,7 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
                 .show()
     }
 
-// TimelineEventController.Callback ************************************************************
+    // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String) {
         homePermalinkHandler.launch(url)
@@ -377,12 +383,25 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event))
     }
 
-    override fun onMediaClicked(mediaData: MediaContentRenderer.Data, view: View) {
-        val intent = MediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
+    override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {
+        val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
         startActivity(intent)
     }
 
-// AutocompleteUserPresenter.Callback
+    override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
+        val intent = VideoMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
+        startActivity(intent)
+    }
+
+    override fun onFileMessageClicked(messageFileContent: MessageFileContent) {
+        vectorBaseActivity.notImplemented()
+    }
+
+    override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {
+        vectorBaseActivity.notImplemented()
+    }
+
+    // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))

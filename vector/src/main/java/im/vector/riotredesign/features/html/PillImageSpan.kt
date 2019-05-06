@@ -52,7 +52,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
     @UiThread
     fun bind(textView: TextView) {
         tv = WeakReference(textView)
-        AvatarRenderer.render(context, glideRequests, user?.avatarUrl, displayName, target)
+        AvatarRenderer.render(context, glideRequests, user?.avatarUrl, userId, displayName, target)
     }
 
     // ReplacementSpan *****************************************************************************
@@ -105,7 +105,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
             textStartPadding = textPadding
             setChipMinHeightResource(R.dimen.pill_min_height)
             setChipIconSizeResource(R.dimen.pill_avatar_size)
-            chipIcon = AvatarRenderer.getPlaceholderDrawable(context, displayName)
+            chipIcon = AvatarRenderer.getPlaceholderDrawable(context, userId, displayName)
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
     }

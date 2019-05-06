@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2019 New Vector Ltd
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -43,28 +58,59 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:textColor="@color/brown_grey"
         android:duplicateParentState="true"
+        android:textColor="@color/brown_grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintTop_toTopOf="@id/messageMemberNameView"
         tools:text="@tools:sample/date/hhmm" />
 
-    <TextView
-        android:id="@+id/messageTextView"
+    <ImageView
+        android:id="@+id/messageThumbnailView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="64dp"
         android:layout_marginLeft="64dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:layout_marginBottom="8dp"
         android:duplicateParentState="true"
-        android:textColor="@color/dark_grey"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/messageMemberNameView"
-        tools:text="Alright finished work, heading there in about 20 mins… Ping me when you’re outside" />
+        tools:layout_height="300dp" />
+
+    <ImageView
+        android:id="@+id/messageMediaPlayView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_material_play_circle"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/messageThumbnailView"
+        app:layout_constraintEnd_toEndOf="@id/messageThumbnailView"
+        app:layout_constraintStart_toStartOf="@id/messageThumbnailView"
+        app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
+        tools:visibility="visible" />
+
+
+    <include
+        android:id="@+id/messageMediaUploadProgressLayout"
+        layout="@layout/media_upload_download_progress_layout"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messageThumbnailView"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

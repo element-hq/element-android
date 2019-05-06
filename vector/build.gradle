@@ -187,6 +187,7 @@ dependencies {
     implementation "com.github.piasy:GlideImageViewFactory:$big_image_viewer_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
+    implementation 'com.danikula:videocache:2.7.1'
 
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.2@aar'

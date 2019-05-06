@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.session.room.invite.InviteTask
 import im.vector.matrix.android.internal.session.room.members.DefaultRoomMembersService
 import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
-import im.vector.matrix.android.internal.session.room.members.RoomMemberExtractor
+import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
@@ -45,7 +45,7 @@ internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
                            private val taskExecutor: TaskExecutor) {
 
     fun instantiate(roomId: String): Room {
-        val roomMemberExtractor = RoomMemberExtractor(roomId)
+        val roomMemberExtractor = SenderRoomMemberExtractor(roomId)
         val timelineEventFactory = TimelineEventFactory(roomMemberExtractor)
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask)
         val sendService = DefaultSendService(roomId, eventFactory, monarchy)

@@ -57,7 +57,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
         } catch (e: Exception) {
             defaultItemFactory.create(event, e)
         }
-        return computedModel ?: EmptyItem_()
+        return (computedModel ?: EmptyItem_())
     }
 
 }

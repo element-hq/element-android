@@ -79,6 +79,7 @@ class RoomSummaryController(private val stringProvider: StringProvider
 
             roomSummaryItem {
                 id(roomSummary.roomId)
+                roomId(roomSummary.roomId)
                 roomName(roomSummary.displayName)
                 avatarUrl(roomSummary.avatarUrl)
                 selected(isSelected)

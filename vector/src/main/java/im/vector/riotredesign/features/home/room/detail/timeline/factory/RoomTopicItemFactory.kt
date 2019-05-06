@@ -28,20 +28,16 @@ class RoomTopicItemFactory(private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent): NoticeItem? {
 
-        val content: RoomTopicContent? = event.root.content.toModel()
-        val roomMember = event.roomMember
-        if (content == null || roomMember == null) {
-            return null
-        }
+        val content: RoomTopicContent = event.root.content.toModel() ?: return null
         val text = if (content.topic.isNullOrEmpty()) {
-            stringProvider.getString(R.string.notice_room_topic_removed, roomMember.displayName)
+            stringProvider.getString(R.string.notice_room_topic_removed, event.senderName)
         } else {
-            stringProvider.getString(R.string.notice_room_topic_changed, roomMember.displayName, content.topic)
+            stringProvider.getString(R.string.notice_room_topic_changed, event.senderName, content.topic)
         }
         return NoticeItem_()
                 .noticeText(text)
-                .avatarUrl(roomMember.avatarUrl)
-                .memberName(roomMember.displayName)
+                .avatarUrl(event.senderAvatar)
+                .memberName(event.senderName)
     }
 
 

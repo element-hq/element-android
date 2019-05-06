@@ -35,6 +35,7 @@ class GroupSummaryController : TypedEpoxyController<GroupListViewState>() {
             val isSelected = groupSummary.groupId == selected?.groupId
             groupSummaryItem {
                 id(groupSummary.groupId)
+                groupId(groupSummary.groupId)
                 groupName(groupSummary.displayName)
                 selected(isSelected)
                 avatarUrl(groupSummary.avatarUrl)

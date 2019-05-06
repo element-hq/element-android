@@ -30,27 +30,26 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 class CallItemFactory(private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent): NoticeItem? {
-        val roomMember = event.roomMember ?: return null
-        val text = buildNoticeText(event.root, roomMember) ?: return null
+        val text = buildNoticeText(event.root, event.senderName) ?: return null
         return NoticeItem_()
                 .noticeText(text)
-                .avatarUrl(roomMember.avatarUrl)
-                .memberName(roomMember.displayName)
+                .avatarUrl(event.senderAvatar)
+                .memberName(event.senderName)
     }
 
-    private fun buildNoticeText(event: Event, roomMember: RoomMember): CharSequence? {
+    private fun buildNoticeText(event: Event, senderName: String?): CharSequence? {
         return when {
             EventType.CALL_INVITE == event.type -> {
                 val content = event.content.toModel<CallInviteContent>() ?: return null
                 val isVideoCall = content.offer.sdp == CallInviteContent.Offer.SDP_VIDEO
                 return if (isVideoCall) {
-                    stringProvider.getString(R.string.notice_placed_video_call, roomMember.displayName)
+                    stringProvider.getString(R.string.notice_placed_video_call, senderName)
                 } else {
-                    stringProvider.getString(R.string.notice_placed_voice_call, roomMember.displayName)
+                    stringProvider.getString(R.string.notice_placed_voice_call, senderName)
                 }
             }
-            EventType.CALL_ANSWER == event.type -> stringProvider.getString(R.string.notice_answered_call, roomMember.displayName)
-            EventType.CALL_HANGUP == event.type -> stringProvider.getString(R.string.notice_ended_call, roomMember.displayName)
+            EventType.CALL_ANSWER == event.type -> stringProvider.getString(R.string.notice_answered_call, senderName)
+            EventType.CALL_HANGUP == event.type -> stringProvider.getString(R.string.notice_ended_call, senderName)
             else                                -> null
         }
 

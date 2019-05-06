@@ -56,14 +56,10 @@ internal fun ChunkEntity.merge(roomId: String,
     if (direction == PaginationDirection.FORWARDS) {
         this.nextToken = chunkToMerge.nextToken
         this.isLastForward = chunkToMerge.isLastForward
-        this.forwardsStateIndex = chunkToMerge.forwardsStateIndex
-        this.forwardsDisplayIndex = chunkToMerge.forwardsDisplayIndex
         eventsToMerge = chunkToMerge.events.sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
     } else {
         this.prevToken = chunkToMerge.prevToken
         this.isLastBackward = chunkToMerge.isLastBackward
-        this.backwardsStateIndex = chunkToMerge.backwardsStateIndex
-        this.backwardsDisplayIndex = chunkToMerge.backwardsDisplayIndex
         eventsToMerge = chunkToMerge.events.sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     }
     eventsToMerge.forEach {
@@ -119,20 +115,20 @@ internal fun ChunkEntity.add(roomId: String,
         this.displayIndex = currentDisplayIndex
         this.sendState = SendState.SYNCED
     }
-    // We are not using the order of the list, but will be sorting with displayIndex field
-    events.add(eventEntity)
+    val position = if (direction == PaginationDirection.FORWARDS) 0 else this.events.size
+    events.add(position, eventEntity)
 }
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> forwardsDisplayIndex
-        PaginationDirection.BACKWARDS -> backwardsDisplayIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> forwardsDisplayIndex
+               PaginationDirection.BACKWARDS -> backwardsDisplayIndex
+           } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> forwardsStateIndex
-        PaginationDirection.BACKWARDS -> backwardsStateIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> forwardsStateIndex
+               PaginationDirection.BACKWARDS -> backwardsStateIndex
+           } ?: defaultValue
 }

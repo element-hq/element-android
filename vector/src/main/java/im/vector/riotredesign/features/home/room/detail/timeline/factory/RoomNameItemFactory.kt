@@ -29,20 +29,16 @@ class RoomNameItemFactory(private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent): NoticeItem? {
 
-        val content: RoomNameContent? = event.root.content.toModel()
-        val roomMember = event.roomMember
-        if (content == null || roomMember == null) {
-            return null
-        }
+        val content: RoomNameContent = event.root.content.toModel() ?: return null
         val text = if (!TextUtils.isEmpty(content.name)) {
-            stringProvider.getString(R.string.notice_room_name_changed, roomMember.displayName, content.name)
+            stringProvider.getString(R.string.notice_room_name_changed, event.senderName, content.name)
         } else {
-            stringProvider.getString(R.string.notice_room_name_removed, roomMember.displayName)
+            stringProvider.getString(R.string.notice_room_name_removed, event.senderName)
         }
         return NoticeItem_()
                 .noticeText(text)
-                .avatarUrl(roomMember.avatarUrl)
-                .memberName(roomMember.displayName)
+                .avatarUrl(event.senderAvatar)
+                .memberName(event.senderName)
     }
 
 
