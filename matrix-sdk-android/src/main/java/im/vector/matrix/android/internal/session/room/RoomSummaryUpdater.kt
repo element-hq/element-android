@@ -21,6 +21,7 @@ package im.vector.matrix.android.internal.session.room
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -41,11 +42,12 @@ internal class RoomSummaryUpdater(private val credentials: Credentials,
 
     fun update(realm: Realm,
                roomId: String,
+               membership: MyMembership? = null,
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null) {
 
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                                ?: realm.createObject(roomId)
 
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -64,6 +66,9 @@ internal class RoomSummaryUpdater(private val credentials: Credentials,
         }
         if (unreadNotifications?.notificationCount != null) {
             roomSummaryEntity.notificationCount = unreadNotifications.notificationCount
+        }
+        if (membership != null) {
+            roomSummaryEntity.membership = membership
         }
 
         val lastEvent = EventEntity.latestEvent(realm, roomId, includedTypes = listOf(EventType.MESSAGE))

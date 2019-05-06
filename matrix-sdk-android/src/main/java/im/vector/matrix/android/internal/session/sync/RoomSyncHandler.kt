@@ -67,7 +67,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
             is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
-            is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
+            is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(realm, it.key, it.value) }
         }
         realm.insertOrUpdate(rooms)
     }
@@ -84,7 +84,6 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         if (roomEntity.membership == MyMembership.INVITED) {
             roomEntity.chunks.deleteAllFromRealm()
         }
-
         roomEntity.membership = MyMembership.JOINED
 
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
@@ -119,7 +118,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                 }
             }
         }
-        roomSummaryUpdater.update(realm, roomId, roomSync.summary, roomSync.unreadNotifications)
+        roomSummaryUpdater.update(realm, roomId, MyMembership.JOINED, roomSync.summary, roomSync.unreadNotifications)
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
             handleEphemeral(realm, roomId, roomSync.ephemeral)
@@ -128,7 +127,6 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
             handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
         }
-
         return roomEntity
     }
 
@@ -136,26 +134,28 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                   roomId: String,
                                   roomSync:
                                   InvitedRoomSync): RoomEntity {
-
         Timber.v("Handle invited sync for room $roomId")
-
-        val roomEntity = RoomEntity()
-        roomEntity.roomId = roomId
+        val roomEntity = RoomEntity.where(realm, roomId).findFirst()
+                         ?: realm.createObject(roomId)
         roomEntity.membership = MyMembership.INVITED
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
             val chunkEntity = handleTimelineEvents(realm, roomId, roomSync.inviteState.events)
             roomEntity.addOrUpdate(chunkEntity)
         }
+        roomSummaryUpdater.update(realm, roomId, MyMembership.INVITED)
         return roomEntity
     }
 
-    // TODO : handle it
-    private fun handleLeftRoom(roomId: String,
+    private fun handleLeftRoom(realm: Realm,
+                               roomId: String,
                                roomSync: RoomSync): RoomEntity {
-        return RoomEntity().apply {
-            this.roomId = roomId
-            this.membership = MyMembership.LEFT
-        }
+        val roomEntity = RoomEntity.where(realm, roomId).findFirst()
+                         ?: realm.createObject(roomId)
+
+        roomEntity.membership = MyMembership.LEFT
+        roomEntity.chunks.deleteAllFromRealm()
+        roomSummaryUpdater.update(realm, roomId, MyMembership.LEFT, roomSync.summary, roomSync.unreadNotifications)
+        return roomEntity
     }
 
     private fun handleTimelineEvents(realm: Realm,

@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.model.EventEntity
+import java.util.*
 
 
 internal object EventMapper {
@@ -26,7 +27,7 @@ internal object EventMapper {
 
     fun map(event: Event, roomId: String): EventEntity {
         val eventEntity = EventEntity()
-        eventEntity.eventId = event.eventId ?: ""
+        eventEntity.eventId = event.eventId ?: UUID.randomUUID().toString()
         eventEntity.roomId = event.roomId ?: roomId
         eventEntity.content = ContentMapper.map(event.content)
         val resolvedPrevContent = event.prevContent ?: event.unsignedData?.prevContent

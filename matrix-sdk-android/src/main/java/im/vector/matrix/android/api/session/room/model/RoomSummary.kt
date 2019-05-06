@@ -31,7 +31,8 @@ data class RoomSummary(
         val isDirect: Boolean = false,
         val lastMessage: Event? = null,
         val otherMemberIds: List<String> = emptyList(),
-        var notificationCount: Int = 0,
-        var highlightCount: Int = 0,
-        var tags: List<RoomTag> = emptyList()
+        val notificationCount: Int = 0,
+        val highlightCount: Int = 0,
+        val tags: List<RoomTag> = emptyList(),
+        val membership: MyMembership = MyMembership.NONE
 )
