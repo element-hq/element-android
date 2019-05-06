@@ -5,37 +5,37 @@
 # Build debug version of the RiotX application, from the develop branch and the features branches
 
 steps:
-- label: "Assemble Debug version"
-  agents:
-    # We use a medium sized instance instead of the normal small ones because
-    # gradle build is long
-    queue: "medium"
-  commands:
-  - "./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
-  - "./gradlew lintFdroidRelease assembleFdroidDebug --stacktrace"
-  artifact_paths:
-  - "vector/build/outputs/apk/gplay/debug/*.apk"
-  - "vector/build/outputs/apk/fdroid/debug/*.apk"
-  branches: "develop feature/*"
-  plugins:
-  - docker#v3.1.0:
-      image: "runmymind/docker-android-sdk"
-
-- label: "Build Google Play unsigned APK"
+  - label: "Assemble Debug version"
     agents:
       # We use a medium sized instance instead of the normal small ones because
       # gradle build is long
       queue: "medium"
     commands:
-    - "./gradlew clean assembleGplayRelease --stacktrace"
+      - "./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
+      - "./gradlew lintFdroidRelease assembleFdroidDebug --stacktrace"
     artifact_paths:
-    - "vector/build/outputs/apk/gplay/release/*.apk"
+      - "vector/build/outputs/apk/gplay/debug/*.apk"
+      - "vector/build/outputs/apk/fdroid/debug/*.apk"
+    branches: "develop feature/*"
+    plugins:
+    - docker#v3.1.0:
+      image: "runmymind/docker-android-sdk"
+
+  - label: "Build Google Play unsigned APK"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # gradle build is long
+      queue: "medium"
+    commands:
+      - "./gradlew clean assembleGplayRelease --stacktrace"
+    artifact_paths:
+      - "vector/build/outputs/apk/gplay/release/*.apk"
     branches: "master"
     plugins:
     - docker#v3.1.0:
-        image: "runmymind/docker-android-sdk"
+      image: "runmymind/docker-android-sdk"
 
-# Code quality
+  # Code quality
 
-- label: "Code quality"
-  command: "./tools/check/check_code_quality.sh"
+  - label: "Code quality"
+    command: "./tools/check/check_code_quality.sh"
