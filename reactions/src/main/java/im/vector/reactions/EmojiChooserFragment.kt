@@ -41,7 +41,9 @@ class EmojiChooserFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(EmojiChooserViewModel::class.java)
+        viewModel = activity?.run {
+            ViewModelProviders.of(this).get(EmojiChooserViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
         viewModel.initWithContect(context!!)
         (view as? RecyclerView)?.let {
             it.adapter = viewModel.adapter

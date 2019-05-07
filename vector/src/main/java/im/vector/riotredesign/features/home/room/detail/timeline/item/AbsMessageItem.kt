@@ -19,6 +19,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline.item
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
@@ -26,6 +27,9 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>() {
 
     abstract val informationData: MessageInformationData
+
+    @EpoxyAttribute
+    var longClickListener: View.OnLongClickListener? = null
 
     override fun bind(holder: H) {
         super.bind(holder)
@@ -41,6 +45,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>()
             holder.memberNameView.visibility = View.GONE
             holder.timeView.visibility = View.GONE
         }
+        holder.view.setOnLongClickListener(longClickListener)
     }
 
     protected fun View.renderSendState() {

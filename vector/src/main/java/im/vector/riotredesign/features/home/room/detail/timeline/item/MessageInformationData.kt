@@ -18,6 +18,10 @@ package im.vector.riotredesign.features.home.room.detail.timeline.item
 
 import im.vector.matrix.android.api.session.room.send.SendState
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class MessageInformationData(
         val eventId: String,
         val senderId: String,
@@ -26,4 +30,4 @@ data class MessageInformationData(
         val avatarUrl: String?,
         val memberName: CharSequence? = null,
         val showInformation: Boolean = true
-)
+) : Parcelable

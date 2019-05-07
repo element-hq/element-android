@@ -5,6 +5,16 @@
     android:layout_height="40dp"
     tools:showIn="@layout/activity_emoji_reaction_picker">
 
+    <View
+        android:id="@+id/grid_item_place_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@drawable/circle" />
+
     <im.vector.reactions.EmojiDrawView
         android:id="@+id/grid_item_emoji_text"
         android:layout_width="40dp"

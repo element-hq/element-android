@@ -3,6 +3,10 @@
     package="im.vector.reactions">
 
     <application>
+        <meta-data
+            android:name="fontProviderRequests"
+            android:value="Noto Color Emoji Compat" />
+
         <activity
             android:name=".EmojiReactionPickerActivity"
             android:label="@string/title_activity_emoji_reaction_picker"

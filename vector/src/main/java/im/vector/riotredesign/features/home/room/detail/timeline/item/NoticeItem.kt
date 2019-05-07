@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -33,9 +34,14 @@ abstract class NoticeItem : VectorEpoxyModel<NoticeItem.Holder>() {
     @EpoxyAttribute var userId: String = ""
     @EpoxyAttribute var memberName: CharSequence? = null
 
+
+    @EpoxyAttribute
+    var longClickListener: View.OnLongClickListener? = null
+
     override fun bind(holder: Holder) {
         holder.noticeTextView.text = noticeText
         AvatarRenderer.render(avatarUrl, userId, memberName?.toString(), holder.avatarImageView)
+        holder.view.setOnLongClickListener(longClickListener)
     }
 
     class Holder : VectorEpoxyHolder() {

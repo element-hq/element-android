@@ -33,7 +33,7 @@ import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
 
-class EmptyState : MvRxState
+data class EmptyState(val isEmpty: Boolean = true) : MvRxState
 
 class HomeActivityViewModel(state: EmptyState,
                             private val session: Session,

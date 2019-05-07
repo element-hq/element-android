@@ -30,4 +30,6 @@ interface TimelineService {
      */
     fun createTimeline(eventId: String?, allowedTypes: List<String>? = null): Timeline
 
+
+    fun getTimeLineEvent(eventId: String): TimelineEvent?
 }

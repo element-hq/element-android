@@ -1,0 +1,165 @@
+package im.vector.riotredesign.features.home.room.detail.timeline.action
+
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.R
+import im.vector.riotredesign.core.platform.VectorViewModel
+import org.json.JSONObject
+import org.koin.android.ext.android.get
+
+
+data class SimpleAction(val uid: String, val titleRes: Int, val iconResId: Int?, val data: Any? = null)
+
+data class MessageMenuState(
+        val actions: List<SimpleAction>
+) : MvRxState
+
+class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<MessageMenuState>(initialState) {
+
+    companion object : MvRxViewModelFactory<MessageMenuViewModel, MessageMenuState> {
+
+        override fun initialState(viewModelContext: ViewModelContext): MessageMenuState? {
+            // Args are accessible from the context.
+            val currentSession = viewModelContext.activity.get<Session>()
+            val parcel = viewModelContext.args as MessageActionsBottomSheet.ParcelableArgs
+            val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
+                    ?: return null
+
+            val messageContent: MessageContent = event.root.content.toModel() ?: return null
+            val type = messageContent.type
+
+            if (event.sendState == SendState.UNSENT) {
+                //Resend and Delete
+                return MessageMenuState(
+                        listOf(
+                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_corner_down_right, event.root.eventId),
+                                //TODO delete icon
+                                SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_material_delete, event.root.eventId)
+                        )
+                )
+            }
+
+
+            //TODO determine if can copy, forward, reply, quote, report?
+            val actions = ArrayList<SimpleAction>().apply {
+                this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_smile))
+                if (canCopy(type)) {
+                    //TODO copy images? html? see ClipBoard
+                    this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent.body))
+                }
+
+                if (canQuote(event, messageContent)) {
+                    //TODO quote icon
+                    this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_material_quote, parcel.eventId))
+                }
+
+                if (canReply(event, messageContent)) {
+                    this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_corner_down_right))
+                }
+                if (canShare(type)) {
+                    if (messageContent is MessageImageContent) {
+                        this.add(SimpleAction(ACTION_SHARE, R.string.share, R.drawable.ic_share, currentSession.contentUrlResolver().resolveFullSize(messageContent.url)))
+                    }
+                    //TODO
+                }
+
+                //TODO is uploading
+                //TODO is downloading
+
+                if (event.sendState == SendState.SENT) {
+
+                    //TODO Can be redacted
+
+                    //TODO sent by me or sufficient power level
+                }
+
+
+                this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, JSONObject(event.root.toContent()).toString(4)))
+                if (event.isEncrypted()) {
+                    this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, null, parcel.eventId))
+                }
+                this.add(SimpleAction(PERMALINK, R.string.permalink, R.drawable.ic_permalink, parcel.eventId))
+            }
+
+            return MessageMenuState(actions)
+        }
+
+        private fun canReply(event: TimelineEvent, messageContent: MessageContent): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            if (event.root.type != EventType.MESSAGE) return false
+            return when (messageContent.type) {
+                MessageType.MSGTYPE_TEXT,
+                MessageType.MSGTYPE_NOTICE,
+                MessageType.MSGTYPE_EMOTE,
+                MessageType.MSGTYPE_IMAGE,
+                MessageType.MSGTYPE_VIDEO,
+                MessageType.MSGTYPE_AUDIO,
+                MessageType.MSGTYPE_FILE -> true
+                else -> false
+            }
+        }
+
+        private fun canQuote(event: TimelineEvent, messageContent: MessageContent): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            if (event.root.type != EventType.MESSAGE) return false
+            return when (messageContent.type) {
+                MessageType.MSGTYPE_TEXT,
+                MessageType.MSGTYPE_NOTICE,
+                MessageType.MSGTYPE_EMOTE,
+                MessageType.FORMAT_MATRIX_HTML,
+                MessageType.MSGTYPE_LOCATION -> {
+                    true
+                }
+                else -> false
+            }
+        }
+
+        private fun canCopy(type: String): Boolean {
+            return when (type) {
+                MessageType.MSGTYPE_TEXT,
+                MessageType.MSGTYPE_NOTICE,
+                MessageType.MSGTYPE_EMOTE,
+                MessageType.FORMAT_MATRIX_HTML,
+                MessageType.MSGTYPE_LOCATION -> {
+                    true
+                }
+                else -> false
+            }
+        }
+
+
+        private fun canShare(type: String): Boolean {
+            return when (type) {
+                MessageType.MSGTYPE_IMAGE,
+                MessageType.MSGTYPE_AUDIO,
+                MessageType.MSGTYPE_VIDEO -> {
+                    true
+                }
+                else -> false
+            }
+        }
+
+        const val ACTION_ADD_REACTION = "add_reaction"
+        const val ACTION_COPY = "copy"
+        const val ACTION_QUOTE = "quote"
+        const val ACTION_REPLY = "reply"
+        const val ACTION_SHARE = "share"
+        const val ACTION_RESEND = "resend"
+        const val ACTION_DELETE = "delete"
+        const val VIEW_SOURCE = "VIEW_SOURCE"
+        const val VIEW_DECRYPTED_SOURCE = "VIEW_DECRYPTED_SOURCE"
+        const val PERMALINK = "PERMALINK"
+
+
+    }
+}

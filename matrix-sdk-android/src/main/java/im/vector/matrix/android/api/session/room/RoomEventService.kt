@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.api.session.room
 
-package im.vector.matrix.android.api.session.room.model.message
+import im.vector.matrix.android.api.session.events.model.Event
 
+interface RoomEventService {
 
-interface MessageContent {
-    val type: String
-    val body: String
+    fun getEvent(eventId: String?) : Event
 }

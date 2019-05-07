@@ -16,14 +16,29 @@
 package im.vector.reactions
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class EmojiChooserViewModel : ViewModel() {
 
     var adapter: EmojiRecyclerAdapter? = null
+    val emojiSourceLiveData: MutableLiveData<EmojiDataSource> = MutableLiveData()
+
+    val currentSection: MutableLiveData<Int> = MutableLiveData()
 
     fun initWithContect(context: Context) {
-        adapter = EmojiRecyclerAdapter(EmojiDataSource(context))
+        val emojiDataSource = EmojiDataSource(context)
+        emojiSourceLiveData.value = emojiDataSource
+        adapter = EmojiRecyclerAdapter(emojiDataSource)
+        adapter?.interactionListener = object : EmojiRecyclerAdapter.InteractionListener {
+            override fun firstVisibleSectionChange(section: Int) {
+               currentSection.value = section
+            }
+
+        }
     }
 
+    fun scrollToSection(sectionIndex: Int) {
+        adapter?.scrollToSection(sectionIndex)
+    }
 }

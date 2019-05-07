@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/root_layout"
+    android:layout_height="96dp">
+
+
+    <RelativeLayout
+        android:id="@+id/quick_react_1"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@id/quick_react_agree_text"
+        app:layout_constraintEnd_toStartOf="@id/quick_react_2"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <TextView
+            android:id="@+id/quick_react_1_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="30sp"
+            tools:text="👍" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/quick_react_2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@id/quick_react_1"
+        app:layout_constraintEnd_toStartOf="@id/center_guideline"
+
+        app:layout_constraintStart_toEndOf="@id/quick_react_1"
+        app:layout_constraintTop_toTopOf="@id/quick_react_1">
+
+        <TextView
+            android:id="@+id/quick_react_2_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:textSize="30sp"
+            tools:text="👎" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/quick_react_agree_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/reactions_agree"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/center_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/quick_react_1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/center_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <RelativeLayout
+        android:id="@+id/quick_react_3"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/quick_react_1"
+        app:layout_constraintEnd_toStartOf="@id/quick_react_4"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/center_guideline"
+        app:layout_constraintTop_toTopOf="@id/quick_react_1">
+
+        <TextView
+            android:id="@+id/quick_react_3_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="30sp"
+            tools:text="😀" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/quick_react_4"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@id/quick_react_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/quick_react_3"
+        app:layout_constraintTop_toTopOf="@id/quick_react_3">
+
+        <TextView
+            android:id="@+id/quick_react_4_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:textSize="30sp"
+            tools:text="😞" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/quick_react_like_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/reactions_like"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/quick_react_agree_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/center_guideline"
+        app:layout_constraintTop_toTopOf="@id/quick_react_agree_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

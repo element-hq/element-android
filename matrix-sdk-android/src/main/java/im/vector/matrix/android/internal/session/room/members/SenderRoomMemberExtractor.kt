@@ -28,17 +28,18 @@ import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.database.query.next
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
+import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
 
 internal class SenderRoomMemberExtractor(private val roomId: String) {
 
-    fun extractFrom(event: EventEntity): RoomMember? {
+    fun extractFrom(event: EventEntity, realm: Realm = event.realm): RoomMember? {
         val sender = event.sender ?: return null
         // If the event is unlinked we want to fetch unlinked state events
         val unlinked = event.isUnlinked
-        val roomEntity = RoomEntity.where(event.realm, roomId = roomId).findFirst() ?: return null
-        val chunkEntity = ChunkEntity.findIncludingEvent(event.realm, event.eventId)
+        val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return null
+        val chunkEntity = ChunkEntity.findIncludingEvent(realm, event.eventId)
         val content = when {
             chunkEntity == null   -> null
             event.stateIndex <= 0 -> baseQuery(chunkEntity.events, sender, unlinked).next(from = event.stateIndex)?.prevContent

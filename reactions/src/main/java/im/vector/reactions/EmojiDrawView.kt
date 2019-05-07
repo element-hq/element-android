@@ -3,17 +3,14 @@ package im.vector.reactions
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Typeface
+import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import android.text.Layout
-import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import java.lang.Exception
 import kotlin.math.abs
-import kotlin.math.max
 
 
 /**
@@ -25,29 +22,26 @@ class EmojiDrawView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     var mLayout: StaticLayout? = null
+        set(value) {
+            field = value
+            invalidate()
+        }
 
 //    var _mySpacing = 0f
 
     var emoji: String? = null
-        set(value) {
-            field = value
-            if (value != null) {
-                EmojiRecyclerAdapter.beginTraceSession("EmojiDrawView.TextStaticLayout")
-//                GlobalScope.launch {
-//                    val sl = StaticLayout(value, tPaint, emojiSize, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true)
-//                    GlobalScope.launch(Dispatchers.Main) {
-//                        if (emoji == value) {
-//                            mLayout = sl
-//                            //invalidate()
-//                        }
-//                    }
-//                }
-                mLayout = StaticLayout(value, tPaint, emojiSize, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true)
-                EmojiRecyclerAdapter.endTraceSession()
-            } else {
-                mLayout = null
-            }
-        }
+//        set(value) {
+//            if (value != null) {
+//                EmojiRecyclerAdapter.beginTraceSession("EmojiDrawView.TextStaticLayout")
+//                mLayout = StaticLayout(value, tPaint, emojiSize, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true)
+//                if (value != field) invalidate()
+//                EmojiRecyclerAdapter.endTraceSession()
+//            } else {
+//                mLayout = null
+////                if (value != field) invalidate()
+//            }
+//            field = value
+//        }
 
     override fun onDraw(canvas: Canvas?) {
         EmojiRecyclerAdapter.beginTraceSession("EmojiDrawView.onDraw")
@@ -55,7 +49,7 @@ class EmojiDrawView @JvmOverloads constructor(
         canvas?.save()
         val space = abs((width - emojiSize) / 2f)
         if (mLayout == null) {
-            canvas?.drawCircle(width / 2f ,width / 2f, emojiSize / 2f,tPaint)
+//            canvas?.drawCircle(width / 2f ,width / 2f, emojiSize / 2f,tPaint)
         } else {
             canvas?.translate(space, space)
             mLayout!!.draw(canvas)
@@ -65,14 +59,18 @@ class EmojiDrawView @JvmOverloads constructor(
     }
 
     companion object {
-        private val tPaint = TextPaint()
+        val tPaint = TextPaint()
 
-        private var emojiSize = 40
+        var emojiSize = 40
 
-        fun configureTextPaint(context: Context) {
+        fun configureTextPaint(context: Context, typeface: Typeface?) {
             tPaint.isAntiAlias = true;
             tPaint.textSize = 24 * context.resources.displayMetrics.density
             tPaint.color = Color.LTGRAY
+            typeface?.let {
+                tPaint.typeface = it
+            }
+
             emojiSize = tPaint.measureText("😅").toInt()
         }
     }

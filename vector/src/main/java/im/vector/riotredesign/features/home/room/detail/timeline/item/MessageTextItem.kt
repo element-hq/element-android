@@ -46,6 +46,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                                                              null)
         holder.messageView.setTextFuture(textFuture)
         holder.messageView.renderSendState()
+        holder.messageView.setOnLongClickListener(longClickListener)
         findPillsAndProcess { it.bind(holder.messageView) }
     }
 

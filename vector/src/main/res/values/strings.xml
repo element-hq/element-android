@@ -57,6 +57,8 @@
     <string name="stay">Stay</string>
     <string name="send">Send</string>
     <string name="copy">Copy</string>
+    <string name="edit">Edit</string>
+    <string name="reply">Reply</string>
     <string name="resend">Resend</string>
     <string name="redact">Remove</string>
     <string name="quote">Quote</string>
@@ -1399,5 +1401,10 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
+    
+    
+    <string name="reactions_agree">Agree</string>
+    <string name="reactions_like">Like</string>
+    <string name="message_add_reaction">Add Reaction</string>
 
 </resources>

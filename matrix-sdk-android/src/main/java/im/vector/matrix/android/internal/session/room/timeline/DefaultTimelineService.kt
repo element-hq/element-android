@@ -18,8 +18,12 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.timeline.Timeline
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.fetchMappedCopied
 
 internal class DefaultTimelineService(private val roomId: String,
                                       private val monarchy: Monarchy,
@@ -31,6 +35,14 @@ internal class DefaultTimelineService(private val roomId: String,
 
     override fun createTimeline(eventId: String?, allowedTypes: List<String>?): Timeline {
         return DefaultTimeline(roomId, eventId, monarchy.realmConfiguration, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask, allowedTypes)
+    }
+
+    override fun getTimeLineEvent(eventId: String): TimelineEvent? {
+        return monarchy.fetchMappedCopied({
+            EventEntity.where(it, eventId = eventId).findFirst()
+        }, { entity, realm ->
+            timelineEventFactory.create(entity, realm)
+        })
     }
 
 }
