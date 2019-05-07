@@ -19,7 +19,7 @@ steps:
     branches: "develop feature/*"
     plugins:
       - docker#v3.1.0:
-        image: "runmymind/docker-android-sdk"
+          image: "runmymind/docker-android-sdk"
 
   - label: "Build Google Play unsigned APK"
     agents:
