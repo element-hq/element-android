@@ -51,6 +51,9 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
     @BindView(R.id.bottom_sheet_message_preview_sender)
     lateinit var senderNameTextView: TextView
 
+    @BindView(R.id.bottom_sheet_message_preview_timestamp)
+    lateinit var messageTimestampText: TextView
+
     @BindView(R.id.bottom_sheet_message_preview_body)
     lateinit var messageBodyTextView: TextView
 
@@ -113,6 +116,7 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
     override fun invalidate() = withState(viewModel) {
         senderNameTextView.text = it.senderName
         messageBodyTextView.text = it.messageBody
+        messageTimestampText.text = it.ts
 
         GlideApp.with(this).clear(senderAvatarImageView)
         if (it.senderAvatarPath != null) {

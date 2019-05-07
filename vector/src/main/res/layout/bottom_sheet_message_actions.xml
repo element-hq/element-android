@@ -22,8 +22,8 @@
                 android:layout_height="60dp"
                 android:layout_margin="@dimen/layout_horizontal_margin"
                 android:adjustViewBounds="true"
-                android:contentDescription="@string/avatar"
                 android:background="@drawable/circle"
+                android:contentDescription="@string/avatar"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,8 +37,8 @@
                 android:layout_gravity="start"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-bold"
                 android:singleLine="true"
@@ -53,24 +53,37 @@
 
                 android:id="@+id/bottom_sheet_message_preview_body"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="@dimen/layout_vertical_margin"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:layout_marginBottom="4dp"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:textColor="?android:textColorSecondary"
                 android:textIsSelectable="false"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/bottom_sheet_message_preview_timestamp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
                 app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_sender"
-                tools:text="Quis harum id autem cumque consequatur laboriosam aliquam sed. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. " />
+                tools:text="Quis harum id autem cumque consequatur laboriosam aliquam sed. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. " />
 
+            <TextView
+                android:id="@+id/bottom_sheet_message_preview_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_body"
+                tools:text="Friday 8pm" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -94,15 +107,5 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!--<com.airbnb.epoxy.EpoxyRecyclerView-->
-        <!--android:visibility="invisible"-->
-        <!--android:id="@+id/bottom_sheet_actions_list"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--tools:itemCount="20"-->
-        <!--android:minHeight="80dp"-->
-        <!--tools:listitem="@layout/adapter_item_action">-->
-
-        <!--</com.airbnb.epoxy.EpoxyRecyclerView>-->
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
