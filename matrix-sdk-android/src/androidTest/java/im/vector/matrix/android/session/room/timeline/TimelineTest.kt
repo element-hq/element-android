@@ -20,7 +20,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
+import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFactory
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor

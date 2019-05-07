@@ -24,7 +24,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.rx.rx
@@ -162,14 +162,14 @@ class RoomListViewModel(initialState: RoomListViewState,
         val serverNotices = ArrayList<RoomSummary>()
 
         for (room in rooms) {
-            if (room.membership == MyMembership.LEFT) continue
+            if (room.membership.isLeft()) continue
             val tags = room.tags.map { it.name }
             when {
+                room.membership == Membership.INVITE          -> invites.add(room)
                 tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
                 tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
                 tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
                 room.isDirect                                 -> directChats.add(room)
-                room.membership == MyMembership.INVITED       -> invites.add(room)
                 else                                          -> groupRooms.add(room)
             }
         }

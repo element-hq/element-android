@@ -34,5 +34,5 @@ data class RoomSummary(
         val notificationCount: Int = 0,
         val highlightCount: Int = 0,
         val tags: List<RoomTag> = emptyList(),
-        val membership: MyMembership = MyMembership.NONE
+        val membership: Membership = Membership.NONE
 )

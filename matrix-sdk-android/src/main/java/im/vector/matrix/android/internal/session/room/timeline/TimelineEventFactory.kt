@@ -19,7 +19,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
+import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor
 
 internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomMemberExtractor) {
 

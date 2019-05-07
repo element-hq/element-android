@@ -37,6 +37,7 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
@@ -50,7 +51,12 @@ import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.core.utils.*
+import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
+import im.vector.riotredesign.core.utils.checkPermissions
+import im.vector.riotredesign.core.utils.openCamera
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
@@ -64,6 +70,7 @@ import im.vector.riotredesign.features.home.room.detail.composer.TextComposerVie
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotredesign.features.html.PillImageSpan
+import im.vector.riotredesign.features.invite.VectorInviteView
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.ImageMediaViewerActivity
 import im.vector.riotredesign.features.media.VideoContentRenderer
@@ -88,7 +95,7 @@ private const val CAMERA_VALUE_TITLE = "attachment"
 private const val REQUEST_FILES_REQUEST_CODE = 0
 private const val TAKE_IMAGE_REQUEST_CODE = 1
 
-class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callback, AutocompleteUserPresenter.Callback {
+class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callback, AutocompleteUserPresenter.Callback, VectorInviteView.Callback {
 
     companion object {
 
@@ -122,6 +129,7 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         setupToolbar()
         setupComposer()
         setupAttachmentButton()
+        setupInviteView()
         roomDetailViewModel.subscribe { renderState(it) }
         textComposerViewModel.subscribe { renderTextComposerState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
@@ -286,27 +294,31 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         }
     }
 
+    private fun setupInviteView() {
+        inviteView.callback = this
+    }
+
     private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
         Timber.v("On send choice clicked: $dialogListItem")
         when (dialogListItem) {
-            is DialogListItem.SendFile -> {
+            is DialogListItem.SendFile       -> {
                 // launchFileIntent
             }
-            is DialogListItem.SendVoice -> {
+            is DialogListItem.SendVoice      -> {
                 //launchAudioRecorderIntent()
             }
-            is DialogListItem.SendSticker -> {
+            is DialogListItem.SendSticker    -> {
                 //startStickerPickerActivity()
             }
             is DialogListItem.TakePhotoVideo ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
                     //    launchCamera()
                 }
-            is DialogListItem.TakePhoto ->
+            is DialogListItem.TakePhoto      ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
                     openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
                 }
-            is DialogListItem.TakeVideo ->
+            is DialogListItem.TakeVideo      ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
                     //  launchNativeVideoRecorder()
                 }
@@ -320,7 +332,14 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
 
     private fun renderState(state: RoomDetailViewState) {
         renderRoomSummary(state)
-        timelineEventController.setTimeline(state.timeline)
+        val summary = state.asyncRoomSummary()
+        if (summary?.membership == Membership.JOIN) {
+            timelineEventController.setTimeline(state.timeline)
+            inviteView.visibility = View.GONE
+        } else if (summary?.membership == Membership.INVITE) {
+            inviteView.visibility = View.VISIBLE
+            inviteView.render(summary)
+        }
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
@@ -343,20 +362,20 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
             is SendMessageResult.MessageSent,
-            is SendMessageResult.SlashCommandHandled -> {
+            is SendMessageResult.SlashCommandHandled        -> {
                 // Clear composer
                 composerEditText.text = null
             }
-            is SendMessageResult.SlashCommandError -> {
+            is SendMessageResult.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
             }
-            is SendMessageResult.SlashCommandUnknown -> {
+            is SendMessageResult.SlashCommandUnknown        -> {
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
-            is SendMessageResult.SlashCommandResultOk -> {
+            is SendMessageResult.SlashCommandResultOk       -> {
                 // Ignore
             }
-            is SendMessageResult.SlashCommandResultError -> {
+            is SendMessageResult.SlashCommandResultError    -> {
                 displayCommandError(sendMessageResult.throwable.localizedMessage)
             }
             is SendMessageResult.SlashCommandNotImplemented -> {
@@ -405,5 +424,15 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
+    }
+
+    // VectorInviteView.Callback
+
+    override fun onAcceptInvite() {
+        roomDetailViewModel.process(RoomDetailActions.AcceptInvite)
+    }
+
+    override fun onRejectInvite() {
+        roomDetailViewModel.process(RoomDetailActions.RejectInvite)
     }
 }

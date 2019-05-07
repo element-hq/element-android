@@ -21,13 +21,18 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.internal.network.NetworkConstants
-import im.vector.matrix.android.internal.session.room.invite.InviteBody
-import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
+import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
+import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 internal interface RoomAPI {
 
@@ -156,4 +161,24 @@ internal interface RoomAPI {
                        @Path("state_event_type") stateEventType: String,
                        @Path("state_key") stateKey: String,
                        @Body params: Map<String, String>): Call<Unit>
+
+    /**
+     * Join the given room.
+     *
+     * @param roomId  the room id
+     * @param params the request body
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/join")
+    fun join(@Path("roomId") roomId: String,
+             @Body params: Map<String, String>): Call<Unit>
+
+    /**
+     * Leave the given room.
+     *
+     * @param roomId  the room id
+     * @param params the request body
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/leave")
+    fun leave(@Path("roomId") roomId: String,
+              @Body params: Map<String, String>): Call<Unit>
 }

@@ -16,28 +16,32 @@
  *
  */
 
-package im.vector.matrix.android.internal.session.room.members
+package im.vector.matrix.android.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.members.RoomMembersService
+import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.session.room.invite.InviteTask
+import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
+import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
+import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
 
-internal class DefaultRoomMembersService(private val roomId: String,
-                                         private val monarchy: Monarchy,
-                                         private val loadRoomMembersTask: LoadRoomMembersTask,
-                                         private val inviteTask: InviteTask,
-                                         private val taskExecutor: TaskExecutor
-) : RoomMembersService {
+internal class DefaultMembershipService(private val roomId: String,
+                                        private val monarchy: Monarchy,
+                                        private val taskExecutor: TaskExecutor,
+                                        private val loadRoomMembersTask: LoadRoomMembersTask,
+                                        private val inviteTask: InviteTask,
+                                        private val joinTask: JoinRoomTask,
+                                        private val leaveRoomTask: LeaveRoomTask
+) : MembershipService {
 
     override fun loadRoomMembersIfNeeded(): Cancelable {
         val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
@@ -65,6 +69,20 @@ internal class DefaultRoomMembersService(private val roomId: String,
     override fun invite(userId: String, callback: MatrixCallback<Unit>) {
         val params = InviteTask.Params(roomId, userId)
         inviteTask.configureWith(params)
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
+    }
+
+    override fun join(callback: MatrixCallback<Unit>) {
+        val params = JoinRoomTask.Params(roomId)
+        joinTask.configureWith(params)
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
+    }
+
+    override fun leave(callback: MatrixCallback<Unit>) {
+        val params = LeaveRoomTask.Params(roomId)
+        leaveRoomTask.configureWith(params)
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }

@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -28,7 +28,7 @@ internal fun RoomEntity.Companion.where(realm: Realm, roomId: String): RealmQuer
     return realm.where<RoomEntity>().equalTo(RoomEntityFields.ROOM_ID, roomId)
 }
 
-internal fun RoomEntity.Companion.where(realm: Realm, membership: MyMembership? = null): RealmQuery<RoomEntity> {
+internal fun RoomEntity.Companion.where(realm: Realm, membership: Membership? = null): RealmQuery<RoomEntity> {
     val query = realm.where<RoomEntity>()
     if (membership != null) {
         query.equalTo(RoomEntityFields.MEMBERSHIP_STR, membership.name)

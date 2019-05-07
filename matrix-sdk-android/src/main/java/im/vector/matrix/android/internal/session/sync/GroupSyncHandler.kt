@@ -17,7 +17,7 @@
 package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.sync.model.GroupsSyncResponse
@@ -56,7 +56,7 @@ internal class GroupSyncHandler(private val monarchy: Monarchy) {
                                   groupId: String): GroupEntity {
 
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
-        groupEntity.membership = MyMembership.JOINED
+        groupEntity.membership = Membership.JOIN
         return groupEntity
     }
 
@@ -64,7 +64,7 @@ internal class GroupSyncHandler(private val monarchy: Monarchy) {
                                    groupId: String): GroupEntity {
 
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
-        groupEntity.membership = MyMembership.INVITED
+        groupEntity.membership = Membership.INVITE
         return groupEntity
 
     }
@@ -74,7 +74,7 @@ internal class GroupSyncHandler(private val monarchy: Monarchy) {
                                 groupId: String): GroupEntity {
 
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
-        groupEntity.membership = MyMembership.LEFT
+        groupEntity.membership = Membership.LEAVE
         return groupEntity
     }
 

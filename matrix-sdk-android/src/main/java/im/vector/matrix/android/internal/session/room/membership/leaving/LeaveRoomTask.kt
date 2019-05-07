@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.room.invite
+package im.vector.matrix.android.internal.session.room.membership.leaving
 
 import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
 
-
-internal interface InviteTask : Task<InviteTask.Params, Unit> {
+internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
     data class Params(
-            val roomId: String,
-            val userId: String
+            val roomId: String
     )
 }
 
-internal class DefaultInviteTask(private val roomAPI: RoomAPI) : InviteTask {
+internal class DefaultLeaveRoomTask(private val roomAPI: RoomAPI) : LeaveRoomTask {
 
-    override fun execute(params: InviteTask.Params): Try<Unit> {
+    override fun execute(params: LeaveRoomTask.Params): Try<Unit> {
         return executeRequest {
-            val body = InviteBody(params.userId)
-            apiCall = roomAPI.invite(params.roomId, body)
+            apiCall = roomAPI.leave(params.roomId, HashMap())
         }
     }
+
 }

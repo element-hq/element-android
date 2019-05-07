@@ -24,9 +24,9 @@ import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.util.Cancelable
 
 /**
- * This interface defines methods to retrieve room members of a room. It's implemented at the room level.
+ * This interface defines methods to handling membership. It's implemented at the room level.
  */
-interface RoomMembersService {
+interface MembershipService {
 
     /**
      * This methods load all room members if it was done yet.
@@ -53,5 +53,16 @@ interface RoomMembersService {
      * Invite a user in the room
      */
     fun invite(userId: String, callback: MatrixCallback<Unit>)
+
+    /**
+     * Join the room
+     */
+    fun join(callback: MatrixCallback<Unit>)
+
+    /**
+     * Leave the room.
+     *
+     */
+    fun leave(callback: MatrixCallback<Unit>)
 
 }

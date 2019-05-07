@@ -74,6 +74,8 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             is RoomDetailActions.SendMedia      -> handleSendMedia(action)
             is RoomDetailActions.EventDisplayed -> handleEventDisplayed(action)
             is RoomDetailActions.LoadMore       -> handleLoadMore(action)
+            is RoomDetailActions.AcceptInvite   -> handleAcceptInvite()
+            is RoomDetailActions.RejectInvite   -> handleRejectInvite()
         }
     }
 
@@ -206,6 +208,14 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     private fun handleLoadMore(action: RoomDetailActions.LoadMore) {
         timeline.paginate(action.direction, PAGINATION_COUNT)
+    }
+
+    private fun handleRejectInvite() {
+        room.leave(object : MatrixCallback<Unit> {})
+    }
+
+    private fun handleAcceptInvite() {
+        room.join(object : MatrixCallback<Unit> {})
     }
 
     private fun observeEventDisplayedActions() {
