@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
+import com.jakewharton.rxbinding2.view.RxView
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
@@ -31,10 +32,17 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>()
     @EpoxyAttribute
     var longClickListener: View.OnLongClickListener? = null
 
+    @EpoxyAttribute
+    var cellClickListener: View.OnClickListener? = null
+
+    @EpoxyAttribute
+    var avatarClickListener: View.OnClickListener? = null
+
     override fun bind(holder: H) {
         super.bind(holder)
         if (informationData.showInformation) {
             holder.avatarImageView.visibility = View.VISIBLE
+            holder.avatarImageView.setOnClickListener(avatarClickListener)
             holder.memberNameView.visibility = View.VISIBLE
             holder.timeView.visibility = View.VISIBLE
             holder.timeView.text = informationData.time
@@ -45,6 +53,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>()
             holder.memberNameView.visibility = View.GONE
             holder.timeView.visibility = View.GONE
         }
+        holder.view.setOnClickListener(cellClickListener)
         holder.view.setOnLongClickListener(longClickListener)
 
     }

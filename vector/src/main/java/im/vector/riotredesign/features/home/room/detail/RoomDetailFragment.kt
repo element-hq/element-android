@@ -49,11 +49,7 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.reactions.EmojiReactionPickerActivity
@@ -429,6 +425,17 @@ class RoomDetailFragment :
         vectorBaseActivity.notImplemented()
     }
 
+    override fun onEventCellClicked(eventId: String, informationData: MessageInformationData, messageContent: MessageContent, view: View) {
+        val roomId = (arguments?.get(MvRx.KEY_ARG) as? RoomDetailArgs)?.roomId
+        if (roomId.isNullOrBlank()) {
+            Timber.e("Missing RoomId, cannot open bottomsheet")
+            return
+        }
+        MessageActionsBottomSheet
+                .newInstance(eventId, roomId, informationData)
+                .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
+    }
+
     // AutocompleteUserPresenter.Callback
     override fun onEventLongClicked(eventId: String, informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
@@ -443,7 +450,9 @@ class RoomDetailFragment :
         return true
     }
 
-
+    override fun onAvatarClicked(informationData: MessageInformationData) {
+        vectorBaseActivity.notImplemented()
+    }
 // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {

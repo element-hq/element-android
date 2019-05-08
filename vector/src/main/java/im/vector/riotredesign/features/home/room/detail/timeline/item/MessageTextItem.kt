@@ -16,7 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
-import android.text.Spannable
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
@@ -36,17 +36,22 @@ import kotlinx.coroutines.withContext
 @EpoxyModelClass(layout = R.layout.item_timeline_event_text_message)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
-    @EpoxyAttribute var message: CharSequence? = null
-    @EpoxyAttribute override lateinit var informationData: MessageInformationData
+    @EpoxyAttribute
+    var message: CharSequence? = null
+    @EpoxyAttribute
+    override lateinit var informationData: MessageInformationData
+    @EpoxyAttribute
+    var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         MatrixLinkify.addLinkMovementMethod(holder.messageView)
         val textFuture = PrecomputedTextCompat.getTextFuture(message ?: "",
-                                                             TextViewCompat.getTextMetricsParams(holder.messageView),
-                                                             null)
+                TextViewCompat.getTextMetricsParams(holder.messageView),
+                null)
         holder.messageView.setTextFuture(textFuture)
         holder.messageView.renderSendState()
+        holder.messageView.setOnClickListener (clickListener)
         holder.messageView.setOnLongClickListener(longClickListener)
         findPillsAndProcess { it.bind(holder.messageView) }
     }

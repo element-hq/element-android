@@ -16,11 +16,9 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
+import android.view.View
 import androidx.annotation.ColorRes
-import androidx.core.text.toSpannable
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -33,6 +31,7 @@ import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
+import im.vector.riotredesign.core.utils.DebouncedClickListener
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
@@ -102,7 +101,18 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .informationData(informationData)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
-                .clickListener { _ -> callback?.onAudioMessageClicked(messageContent) }
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                        }))
+                .clickListener(
+                        DebouncedClickListener(View.OnClickListener { _ ->
+                            callback?.onAudioMessageClicked(messageContent)
+                        }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
                             ?: false
@@ -116,7 +126,18 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .informationData(informationData)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_attachment)
-                .clickListener { _ -> callback?.onFileMessageClicked(messageContent) }
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                        }))
+                .clickListener(
+                        DebouncedClickListener(View.OnClickListener { _ ->
+                            callback?.onFileMessageClicked(messageContent)
+                        }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
                             ?: false
@@ -147,7 +168,19 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .informationData(informationData)
                 .mediaData(data)
-                .clickListener { view -> callback?.onImageMessageClicked(messageContent, data, view) }
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .clickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onImageMessageClicked(messageContent, data, view)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                        }))
+
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
                             ?: false
@@ -178,6 +211,14 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .playable(true)
                 .informationData(informationData)
                 .mediaData(thumbnailData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                        }))
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
@@ -198,6 +239,19 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(linkifiedBody)
                 .informationData(informationData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                //click on the text
+                .clickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                        }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
                             ?: false
@@ -219,6 +273,14 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                        }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
                             ?: false
@@ -236,6 +298,14 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                        }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
                             ?: false
