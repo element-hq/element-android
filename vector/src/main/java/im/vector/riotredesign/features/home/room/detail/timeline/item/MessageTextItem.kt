@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
+import androidx.core.text.toSpannable
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -35,7 +36,7 @@ import kotlinx.coroutines.withContext
 @EpoxyModelClass(layout = R.layout.item_timeline_event_text_message)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
-    @EpoxyAttribute var message: Spannable? = null
+    @EpoxyAttribute var message: CharSequence? = null
     @EpoxyAttribute override lateinit var informationData: MessageInformationData
 
     override fun bind(holder: Holder) {
@@ -53,7 +54,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     private fun findPillsAndProcess(processBlock: (span: PillImageSpan) -> Unit) {
         GlobalScope.launch(Dispatchers.Main) {
             val pillImageSpans: Array<PillImageSpan>? = withContext(Dispatchers.IO) {
-                message?.let { spannable ->
+                message?.toSpannable()?.let { spannable ->
                     spannable.getSpans(0, spannable.length, PillImageSpan::class.java)
                 }
             }

@@ -46,6 +46,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>()
             holder.timeView.visibility = View.GONE
         }
         holder.view.setOnLongClickListener(longClickListener)
+
     }
 
     protected fun View.renderSendState() {

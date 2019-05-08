@@ -17,8 +17,10 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import android.text.Spannable
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import androidx.annotation.ColorRes
+import androidx.core.text.toSpannable
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -84,16 +86,16 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return when (messageContent) {
             is MessageEmoteContent -> buildEmoteMessageItem(eventId, messageContent, informationData, callback)
             is MessageTextContent -> buildTextMessageItem(eventId, event.sendState, messageContent, informationData, callback)
-            is MessageImageContent -> buildImageMessageItem(messageContent, informationData, callback)
+            is MessageImageContent -> buildImageMessageItem(eventId, messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(eventId, messageContent, informationData, callback)
-            is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, callback)
-            is MessageFileContent -> buildFileMessageItem(messageContent, informationData, callback)
-            is MessageAudioContent -> buildAudioMessageItem(messageContent, informationData, callback)
+            is MessageVideoContent -> buildVideoMessageItem(eventId, messageContent, informationData, callback)
+            is MessageFileContent -> buildFileMessageItem(eventId, messageContent, informationData, callback)
+            is MessageAudioContent -> buildAudioMessageItem(eventId, messageContent, informationData, callback)
             else -> buildNotHandledMessageItem(messageContent)
         }
     }
 
-    private fun buildAudioMessageItem(messageContent: MessageAudioContent,
+    private fun buildAudioMessageItem(eventId: String, messageContent: MessageAudioContent,
                                       informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
@@ -101,9 +103,13 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
                 .clickListener { _ -> callback?.onAudioMessageClicked(messageContent) }
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                            ?: false
+                }
     }
 
-    private fun buildFileMessageItem(messageContent: MessageFileContent,
+    private fun buildFileMessageItem(eventId: String, messageContent: MessageFileContent,
                                      informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
@@ -111,6 +117,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_attachment)
                 .clickListener { _ -> callback?.onFileMessageClicked(messageContent) }
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                            ?: false
+                }
     }
 
     private fun buildNotHandledMessageItem(messageContent: MessageContent): DefaultItem? {
@@ -118,7 +128,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return DefaultItem_().text(text)
     }
 
-    private fun buildImageMessageItem(messageContent: MessageImageContent,
+    private fun buildImageMessageItem(eventId: String, messageContent: MessageImageContent,
                                       informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
@@ -138,9 +148,13 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .informationData(informationData)
                 .mediaData(data)
                 .clickListener { view -> callback?.onImageMessageClicked(messageContent, data, view) }
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                            ?: false
+                }
     }
 
-    private fun buildVideoMessageItem(messageContent: MessageVideoContent,
+    private fun buildVideoMessageItem(eventId: String, messageContent: MessageVideoContent,
                                       informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
@@ -165,6 +179,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .informationData(informationData)
                 .mediaData(thumbnailData)
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                            ?: false
+                }
     }
 
     private fun buildTextMessageItem(eventId: String, sendState: SendState,
@@ -224,7 +242,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): Spannable {
+    private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {
         val spannable = SpannableStringBuilder(body)
         MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
             override fun onUrlClicked(url: String) {

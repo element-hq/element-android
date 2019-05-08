@@ -39,6 +39,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         ImageContentRenderer.render(mediaData, ImageContentRenderer.Mode.THUMBNAIL, holder.imageView)
         ContentUploadStateTrackerBinder.bind(informationData.eventId, mediaData, holder.progressLayout)
         holder.imageView.setOnClickListener(clickListener)
+        holder.imageView.setOnLongClickListener(longClickListener)
         holder.imageView.renderSendState()
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
     }
