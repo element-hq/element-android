@@ -68,7 +68,11 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 }
                 if (canShare(type)) {
                     if (messageContent is MessageImageContent) {
-                        this.add(SimpleAction(ACTION_SHARE, R.string.share, R.drawable.ic_share, currentSession.contentUrlResolver().resolveFullSize(messageContent.url)))
+                        this.add(
+                                SimpleAction(ACTION_SHARE,
+                                        R.string.share, R.drawable.ic_share,
+                                        currentSession.contentUrlResolver().resolveFullSize(messageContent.url))
+                        )
                     }
                     //TODO
                 }
