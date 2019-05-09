@@ -39,6 +39,10 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.media.VideoMediaViewerActivity" />
 
+        <activity
+            android:name="im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity"
+            android:label="@string/title_activity_emoji_reaction_picker" />
+
         <service
             android:name=".core.services.CallService"
             android:exported="false" />

@@ -1402,6 +1402,8 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
+
+    <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="reactions_agree">Agree</string>
     <string name="reactions_like">Like</string>
     <string name="message_add_reaction">Add Reaction</string>

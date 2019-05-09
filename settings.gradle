@@ -1,1 +1,1 @@
-include ':vector', ':matrix-sdk-android', ':matrix-sdk-android-rx', ':reactions'
+include ':vector', ':matrix-sdk-android', ':matrix-sdk-android-rx'

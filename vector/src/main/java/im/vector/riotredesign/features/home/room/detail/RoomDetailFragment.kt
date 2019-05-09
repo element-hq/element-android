@@ -52,7 +52,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.reactions.EmojiReactionPickerActivity
+import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.dialogs.DialogListItem
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
