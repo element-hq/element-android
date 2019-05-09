@@ -20,7 +20,9 @@ import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewModelStore
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-
+/**
+ * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)
+ */
 abstract class BaseMvRxBottomSheetDialog() : BottomSheetDialogFragment(), MvRxView {
     override val mvrxViewModelStore by lazy { MvRxViewModelStore(viewModelStore) }
 

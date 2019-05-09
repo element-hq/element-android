@@ -15,7 +15,6 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,11 +29,12 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
 
-
+/**
+ * Quick Reaction Fragment (agree / like reactions)
+ */
 class QuickReactionFragment : BaseMvRxFragment() {
 
     private val viewModel: QuickReactionViewModel by fragmentViewModel(QuickReactionViewModel::class)
-
 
     @BindView(R.id.root_layout)
     lateinit var rootLayout: ConstraintLayout
@@ -48,7 +48,6 @@ class QuickReactionFragment : BaseMvRxFragment() {
     lateinit var quickReact3: View
     @BindView(R.id.quick_react_4)
     lateinit var quickReact4: View
-
 
     @BindView(R.id.quick_react_1_text)
     lateinit var quickReact1Text: TextView
@@ -68,10 +67,6 @@ class QuickReactionFragment : BaseMvRxFragment() {
         val view = inflater.inflate(R.layout.adapter_item_action_quick_reaction, container, false)
         ButterKnife.bind(this, view)
         return view
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

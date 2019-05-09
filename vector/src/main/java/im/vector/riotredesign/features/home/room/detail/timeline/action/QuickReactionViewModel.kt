@@ -31,6 +31,10 @@ enum class TriggleState {
 
 data class QuickReactionState(val agreeTrigleState: TriggleState, val likeTriggleState: TriggleState, val selectionResult: List<String>? = null) : MvRxState
 
+/**
+ * Quick reaction view model
+ * TODO: configure initial state from event
+ */
 class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel<QuickReactionState>(initialState) {
 
     val agreePositive = "👍"

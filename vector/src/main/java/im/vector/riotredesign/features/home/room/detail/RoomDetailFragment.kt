@@ -426,17 +426,9 @@ class RoomDetailFragment :
     }
 
     override fun onEventCellClicked(eventId: String, informationData: MessageInformationData, messageContent: MessageContent, view: View) {
-        val roomId = (arguments?.get(MvRx.KEY_ARG) as? RoomDetailArgs)?.roomId
-        if (roomId.isNullOrBlank()) {
-            Timber.e("Missing RoomId, cannot open bottomsheet")
-            return
-        }
-        MessageActionsBottomSheet
-                .newInstance(eventId, roomId, informationData)
-                .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
+
     }
 
-    // AutocompleteUserPresenter.Callback
     override fun onEventLongClicked(eventId: String, informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         val roomId = (arguments?.get(MvRx.KEY_ARG) as? RoomDetailArgs)?.roomId

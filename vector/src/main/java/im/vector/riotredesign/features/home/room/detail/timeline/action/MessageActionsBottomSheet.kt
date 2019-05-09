@@ -38,7 +38,10 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import kotlinx.android.parcel.Parcelize
 
-
+/**
+ * Bottom sheet fragment that shows a message preview with list of contextual actions
+ * (Includes fragments for quick reactions and list of actions)
+ */
 class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
 
     private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
@@ -137,9 +140,6 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
             val eventId: String,
             val roomId: String,
             val informationData: MessageInformationData
-//            val body: String,
-//            val type: String,
-//            var url: String? = null
     ) : Parcelable
 
     companion object {
@@ -149,16 +149,7 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
                     eventId,
                     roomId,
                     informationData
-//                    messageContent.body,
-//                    messageContent.type
             )
-//            if (messageContent is MessageImageContent) {
-//                parcelableArgs.url = messageContent.url
-//            }
-//            if (messageContent is MessageVideoContent) {
-//                parcelableArgs.url = messageContent.url
-//            }
-
             args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
             return MessageActionsBottomSheet().apply { arguments = args }
 
