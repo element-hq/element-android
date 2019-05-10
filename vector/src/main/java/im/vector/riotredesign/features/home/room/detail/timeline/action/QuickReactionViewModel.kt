@@ -84,10 +84,14 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
             when (state.likeTriggleState) {
                 TriggleState.FIRST -> add(likePositive)
                 TriggleState.SECOND -> add(likeNegative)
+                else -> {
+                }
             }
             when (state.agreeTrigleState) {
                 TriggleState.FIRST -> add(agreePositive)
                 TriggleState.SECOND -> add(agreeNegative)
+                else -> {
+                }
             }
         }
     }

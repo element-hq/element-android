@@ -21,7 +21,6 @@ import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.riotredesign.VectorApplication
 import im.vector.riotredesign.core.platform.VectorViewModel
 import org.koin.android.ext.android.get
 import timber.log.Timber
@@ -44,12 +43,11 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
 
     companion object : MvRxViewModelFactory<MessageActionsViewModel, MessageActionState> {
 
-        val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm")
-
         override fun initialState(viewModelContext: ViewModelContext): MessageActionState? {
             val currentSession = viewModelContext.activity.get<Session>()
             val parcel = viewModelContext.args as MessageActionsBottomSheet.ParcelableArgs
 
+            val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
 
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
             return if (event != null) {
