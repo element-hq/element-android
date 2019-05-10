@@ -19,13 +19,15 @@ package im.vector.riotredesign.features.home.room.detail.timeline.item
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import im.vector.riotredesign.R
 import com.airbnb.epoxy.EpoxyAttribute
 import com.jakewharton.rxbinding2.view.RxView
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
 
-abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>() {
+
+abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AEventItemBase<H>() {
 
     abstract val informationData: MessageInformationData
 
@@ -41,6 +43,14 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>()
     override fun bind(holder: H) {
         super.bind(holder)
         if (informationData.showInformation) {
+
+            val lp = holder.avatarImageView.layoutParams?.apply {
+                val size = dpToPx(avatarStyle.avatarSizeDP, holder.view.context)
+                height = size
+                width = size
+            }
+            holder.avatarImageView.layoutParams = lp
+
             holder.avatarImageView.visibility = View.VISIBLE
             holder.avatarImageView.setOnClickListener(avatarClickListener)
             holder.memberNameView.visibility = View.VISIBLE
@@ -63,10 +73,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : VectorEpoxyModel<H>()
         alpha = if (informationData.sendState.isSent()) 1f else 0.5f
     }
 
-    abstract class Holder : VectorEpoxyHolder() {
-        abstract val avatarImageView: ImageView
-        abstract val memberNameView: TextView
-        abstract val timeView: TextView
+    abstract class Holder : BaseHolder() {
+
+        val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
+        val memberNameView by bind<TextView>(R.id.messageMemberNameView)
+        val timeView by bind<TextView>(R.id.messageTimeView)
     }
 
 }

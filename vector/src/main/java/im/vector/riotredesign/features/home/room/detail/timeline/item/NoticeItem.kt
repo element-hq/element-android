@@ -22,30 +22,41 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
-import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_notice)
-abstract class NoticeItem : VectorEpoxyModel<NoticeItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
+abstract class NoticeItem : AEventItemBase<NoticeItem.Holder>() {
 
-    @EpoxyAttribute var noticeText: CharSequence? = null
-    @EpoxyAttribute var avatarUrl: String? = null
-    @EpoxyAttribute var userId: String = ""
-    @EpoxyAttribute var memberName: CharSequence? = null
+    @EpoxyAttribute
+    var noticeText: CharSequence? = null
+    @EpoxyAttribute
+    var avatarUrl: String? = null
+    @EpoxyAttribute
+    var userId: String = ""
+    @EpoxyAttribute
+    var memberName: CharSequence? = null
 
 
     @EpoxyAttribute
     var longClickListener: View.OnLongClickListener? = null
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.noticeTextView.text = noticeText
         AvatarRenderer.render(avatarUrl, userId, memberName?.toString(), holder.avatarImageView)
         holder.view.setOnLongClickListener(longClickListener)
     }
 
-    class Holder : VectorEpoxyHolder() {
+    override fun getStubType(): Int = STUB_ID
+
+    class Holder : BaseHolder() {
+        override fun getStubId(): Int = STUB_ID
+
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
+    }
+
+    companion object {
+        private val STUB_ID = R.id.messageContentNoticeStub
     }
 }

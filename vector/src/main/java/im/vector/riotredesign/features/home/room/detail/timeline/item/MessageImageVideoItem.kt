@@ -19,20 +19,23 @@ package im.vector.riotredesign.features.home.room.detail.timeline.item
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotredesign.features.media.ImageContentRenderer
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_image_video_message)
+@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
 
-    @EpoxyAttribute lateinit var mediaData: ImageContentRenderer.Data
-    @EpoxyAttribute override lateinit var informationData: MessageInformationData
-    @EpoxyAttribute var playable: Boolean = false
-    @EpoxyAttribute var clickListener: View.OnClickListener? = null
+    @EpoxyAttribute
+    lateinit var mediaData: ImageContentRenderer.Data
+    @EpoxyAttribute
+    override lateinit var informationData: MessageInformationData
+    @EpoxyAttribute
+    var playable: Boolean = false
+    @EpoxyAttribute
+    var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -49,13 +52,21 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         super.unbind(holder)
     }
 
+    override fun getStubType(): Int = STUB_ID
+
     class Holder : AbsMessageItem.Holder() {
-        override val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
-        override val memberNameView by bind<TextView>(R.id.messageMemberNameView)
-        override val timeView by bind<TextView>(R.id.messageTimeView)
+
+        override fun getStubId(): Int = STUB_ID
+
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
         val imageView by bind<ImageView>(R.id.messageThumbnailView)
         val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
+
+    }
+
+
+    companion object {
+        private val STUB_ID = R.id.messageContentMediaStub
     }
 
 }

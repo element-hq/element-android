@@ -32,6 +32,7 @@ import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.utils.DebouncedClickListener
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
@@ -70,7 +71,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val avatarUrl = event.senderAvatar
         val memberName = event.senderName ?: event.root.sender ?: ""
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(getColorFor(event.root.sender ?: ""))
+            textColor = colorProvider.getColor(AvatarRenderer.getColorFromUserId(event.root.sender ?: ""))
         }
         val informationData = MessageInformationData(eventId = eventId,
                 senderId = event.root.sender ?: "",
