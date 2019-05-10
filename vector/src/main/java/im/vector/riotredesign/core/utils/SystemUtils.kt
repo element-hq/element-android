@@ -76,10 +76,12 @@ fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?,
  * @param context the context
  * @param text    the text to copy
  */
-fun copyToClipboard(context: Context, text: CharSequence) {
+fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboard.primaryClip = ClipData.newPlainText("", text)
-    context.toast(R.string.copied_to_clipboard)
+    if (showToast) {
+        context.toast(R.string.copied_to_clipboard)
+    }
 }
 
 /**

@@ -39,9 +39,23 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.media.VideoMediaViewerActivity" />
 
+        <activity
+            android:name="im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity"
+            android:label="@string/title_activity_emoji_reaction_picker" />
+
         <service
             android:name=".core.services.CallService"
             android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/riotx_provider_paths" />
+        </provider>
 
     </application>
 

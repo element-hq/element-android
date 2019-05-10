@@ -238,3 +238,26 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
         activity.toast(R.string.error_no_external_application_found)
     }
 }
+
+fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
+
+    var mediaUri: Uri? = null
+    try {
+        mediaUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+    } catch (e: Exception) {
+        Timber.e("onMediaAction Selected File cannot be shared " + e.message)
+    }
+
+
+    if (null != mediaUri) {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        // Grant temporary read permission to the content URI
+        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        sendIntent.type = mediaMimeType
+        sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri)
+
+        context.startActivity(sendIntent)
+
+    }
+}

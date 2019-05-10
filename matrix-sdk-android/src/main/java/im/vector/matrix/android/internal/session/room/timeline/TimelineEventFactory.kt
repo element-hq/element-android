@@ -20,16 +20,17 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
+import io.realm.Realm
 
 internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomMemberExtractor) {
 
     private val cached = mutableMapOf<String, SenderData>()
 
-    fun create(eventEntity: EventEntity): TimelineEvent {
+    fun create(eventEntity: EventEntity, realm: Realm = eventEntity.realm): TimelineEvent {
         val sender = eventEntity.sender
         val cacheKey = sender + eventEntity.stateIndex
         val senderData = cached.getOrPut(cacheKey) {
-            val senderRoomMember = roomMemberExtractor.extractFrom(eventEntity)
+            val senderRoomMember = roomMemberExtractor.extractFrom(eventEntity,realm)
             SenderData(senderRoomMember?.displayName, senderRoomMember?.avatarUrl)
         }
         return TimelineEvent(

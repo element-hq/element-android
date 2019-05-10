@@ -18,9 +18,13 @@ package im.vector.matrix.android.api.session.room.send
 
 enum class SendState {
     UNKNOWN,
+    // the event has not been sent
     UNSENT,
+    // the event is encrypting
     ENCRYPTING,
+    // the event is currently sending
     SENDING,
+    // the event has been sent
     SENT,
     SYNCED;
 

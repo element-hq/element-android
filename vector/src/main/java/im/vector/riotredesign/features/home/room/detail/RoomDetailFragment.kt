@@ -20,16 +20,28 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
+import android.view.HapticFeedbackConstants
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
+import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
+import com.github.piasy.biv.BigImageViewer
+import com.github.piasy.biv.loader.ImageLoader
+import com.google.android.material.snackbar.Snackbar
 import com.jaiselrahman.filepicker.activity.FilePickerActivity
 import com.jaiselrahman.filepicker.config.Configurations
 import com.jaiselrahman.filepicker.model.MediaFile
@@ -37,12 +49,10 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.dialogs.DialogListItem
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
@@ -62,7 +72,11 @@ import im.vector.riotredesign.features.home.room.detail.composer.TextComposerAct
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotredesign.features.home.room.detail.timeline.action.ActionsHandler
+import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageActionsBottomSheet
+import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageMenuViewModel
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.html.PillImageSpan
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.ImageMediaViewerActivity
@@ -75,6 +89,7 @@ import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import java.io.File
 
 
 @Parcelize
@@ -88,7 +103,10 @@ private const val CAMERA_VALUE_TITLE = "attachment"
 private const val REQUEST_FILES_REQUEST_CODE = 0
 private const val TAKE_IMAGE_REQUEST_CODE = 1
 
-class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callback, AutocompleteUserPresenter.Callback {
+class RoomDetailFragment :
+        VectorBaseFragment(),
+        TimelineEventController.Callback,
+        AutocompleteUserPresenter.Callback {
 
     companion object {
 
@@ -115,8 +133,11 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
 
+    private lateinit var actionViewModel: ActionsHandler
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
         bindScope(getOrCreateScope(HomeModule.ROOM_DETAIL_SCOPE))
         setupRecyclerView()
         setupToolbar()
@@ -125,6 +146,10 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         roomDetailViewModel.subscribe { renderState(it) }
         textComposerViewModel.subscribe { renderTextComposerState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
+
+        actionViewModel.actionCommandEvent.observe(this, Observer {
+            handleActions(it)
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -135,7 +160,6 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
             }
         }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -401,9 +425,93 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
         vectorBaseActivity.notImplemented()
     }
 
-    // AutocompleteUserPresenter.Callback
+    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View) {
+
+    }
+
+    override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean {
+        view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        val roomId = (arguments?.get(MvRx.KEY_ARG) as? RoomDetailArgs)?.roomId
+        if (roomId.isNullOrBlank()) {
+            Timber.e("Missing RoomId, cannot open bottomsheet")
+            return false
+        }
+        MessageActionsBottomSheet
+                .newInstance(roomId, informationData)
+                .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
+        return true
+    }
+
+    override fun onAvatarClicked(informationData: MessageInformationData) {
+        vectorBaseActivity.notImplemented()
+    }
+// AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
+    }
+
+    private fun handleActions(it: LiveEvent<ActionsHandler.ActionData>?) {
+        it?.getContentIfNotHandled()?.let { actionData ->
+
+            when (actionData.actionId) {
+                MessageMenuViewModel.ACTION_ADD_REACTION -> {
+                    startActivityForResult(EmojiReactionPickerActivity.intent(requireContext()), 0)
+                }
+                MessageMenuViewModel.ACTION_COPY -> {
+                    //I need info about the current selected message :/
+                    copyToClipboard(requireContext(), actionData.data?.toString() ?: "", false)
+                    val snack = Snackbar.make(view!!, requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+                    snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
+                    snack.show()
+                }
+                MessageMenuViewModel.ACTION_SHARE -> {
+                    //TODO current data communication is too limited
+                    //Need to now the media type
+                    actionData.data?.toString()?.let {
+                        //TODO bad, just POC
+                        BigImageViewer.imageLoader().loadImage(
+                                actionData.hashCode(),
+                                Uri.parse(it),
+                                object : ImageLoader.Callback {
+                                    override fun onFinish() {}
+
+                                    override fun onSuccess(image: File?) {
+                                        if (image != null)
+                                            shareMedia(requireContext(), image, "image/*")
+                                    }
+
+                                    override fun onFail(error: Exception?) {}
+
+                                    override fun onCacheHit(imageType: Int, image: File?) {}
+
+                                    override fun onCacheMiss(imageType: Int, image: File?) {}
+
+                                    override fun onProgress(progress: Int) {}
+
+                                    override fun onStart() {}
+
+                                }
+
+                        )
+                    }
+                }
+                MessageMenuViewModel.VIEW_SOURCE,
+                MessageMenuViewModel.VIEW_DECRYPTED_SOURCE -> {
+                    val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
+                    view.findViewById<TextView>(R.id.event_content_text_view)?.let {
+                        it.text = actionData.data?.toString() ?: ""
+                    }
+
+                    AlertDialog.Builder(requireActivity())
+                            .setView(view)
+                            .setPositiveButton(R.string.ok) { dialog, id -> dialog.cancel() }
+                            .show()
+                }
+                else -> {
+                    Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 }

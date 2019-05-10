@@ -160,6 +160,17 @@ object ThemeUtils {
         return matchedColor
     }
 
+    fun getAttribute(c: Context, @AttrRes attribute: Int): TypedValue? {
+        try {
+            val typedValue = TypedValue()
+            c.theme.resolveAttribute(attribute, typedValue, true)
+            return  typedValue
+        } catch (e: Exception) {
+            Timber.e(e, "Unable to get color")
+        }
+        return null
+    }
+
     /**
      * Get the resource Id applied to the current theme
      *

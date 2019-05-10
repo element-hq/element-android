@@ -199,7 +199,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
      * MENU MANAGEMENT
      * ========================================================================================== */
 
-    final override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val menuRes = getMenuRes()
 
         if (menuRes != -1) {

@@ -57,6 +57,8 @@
     <string name="stay">Stay</string>
     <string name="send">Send</string>
     <string name="copy">Copy</string>
+    <string name="edit">Edit</string>
+    <string name="reply">Reply</string>
     <string name="resend">Resend</string>
     <string name="redact">Remove</string>
     <string name="quote">Quote</string>

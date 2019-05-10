@@ -16,39 +16,26 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
-import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.view.View
 import androidx.annotation.ColorRes
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
+import im.vector.riotredesign.core.utils.DebouncedClickListener
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem
-import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem_
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageFileItem
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageFileItem_
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageVideoItem
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageVideoItem_
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.*
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.VideoContentRenderer
@@ -70,13 +57,13 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                                                      ?: false
+                ?: false
 
         val showInformation = addDaySeparator
-                              || event.senderAvatar != nextEvent?.senderAvatar
-                              || event.senderName != nextEvent?.senderName
-                              || nextEvent?.root?.type != EventType.MESSAGE
-                              || isNextMessageReceivedMoreThanOneHourAgo
+                || event.senderAvatar != nextEvent?.senderAvatar
+                || event.senderName != nextEvent?.senderName
+                || nextEvent?.root?.type != EventType.MESSAGE
+                || isNextMessageReceivedMoreThanOneHourAgo
 
         val messageContent: MessageContent = event.root.content.toModel() ?: return null
         val time = timelineDateFormatter.formatMessageHour(date)
@@ -86,43 +73,73 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             textColor = colorProvider.getColor(getColorFor(event.root.sender ?: ""))
         }
         val informationData = MessageInformationData(eventId = eventId,
-                                                     senderId = event.root.sender ?: "",
-                                                     sendState = event.sendState,
-                                                     time = time,
-                                                     avatarUrl = avatarUrl,
-                                                     memberName = formattedMemberName,
-                                                     showInformation = showInformation)
+                senderId = event.root.sender ?: "",
+                sendState = event.sendState,
+                time = time,
+                avatarUrl = avatarUrl,
+                memberName = formattedMemberName,
+                showInformation = showInformation)
 
+//        val all = event.root.toContent()
+//        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, callback)
-            is MessageTextContent   -> buildTextMessageItem(messageContent, informationData, callback)
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, callback)
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, callback)
+            is MessageTextContent -> buildTextMessageItem(event.sendState, messageContent, informationData, callback)
+            is MessageImageContent -> buildImageMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
-            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, callback)
-            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, callback)
-            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, callback)
-            else                    -> buildNotHandledMessageItem(messageContent)
+            is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, callback)
+            is MessageFileContent -> buildFileMessageItem(messageContent, informationData, callback)
+            is MessageAudioContent -> buildAudioMessageItem(messageContent, informationData, callback)
+            else -> buildNotHandledMessageItem(messageContent)
         }
     }
 
-    private fun buildAudioMessageItem(messageContent: MessageAudioContent,
-                                      informationData: MessageInformationData,
+    private fun buildAudioMessageItem(messageContent: MessageAudioContent, informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
-                .clickListener { _ -> callback?.onAudioMessageClicked(messageContent) }
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, messageContent, view)
+                        }))
+                .clickListener(
+                        DebouncedClickListener(View.OnClickListener { _ ->
+                            callback?.onAudioMessageClicked(messageContent)
+                        }))
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                            ?: false
+                }
     }
 
-    private fun buildFileMessageItem(messageContent: MessageFileContent,
-                                     informationData: MessageInformationData,
+    private fun buildFileMessageItem(messageContent: MessageFileContent, informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_attachment)
-                .clickListener { _ -> callback?.onFileMessageClicked(messageContent) }
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, messageContent, view)
+                        }))
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                            ?: false
+                }
+                .clickListener(
+                        DebouncedClickListener(View.OnClickListener { _ ->
+                            callback?.onFileMessageClicked(messageContent)
+                        }))
     }
 
     private fun buildNotHandledMessageItem(messageContent: MessageContent): DefaultItem? {
@@ -130,8 +147,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return DefaultItem_().text(text)
     }
 
-    private fun buildImageMessageItem(messageContent: MessageImageContent,
-                                      informationData: MessageInformationData,
+    private fun buildImageMessageItem(messageContent: MessageImageContent, informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -149,11 +165,26 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .informationData(informationData)
                 .mediaData(data)
-                .clickListener { view -> callback?.onImageMessageClicked(messageContent, data, view) }
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .clickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onImageMessageClicked(messageContent, data, view)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, messageContent, view)
+                        }))
+
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                            ?: false
+                }
     }
 
-    private fun buildVideoMessageItem(messageContent: MessageVideoContent,
-                                      informationData: MessageInformationData,
+    private fun buildVideoMessageItem(messageContent: MessageVideoContent, informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -176,10 +207,22 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .playable(true)
                 .informationData(informationData)
                 .mediaData(thumbnailData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, messageContent, view)
+                        }))
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                            ?: false
+                }
     }
 
-    private fun buildTextMessageItem(messageContent: MessageTextContent,
+    private fun buildTextMessageItem(sendState: SendState, messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
@@ -191,10 +234,26 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(linkifiedBody)
                 .informationData(informationData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                //click on the text
+                .clickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, messageContent, view)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, messageContent, view)
+                        }))
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                            ?: false
+                }
     }
 
-    private fun buildNoticeMessageItem(messageContent: MessageNoticeContent,
-                                       informationData: MessageInformationData,
+    private fun buildNoticeMessageItem(messageContent: MessageNoticeContent, informationData: MessageInformationData,
                                        callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -208,10 +267,21 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, messageContent, view)
+                        }))
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                            ?: false
+                }
     }
 
-    private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
-                                      informationData: MessageInformationData,
+    private fun buildEmoteMessageItem(messageContent: MessageEmoteContent, informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -221,9 +291,21 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, messageContent, view)
+                        }))
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                            ?: false
+                }
     }
 
-    private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): Spannable {
+    private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {
         val spannable = SpannableStringBuilder(body)
         MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
             override fun onUrlClicked(url: String) {
@@ -251,13 +333,13 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         }
         val cI = Math.abs(hash) % 8 + 1
         return when (cI) {
-            1    -> R.color.username_1
-            2    -> R.color.username_2
-            3    -> R.color.username_3
-            4    -> R.color.username_4
-            5    -> R.color.username_5
-            6    -> R.color.username_6
-            7    -> R.color.username_7
+            1 -> R.color.username_1
+            2 -> R.color.username_2
+            3 -> R.color.username_3
+            4 -> R.color.username_4
+            5 -> R.color.username_5
+            6 -> R.color.username_6
+            7 -> R.color.username_7
             else -> R.color.username_8
         }
     }

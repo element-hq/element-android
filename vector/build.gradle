@@ -124,6 +124,7 @@ dependencies {
     def markwon_version = '3.0.0-SNAPSHOT'
     def big_image_viewer_version = '1.5.6'
     def glide_version = '4.9.0'
+    def moshi_version = '1.8.0'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -138,6 +139,8 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.1'
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
+    implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     // Log
     implementation 'com.jakewharton.timber:timber:4.7.1'

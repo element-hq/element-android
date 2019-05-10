@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottom_sheet_message_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/bottom_sheet_message_preview_avatar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="@dimen/layout_horizontal_margin"
+                android:adjustViewBounds="true"
+                android:background="@drawable/circle"
+                android:contentDescription="@string/avatar"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/bottom_sheet_message_preview_sender"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-bold"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
+                app:layout_constraintTop_toTopOf="@id/bottom_sheet_message_preview_avatar"
+                tools:text="@tools:sample/full_names" />
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+
+                android:id="@+id/bottom_sheet_message_preview_body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:layout_marginBottom="4dp"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:textColor="?android:textColorSecondary"
+                android:textIsSelectable="false"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@id/bottom_sheet_message_preview_timestamp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
+                app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_sender"
+                tools:text="Quis harum id autem cumque consequatur laboriosam aliquam sed. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. " />
+
+            <TextView
+                android:id="@+id/bottom_sheet_message_preview_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_body"
+                tools:text="Friday 8pm" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/vctr_list_divider_color" />
+
+        <FrameLayout
+            android:id="@+id/bottom_sheet_quick_reaction_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/vctr_list_divider_color" />
+
+
+        <FrameLayout
+            android:id="@+id/bottom_sheet_menu_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
