@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.util.fetchMappedCopied
+import im.vector.matrix.android.internal.util.fetchCopyMap
 
 internal class DefaultTimelineService(private val roomId: String,
                                       private val monarchy: Monarchy,
@@ -38,7 +38,7 @@ internal class DefaultTimelineService(private val roomId: String,
     }
 
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {
-        return monarchy.fetchMappedCopied({
+        return monarchy.fetchCopyMap({
             EventEntity.where(it, eventId = eventId).findFirst()
         }, { entity, realm ->
             timelineEventFactory.create(entity, realm)

@@ -5,4 +5,10 @@
     <string name="global_retry">"Retry"</string>
     <string name="room_list_empty">"Join a room to start using the app."</string>
 
+
+    <string name="title_activity_emoji_reaction_picker">Reactions</string>
+    <string name="reactions_agree">Agree</string>
+    <string name="reactions_like">Like</string>
+    <string name="message_add_reaction">Add Reaction</string>
+
 </resources>

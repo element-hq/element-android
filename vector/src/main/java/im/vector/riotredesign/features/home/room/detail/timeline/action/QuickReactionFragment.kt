@@ -39,16 +39,6 @@ class QuickReactionFragment : BaseMvRxFragment() {
     @BindView(R.id.root_layout)
     lateinit var rootLayout: ConstraintLayout
 
-
-    @BindView(R.id.quick_react_1)
-    lateinit var quickReact1: View
-    @BindView(R.id.quick_react_2)
-    lateinit var quickReact2: View
-    @BindView(R.id.quick_react_3)
-    lateinit var quickReact3: View
-    @BindView(R.id.quick_react_4)
-    lateinit var quickReact4: View
-
     @BindView(R.id.quick_react_1_text)
     lateinit var quickReact1Text: TextView
 
@@ -78,16 +68,16 @@ class QuickReactionFragment : BaseMvRxFragment() {
         quickReact4Text.text = viewModel.likeNegative
 
         //configure click listeners
-        quickReact1.setOnClickListener {
+        quickReact1Text.setOnClickListener {
             viewModel.toggleAgree(true)
         }
-        quickReact2.setOnClickListener {
+        quickReact2Text.setOnClickListener {
             viewModel.toggleAgree(false)
         }
-        quickReact3.setOnClickListener {
+        quickReact3Text.setOnClickListener {
             viewModel.toggleLike(true)
         }
-        quickReact4.setOnClickListener {
+        quickReact4Text.setOnClickListener {
             viewModel.toggleLike(false)
         }
 
@@ -98,32 +88,32 @@ class QuickReactionFragment : BaseMvRxFragment() {
         TransitionManager.beginDelayedTransition(rootLayout)
         when (it.agreeTrigleState) {
             TriggleState.NONE -> {
-                quickReact1.alpha = 1f
-                quickReact2.alpha = 1f
+                quickReact1Text.alpha = 1f
+                quickReact2Text.alpha = 1f
             }
             TriggleState.FIRST -> {
-                quickReact1.alpha = 1f
-                quickReact2.alpha = 0.2f
+                quickReact1Text.alpha = 1f
+                quickReact2Text.alpha = 0.2f
 
             }
             TriggleState.SECOND -> {
-                quickReact1.alpha = 0.2f
-                quickReact2.alpha = 1f
+                quickReact1Text.alpha = 0.2f
+                quickReact2Text.alpha = 1f
             }
         }
         when (it.likeTriggleState) {
             TriggleState.NONE -> {
-                quickReact3.alpha = 1f
-                quickReact4.alpha = 1f
+                quickReact3Text.alpha = 1f
+                quickReact4Text.alpha = 1f
             }
             TriggleState.FIRST -> {
-                quickReact3.alpha = 1f
-                quickReact4.alpha = 0.2f
+                quickReact3Text.alpha = 1f
+                quickReact4Text.alpha = 0.2f
 
             }
             TriggleState.SECOND -> {
-                quickReact3.alpha = 0.2f
-                quickReact4.alpha = 1f
+                quickReact3Text.alpha = 0.2f
+                quickReact4Text.alpha = 1f
             }
         }
 

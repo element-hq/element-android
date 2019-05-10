@@ -42,7 +42,7 @@ fun <T : RealmModel> Monarchy.fetchCopied(query: (Realm) -> T?): T? {
     return fetch(query, true)
 }
 
-fun <U, T : RealmModel> Monarchy.fetchMappedCopied(query: (Realm) -> T?, map: (T, realm: Realm) -> U): U? {
+fun <U, T : RealmModel> Monarchy.fetchCopyMap(query: (Realm) -> T?, map: (T, realm: Realm) -> U): U? {
     val ref = AtomicReference<U?>()
     doWithRealm { realm ->
         val result = query.invoke(realm)?.let {

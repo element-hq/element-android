@@ -133,7 +133,7 @@ class RoomDetailFragment :
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
 
-    lateinit var actionViewModel: ActionsHandler
+    private lateinit var actionViewModel: ActionsHandler
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -425,11 +425,11 @@ class RoomDetailFragment :
         vectorBaseActivity.notImplemented()
     }
 
-    override fun onEventCellClicked(eventId: String, informationData: MessageInformationData, messageContent: MessageContent, view: View) {
+    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View) {
 
     }
 
-    override fun onEventLongClicked(eventId: String, informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean {
+    override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         val roomId = (arguments?.get(MvRx.KEY_ARG) as? RoomDetailArgs)?.roomId
         if (roomId.isNullOrBlank()) {
@@ -437,7 +437,7 @@ class RoomDetailFragment :
             return false
         }
         MessageActionsBottomSheet
-                .newInstance(eventId, roomId, informationData)
+                .newInstance(roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
         return true
     }
@@ -478,7 +478,7 @@ class RoomDetailFragment :
 
                                     override fun onSuccess(image: File?) {
                                         if (image != null)
-                                            shareMedia(requireContext(), image!!, "image/*")
+                                            shareMedia(requireContext(), image, "image/*")
                                     }
 
                                     override fun onFail(error: Exception?) {}

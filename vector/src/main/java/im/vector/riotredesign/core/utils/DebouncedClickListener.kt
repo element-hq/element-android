@@ -1,6 +1,7 @@
 package im.vector.riotredesign.core.utils
 
 import android.view.View
+import java.util.*
 
 
 /**
@@ -8,7 +9,7 @@ import android.view.View
  * Safe to use in different views
  */
 class DebouncedClickListener(val original: View.OnClickListener, private val minimumInterval: Long = 400) : View.OnClickListener {
-    private val lastClickMap = HashMap<View, Long>()
+    private val lastClickMap = WeakHashMap<View, Long>()
 
     override fun onClick(clickedView: View) {
         val previousClickTimestamp = lastClickMap[clickedView]

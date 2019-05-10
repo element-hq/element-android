@@ -83,19 +83,18 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent -> buildEmoteMessageItem(eventId, messageContent, informationData, callback)
-            is MessageTextContent -> buildTextMessageItem(eventId, event.sendState, messageContent, informationData, callback)
-            is MessageImageContent -> buildImageMessageItem(eventId, messageContent, informationData, callback)
-            is MessageNoticeContent -> buildNoticeMessageItem(eventId, messageContent, informationData, callback)
-            is MessageVideoContent -> buildVideoMessageItem(eventId, messageContent, informationData, callback)
-            is MessageFileContent -> buildFileMessageItem(eventId, messageContent, informationData, callback)
-            is MessageAudioContent -> buildAudioMessageItem(eventId, messageContent, informationData, callback)
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, callback)
+            is MessageTextContent -> buildTextMessageItem(event.sendState, messageContent, informationData, callback)
+            is MessageImageContent -> buildImageMessageItem(messageContent, informationData, callback)
+            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
+            is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, callback)
+            is MessageFileContent -> buildFileMessageItem(messageContent, informationData, callback)
+            is MessageAudioContent -> buildAudioMessageItem(messageContent, informationData, callback)
             else -> buildNotHandledMessageItem(messageContent)
         }
     }
 
-    private fun buildAudioMessageItem(eventId: String, messageContent: MessageAudioContent,
-                                      informationData: MessageInformationData,
+    private fun buildAudioMessageItem(messageContent: MessageAudioContent, informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
@@ -107,20 +106,19 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { _ ->
                             callback?.onAudioMessageClicked(messageContent)
                         }))
                 .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
     }
 
-    private fun buildFileMessageItem(eventId: String, messageContent: MessageFileContent,
-                                     informationData: MessageInformationData,
+    private fun buildFileMessageItem(messageContent: MessageFileContent, informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
@@ -132,16 +130,16 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                            ?: false
+                }
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { _ ->
                             callback?.onFileMessageClicked(messageContent)
                         }))
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
-                            ?: false
-                }
     }
 
     private fun buildNotHandledMessageItem(messageContent: MessageContent): DefaultItem? {
@@ -149,8 +147,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return DefaultItem_().text(text)
     }
 
-    private fun buildImageMessageItem(eventId: String, messageContent: MessageImageContent,
-                                      informationData: MessageInformationData,
+    private fun buildImageMessageItem(messageContent: MessageImageContent, informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -178,17 +175,16 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
 
                 .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
     }
 
-    private fun buildVideoMessageItem(eventId: String, messageContent: MessageVideoContent,
-                                      informationData: MessageInformationData,
+    private fun buildVideoMessageItem(messageContent: MessageVideoContent, informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -217,17 +213,16 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
                 .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
     }
 
-    private fun buildTextMessageItem(eventId: String, sendState: SendState,
-                                     messageContent: MessageTextContent,
+    private fun buildTextMessageItem(sendState: SendState, messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
@@ -246,20 +241,19 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 //click on the text
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
                 .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
     }
 
-    private fun buildNoticeMessageItem(eventId: String, messageContent: MessageNoticeContent,
-                                       informationData: MessageInformationData,
+    private fun buildNoticeMessageItem(messageContent: MessageNoticeContent, informationData: MessageInformationData,
                                        callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -279,16 +273,15 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
                 .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
     }
 
-    private fun buildEmoteMessageItem(eventId: String, messageContent: MessageEmoteContent,
-                                      informationData: MessageInformationData,
+    private fun buildEmoteMessageItem(messageContent: MessageEmoteContent, informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -304,10 +297,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(eventId, informationData, messageContent, view)
+                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
                 .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(eventId, informationData, messageContent, view)
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
     }

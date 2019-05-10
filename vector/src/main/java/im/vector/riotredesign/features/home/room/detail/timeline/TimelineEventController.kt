@@ -54,8 +54,8 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
         fun onFileMessageClicked(messageFileContent: MessageFileContent)
         fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
-        fun onEventCellClicked(eventId: String, informationData: MessageInformationData, messageContent: MessageContent, view: View)
-        fun onEventLongClicked(eventId: String, informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean
+        fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View)
+        fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean
         fun onAvatarClicked(informationData: MessageInformationData)
     }
 

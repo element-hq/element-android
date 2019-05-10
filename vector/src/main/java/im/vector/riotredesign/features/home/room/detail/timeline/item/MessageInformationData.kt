@@ -29,6 +29,5 @@ data class MessageInformationData(
         val time: CharSequence? = null,
         val avatarUrl: String?,
         val memberName: CharSequence? = null,
-        val userId: String? = null,
         val showInformation: Boolean = true
 ) : Parcelable
