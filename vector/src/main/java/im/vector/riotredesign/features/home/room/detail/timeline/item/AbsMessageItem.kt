@@ -44,12 +44,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AEventItemBase<H>() {
         super.bind(holder)
         if (informationData.showInformation) {
 
-            val lp = holder.avatarImageView.layoutParams?.apply {
+            holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
                 val size = dpToPx(avatarStyle.avatarSizeDP, holder.view.context)
                 height = size
                 width = size
             }
-            holder.avatarImageView.layoutParams = lp
 
             holder.avatarImageView.visibility = View.VISIBLE
             holder.avatarImageView.setOnClickListener(avatarClickListener)
