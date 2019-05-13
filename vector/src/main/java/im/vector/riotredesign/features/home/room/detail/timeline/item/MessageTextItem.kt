@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
+import android.text.Spannable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -33,7 +34,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_text_message)
+@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
@@ -67,12 +68,12 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         }
     }
 
-    class Holder : AbsMessageItem.Holder() {
-        override val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
-        override val memberNameView by bind<TextView>(R.id.messageMemberNameView)
-        override val timeView by bind<TextView>(R.id.messageTimeView)
-        val messageView by bind<AppCompatTextView>(R.id.messageTextView)
-    }
+    override fun getStubType(): Int = R.id.messageContentTextStub
 
+    class Holder : AbsMessageItem.Holder() {
+        val messageView by bind<AppCompatTextView>(R.id.messageTextView)
+        override fun getStubId(): Int = R.id.messageContentTextStub
+
+    }
 
 }

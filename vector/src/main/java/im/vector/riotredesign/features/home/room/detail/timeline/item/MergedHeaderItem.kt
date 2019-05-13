@@ -24,15 +24,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
-import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
 
+
 data class MergedHeaderItem(private val isCollapsed: Boolean,
-                       private val mergeId: String,
-                       private val mergeData: List<Data>,
-                       private val onCollapsedStateChanged: (Boolean) -> Unit
-) : VectorEpoxyModel<MergedHeaderItem.Holder>() {
+                            private val mergeId: String,
+                            private val mergeData: List<Data>,
+                            private val onCollapsedStateChanged: (Boolean) -> Unit
+) : BaseEventItem<MergedHeaderItem.Holder>() {
 
     private val distinctMergeData = mergeData.distinctBy { it.userId }
 
@@ -41,12 +40,14 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
     }
 
     override fun getDefaultLayout(): Int {
-        return R.layout.item_timeline_event_merged_header
+        return R.layout.item_timeline_event_base_noinfo
     }
 
     override fun createNewHolder(): Holder {
         return Holder()
     }
+
+    override fun getStubType(): Int = STUB_ID
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -84,11 +85,17 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
             val avatarUrl: String?
     )
 
-    class Holder : VectorEpoxyHolder() {
+    class Holder : BaseHolder() {
+        override fun getStubId(): Int = STUB_ID
+
         val expandView by bind<TextView>(R.id.itemMergedExpandTextView)
         val summaryView by bind<TextView>(R.id.itemMergedSummaryTextView)
         val separatorView by bind<View>(R.id.itemMergedSeparatorView)
         val avatarListView by bind<ViewGroup>(R.id.itemMergedAvatarListView)
 
+    }
+
+    companion object {
+        private val STUB_ID = R.id.messageContentMergedheaderStub
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/messageThumbnailView"
+        android:layout_width="375dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="300dp" />
+
+    <ImageView
+        android:id="@+id/messageMediaPlayView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_material_play_circle"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/messageThumbnailView"
+        app:layout_constraintEnd_toEndOf="@id/messageThumbnailView"
+        app:layout_constraintStart_toStartOf="@id/messageThumbnailView"
+        app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
+        tools:visibility="visible" />
+
+
+    <include
+        android:id="@+id/messageMediaUploadProgressLayout"
+        layout="@layout/media_upload_download_progress_layout"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messageThumbnailView"
+        tools:visibility="visible" />
+</androidx.constraintlayout.widget.ConstraintLayout>

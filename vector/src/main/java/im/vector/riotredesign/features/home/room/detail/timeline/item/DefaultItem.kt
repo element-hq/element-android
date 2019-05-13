@@ -20,19 +20,26 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
-import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_default)
-abstract class DefaultItem : VectorEpoxyModel<DefaultItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
+abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
 
-    @EpoxyAttribute var text: CharSequence? = null
+    @EpoxyAttribute
+    var text: CharSequence? = null
 
     override fun bind(holder: Holder) {
         holder.messageView.text = text
     }
 
-    class Holder : VectorEpoxyHolder() {
+    override fun getStubType(): Int = STUB_ID
+
+    class Holder : BaseHolder() {
+        override fun getStubId(): Int = STUB_ID
+
         val messageView by bind<TextView>(R.id.stateMessageView)
+    }
+
+    companion object {
+        private val STUB_ID = R.id.messageContentDefaultStub
     }
 }

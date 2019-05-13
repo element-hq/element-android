@@ -4,37 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
     android:addStatesFromChildren="true"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:background="?attr/selectableItemBackground"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
 
 
     <ImageView
         android:id="@+id/messageAvatarImageView"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/messageStartGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:layout_constraintGuide_begin="44dp" />
 
     <TextView
         android:id="@+id/messageMemberNameView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         android:layout_marginRight="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/messageTimeView"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/messageStartGuideline"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/full_names" />
 
@@ -51,21 +58,26 @@
         app:layout_constraintTop_toTopOf="@id/messageMemberNameView"
         tools:text="@tools:sample/date/hhmm" />
 
-    <TextView
-        android:id="@+id/messageTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginBottom="8dp"
-        android:clickable="true"
-        android:textColor="@color/dark_grey"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageMemberNameView"
-        tools:text="Alright finished work, heading there in about 20 mins… Ping me when you’re outside" />
+
+    <ViewStub
+        android:id="@+id/messageContentTextStub"
+        style="@style/TimelineContentStubLayoutParams"
+        android:inflatedId="@id/messageTextView"
+        android:layout="@layout/item_timeline_event_text_message_stub"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
+    <ViewStub
+        android:id="@+id/messageContentMediaStub"
+        style="@style/TimelineContentStubLayoutParams"
+        android:layout="@layout/item_timeline_event_media_message_stub"
+        tools:ignore="MissingConstraints" />
+
+    <ViewStub
+        android:id="@+id/messageContentFileStub"
+        style="@style/TimelineContentStubLayoutParams"
+        android:layout="@layout/item_timeline_event_file_stub"
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

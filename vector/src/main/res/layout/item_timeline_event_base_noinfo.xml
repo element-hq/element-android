@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:addStatesFromChildren="true"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/messageStartGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:layout_constraintGuide_begin="44dp" />
+
+    <ViewStub
+        android:id="@+id/messageContentNoticeStub"
+        style="@style/TimelineContentStubNoInfoLayoutParams"
+        android:layout="@layout/item_timeline_event_notice_stub"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
+    <ViewStub
+        android:id="@+id/messageContentDefaultStub"
+        style="@style/TimelineContentStubNoInfoLayoutParams"
+        android:inflatedId="@+id/stateMessageView"
+        android:layout="@layout/item_timeline_event_default_stub"
+        tools:ignore="MissingConstraints" />
+
+    <ViewStub
+        android:id="@+id/messageContentBlankStub"
+        style="@style/TimelineContentStubNoInfoLayoutParams"
+        android:layout="@layout/item_timeline_event_blank_stub"
+        tools:ignore="MissingConstraints" />
+
+    <ViewStub
+        android:id="@+id/messageContentMergedheaderStub"
+        style="@style/TimelineContentStubNoInfoLayoutParams"
+        android:layout="@layout/item_timeline_event_merged_header_stub"
+        tools:ignore="MissingConstraints" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
