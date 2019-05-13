@@ -27,7 +27,7 @@ import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 
 abstract class AEventItemBase<H : AEventItemBase.BaseHolder> : VectorEpoxyModel<H>() {
 
-    var avatarStyle: AvatarStyle = Companion.AvatarStyle.MEDIUM
+    var avatarStyle: AvatarStyle = Companion.AvatarStyle.SMALL
 
     override fun bind(holder: H) {
         super.bind(holder)
