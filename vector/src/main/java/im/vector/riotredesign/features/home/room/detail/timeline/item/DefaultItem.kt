@@ -22,7 +22,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class DefaultItem : AEventItemBase<DefaultItem.Holder>() {
+abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
 
     @EpoxyAttribute
     var text: CharSequence? = null

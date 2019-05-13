@@ -21,13 +21,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import im.vector.riotredesign.R
 import com.airbnb.epoxy.EpoxyAttribute
-import com.jakewharton.rxbinding2.view.RxView
-import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
-import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 
-abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AEventItemBase<H>() {
+abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     abstract val informationData: MessageInformationData
 

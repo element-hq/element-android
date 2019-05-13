@@ -31,7 +31,7 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
                             private val mergeId: String,
                             private val mergeData: List<Data>,
                             private val onCollapsedStateChanged: (Boolean) -> Unit
-) : AEventItemBase<MergedHeaderItem.Holder>() {
+) : BaseEventItem<MergedHeaderItem.Holder>() {
 
     private val distinctMergeData = mergeData.distinctBy { it.userId }
 

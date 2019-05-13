@@ -25,7 +25,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class NoticeItem : AEventItemBase<NoticeItem.Holder>() {
+abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
 
     @EpoxyAttribute
     var noticeText: CharSequence? = null

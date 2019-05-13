@@ -25,7 +25,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 
-abstract class AEventItemBase<H : AEventItemBase.BaseHolder> : VectorEpoxyModel<H>() {
+abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>() {
 
     var avatarStyle: AvatarStyle = Companion.AvatarStyle.SMALL
 
