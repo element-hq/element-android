@@ -21,7 +21,9 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import androidx.core.view.setPadding
+import androidx.core.view.updateLayoutParams
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.home.AvatarRenderer
 import kotlinx.android.synthetic.main.vector_invite_view.view.*
@@ -34,19 +36,33 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         fun onRejectInvite()
     }
 
+    enum class Mode {
+        LARGE,
+        SMALL
+    }
+
     var callback: Callback? = null
 
     init {
         View.inflate(context, R.layout.vector_invite_view, this)
-        layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
         setBackgroundColor(Color.WHITE)
         inviteRejectView.setOnClickListener { callback?.onRejectInvite() }
         inviteAcceptView.setOnClickListener { callback?.onAcceptInvite() }
     }
 
-    fun render(roomSummary: RoomSummary) {
-        AvatarRenderer.render(roomSummary.avatarUrl, roomSummary.roomId, roomSummary.displayName, inviteAvatarView)
-        inviteIdentifierView.text = roomSummary.lastMessage?.sender
-        inviteNameView.text = roomSummary.displayName
+    fun render(sender: User, mode: Mode = Mode.LARGE) {
+        if (mode == Mode.LARGE) {
+            updateLayoutParams { height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT }
+            AvatarRenderer.render(sender.avatarUrl, sender.userId, sender.displayName, inviteAvatarView)
+            inviteIdentifierView.text = sender.userId
+            inviteNameView.text = sender.displayName
+            inviteLabelView.text = context.getString(R.string.send_you_invite)
+        } else {
+            updateLayoutParams { height = ConstraintLayout.LayoutParams.WRAP_CONTENT }
+            inviteAvatarView.visibility = View.GONE
+            inviteIdentifierView.visibility = View.GONE
+            inviteNameView.visibility = View.GONE
+            inviteLabelView.text = context.getString(R.string.invited_by, sender.userId)
+        }
     }
 }

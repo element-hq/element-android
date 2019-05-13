@@ -22,11 +22,13 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
+import im.vector.matrix.android.api.session.user.model.User
 
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
         val timeline: Timeline? = null,
+        val inviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val asyncTimelineData: Async<TimelineData> = Uninitialized
 ) : MvRxState {

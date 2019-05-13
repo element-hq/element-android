@@ -3,7 +3,6 @@
     <color name="pale_grey">#f2f5f8</color>
     <color name="dark">#2e3649</color>
     <color name="pale_teal">#7ac9a1</color>
-    <color name="black">#212121</color>
     <color name="deep_sky_blue">#007aff</color>
     <color name="rosy_pink">#f56679</color>
     <color name="bluey_grey">#a5a5a6</color>
@@ -17,5 +16,10 @@
     <color name="pale_grey_two">#ebedf8</color>
     <color name="brown_grey">#a5a5a5</color>
     <color name="grey_lynch">#61708B</color>
+
+    <color name="black">#000000</color>
+    <color name="black_87">#de000000</color>
+    <color name="black_38">#61000000</color>
+    <color name="black_37">#5d000000</color>
 
 </resources>

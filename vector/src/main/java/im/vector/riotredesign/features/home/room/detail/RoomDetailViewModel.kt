@@ -19,11 +19,13 @@ package im.vector.riotredesign.features.home.room.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
@@ -62,6 +64,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     init {
         observeRoomSummary()
         observeEventDisplayedActions()
+        observeInvitationState()
         room.loadRoomMembersIfNeeded()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
@@ -238,6 +241,18 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                 .execute { async ->
                     copy(asyncRoomSummary = async)
                 }
+    }
+
+    private fun observeInvitationState() {
+        asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
+            if (summary.membership == Membership.INVITE) {
+                summary.lastMessage?.sender?.let { senderId ->
+                    session.getUser(senderId)
+                }?.also {
+                    setState { copy(inviter = Success(it)) }
+                }
+            }
+        }
     }
 
     override fun onCleared() {

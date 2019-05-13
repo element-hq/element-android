@@ -26,6 +26,8 @@ import android.text.Editable
 import android.text.Spannable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
@@ -51,12 +53,7 @@ import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
-import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
-import im.vector.riotredesign.core.utils.checkPermissions
-import im.vector.riotredesign.core.utils.openCamera
+import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
@@ -333,12 +330,15 @@ class RoomDetailFragment : VectorBaseFragment(), TimelineEventController.Callbac
     private fun renderState(state: RoomDetailViewState) {
         renderRoomSummary(state)
         val summary = state.asyncRoomSummary()
+        val inviter = state.inviter()
         if (summary?.membership == Membership.JOIN) {
             timelineEventController.setTimeline(state.timeline)
             inviteView.visibility = View.GONE
-        } else if (summary?.membership == Membership.INVITE) {
+        } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
-            inviteView.render(summary)
+            inviteView.render(inviter, VectorInviteView.Mode.LARGE)
+        } else {
+            //TODO : close the screen
         }
     }
 
