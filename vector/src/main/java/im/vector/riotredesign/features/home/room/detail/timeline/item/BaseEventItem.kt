@@ -15,8 +15,6 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
-import android.content.Context
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewStub
 import androidx.annotation.IdRes
@@ -24,6 +22,7 @@ import androidx.constraintlayout.widget.Guideline
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
+import im.vector.riotredesign.core.utils.DimensionUtils.dpToPx
 
 abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>() {
 
@@ -69,14 +68,6 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
             MEDIUM(40),
             SMALL(30),
             NONE(0)
-        }
-
-        fun dpToPx(dp: Int, context: Context): Int {
-            return TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    dp.toFloat(),
-                    context.resources.displayMetrics
-            ).toInt()
         }
     }
 }

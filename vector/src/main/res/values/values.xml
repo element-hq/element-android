@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ReactionButton">
+        <attr name="dots_primary_color" format="color|reference" />
+        <attr name="dots_secondary_color" format="color|reference" />
+        <attr name="circle_start_color" format="color|reference" />
+        <attr name="circle_end_color" format="color|reference" />
+        <attr name="toggled" format="boolean" />
+        <attr name="emoji" format="string"/>
+        <attr name="reaction_count" format="integer"/>
+    </declare-styleable>
+</resources>

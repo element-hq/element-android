@@ -57,6 +57,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View)
         fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean
         fun onAvatarClicked(informationData: MessageInformationData)
+        fun onMemberNameClicked(informationData: MessageInformationData)
     }
 
     private val collapsedEventIds = linkedSetOf<String>()

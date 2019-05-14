@@ -9,7 +9,6 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp">
 
-
     <ImageView
         android:id="@+id/messageAvatarImageView"
         android:layout_width="44dp"
@@ -28,7 +27,7 @@
 
     <TextView
         android:id="@+id/messageMemberNameView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -39,8 +38,10 @@
         android:maxLines="1"
         android:textSize="15sp"
         android:textStyle="bold"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/messageTimeView"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@id/messageStartGuideline"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/full_names" />
@@ -48,14 +49,15 @@
 
     <TextView
         android:id="@+id/messageTimeView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:textColor="@color/brown_grey"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/messageMemberNameView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toTopOf="@id/messageMemberNameView"
+        app:layout_constraintStart_toEndOf="@id/messageMemberNameView"
         tools:text="@tools:sample/date/hhmm" />
 
 
@@ -78,6 +80,118 @@
         style="@style/TimelineContentStubLayoutParams"
         android:layout="@layout/item_timeline_event_file_stub"
         tools:ignore="MissingConstraints" />
+
+
+    <!-- TODO: For now we show 8 reactions maximum, this will need rework when needed-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/messageBottomInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/messageStartGuideline"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="visible">
+
+        <im.vector.riotredesign.features.reactions.widget.ReactionButton
+            android:id="@+id/messageBottomReaction1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:emoji="👍"
+            tools:ignore="MissingConstraints"
+            tools:reaction_count="3"
+            tools:visibility="visible" />
+
+
+        <im.vector.riotredesign.features.reactions.widget.ReactionButton
+            android:id="@+id/messageBottomReaction2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:emoji="👎"
+            tools:ignore="MissingConstraints"
+            tools:reaction_count="10"
+            tools:visibility="visible" />
+
+
+        <im.vector.riotredesign.features.reactions.widget.ReactionButton
+            android:id="@+id/messageBottomReaction3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:emoji="😀"
+            tools:ignore="MissingConstraints"
+            tools:visibility="visible" />
+
+
+        <im.vector.riotredesign.features.reactions.widget.ReactionButton
+            android:id="@+id/messageBottomReaction4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:emoji="☹️"
+            tools:ignore="MissingConstraints"
+            tools:visibility="visible" />
+
+
+        <im.vector.riotredesign.features.reactions.widget.ReactionButton
+            android:id="@+id/messageBottomReaction5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:emoji="😱"
+            tools:ignore="MissingConstraints"
+            tools:visibility="visible" />
+
+
+        <im.vector.riotredesign.features.reactions.widget.ReactionButton
+            android:id="@+id/messageBottomReaction6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:emoji="❌"
+            tools:ignore="MissingConstraints"
+            tools:visibility="visible" />
+
+
+        <im.vector.riotredesign.features.reactions.widget.ReactionButton
+            android:id="@+id/messageBottomReaction7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:emoji="✔️"
+            tools:ignore="MissingConstraints"
+            tools:visibility="visible" />
+
+        <im.vector.riotredesign.features.reactions.widget.ReactionButton
+            android:id="@+id/messageBottomReaction8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:emoji="♥️"
+            tools:ignore="MissingConstraints"
+            tools:visibility="visible" />
+
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/reactionsFlowHelper"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            app:constraint_referenced_ids="messageBottomReaction1,messageBottomReaction2,messageBottomReaction3,messageBottomReaction4,messageBottomReaction5,messageBottomReaction6,messageBottomReaction7,messageBottomReaction8"
+            app:flow_horizontalBias="0"
+            app:flow_horizontalGap="8dp"
+            app:flow_horizontalStyle="packed"
+            app:flow_verticalBias="0"
+            app:flow_verticalGap="4dp"
+            app:flow_wrapMode="chain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
