@@ -19,6 +19,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline.item
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.helper.widget.Flow
@@ -76,14 +77,19 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         holder.view.setOnLongClickListener(longClickListener)
 
         if (informationData.orderedReactionList.isNullOrEmpty()) {
-            holder.reactionWrapper.isVisible = false
+            holder.reactionWrapper?.isVisible = false
         } else {
-            holder.reactionWrapper.isVisible = true
+            //inflate if needed
+            if (holder.reactionFlowHelper == null) {
+                holder.reactionWrapper = holder.view.findViewById<ViewStub>(R.id.messageBottomInfo).inflate() as? ViewGroup
+                holder.reactionFlowHelper = holder.view.findViewById(R.id.reactionsFlowHelper)
+            }
+            holder.reactionWrapper?.isVisible = true
             //clear all reaction buttons (but not the Flow helper!)
-            holder.reactionWrapper.children.forEach { (it as? ReactionButton)?.isGone = true }
+            holder.reactionWrapper?.children?.forEach { (it as? ReactionButton)?.isGone = true }
             val idToRefInFlow = ArrayList<Int>()
             informationData.orderedReactionList?.forEachIndexed { index, reaction ->
-                (holder.reactionWrapper.children.elementAt(index) as? ReactionButton)?.let { reactionButton ->
+                (holder.reactionWrapper?.children?.elementAt(index) as? ReactionButton)?.let { reactionButton ->
                     reactionButton.isVisible = true
                     idToRefInFlow.add(reactionButton.id)
                     reactionButton.reactionString = reaction.first
@@ -93,9 +99,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             }
             // Just setting the view as gone will break the FlowHelper (and invisible will take too much space),
             // so have to update ref ids
-            holder.reactionFlowHelper.referencedIds = idToRefInFlow.toIntArray()
+            holder.reactionFlowHelper?.referencedIds = idToRefInFlow.toIntArray()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && !holder.view.isInLayout) {
-                holder.reactionFlowHelper.requestLayout()
+                holder.reactionFlowHelper?.requestLayout()
             }
 
         }
@@ -112,8 +118,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
 
-        val reactionWrapper: ViewGroup by bind(R.id.messageBottomInfo)
-        val reactionFlowHelper: Flow by bind(R.id.reactionsFlowHelper)
+        var reactionWrapper: ViewGroup? = null
+        var reactionFlowHelper: Flow? = null
     }
 
 }
