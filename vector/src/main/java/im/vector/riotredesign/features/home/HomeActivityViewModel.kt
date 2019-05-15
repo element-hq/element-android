@@ -60,10 +60,6 @@ class HomeActivityViewModel(state: EmptyState,
 
     init {
         session.addListener(this)
-
-        // TODO Move this else where, it's too late when we are here to change the filter
-        session.setFilter(FilterService.FilterPreset.RiotFilter)
-
         val lastSelectedRoomId = roomSelectionRepository.lastSelectedRoom()
         if (lastSelectedRoomId == null || session.getRoom(lastSelectedRoomId) == null) {
             getTheFirstRoomWhenAvailable()

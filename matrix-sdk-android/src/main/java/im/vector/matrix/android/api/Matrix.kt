@@ -21,6 +21,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
@@ -53,6 +54,7 @@ class Matrix private constructor(context: Context) : MatrixKoinComponent {
         authenticator.getLastActiveSession()?.also {
             currentSession = it
             it.open()
+            it.setFilter(FilterService.FilterPreset.RiotFilter)
             it.startSync()
         }
     }

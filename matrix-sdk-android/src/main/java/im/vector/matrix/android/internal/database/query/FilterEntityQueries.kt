@@ -27,7 +27,6 @@ import io.realm.kotlin.where
  */
 internal fun FilterEntity.Companion.getFilter(realm: Realm): FilterEntity {
     var filter = realm.where<FilterEntity>().findFirst()
-
     if (filter == null) {
         realm.executeTransaction {
             realm.createObject<FilterEntity>().apply {
@@ -36,7 +35,6 @@ internal fun FilterEntity.Companion.getFilter(realm: Realm): FilterEntity {
                 filterId = ""
             }
         }
-
         filter = realm.where<FilterEntity>().findFirst()!!
     }
 

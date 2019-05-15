@@ -23,19 +23,15 @@ internal object FilterFactory {
     fun createDefaultFilterBody(): FilterBody {
         val filterBody = FilterBody()
         FilterUtil.enableLazyLoading(filterBody, true)
-
         return filterBody
     }
 
     fun createRiotFilterBody(): FilterBody {
         val filterBody = FilterBody()
-
         filterBody.room = RoomFilter().apply {
             timeline = createRiotTimelineFilter()
-            // TODO Enable this for optimization
-            // state = createRiotStateFilter()
+            state = createRiotStateFilter()
         }
-
         return filterBody
     }
 
@@ -55,7 +51,6 @@ internal object FilterFactory {
 
     private fun createRiotTimelineFilter(): RoomEventFilter {
         return RoomEventFilter().apply {
-            lazyLoadMembers = true
             // TODO Enable this for optimization
             // types = listOfSupportedEventTypes.toMutableList()
         }
@@ -63,7 +58,7 @@ internal object FilterFactory {
 
     private fun createRiotStateFilter(): RoomEventFilter {
         return RoomEventFilter().apply {
-            types = listOfSupportedStateEventTypes.toMutableList()
+            lazyLoadMembers = true
         }
     }
 
