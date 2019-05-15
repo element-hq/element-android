@@ -16,17 +16,25 @@
 
 package im.vector.riotredesign.features.home.group
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
+import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.core.utils.LiveEvent
 import org.koin.android.ext.android.get
+
+const val ALL_COMMUNITIES_GROUP_ID = "ALL_COMMUNITIES_GROUP_ID"
 
 class GroupListViewModel(initialState: GroupListViewState,
                          private val selectedGroupHolder: SelectedGroupStore,
-                         private val session: Session
+                         private val session: Session,
+                         private val stringProvider: StringProvider
 ) : VectorViewModel<GroupListViewState>(initialState) {
 
     companion object : MvRxViewModelFactory<GroupListViewModel, GroupListViewState> {
@@ -35,9 +43,14 @@ class GroupListViewModel(initialState: GroupListViewState,
         override fun create(viewModelContext: ViewModelContext, state: GroupListViewState): GroupListViewModel? {
             val currentSession = viewModelContext.activity.get<Session>()
             val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupStore>()
-            return GroupListViewModel(state, selectedGroupHolder, currentSession)
+            val stringProvider = viewModelContext.activity.get<StringProvider>()
+            return GroupListViewModel(state, selectedGroupHolder, currentSession, stringProvider)
         }
     }
+
+    private val _openGroupLiveData = MutableLiveData<LiveEvent<GroupSummary>>()
+    val openGroupLiveData: LiveData<LiveEvent<GroupSummary>>
+        get() = _openGroupLiveData
 
     init {
         observeGroupSummaries()
@@ -46,8 +59,8 @@ class GroupListViewModel(initialState: GroupListViewState,
 
     private fun observeState() {
         subscribe {
-            val selectedGroup = Option.fromNullable(it.selectedGroup)
-            selectedGroupHolder.post(selectedGroup)
+            val optionGroup = Option.fromNullable(it.selectedGroup)
+            selectedGroupHolder.post(optionGroup)
         }
     }
 
@@ -62,15 +75,21 @@ class GroupListViewModel(initialState: GroupListViewState,
     private fun handleSelectGroup(action: GroupListActions.SelectGroup) = withState { state ->
         if (state.selectedGroup?.groupId != action.groupSummary.groupId) {
             setState { copy(selectedGroup = action.groupSummary) }
-        } else {
-            setState { copy(selectedGroup = null) }
+            _openGroupLiveData.postValue(LiveEvent(action.groupSummary))
         }
     }
-
 
     private fun observeGroupSummaries() {
         session
                 .rx().liveGroupSummaries()
+                .map {
+                    val myUser = session.getUser(session.sessionParams.credentials.userId)
+                    val allCommunityGroup = GroupSummary(
+                            groupId = ALL_COMMUNITIES_GROUP_ID,
+                            displayName = "All Communities",
+                            avatarUrl = myUser?.avatarUrl ?: "")
+                    listOf(allCommunityGroup) + it
+                }
                 .execute { async ->
                     copy(asyncGroups = async)
                 }

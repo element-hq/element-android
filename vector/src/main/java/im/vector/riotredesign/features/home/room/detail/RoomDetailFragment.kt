@@ -64,7 +64,6 @@ import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
-import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
@@ -170,7 +169,6 @@ class RoomDetailFragment :
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
         bindScope(getOrCreateScope(HomeModule.ROOM_DETAIL_SCOPE))
         setupRecyclerView()
-        setupToolbar()
         setupComposer()
         setupAttachmentButton()
         setupInviteView()
@@ -194,7 +192,7 @@ class RoomDetailFragment :
         if (resultCode == RESULT_OK && data != null) {
             when (requestCode) {
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
-                REACTION_SELECT_REQUEST_CODE -> {
+                REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
                             ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
@@ -212,13 +210,6 @@ class RoomDetailFragment :
     }
 
 // PRIVATE METHODS *****************************************************************************
-
-    private fun setupToolbar() {
-        val parentActivity = vectorBaseActivity
-        if (parentActivity is ToolbarConfigurable) {
-            parentActivity.configure(toolbar)
-        }
-    }
 
     private fun setupRecyclerView() {
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
@@ -362,24 +353,24 @@ class RoomDetailFragment :
     private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
         Timber.v("On send choice clicked: $dialogListItem")
         when (dialogListItem) {
-            is DialogListItem.SendFile -> {
+            is DialogListItem.SendFile       -> {
                 // launchFileIntent
             }
-            is DialogListItem.SendVoice -> {
+            is DialogListItem.SendVoice      -> {
                 //launchAudioRecorderIntent()
             }
-            is DialogListItem.SendSticker -> {
+            is DialogListItem.SendSticker    -> {
                 //startStickerPickerActivity()
             }
             is DialogListItem.TakePhotoVideo ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
                     //    launchCamera()
                 }
-            is DialogListItem.TakePhoto ->
+            is DialogListItem.TakePhoto      ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
                     openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
                 }
-            is DialogListItem.TakeVideo ->
+            is DialogListItem.TakeVideo      ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
                     //  launchNativeVideoRecorder()
                 }
@@ -426,20 +417,20 @@ class RoomDetailFragment :
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
             is SendMessageResult.MessageSent,
-            is SendMessageResult.SlashCommandHandled -> {
+            is SendMessageResult.SlashCommandHandled        -> {
                 // Clear composer
                 composerEditText.text = null
             }
-            is SendMessageResult.SlashCommandError -> {
+            is SendMessageResult.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
             }
-            is SendMessageResult.SlashCommandUnknown -> {
+            is SendMessageResult.SlashCommandUnknown        -> {
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
-            is SendMessageResult.SlashCommandResultOk -> {
+            is SendMessageResult.SlashCommandResultOk       -> {
                 // Ignore
             }
-            is SendMessageResult.SlashCommandResultError -> {
+            is SendMessageResult.SlashCommandResultError    -> {
                 displayCommandError(sendMessageResult.throwable.localizedMessage)
             }
             is SendMessageResult.SlashCommandNotImplemented -> {
@@ -537,22 +528,22 @@ class RoomDetailFragment :
         it?.getContentIfNotHandled()?.let { actionData ->
 
             when (actionData.actionId) {
-                MessageMenuViewModel.ACTION_ADD_REACTION -> {
+                MessageMenuViewModel.ACTION_ADD_REACTION   -> {
                     val eventId = actionData.data?.toString() ?: return
                     startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), eventId), REACTION_SELECT_REQUEST_CODE)
                 }
-                MessageMenuViewModel.ACTION_COPY -> {
+                MessageMenuViewModel.ACTION_COPY           -> {
                     //I need info about the current selected message :/
                     copyToClipboard(requireContext(), actionData.data?.toString() ?: "", false)
                     val snack = Snackbar.make(view!!, requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
                     snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
                     snack.show()
                 }
-                MessageMenuViewModel.ACTION_DELETE -> {
+                MessageMenuViewModel.ACTION_DELETE         -> {
                     val eventId = actionData.data?.toString() ?: return
                     roomDetailViewModel.process(RoomDetailActions.RedactAction(eventId, context?.getString(R.string.event_redacted_by_user_reason)))
                 }
-                MessageMenuViewModel.ACTION_SHARE -> {
+                MessageMenuViewModel.ACTION_SHARE          -> {
                     //TODO current data communication is too limited
                     //Need to now the media type
                     actionData.data?.toString()?.let {
@@ -595,13 +586,13 @@ class RoomDetailFragment :
                             .setPositiveButton(R.string.ok) { dialog, id -> dialog.cancel() }
                             .show()
                 }
-                MessageMenuViewModel.ACTION_QUICK_REACT -> {
+                MessageMenuViewModel.ACTION_QUICK_REACT    -> {
                     //eventId,ClickedOn,Opposite
                     (actionData.data as? Triple<String, String, String>)?.let { (eventId, clickedOn, opposite) ->
                         roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, opposite))
                     }
                 }
-                else -> {
+                else                                       -> {
                     Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()
                 }
             }

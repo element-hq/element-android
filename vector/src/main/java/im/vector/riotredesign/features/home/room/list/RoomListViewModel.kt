@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
+import im.vector.riotredesign.features.home.group.ALL_COMMUNITIES_GROUP_ID
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import io.reactivex.Observable
@@ -118,7 +119,7 @@ class RoomListViewModel(initialState: RoomListViewState,
                     val filteredDirectRooms = filteredRooms
                             .filter { it.isDirect }
                             .filter {
-                                if (selectedGroup == null) {
+                                if (selectedGroup == null || selectedGroup.groupId == ALL_COMMUNITIES_GROUP_ID) {
                                     true
                                 } else {
                                     it.otherMemberIds
@@ -130,7 +131,8 @@ class RoomListViewModel(initialState: RoomListViewState,
                     val filteredGroupRooms = filteredRooms
                             .filter { !it.isDirect }
                             .filter {
-                                selectedGroup?.roomIds?.contains(it.roomId) ?: true
+                                selectedGroup?.groupId == ALL_COMMUNITIES_GROUP_ID
+                                        || selectedGroup?.roomIds?.contains(it.roomId) ?: true
                             }
                     buildRoomSummaries(filteredDirectRooms + filteredGroupRooms)
                 }

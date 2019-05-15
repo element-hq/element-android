@@ -17,8 +17,8 @@
 package im.vector.riotredesign.features.home.room.list
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -29,21 +29,35 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.observeEvent
-import im.vector.riotredesign.core.extensions.setupAsSearch
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomeNavigator
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 
+@Parcelize
+data class RoomListParams(
+        val displayMode: RoomListFragment.DisplayMode
+) : Parcelable
+
+
 class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
 
+    enum class DisplayMode(@StringRes val titleRes: Int) {
+        HOME(R.string.bottom_action_home),
+        PEOPLE(R.string.bottom_action_people),
+        ROOMS(R.string.bottom_action_rooms)
+    }
+
     companion object {
-        fun newInstance(): RoomListFragment {
-            return RoomListFragment()
+        fun newInstance(roomListParams: RoomListParams): RoomListFragment {
+            return RoomListFragment().apply {
+                setArguments(roomListParams)
+            }
         }
     }
 
@@ -57,7 +71,6 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         super.onActivityCreated(savedInstanceState)
         bindScope(getOrCreateScope(HomeModule.ROOM_LIST_SCOPE))
         setupRecyclerView()
-        setupFilterView()
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.openRoomLiveData.observeEvent(this) {
             homeNavigator.openRoomDetail(it, null)
@@ -72,19 +85,6 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
-    }
-
-    private fun setupFilterView() {
-        filterRoomView.setupAsSearch()
-        filterRoomView.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) = Unit
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                roomListViewModel.accept(RoomListActions.FilterRooms(s))
-            }
-        })
     }
 
     private fun renderState(state: RoomListViewState) {

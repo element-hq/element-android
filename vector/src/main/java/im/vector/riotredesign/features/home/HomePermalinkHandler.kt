@@ -34,10 +34,10 @@ class HomePermalinkHandler(private val navigator: HomeNavigator) {
         val permalinkData = PermalinkParser.parse(deepLink)
         when (permalinkData) {
             is PermalinkData.EventLink -> {
-                navigator.openRoomDetail(permalinkData.roomIdOrAlias, permalinkData.eventId, true)
+                navigator.openRoomDetail(permalinkData.roomIdOrAlias, permalinkData.eventId)
             }
             is PermalinkData.RoomLink -> {
-                navigator.openRoomDetail(permalinkData.roomIdOrAlias, null, true)
+                navigator.openRoomDetail(permalinkData.roomIdOrAlias, null)
             }
             is PermalinkData.GroupLink -> {
                 navigator.openGroupDetail(permalinkData.groupId)
