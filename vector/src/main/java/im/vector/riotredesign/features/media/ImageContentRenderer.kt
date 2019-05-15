@@ -20,10 +20,12 @@ import android.media.ExifInterface
 import android.net.Uri
 import android.os.Parcelable
 import android.widget.ImageView
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.github.piasy.biv.view.BigImageView
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.riotredesign.core.glide.GlideApp
+import im.vector.riotredesign.core.utils.DimensionUtils.dpToPx
 import kotlinx.android.parcel.Parcelize
 import java.io.File
 
@@ -67,6 +69,7 @@ object ImageContentRenderer {
                 .with(imageView)
                 .load(resolvedUrl)
                 .dontAnimate()
+                .transform(RoundedCorners(dpToPx(8,imageView.context)))
                 .thumbnail(0.3f)
                 .into(imageView)
     }

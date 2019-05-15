@@ -16,7 +16,9 @@
 
 package im.vector.riotredesign.features.home.room.detail
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -25,9 +27,11 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
+import android.text.TextUtils
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -52,7 +56,6 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.dialogs.DialogListItem
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
@@ -82,6 +85,7 @@ import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.ImageMediaViewerActivity
 import im.vector.riotredesign.features.media.VideoContentRenderer
 import im.vector.riotredesign.features.media.VideoMediaViewerActivity
+import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import org.koin.android.ext.android.inject
@@ -114,6 +118,26 @@ class RoomDetailFragment :
             return RoomDetailFragment().apply {
                 setArguments(args)
             }
+        }
+
+        /**
+         * Sanitize the display name.
+         *
+         * @param displayName the display name to sanitize
+         * @return the sanitized display name
+         */
+        fun sanitizeDisplayname(displayName: String): String? {
+            var displayName = displayName
+            // sanity checks
+            if (!TextUtils.isEmpty(displayName)) {
+                val ircPattern = " (IRC)"
+
+                if (displayName.endsWith(ircPattern)) {
+                    displayName = displayName.substring(0, displayName.length - ircPattern.length)
+                }
+            }
+
+            return displayName
         }
     }
 
@@ -445,6 +469,11 @@ class RoomDetailFragment :
     override fun onAvatarClicked(informationData: MessageInformationData) {
         vectorBaseActivity.notImplemented()
     }
+
+    @SuppressLint("SetTextI18n")
+    override fun onMemberNameClicked(informationData: MessageInformationData) {
+        insertUserDisplayNameInTextEditor(informationData.memberName?.toString())
+    }
 // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
@@ -514,4 +543,50 @@ class RoomDetailFragment :
             }
         }
     }
+
+    //utils
+    /**
+     * Insert an user displayname  in the message editor.
+     *
+     * @param text the text to insert.
+     */
+    private fun insertUserDisplayNameInTextEditor(text: String?) {
+        if (null != text) {
+//            var vibrate = false
+
+            val myDisplayName = session.getUser(session.sessionParams.credentials.userId)?.displayName
+            if (TextUtils.equals(myDisplayName, text)) {
+                // current user
+                if (TextUtils.isEmpty(composerEditText.text)) {
+                    composerEditText.append(Command.EMOTE.command + " ")
+                    composerEditText.setSelection(composerEditText.text.length)
+//                    vibrate = true
+                }
+            } else {
+                // another user
+                if (TextUtils.isEmpty(composerEditText.text)) {
+                    // Ensure displayName will not be interpreted as a Slash command
+                    if (text.startsWith("/")) {
+                        composerEditText.append("\\")
+                    }
+                    composerEditText.append(sanitizeDisplayname(text)!! + ": ")
+                } else {
+                    composerEditText.text.insert(composerEditText.selectionStart, sanitizeDisplayname(text)!! + " ")
+                }
+
+//                vibrate = true
+            }
+
+//            if (vibrate && PreferencesManager.vibrateWhenMentioning(context)) {
+//                val v= context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+//                if (v?.hasVibrator() == true) {
+//                    v.vibrate(100)
+//                }
+//            }
+            composerEditText.requestFocus()
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.showSoftInput(composerEditText, InputMethodManager.SHOW_FORCED)
+        }
+    }
+
 }

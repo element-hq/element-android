@@ -81,6 +81,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 memberName = formattedMemberName,
                 showInformation = showInformation)
 
+        //Test for reactions UX
+        //informationData.orderedReactionList = listOf( Triple("👍",1,false), Triple("👎",2,false))
+
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
@@ -105,6 +108,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
                         }))
+                .memberClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onMemberNameClicked(informationData)
+                        }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, messageContent, view)
@@ -128,6 +135,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
+                        }))
+                .memberClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onMemberNameClicked(informationData)
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -169,6 +180,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
+                        }))
+                .memberClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onMemberNameClicked(informationData)
                         }))
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -212,6 +227,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
                         }))
+                .memberClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onMemberNameClicked(informationData)
+                        }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, messageContent, view)
@@ -238,6 +257,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
+                        }))
+                .memberClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onMemberNameClicked(informationData)
                         }))
                 //click on the text
                 .clickListener(
@@ -272,6 +295,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
                         }))
+                .memberClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onMemberNameClicked(informationData)
+                        }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, messageContent, view)
@@ -295,6 +322,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
+                        }))
+                .memberClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onMemberNameClicked(informationData)
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->

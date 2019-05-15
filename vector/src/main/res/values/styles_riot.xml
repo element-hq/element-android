@@ -266,5 +266,6 @@
 
     <style name="TimelineContentStubLayoutParams" parent="TimelineContentStubBaseParams">
         <item name="layout_constraintTop_toBottomOf">@id/messageMemberNameView</item>
+        <item name="layout_constraintBottom_toTopOf">@id/messageBottomInfo</item>
     </style>
 </resources>
