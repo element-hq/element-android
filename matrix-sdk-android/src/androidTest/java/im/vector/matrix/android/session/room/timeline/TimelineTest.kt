@@ -20,6 +20,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.session.room.EventRelationExtractor
 import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFactory
@@ -58,8 +59,16 @@ internal class TimelineTest : InstrumentedTest {
         val paginationTask = FakePaginationTask(tokenChunkEventPersistor)
         val getContextOfEventTask = FakeGetContextOfEventTask(tokenChunkEventPersistor)
         val roomMemberExtractor = SenderRoomMemberExtractor(ROOM_ID)
-        val timelineEventFactory = TimelineEventFactory(roomMemberExtractor)
-        return DefaultTimeline(ROOM_ID, initialEventId, monarchy.realmConfiguration, taskExecutor, getContextOfEventTask, timelineEventFactory, paginationTask, null)
+        val timelineEventFactory = TimelineEventFactory(roomMemberExtractor, EventRelationExtractor())
+        return DefaultTimeline(
+                ROOM_ID,
+                initialEventId,
+                monarchy.realmConfiguration,
+                taskExecutor,
+                getContextOfEventTask,
+                timelineEventFactory,
+                paginationTask,
+                null)
     }
 
     @Test

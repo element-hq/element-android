@@ -17,6 +17,8 @@
 package im.vector.matrix.android.internal.di
 
 import com.squareup.moshi.Moshi
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.model.annotation.RelationContent
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageDefaultContent

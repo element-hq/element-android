@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
@@ -45,7 +46,8 @@ import timber.log.Timber
 internal class RoomSyncHandler(private val monarchy: Monarchy,
                                private val readReceiptHandler: ReadReceiptHandler,
                                private val roomSummaryUpdater: RoomSummaryUpdater,
-                               private val roomTagHandler: RoomTagHandler) {
+                               private val roomTagHandler: RoomTagHandler,
+                               private val eventRelationsAggregationUpdater: EventRelationsAggregationUpdater) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -120,6 +122,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
             }
         }
         roomSummaryUpdater.update(realm, roomId, roomSync.summary, roomSync.unreadNotifications)
+        eventRelationsAggregationUpdater.update(realm,roomId,roomSync.timeline?.events)
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
             handleEphemeral(realm, roomId, roomSync.ephemeral)
@@ -174,6 +177,9 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true
         chunkEntity.addAll(roomId, eventList, PaginationDirection.FORWARDS, stateIndexOffset)
+
+        //update eventAnnotationSummary here?
+
         return chunkEntity
     }
 

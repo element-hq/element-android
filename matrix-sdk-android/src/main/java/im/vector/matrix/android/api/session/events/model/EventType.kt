@@ -65,6 +65,11 @@ object EventType {
     const val CALL_ANSWER = "m.call.answer"
     const val CALL_HANGUP = "m.call.hangup"
 
+    // Relation Events
+
+    const val REACTION = "m.reaction"
+
+
     private val STATE_EVENTS = listOf(
             STATE_ROOM_NAME,
             STATE_ROOM_TOPIC,

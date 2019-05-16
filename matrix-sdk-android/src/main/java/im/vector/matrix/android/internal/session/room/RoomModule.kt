@@ -51,7 +51,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            TokenChunkEventPersistor(get())
+            TokenChunkEventPersistor(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

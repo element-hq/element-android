@@ -19,10 +19,13 @@ package im.vector.matrix.android.internal.session.room.timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.session.room.EventRelationExtractor
 import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
 import io.realm.Realm
 
-internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomMemberExtractor) {
+internal class TimelineEventFactory(
+        private val roomMemberExtractor: SenderRoomMemberExtractor,
+        private val relationExtractor: EventRelationExtractor) {
 
     private val cached = mutableMapOf<String, SenderData>()
 
@@ -30,20 +33,22 @@ internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomM
         val sender = eventEntity.sender
         val cacheKey = sender + eventEntity.stateIndex
         val senderData = cached.getOrPut(cacheKey) {
-            val senderRoomMember = roomMemberExtractor.extractFrom(eventEntity,realm)
+            val senderRoomMember = roomMemberExtractor.extractFrom(eventEntity, realm)
             SenderData(senderRoomMember?.displayName, senderRoomMember?.avatarUrl)
         }
+        val relations = relationExtractor.extractFrom(eventEntity, realm)
         return TimelineEvent(
                 eventEntity.asDomain(),
                 eventEntity.localId,
                 eventEntity.displayIndex,
                 senderData.senderName,
                 senderData.senderAvatar,
-                eventEntity.sendState
+                eventEntity.sendState,
+                relations
         )
     }
 
-    fun clear(){
+    fun clear() {
         cached.clear()
     }
 

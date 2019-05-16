@@ -13,17 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package im.vector.matrix.android.api.session.events.model
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * <code>
+ *      {
+ *          "type": "m.reaction",
+ *          "key": "👍",
+ *          "count": 3
+ *      }
+ * </code>
+ */
+
 @JsonClass(generateAdapter = true)
-data class UnsignedData(
-        @Json(name = "age") val age: Long?,
-        @Json(name = "redacted_because") val redactedEvent: Event? = null,
-        @Json(name = "transaction_id") val transactionId: String? = null,
-        @Json(name = "prev_content") val prevContent: Map<String, Any>? = null,
-        @Json(name = "m.relations") val relations: AggregatedRelations?
+data class RelationChunkInfo(
+        val type: String,
+        val key: String,
+        val count: Int
 )

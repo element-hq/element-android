@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.room.timeline
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.send.SendState
 
@@ -32,7 +33,8 @@ data class TimelineEvent(
         val displayIndex: Int,
         val senderName: String?,
         val senderAvatar: String?,
-        val sendState: SendState
+        val sendState: SendState,
+        val annotations: EventAnnotationsSummary? = null
 ) {
 
     val metadata = HashMap<String, Any>()

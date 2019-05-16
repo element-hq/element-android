@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.internal.database.model
 
-package im.vector.matrix.android.api.session.events.model
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
-data class UnsignedData(
-        @Json(name = "age") val age: Long?,
-        @Json(name = "redacted_because") val redactedEvent: Event? = null,
-        @Json(name = "transaction_id") val transactionId: String? = null,
-        @Json(name = "prev_content") val prevContent: Map<String, Any>? = null,
-        @Json(name = "m.relations") val relations: AggregatedRelations?
-)
+internal open class EventAnnotationsSummaryEntity(
+        @PrimaryKey
+        var eventId: String = "",
+        var roomId: String? = null,
+        var reactionsSummary: RealmList<ReactionAggregatedSummaryEntity> = RealmList()
+) : RealmObject() {
+
+    companion object
+
+}
