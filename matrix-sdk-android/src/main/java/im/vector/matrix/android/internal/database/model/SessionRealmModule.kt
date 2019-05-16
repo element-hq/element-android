@@ -33,6 +33,8 @@ import io.realm.annotations.RealmModule
             RoomSummaryEntity::class,
             RoomTagEntity::class,
             SyncEntity::class,
-            UserEntity::class
+            UserEntity::class,
+            EventAnnotationsSummaryEntity::class,
+            ReactionAggregatedSummaryEntity::class
         ])
 internal class SessionRealmModule

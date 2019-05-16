@@ -46,7 +46,7 @@ internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
 
     fun instantiate(roomId: String): Room {
         val roomMemberExtractor = SenderRoomMemberExtractor(roomId)
-        val timelineEventFactory = TimelineEventFactory(roomMemberExtractor)
+        val timelineEventFactory = TimelineEventFactory(roomMemberExtractor, EventRelationExtractor())
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask)
         val sendService = DefaultSendService(roomId, eventFactory, monarchy)
         val stateService = DefaultStateService(roomId, sendStateTask, taskExecutor)

@@ -71,7 +71,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val avatarUrl = event.senderAvatar
         val memberName = event.senderName ?: event.root.sender ?: ""
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(AvatarRenderer.getColorFromUserId(event.root.sender ?: ""))
+            textColor = colorProvider.getColor(AvatarRenderer.getColorFromUserId(event.root.sender
+                    ?: ""))
         }
         val informationData = MessageInformationData(eventId = eventId,
                 senderId = event.root.sender ?: "",
@@ -79,7 +80,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 time = time,
                 avatarUrl = avatarUrl,
                 memberName = formattedMemberName,
-                showInformation = showInformation)
+                showInformation = showInformation,
+                orderedReactionList = event.annotations?.reactionsSummary?.map { Triple(it.key, it.count, it.addedByMe) }
+        )
 
         //Test for reactions UX
         //informationData.orderedReactionList = listOf( Triple("👍",1,false), Triple("👎",2,false))

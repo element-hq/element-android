@@ -25,6 +25,7 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.airbnb.mvrx.BaseMvRxFragment
+import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
@@ -62,10 +63,10 @@ class QuickReactionFragment : BaseMvRxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        quickReact1Text.text = viewModel.agreePositive
-        quickReact2Text.text = viewModel.agreeNegative
-        quickReact3Text.text = viewModel.likePositive
-        quickReact4Text.text = viewModel.likeNegative
+        quickReact1Text.text = QuickReactionViewModel.agreePositive
+        quickReact2Text.text = QuickReactionViewModel.agreeNegative
+        quickReact3Text.text = QuickReactionViewModel.likePositive
+        quickReact4Text.text = QuickReactionViewModel.likeNegative
 
         //configure click listeners
         quickReact1Text.setOnClickListener {
@@ -127,8 +128,12 @@ class QuickReactionFragment : BaseMvRxFragment() {
     }
 
     companion object {
-        fun newInstance(): QuickReactionFragment {
-            return QuickReactionFragment()
+        fun newInstance(pa: MessageActionsBottomSheet.ParcelableArgs): QuickReactionFragment {
+            val args = Bundle()
+            args.putParcelable(MvRx.KEY_ARG, pa)
+            val fragment = QuickReactionFragment()
+            fragment.arguments = args
+            return fragment
         }
     }
 }

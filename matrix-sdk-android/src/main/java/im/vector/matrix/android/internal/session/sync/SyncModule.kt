@@ -40,7 +40,7 @@ internal class SyncModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSyncHandler(get(), get(), get(), get())
+            RoomSyncHandler(get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
