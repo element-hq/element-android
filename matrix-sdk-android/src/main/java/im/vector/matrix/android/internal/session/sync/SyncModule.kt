@@ -48,7 +48,7 @@ internal class SyncModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            CryptoSyncHandler(get())
+            CryptoSyncHandler(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

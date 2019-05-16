@@ -43,7 +43,10 @@ import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.*
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
-import im.vector.matrix.android.internal.crypto.model.rest.*
+import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
+import im.vector.matrix.android.internal.crypto.model.rest.EncryptedMessage
+import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
+import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
@@ -1293,11 +1296,11 @@ internal class CryptoManager(
      * @param event the event
      */
     fun onToDeviceEvent(event: Event) {
-        mSasVerificationService.onToDeviceEvent(event)
-
-        if (TextUtils.equals(event.type, EventType.ROOM_KEY) || TextUtils.equals(event.type, EventType.FORWARDED_ROOM_KEY)) {
-            getDecryptingThreadHandler().post { onRoomKeyEvent(event) }
-        } else if (TextUtils.equals(event.type, EventType.ROOM_KEY_REQUEST)) {
+        if (event.type == EventType.ROOM_KEY || event.type == EventType.FORWARDED_ROOM_KEY) {
+            getDecryptingThreadHandler().post {
+                onRoomKeyEvent(event)
+            }
+        } else if (event.type == EventType.ROOM_KEY_REQUEST) {
             encryptingThreadHandler.post {
                 mIncomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
             }
@@ -1490,7 +1493,7 @@ internal class CryptoManager(
 
         // Try to keep at most half that number on the server. This leaves the
         // rest of the slots free to hold keys that have been claimed from the
-        // server but we haven't recevied a message for.
+        // server but we haven't received a message for.
         // If we run out of slots when generating new keys then olm will
         // discard the oldest private keys first. This will eventually clean
         // out stale private keys that won't receive a message.

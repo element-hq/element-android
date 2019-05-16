@@ -73,7 +73,6 @@ interface CryptoService {
 
     fun getDeviceInfo(userId: String, deviceId: String?, callback: MatrixCallback<MXDeviceInfo?>)
 
-    // TODO move elsewhere
     fun reRequestRoomKeyForEvent(event: Event)
 
     fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody)

@@ -17,21 +17,24 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.sync.model.ToDeviceSyncResponse
 
 
-internal class CryptoSyncHandler(private val crypto: CryptoManager) {
+internal class CryptoSyncHandler(private val cryptoManager: CryptoManager,
+                                 private val sasVerificationService: DefaultSasVerificationService) {
 
     fun handleToDevice(toDevice: ToDeviceSyncResponse) {
         toDevice.events?.forEach {
-            crypto.onToDeviceEvent(it)
+            sasVerificationService.onToDeviceEvent(it)
+            cryptoManager.onToDeviceEvent(it)
         }
 
     }
 
     fun onSyncCompleted(syncResponse: SyncResponse, fromToken: String?, catchingUp: Boolean) {
-        crypto.onSyncCompleted(syncResponse, fromToken, catchingUp)
+        cryptoManager.onSyncCompleted(syncResponse, fromToken, catchingUp)
     }
 
 }

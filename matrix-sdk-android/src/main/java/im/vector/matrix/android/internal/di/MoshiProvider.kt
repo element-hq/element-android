@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.network.parsing.UriMoshiAdapter
 import im.vector.matrix.android.internal.session.sync.model.UserAccountData
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirectMessages
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataFallback
+import im.vector.matrix.android.internal.util.JsonCanonicalizer
 
 object MoshiProvider {
 
@@ -48,10 +49,16 @@ object MoshiProvider {
     }
 
     fun <T> getCanonicalJson(type: Class<T>, o: T): String {
-        val adadpter = moshi.adapter<T>(type)
+        val adapter = moshi.adapter<T>(type)
 
-        // FIXME It is not canonical...
-        return adadpter.toJson(o)
+        val json = adapter.toJson(o)
+
+        // Canonicalize manually
+        val can = JsonCanonicalizer.canonicalize(json)
+
+        val jsonSafe = can.replace("\\/", "/")
+
+        return jsonSafe
     }
-
 }
+

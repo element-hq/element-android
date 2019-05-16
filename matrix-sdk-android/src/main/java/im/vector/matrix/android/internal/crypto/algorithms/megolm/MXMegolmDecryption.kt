@@ -28,15 +28,14 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.*
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
 import im.vector.matrix.android.internal.crypto.algorithms.MXDecryptionResult
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
-import im.vector.matrix.android.internal.crypto.model.rest.ForwardedRoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
+import im.vector.matrix.android.internal.crypto.model.rest.ForwardedRoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -239,7 +238,7 @@ internal class MXMegolmDecryption : IMXDecrypting {
             return
         }
 
-        if (TextUtils.equals(event.type, EventType.FORWARDED_ROOM_KEY)) {
+        if (event.type == EventType.FORWARDED_ROOM_KEY) {
             Timber.d("## onRoomKeyEvent(), forward adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
                     + " sessionKey " + roomKeyContent.sessionKey) // from " + event);
             val forwardedRoomKeyContent = event.content.toModel<ForwardedRoomKeyContent>()!!
