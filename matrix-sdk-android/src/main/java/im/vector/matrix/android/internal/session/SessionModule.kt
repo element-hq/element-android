@@ -104,7 +104,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            EventRelationsAggregationUpdater()
+            EventRelationsAggregationUpdater(get())
         }
 
         scope(DefaultSession.SCOPE) {

@@ -45,6 +45,7 @@ internal object EventMapper {
     }
 
     fun map(eventEntity: EventEntity): Event {
+        //TODO proxy the event to only parse unsigned data when accessed?
         var ud = if (eventEntity.unsignedData.isNullOrBlank()) null
         else MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(eventEntity.unsignedData)
         return Event(

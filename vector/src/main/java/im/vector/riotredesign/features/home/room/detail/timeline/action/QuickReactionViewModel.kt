@@ -18,7 +18,9 @@ package im.vector.riotredesign.features.home.room.detail.timeline.action
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.core.platform.VectorViewModel
+import org.koin.android.ext.android.get
 
 /**
  * Quick reactions state, it's a toggle with 3rd state
@@ -36,11 +38,6 @@ data class QuickReactionState(val agreeTrigleState: TriggleState, val likeTriggl
  * TODO: configure initial state from event
  */
 class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel<QuickReactionState>(initialState) {
-
-    val agreePositive = "👍"
-    val agreeNegative = "👎"
-    val likePositive = "😀"
-    val likeNegative = "😞"
 
 
     fun toggleAgree(isFirst: Boolean) = withState {
@@ -99,10 +96,37 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
 
     companion object : MvRxViewModelFactory<QuickReactionViewModel, QuickReactionState> {
 
+        val agreePositive = "👍"
+        val agreeNegative = "👎"
+        val likePositive = "😀"
+        val likeNegative = "😞"
+
         override fun initialState(viewModelContext: ViewModelContext): QuickReactionState? {
             // Args are accessible from the context.
             // val foo = vieWModelContext.args<MyArgs>.foo
-            return QuickReactionState(TriggleState.NONE, TriggleState.NONE)
+            val currentSession = viewModelContext.activity.get<Session>()
+            val parcel = viewModelContext.args as MessageActionsBottomSheet.ParcelableArgs
+            val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
+                    ?: return null
+            var agreeTriggle: TriggleState = TriggleState.NONE
+            var likeTriggle: TriggleState = TriggleState.NONE
+            event.annotations?.reactionsSummary?.forEach {
+                //it.addedByMe
+                if (it.addedByMe) {
+                    if (agreePositive == it.key) {
+                        agreeTriggle = TriggleState.FIRST
+                    } else if (agreeNegative == it.key) {
+                        agreeTriggle = TriggleState.SECOND
+                    }
+
+                    if (likePositive == it.key) {
+                        likeTriggle = TriggleState.FIRST
+                    } else if (likeNegative == it.key) {
+                        likeTriggle = TriggleState.SECOND
+                    }
+                }
+            }
+            return QuickReactionState(agreeTriggle, likeTriggle)
         }
     }
 }

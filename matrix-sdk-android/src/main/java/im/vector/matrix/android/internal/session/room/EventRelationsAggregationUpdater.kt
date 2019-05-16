@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.session.room
 
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
@@ -10,7 +11,7 @@ import io.realm.Realm
 import timber.log.Timber
 
 
-internal class EventRelationsAggregationUpdater {
+internal class EventRelationsAggregationUpdater(private val credentials: Credentials) {
 
     fun update(realm: Realm, roomId: String, events: List<Event>?) {
         events?.forEach { event ->
@@ -66,12 +67,14 @@ internal class EventRelationsAggregationUpdater {
                     sum.key = reaction
                     sum.firstTimestamp = event.originServerTs ?: 0
                     sum.count = 1
+                    sum.addedByMe = sum.addedByMe || (credentials.userId == event.sender)
                     eventSummary.reactionsSummary.add(sum)
                 } else {
                     //is this a known event (is possible? pagination?)
                     if (!sum.sourceEvents.contains(eventId)) {
                         sum.count += 1
                         sum.sourceEvents.add(eventId)
+                        sum.addedByMe = sum.addedByMe || (credentials.userId == event.sender)
                     }
                 }
 
