@@ -49,7 +49,7 @@ internal class RoomMembers(private val realm: Realm,
     }
 
     fun isUniqueDisplayName(displayName: String?): Boolean {
-        if(displayName.isNullOrEmpty()){
+        if (displayName.isNullOrEmpty()) {
             return true
         }
         return EventEntity
@@ -83,12 +83,12 @@ internal class RoomMembers(private val realm: Realm,
 
     fun getNumberOfJoinedMembers(): Int {
         return roomSummary?.joinedMembersCount
-               ?: getLoaded().filterValues { it.membership == Membership.JOIN }.size
+                ?: getLoaded().filterValues { it.membership == Membership.JOIN }.size
     }
 
     fun getNumberOfInvitedMembers(): Int {
         return roomSummary?.invitedMembersCount
-               ?: getLoaded().filterValues { it.membership == Membership.INVITE }.size
+                ?: getLoaded().filterValues { it.membership == Membership.INVITE }.size
     }
 
     fun getNumberOfMembers(): Int {

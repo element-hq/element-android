@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/sas_emoji_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_horizontal_margin"
+            android:layout_marginTop="@dimen/layout_vertical_margin"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/sas_emoji_description" />
+
+        <TextView
+            android:id="@+id/sas_emoji_description_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_vertical_margin"
+            android:gravity="center"
+            android:text="@string/sas_security_advise"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sas_emoji_description" />
+
+        <TextView
+            android:id="@+id/sas_decimal_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/sas_emoji_grid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sas_emoji_grid"
+            tools:text="1234-4320-3905"
+            tools:visibility="visible" />
+
+        <GridLayout
+            android:id="@+id/sas_emoji_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_vertical_margin"
+            android:columnCount="@integer/number_of_emoji_per_line"
+            android:padding="@dimen/layout_vertical_margin"
+            android:useDefaultMargins="true"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sas_emoji_description_2"
+            tools:visibility="visible">
+
+            <include
+                android:id="@+id/emoji0"
+                layout="@layout/item_emoji_verif" />
+
+            <include
+                android:id="@+id/emoji1"
+                layout="@layout/item_emoji_verif" />
+
+            <include
+                android:id="@+id/emoji2"
+                layout="@layout/item_emoji_verif" />
+
+            <include
+                android:id="@+id/emoji3"
+                layout="@layout/item_emoji_verif" />
+
+            <include
+                android:id="@+id/emoji4"
+                layout="@layout/item_emoji_verif" />
+
+            <include
+                android:id="@+id/emoji5"
+                layout="@layout/item_emoji_verif" />
+
+            <include
+                android:id="@+id/emoji6"
+                layout="@layout/item_emoji_verif" />
+
+        </GridLayout>
+
+        <Button
+            android:id="@+id/sas_request_continue_button"
+            style="@style/VectorButtonStyle"
+            android:layout_margin="@dimen/layout_vertical_margin"
+            android:minWidth="160dp"
+            android:text="@string/_continue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sas_emoji_grid" />
+
+        <Button
+            android:id="@+id/sas_request_cancel_button"
+            style="@style/VectorButtonStyleFlat"
+            android:layout_margin="@dimen/layout_vertical_margin"
+            android:text="@string/cancel"
+            app:layout_constraintEnd_toStartOf="@+id/sas_request_continue_button"
+            app:layout_constraintTop_toBottomOf="@+id/sas_emoji_grid" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

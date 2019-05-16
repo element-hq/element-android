@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
+import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addStateEvents
@@ -33,11 +34,7 @@ import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoo
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
-import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
-import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
+import im.vector.matrix.android.internal.session.sync.model.*
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import timber.log.Timber
@@ -45,7 +42,8 @@ import timber.log.Timber
 internal class RoomSyncHandler(private val monarchy: Monarchy,
                                private val readReceiptHandler: ReadReceiptHandler,
                                private val roomSummaryUpdater: RoomSummaryUpdater,
-                               private val roomTagHandler: RoomTagHandler) {
+                               private val roomTagHandler: RoomTagHandler,
+                               private val mCrypto: CryptoManager) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -65,9 +63,9 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
     private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy) {
         val rooms = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
+            is HandlingStrategy.JOINED -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
             is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
-            is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
+            is HandlingStrategy.LEFT -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
         }
         realm.insertOrUpdate(rooms)
     }
@@ -79,7 +77,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         Timber.v("Handle join sync for room $roomId")
 
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+                ?: realm.createObject(roomId)
 
         if (roomEntity.membership == MyMembership.INVITED) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -109,6 +107,11 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                     timelineStateOffset
             )
             roomEntity.addOrUpdate(chunkEntity)
+
+            // Give info to crypto module
+            roomSync.timeline.events.forEach {
+                mCrypto.onLiveEvent(roomId, it)
+            }
 
             // Try to remove local echo
             val transactionIds = roomSync.timeline.events.mapNotNull { it.unsignedData?.transactionId }

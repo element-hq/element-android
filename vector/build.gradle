@@ -174,6 +174,12 @@ dependencies {
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"
 
+    // Passphrase strength helper
+    implementation 'com.nulab-inc:zxcvbn:1.2.5'
+
+    //Alerter
+    implementation 'com.tapadoo.android:alerter:3.0.2'
+
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
     // Butterknife

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?vctr_list_header_background_color"
+    android:minHeight="67dp">
+
+    <ImageView
+        android:id="@+id/view_keys_backup_banner_picto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginLeft="19dp"
+        android:src="@drawable/key_small"
+        android:tint="?android:textColorTertiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/view_keys_backup_banner_text_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginLeft="27dp"
+        android:text="@string/keys_backup_banner_setup_line1"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@id/view_keys_backup_banner_text_2"
+        app:layout_constraintEnd_toStartOf="@id/view_keys_backup_banner_barrier"
+        app:layout_constraintStart_toEndOf="@id/view_keys_backup_banner_picto"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/view_keys_backup_banner_text_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginLeft="27dp"
+        android:text="@string/keys_backup_banner_setup_line2"
+        android:textColor="?colorAccent"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/view_keys_backup_banner_barrier"
+        app:layout_constraintStart_toEndOf="@id/view_keys_backup_banner_picto"
+        app:layout_constraintTop_toBottomOf="@id/view_keys_backup_banner_text_1"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/view_keys_backup_banner_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="view_keys_backup_banner_close,view_keys_backup_banner_loading"
+        tools:ignore="MissingConstraints" />
+
+    <ProgressBar
+        android:id="@+id/view_keys_backup_banner_loading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="14dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <!-- Trick to align the close picto to top of text -->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/view_keys_backup_banner_close_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="view_keys_backup_banner_close,view_keys_backup_banner_close_image"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/view_keys_backup_banner_close"
+        android:layout_width="@dimen/layout_touch_size"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/view_keys_backup_banner_close_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_small_close"
+        app:layout_constraintEnd_toEndOf="@id/view_keys_backup_banner_close"
+        app:layout_constraintStart_toStartOf="@id/view_keys_backup_banner_close"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?vctr_line_divider"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

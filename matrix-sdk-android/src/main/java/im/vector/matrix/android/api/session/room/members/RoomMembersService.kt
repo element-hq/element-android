@@ -54,4 +54,18 @@ interface RoomMembersService {
      */
     fun invite(userId: String, callback: MatrixCallback<Unit>)
 
+    /**
+     * Return all the roomMembers ids which are joined or invited to the room
+     *
+     * @return a roomMember id list of joined or invited members.
+     */
+    fun getActiveRoomMemberIds(): List<String>
+
+    /**
+     * Return all the roomMembers ids which are joined to the room
+     *
+     * @return a roomMember id list of joined members.
+     */
+    fun getJoinedRoomMemberIds(): List<String>
+
 }

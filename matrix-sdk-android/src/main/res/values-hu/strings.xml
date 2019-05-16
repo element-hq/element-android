@@ -80,4 +80,8 @@
     </plurals>
 
 
+    <string name="notice_event_redacted">Üzenet eltávolítva</string>
+    <string name="notice_event_redacted_by">Üzenetet eltávolította: %1$s</string>
+    <string name="notice_event_redacted_with_reason">Üzenet eltávolítva [ok: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Üzenetet eltávolította: %1$s [ok: %2$s]</string>
 </resources>

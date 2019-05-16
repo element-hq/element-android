@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/sas_verification_verified_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/sas_verified"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/sas_verification_verified_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_vertical_margin"
+            android:gravity="center"
+            android:text="@string/sas_verified_successful"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sas_verification_verified_title" />
+
+        <TextView
+            android:id="@+id/sas_verification_verified_description_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_vertical_margin"
+            android:gravity="center"
+            android:text="@string/sas_verified_successful_description"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sas_verification_verified_description" />
+
+        <Button
+            android:id="@+id/sas_verification_verified_done_button"
+            style="@style/VectorButtonStyle"
+            android:layout_marginTop="@dimen/layout_vertical_margin_big"
+            android:layout_marginEnd="@dimen/layout_vertical_margin"
+            android:layout_marginRight="@dimen/layout_vertical_margin"
+            android:layout_marginBottom="@dimen/layout_vertical_margin"
+            android:minWidth="160dp"
+            android:text="@string/sas_got_it"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sas_verification_verified_description_2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

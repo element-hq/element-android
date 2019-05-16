@@ -269,9 +269,10 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                 val permissionsArrayToBeGranted = permissionsListToBeGranted.toTypedArray()
 
                 // for android < M, we use a custom dialog to request the contacts book access.
-                /*
                 if (permissionsListToBeGranted.contains(Manifest.permission.READ_CONTACTS)
                         && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    TODO()
+                    /*
                     AlertDialog.Builder(activity)
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .setTitle(R.string.permissions_rationale_popup_title)
@@ -293,13 +294,13 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                                         }
                             }
                             .show()
+                    */
                 } else {
                     fragment?.requestPermissions(permissionsArrayToBeGranted, requestCode)
                             ?: run {
                                 ActivityCompat.requestPermissions(activity, permissionsArrayToBeGranted, requestCode)
                             }
                 }
-                */
             } else {
                 // permissions were granted, start now.
                 isPermissionGranted = true

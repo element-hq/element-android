@@ -1373,8 +1373,8 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="autodiscover_invalid_response">Réponse de découverte du serveur d’accueil non valide</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Auto-compléter les options du serveur</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot a détecté une configuration de serveur personnalisée pour le domaine de votre identifiant « %s » :
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot a détecté une configuration de serveur personnalisée pour le domaine de votre identifiant « %1$s » :
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Utiliser la configuration</string>
 
     <string name="notification_sync_init">Initialisation du service</string>

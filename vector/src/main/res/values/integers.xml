@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <integer name="default_animation_duration">500</integer>
+
     <integer name="rtl_mirror_flip">0</integer>
 
     <integer name="splash_animation_velocity">750</integer>
+
+    <integer name="number_of_emoji_per_line">4</integer>
 
 </resources>

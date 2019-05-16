@@ -1327,8 +1327,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="autodiscover_invalid_response">無效的家伺服器探索回應</string>
     <string name="autodiscover_well_known_autofill_dialog_title">自動完成伺服器選項</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot 偵測到您的 userId 網域「%s」有自訂的伺服器設定：
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot 偵測到您的 userId 網域「%1$s」有自訂的伺服器設定：
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">使用設定</string>
 
     <string name="notification_sync_init">正在初始化服務</string>

@@ -80,4 +80,8 @@
         <item quantity="other">%1$s dhe %2$d të tjerë</item>
     </plurals>
 
+    <string name="notice_event_redacted">Mesazhi u hoq</string>
+    <string name="notice_event_redacted_by">Mesazhi u hoq nga %1$s</string>
+    <string name="notice_event_redacted_with_reason">Mesazh i hequr [arsye: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Mesazh i hequr nga %1$s [arsye: %2$s]</string>
 </resources>

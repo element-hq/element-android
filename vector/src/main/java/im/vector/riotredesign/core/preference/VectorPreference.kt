@@ -133,7 +133,7 @@ open class VectorPreference : Preference {
             }
 
         } catch (e: Exception) {
-            Timber.e(LOG_TAG, "onBindView " + e.message, e)
+            Timber.e("onBindView " + e.message, e)
         }
 
         super.onBindViewHolder(holder)

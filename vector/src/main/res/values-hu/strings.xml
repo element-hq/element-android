@@ -1372,8 +1372,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="autodiscover_invalid_response">A Matrix szerver felderítésére érvénytelen válasz érkezett</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Szerver beállítások automatikus kiegészítése</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot egyedi szerver beállítást észlelt a felhasználói azonosítód domain-jéhez: \"%s\":
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot egyedi szerver beállítást észlelt a felhasználói azonosítód domain-jéhez: \"%1$s\":
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Beállítás használata</string>
 
     <string name="notification_sync_init">Szolgáltatás indítása</string>

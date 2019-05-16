@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorBackgroundFloating"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/keys_backup_setup_step3_copy_button_title"
+        android:textAlignment="center"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/keys_backup_recovery_key_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/layout_horizontal_margin"
+        android:fontFamily="monospace"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        tools:text="HHWJ Y8DK RDR4\nBQEN FQ4V M4F8\nBQEN FQ4V M4A8" />
+
+    <LinearLayout
+        android:id="@+id/keys_backup_setup_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/layout_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingRight="@dimen/layout_horizontal_margin"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_material_share"
+            android:tint="?colorAccent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/keys_backup_setup_step3_share_recovery_file"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/keys_backup_setup_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/layout_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingRight="@dimen/layout_horizontal_margin"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_material_save"
+            android:tint="?colorAccent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/keys_backup_setup_step3_save_button_title"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

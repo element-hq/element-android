@@ -61,7 +61,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
         Matrix.getInstance(context)?.defaultSession?.let { session ->
             session.dataHandler
                     ?.getRoom(roomId)
-                    ?.markAllAsRead(object : SimpleApiCallback<Void>() {
+                    ?.markAllAsRead(object : SimpleApiCallback<Unit>() {
                         override fun onSuccess(void: Void?) {
                             // Ignore
                         }
@@ -100,7 +100,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
 
         val event = Event(mxMessage, session.credentials.userId, roomId)
         room.storeOutgoingEvent(event)
-        room.sendEvent(event, object : ApiCallback<Void?> {
+        room.sendEvent(event, object : MatrixCallback<Void?> {
             override fun onSuccess(info: Void?) {
                 Timber.d("Send message : onSuccess ")
                 val notifiableMessageEvent = NotifiableMessageEvent(

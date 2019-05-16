@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/keys_backup_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/keys_backup_shield"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:src="@drawable/key_big"
+            android:tint="?android:textColorTertiary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/keys_restore_with_key"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/keys_backup_restore_with_recovery_key"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/keys_backup_shield" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/keys_backup_key_enter_til"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toStartOf="@+id/keys_backup_import"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/keys_restore_with_key">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/keys_restore_key_enter_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/keys_backup_restore_key_enter_hint"
+                android:imeOptions="actionDone"
+                android:inputType="textNoSuggestions|textMultiLine"
+                android:maxLines="3"
+                android:textColor="?android:textColorPrimary"
+                tools:text="EsTy 7CiZ Zqpj eqFq Wjz1 kzfS 59DE uZyA wt7b rhBE viyt kb1p" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/keys_backup_import"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="center"
+            android:src="@drawable/ic_import_black"
+            android:tint="?attr/colorAccent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/keys_backup_key_enter_til"
+            app:layout_constraintTop_toTopOf="@id/keys_backup_key_enter_til" />
+
+        <TextView
+            android:id="@+id/keys_restore_key_help_with_link"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/keys_backup_restore_with_key_helper"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/keys_backup_key_enter_til" />
+
+        <Button
+            android:id="@+id/keys_restore_button"
+            style="@style/VectorButtonStyle"
+            android:layout_marginTop="@dimen/layout_vertical_margin_big"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
+            android:layout_marginRight="@dimen/layout_horizontal_margin"
+            android:minWidth="200dp"
+            android:padding="16dp"
+            android:text="@string/keys_backup_unlock_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/keys_restore_key_help_with_link"
+            app:layout_constraintVertical_bias="0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

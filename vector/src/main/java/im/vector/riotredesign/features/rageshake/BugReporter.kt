@@ -199,7 +199,7 @@ object BugReporter {
                     userId = session.sessionParams.credentials.userId
                     deviceId = session.sessionParams.credentials.deviceId ?: "undefined"
                     // TODO matrixSdkVersion = session.getVersion(true);
-                    // TODO olmVersion = session.getCryptoVersion(context, true);
+                    olmVersion = session.getCryptoVersion(context, true)
                 }
 
                 if (!mIsCancelled) {

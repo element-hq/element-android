@@ -1197,7 +1197,7 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="no_valid_google_play_services_apk">Keine validen Google-Play-Dienste gefunden. Benachrichtigungen könnten nicht richtig funktionieren.</string>
 
-    <string name="store_title">Riot.im - Kommunizierte auf deine Weise</string>
+    <string name="store_title">Riot.im - Kommuniziere auf deine Weise</string>
     <string name="store_short_description">Eine universelle, sichere Chat-App - komplett unter deiner Kontrolle.</string>
     <string name="store_full_description">"Eine Chat-App unter deiner Kontrolle und total flexibel. Riot lässt dich auf die Art kommunizieren wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
 
@@ -1423,8 +1423,8 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="autodiscover_invalid_response">Ungültige Antwort beim Entdecken des Heimservers</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%s\": 
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%1$s\":
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Nutze Konfiguration</string>
 
     <string name="notification_sync_init">Initialisiere Dienst</string>

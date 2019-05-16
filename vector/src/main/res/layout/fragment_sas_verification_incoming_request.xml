@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/sas_incoming_request_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/sas_incoming_request_title"
+            android:textAlignment="center"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/sas_incoming_request_user_avatar"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="@dimen/layout_vertical_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sas_incoming_request_title"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/sas_incoming_request_user_display_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sas_incoming_request_user_avatar"
+            tools:text="User name" />
+
+        <TextView
+            android:id="@+id/sas_incoming_request_user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sas_incoming_request_user_display_name"
+            tools:text="\@foo:matrix.org" />
+
+        <TextView
+            android:id="@+id/sas_incoming_request_user_device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sas_incoming_request_user_id"
+            tools:text="Device: Mobile" />
+
+        <TextView
+            android:id="@+id/sas_incoming_request_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_vertical_margin"
+            android:text="@string/sas_incoming_request_description"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sas_incoming_request_user_device" />
+
+        <TextView
+            android:id="@+id/sas_incoming_request_description_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_vertical_margin"
+            android:text="@string/sas_incoming_request_description_2"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sas_incoming_request_description" />
+
+        <Button
+            android:id="@+id/sas_request_continue_button"
+            style="@style/VectorButtonStyle"
+            android:layout_marginTop="@dimen/layout_vertical_margin_big"
+            android:layout_marginEnd="@dimen/layout_vertical_margin"
+            android:layout_marginRight="@dimen/layout_vertical_margin"
+            android:layout_marginBottom="@dimen/layout_vertical_margin"
+            android:minWidth="160dp"
+            android:text="@string/_continue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sas_incoming_request_description_2" />
+
+        <Button
+            android:id="@+id/sas_request_cancel_button"
+            style="@style/VectorButtonStyleFlat"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/layout_vertical_margin"
+            android:layout_marginRight="@dimen/layout_vertical_margin"
+            android:text="@string/cancel"
+            app:layout_constraintEnd_toStartOf="@+id/sas_request_continue_button"
+            app:layout_constraintTop_toTopOf="@+id/sas_request_continue_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

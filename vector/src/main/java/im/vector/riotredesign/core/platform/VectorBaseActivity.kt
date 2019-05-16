@@ -24,6 +24,7 @@ import android.view.View
 import androidx.annotation.*
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
@@ -252,6 +253,39 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
             it.setDisplayShowHomeEnabled(true)
             it.setDisplayHomeAsUpEnabled(true)
         }
+    }
+
+    //==============================================================================================
+    // Handle loading view (also called waiting view or spinner view)
+    //==============================================================================================
+
+    var waitingView: View? = null
+        set(value) {
+            field = value
+
+            // Ensure this view is clickable to catch UI events
+            value?.isClickable = true
+        }
+
+    /**
+     * Tells if the waiting view is currently displayed
+     *
+     * @return true if the waiting view is displayed
+     */
+    fun isWaitingViewVisible() = waitingView?.isVisible == true
+
+    /**
+     * Show the waiting view
+     */
+    open fun showWaitingView() {
+        waitingView?.isVisible = true
+    }
+
+    /**
+     * Hide the waiting view
+     */
+    open fun hideWaitingView() {
+        waitingView?.isVisible = false
     }
 
     /* ==========================================================================================

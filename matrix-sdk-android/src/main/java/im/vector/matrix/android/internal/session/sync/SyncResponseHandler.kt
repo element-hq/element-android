@@ -23,12 +23,18 @@ import kotlin.system.measureTimeMillis
 
 internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
                                    private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-                                   private val groupSyncHandler: GroupSyncHandler) {
+                                   private val groupSyncHandler: GroupSyncHandler,
+                                   private val cryptoSyncHandler: CryptoSyncHandler) {
 
     fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
         return Try {
             Timber.v("Start handling sync")
             val measure = measureTimeMillis {
+                // Handle the to device events before the room ones
+                // to ensure to decrypt them properly
+                if (syncResponse.toDevice != null) {
+                    cryptoSyncHandler.handleToDevice(syncResponse.toDevice)
+                }
                 if (syncResponse.rooms != null) {
                     roomSyncHandler.handle(syncResponse.rooms)
                 }
@@ -38,6 +44,8 @@ internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
                 if (syncResponse.accountData != null) {
                     userAccountDataSyncHandler.handle(syncResponse.accountData)
                 }
+
+                cryptoSyncHandler.onSyncCompleted(syncResponse, fromToken, isCatchingUp)
             }
             Timber.v("Finish handling sync in $measure ms")
             syncResponse

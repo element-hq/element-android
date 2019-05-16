@@ -78,4 +78,8 @@
         <item quantity="other">%1$s 与其他 %2$d 位</item>
     </plurals>
 
+    <string name="notice_event_redacted">消息已被移除</string>
+    <string name="notice_event_redacted_by">消息已被 %1$s 移除</string>
+    <string name="notice_event_redacted_with_reason">消息已被移除 [原因: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">消息已被 %1$s 移除 [原因: %2$s]</string>
 </resources>

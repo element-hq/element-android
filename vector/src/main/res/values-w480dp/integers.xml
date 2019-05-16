@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="number_of_emoji_per_line">7</integer>
+
+</resources>

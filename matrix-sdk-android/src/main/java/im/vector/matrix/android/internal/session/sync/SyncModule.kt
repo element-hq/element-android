@@ -40,7 +40,7 @@ internal class SyncModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomSyncHandler(get(), get(), get(), get())
+            RoomSyncHandler(get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -48,11 +48,15 @@ internal class SyncModule {
         }
 
         scope(DefaultSession.SCOPE) {
+            CryptoSyncHandler(get())
+        }
+
+        scope(DefaultSession.SCOPE) {
             UserAccountDataSyncHandler(get())
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncResponseHandler(get(), get(), get())
+            SyncResponseHandler(get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -60,7 +64,7 @@ internal class SyncModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncTokenStore(get())
+            SyncTokenStore(get("SessionRealmConfiguration"))
         }
 
         scope(DefaultSession.SCOPE) {

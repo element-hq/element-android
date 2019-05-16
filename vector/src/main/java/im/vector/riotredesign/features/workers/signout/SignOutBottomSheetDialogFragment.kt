@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.workers.signout
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -30,13 +31,18 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.utils.toast
+import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
+import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import org.koin.android.ext.android.inject
 
 
@@ -99,13 +105,13 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
         setupClickableView.setOnClickListener {
             context?.let { context ->
-                // TODO startActivityForResult(KeysBackupSetupActivity.intent(context, getExtraMatrixID(), true), EXPORT_REQ)
+                startActivityForResult(KeysBackupSetupActivity.intent(context, true), EXPORT_REQ)
             }
         }
 
         activateClickableView.setOnClickListener {
             context?.let { context ->
-                // TODO startActivity(KeysBackupManageActivity.intent(context, getExtraMatrixID()))
+                startActivity(KeysBackupManageActivity.intent(context))
             }
         }
 
@@ -119,20 +125,19 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                         .setTitle(R.string.are_you_sure)
                         .setMessage(R.string.sign_out_bottom_sheet_will_lose_secure_messages)
                         .setPositiveButton(R.string.backup) { _, _ ->
-                            /* TODO
                             when (viewModel.keysBackupState.value) {
-                                KeysBackupStateManager.KeysBackupState.NotTrusted -> {
+                                KeysBackupState.NotTrusted -> {
                                     context?.let { context ->
-                                        startActivity(KeysBackupManageActivity.intent(context, getExtraMatrixID()))
+                                        startActivity(KeysBackupManageActivity.intent(context))
                                     }
                                 }
-                                KeysBackupStateManager.KeysBackupState.Disabled -> {
+                                KeysBackupState.Disabled -> {
                                     context?.let { context ->
-                                        startActivityForResult(KeysBackupSetupActivity.intent(context, getExtraMatrixID(), true), EXPORT_REQ)
+                                        startActivityForResult(KeysBackupSetupActivity.intent(context, true), EXPORT_REQ)
                                     }
                                 }
-                                KeysBackupStateManager.KeysBackupState.BackingUp,
-                                KeysBackupStateManager.KeysBackupState.WillBackUp -> {
+                                KeysBackupState.BackingUp,
+                                KeysBackupState.WillBackUp -> {
                                     //keys are already backing up please wait
                                     context?.toast(R.string.keys_backup_is_not_finished_please_wait)
                                 }
@@ -140,7 +145,6 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                     //nop
                                 }
                             }
-                            */
                         }
                         .setNegativeButton(R.string.action_sign_out) { _, _ ->
                             onSignOut?.run()
@@ -165,60 +169,57 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
             }
         })
 
-        /* TODO
-    viewModel.keysBackupState.observe(this, Observer {
-        if (viewModel.keysExportedToFile.value == true) {
-            //ignore this
-            return@Observer
-        }
-        TransitionManager.beginDelayedTransition(rootLayout)
-        when (it) {
-            KeysBackupStateManager.KeysBackupState.ReadyToBackUp -> {
-                signoutClickableView.isVisible = true
-                dontWantClickableView.isVisible = false
-                setupClickableView.isVisible = false
-                activateClickableView.isVisible = false
-                backingUpStatusGroup.isVisible = true
-
-                backupProgress.isVisible = false
-                backupCompleteImage.isVisible = true
-                backupStatusTex.text = getString(R.string.keys_backup_info_keys_all_backup_up)
-
-                sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
+        viewModel.keysBackupState.observe(this, Observer {
+            if (viewModel.keysExportedToFile.value == true) {
+                //ignore this
+                return@Observer
             }
-            KeysBackupStateManager.KeysBackupState.BackingUp,
-            KeysBackupStateManager.KeysBackupState.WillBackUp -> {
-                backingUpStatusGroup.isVisible = true
-                sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
-                dontWantClickableView.isVisible = true
-                setupClickableView.isVisible = false
-                activateClickableView.isVisible = false
+            TransitionManager.beginDelayedTransition(rootLayout)
+            when (it) {
+                KeysBackupState.ReadyToBackUp -> {
+                    signoutClickableView.isVisible = true
+                    dontWantClickableView.isVisible = false
+                    setupClickableView.isVisible = false
+                    activateClickableView.isVisible = false
+                    backingUpStatusGroup.isVisible = true
 
-                backupProgress.isVisible = true
-                backupCompleteImage.isVisible = false
-                backupStatusTex.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
+                    backupProgress.isVisible = false
+                    backupCompleteImage.isVisible = true
+                    backupStatusTex.text = getString(R.string.keys_backup_info_keys_all_backup_up)
 
+                    sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
+                }
+                KeysBackupState.BackingUp,
+                KeysBackupState.WillBackUp -> {
+                    backingUpStatusGroup.isVisible = true
+                    sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
+                    dontWantClickableView.isVisible = true
+                    setupClickableView.isVisible = false
+                    activateClickableView.isVisible = false
+
+                    backupProgress.isVisible = true
+                    backupCompleteImage.isVisible = false
+                    backupStatusTex.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
+
+                }
+                KeysBackupState.NotTrusted -> {
+                    backingUpStatusGroup.isVisible = false
+                    dontWantClickableView.isVisible = true
+                    setupClickableView.isVisible = false
+                    activateClickableView.isVisible = true
+                    sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
+                }
+                else -> {
+                    backingUpStatusGroup.isVisible = false
+                    dontWantClickableView.isVisible = true
+                    setupClickableView.isVisible = true
+                    activateClickableView.isVisible = false
+                    sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+                }
             }
-            KeysBackupStateManager.KeysBackupState.NotTrusted -> {
-                backingUpStatusGroup.isVisible = false
-                dontWantClickableView.isVisible = true
-                setupClickableView.isVisible = false
-                activateClickableView.isVisible = true
-                sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
-            }
-            else -> {
-                backingUpStatusGroup.isVisible = false
-                dontWantClickableView.isVisible = true
-                setupClickableView.isVisible = true
-                activateClickableView.isVisible = false
-                sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
-            }
-        }
 
-//            updateSignOutSection()
-    })
-        */
-
+            // updateSignOutSection()
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -244,14 +245,12 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        /* TODO
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == EXPORT_REQ) {
                 val manualExportDone = data?.getBooleanExtra(KeysBackupSetupActivity.MANUAL_EXPORT, false)
                 viewModel.keysExportedToFile.value = manualExportDone
             }
         }
-        */
     }
 
 }

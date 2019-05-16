@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/rootLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/sas_verification_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/sas_verify_title"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sas_verification_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/sas_security_advise"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/sas_cancel_button"
+                style="@style/VectorButtonStyleFlat"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/cancel" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin">
+
+                <Button
+                    android:id="@+id/sas_start_button"
+                    style="@style/VectorButtonStyle"
+                    android:minWidth="160dp"
+                    android:text="@string/sas_verify_start_button_title" />
+
+                <ProgressBar
+                    android:id="@+id/sas_start_button_loading"
+                    android:layout_width="19dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/sas_legacy_verification"
+            style="@style/VectorButtonStyleFlat"
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/layout_horizontal_margin"
+            android:text="@string/sas_legacy_verification_button_title"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/sas_verifying_keys"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/sas_verifying_keys"
+            android:textColor="?android:attr/textColorSecondary"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+</ScrollView>

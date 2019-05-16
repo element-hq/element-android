@@ -16,13 +16,20 @@
 
 package im.vector.matrix.android.api.session.events.model
 
+import android.text.TextUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Types
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
+import im.vector.matrix.android.api.util.JsonDict
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
+import timber.log.Timber
 import java.lang.reflect.ParameterizedType
+import java.util.ArrayList
+import java.util.HashMap
 
-typealias Content = Map<String, @JvmSuppressWildcards Any>
+typealias Content = JsonDict
 
 /**
  * This methods is a facility method to map a json content to a model.
@@ -77,4 +84,148 @@ data class Event(
     companion object {
         internal val CONTENT_TYPE: ParameterizedType = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)
     }
+
+    //==============================================================================================================
+    // Crypto
+    //==============================================================================================================
+
+    /**
+     * For encrypted events, the plaintext payload for the event.
+     * This is a small MXEvent instance with typically value for `type` and 'content' fields.
+     */
+    @Transient
+    private var mClearEvent: Event? = null
+
+    /**
+     * Curve25519 key which we believe belongs to the sender of the event.
+     * See `senderKey` property.
+     */
+    @Transient
+    private var mSenderCurve25519Key: String? = null
+
+    /**
+     * Ed25519 key which the sender of this event (for olm) or the creator of the megolm session (for megolm) claims to own.
+     * See `claimedEd25519Key` property.
+     */
+    @Transient
+    private var mClaimedEd25519Key: String? = null
+
+    /**
+     * Curve25519 keys of devices involved in telling us about the senderCurve25519Key and claimedEd25519Key.
+     * See `forwardingCurve25519KeyChain` property.
+     */
+    @Transient
+    private var mForwardingCurve25519KeyChain: List<String> = ArrayList()
+
+    /**
+     * Decryption error
+     */
+    @Transient
+    private var mCryptoError: MXCryptoError? = null
+
+    /**
+     * @return true if this event is encrypted.
+     */
+    fun isEncrypted(): Boolean {
+        return TextUtils.equals(type, EventType.ENCRYPTED)
+    }
+
+    /**
+     * Update the clear data on this event.
+     * This is used after decrypting an event; it should not be used by applications.
+     * It fires kMXEventDidDecryptNotification.
+     *
+     * @param decryptionResult the decryption result, including the plaintext and some key info.
+     */
+    fun setClearData(decryptionResult: MXEventDecryptionResult?) {
+        mClearEvent = null
+
+        if (null != decryptionResult) {
+            if (null != decryptionResult!!.mClearEvent) {
+                mClearEvent = decryptionResult!!.mClearEvent
+            }
+
+            if (null != mClearEvent) {
+                mClearEvent!!.mSenderCurve25519Key = decryptionResult!!.mSenderCurve25519Key
+                mClearEvent!!.mClaimedEd25519Key = decryptionResult!!.mClaimedEd25519Key
+
+                if (null != decryptionResult!!.mForwardingCurve25519KeyChain) {
+                    mClearEvent!!.mForwardingCurve25519KeyChain = decryptionResult!!.mForwardingCurve25519KeyChain
+                } else {
+                    mClearEvent!!.mForwardingCurve25519KeyChain = ArrayList()
+                }
+
+                try {
+                    // Add "m.relates_to" data from e2e event to the unencrypted event
+                    // TODO
+                    //if (getWireContent().getAsJsonObject().has("m.relates_to")) {
+                    //    mClearEvent!!.getContentAsJsonObject()
+                    //            .add("m.relates_to", getWireContent().getAsJsonObject().get("m.relates_to"))
+                    //}
+                } catch (e: Exception) {
+                    Timber.e(e,"Unable to restore 'm.relates_to' the clear event")
+                }
+
+            }
+
+            mCryptoError = null
+        }
+    }
+
+    /**
+     * @return The curve25519 key that sent this event.
+     */
+    fun getSenderKey(): String? {
+        return if (null != mClearEvent) {
+            mClearEvent!!.mSenderCurve25519Key
+        } else {
+            mSenderCurve25519Key
+        }
+    }
+
+    /**
+     * @return The additional keys the sender of this encrypted event claims to possess.
+     */
+    fun getKeysClaimed(): Map<String, String> {
+        val res = HashMap<String, String>()
+
+        val claimedEd25519Key = if (null != mClearEvent) mClearEvent!!.mClaimedEd25519Key else mClaimedEd25519Key
+
+        if (null != claimedEd25519Key) {
+            res["ed25519"] = claimedEd25519Key
+        }
+
+        return res
+    }
+
+    /**
+     * @return the event type
+     */
+    fun getClearType(): String {
+        return if (null != mClearEvent) {
+            mClearEvent!!.type
+        } else {
+            type
+        }
+    }
+
+    /**
+     * @return the linked crypto error
+     */
+    fun getCryptoError(): MXCryptoError? {
+        return mCryptoError
+    }
+
+    /**
+     * Update the linked crypto error
+     *
+     * @param error the new crypto error.
+     */
+    fun setCryptoError(error: MXCryptoError?) {
+        mCryptoError = error
+        if (null != error) {
+            mClearEvent = null
+        }
+    }
+
 }

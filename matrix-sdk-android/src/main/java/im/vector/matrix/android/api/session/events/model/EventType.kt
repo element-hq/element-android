@@ -36,8 +36,6 @@ object EventType {
     const val FULLY_READ = "m.fully_read"
     const val PLUMBING = "m.room.plumbing"
     const val BOT_OPTIONS = "m.room.bot.options"
-    const val KEY_REQUEST = "m.room_key_request"
-    const val FORWARDED_ROOM_KEY = "m.forwarded_room_key"
     const val PREVIEW_URLS = "org.matrix.room.preview_urls"
 
     // State Events
@@ -64,6 +62,17 @@ object EventType {
     const val CALL_CANDIDATES = "m.call.candidates"
     const val CALL_ANSWER = "m.call.answer"
     const val CALL_HANGUP = "m.call.hangup"
+
+    // Key share events
+    const val ROOM_KEY_REQUEST = "m.room_key_request"
+    const val FORWARDED_ROOM_KEY = "m.forwarded_room_key"
+
+    // Interactive key verification
+    const val KEY_VERIFICATION_START = "m.key.verification.start"
+    const val KEY_VERIFICATION_ACCEPT = "m.key.verification.accept"
+    const val KEY_VERIFICATION_KEY = "m.key.verification.key"
+    const val KEY_VERIFICATION_MAC = "m.key.verification.mac"
+    const val KEY_VERIFICATION_CANCEL = "m.key.verification.cancel"
 
     private val STATE_EVENTS = listOf(
             STATE_ROOM_NAME,

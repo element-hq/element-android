@@ -60,7 +60,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
             sessionParams.credentials
         }
 
-        scope(DefaultSession.SCOPE) {
+        scope(DefaultSession.SCOPE, name = "SessionRealmConfiguration") {
             val context = get<Context>()
             val childPath = sessionParams.credentials.userId.md5()
             val directory = File(context.filesDir, childPath)
@@ -75,7 +75,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             Monarchy.Builder()
-                    .setRealmConfiguration(get())
+                    .setRealmConfiguration(get("SessionRealmConfiguration"))
                     .build()
         }
 
@@ -119,7 +119,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            RealmClearCacheTask(get()) as ClearCacheTask
+            RealmClearCacheTask(get("SessionRealmConfiguration")) as ClearCacheTask
         }
 
         scope(DefaultSession.SCOPE) {
@@ -131,7 +131,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultFilterRepository(get()) as FilterRepository
+            DefaultFilterRepository(get("SessionRealmConfiguration")) as FilterRepository
         }
 
         scope(DefaultSession.SCOPE) {
@@ -142,7 +142,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
             DefaultFilterService(get(), get(), get()) as FilterService
         }
 
-        scope(DefaultSession.SCOPE) {
+        scope<FilterApi>(DefaultSession.SCOPE) {
             val retrofit: Retrofit = get()
             retrofit.create(FilterApi::class.java)
         }

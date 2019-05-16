@@ -27,7 +27,7 @@ class TestTokenRegistration(val fragment: Fragment) : TroubleshootTest(R.string.
     override fun perform() {
         /*
         TODO
-        Matrix.getInstance(VectorApp.getInstance().baseContext).pushManager.forceSessionsRegistration(object : ApiCallback<Void> {
+        Matrix.getInstance(VectorApp.getInstance().baseContext).pushManager.forceSessionsRegistration(object : MatrixCallback<Unit> {
             override fun onSuccess(info: Void?) {
                 description = fragment.getString(R.string.settings_troubleshoot_test_token_registration_success)
                 status = TestStatus.SUCCESS

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".features.crypto.keysbackup.setup.KeysBackupSetupStep1Fragment">
+
+    <ImageView
+        android:id="@+id/keys_backup_setup_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:src="@drawable/backup_keys"
+        android:tint="?android:attr/textColorTertiary"
+        app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/keys_backup_setup_step1_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/keys_backup_setup_step1_title"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_description"
+        app:layout_constraintTop_toBottomOf="@+id/keys_backup_setup_image"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/keys_backup_setup_step1_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/keys_backup_setup_step1_description"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_button"
+        app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_title" />
+
+    <!-- Centered button -->
+    <Button
+        android:id="@+id/keys_backup_setup_step1_button"
+        style="@style/VectorButtonStyle"
+        android:layout_margin="16dp"
+        android:minWidth="200dp"
+        android:padding="8dp"
+        android:text="@string/keys_backup_setup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_description" />
+
+    <TextView
+        android:id="@+id/keys_backup_setup_step1_advanced"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:text="@string/keys_backup_setup_step1_advanced"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_button"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/keys_backup_setup_step1_manualExport"
+        style="@style/VectorButtonStyleFlat"
+        android:layout_margin="16dp"
+        android:minWidth="200dp"
+        android:padding="8dp"
+        android:text="@string/keys_backup_setup_step1_manual_export"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_advanced"
+        app:layout_constraintVertical_bias="0"
+        tools:visibility="visible" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -48,7 +48,7 @@ android {
             buildConfigField "boolean", "LOG_PRIVATE_DATA", "false"
 
             // Set to BODY instead of NONE to enable logging
-            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.NONE"
+            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BODY"
         }
 
         release {
@@ -125,6 +125,9 @@ dependencies {
     implementation "io.arrow-kt:arrow-effects:$arrow_version"
     implementation "io.arrow-kt:arrow-effects-instances:$arrow_version"
     implementation "io.arrow-kt:arrow-integration-retrofit-adapter:$arrow_version"
+
+    // olm lib is now hosted by jitpack: https://jitpack.io/#org.matrix.gitlab.matrix-org/olm
+    implementation 'org.matrix.gitlab.matrix-org:olm:3.1.2'
 
     // DI
     implementation "org.koin:koin-core:$koin_version"

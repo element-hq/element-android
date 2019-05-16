@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
@@ -71,6 +72,10 @@ class AppModule(private val context: Context) {
 
         factory {
             Matrix.getInstance().currentSession!!
+        }
+
+        single {
+            IncomingVerificationRequestHandler(get(), get(), get())
         }
 
 

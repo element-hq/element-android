@@ -28,6 +28,8 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                           private val roomMemberItemFactory: RoomMemberItemFactory,
                           private val roomHistoryVisibilityItemFactory: RoomHistoryVisibilityItemFactory,
                           private val callItemFactory: CallItemFactory,
+                          private val encryptionItemFactory: EncryptionItemFactory,
+                          private val encryptedItemFactory: EncryptedItemFactory,
                           private val defaultItemFactory: DefaultItemFactory) {
 
     fun create(event: TimelineEvent,
@@ -46,8 +48,10 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER              -> callItemFactory.create(event)
 
-                EventType.ENCRYPTED,
-                EventType.ENCRYPTION,
+                EventType.ENCRYPTION               -> encryptionItemFactory.create(event)
+
+                EventType.ENCRYPTED                -> encryptedItemFactory.create(event, nextEvent, callback)
+
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STICKER,
                 EventType.STATE_ROOM_CREATE        -> defaultItemFactory.create(event)

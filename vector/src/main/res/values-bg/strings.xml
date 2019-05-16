@@ -10,7 +10,7 @@
     <string name="dark_theme">Тъмна тема</string>
     <string name="black_them">Черна тема</string>
 
-    <string name="notification_sync_in_progress">Синхронизиране</string>
+    <string name="notification_sync_in_progress">Синхронизиране…</string>
     <string name="title_activity_home">Съобщения</string>
     <string name="title_activity_room">Стая</string>
     <string name="title_activity_settings">Настройки</string>
@@ -1358,8 +1358,8 @@
 
     <string name="autodiscover_invalid_response">Невалиден отговор при опит за откриване на адреса на сървъра</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Опции за откриване на сървър</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot откри конфигурация за собствен сървър за домейна от потребителското Ви име \"%s\":
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot откри конфигурация за собствен сървър за домейна от потребителското Ви име \"%1$s\":
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Използвай конфигурацията</string>
 
     <string name="notification_sync_init">Инициализиране на услугата</string>
@@ -1387,5 +1387,7 @@
     <string name="notification_new_invitation">Нова покана</string>
     <string name="notification_sender_me">Аз</string>
     <string name="notification_inline_reply_failed">** Неуспешно изпращане - моля, отворете стаята</string>
+
+    <string name="error_jitsi_not_supported_on_old_device">Извиняваме се, но конферентни разговори с Jitsi не се поддържат на стари устройства (устройства с Android OS под 5.0)</string>
 
 </resources>

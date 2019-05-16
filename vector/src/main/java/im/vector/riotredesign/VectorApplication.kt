@@ -28,8 +28,10 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.di.AppModule
 import im.vector.riotredesign.features.home.HomeModule
+import im.vector.riotredesign.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
+import org.koin.android.logger.AndroidLogger
 import org.koin.log.EmptyLogger
 import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
@@ -37,8 +39,12 @@ import timber.log.Timber
 
 class VectorApplication : Application() {
 
+    lateinit var appContext: Context
+
     override fun onCreate() {
         super.onCreate()
+
+        appContext = this
 
         VectorUncaughtExceptionHandler.activate(this)
 
@@ -56,9 +62,13 @@ class VectorApplication : Application() {
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         val appModule = AppModule(applicationContext).definition
         val homeModule = HomeModule().definition
-        startKoin(listOf(appModule, homeModule), logger = EmptyLogger())
+        startKoin(
+                list = listOf(appModule, homeModule),
+                logger = if (BuildConfig.DEBUG) AndroidLogger() else EmptyLogger())
 
         Matrix.getInstance().setApplicationFlavor(BuildConfig.FLAVOR_DESCRIPTION)
+
+        registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks())
     }
 
     override fun attachBaseContext(base: Context) {

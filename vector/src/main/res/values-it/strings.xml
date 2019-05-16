@@ -1417,8 +1417,8 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="autodiscover_invalid_response">Risposta alla scoperta di un homeserver non valida</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Opzioni autocompletamento server</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot ha rilevato una configurazione server personalizzata per il tuo dominio userId \"%s\":
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot ha rilevato una configurazione server personalizzata per il tuo dominio userId \"%1$s\":
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Usa configurazione</string>
 
     <string name="notification_sync_init">Inizializzazione del servizio</string>

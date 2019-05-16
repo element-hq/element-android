@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/colorBackground"
+    android:minHeight="50dp">
+
+    <TextView
+        android:id="@+id/item_generic_title_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/item_generic_description_text"
+        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Item Title"
+        tools:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/item_generic_description_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/item_generic_action_button"
+        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_generic_title_text"
+        tools:text="At totam delectus et aliquid dolorem. Consectetur voluptas tempore et non blanditiis id optio. Dolorum impedit quidem minus nihil. "
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/item_generic_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="item_generic_accessory_image,item_generic_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/item_generic_accessory_image"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/item_generic_description_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/item_generic_title_text"
+        tools:srcCompat="@drawable/e2e_warning"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/item_generic_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/item_generic_description_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/item_generic_title_text"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/item_generic_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:background="?attr/colorAccent"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/item_generic_description_text"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_generic_description_text"
+        tools:text="@string/settings_troubleshoot_test_device_settings_quickfix"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

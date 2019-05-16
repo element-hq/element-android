@@ -16,16 +16,22 @@
 
 package im.vector.matrix.android.internal.session
 
+import android.content.Context
 import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
+import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.group.model.GroupSummary
@@ -38,6 +44,13 @@ import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.MatrixCallbackDelegate
+import im.vector.matrix.android.internal.crypto.CryptoModule
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
+import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
@@ -53,7 +66,6 @@ import org.koin.standalone.inject
 
 
 internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent {
-
     companion object {
         const val SCOPE: String = "session"
     }
@@ -69,6 +81,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val filterService by inject<FilterService>()
     private val cacheService by inject<CacheService>()
     private val signOutService by inject<SignOutService>()
+    private val cryptoService by inject<CryptoManager>()
     private val syncThread by inject<SyncThread>()
     private val contentUrlResolver by inject<ContentUrlResolver>()
     private val contentUploadProgressTracker by inject<ContentUploadStateTracker>()
@@ -86,11 +99,20 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         val signOutModule = SignOutModule().definition
         val userModule = UserModule().definition
         val contentModule = ContentModule().definition
-        MatrixKoinHolder.instance.loadModules(listOf(sessionModule, syncModule, roomModule, groupModule, userModule, signOutModule, contentModule))
+        val cryptoModule = CryptoModule().definition
+        MatrixKoinHolder.instance.loadModules(listOf(sessionModule,
+                syncModule,
+                roomModule,
+                groupModule,
+                userModule,
+                signOutModule,
+                contentModule,
+                cryptoModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         if (!monarchy.isMonarchyThreadOpen) {
             monarchy.openManually()
         }
+        cryptoService.start(false, null)
         liveEntityUpdaters.forEach { it.start() }
     }
 
@@ -111,6 +133,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         assertMainThread()
         assert(isOpen)
         liveEntityUpdaters.forEach { it.dispose() }
+        cryptoService.close()
         if (monarchy.isMonarchyThreadOpen) {
             monarchy.closeManually()
         }
@@ -206,6 +229,116 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     override fun getUser(userId: String): User? {
         assert(isOpen)
         return userService.getUser(userId)
+    }
+
+    // CRYPTO SERVICE
+
+    override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
+        cryptoService.setDeviceName(deviceId, deviceName, callback)
+    }
+
+    override fun deleteDevice(deviceId: String, accountPassword: String, callback: MatrixCallback<Unit>) {
+        cryptoService.deleteDevice(deviceId, accountPassword, callback)
+    }
+
+    override fun getCryptoVersion(context: Context, longFormat: Boolean): String {
+        return cryptoService.getCryptoVersion(context, longFormat)
+    }
+
+    override fun isCryptoEnabled(): Boolean {
+        return cryptoService.isCryptoEnabled()
+    }
+
+    override fun getSasVerificationService(): SasVerificationService {
+        return cryptoService.getSasVerificationService()
+    }
+
+    override fun getKeysBackupService(): KeysBackupService {
+        return cryptoService.getKeysBackupService()
+    }
+
+    override fun isRoomBlacklistUnverifiedDevices(roomId: String, callback: MatrixCallback<Boolean>?) {
+        cryptoService.isRoomBlacklistUnverifiedDevices(roomId, callback)
+    }
+
+    override fun setWarnOnUnknownDevices(warn: Boolean) {
+        cryptoService.setWarnOnUnknownDevices(warn)
+    }
+
+    override fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String, callback: MatrixCallback<Unit>) {
+        cryptoService.setDeviceVerification(verificationStatus, deviceId, userId, callback)
+    }
+
+    override fun getUserDevices(userId: String): MutableList<MXDeviceInfo> {
+        return cryptoService.getUserDevices(userId)
+    }
+
+    override fun setDevicesKnown(devices: List<MXDeviceInfo>, callback: MatrixCallback<Unit>?) {
+        cryptoService.setDevicesKnown(devices, callback)
+    }
+
+    override fun deviceWithIdentityKey(senderKey: String, algorithm: String): MXDeviceInfo? {
+        return cryptoService.deviceWithIdentityKey(senderKey, algorithm)
+    }
+
+    override fun getMyDevice(): MXDeviceInfo {
+        return cryptoService.getMyDevice()
+    }
+
+    override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
+        cryptoService.getDevicesList(callback)
+    }
+
+    override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
+        return cryptoService.inboundGroupSessionsCount(onlyBackedUp)
+    }
+
+    override fun getGlobalBlacklistUnverifiedDevices(callback: MatrixCallback<Boolean>?) {
+        cryptoService.getGlobalBlacklistUnverifiedDevices(callback)
+    }
+
+    override fun setGlobalBlacklistUnverifiedDevices(block: Boolean, callback: MatrixCallback<Unit>?) {
+        cryptoService.setGlobalBlacklistUnverifiedDevices(block, callback)
+    }
+
+    override fun setRoomUnBlacklistUnverifiedDevices(roomId: String, callback: MatrixCallback<Unit>) {
+        cryptoService.setRoomUnBlacklistUnverifiedDevices(roomId, callback)
+    }
+
+    override fun getDeviceTrackingStatus(userId: String): Int {
+        return cryptoService.getDeviceTrackingStatus(userId)
+    }
+
+    override fun importRoomKeys(roomKeysAsArray: ByteArray, password: String, progressListener: ProgressListener?, callback: MatrixCallback<ImportRoomKeysResult>) {
+        cryptoService.importRoomKeys(roomKeysAsArray, password, progressListener, callback)
+    }
+
+    override fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>) {
+        cryptoService.exportRoomKeys(password, callback)
+    }
+
+    override fun setRoomBlacklistUnverifiedDevices(roomId: String, callback: MatrixCallback<Unit>) {
+        cryptoService.setRoomBlacklistUnverifiedDevices(roomId, callback)
+    }
+
+    override fun getDeviceInfo(userId: String, deviceId: String?, callback: MatrixCallback<MXDeviceInfo?>) {
+        cryptoService.getDeviceInfo(userId, deviceId, callback)
+    }
+
+    override fun reRequestRoomKeyForEvent(event: Event) {
+        cryptoService.reRequestRoomKeyForEvent(event)
+    }
+
+    override fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody) {
+        cryptoService.cancelRoomKeyRequest(requestBody)
+    }
+
+    override fun addRoomKeysRequestListener(listener: RoomKeysRequestListener) {
+        cryptoService.addRoomKeysRequestListener(listener)
+    }
+
+    override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
+        return cryptoService.decryptEvent(event, timeline)
     }
 
     // Private methods *****************************************************************************

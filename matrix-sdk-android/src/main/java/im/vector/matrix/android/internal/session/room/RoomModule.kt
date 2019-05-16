@@ -75,7 +75,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultCreateRoomTask(get(), get()) as CreateRoomTask
+            DefaultCreateRoomTask(get(), get("SessionRealmConfiguration")) as CreateRoomTask
         }
 
         scope(DefaultSession.SCOPE) {

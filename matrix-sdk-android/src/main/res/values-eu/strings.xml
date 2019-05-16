@@ -81,4 +81,8 @@
     </plurals>
 
 
+    <string name="notice_event_redacted">Mezua kendu da</string>
+    <string name="notice_event_redacted_by">%1$s erabiltzaileak mezua kendu du</string>
+    <string name="notice_event_redacted_with_reason">Mezua kendu da [arrazoia: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">%1$s erabiltzaileak mezua kendu du [arrazoia: %2$s]</string>
 </resources>

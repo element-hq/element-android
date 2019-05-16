@@ -136,6 +136,14 @@
         <item name="colorControlHighlight">?colorAccent</item>
     </style>
 
+    <style name="AlerterButton" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+    </style>
+
     <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
         <item name="android:background">@android:color/transparent</item>

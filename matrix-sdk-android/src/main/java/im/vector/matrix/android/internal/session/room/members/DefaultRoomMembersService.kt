@@ -68,4 +68,26 @@ internal class DefaultRoomMembersService(private val roomId: String,
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }
+
+    override fun getActiveRoomMemberIds(): List<String> {
+        return getRoomMemberIdsFiltered { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
+    }
+
+    override fun getJoinedRoomMemberIds(): List<String> {
+        return getRoomMemberIdsFiltered { it.membership == Membership.JOIN }
+    }
+
+    /* ==========================================================================================
+     * Private
+     * ========================================================================================== */
+
+    private fun getRoomMemberIdsFiltered(predicate: (RoomMember) -> Boolean): List<String> {
+        return monarchy.fetchAllCopiedSync { RoomMembers(it, roomId).queryRoomMembersEvent() }
+                .map { it.asDomain() }
+                .associateBy { it.stateKey!! }
+                .mapValues { it.value.content.toModel<RoomMember>()!! }
+                .filterValues { predicate(it) }
+                .keys
+                .toList()
+    }
 }
