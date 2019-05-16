@@ -75,7 +75,7 @@ class AppModule(private val context: Context) {
         }
 
         single {
-            IncomingVerificationRequestHandler(get(), get(), get())
+            IncomingVerificationRequestHandler(context, get())
         }
 
 

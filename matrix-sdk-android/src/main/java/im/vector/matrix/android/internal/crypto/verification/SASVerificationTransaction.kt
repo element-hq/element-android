@@ -24,11 +24,11 @@ import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -182,7 +182,7 @@ internal abstract class SASVerificationTransaction(
             is KeyVerificationAccept -> onVerificationAccept(event)
             is KeyVerificationKey    -> onKeyVerificationKey(senderId, event)
             is KeyVerificationMac    -> onKeyVerificationMac(event)
-            else                                                                         -> {
+            else                     -> {
                 //nop
             }
         }
@@ -323,11 +323,11 @@ internal abstract class SASVerificationTransaction(
                 if (shortCodeBytes!!.size < 5) return null
                 return getDecimalCodeRepresentation(shortCodeBytes!!)
             }
-            SasMode.EMOJI -> {
+            SasMode.EMOJI   -> {
                 if (shortCodeBytes!!.size < 6) return null
                 return getEmojiCodeRepresentation(shortCodeBytes!!).joinToString(" ") { it.emoji }
             }
-            else -> return null
+            else            -> return null
         }
     }
 

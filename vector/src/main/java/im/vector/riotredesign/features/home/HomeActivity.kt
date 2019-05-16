@@ -37,6 +37,7 @@ import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
@@ -52,6 +53,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private val homeNavigator by inject<HomeNavigator>()
+
+    // TODO Move this elsewhere
+    private val incomingVerificationRequestHandler by inject<IncomingVerificationRequestHandler>()
 
     private var progress: ProgressDialog? = null
 
@@ -88,6 +92,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 progress?.dismiss()
             }
         })
+
+        incomingVerificationRequestHandler.ensureStarted()
     }
 
     override fun onDestroy() {
@@ -124,7 +130,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
+            android.R.id.home          -> {
                 drawerLayout.openDrawer(GravityCompat.START)
                 return true
             }
@@ -137,7 +143,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 return true
             }
             // TODO Temporary code here to create a room
-            R.id.tmp_menu_create_room -> {
+            R.id.tmp_menu_create_room  -> {
                 homeActivityViewModel.createRoom()
                 return true
             }

@@ -59,7 +59,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
 
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
-        CryptoAsyncHelper.getDecryptBackgroundHandler().post {
+        CryptoAsyncHelper.getDecryptBackgroundHandler().post { // TODO We are already in a BG thread
             when (event.type) {
                 EventType.KEY_VERIFICATION_START -> {
                     onStartRequestReceived(event)
@@ -226,10 +226,10 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                 }
             }
 
-            override fun onSuccess(info: MXUsersDevicesMap<MXDeviceInfo>) {
+            override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
                 CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                    if (info.getUserDeviceIds(otherUserId).contains(startReq.fromDevice)) {
-                        success(info)
+                    if (data.getUserDeviceIds(otherUserId).contains(startReq.fromDevice)) {
+                        success(data)
                     } else {
                         error()
                     }

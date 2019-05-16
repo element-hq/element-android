@@ -61,7 +61,7 @@ internal class MXOlmDevice(
     // They are not stored in 'store' to avoid to remember to which devices we sent the session key.
     // Plus, in cryptography, it is good to refresh sessions from time to time.
     // The key is the session id, the value the outbound group session.
-    private val mOutboundGroupSessionStore: MutableMap<String, OlmOutboundGroupSession>
+    private val mOutboundGroupSessionStore: MutableMap<String, OlmOutboundGroupSession> = HashMap()
 
     // Store a set of decrypted message indexes for each group session.
     // This partially mitigates a replay attack where a MITM resends a group
@@ -75,7 +75,7 @@ internal class MXOlmDevice(
     // The first level keys are timeline ids.
     // The second level keys are strings of form "<senderKey>|<session_id>|<message_index>"
     // Values are true.
-    private val mInboundGroupSessionMessageIndexes: MutableMap<String, MutableMap<String, Boolean>>
+    private val mInboundGroupSessionMessageIndexes: MutableMap<String, MutableMap<String, Boolean>> = HashMap()
 
     /**
      * inboundGroupSessionWithId error
@@ -107,8 +107,6 @@ internal class MXOlmDevice(
             mOlmUtility = null
         }
 
-        mOutboundGroupSessionStore = HashMap()
-
         try {
             deviceCurve25519Key = mOlmAccount!!.identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY]
         } catch (e: Exception) {
@@ -120,8 +118,6 @@ internal class MXOlmDevice(
         } catch (e: Exception) {
             Timber.e(e, "## MXOlmDevice : cannot find " + OlmAccount.JSON_KEY_FINGER_PRINT_KEY + " with error")
         }
-
-        mInboundGroupSessionMessageIndexes = HashMap()
     }
 
     /**

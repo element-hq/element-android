@@ -86,8 +86,6 @@ class SignOutViewModel : ViewModel(), KeysBackupService.KeysBackupStateListener 
          * The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
          */
         fun doYouNeedToBeDisplayed(session: Session?): Boolean {
-            return false
-
             return session
                     ?.inboundGroupSessionsCount(false)
                     ?: 0 > 0

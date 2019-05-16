@@ -38,8 +38,9 @@ internal class IncomingSASVerificationTransaction(
         private val mCredentials: Credentials,
         private val mCryptoStore: IMXCryptoStore,
         private val mSendToDeviceTask: SendToDeviceTask,
-        private val mTaskExecutor: TaskExecutor, transactionId: String,
+        private val mTaskExecutor: TaskExecutor,
         deviceFingerprint: String,
+        transactionId: String,
         otherUserID: String)
     : SASVerificationTransaction(
         mSasVerificationService,

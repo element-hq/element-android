@@ -16,6 +16,7 @@
 package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.internal.crypto.verification.SASVerificationTransaction
 import timber.log.Timber
@@ -23,6 +24,7 @@ import timber.log.Timber
 /**
  * Sent by Alice to initiate an interactive key verification.
  */
+@JsonClass(generateAdapter = true)
 class KeyVerificationStart : SendToDeviceObject {
 
     /**

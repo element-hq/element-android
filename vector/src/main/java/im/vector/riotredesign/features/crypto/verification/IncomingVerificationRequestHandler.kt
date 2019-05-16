@@ -17,7 +17,7 @@ package im.vector.riotredesign.features.crypto.verification
 
 import android.content.Context
 import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
@@ -28,11 +28,10 @@ import im.vector.riotredesign.features.popup.PopupAlertManager
  * Listens to the VerificationManager and add a new notification when an incoming request is detected.
  */
 class IncomingVerificationRequestHandler(val context: Context,
-                                         private val credentials: Credentials,
-                                         verificationService: SasVerificationService) : SasVerificationService.SasVerificationListener {
+                                         private val session: Session) : SasVerificationService.SasVerificationListener {
 
-    init {
-        verificationService.addListener(this)
+    fun ensureStarted() {
+        session.getSasVerificationService().addListener(this)
     }
 
     override fun transactionCreated(tx: SasVerificationTransaction) {}
@@ -53,7 +52,7 @@ class IncomingVerificationRequestHandler(val context: Context,
                 ).apply {
                     contentAction = Runnable {
                         val intent = SASVerificationActivity.incomingIntent(context,
-                                credentials.userId,
+                                session.sessionParams.credentials.userId,
                                 tx.otherUserId,
                                 tx.transactionId)
                         weakCurrentActivity?.get()?.startActivity(intent)
@@ -71,7 +70,7 @@ class IncomingVerificationRequestHandler(val context: Context,
                             context.getString(R.string.action_open),
                             Runnable {
                                 val intent = SASVerificationActivity.incomingIntent(context,
-                                        credentials.userId,
+                                        session.sessionParams.credentials.userId,
                                         tx.otherUserId,
                                         tx.transactionId)
                                 weakCurrentActivity?.get()?.startActivity(intent)
@@ -85,11 +84,11 @@ class IncomingVerificationRequestHandler(val context: Context,
             }
             SasVerificationTxState.Cancelled,
             SasVerificationTxState.OnCancelled,
-            SasVerificationTxState.Verified -> {
+            SasVerificationTxState.Verified  -> {
                 //cancel related notification
                 PopupAlertManager.cancelAlert("kvr_${tx.transactionId}")
             }
-            else -> Unit
+            else                             -> Unit
         }
     }
 
