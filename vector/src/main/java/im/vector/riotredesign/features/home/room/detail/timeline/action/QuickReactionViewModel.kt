@@ -98,8 +98,8 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
 
         val agreePositive = "👍"
         val agreeNegative = "👎"
-        val likePositive = "😀"
-        val likeNegative = "😞"
+        val likePositive = "🙂"
+        val likeNegative = "😔"
 
         override fun initialState(viewModelContext: ViewModelContext): QuickReactionState? {
             // Args are accessible from the context.
