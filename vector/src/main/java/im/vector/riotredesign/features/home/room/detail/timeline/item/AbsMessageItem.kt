@@ -30,6 +30,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.DimensionUtils.dpToPx
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.reactions.widget.ReactionButton
 
 
@@ -48,6 +49,19 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     @EpoxyAttribute
     var memberClickListener: View.OnClickListener? = null
+
+    @EpoxyAttribute
+    var reactionPillCallback: TimelineEventController.ReactionPillCallback? = null
+
+    var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
+        override fun onReacted(reactionButton: ReactionButton) {
+            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString,true)
+        }
+
+        override fun onUnReacted(reactionButton: ReactionButton) {
+            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString,false)
+        }
+    }
 
     override fun bind(holder: H) {
         super.bind(holder)
@@ -91,6 +105,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             informationData.orderedReactionList?.chunked(7)?.firstOrNull()?.forEachIndexed { index, reaction ->
                 (holder.reactionWrapper?.children?.elementAtOrNull(index) as? ReactionButton)?.let { reactionButton ->
                     reactionButton.isVisible = true
+                    reactionButton.reactedListener = reactionClickListener
+                    reactionButton.setTag(R.id.messageBottomInfo, reaction.first)
                     idToRefInFlow.add(reactionButton.id)
                     reactionButton.reactionString = reaction.first
                     reactionButton.reactionCount = reaction.second
@@ -105,6 +121,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             }
 
         }
+    }
+
+    override fun unbind(holder: H) {
+        super.unbind(holder)
     }
 
     protected fun View.renderSendState() {

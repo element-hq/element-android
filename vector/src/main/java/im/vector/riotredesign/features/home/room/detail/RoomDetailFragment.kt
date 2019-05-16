@@ -483,6 +483,16 @@ class RoomDetailFragment :
     override fun onMemberNameClicked(informationData: MessageInformationData) {
         insertUserDisplayNameInTextEditor(informationData.memberName?.toString())
     }
+
+    override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
+        if (on) {
+            //we should test the current real state of reaction on this event
+            roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction,informationData.eventId))
+        } else {
+            //TODO it's an undo :/
+        }
+    }
+
 // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
@@ -566,6 +576,7 @@ class RoomDetailFragment :
      * @param text the text to insert.
      */
     private fun insertUserDisplayNameInTextEditor(text: String?) {
+        //TODO move logic outside of fragment
         if (null != text) {
 //            var vibrate = false
 

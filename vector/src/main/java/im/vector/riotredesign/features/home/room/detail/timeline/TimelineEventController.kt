@@ -47,7 +47,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                               private val backgroundHandler: Handler = TimelineAsyncHelper.getBackgroundHandler()
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
-    interface Callback {
+    interface Callback : ReactionPillCallback {
         fun onEventVisible(event: TimelineEvent)
         fun onUrlClicked(url: String)
         fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
@@ -58,6 +58,10 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean
         fun onAvatarClicked(informationData: MessageInformationData)
         fun onMemberNameClicked(informationData: MessageInformationData)
+    }
+
+    interface ReactionPillCallback {
+        fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean)
     }
 
     private val collapsedEventIds = linkedSetOf<String>()
