@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.internal.network.NetworkConstants
@@ -156,4 +157,20 @@ internal interface RoomAPI {
                        @Path("state_event_type") stateEventType: String,
                        @Path("state_key") stateKey: String,
                        @Body params: Map<String, String>): Call<Unit>
+
+    /**
+     * Send a relation event to a room.
+     *
+     * @param txId      the transaction Id
+     * @param roomId    the room id
+     * @param eventType the event type
+     * @param content   the event content
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send_relation/{parent_id}/{relation_type}/{event_type}")
+    fun sendRelation(@Path("roomId") roomId: String,
+                     @Path("parentId") parent_id: String,
+                     @Path("relation_type") relationType: String,
+                     @Path("eventType") eventType: String,
+                     @Body content: Content?
+    ): Call<SendResponse>
 }

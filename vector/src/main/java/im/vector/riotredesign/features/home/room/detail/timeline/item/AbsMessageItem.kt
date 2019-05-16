@@ -88,8 +88,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             //clear all reaction buttons (but not the Flow helper!)
             holder.reactionWrapper?.children?.forEach { (it as? ReactionButton)?.isGone = true }
             val idToRefInFlow = ArrayList<Int>()
-            informationData.orderedReactionList?.forEachIndexed { index, reaction ->
-                (holder.reactionWrapper?.children?.elementAt(index) as? ReactionButton)?.let { reactionButton ->
+            informationData.orderedReactionList?.chunked(7)?.firstOrNull()?.forEachIndexed { index, reaction ->
+                (holder.reactionWrapper?.children?.elementAtOrNull(index) as? ReactionButton)?.let { reactionButton ->
                     reactionButton.isVisible = true
                     idToRefInFlow.add(reactionButton.id)
                     reactionButton.reactionString = reaction.first

@@ -419,6 +419,8 @@ internal class DefaultTimeline(
             val timelineEvent = timelineEventFactory.create(eventEntity)
             val position = if (direction == Timeline.Direction.FORWARDS) 0 else builtEvents.size
             builtEvents.add(position, timelineEvent)
+            //Need to shift :/
+            builtEventsIdMap.entries.filter { it.value >= position }.forEach { it.setValue(it.value + 1) }
             builtEventsIdMap[eventEntity.eventId] = position
         }
         Timber.v("Built ${offsetResults.size} items from db")

@@ -31,7 +31,12 @@ enum class TriggleState {
     SECOND
 }
 
-data class QuickReactionState(val agreeTrigleState: TriggleState, val likeTriggleState: TriggleState, val selectionResult: List<String>? = null) : MvRxState
+data class QuickReactionState(
+        val agreeTrigleState: TriggleState,
+        val likeTriggleState: TriggleState,
+        /** Pair of 'clickedOn' and current toggles state*/
+        val selectionResult: Pair<String, List<String>>? = null,
+        val eventId: String) : MvRxState
 
 /**
  * Quick reaction view model
@@ -43,16 +48,18 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
     fun toggleAgree(isFirst: Boolean) = withState {
         if (isFirst) {
             setState {
+                val newTriggle = if (it.agreeTrigleState == TriggleState.FIRST) TriggleState.NONE else TriggleState.FIRST
                 copy(
-                        agreeTrigleState = if (it.agreeTrigleState == TriggleState.FIRST) TriggleState.NONE else TriggleState.FIRST,
-                        selectionResult = getReactions(this)
+                        agreeTrigleState = newTriggle,
+                        selectionResult = Pair(agreePositive, getReactions(this, newTriggle, null))
                 )
             }
         } else {
             setState {
+                val newTriggle = if (it.agreeTrigleState == TriggleState.SECOND) TriggleState.NONE else TriggleState.SECOND
                 copy(
-                        agreeTrigleState = if (it.agreeTrigleState == TriggleState.SECOND) TriggleState.NONE else TriggleState.SECOND,
-                        selectionResult = getReactions(this)
+                        agreeTrigleState = agreeTrigleState,
+                        selectionResult = Pair(agreeNegative, getReactions(this, newTriggle, null))
                 )
             }
         }
@@ -61,30 +68,32 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
     fun toggleLike(isFirst: Boolean) = withState {
         if (isFirst) {
             setState {
+                val newTriggle = if (it.likeTriggleState == TriggleState.FIRST) TriggleState.NONE else TriggleState.FIRST
                 copy(
-                        likeTriggleState = if (it.likeTriggleState == TriggleState.FIRST) TriggleState.NONE else TriggleState.FIRST,
-                        selectionResult = getReactions(this)
+                        likeTriggleState = newTriggle,
+                        selectionResult = Pair(likePositive, getReactions(this, null, newTriggle))
                 )
             }
         } else {
             setState {
+                val newTriggle = if (it.likeTriggleState == TriggleState.SECOND) TriggleState.NONE else TriggleState.SECOND
                 copy(
-                        likeTriggleState = if (it.likeTriggleState == TriggleState.SECOND) TriggleState.NONE else TriggleState.SECOND,
-                        selectionResult = getReactions(this)
+                        likeTriggleState = newTriggle,
+                        selectionResult = Pair(likeNegative, getReactions(this, null, newTriggle))
                 )
             }
         }
     }
 
-    private fun getReactions(state: QuickReactionState): List<String> {
+    private fun getReactions(state: QuickReactionState, newState1: TriggleState?, newState2: TriggleState?): List<String> {
         return ArrayList<String>(4).apply {
-            when (state.likeTriggleState) {
+            when (newState2 ?: state.likeTriggleState) {
                 TriggleState.FIRST -> add(likePositive)
                 TriggleState.SECOND -> add(likeNegative)
                 else -> {
                 }
             }
-            when (state.agreeTrigleState) {
+            when (newState1 ?: state.agreeTrigleState) {
                 TriggleState.FIRST -> add(agreePositive)
                 TriggleState.SECOND -> add(agreeNegative)
                 else -> {
@@ -126,7 +135,7 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
                     }
                 }
             }
-            return QuickReactionState(agreeTriggle, likeTriggle)
+            return QuickReactionState(agreeTriggle, likeTriggle, null, event.root.eventId ?: "")
         }
     }
 }

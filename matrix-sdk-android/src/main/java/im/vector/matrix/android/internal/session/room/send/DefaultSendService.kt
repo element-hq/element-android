@@ -74,6 +74,18 @@ internal class DefaultSendService(private val roomId: String,
         return cancelableBag
     }
 
+
+    override fun sendReaction(reaction: String, targetEventId: String) : Cancelable {
+        val event = eventFactory.createReactionEvent(roomId,targetEventId,reaction).also {
+            saveLocalEcho(it)
+        }
+        val sendRelationWork = createSendRelationWork(event)
+        WorkManager.getInstance()
+                .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, sendRelationWork)
+                .enqueue()
+        return CancelableWork(sendRelationWork.id)
+    }
+
     override fun sendMedia(attachment: ContentAttachmentData): Cancelable {
         // Create an event with the media file path
         val event = eventFactory.createMediaEvent(roomId, attachment).also {
@@ -107,6 +119,19 @@ internal class DefaultSendService(private val roomId: String,
 
     private fun createSendEventWork(event: Event): OneTimeWorkRequest {
         val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
+        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+
+        return OneTimeWorkRequestBuilder<SendEventWorker>()
+                .setConstraints(WORK_CONSTRAINTS)
+                .setInputData(sendWorkData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .build()
+    }
+
+    private fun createSendRelationWork(event: Event): OneTimeWorkRequest {
+        //TODO use the new API to send relation (for now use regular send)
+        val sendContentWorkerParams = SendEventWorker.Params(
+                roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return OneTimeWorkRequestBuilder<SendEventWorker>()

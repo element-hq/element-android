@@ -119,12 +119,12 @@ class QuickReactionFragment : BaseMvRxFragment() {
         }
 
         if (it.selectionResult != null) {
-            interactionListener?.didQuickReactWith(it.selectionResult)
+            interactionListener?.didQuickReactWith(it.selectionResult.first, it.selectionResult.second, it.eventId)
         }
     }
 
     interface InteractionListener {
-        fun didQuickReactWith(reactions: List<String>)
+        fun didQuickReactWith(clikedOn: String, reactions: List<String>, eventId: String)
     }
 
     companion object {

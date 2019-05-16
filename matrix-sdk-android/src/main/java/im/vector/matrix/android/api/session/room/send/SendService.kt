@@ -49,4 +49,6 @@ interface SendService {
     fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable
 
 
+    fun sendReaction(reaction: String, targetEventId: String) : Cancelable
+
 }

@@ -95,8 +95,13 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
                     .commit()
         }
         quickReactionFragment.interactionListener = object : QuickReactionFragment.InteractionListener {
-            override fun didQuickReactWith(reactions: List<String>) {
-                actionHandlerModel.fireAction("Quick React", reactions)
+            override fun didQuickReactWith(clikedOn: String, reactions: List<String>, eventId: String) {
+                if (reactions.contains(clikedOn)) {
+                    //it's an add
+                    actionHandlerModel.fireAction(MessageMenuViewModel.ACTION_QUICK_REACT, Pair(eventId,clikedOn))
+                } else {
+                    //it's a remove
+                }
                 dismiss()
             }
         }

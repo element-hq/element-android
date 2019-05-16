@@ -15,6 +15,7 @@
  */
 package im.vector.riotredesign.features.reactions
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -88,6 +89,8 @@ class EmojiReactionPickerActivity : VectorBaseActivity() {
 
         viewModel = ViewModelProviders.of(this).get(EmojiChooserViewModel::class.java)
 
+        viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
+
         viewModel.emojiSourceLiveData.observe(this, Observer {
             it.rawData?.categories?.let { categories ->
                 for (category in categories) {
@@ -104,6 +107,19 @@ class EmojiReactionPickerActivity : VectorBaseActivity() {
                 tabLayout.removeOnTabSelectedListener(tabLayoutSelectionListener)
                 tabLayout.getTabAt(it)?.select()
                 tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
+            }
+        })
+
+        viewModel.navigateEvent.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                if (it == EmojiChooserViewModel.NAVIGATE_FINISH) {
+                    //finish with result
+                    val dataResult = Intent()
+                    dataResult.putExtra(EXTRA_REACTION_RESULT, viewModel.selectedReaction)
+                    dataResult.putExtra(EXTRA_EVENT_ID, viewModel.eventId)
+                    setResult(Activity.RESULT_OK, dataResult)
+                    finish()
+                }
             }
         })
     }
@@ -172,9 +188,13 @@ class EmojiReactionPickerActivity : VectorBaseActivity() {
     }
 
     companion object {
-        fun intent(context: Context): Intent {
+
+        const val EXTRA_EVENT_ID = "EXTRA_EVENT_ID"
+        const val EXTRA_REACTION_RESULT = "EXTRA_REACTION_RESULT"
+
+        fun intent(context: Context, eventId: String): Intent {
             val intent = Intent(context, EmojiReactionPickerActivity::class.java)
-//            intent.putExtra(EXTRA_MATRIX_ID, matrixID)
+            intent.putExtra(EXTRA_EVENT_ID, eventId)
             return intent
         }
     }
