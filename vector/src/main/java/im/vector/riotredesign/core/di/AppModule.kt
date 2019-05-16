@@ -24,8 +24,6 @@ import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
-import im.vector.riotredesign.features.home.room.VisibleRoomStore
-import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
 import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import org.koin.dsl.module.module
@@ -51,15 +49,7 @@ class AppModule(private val context: Context) {
         }
 
         single {
-            RoomSelectionRepository(get())
-        }
-
-        single {
             SelectedGroupStore()
-        }
-
-        single {
-            VisibleRoomStore()
         }
 
         single {
@@ -77,7 +67,6 @@ class AppModule(private val context: Context) {
         factory {
             Matrix.getInstance().currentSession!!
         }
-
 
     }
 }

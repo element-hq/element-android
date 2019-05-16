@@ -37,7 +37,7 @@ class RoomSummaryController(private val stringProvider: StringProvider
                     callback?.onToggleRoomCategory(category)
                 }
                 if (isExpanded) {
-                    buildRoomModels(summaries, viewState.visibleRoomId)
+                    buildRoomModels(summaries)
                 }
             }
         }
@@ -71,18 +71,16 @@ class RoomSummaryController(private val stringProvider: StringProvider
         }
     }
 
-    private fun buildRoomModels(summaries: List<RoomSummary>, selectedRoomId: String?) {
+    private fun buildRoomModels(summaries: List<RoomSummary>) {
         summaries.forEach { roomSummary ->
             val unreadCount = roomSummary.notificationCount
             val showHighlighted = roomSummary.highlightCount > 0
-            val isSelected = roomSummary.roomId == selectedRoomId
 
             roomSummaryItem {
                 id(roomSummary.roomId)
                 roomId(roomSummary.roomId)
                 roomName(roomSummary.displayName)
                 avatarUrl(roomSummary.avatarUrl)
-                selected(isSelected)
                 showHighlighted(showHighlighted)
                 unreadCount(unreadCount)
                 listener { callback?.onRoomSelected(roomSummary) }

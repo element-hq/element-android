@@ -21,11 +21,13 @@ package im.vector.riotredesign.features.home.room.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceFragment
+import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 
-class RoomDetailActivity : VectorBaseActivity() {
+class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_room_detail
@@ -35,9 +37,17 @@ class RoomDetailActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
             val roomDetailArgs: RoomDetailArgs = intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
-                    ?: return
+                                                 ?: return
             val roomDetailFragment = RoomDetailFragment.newInstance(roomDetailArgs)
             replaceFragment(roomDetailFragment, R.id.roomDetailContainer)
+        }
+    }
+
+    override fun configure(toolbar: Toolbar) {
+        setSupportActionBar(toolbar)
+        supportActionBar?.let {
+            it.setDisplayShowHomeEnabled(true)
+            it.setDisplayHomeAsUpEnabled(true)
         }
     }
 

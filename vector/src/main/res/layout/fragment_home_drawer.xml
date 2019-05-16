@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/stateView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/homeDrawerHeader"
@@ -46,12 +47,16 @@
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView"
             tools:text="@tools:sample/full_names" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/homeDrawerHeaderSettingsView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_settings"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/homeDrawerUserIdView" />
+            app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

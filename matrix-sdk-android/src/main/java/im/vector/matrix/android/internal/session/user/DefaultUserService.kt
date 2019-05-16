@@ -18,9 +18,13 @@
 
 package im.vector.matrix.android.internal.session.user
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -29,12 +33,19 @@ internal class DefaultUserService(private val monarchy: Monarchy) : UserService 
 
     override fun getUser(userId: String): User? {
         val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }
-                ?: return null
+                         ?: return null
 
-        return User(
-                userEntity.userId,
-                userEntity.displayName,
-                userEntity.avatarUrl
-        )
+        return userEntity.asDomain()
+    }
+
+    override fun observeUser(userId: String): LiveData<User?> {
+        val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
+            UserEntity.where(realm, userId)
+        }
+        return Transformations.map(liveRealmData) { results ->
+            results
+                    .map { it.asDomain() }
+                    .firstOrNull()
+        }
     }
 }

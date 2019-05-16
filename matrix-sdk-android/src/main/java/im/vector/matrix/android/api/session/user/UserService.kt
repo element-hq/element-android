@@ -18,6 +18,7 @@
 
 package im.vector.matrix.android.api.session.user
 
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.user.model.User
 
 /**
@@ -31,5 +32,12 @@ interface UserService {
      * @return a user with userId or null
      */
     fun getUser(userId: String): User?
+
+    /**
+     * Observe a live user from a userId
+     * @param userId the userId to look for.
+     * @return a Livedata of user with userId
+     */
+    fun observeUser(userId: String): LiveData<User?>
 
 }

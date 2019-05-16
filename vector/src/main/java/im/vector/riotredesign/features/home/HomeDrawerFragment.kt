@@ -19,9 +19,11 @@ package im.vector.riotredesign.features.home
 import android.os.Bundle
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.observeK
 import im.vector.riotredesign.core.extensions.replaceChildFragment
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.group.GroupListFragment
+import im.vector.riotredesign.features.settings.VectorSettingsActivity
 import kotlinx.android.synthetic.main.fragment_home_drawer.*
 
 class HomeDrawerFragment : VectorBaseFragment() {
@@ -42,12 +44,15 @@ class HomeDrawerFragment : VectorBaseFragment() {
             replaceChildFragment(groupListFragment, R.id.homeDrawerGroupListContainer)
         }
         val session = Matrix.getInstance().currentSession ?: return
-        val user = session.getUser(session.sessionParams.credentials.userId)
-        if (user != null) {
-            AvatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)
-            homeDrawerUsernameView.text = user.displayName
-            homeDrawerUserIdView.text = user.userId
+        session.observeUser(session.sessionParams.credentials.userId).observeK(this) { user ->
+            if (user != null) {
+                AvatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)
+                homeDrawerUsernameView.text = user.displayName
+                homeDrawerUserIdView.text = user.userId
+            }
+        }
+        homeDrawerHeaderSettingsView.setOnClickListener {
+            startActivity(VectorSettingsActivity.getIntent(requireContext(), "TODO"))
         }
     }
-
 }

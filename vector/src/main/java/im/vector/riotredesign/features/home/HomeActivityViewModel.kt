@@ -18,26 +18,31 @@ package im.vector.riotredesign.features.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import arrow.core.Option
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
-import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
-import im.vector.riotredesign.core.utils.LiveEvent
-import im.vector.riotredesign.features.home.room.list.RoomSelectionRepository
-import io.reactivex.rxkotlin.subscribeBy
+import im.vector.riotredesign.features.home.group.ALL_COMMUNITIES_GROUP_ID
+import im.vector.riotredesign.features.home.group.SelectedGroupStore
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import org.koin.android.ext.android.get
+import java.util.concurrent.TimeUnit
 
 data class EmptyState(val isEmpty: Boolean = true) : MvRxState
 
 class HomeActivityViewModel(state: EmptyState,
                             private val session: Session,
-                            roomSelectionRepository: RoomSelectionRepository
+                            private val selectedGroupStore: SelectedGroupStore,
+                            private val homeRoomListStore: HomeRoomListObservableStore
 ) : VectorViewModel<EmptyState>(state), Session.Listener {
 
     companion object : MvRxViewModelFactory<HomeActivityViewModel, EmptyState> {
@@ -45,8 +50,9 @@ class HomeActivityViewModel(state: EmptyState,
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: EmptyState): HomeActivityViewModel? {
             val session = Matrix.getInstance().currentSession!!
-            val roomSelectionRepository = viewModelContext.activity.get<RoomSelectionRepository>()
-            return HomeActivityViewModel(state, session, roomSelectionRepository)
+            val selectedGroupStore = viewModelContext.activity.get<SelectedGroupStore>()
+            val homeRoomListObservableSource = viewModelContext.activity.get<HomeRoomListObservableStore>()
+            return HomeActivityViewModel(state, session, selectedGroupStore, homeRoomListObservableSource)
         }
     }
 
@@ -54,29 +60,41 @@ class HomeActivityViewModel(state: EmptyState,
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-    private val _openRoomLiveData = MutableLiveData<LiveEvent<String>>()
-    val openRoomLiveData: LiveData<LiveEvent<String>>
-        get() = _openRoomLiveData
-
     init {
         session.addListener(this)
-        val lastSelectedRoomId = roomSelectionRepository.lastSelectedRoom()
-        if (lastSelectedRoomId == null || session.getRoom(lastSelectedRoomId) == null) {
-            getTheFirstRoomWhenAvailable()
-        } else {
-            _openRoomLiveData.postValue(LiveEvent(lastSelectedRoomId))
-        }
+        observeRoomAndGroup()
     }
 
-    private fun getTheFirstRoomWhenAvailable() {
-        session.rx().liveRoomSummaries()
-                .filter { it.isNotEmpty() }
-                .first(emptyList())
-                .subscribeBy {
-                    val firstRoom = it.firstOrNull()
-                    if (firstRoom != null) {
-                        _openRoomLiveData.postValue(LiveEvent(firstRoom.roomId))
-                    }
+    private fun observeRoomAndGroup() {
+        Observable
+                .combineLatest<List<RoomSummary>, Option<GroupSummary>, List<RoomSummary>>(
+                        session.rx().liveRoomSummaries().throttleLast(300, TimeUnit.MILLISECONDS),
+                        selectedGroupStore.observe(),
+                        BiFunction { rooms, selectedGroupOption ->
+                            val selectedGroup = selectedGroupOption.orNull()
+                            val filteredDirectRooms = rooms
+                                    .filter { it.isDirect }
+                                    .filter {
+                                        if (selectedGroup == null || selectedGroup.groupId == ALL_COMMUNITIES_GROUP_ID) {
+                                            true
+                                        } else {
+                                            it.otherMemberIds
+                                                    .intersect(selectedGroup.userIds)
+                                                    .isNotEmpty()
+                                        }
+                                    }
+
+                            val filteredGroupRooms = rooms
+                                    .filter { !it.isDirect }
+                                    .filter {
+                                        selectedGroup?.groupId == ALL_COMMUNITIES_GROUP_ID
+                                        || selectedGroup?.roomIds?.contains(it.roomId) ?: true
+                                    }
+                            filteredDirectRooms + filteredGroupRooms
+                        }
+                )
+                .subscribe {
+                    homeRoomListStore.post(it)
                 }
                 .disposeOnClear()
     }
@@ -87,8 +105,6 @@ class HomeActivityViewModel(state: EmptyState,
         session.createRoom(createRoomParams, object : MatrixCallback<String> {
             override fun onSuccess(data: String) {
                 _isLoading.value = false
-                // Open room id
-                _openRoomLiveData.postValue(LiveEvent(data))
             }
 
             override fun onFailure(failure: Throwable) {

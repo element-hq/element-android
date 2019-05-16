@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/roomToolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/toolbarAvatarImageView"
+                android:id="@+id/roomToolbarAvatarImageView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -34,7 +34,7 @@
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/toolbarTitleView"
+                android:id="@+id/roomToolbarTitleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -43,15 +43,15 @@
                 android:maxLines="1"
                 android:textColor="?vctr_toolbar_primary_text_color"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/toolbarSubtitleView"
+                app:layout_constraintBottom_toTopOf="@+id/roomToolbarSubtitleView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/toolbarAvatarImageView"
+                app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@tools:sample/full_names" />
 
             <TextView
-                android:id="@+id/toolbarSubtitleView"
+                android:id="@+id/roomToolbarSubtitleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -63,8 +63,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/toolbarAvatarImageView"
-                app:layout_constraintTop_toBottomOf="@+id/toolbarTitleView"
+                app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
+                app:layout_constraintTop_toBottomOf="@+id/roomToolbarTitleView"
                 tools:text="@tools:sample/date/day_of_week" />
 
 
@@ -79,7 +79,7 @@
         app:layout_constraintBottom_toTopOf="@+id/composerDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/roomToolbar"
         tools:listitem="@layout/item_timeline_event_base" />
 
     <View
@@ -148,7 +148,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/roomToolbar"
         app:layout_constraintVertical_bias="1.0"
         tools:visibility="visible" />
 

@@ -64,6 +64,7 @@ import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
+import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
@@ -168,6 +169,7 @@ class RoomDetailFragment :
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
         bindScope(getOrCreateScope(HomeModule.ROOM_DETAIL_SCOPE))
+        setupToolbar()
         setupRecyclerView()
         setupComposer()
         setupAttachmentButton()
@@ -187,6 +189,13 @@ class RoomDetailFragment :
         })
     }
 
+    private fun setupToolbar() {
+        val parentActivity = vectorBaseActivity
+        if (parentActivity is ToolbarConfigurable) {
+            parentActivity.configure(roomToolbar)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && data != null) {
@@ -202,11 +211,6 @@ class RoomDetailFragment :
                 }
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        roomDetailViewModel.process(RoomDetailActions.IsDisplayed)
     }
 
 // PRIVATE METHODS *****************************************************************************
@@ -399,13 +403,13 @@ class RoomDetailFragment :
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let {
-            toolbarTitleView.text = it.displayName
-            AvatarRenderer.render(it, toolbarAvatarImageView)
+            roomToolbarTitleView.text = it.displayName
+            AvatarRenderer.render(it, roomToolbarAvatarImageView)
             if (it.topic.isNotEmpty()) {
-                toolbarSubtitleView.visibility = View.VISIBLE
-                toolbarSubtitleView.text = it.topic
+                roomToolbarSubtitleView.visibility = View.VISIBLE
+                roomToolbarSubtitleView.text = it.topic
             } else {
-                toolbarSubtitleView.visibility = View.GONE
+                roomToolbarSubtitleView.visibility = View.GONE
             }
         }
     }

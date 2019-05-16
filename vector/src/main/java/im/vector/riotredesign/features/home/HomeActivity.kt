@@ -109,8 +109,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun configure(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayUseLogoEnabled(true)
     }
 
     override fun getMenuRes() = R.menu.home
@@ -119,10 +117,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         when (item.itemId) {
             android.R.id.home          -> {
                 drawerLayout.openDrawer(GravityCompat.START)
-                return true
-            }
-            R.id.sliding_menu_settings -> {
-                startActivity(VectorSettingsActivity.getIntent(this, "TODO"))
                 return true
             }
             R.id.sliding_menu_sign_out -> {

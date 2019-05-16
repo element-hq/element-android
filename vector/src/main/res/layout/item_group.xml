@@ -1,48 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<im.vector.riotredesign.core.platform.CheckableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemGroupLayout"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:background="@android:color/transparent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_group_item"
     android:clickable="true"
     android:focusable="true"
-    android:padding="16dp">
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingStart="8dp"
+    android:paddingLeft="8dp"
+    android:paddingEnd="16dp"
+    android:paddingRight="16dp">
 
-    <ImageView
-        android:id="@+id/groupAvatarImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:duplicateParentState="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:duplicateParentState="true">
 
-    <TextView
-        android:id="@+id/groupNameView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        app:layout_constraintBottom_toBottomOf="@+id/groupAvatarImageView"
-        app:layout_constraintEnd_toStartOf="@+id/groupAvatarChevron"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
-        app:layout_constraintTop_toTopOf="@+id/groupAvatarImageView"
-        tools:text="@tools:sample/lorem/random" />
+        <ImageView
+            android:id="@+id/groupAvatarImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:duplicateParentState="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
 
-    <ImageView
-        android:id="@+id/groupAvatarChevron"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_material_chevron_right_black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/groupNameView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="@+id/groupAvatarImageView"
+            app:layout_constraintEnd_toStartOf="@+id/groupAvatarChevron"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
+            app:layout_constraintTop_toTopOf="@+id/groupAvatarImageView"
+            tools:text="@tools:sample/lorem/random" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/groupAvatarChevron"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_material_chevron_right_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</im.vector.riotredesign.core.platform.CheckableFrameLayout>

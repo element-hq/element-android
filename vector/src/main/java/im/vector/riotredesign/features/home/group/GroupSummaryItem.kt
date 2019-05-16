@@ -16,7 +16,6 @@
 
 package im.vector.riotredesign.features.home.group
 
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -24,6 +23,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
+import im.vector.riotredesign.core.platform.CheckableFrameLayout
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_group)
@@ -39,13 +39,14 @@ abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
         super.bind(holder)
         holder.rootView.setOnClickListener { listener?.invoke() }
         holder.groupNameView.text = groupName
+        holder.rootView.isChecked = selected
         AvatarRenderer.render(avatarUrl, groupId, groupName.toString(), holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {
         val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
         val groupNameView by bind<TextView>(R.id.groupNameView)
-        val rootView by bind<ViewGroup>(R.id.itemGroupLayout)
+        val rootView by bind<CheckableFrameLayout>(R.id.itemGroupLayout)
     }
 
 }

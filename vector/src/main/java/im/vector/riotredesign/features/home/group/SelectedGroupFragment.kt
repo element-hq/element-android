@@ -18,15 +18,10 @@
 
 package im.vector.riotredesign.features.home.group
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
 import com.airbnb.mvrx.args
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.replaceChildFragment
-import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.AvatarRenderer
@@ -42,9 +37,12 @@ data class SelectedGroupParams(
         val groupAvatar: String
 ) : Parcelable
 
+private const val CURRENT_DISPLAY_MODE = "CURRENT_DISPLAY_MODE"
+
 class SelectedGroupFragment : VectorBaseFragment() {
 
     private val selectedGroupParams: SelectedGroupParams by args()
+    private lateinit var currentDisplayMode: RoomListFragment.DisplayMode
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_selected_group
@@ -53,31 +51,36 @@ class SelectedGroupFragment : VectorBaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState == null) {
-            updateSelectedFragment(RoomListFragment.DisplayMode.HOME)
-            toolbar.setTitle(RoomListFragment.DisplayMode.HOME.titleRes)
+            currentDisplayMode = RoomListFragment.DisplayMode.HOME
+        } else {
+            currentDisplayMode = savedInstanceState.getSerializable(CURRENT_DISPLAY_MODE) as? RoomListFragment.DisplayMode
+                                 ?: RoomListFragment.DisplayMode.HOME
         }
+        renderState(currentDisplayMode)
         setupBottomNavigationView()
         setupToolbar()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable(CURRENT_DISPLAY_MODE, currentDisplayMode)
+        super.onSaveInstanceState(outState)
     }
 
     private fun setupToolbar() {
         val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
-            parentActivity.configure(toolbar)
+            parentActivity.configure(groupToolbar)
         }
-        val toolbarLogoTarget = object : SimpleTarget<Drawable>() {
-            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                toolbar.logo = resource
-            }
-        }
+        groupToolbar.title = ""
         AvatarRenderer.render(
-                requireContext(),
-                GlideApp.with(this),
                 selectedGroupParams.groupAvatar,
                 selectedGroupParams.groupId,
                 selectedGroupParams.groupName,
-                toolbarLogoTarget
+                groupToolbarAvatarImageView
         )
+        groupToolbarAvatarImageView.setOnClickListener {
+
+        }
     }
 
     private fun setupBottomNavigationView() {
@@ -87,16 +90,29 @@ class SelectedGroupFragment : VectorBaseFragment() {
                 it.itemId == R.id.bottom_action_rooms  -> RoomListFragment.DisplayMode.ROOMS
                 else                                   -> RoomListFragment.DisplayMode.HOME
             }
-            updateSelectedFragment(displayMode)
-            toolbar.setTitle(displayMode.titleRes)
+            if (currentDisplayMode != displayMode) {
+                currentDisplayMode = displayMode
+                renderState(displayMode)
+            }
             true
         }
     }
 
+    private fun renderState(displayMode: RoomListFragment.DisplayMode) {
+        groupToolbarTitleView.setText(displayMode.titleRes)
+        updateSelectedFragment(displayMode)
+    }
+
     private fun updateSelectedFragment(displayMode: RoomListFragment.DisplayMode) {
-        val roomListParams = RoomListParams(displayMode)
-        val roomListFragment = RoomListFragment.newInstance(roomListParams)
-        replaceChildFragment(roomListFragment, R.id.roomListContainer)
+        val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
+        var fragment = childFragmentManager.findFragmentByTag(fragmentTag)
+        if (fragment == null) {
+            fragment = RoomListFragment.newInstance(RoomListParams(displayMode))
+        }
+        childFragmentManager.beginTransaction()
+                .replace(R.id.roomListContainer, fragment, fragmentTag)
+                .addToBackStack(fragmentTag)
+                .commit()
     }
 
     companion object {

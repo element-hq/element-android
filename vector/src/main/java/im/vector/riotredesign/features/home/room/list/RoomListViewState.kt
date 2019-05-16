@@ -25,7 +25,6 @@ import im.vector.riotredesign.R
 
 data class RoomListViewState(
         val asyncRooms: Async<RoomSummaries> = Uninitialized,
-        val visibleRoomId: String? = null,
         val isInviteExpanded: Boolean = true,
         val isFavouriteRoomsExpanded: Boolean = true,
         val isDirectRoomsExpanded: Boolean = true,

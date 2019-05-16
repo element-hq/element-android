@@ -54,13 +54,16 @@ class GroupListViewModel(initialState: GroupListViewState,
 
     init {
         observeGroupSummaries()
-        observeState()
+        observeSelectionState()
     }
 
-    private fun observeState() {
-        subscribe {
-            val optionGroup = Option.fromNullable(it.selectedGroup)
-            selectedGroupHolder.post(optionGroup)
+    private fun observeSelectionState() {
+        selectSubscribe(GroupListViewState::selectedGroup) {
+            if (it != null) {
+                _openGroupLiveData.postValue(LiveEvent(it))
+                val optionGroup = Option.fromNullable(it)
+                selectedGroupHolder.post(optionGroup)
+            }
         }
     }
 
@@ -75,7 +78,6 @@ class GroupListViewModel(initialState: GroupListViewState,
     private fun handleSelectGroup(action: GroupListActions.SelectGroup) = withState { state ->
         if (state.selectedGroup?.groupId != action.groupSummary.groupId) {
             setState { copy(selectedGroup = action.groupSummary) }
-            _openGroupLiveData.postValue(LiveEvent(action.groupSummary))
         }
     }
 
@@ -91,7 +93,8 @@ class GroupListViewModel(initialState: GroupListViewState,
                     listOf(allCommunityGroup) + it
                 }
                 .execute { async ->
-                    copy(asyncGroups = async)
+                    val newSelectedGroup = selectedGroup ?: async()?.firstOrNull()
+                    copy(asyncGroups = async, selectedGroup = newSelectedGroup)
                 }
     }
 

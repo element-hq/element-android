@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -61,6 +62,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         }
     }
 
+    private val roomListParams: RoomListParams by args()
     private val roomController by inject<RoomSummaryController>()
     private val homeNavigator by inject<HomeNavigator>()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
@@ -71,9 +73,17 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         super.onActivityCreated(savedInstanceState)
         bindScope(getOrCreateScope(HomeModule.ROOM_LIST_SCOPE))
         setupRecyclerView()
+        setupCreateRoomButton()
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.openRoomLiveData.observeEvent(this) {
             homeNavigator.openRoomDetail(it, null)
+        }
+    }
+
+    private fun setupCreateRoomButton() {
+        createRoomButton.setImageResource(R.drawable.ic_add_white)
+        createRoomButton.setOnClickListener {
+            vectorBaseActivity.notImplemented()
         }
     }
 
