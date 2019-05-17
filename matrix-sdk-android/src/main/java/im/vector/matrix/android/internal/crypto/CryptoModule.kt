@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
@@ -107,6 +108,12 @@ internal class CryptoModule {
             OneTimeKeysManager(get(), get(), get(), get(), get())
         }
 
+        // Actions
+        scope(DefaultSession.SCOPE) {
+            SetDeviceVerificationAction(get(), get(), get())
+        }
+
+
         // CryptoManager
         scope(DefaultSession.SCOPE) {
             CryptoManager(
@@ -123,6 +130,8 @@ internal class CryptoModule {
                     get(),
                     get(),
                     get(),
+                    get(),
+                    // Actions
                     get(),
                     // Tasks
                     get(), get(), get(), get(), get(), get(), get(),

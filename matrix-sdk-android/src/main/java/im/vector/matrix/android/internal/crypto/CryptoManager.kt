@@ -37,6 +37,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.*
@@ -95,6 +96,8 @@ internal class CryptoManager(
         private val mRoomService: RoomService,
         // Olm Manager
         private val mOlmManager: OlmManager,
+        // Actions
+        private val mSetDeviceVerificationAction: SetDeviceVerificationAction,
         // Tasks
         private val mClaimOneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
         private val mDeleteDeviceTask: DeleteDeviceTask,
@@ -529,25 +532,7 @@ internal class CryptoManager(
      * @param callback           the asynchronous callback
      */
     override fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String) {
-        val device = mCryptoStore.getUserDevice(deviceId, userId)
-
-        // Sanity check
-        if (null == device) {
-            Timber.w("## setDeviceVerification() : Unknown device $userId:$deviceId")
-            return
-        }
-
-        if (device.mVerified != verificationStatus) {
-            device.mVerified = verificationStatus
-            mCryptoStore.storeUserDevice(userId, device)
-
-            if (userId == mCredentials.userId) {
-                // If one of the user's own devices is being marked as verified / unverified,
-                // check the key backup status, since whether or not we use this depends on
-                // whether it has a signature from a verified device
-                mKeysBackup.checkAndStartKeysBackup()
-            }
-        }
+        mSetDeviceVerificationAction.handle(verificationStatus, deviceId, userId)
     }
 
     /**

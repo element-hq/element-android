@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.DeviceListManager
+import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
@@ -48,6 +49,7 @@ import kotlin.collections.HashMap
 internal class DefaultSasVerificationService(private val mCredentials: Credentials,
                                              private val mCryptoStore: IMXCryptoStore,
                                              private val deviceListManager: DeviceListManager,
+                                             private val setDeviceVerificationAction: SetDeviceVerificationAction,
                                              private val mSendToDeviceTask: SendToDeviceTask,
                                              private val mTaskExecutor: TaskExecutor)
     : VerificationTransaction.Listener, SasVerificationService {
@@ -130,7 +132,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     }
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
-        mCryptoListener.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
+        setDeviceVerificationAction.handle(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
                 deviceID,
                 userId)
 
@@ -427,12 +429,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
         mCryptoListener = listener
     }
 
-    fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String) {
-        mCryptoListener.setDeviceVerification(verificationStatus, deviceId, userId)
-    }
-
     interface SasCryptoListener {
-        fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String)
         fun getMyDevice(): MXDeviceInfo
     }
 }
