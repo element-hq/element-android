@@ -27,9 +27,8 @@ sealed class RoomDetailActions {
     object IsDisplayed : RoomDetailActions()
     data class EventDisplayed(val event: TimelineEvent) : RoomDetailActions()
     data class LoadMore(val direction: Timeline.Direction) : RoomDetailActions()
-
     data class SendReaction(val reaction: String, val targetEventId: String) : RoomDetailActions()
-
-
+    object AcceptInvite : RoomDetailActions()
+    object RejectInvite : RoomDetailActions()
 
 }

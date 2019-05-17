@@ -4,6 +4,8 @@
     <!-- Strings not defined in Riot -->
     <string name="global_retry">"Retry"</string>
     <string name="room_list_empty">"Join a room to start using the app."</string>
+    <string name="send_you_invite">"Sent you an invitation"</string>
+    <string name="invited_by">Invited by %s</string>
 
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>

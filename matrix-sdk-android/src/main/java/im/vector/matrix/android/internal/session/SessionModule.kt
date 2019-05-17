@@ -37,8 +37,8 @@ import im.vector.matrix.android.internal.session.room.DefaultRoomService
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
-import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
-import im.vector.matrix.android.internal.session.room.members.RoomMemberDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.signout.DefaultSignOutService
 import im.vector.matrix.android.internal.session.user.DefaultUserService

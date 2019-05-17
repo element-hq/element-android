@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.room.members
+package im.vector.matrix.android.internal.session.room.membership
 
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
@@ -22,7 +22,7 @@ import im.vector.matrix.android.R
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
@@ -77,24 +77,17 @@ internal class RoomDisplayNameResolver(private val context: Context,
             }
 
             val roomMembers = RoomMembers(realm, roomId)
-            val otherRoomMembers = roomMembers.getLoaded()
-                    .filterKeys { it != credentials.userId }
-
-            if (roomEntity?.membership == MyMembership.INVITED) {
-                //TODO handle invited
-                /*
-                if (currentUser != null
-                    && !othersActiveMembers.isEmpty()
-                    && !TextUtils.isEmpty(currentUser!!.mSender)) {
-                    // extract who invited us to the room
-                    name = context.getString(R.string.room_displayname_invite_from, roomState.resolve(currentUser!!.mSender))
+            val loadedMembers = roomMembers.getLoaded()
+            val otherRoomMembers = loadedMembers.filterKeys { it != credentials.userId }
+            if (roomEntity?.membership == Membership.INVITE) {
+                val inviteMeEvent = roomMembers.queryRoomMemberEvent(credentials.userId).findFirst()
+                val inviterId = inviteMeEvent?.sender
+                name = if (inviterId != null && otherRoomMembers.containsKey(inviterId)) {
+                    roomMemberDisplayNameResolver.resolve(inviterId, otherRoomMembers)
                 } else {
-                    name = context.getString(R.string.room_displayname_room_invite)
+                    context.getString(R.string.room_displayname_room_invite)
                 }
-                */
-                name = context.getString(R.string.room_displayname_room_invite)
             } else {
-
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
                 val memberIds = if (roomSummary?.heroes?.isNotEmpty() == true) {
                     roomSummary.heroes

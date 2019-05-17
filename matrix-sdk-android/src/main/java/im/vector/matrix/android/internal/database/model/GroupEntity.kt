@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.database.model
 
-import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.api.session.room.model.Membership
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
@@ -26,10 +26,10 @@ internal open class GroupEntity(@PrimaryKey var groupId: String = ""
 
 ) : RealmObject() {
 
-    private var membershipStr: String = MyMembership.NONE.name
+    private var membershipStr: String = Membership.NONE.name
 
     @delegate:Ignore
-    var membership: MyMembership by Delegates.observable(MyMembership.valueOf(membershipStr)) { _, _, newValue ->
+    var membership: Membership by Delegates.observable(Membership.valueOf(membershipStr)) { _, _, newValue ->
         membershipStr = newValue.name
     }
 

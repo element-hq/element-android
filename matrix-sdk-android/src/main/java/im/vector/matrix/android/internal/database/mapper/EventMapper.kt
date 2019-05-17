@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
-
+import java.util.*
 
 internal object EventMapper {
 
@@ -29,7 +29,7 @@ internal object EventMapper {
         val uds = if (event.unsignedData == null) null
         else MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(event.unsignedData)
         val eventEntity = EventEntity()
-        eventEntity.eventId = event.eventId ?: ""
+        eventEntity.eventId = event.eventId ?: UUID.randomUUID().toString()
         eventEntity.roomId = event.roomId ?: roomId
         eventEntity.content = ContentMapper.map(event.content)
         val resolvedPrevContent = event.prevContent ?: event.unsignedData?.prevContent

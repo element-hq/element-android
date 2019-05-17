@@ -19,10 +19,14 @@ package im.vector.matrix.android.internal.session.room
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
-import im.vector.matrix.android.internal.session.room.invite.DefaultInviteTask
-import im.vector.matrix.android.internal.session.room.invite.InviteTask
-import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMembersTask
-import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.joining.DefaultInviteTask
+import im.vector.matrix.android.internal.session.room.membership.joining.DefaultJoinRoomTask
+import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
+import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
+import im.vector.matrix.android.internal.session.room.membership.leaving.DefaultLeaveRoomTask
+import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
@@ -71,7 +75,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get())
+            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -80,6 +84,14 @@ class RoomModule {
 
         scope(DefaultSession.SCOPE) {
             DefaultInviteTask(get()) as InviteTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultJoinRoomTask(get()) as JoinRoomTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultLeaveRoomTask(get()) as LeaveRoomTask
         }
 
         scope(DefaultSession.SCOPE) {

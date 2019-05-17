@@ -23,8 +23,8 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 
 internal class DefaultStateService(private val roomId: String,
-                                   private val sendStateTask: SendStateTask,
-                                   private val taskExecutor: TaskExecutor) : StateService {
+                                   private val taskExecutor: TaskExecutor,
+                                   private val sendStateTask: SendStateTask) : StateService {
 
     override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
         val params = SendStateTask.Params(roomId,

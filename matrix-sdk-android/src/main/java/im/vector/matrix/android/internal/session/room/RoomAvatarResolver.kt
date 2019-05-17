@@ -20,14 +20,14 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.MyMembership
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.members.RoomMembers
+import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 
 internal class RoomAvatarResolver(private val monarchy: Monarchy,
                                   private val credentials: Credentials) {
@@ -48,7 +48,7 @@ internal class RoomAvatarResolver(private val monarchy: Monarchy,
             }
             val roomMembers = RoomMembers(realm, roomId)
             val members = roomMembers.getLoaded()
-            if (roomEntity?.membership == MyMembership.INVITED) {
+            if (roomEntity?.membership == Membership.INVITE) {
                 if (members.size == 1) {
                     res = members.entries.first().value.avatarUrl
                 } else if (members.size > 1) {
@@ -57,9 +57,9 @@ internal class RoomAvatarResolver(private val monarchy: Monarchy,
                 }
             } else {
                 // detect if it is a room with no more than 2 members (i.e. an alone or a 1:1 chat)
-                if (roomMembers.getNumberOfJoinedMembers() == 1 && members.isNotEmpty()) {
+                if (members.size == 1) {
                     res = members.entries.first().value.avatarUrl
-                } else if (roomMembers.getNumberOfMembers() == 2 && members.size > 1) {
+                } else if (members.size == 2) {
                     val firstOtherMember = members.filterKeys { it != credentials.userId }.values.firstOrNull()
                     res = firstOtherMember?.avatarUrl
                 }

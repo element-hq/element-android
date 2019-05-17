@@ -28,8 +28,8 @@ import im.vector.matrix.android.internal.util.fetchCopyMap
 internal class DefaultTimelineService(private val roomId: String,
                                       private val monarchy: Monarchy,
                                       private val taskExecutor: TaskExecutor,
-                                      private val contextOfEventTask: GetContextOfEventTask,
                                       private val timelineEventFactory: TimelineEventFactory,
+                                      private val contextOfEventTask: GetContextOfEventTask,
                                       private val paginationTask: PaginationTask
 ) : TimelineService {
 

@@ -24,6 +24,8 @@
         <item name="vctr_bottom_nav_background_color">@color/riot_primary_background_color_status
         </item>
 
+        <item name="buttonStyle">@style/Widget.Vector.Button</item>
+
         <!-- waiting view background -->
         <item name="vctr_waiting_background_color">#AAAAAAAA</item>
 

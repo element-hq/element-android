@@ -27,8 +27,8 @@ import im.vector.matrix.android.internal.util.fetchCopied
 
 internal class DefaultReadService(private val roomId: String,
                                   private val monarchy: Monarchy,
-                                  private val setReadMarkersTask: SetReadMarkersTask,
-                                  private val taskExecutor: TaskExecutor) : ReadService {
+                                  private val taskExecutor: TaskExecutor,
+                                  private val setReadMarkersTask: SetReadMarkersTask) : ReadService {
 
     override fun markAllAsRead(callback: MatrixCallback<Unit>) {
         val latestEvent = getLatestEvent()

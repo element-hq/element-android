@@ -19,11 +19,13 @@ package im.vector.riotredesign.features.home.room.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
@@ -62,6 +64,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     init {
         observeRoomSummary()
         observeEventDisplayedActions()
+        observeInvitationState()
         room.loadRoomMembersIfNeeded()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
@@ -69,12 +72,14 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     fun process(action: RoomDetailActions) {
         when (action) {
-            is RoomDetailActions.SendMessage -> handleSendMessage(action)
-            is RoomDetailActions.IsDisplayed -> handleIsDisplayed()
-            is RoomDetailActions.SendMedia -> handleSendMedia(action)
+            is RoomDetailActions.SendMessage    -> handleSendMessage(action)
+            is RoomDetailActions.IsDisplayed    -> handleIsDisplayed()
+            is RoomDetailActions.SendMedia      -> handleSendMedia(action)
             is RoomDetailActions.EventDisplayed -> handleEventDisplayed(action)
-            is RoomDetailActions.LoadMore -> handleLoadMore(action)
-            is RoomDetailActions.SendReaction -> handleSendReaction(action)
+            is RoomDetailActions.LoadMore       -> handleLoadMore(action)
+            is RoomDetailActions.SendReaction   -> handleSendReaction(action)
+            is RoomDetailActions.AcceptInvite   -> handleAcceptInvite()
+            is RoomDetailActions.RejectInvite   -> handleRejectInvite()
         }
     }
 
@@ -89,63 +94,63 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         val slashCommandResult = CommandParser.parseSplashCommand(action.text)
 
         when (slashCommandResult) {
-            is ParsedCommand.ErrorNotACommand -> {
+            is ParsedCommand.ErrorNotACommand         -> {
                 // Send the text message to the room
                 room.sendTextMessage(action.text)
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
             }
-            is ParsedCommand.ErrorSyntax -> {
+            is ParsedCommand.ErrorSyntax              -> {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command)))
             }
-            is ParsedCommand.ErrorEmptySlashCommand -> {
+            is ParsedCommand.ErrorEmptySlashCommand   -> {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown("/")))
             }
             is ParsedCommand.ErrorUnknownSlashCommand -> {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand)))
             }
-            is ParsedCommand.Invite -> {
+            is ParsedCommand.Invite                   -> {
                 handleInviteSlashCommand(slashCommandResult)
             }
-            is ParsedCommand.SetUserPowerLevel -> {
+            is ParsedCommand.SetUserPowerLevel        -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.ClearScalarToken -> {
+            is ParsedCommand.ClearScalarToken         -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.SetMarkdown -> {
+            is ParsedCommand.SetMarkdown              -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.UnbanUser -> {
+            is ParsedCommand.UnbanUser                -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.BanUser -> {
+            is ParsedCommand.BanUser                  -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.KickUser -> {
+            is ParsedCommand.KickUser                 -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.JoinRoom -> {
+            is ParsedCommand.JoinRoom                 -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.PartRoom -> {
+            is ParsedCommand.PartRoom                 -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
-            is ParsedCommand.SendEmote -> {
+            is ParsedCommand.SendEmote                -> {
                 room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
             }
-            is ParsedCommand.ChangeTopic -> {
+            is ParsedCommand.ChangeTopic              -> {
                 handleChangeTopicSlashCommand(slashCommandResult)
             }
-            is ParsedCommand.ChangeDisplayName -> {
+            is ParsedCommand.ChangeDisplayName        -> {
                 // TODO
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
             }
@@ -182,7 +187,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
 
     private fun handleSendReaction(action: RoomDetailActions.SendReaction) {
-        room.sendReaction(action.reaction,action.targetEventId)
+        room.sendReaction(action.reaction, action.targetEventId)
     }
 
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
@@ -214,6 +219,14 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         timeline.paginate(action.direction, PAGINATION_COUNT)
     }
 
+    private fun handleRejectInvite() {
+        room.leave(object : MatrixCallback<Unit> {})
+    }
+
+    private fun handleAcceptInvite() {
+        room.join(object : MatrixCallback<Unit> {})
+    }
+
     private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second
         // and keep the most recent one to set the read receipt on.
@@ -234,6 +247,18 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                 .execute { async ->
                     copy(asyncRoomSummary = async)
                 }
+    }
+
+    private fun observeInvitationState() {
+        asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
+            if (summary.membership == Membership.INVITE) {
+                summary.lastMessage?.sender?.let { senderId ->
+                    session.getUser(senderId)
+                }?.also {
+                    setState { copy(inviter = Success(it)) }
+                }
+            }
+        }
     }
 
     override fun onCleared() {

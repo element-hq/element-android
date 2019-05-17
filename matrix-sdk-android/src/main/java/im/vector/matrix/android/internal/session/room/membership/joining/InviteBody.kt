@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.room.members
+package im.vector.matrix.android.internal.session.room.membership.joining
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
-internal data class RoomMembersResponse(
-        @Json(name = "chunk") val roomMemberEvents: List<Event>
+data class InviteBody(
+        @Json(name = "user_id") val userId: String
 )

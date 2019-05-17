@@ -6,12 +6,14 @@
     <style name="AppTheme.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="colorPrimaryDark">@color/primary_color_dark_light</item>
         <item name="colorPrimary">@color/primary_color_light</item>
+        <item name="colorPrimaryVariant">@color/primary_color_dark_light</item>
+        <item name="colorSecondary">@color/accent_color_light</item>
+        <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorAccent">@color/accent_color_light</item>
 
-        <item name="android:textColorPrimary">@color/primary_text_color_selector_light</item>
-        <item name="android:textColorSecondary">@color/riot_secondary_text_color_light</item>
-        <!-- Default color for text View -->
-        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_light</item>
+        <item name="android:textColorPrimary">@color/black_87</item>
+        <item name="android:textColorSecondary">@color/black_38</item>
+        <item name="android:textColorTertiary">@color/black_37</item>
 
         <item name="android:textColorLink">@color/link_color_light</item>
 
@@ -21,6 +23,9 @@
         <!-- default background color -->
         <item name="android:colorBackground">@color/riot_primary_background_color_light</item>
         <item name="vctr_bottom_nav_background_color">#FFF3F8FD</item>
+
+        <!-- default button -->
+        <item name="android:buttonStyle">@style/Widget.Vector.Button</item>
 
         <!-- waiting view background -->
         <item name="vctr_waiting_background_color">#AAAAAAAA</item>

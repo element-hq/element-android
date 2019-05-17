@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.room.members
+package im.vector.matrix.android.internal.session.room.membership
 
 import im.vector.matrix.android.api.session.room.model.RoomMember
 

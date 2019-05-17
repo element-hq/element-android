@@ -19,9 +19,11 @@ package im.vector.matrix.android.api.session.room.model
 import com.squareup.moshi.Json
 
 /**
- * Represents the membership of a user on a room. Linked to a [RoomMember]
+ * Represents the membership of a user on a room
  */
 enum class Membership(val value: String) {
+
+    NONE("none"),
 
     @Json(name = "invite")
     INVITE("invite"),
@@ -37,5 +39,9 @@ enum class Membership(val value: String) {
 
     @Json(name = "ban")
     BAN("ban");
+
+    fun isLeft(): Boolean {
+        return this == KNOCK || this == LEAVE || this == BAN
+    }
 
 }

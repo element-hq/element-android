@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.session.room.EventRelationExtractor
-import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
+import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor
 import io.realm.Realm
 
 internal class TimelineEventFactory(

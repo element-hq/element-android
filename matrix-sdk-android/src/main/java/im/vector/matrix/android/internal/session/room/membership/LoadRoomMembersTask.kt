@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.room.members
+package im.vector.matrix.android.internal.session.room.membership
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy

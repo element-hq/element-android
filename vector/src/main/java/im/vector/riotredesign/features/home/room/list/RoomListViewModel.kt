@@ -24,6 +24,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.rx.rx
@@ -153,6 +154,7 @@ class RoomListViewModel(initialState: RoomListViewState,
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
+        val invites = ArrayList<RoomSummary>()
         val favourites = ArrayList<RoomSummary>()
         val directChats = ArrayList<RoomSummary>()
         val groupRooms = ArrayList<RoomSummary>()
@@ -160,8 +162,10 @@ class RoomListViewModel(initialState: RoomListViewState,
         val serverNotices = ArrayList<RoomSummary>()
 
         for (room in rooms) {
+            if (room.membership.isLeft()) continue
             val tags = room.tags.map { it.name }
             when {
+                room.membership == Membership.INVITE          -> invites.add(room)
                 tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
                 tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
                 tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
@@ -171,6 +175,7 @@ class RoomListViewModel(initialState: RoomListViewState,
         }
 
         return RoomSummaries().apply {
+            put(RoomCategory.INVITE, invites.sortedWith(roomSummaryComparator))
             put(RoomCategory.FAVOURITE, favourites.sortedWith(roomSummaryComparator))
             put(RoomCategory.DIRECT, directChats.sortedWith(roomSummaryComparator))
             put(RoomCategory.GROUP, groupRooms.sortedWith(roomSummaryComparator))

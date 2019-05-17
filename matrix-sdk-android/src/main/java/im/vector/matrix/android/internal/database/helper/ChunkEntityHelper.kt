@@ -86,10 +86,9 @@ internal fun ChunkEntity.add(roomId: String,
                              isUnlinked: Boolean = false) {
 
     assertIsManaged()
-    if (event.eventId.isNullOrEmpty() || this.events.fastContains(event.eventId)) {
+    if (event.eventId != null && events.fastContains(event.eventId)) {
         return
     }
-
     var currentDisplayIndex = lastDisplayIndex(direction, 0)
     if (direction == PaginationDirection.FORWARDS) {
         currentDisplayIndex += 1

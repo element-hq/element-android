@@ -20,7 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.members.RoomMembersService
+import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
@@ -39,13 +39,13 @@ internal class DefaultRoom(
         private val sendService: SendService,
         private val stateService: StateService,
         private val readService: ReadService,
-        private val roomMembersService: RoomMembersService
+        private val roomMembersService: MembershipService
 ) : Room,
-        TimelineService by timelineService,
-        SendService by sendService,
-        StateService by stateService,
-        ReadService by readService,
-        RoomMembersService by roomMembersService {
+    TimelineService by timelineService,
+    SendService by sendService,
+    StateService by stateService,
+    ReadService by readService,
+    MembershipService by roomMembersService {
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
         val liveRealmData = RealmLiveData<RoomSummaryEntity>(monarchy.realmConfiguration) { realm ->

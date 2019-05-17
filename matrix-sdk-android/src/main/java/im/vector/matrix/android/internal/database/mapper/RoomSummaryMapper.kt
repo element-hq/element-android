@@ -37,7 +37,8 @@ internal object RoomSummaryMapper {
                 otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
                 highlightCount = roomSummaryEntity.highlightCount,
                 notificationCount = roomSummaryEntity.notificationCount,
-                tags = tags
+                tags = tags,
+                membership = roomSummaryEntity.membership
         )
     }
 }
