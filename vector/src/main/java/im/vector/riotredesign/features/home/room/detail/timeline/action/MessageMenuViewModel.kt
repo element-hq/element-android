@@ -73,6 +73,10 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent.body))
                 }
 
+                if(canRedact(event, currentSession.sessionParams.credentials.userId)) {
+                    this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_material_delete, event.root.eventId))
+                }
+
                 if (canQuote(event, messageContent)) {
                     //TODO quote icon
                     this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, parcel.eventId))
@@ -148,6 +152,14 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             }
         }
 
+        private fun canRedact(event: TimelineEvent, myUserId: String): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            if (event.root.type != EventType.MESSAGE) return false
+            //TODO if user is admin or moderator
+            return event.root.sender == myUserId
+        }
+
+
         private fun canCopy(type: String): Boolean {
             return when (type) {
                 MessageType.MSGTYPE_TEXT,
@@ -160,6 +172,8 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 else -> false
             }
         }
+
+
 
 
         private fun canShare(type: String): Boolean {

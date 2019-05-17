@@ -521,7 +521,8 @@ class RoomDetailFragment :
             //we should test the current real state of reaction on this event
             roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, informationData.eventId))
         } else {
-            //TODO it's an undo :/
+            //I need to redact a reaction
+            roomDetailViewModel.process(RoomDetailActions.UndoReaction(informationData.eventId,reaction))
         }
     }
 
@@ -546,7 +547,11 @@ class RoomDetailFragment :
                     snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
                     snack.show()
                 }
-                MessageMenuViewModel.ACTION_SHARE          -> {
+                MessageMenuViewModel.ACTION_DELETE -> {
+                    val eventId = actionData.data?.toString() ?: return
+                    roomDetailViewModel.process(RoomDetailActions.RedactAction(eventId,context?.getString(R.string.event_redacted_by_user_reason)))
+                }
+                MessageMenuViewModel.ACTION_SHARE -> {
                     //TODO current data communication is too limited
                     //Need to now the media type
                     actionData.data?.toString()?.let {

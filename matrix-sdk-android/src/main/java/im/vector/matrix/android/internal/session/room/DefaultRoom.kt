@@ -22,6 +22,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.annotation.ReactionService
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
@@ -39,12 +40,14 @@ internal class DefaultRoom(
         private val sendService: SendService,
         private val stateService: StateService,
         private val readService: ReadService,
+        private val reactionService: ReactionService,
         private val roomMembersService: MembershipService
 ) : Room,
-    TimelineService by timelineService,
-    SendService by sendService,
-    StateService by stateService,
-    ReadService by readService,
+        TimelineService by timelineService,
+        SendService by sendService,
+        StateService by stateService,
+        ReadService by readService,
+        ReactionService by reactionService,
     MembershipService by roomMembersService {
 
     override val roomSummary: LiveData<RoomSummary> by lazy {

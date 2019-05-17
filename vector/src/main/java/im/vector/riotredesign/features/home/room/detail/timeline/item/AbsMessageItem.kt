@@ -55,11 +55,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
-            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString,true)
+            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString, true)
         }
 
         override fun onUnReacted(reactionButton: ReactionButton) {
-            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString,false)
+            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString, false)
         }
     }
 
@@ -121,10 +121,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             }
 
         }
-    }
-
-    override fun unbind(holder: H) {
-        super.unbind(holder)
     }
 
     protected fun View.renderSendState() {

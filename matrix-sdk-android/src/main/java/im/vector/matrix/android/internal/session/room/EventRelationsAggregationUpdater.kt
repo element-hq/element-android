@@ -67,13 +67,14 @@ internal class EventRelationsAggregationUpdater(private val credentials: Credent
                     sum.key = reaction
                     sum.firstTimestamp = event.originServerTs ?: 0
                     sum.count = 1
+                    sum.sourceEvents.add(event.eventId)
                     sum.addedByMe = sum.addedByMe || (credentials.userId == event.sender)
                     eventSummary.reactionsSummary.add(sum)
                 } else {
                     //is this a known event (is possible? pagination?)
                     if (!sum.sourceEvents.contains(eventId)) {
                         sum.count += 1
-                        sum.sourceEvents.add(eventId)
+                        sum.sourceEvents.add(event.eventId)
                         sum.addedByMe = sum.addedByMe || (credentials.userId == event.sender)
                     }
                 }

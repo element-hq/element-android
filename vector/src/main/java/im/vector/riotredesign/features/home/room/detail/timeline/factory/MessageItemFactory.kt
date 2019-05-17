@@ -66,7 +66,6 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 || nextEvent?.root?.type != EventType.MESSAGE
                 || isNextMessageReceivedMoreThanOneHourAgo
 
-        val messageContent: MessageContent = event.root.content.toModel() ?: return null
         val time = timelineDateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
         val memberName = event.senderName ?: event.root.sender ?: ""
@@ -84,8 +83,12 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 orderedReactionList = event.annotations?.reactionsSummary?.map { Triple(it.key, it.count, it.addedByMe) }
         )
 
-        //Test for reactions UX
-        //informationData.orderedReactionList = listOf( Triple("👍",1,false), Triple("👎",2,false))
+        if (event.root.unsignedData?.redactedEvent != null) {
+            //message is redacted
+            return buildRedactedItem(informationData)
+        }
+
+        val messageContent: MessageContent = event.root.content.toModel() ?: return null
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
@@ -345,6 +348,11 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
+    }
+
+    private fun buildRedactedItem(informationData: MessageInformationData): RedactedMessageItem? {
+        return RedactedMessageItem_()
+                .informationData(informationData)
     }
 
     private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {

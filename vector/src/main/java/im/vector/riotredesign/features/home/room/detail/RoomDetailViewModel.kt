@@ -80,6 +80,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             is RoomDetailActions.SendReaction   -> handleSendReaction(action)
             is RoomDetailActions.AcceptInvite   -> handleAcceptInvite()
             is RoomDetailActions.RejectInvite   -> handleRejectInvite()
+            is RoomDetailActions.RedactAction -> handleRedactEvent(action)
         }
     }
 
@@ -189,6 +190,16 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private fun handleSendReaction(action: RoomDetailActions.SendReaction) {
         room.sendReaction(action.reaction, action.targetEventId)
     }
+
+    private fun handleRedactEvent(action: RoomDetailActions.RedactAction) {
+        val event = room.getTimeLineEvent(action.targetEventId) ?: return
+        room.redactEvent(event.root, action.reason)
+    }
+
+    private fun handleUndoReact(action: RoomDetailActions.UndoReaction) {
+        room.undoReaction(action.key, action.targetEventId, session.sessionParams.credentials.userId)
+    }
+
 
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
         val attachments = action.mediaFiles.map {

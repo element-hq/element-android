@@ -17,6 +17,8 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.session.DefaultSession
+import im.vector.matrix.android.internal.session.room.annotation.DefaultFindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.annotation.FindReactionEventForUndoTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
@@ -97,6 +99,11 @@ class RoomModule {
         scope(DefaultSession.SCOPE) {
             DefaultSendStateTask(get()) as SendStateTask
         }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultFindReactionEventForUndoTask(get()) as FindReactionEventForUndoTask
+        }
+
 
     }
 }

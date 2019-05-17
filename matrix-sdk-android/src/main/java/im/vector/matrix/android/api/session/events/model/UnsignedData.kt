@@ -25,5 +25,5 @@ data class UnsignedData(
         @Json(name = "redacted_because") val redactedEvent: Event? = null,
         @Json(name = "transaction_id") val transactionId: String? = null,
         @Json(name = "prev_content") val prevContent: Map<String, Any>? = null,
-        @Json(name = "m.relations") val relations: AggregatedRelations?
+        @Json(name = "m.relations") val relations: AggregatedRelations? = null
 )
