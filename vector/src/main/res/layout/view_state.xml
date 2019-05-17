@@ -2,8 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="40dp"
+    android:layout_height="match_parent"
     android:padding="8dp"
     tools:parentTag="android.widget.FrameLayout">
 
@@ -11,13 +10,14 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center" />
 
 
     <LinearLayout
         android:id="@+id/errorView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="8dp">
 
@@ -48,8 +48,25 @@
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="8dp">
+
+        <TextView
+            android:id="@+id/emptyTitleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="40dp"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/emptyImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp" />
 
         <TextView
             android:id="@+id/emptyMessageView"
@@ -59,14 +76,6 @@
             android:gravity="center"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
-
-
-        <ImageView
-            android:id="@+id/emptyImageView"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 

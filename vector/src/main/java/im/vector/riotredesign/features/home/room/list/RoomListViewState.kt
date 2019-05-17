@@ -17,15 +17,12 @@
 package im.vector.riotredesign.features.home.room.list
 
 import androidx.annotation.StringRes
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 
 data class RoomListViewState(
         val displayMode: RoomListFragment.DisplayMode,
-        val asyncRooms: Async<RoomSummaries> = Uninitialized,
         val isInviteExpanded: Boolean = true,
         val isFavouriteRoomsExpanded: Boolean = true,
         val isDirectRoomsExpanded: Boolean = true,
@@ -71,5 +68,5 @@ enum class RoomCategory(@StringRes val titleRes: Int) {
 }
 
 fun RoomSummaries?.isNullOrEmpty(): Boolean {
-    return this == null || isEmpty()
+    return this == null || this.values.flatten().isEmpty()
 }

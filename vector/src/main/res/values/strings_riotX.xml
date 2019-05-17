@@ -7,6 +7,10 @@
     <string name="send_you_invite">"Sent you an invitation"</string>
     <string name="invited_by">Invited by %s</string>
 
+    <string name="room_list_catchup_empty_title">You’re all caught up!</string>
+    <string name="room_list_catchup_empty_body">You have no more unread messages</string>
+    <string name="room_list_catchup_welcome_title">Welcome home!</string>
+    <string name="room_list_catchup_welcome_body">Catch up on unread messages here</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="reactions_agree">Agree</string>

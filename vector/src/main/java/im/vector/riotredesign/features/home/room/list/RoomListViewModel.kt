@@ -89,6 +89,12 @@ class RoomListViewModel(initialState: RoomListViewState,
     private fun observeRoomSummaries() {
         homeRoomListObservableSource
                 .observe()
+                .execute { asyncRooms ->
+                    copy(asyncRooms = asyncRooms)
+                }
+
+        homeRoomListObservableSource
+                .observe()
                 .flatMapSingle {
                     Observable.fromIterable(it)
                             .filter(filterByDisplayMode(displayMode))
@@ -96,7 +102,7 @@ class RoomListViewModel(initialState: RoomListViewState,
                 }
                 .map { buildRoomSummaries(it) }
                 .execute { async ->
-                    copy(asyncRooms = async)
+                    copy(asyncFilteredRooms = async)
                 }
     }
 

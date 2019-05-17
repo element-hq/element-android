@@ -91,6 +91,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         val layoutManager = LinearLayoutManager(context)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         epoxyRecyclerView.layoutManager = layoutManager
+        epoxyRecyclerView.itemAnimator = RoomListAnimator()
         roomController.callback = this
         roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
         stateView.contentView = epoxyRecyclerView
@@ -98,20 +99,38 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
     }
 
     private fun renderState(state: RoomListViewState) {
-        when (state.asyncRooms) {
+        when (state.asyncFilteredRooms) {
             is Incomplete -> renderLoading()
             is Success    -> renderSuccess(state)
-            is Fail       -> renderFailure(state.asyncRooms.error)
+            is Fail       -> renderFailure(state.asyncFilteredRooms.error)
         }
     }
 
     private fun renderSuccess(state: RoomListViewState) {
-        if (state.asyncRooms().isNullOrEmpty()) {
-            stateView.state = StateView.State.Empty(getString(R.string.room_list_empty))
+        val allRooms = state.asyncRooms()
+        val filteredRooms = state.asyncFilteredRooms()
+        if (filteredRooms.isNullOrEmpty()) {
+            renderEmptyState(allRooms)
         } else {
             stateView.state = StateView.State.Content
         }
         roomController.setData(state)
+    }
+
+    private fun renderEmptyState(allRooms: List<RoomSummary>?) {
+        val hasNoRoom = allRooms.isNullOrEmpty()
+        val emptyState = when (roomListParams.displayMode) {
+            DisplayMode.HOME   -> {
+                if (hasNoRoom) {
+                    StateView.State.Empty(getString(R.string.room_list_catchup_welcome_title), null, getString(R.string.room_list_catchup_welcome_body))
+                } else {
+                    StateView.State.Empty(getString(R.string.room_list_catchup_empty_title), null, getString(R.string.room_list_catchup_empty_body))
+                }
+            }
+            DisplayMode.PEOPLE -> StateView.State.Empty()
+            DisplayMode.ROOMS  -> StateView.State.Empty()
+        }
+        stateView.state = emptyState
     }
 
     private fun renderLoading() {

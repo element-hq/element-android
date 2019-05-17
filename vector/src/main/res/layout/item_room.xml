@@ -9,12 +9,12 @@
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:paddingBottom="16dp"
-    android:paddingTop="16dp"
     android:paddingStart="8dp"
     android:paddingLeft="8dp"
+    android:paddingTop="8dp"
     android:paddingEnd="16dp"
-    android:paddingRight="16dp">
+    android:paddingRight="16dp"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/roomAvatarImageView"
@@ -29,30 +29,41 @@
 
     <TextView
         android:id="@+id/roomNameView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/black_87"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomAvatarImageView"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/roomAvatarImageView"
         tools:text="@tools:sample/full_names" />
 
-    <TextView
-        android:id="@+id/roomLastEventView"
-        android:layout_width="0dp"
+
+    <im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
+        android:id="@+id/roomUnreadCounterBadgeView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black_38"
-        android:textSize="14sp"
-        android:maxLines="2"
-        android:ellipsize="end"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/roomNameView"
-        app:layout_constraintTop_toBottomOf="@+id/roomNameView"
-        tools:text="@tools:sample/lorem/random" />
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:minWidth="16dp"
+        android:minHeight="16dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
+        app:layout_constraintStart_toEndOf="@+id/roomNameView"
+        app:layout_constraintTop_toTopOf="@+id/roomAvatarImageView"
+        tools:background="@drawable/bg_unread_highlight"
+        tools:text="4" />
 
     <TextView
         android:id="@+id/roomLastEventTimeView"
@@ -63,9 +74,23 @@
         android:textColor="@color/black_38"
         android:textSize="12sp"
         app:layout_constraintBaseline_toBaselineOf="@id/messageMemberNameView"
+        app:layout_constraintTop_toTopOf="@+id/roomAvatarImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/messageMemberNameView"
         tools:text="@tools:sample/date/hhmm" />
+
+
+    <TextView
+        android:id="@+id/roomLastEventView"
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/black_38"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@+id/roomNameView"
+        tools:text="@tools:sample/lorem/random" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

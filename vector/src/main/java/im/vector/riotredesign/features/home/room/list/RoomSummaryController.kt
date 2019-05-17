@@ -31,7 +31,7 @@ class RoomSummaryController(private val stringProvider: StringProvider,
     var callback: Callback? = null
 
     override fun buildModels(viewState: RoomListViewState) {
-        val roomSummaries = viewState.asyncRooms()
+        val roomSummaries = viewState.asyncFilteredRooms()
         roomSummaries?.forEach { (category, summaries) ->
             if (summaries.isEmpty()) {
                 return@forEach

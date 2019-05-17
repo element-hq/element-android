@@ -46,11 +46,13 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.titleView.text = roomName
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
+        holder.unreadCounterBadgeView.render(unreadCount, showHighlighted)
         AvatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {
         val titleView by bind<TextView>(R.id.roomNameView)
+        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
         val lastEventView by bind<TextView>(R.id.roomLastEventView)
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
