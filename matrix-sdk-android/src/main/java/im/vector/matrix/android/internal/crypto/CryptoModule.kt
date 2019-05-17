@@ -20,14 +20,14 @@ import android.content.Context
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
+import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
+import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
 import im.vector.matrix.android.internal.crypto.store.db.hash
-import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
-import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.*
 import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.session.DefaultSession
@@ -97,9 +97,21 @@ internal class CryptoModule {
             MXOlmDevice(get())
         }
 
+        // ObjectSigner
+        scope(DefaultSession.SCOPE) {
+            ObjectSigner(get(), get())
+        }
+
+        // OneTimeKeysManager
+        scope(DefaultSession.SCOPE) {
+            OneTimeKeysManager(get(), get(), get(), get(), get())
+        }
+
         // CryptoManager
         scope(DefaultSession.SCOPE) {
             CryptoManager(
+                    get(),
+                    get(),
                     get(),
                     get(),
                     get(),
@@ -176,6 +188,7 @@ internal class CryptoModule {
                     // Credentials
                     get(),
                     // CryptoStore
+                    get(),
                     get(),
                     get(),
                     // Task

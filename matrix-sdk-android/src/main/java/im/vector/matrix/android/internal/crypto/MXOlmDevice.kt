@@ -263,7 +263,8 @@ internal class MXOlmDevice(
 
             Timber.d("## createInboundSession() : ciphertext: $ciphertext")
             try {
-                Timber.d("## createInboundSession() :ciphertext: SHA256:" + mOlmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))) // TODO Extract code from the Log method...
+                val sha256 = mOlmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))
+                Timber.d("## createInboundSession() :ciphertext: SHA256:" + sha256)
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
             }

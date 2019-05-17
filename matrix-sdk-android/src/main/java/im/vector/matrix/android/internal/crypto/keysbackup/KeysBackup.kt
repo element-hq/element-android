@@ -36,14 +36,14 @@ import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.*
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
-import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.*
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
 import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
+import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
+import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -66,6 +66,7 @@ internal class KeysBackup(
         private val mCredentials: Credentials,
         private val mCryptoStore: IMXCryptoStore,
         private val mOlmDevice: MXOlmDevice,
+        private val mObjectSigner: ObjectSigner,
         // Tasks
         private val mCreateKeysBackupVersionTask: CreateKeysBackupVersionTask,
         private val mDeleteBackupTask: DeleteBackupTask,
@@ -175,7 +176,7 @@ internal class KeysBackup(
 
                 val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, megolmBackupAuthData.signalableJSONDictionary())
 
-                megolmBackupAuthData.signatures = mKeysBackupCryptoListener.signObject(canonicalJson)
+                megolmBackupAuthData.signatures = mObjectSigner.signObject(canonicalJson)
 
 
                 val megolmBackupCreationInfo = MegolmBackupCreationInfo()
@@ -502,7 +503,7 @@ internal class KeysBackup(
                 // Add current device signature
                 val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, authData.signalableJSONDictionary())
 
-                val deviceSignatures = mKeysBackupCryptoListener.signObject(canonicalJson)
+                val deviceSignatures = mObjectSigner.signObject(canonicalJson)
 
                 deviceSignatures[myUserId]?.forEach { entry ->
                     myUserSignatures[entry.key] = entry.value
@@ -1484,8 +1485,6 @@ internal class KeysBackup(
     }
 
     interface KeysBackupCryptoListener {
-        fun signObject(strToSign: String): Map<String, Map<String, String>>
-
         fun importMegolmSessionsData(megolmSessionsData: List<MegolmSessionData>,
                                      backUpKeys: Boolean,
                                      progressListener: ProgressListener?,
