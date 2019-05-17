@@ -9,7 +9,8 @@
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:minHeight="48dp"
+    android:paddingBottom="16dp"
+    android:paddingTop="16dp"
     android:paddingStart="8dp"
     android:paddingLeft="8dp"
     android:paddingEnd="16dp"
@@ -17,8 +18,8 @@
 
     <ImageView
         android:id="@+id/roomAvatarImageView"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,30 +34,38 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:duplicateParentState="true"
-        android:textColor="@color/color_room_title"
+        android:textColor="@color/black_87"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
+        app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
         app:layout_constraintStart_toEndOf="@id/roomAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/full_names" />
 
-    <im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
-        android:id="@+id/roomUnreadCounterBadgeView"
+    <TextView
+        android:id="@+id/roomLastEventView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_38"
+        android:textSize="14sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@+id/roomNameView"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/roomLastEventTimeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:minWidth="24dp"
-        android:minHeight="24dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:textColor="@android:color/white"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:textColor="@color/black_38"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintBaseline_toBaselineOf="@id/messageMemberNameView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:background="@drawable/bg_unread_highlight"
-        tools:text="115" />
+        app:layout_constraintStart_toEndOf="@id/messageMemberNameView"
+        tools:text="@tools:sample/date/hhmm" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

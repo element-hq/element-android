@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
+import io.reactivex.Observable
 import org.koin.android.ext.android.get
 
 typealias RoomListFilterName = CharSequence
@@ -50,7 +51,7 @@ class RoomListViewModel(initialState: RoomListViewState,
         }
     }
 
-
+    private val displayMode = initialState.displayMode
     private val roomListFilter = BehaviorRelay.createDefault<Option<RoomListFilterName>>(Option.empty())
 
     private val _openRoomLiveData = MutableLiveData<LiveEvent<String>>()
@@ -86,13 +87,25 @@ class RoomListViewModel(initialState: RoomListViewState,
 
 
     private fun observeRoomSummaries() {
-        homeRoomListObservableSource.observe()
+        homeRoomListObservableSource
+                .observe()
+                .flatMapSingle {
+                    Observable.fromIterable(it)
+                            .filter(filterByDisplayMode(displayMode))
+                            .toList()
+                }
                 .map { buildRoomSummaries(it) }
                 .execute { async ->
-                    copy(
-                            asyncRooms = async
-                    )
+                    copy(asyncRooms = async)
                 }
+    }
+
+    private fun filterByDisplayMode(displayMode: RoomListFragment.DisplayMode) = { roomSummary: RoomSummary ->
+        when (displayMode) {
+            RoomListFragment.DisplayMode.HOME   -> roomSummary.notificationCount > 0
+            RoomListFragment.DisplayMode.PEOPLE -> roomSummary.isDirect
+            RoomListFragment.DisplayMode.ROOMS  -> !roomSummary.isDirect
+        }
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {

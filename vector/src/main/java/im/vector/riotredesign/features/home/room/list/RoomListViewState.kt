@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 
 data class RoomListViewState(
+        val displayMode: RoomListFragment.DisplayMode,
         val asyncRooms: Async<RoomSummaries> = Uninitialized,
         val isInviteExpanded: Boolean = true,
         val isFavouriteRoomsExpanded: Boolean = true,
@@ -32,6 +33,8 @@ data class RoomListViewState(
         val isLowPriorityRoomsExpanded: Boolean = true,
         val isServerNoticeRoomsExpanded: Boolean = true
 ) : MvRxState {
+
+    constructor(args: RoomListParams) : this(displayMode = args.displayMode)
 
     fun isCategoryExpanded(roomCategory: RoomCategory): Boolean {
         return when (roomCategory) {

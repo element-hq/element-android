@@ -19,9 +19,13 @@ package im.vector.riotredesign.features.home.room.list
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotredesign.core.extensions.localDateTime
+import im.vector.riotredesign.core.resources.DateProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 
-class RoomSummaryController(private val stringProvider: StringProvider
+class RoomSummaryController(private val stringProvider: StringProvider,
+                            private val timelineDateFormatter: TimelineDateFormatter
 ) : TypedEpoxyController<RoomListViewState>() {
 
     var callback: Callback? = null
@@ -76,9 +80,29 @@ class RoomSummaryController(private val stringProvider: StringProvider
             val unreadCount = roomSummary.notificationCount
             val showHighlighted = roomSummary.highlightCount > 0
 
+            var lastMessageFormatted: CharSequence = ""
+            var lastMessageTime: CharSequence = ""
+            val lastMessage = roomSummary.lastMessage
+            if (lastMessage != null) {
+                val date = lastMessage.localDateTime()
+                val currentData = DateProvider.currentLocalDateTime()
+                val isSameDay = date.toLocalDate() == currentData.toLocalDate()
+                //TODO: get formatted
+                lastMessageFormatted = lastMessage.content?.toString() ?: ""
+                lastMessageTime = if (isSameDay) {
+                    timelineDateFormatter.formatMessageHour(date)
+                } else {
+                    //TODO: change this
+                    timelineDateFormatter.formatMessageDay(date)
+                }
+
+
+            }
             roomSummaryItem {
                 id(roomSummary.roomId)
                 roomId(roomSummary.roomId)
+                lastEventTime(lastMessageTime)
+                lastFormattedEvent(lastMessageFormatted)
                 roomName(roomSummary.displayName)
                 avatarUrl(roomSummary.avatarUrl)
                 showHighlighted(showHighlighted)

@@ -32,6 +32,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     @EpoxyAttribute lateinit var roomName: CharSequence
     @EpoxyAttribute lateinit var roomId: String
+    @EpoxyAttribute lateinit var lastFormattedEvent: CharSequence
+    @EpoxyAttribute lateinit var lastEventTime: CharSequence
     @EpoxyAttribute var avatarUrl: String? = null
     @EpoxyAttribute var unreadCount: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
@@ -40,15 +42,17 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.unreadCounterBadgeView.render(unreadCount, showHighlighted)
         holder.rootView.setOnClickListener { listener?.invoke() }
         holder.titleView.text = roomName
+        holder.lastEventTimeView.text = lastEventTime
+        holder.lastEventView.text = lastFormattedEvent
         AvatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
         val titleView by bind<TextView>(R.id.roomNameView)
+        val lastEventView by bind<TextView>(R.id.roomLastEventView)
+        val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
     }

@@ -23,6 +23,7 @@ import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
@@ -50,6 +51,10 @@ class AppModule(private val context: Context) {
 
         single {
             SelectedGroupStore()
+        }
+
+        single {
+            HomeRoomListObservableStore()
         }
 
         single {
