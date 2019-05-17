@@ -107,6 +107,7 @@ data class RoomDetailArgs(
 private const val CAMERA_VALUE_TITLE = "attachment"
 private const val REQUEST_FILES_REQUEST_CODE = 0
 private const val TAKE_IMAGE_REQUEST_CODE = 1
+private const val REACTION_SELECT_REQUEST_CODE = 2
 
 class RoomDetailFragment :
         VectorBaseFragment(),
@@ -182,6 +183,12 @@ class RoomDetailFragment :
         if (resultCode == RESULT_OK && data != null) {
             when (requestCode) {
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
+                REACTION_SELECT_REQUEST_CODE -> {
+                    val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID) ?: return
+                    val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT) ?: return
+                    //TODO check if already reacted with that?
+                    roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction,eventId))
+                }
             }
         }
     }
@@ -476,6 +483,16 @@ class RoomDetailFragment :
     override fun onMemberNameClicked(informationData: MessageInformationData) {
         insertUserDisplayNameInTextEditor(informationData.memberName?.toString())
     }
+
+    override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
+        if (on) {
+            //we should test the current real state of reaction on this event
+            roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction,informationData.eventId))
+        } else {
+            //TODO it's an undo :/
+        }
+    }
+
 // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
@@ -487,7 +504,8 @@ class RoomDetailFragment :
 
             when (actionData.actionId) {
                 MessageMenuViewModel.ACTION_ADD_REACTION -> {
-                    startActivityForResult(EmojiReactionPickerActivity.intent(requireContext()), 0)
+                    val eventId = actionData.data?.toString() ?: return
+                    startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), eventId), REACTION_SELECT_REQUEST_CODE)
                 }
                 MessageMenuViewModel.ACTION_COPY -> {
                     //I need info about the current selected message :/
@@ -539,6 +557,11 @@ class RoomDetailFragment :
                             .setPositiveButton(R.string.ok) { dialog, id -> dialog.cancel() }
                             .show()
                 }
+                MessageMenuViewModel.ACTION_QUICK_REACT -> {
+                    (actionData.data as? Pair<String, String>)?.let { pairData ->
+                        roomDetailViewModel.process(RoomDetailActions.SendReaction(pairData.second, pairData.first))
+                    }
+                }
                 else -> {
                     Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()
                 }
@@ -553,6 +576,7 @@ class RoomDetailFragment :
      * @param text the text to insert.
      */
     private fun insertUserDisplayNameInTextEditor(text: String?) {
+        //TODO move logic outside of fragment
         if (null != text) {
 //            var vibrate = false
 

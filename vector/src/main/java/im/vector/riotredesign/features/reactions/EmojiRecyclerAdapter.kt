@@ -43,7 +43,7 @@ import kotlin.math.abs
  * TODO: Performances
  * TODO: Scroll to section - Find a way to snap section to the top
  */
-class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null) :
+class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null, var reactionClickListener: ReactionClickListener?) :
         RecyclerView.Adapter<EmojiRecyclerAdapter.ViewHolder>() {
 
     var interactionListener: InteractionListener? = null
@@ -63,6 +63,22 @@ class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null) :
     private var isFastScroll = false
 
     val toUpdateWhenNotBusy = ArrayList<Pair<String, EmojiViewHolder>>()
+
+    val itemClickListener = View.OnClickListener { view ->
+        mRecyclerView?.getChildLayoutPosition(view)?.let { itemPosition ->
+            if (itemPosition != RecyclerView.NO_POSITION) {
+                val categories = dataSource?.rawData?.categories ?: return@OnClickListener
+                val sectionNumber = getSectionForAbsoluteIndex(itemPosition)
+                if (!isSection(itemPosition)) {
+                    val sectionMojis = categories[sectionNumber].emojis
+                    val sectionOffset = getSectionOffset(sectionNumber)
+                    val emoji = sectionMojis[itemPosition - sectionOffset]
+                    val item = dataSource.rawData!!.emojis.getValue(emoji).emojiString()
+                    reactionClickListener?.onReactionSelected(item)
+                }
+            }
+        }
+    }
 
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -113,6 +129,7 @@ class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null) :
         beginTraceSession("MyAdapter.onCreateViewHolder")
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(viewType, parent, false)
+        itemView.setOnClickListener(itemClickListener)
         val viewHolder = when (viewType) {
             R.layout.grid_section_header -> SectionViewHolder(itemView)
             else -> EmojiViewHolder(itemView)

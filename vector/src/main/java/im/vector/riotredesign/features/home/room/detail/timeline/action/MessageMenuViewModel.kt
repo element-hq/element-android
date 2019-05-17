@@ -67,7 +67,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
             //TODO determine if can copy, forward, reply, quote, report?
             val actions = ArrayList<SimpleAction>().apply {
-                this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_smile))
+                this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_smile, event.root.eventId))
                 if (canCopy(type)) {
                     //TODO copy images? html? see ClipBoard
                     this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent.body))
@@ -184,6 +184,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         const val VIEW_DECRYPTED_SOURCE = "VIEW_DECRYPTED_SOURCE"
         const val PERMALINK = "PERMALINK"
         const val ACTION_FLAG = "ACTION_FLAG"
+        const val ACTION_QUICK_REACT = "ACTION_QUICK_REACT"
 
 
     }

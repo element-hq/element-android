@@ -18,22 +18,34 @@ package im.vector.riotredesign.features.reactions
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import im.vector.riotredesign.core.utils.LiveEvent
 
 class EmojiChooserViewModel : ViewModel() {
 
     var adapter: EmojiRecyclerAdapter? = null
     val emojiSourceLiveData: MutableLiveData<EmojiDataSource> = MutableLiveData()
 
+    val navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
+    var selectedReaction: String? = null
+    var eventId: String? = null
+
     val currentSection: MutableLiveData<Int> = MutableLiveData()
+
+    var reactionClickListener = object : ReactionClickListener {
+        override fun onReactionSelected(reaction: String) {
+            selectedReaction = reaction
+            navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
+        }
+    }
 
     fun initWithContect(context: Context) {
         //TODO load async
         val emojiDataSource = EmojiDataSource(context)
         emojiSourceLiveData.value = emojiDataSource
-        adapter = EmojiRecyclerAdapter(emojiDataSource)
+        adapter = EmojiRecyclerAdapter(emojiDataSource, reactionClickListener)
         adapter?.interactionListener = object : EmojiRecyclerAdapter.InteractionListener {
             override fun firstVisibleSectionChange(section: Int) {
-               currentSection.value = section
+                currentSection.value = section
             }
 
         }
@@ -41,5 +53,9 @@ class EmojiChooserViewModel : ViewModel() {
 
     fun scrollToSection(sectionIndex: Int) {
         adapter?.scrollToSection(sectionIndex)
+    }
+
+    companion object {
+        const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
     }
 }

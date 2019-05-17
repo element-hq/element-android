@@ -21,18 +21,11 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.api.session.room.model.message.AudioInfo
-import im.vector.matrix.android.api.session.room.model.message.FileInfo
-import im.vector.matrix.android.api.session.room.model.message.ImageInfo
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.model.message.MessageType
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
-import im.vector.matrix.android.api.session.room.model.message.ThumbnailInfo
-import im.vector.matrix.android.api.session.room.model.message.VideoInfo
+import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
+import im.vector.matrix.android.api.session.room.model.annotation.ReactionInfo
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 
 internal class LocalEchoEventFactory(private val credentials: Credentials) {
@@ -47,9 +40,28 @@ internal class LocalEchoEventFactory(private val credentials: Credentials) {
             ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment)
             ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment)
             ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment)
-            ContentAttachmentData.Type.FILE  -> createFileEvent(roomId, attachment)
+            ContentAttachmentData.Type.FILE -> createFileEvent(roomId, attachment)
         }
     }
+
+    fun createReactionEvent(roomId: String, targetEventId: String, reaction: String): Event {
+        val content = ReactionContent(
+                ReactionInfo(
+                        RelationType.ANNOTATION,
+                        targetEventId,
+                        reaction
+                )
+        )
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                sender = credentials.userId,
+                eventId = dummyEventId(roomId),
+                type = EventType.REACTION,
+                content = content.toContent()
+        )
+    }
+
 
     private fun createImageEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val content = MessageImageContent(

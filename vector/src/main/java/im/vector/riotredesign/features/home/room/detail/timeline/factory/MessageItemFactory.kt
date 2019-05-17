@@ -107,6 +107,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .informationData(informationData)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -134,6 +135,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageFileItem_()
                 .informationData(informationData)
                 .filename(messageContent.body)
+                .reactionPillCallback(callback)
                 .iconRes(R.drawable.filetype_attachment)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -180,6 +182,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .informationData(informationData)
                 .mediaData(data)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -226,6 +229,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .playable(true)
                 .informationData(informationData)
                 .mediaData(thumbnailData)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -257,6 +261,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(linkifiedBody)
                 .informationData(informationData)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -294,6 +299,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -322,6 +328,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
