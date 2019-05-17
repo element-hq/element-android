@@ -26,8 +26,7 @@ import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
 import timber.log.Timber
 import java.lang.reflect.ParameterizedType
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 typealias Content = JsonDict
 
@@ -94,7 +93,8 @@ data class Event(
      * This is a small MXEvent instance with typically value for `type` and 'content' fields.
      */
     @Transient
-    private var mClearEvent: Event? = null
+    var mClearEvent: Event? = null
+        private set
 
     /**
      * Curve25519 key which we believe belongs to the sender of the event.
@@ -121,7 +121,8 @@ data class Event(
      * Decryption error
      */
     @Transient
-    private var mCryptoError: MXCryptoError? = null
+    var mCryptoError: MXCryptoError? = null
+        private set
 
     /**
      * @return true if this event is encrypted.
@@ -141,16 +142,16 @@ data class Event(
         mClearEvent = null
 
         if (null != decryptionResult) {
-            if (null != decryptionResult!!.mClearEvent) {
-                mClearEvent = decryptionResult!!.mClearEvent
+            if (null != decryptionResult.mClearEvent) {
+                mClearEvent = decryptionResult.mClearEvent
             }
 
             if (null != mClearEvent) {
-                mClearEvent!!.mSenderCurve25519Key = decryptionResult!!.mSenderCurve25519Key
-                mClearEvent!!.mClaimedEd25519Key = decryptionResult!!.mClaimedEd25519Key
+                mClearEvent!!.mSenderCurve25519Key = decryptionResult.mSenderCurve25519Key
+                mClearEvent!!.mClaimedEd25519Key = decryptionResult.mClaimedEd25519Key
 
-                if (null != decryptionResult!!.mForwardingCurve25519KeyChain) {
-                    mClearEvent!!.mForwardingCurve25519KeyChain = decryptionResult!!.mForwardingCurve25519KeyChain
+                if (null != decryptionResult.mForwardingCurve25519KeyChain) {
+                    mClearEvent!!.mForwardingCurve25519KeyChain = decryptionResult.mForwardingCurve25519KeyChain
                 } else {
                     mClearEvent!!.mForwardingCurve25519KeyChain = ArrayList()
                 }
@@ -163,7 +164,7 @@ data class Event(
                     //            .add("m.relates_to", getWireContent().getAsJsonObject().get("m.relates_to"))
                     //}
                 } catch (e: Exception) {
-                    Timber.e(e,"Unable to restore 'm.relates_to' the clear event")
+                    Timber.e(e, "Unable to restore 'm.relates_to' the clear event")
                 }
 
             }

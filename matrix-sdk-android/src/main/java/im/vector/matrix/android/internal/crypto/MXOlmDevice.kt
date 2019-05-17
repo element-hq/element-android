@@ -51,10 +51,10 @@ internal class MXOlmDevice(
     var deviceEd25519Key: String? = null
         private set
 
-    // The OLMKit account instance.
+    // The OLM lib account instance.
     private var mOlmAccount: OlmAccount? = null
 
-    // The OLMKit utility instance.
+    // The OLM lib utility instance.
     private var mOlmUtility: OlmUtility? = null
 
     // The outbound group session.
@@ -144,9 +144,7 @@ internal class MXOlmDevice(
      * Release the instance
      */
     fun release() {
-        if (null != mOlmAccount) {
-            mOlmAccount!!.releaseAccount()
-        }
+        mOlmAccount?.releaseAccount()
     }
 
     /**
@@ -265,7 +263,7 @@ internal class MXOlmDevice(
 
             Timber.d("## createInboundSession() : ciphertext: $ciphertext")
             try {
-                Timber.d("## createInboundSession() :ciphertext: SHA256:" + mOlmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8")))
+                Timber.d("## createInboundSession() :ciphertext: SHA256:" + mOlmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))) // TODO Extract code from the Log method...
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
             }

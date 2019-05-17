@@ -151,7 +151,7 @@ internal class CryptoManager(
 
     fun onLiveEvent(roomId: String, event: Event) {
         if (event.type == EventType.ENCRYPTION) {
-            onCryptoEvent(roomId, event)
+            onRoomEncryptionEvent(roomId, event)
         } else if (event.type == EventType.STATE_ROOM_MEMBER) {
             onRoomMembershipEvent(roomId, event)
         }
@@ -206,7 +206,7 @@ internal class CryptoManager(
             mCryptoConfig = MXCryptoConfig()
         }
 
-        mRoomEncryptors = HashMap()
+        mRoomEncryptors = HashMap() // TODO Merge with declaration
 
         var deviceId = mCredentials.deviceId
         // deviceId should always be defined
@@ -770,6 +770,7 @@ internal class CryptoManager(
 
         alg.initWithMatrixSession(this,
                 mOlmDevice,
+                mKeysBackup,
                 deviceListManager,
                 mCredentials,
                 mSendToDeviceTask,
@@ -1146,7 +1147,7 @@ internal class CryptoManager(
 
         getDecryptingThreadHandler().post {
             var result: MXEventDecryptionResult? = null
-            val alg = roomDecryptorProvider.getRoomDecryptor(event.roomId, eventContent["algorithm"] as String)
+            val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(this, event.roomId, eventContent["algorithm"] as String)
 
             if (null == alg) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, eventContent["algorithm"] as String)
@@ -1342,7 +1343,8 @@ internal class CryptoManager(
      *
      * @param event the encryption event.
      */
-    fun onCryptoEvent(roomId: String, event: Event) {
+    private fun onRoomEncryptionEvent(roomId: String, event: Event) {
+        // TODO Parse the event
         val eventContent = event.content // wireEventContent
 
         val room = mRoomService.getRoom(roomId)!!
@@ -1520,7 +1522,7 @@ internal class CryptoManager(
                                     // But that message might never arrive leaving us stuck with duff
                                     // private keys clogging up our local storage.
                                     // So we need some kind of enginering compromise to balance all of
-                                    // these factors.
+                                    // these factors. // TODO Why we do not set mOneTimeKeyCount here?
                                     val keyCount = data.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)
                                     uploadOTK(keyCount, keyLimit, callback)
                                 }
@@ -1765,7 +1767,7 @@ internal class CryptoManager(
                 cpt++
 
 
-                val decrypting = roomDecryptorProvider.getRoomDecryptor(megolmSessionData.roomId, megolmSessionData.algorithm)
+                val decrypting = roomDecryptorProvider.getOrCreateRoomDecryptor(this, megolmSessionData.roomId, megolmSessionData.algorithm)
 
                 if (null != decrypting) {
                     try {

@@ -24,13 +24,14 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
+import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import java.util.*
@@ -49,6 +50,7 @@ internal class MXOlmEncryption : IMXEncrypting {
 
     override fun initWithMatrixSession(crypto: CryptoManager,
                                        olmDevice: MXOlmDevice,
+                                       keysBackup: KeysBackup,
                                        deviceListManager: DeviceListManager,
                                        credentials: Credentials,
                                        sendToDeviceTask: SendToDeviceTask,
@@ -69,7 +71,7 @@ internal class MXOlmEncryption : IMXEncrypting {
         //
         // TODO: there is a race condition here! What if a new user turns up
         ensureSession(userIds, object : MatrixCallback<Unit> {
-            override fun onSuccess(info: Unit) {
+            override fun onSuccess(data: Unit) {
                 val deviceInfos = ArrayList<MXDeviceInfo>()
 
                 for (userId in userIds) {
@@ -95,11 +97,11 @@ internal class MXOlmEncryption : IMXEncrypting {
                 }
 
                 val messageMap = HashMap<String, Any>()
-                messageMap["room_id"] = mRoomId!!
+                messageMap["room_id"] = mRoomId
                 messageMap["type"] = eventType
                 messageMap["content"] = eventContent
 
-                mCrypto!!.encryptMessage(messageMap, deviceInfos)
+                mCrypto.encryptMessage(messageMap, deviceInfos)
 
                 callback.onSuccess(messageMap.toContent()!!)
             }
@@ -116,7 +118,7 @@ internal class MXOlmEncryption : IMXEncrypting {
         mDeviceListManager.downloadKeys(users, false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
 
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                mCrypto!!.ensureOlmSessionsForUsers(users, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
+                mCrypto.ensureOlmSessionsForUsers(users, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
                     override fun onSuccess(data: MXUsersDevicesMap<MXOlmSessionResult>) {
                         callback?.onSuccess(Unit)
                     }

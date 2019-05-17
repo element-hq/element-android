@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 
@@ -39,6 +40,7 @@ internal interface IMXEncrypting {
      */
     fun initWithMatrixSession(crypto: CryptoManager,
                               olmDevice: MXOlmDevice,
+                              keysBackup: KeysBackup,
                               deviceListManager: DeviceListManager,
                               credentials: Credentials,
                               sendToDeviceTask: SendToDeviceTask,

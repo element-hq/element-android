@@ -33,7 +33,7 @@ internal class RoomDecryptorProvider(
 ) {
 
     // A map from algorithm to MXDecrypting instance, for each room
-    private val mRoomDecryptors: MutableMap<String, MutableMap<String /* algorithm */, IMXDecrypting>>/* room id */ = HashMap()
+    private val mRoomDecryptors: MutableMap<String /* room id */, MutableMap<String /* algorithm */, IMXDecrypting>> = HashMap()
 
     /**
      * Get a decryptor for a given room and algorithm.
@@ -43,7 +43,7 @@ internal class RoomDecryptorProvider(
      * @param roomId    the room id
      * @param algorithm the crypto algorithm
      * @return the decryptor
-     * TODO do not provide cryptoManager?
+     * TODO do not provide cryptoManager? // TODO Create another method for the case of roomId is null
      */
     fun getOrCreateRoomDecryptor(cryptoManager: CryptoManager, roomId: String?, algorithm: String?): IMXDecrypting? {
         // sanity check

@@ -62,7 +62,7 @@ internal class MXMegolmDecryption : IMXDecrypting {
      * Events which we couldn't decrypt due to unknown sessions / indexes: map from
      * senderKey|sessionId to timelines to list of MatrixEvents.
      */
-    private var mPendingEvents: MutableMap<String, MutableMap<String /* timelineId */, MutableList<Event>>>? = null/* senderKey|sessionId */
+    private var mPendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>>  = HashMap()
 
     /**
      * Init the object fields
@@ -74,11 +74,11 @@ internal class MXMegolmDecryption : IMXDecrypting {
                                        sendToDeviceTask: SendToDeviceTask,
                                        taskExecutor: TaskExecutor) {
         mCredentials = credentials
+        mCrypto = crypto
+        mOlmDevice = olmDevice
         mDeviceListManager = deviceListManager
         mSendToDeviceTask = sendToDeviceTask
         mTaskExecutor = taskExecutor
-        mOlmDevice = olmDevice
-        mPendingEvents = HashMap()
     }
 
     @Throws(MXDecryptionException::class)
@@ -167,7 +167,7 @@ internal class MXMegolmDecryption : IMXDecrypting {
         val recipients = ArrayList<Map<String, String>>()
 
         val selfMap = HashMap<String, String>()
-        selfMap["userId"] = mCredentials.userId
+        selfMap["userId"] = mCredentials.userId // TODO Replace this hard coded keys (see MXOutgoingRoomKeyRequestManager)
         selfMap["deviceId"] = "*"
         recipients.add(selfMap)
 
@@ -196,27 +196,21 @@ internal class MXMegolmDecryption : IMXDecrypting {
      * @param timelineId the timeline identifier
      */
     private fun addEventToPendingList(event: Event, timelineId: String) {
-        var timelineId = timelineId
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()!!
 
         val k = "${encryptedEventContent.senderKey}|${encryptedEventContent.sessionId}"
 
-        // avoid undefined timelineId
-        if (TextUtils.isEmpty(timelineId)) {
-            timelineId = ""
+        if (!mPendingEvents.containsKey(k)) {
+            mPendingEvents[k] = HashMap()
         }
 
-        if (!mPendingEvents!!.containsKey(k)) {
-            mPendingEvents!![k] = HashMap()
+        if (!mPendingEvents[k]!!.containsKey(timelineId)) {
+            mPendingEvents[k]!!.put(timelineId, ArrayList<Event>())
         }
 
-        if (!mPendingEvents!![k]!!.containsKey(timelineId)) {
-            mPendingEvents!![k]!!.put(timelineId, ArrayList<Event>())
-        }
-
-        if (mPendingEvents!![k]!![timelineId]!!.indexOf(event) < 0) {
+        if (mPendingEvents[k]!![timelineId]!!.indexOf(event) < 0) {
             Timber.d("## addEventToPendingList() : add Event " + event.eventId + " in room id " + event.roomId)
-            mPendingEvents!![k]!![timelineId]!!.add(event)
+            mPendingEvents[k]!![timelineId]!!.add(event)
         }
     }
 
@@ -304,11 +298,11 @@ internal class MXMegolmDecryption : IMXDecrypting {
     override fun onNewSession(senderKey: String, sessionId: String) {
         val k = "$senderKey|$sessionId"
 
-        val pending = mPendingEvents!![k]
+        val pending = mPendingEvents[k]
 
         if (null != pending) {
             // Have another go at decrypting events sent with this session.
-            mPendingEvents!!.remove(k)
+            mPendingEvents.remove(k)
 
             val timelineIds = pending.keys
 

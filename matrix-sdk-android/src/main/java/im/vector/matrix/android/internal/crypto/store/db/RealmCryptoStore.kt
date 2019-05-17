@@ -201,7 +201,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
                         .let { u ->
                             // Add the devices
                             // Ensure all other devices are deleted
-                            u.devices.deleteAllFromRealm()
+                            u.devices.deleteAllFromRealm() // Device is null!!
 
                             u.devices.addAll(
                                     devices.map {

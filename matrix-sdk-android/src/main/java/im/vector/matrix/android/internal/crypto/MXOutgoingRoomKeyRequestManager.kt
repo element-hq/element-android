@@ -298,7 +298,7 @@ internal class MXOutgoingRoomKeyRequestManager(
         val contentMap = MXUsersDevicesMap<Any>()
 
         for (recipient in recipients) {
-            contentMap.setObject(message, recipient["userId"], recipient["deviceId"])
+            contentMap.setObject(message, recipient["userId"], recipient["deviceId"]) // TODO Change this two hard coded key to something better
         }
 
         mSendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ROOM_KEY_REQUEST, contentMap, transactionId))

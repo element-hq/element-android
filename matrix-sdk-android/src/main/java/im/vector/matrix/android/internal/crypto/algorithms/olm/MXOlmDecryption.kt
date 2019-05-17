@@ -25,10 +25,9 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.*
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.model.event.OlmEventContent
 import im.vector.matrix.android.internal.crypto.model.event.OlmPayloadContent
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.convertFromUTF8
@@ -42,7 +41,7 @@ import java.util.*
 internal class MXOlmDecryption : IMXDecrypting {
 
     // The olm device interface
-    private var mOlmDevice: MXOlmDevice? = null
+    private lateinit var mOlmDevice: MXOlmDevice
 
     // the matrix credentials
     private lateinit var mCredentials: Credentials
@@ -60,9 +59,9 @@ internal class MXOlmDecryption : IMXDecrypting {
                                        taskExecutor: TaskExecutor) {
         mCredentials = credentials
         mCrypto = crypto
+        mOlmDevice = olmDevice
         mSendToDeviceTask = sendToDeviceTask
         mTaskExecutor = taskExecutor
-        mOlmDevice = olmDevice
     }
 
     @Throws(MXDecryptionException::class)
@@ -81,15 +80,15 @@ internal class MXOlmDecryption : IMXDecrypting {
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_CIPHER_TEXT_REASON))
         }
 
-        if (!olmEventContent.ciphertext!!.containsKey(mOlmDevice!!.deviceCurve25519Key)) {
-            Timber.e("## decryptEvent() : our device " + mOlmDevice!!.deviceCurve25519Key
+        if (!olmEventContent.ciphertext!!.containsKey(mOlmDevice.deviceCurve25519Key)) {
+            Timber.e("## decryptEvent() : our device " + mOlmDevice.deviceCurve25519Key
                     + " is not included in recipients. Event")
             throw MXDecryptionException(MXCryptoError(MXCryptoError.NOT_INCLUDE_IN_RECIPIENTS_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.NOT_INCLUDED_IN_RECIPIENT_REASON))
         }
 
         // The message for myUser
-        val message = olmEventContent.ciphertext!![mOlmDevice!!.deviceCurve25519Key] as Map<String, Any>
+        val message = olmEventContent.ciphertext!![mOlmDevice.deviceCurve25519Key] as Map<String, Any>
         val payloadString = decryptMessage(message, olmEventContent.senderKey)
 
         if (null == payloadString) {
@@ -131,7 +130,7 @@ internal class MXOlmDecryption : IMXDecrypting {
 
         val ed25519 = olmPayloadContent.recipient_keys!!.get("ed25519")
 
-        if (!TextUtils.equals(ed25519, mOlmDevice!!.deviceEd25519Key)) {
+        if (!TextUtils.equals(ed25519, mOlmDevice.deviceEd25519Key)) {
             Timber.e("## decryptEvent() : Event " + event.eventId + ": Intended recipient ed25519 key " + ed25519 + " did not match ours")
             throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_RECIPIENT_KEY_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.BAD_RECIPIENT_KEY_REASON))
@@ -194,7 +193,7 @@ internal class MXOlmDecryption : IMXDecrypting {
      * @return payload, if decrypted successfully.
      */
     private fun decryptMessage(message: Map<String, Any>, theirDeviceIdentityKey: String?): String? {
-        val sessionIdsSet = mOlmDevice!!.getSessionIds(theirDeviceIdentityKey!!)
+        val sessionIdsSet = mOlmDevice.getSessionIds(theirDeviceIdentityKey!!)
 
         val sessionIds: List<String>
 
@@ -226,13 +225,13 @@ internal class MXOlmDecryption : IMXDecrypting {
         // Try each session in turn
         // decryptionErrors = {};
         for (sessionId in sessionIds) {
-            val payload = mOlmDevice!!.decryptMessage(messageBody, messageType, sessionId, theirDeviceIdentityKey)
+            val payload = mOlmDevice.decryptMessage(messageBody, messageType, sessionId, theirDeviceIdentityKey)
 
             if (null != payload) {
                 Timber.d("## decryptMessage() : Decrypted Olm message from $theirDeviceIdentityKey with session $sessionId")
                 return payload
             } else {
-                val foundSession = mOlmDevice!!.matchesSession(theirDeviceIdentityKey, sessionId, messageType, messageBody)
+                val foundSession = mOlmDevice.matchesSession(theirDeviceIdentityKey, sessionId, messageType, messageBody)
 
                 if (foundSession) {
                     // Decryption failed, but it was a prekey message matching this
@@ -258,7 +257,7 @@ internal class MXOlmDecryption : IMXDecrypting {
 
         // prekey message which doesn't match any existing sessions: make a new
         // session.
-        val res = mOlmDevice!!.createInboundSession(theirDeviceIdentityKey, messageType, messageBody)
+        val res = mOlmDevice.createInboundSession(theirDeviceIdentityKey, messageType, messageBody)
 
         if (null == res) {
             Timber.e("## decryptMessage() :  Error decrypting non-prekey message with existing sessions")
@@ -268,9 +267,5 @@ internal class MXOlmDecryption : IMXDecrypting {
         Timber.d("## decryptMessage() :  Created new inbound Olm session get id " + res["session_id"] + " with " + theirDeviceIdentityKey)
 
         return res["payload"]
-    }
-
-    companion object {
-        private val LOG_TAG = "MXOlmDecryption"
     }
 }

@@ -27,17 +27,13 @@ import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
-import im.vector.matrix.android.internal.crypto.DeviceListManager
-import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import im.vector.matrix.android.internal.crypto.MXOlmDevice
+import im.vector.matrix.android.internal.crypto.*
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
+import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXQueuedEncryption
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.CryptoManager
-import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -51,15 +47,15 @@ internal class MXMegolmEncryption : IMXEncrypting {
 
     private lateinit var mCrypto: CryptoManager
     private lateinit var olmDevice: MXOlmDevice
+    private lateinit var mKeysBackup: KeysBackup
     private lateinit var mDeviceListManager: DeviceListManager
 
-    private lateinit var mKeysBackup: KeysBackup
     private lateinit var mCredentials: Credentials
     private lateinit var mSendToDeviceTask: SendToDeviceTask
     private lateinit var mTaskExecutor: TaskExecutor
 
     // The id of the room we will be sending to.
-    private var mRoomId: String? = null
+    private lateinit var mRoomId: String
 
     private var mDeviceId: String? = null
 
@@ -93,6 +89,7 @@ internal class MXMegolmEncryption : IMXEncrypting {
 
     override fun initWithMatrixSession(crypto: CryptoManager,
                                        olmDevice: MXOlmDevice,
+                                       keysBackup: KeysBackup,
                                        deviceListManager: DeviceListManager,
                                        credentials: Credentials,
                                        sendToDeviceTask: SendToDeviceTask,
@@ -101,12 +98,14 @@ internal class MXMegolmEncryption : IMXEncrypting {
         mCrypto = crypto
         this.olmDevice = olmDevice
         mDeviceListManager = deviceListManager
+        mKeysBackup = keysBackup
         mCredentials = credentials
         mSendToDeviceTask = sendToDeviceTask
         mTaskExecutor = taskExecutor
 
         mRoomId = roomId
         mDeviceId = mCredentials.deviceId
+
 
         // Default rotation periods
         // TODO: Make it configurable via parameters
