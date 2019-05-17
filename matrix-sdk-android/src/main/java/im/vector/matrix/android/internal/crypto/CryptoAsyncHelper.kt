@@ -25,6 +25,7 @@ import android.os.Looper
 private const val THREAD_ENCRYPT_NAME = "Crypto_Encrypt_Thread"
 private const val THREAD_DECRYPT_NAME = "Crypto_Decrypt_Thread"
 
+// TODO Remove and replace by Task
 internal object CryptoAsyncHelper {
 
     private var uiHandler: Handler? = null

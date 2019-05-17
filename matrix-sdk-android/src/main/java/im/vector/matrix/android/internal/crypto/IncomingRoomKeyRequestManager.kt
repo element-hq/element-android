@@ -16,21 +16,20 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import android.os.Handler
 import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShare
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import java.util.*
 
 internal class IncomingRoomKeyRequestManager(
-        val mCredentials: Credentials,
-        val mCryptoStore: IMXCryptoStore,
-        val mRoomDecryptorProvider: RoomDecryptorProvider) {
+        private val mCredentials: Credentials,
+        private val mCryptoStore: IMXCryptoStore,
+        private val mRoomDecryptorProvider: RoomDecryptorProvider) {
 
 
     // list of IncomingRoomKeyRequests/IncomingRoomKeyRequestCancellations
@@ -39,7 +38,7 @@ internal class IncomingRoomKeyRequestManager(
     private val mReceivedRoomKeyRequestCancellations = ArrayList<IncomingRoomKeyRequestCancellation>()
 
     // the listeners
-    val mRoomKeysRequestListeners: MutableSet<RoomKeysRequestListener> = HashSet<RoomKeysRequestListener>()
+    val mRoomKeysRequestListeners: MutableSet<RoomKeysRequestListener> = HashSet()
 
     init {
         mReceivedRoomKeyRequests.addAll(mCryptoStore.getPendingIncomingRoomKeyRequests())
@@ -52,25 +51,17 @@ internal class IncomingRoomKeyRequestManager(
      * @param event the announcement event.
      */
     fun onRoomKeyRequestEvent(event: Event) {
-        val roomKeyShare = event.content.toModel<RoomKeyShare>()!!
+        val roomKeyShare = event.content.toModel<RoomKeyShare>()
 
-        if (null != roomKeyShare.action) {
-            when (roomKeyShare.action) {
-                RoomKeyShare.ACTION_SHARE_REQUEST      -> synchronized(mReceivedRoomKeyRequests) {
-                    mReceivedRoomKeyRequests.add(IncomingRoomKeyRequest(event))
-                }
-                RoomKeyShare.ACTION_SHARE_CANCELLATION -> synchronized(mReceivedRoomKeyRequestCancellations) {
-                    mReceivedRoomKeyRequestCancellations.add(IncomingRoomKeyRequestCancellation(event))
-                }
-                else                                   -> Timber.e("## onRoomKeyRequestEvent() : unsupported action " + roomKeyShare.action!!)
+        when (roomKeyShare?.action) {
+            RoomKeyShare.ACTION_SHARE_REQUEST      -> synchronized(mReceivedRoomKeyRequests) {
+                mReceivedRoomKeyRequests.add(IncomingRoomKeyRequest(event))
             }
+            RoomKeyShare.ACTION_SHARE_CANCELLATION -> synchronized(mReceivedRoomKeyRequestCancellations) {
+                mReceivedRoomKeyRequestCancellations.add(IncomingRoomKeyRequestCancellation(event))
+            }
+            else                                   -> Timber.e("## onRoomKeyRequestEvent() : unsupported action " + roomKeyShare?.action)
         }
-    }
-
-    private lateinit var encryptingThreadHandler: Handler
-
-    fun setEncryptingThreadHandler(encryptingThreadHandler: Handler) {
-        this.encryptingThreadHandler = encryptingThreadHandler
     }
 
     /**
@@ -129,13 +120,11 @@ internal class IncomingRoomKeyRequestManager(
                 }
 
                 request.mShare = Runnable {
-                    encryptingThreadHandler.post {
-                        decryptor.shareKeysWithDevice(request)
-                        mCryptoStore.deleteIncomingRoomKeyRequest(request)
-                    }
+                    decryptor.shareKeysWithDevice(request)
+                    mCryptoStore.deleteIncomingRoomKeyRequest(request)
                 }
 
-                request.mIgnore = Runnable { encryptingThreadHandler.post { mCryptoStore.deleteIncomingRoomKeyRequest(request) } }
+                request.mIgnore = Runnable { mCryptoStore.deleteIncomingRoomKeyRequest(request) }
 
                 // if the device is verified already, share the keys
                 val device = mCryptoStore.getUserDevice(deviceId!!, userId)

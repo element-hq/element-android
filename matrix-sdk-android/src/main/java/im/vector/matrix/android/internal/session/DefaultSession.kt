@@ -257,16 +257,16 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return cryptoService.getKeysBackupService()
     }
 
-    override fun isRoomBlacklistUnverifiedDevices(roomId: String, callback: MatrixCallback<Boolean>?) {
-        cryptoService.isRoomBlacklistUnverifiedDevices(roomId, callback)
+    override fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean {
+        return cryptoService.isRoomBlacklistUnverifiedDevices(roomId)
     }
 
     override fun setWarnOnUnknownDevices(warn: Boolean) {
         cryptoService.setWarnOnUnknownDevices(warn)
     }
 
-    override fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String, callback: MatrixCallback<Unit>) {
-        cryptoService.setDeviceVerification(verificationStatus, deviceId, userId, callback)
+    override fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String) {
+        cryptoService.setDeviceVerification(verificationStatus, deviceId, userId)
     }
 
     override fun getUserDevices(userId: String): MutableList<MXDeviceInfo> {
@@ -293,16 +293,16 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return cryptoService.inboundGroupSessionsCount(onlyBackedUp)
     }
 
-    override fun getGlobalBlacklistUnverifiedDevices(callback: MatrixCallback<Boolean>?) {
-        cryptoService.getGlobalBlacklistUnverifiedDevices(callback)
+    override fun getGlobalBlacklistUnverifiedDevices(): Boolean {
+        return cryptoService.getGlobalBlacklistUnverifiedDevices()
     }
 
-    override fun setGlobalBlacklistUnverifiedDevices(block: Boolean, callback: MatrixCallback<Unit>?) {
-        cryptoService.setGlobalBlacklistUnverifiedDevices(block, callback)
+    override fun setGlobalBlacklistUnverifiedDevices(block: Boolean) {
+        cryptoService.setGlobalBlacklistUnverifiedDevices(block)
     }
 
-    override fun setRoomUnBlacklistUnverifiedDevices(roomId: String, callback: MatrixCallback<Unit>) {
-        cryptoService.setRoomUnBlacklistUnverifiedDevices(roomId, callback)
+    override fun setRoomUnBlacklistUnverifiedDevices(roomId: String) {
+        cryptoService.setRoomUnBlacklistUnverifiedDevices(roomId)
     }
 
     override fun getDeviceTrackingStatus(userId: String): Int {
@@ -317,12 +317,12 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         cryptoService.exportRoomKeys(password, callback)
     }
 
-    override fun setRoomBlacklistUnverifiedDevices(roomId: String, callback: MatrixCallback<Unit>) {
-        cryptoService.setRoomBlacklistUnverifiedDevices(roomId, callback)
+    override fun setRoomBlacklistUnverifiedDevices(roomId: String) {
+        cryptoService.setRoomBlacklistUnverifiedDevices(roomId)
     }
 
-    override fun getDeviceInfo(userId: String, deviceId: String?, callback: MatrixCallback<MXDeviceInfo?>) {
-        cryptoService.getDeviceInfo(userId, deviceId, callback)
+    override fun getDeviceInfo(userId: String, deviceId: String?): MXDeviceInfo? {
+        return cryptoService.getDeviceInfo(userId, deviceId)
     }
 
     override fun reRequestRoomKeyForEvent(event: Event) {

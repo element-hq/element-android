@@ -239,33 +239,15 @@ internal abstract class SASVerificationTransaction(
 
         setDeviceVerified(
                 otherDeviceId ?: "",
-                otherUserId,
-                success = {
-                    state = SasVerificationTxState.Verified
-                },
-                error = {
-                    //mmm what to do?, looks like this is never called
-                }
-        )
+                otherUserId)
+
+        state = SasVerificationTxState.Verified
     }
 
-    private fun setDeviceVerified(deviceId: String, userId: String, success: () -> Unit, error: () -> Unit) {
+    private fun setDeviceVerified(deviceId: String, userId: String) {
         mSasVerificationService.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
                 deviceId,
-                userId,
-                object : MatrixCallback<Unit> {
-
-                    override fun onSuccess(data: Unit) {
-                        //We good
-                        Timber.d("## SAS verification complete and device status updated for id:$transactionId")
-                        success()
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## SAS verification [$transactionId] failed in state : $state")
-                        error()
-                    }
-                })
+                userId)
     }
 
     override fun cancel() {

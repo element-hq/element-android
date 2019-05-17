@@ -55,9 +55,6 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
     // tells if there is a download keys request in progress
     private var mIsDownloadingKeys = false
 
-    // Internal listener
-    private lateinit var mCryptoListener: DeviceListCryptoListener
-
     /**
      * Creator
      *
@@ -330,13 +327,12 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                             }
                         }
 
-                        if (!mCryptoListener.hasBeenReleased()) {
-                            val callback = promise.mCallback
+                        val callback = promise.mCallback
 
-                            if (null != callback) {
-                                CryptoAsyncHelper.getUiHandler().post { callback.onSuccess(usersDevicesInfoMap) }
-                            }
+                        if (null != callback) {
+                            CryptoAsyncHelper.getUiHandler().post { callback.onSuccess(usersDevicesInfoMap) }
                         }
+
                         promisesToRemove.add(promise)
                     }
                 }
@@ -701,15 +697,6 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                 Timber.e(failure, "## refreshOutdatedDeviceLists() : ERROR updating device keys for users $users")
             }
         })
-    }
-
-    fun setCryptoInternalListener(listener: DeviceListCryptoListener) {
-        mCryptoListener = listener
-    }
-
-
-    interface DeviceListCryptoListener {
-        fun hasBeenReleased(): Boolean
     }
 
     companion object {

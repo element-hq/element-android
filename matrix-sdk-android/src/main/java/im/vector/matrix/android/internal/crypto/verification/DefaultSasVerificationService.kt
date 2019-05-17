@@ -29,10 +29,10 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.DeviceListManager
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -59,9 +59,10 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
 
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
-        CryptoAsyncHelper.getDecryptBackgroundHandler().post { // TODO We are already in a BG thread
+        CryptoAsyncHelper.getDecryptBackgroundHandler().post {
+            // TODO We are already in a BG thread
             when (event.type) {
-                EventType.KEY_VERIFICATION_START -> {
+                EventType.KEY_VERIFICATION_START  -> {
                     onStartRequestReceived(event)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
@@ -70,13 +71,13 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                 EventType.KEY_VERIFICATION_ACCEPT -> {
                     onAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY -> {
+                EventType.KEY_VERIFICATION_KEY    -> {
                     onKeyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC -> {
+                EventType.KEY_VERIFICATION_MAC    -> {
                     onMacReceived(event)
                 }
-                else -> {
+                else                              -> {
                     //ignore
                 }
             }
@@ -131,24 +132,15 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         mCryptoListener.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
                 deviceID,
-                userId,
-                object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        uiHandler.post {
-                            listeners.forEach {
-                                try {
-                                    it.markedAsManuallyVerified(userId, deviceID)
-                                } catch (e: Throwable) {
-                                    Timber.e(e, "## Error while notifying listeners")
-                                }
-                            }
-                        }
-                    }
+                userId)
 
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## Manual verification failed in state")
-                    }
-                })
+        listeners.forEach {
+            try {
+                it.markedAsManuallyVerified(userId, deviceID)
+            } catch (e: Throwable) {
+                Timber.e(e, "## Error while notifying listeners")
+            }
+        }
     }
 
     private fun onStartRequestReceived(event: Event) {
@@ -435,12 +427,12 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
         mCryptoListener = listener
     }
 
-    fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String, callback: MatrixCallback<Unit>) {
-        mCryptoListener.setDeviceVerification(verificationStatus, deviceId, userId, callback)
+    fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String) {
+        mCryptoListener.setDeviceVerification(verificationStatus, deviceId, userId)
     }
 
     interface SasCryptoListener {
-        fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String, callback: MatrixCallback<Unit>)
+        fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String)
         fun getMyDevice(): MXDeviceInfo
     }
 }

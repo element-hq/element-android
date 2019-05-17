@@ -701,8 +701,4 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
                 }
                 .toMutableList()
     }
-
-    companion object {
-        private const val LOG_TAG = "RealmCryptoStore"
-    }
 }

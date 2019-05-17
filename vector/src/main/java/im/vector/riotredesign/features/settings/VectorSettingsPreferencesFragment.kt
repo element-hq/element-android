@@ -47,7 +47,6 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.getFingerprintHumanReadable
 import im.vector.matrix.android.api.extensions.sortByLastSeen
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotredesign.R
@@ -2210,42 +2209,26 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         // crypto section: device key (fingerprint)
         if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
-            mSession.getDeviceInfo(userId, deviceId, object : MatrixCallback<MXDeviceInfo?> {
-                override fun onSuccess(data: MXDeviceInfo?) {
-                    if (null != data && !TextUtils.isEmpty(data.fingerprint()) && null != activity) {
-                        cryptoInfoTextPreference.summary = data.getFingerprintHumanReadable()
+            val deviceInfo = mSession.getDeviceInfo(userId, deviceId)
 
-                        cryptoInfoTextPreference.setOnPreferenceClickListener {
-                            data.fingerprint()?.let {
-                                copyToClipboard(requireActivity(), it)
-                            }
-                            true
-                        }
+            if (null != deviceInfo && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
+                cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
+
+                cryptoInfoTextPreference.setOnPreferenceClickListener {
+                    deviceInfo.fingerprint()?.let {
+                        copyToClipboard(requireActivity(), it)
                     }
+                    true
                 }
-            })
+            }
         }
 
         sendToUnverifiedDevicesPref.isChecked = false
 
-        mSession.getGlobalBlacklistUnverifiedDevices(object : MatrixCallback<Boolean> {
-            override fun onSuccess(data: Boolean) {
-                sendToUnverifiedDevicesPref.isChecked = data
-            }
-        })
+        sendToUnverifiedDevicesPref.isChecked = mSession.getGlobalBlacklistUnverifiedDevices()
 
         sendToUnverifiedDevicesPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            mSession.getGlobalBlacklistUnverifiedDevices(object : MatrixCallback<Boolean> {
-                override fun onSuccess(data: Boolean) {
-                    if (sendToUnverifiedDevicesPref.isChecked != data) {
-                        mSession.setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked, object : MatrixCallback<Unit> {
-                            override fun onSuccess(data: Unit) {
-
-                            }
-                        })
-                    }
-                }
-            })
+            mSession.setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked)
 
             true
         }
@@ -2871,8 +2854,6 @@ if (sharedDataItems.isNotEmpty() && thisActivity != null) {
      * ========================================================================================== */
 
     companion object {
-        private val LOG_TAG = VectorSettingsPreferencesFragment::class.java.simpleName
-
         // arguments indexes
         private const val ARG_MATRIX_ID = "VectorSettingsPreferencesFragment.ARG_MATRIX_ID"
 

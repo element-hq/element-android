@@ -154,10 +154,8 @@ internal class MXMegolmEncryption : IMXEncrypting {
             override fun onSuccess(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>) {
                 ensureOutboundSession(devicesInRoom, object : MatrixCallback<MXOutboundSessionInfo> {
                     override fun onSuccess(data: MXOutboundSessionInfo) {
-                        mCrypto!!.encryptingThreadHandler.post {
-                            Timber.d("## encryptEventContent () processPendingEncryptions after " + (System.currentTimeMillis() - t0) + "ms")
-                            processPendingEncryptions(data)
-                        }
+                        Timber.d("## encryptEventContent () processPendingEncryptions after " + (System.currentTimeMillis() - t0) + "ms")
+                        processPendingEncryptions(data)
                     }
 
                     override fun onFailure(failure: Throwable) {
@@ -178,12 +176,12 @@ internal class MXMegolmEncryption : IMXEncrypting {
      * @return the session description
      */
     private fun prepareNewSessionInRoom(): MXOutboundSessionInfo {
-        val sessionId = olmDevice!!.createOutboundGroupSession()
+        val sessionId = olmDevice.createOutboundGroupSession()
 
         val keysClaimedMap = HashMap<String, String>()
         keysClaimedMap["ed25519"] = olmDevice.deviceEd25519Key!!
 
-        olmDevice.addInboundGroupSession(sessionId!!, olmDevice.getSessionKey(sessionId)!!, mRoomId!!, olmDevice.deviceCurve25519Key!!,
+        olmDevice.addInboundGroupSession(sessionId!!, olmDevice.getSessionKey(sessionId)!!, mRoomId, olmDevice.deviceCurve25519Key!!,
                 ArrayList(), keysClaimedMap, false)
 
         mKeysBackup.maybeBackupKeys()
@@ -296,12 +294,10 @@ internal class MXMegolmEncryption : IMXEncrypting {
         Timber.d("## shareKey() ; userId $userIds")
         shareUserDevicesKey(session, subMap, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                mCrypto!!.encryptingThreadHandler.post {
-                    for (userId in userIds) {
-                        devicesByUsers.remove(userId)
-                    }
-                    shareKey(session, devicesByUsers, callback)
+                for (userId in userIds) {
+                    devicesByUsers.remove(userId)
                 }
+                shareKey(session, devicesByUsers, callback)
             }
 
             override fun onFailure(failure: Throwable) {
@@ -326,7 +322,7 @@ internal class MXMegolmEncryption : IMXEncrypting {
 
         val submap = HashMap<String, Any>()
         submap["algorithm"] = MXCRYPTO_ALGORITHM_MEGOLM
-        submap["room_id"] = mRoomId!!
+        submap["room_id"] = mRoomId
         submap["session_id"] = session.mSessionId
         submap["session_key"] = sessionKey!!
         submap["chain_index"] = chainIndex
@@ -338,88 +334,84 @@ internal class MXMegolmEncryption : IMXEncrypting {
         val t0 = System.currentTimeMillis()
         Timber.d("## shareUserDevicesKey() : starts")
 
-        mCrypto!!.ensureOlmSessionsForDevices(devicesByUser, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
-            override fun onSuccess(results: MXUsersDevicesMap<MXOlmSessionResult>) {
-                mCrypto!!.encryptingThreadHandler.post {
-                    Timber.d("## shareUserDevicesKey() : ensureOlmSessionsForDevices succeeds after "
-                            + (System.currentTimeMillis() - t0) + " ms")
-                    val contentMap = MXUsersDevicesMap<Any>()
+        mCrypto.ensureOlmSessionsForDevices(devicesByUser, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
+            override fun onSuccess(data: MXUsersDevicesMap<MXOlmSessionResult>) {
+                Timber.d("## shareUserDevicesKey() : ensureOlmSessionsForDevices succeeds after "
+                        + (System.currentTimeMillis() - t0) + " ms")
+                val contentMap = MXUsersDevicesMap<Any>()
 
-                    var haveTargets = false
-                    val userIds = results.userIds
+                var haveTargets = false
+                val userIds = data.userIds
 
-                    for (userId in userIds) {
-                        val devicesToShareWith = devicesByUser[userId]
+                for (userId in userIds) {
+                    val devicesToShareWith = devicesByUser[userId]
 
-                        for ((deviceID) in devicesToShareWith!!) {
+                    for ((deviceID) in devicesToShareWith!!) {
 
-                            val sessionResult = results.getObject(deviceID, userId)
+                        val sessionResult = data.getObject(deviceID, userId)
 
-                            if (null == sessionResult || null == sessionResult.mSessionId) {
-                                // no session with this device, probably because there
-                                // were no one-time keys.
-                                //
-                                // we could send them a to_device message anyway, as a
-                                // signal that they have missed out on the key sharing
-                                // message because of the lack of keys, but there's not
-                                // much point in that really; it will mostly serve to clog
-                                // up to_device inboxes.
-                                //
-                                // ensureOlmSessionsForUsers has already done the logging,
-                                // so just skip it.
-                                continue
-                            }
-
-                            Timber.d("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
-                            //noinspection ArraysAsListWithZeroOrOneArgument,ArraysAsListWithZeroOrOneArgument
-                            contentMap.setObject(mCrypto!!.encryptMessage(payload, Arrays.asList(sessionResult.mDevice)), userId, deviceID)
-                            haveTargets = true
+                        if (null == sessionResult || null == sessionResult.mSessionId) {
+                            // no session with this device, probably because there
+                            // were no one-time keys.
+                            //
+                            // we could send them a to_device message anyway, as a
+                            // signal that they have missed out on the key sharing
+                            // message because of the lack of keys, but there's not
+                            // much point in that really; it will mostly serve to clog
+                            // up to_device inboxes.
+                            //
+                            // ensureOlmSessionsForUsers has already done the logging,
+                            // so just skip it.
+                            continue
                         }
+
+                        Timber.d("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
+                        //noinspection ArraysAsListWithZeroOrOneArgument,ArraysAsListWithZeroOrOneArgument
+                        contentMap.setObject(mCrypto.encryptMessage(payload, Arrays.asList(sessionResult.mDevice)), userId, deviceID)
+                        haveTargets = true
                     }
+                }
 
-                    if (haveTargets && !mCrypto!!.hasBeenReleased()) {
-                        val t0 = System.currentTimeMillis()
-                        Timber.d("## shareUserDevicesKey() : has target")
+                if (haveTargets) {
+                    val t0 = System.currentTimeMillis()
+                    Timber.d("## shareUserDevicesKey() : has target")
 
-                        mSendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ENCRYPTED, contentMap))
-                                .dispatchTo(object : MatrixCallback<Unit> {
-                                    override fun onSuccess(data: Unit) {
-                                        mCrypto!!.encryptingThreadHandler.post {
-                                            Timber.d("## shareUserDevicesKey() : sendToDevice succeeds after "
-                                                    + (System.currentTimeMillis() - t0) + " ms")
+                    mSendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ENCRYPTED, contentMap))
+                            .dispatchTo(object : MatrixCallback<Unit> {
+                                override fun onSuccess(data: Unit) {
+                                    Timber.d("## shareUserDevicesKey() : sendToDevice succeeds after "
+                                            + (System.currentTimeMillis() - t0) + " ms")
 
-                                            // Add the devices we have shared with to session.sharedWithDevices.
-                                            // we deliberately iterate over devicesByUser (ie, the devices we
-                                            // attempted to share with) rather than the contentMap (those we did
-                                            // share with), because we don't want to try to claim a one-time-key
-                                            // for dead devices on every message.
-                                            for (userId in devicesByUser.keys) {
-                                                val devicesToShareWith = devicesByUser[userId]
+                                    // Add the devices we have shared with to session.sharedWithDevices.
+                                    // we deliberately iterate over devicesByUser (ie, the devices we
+                                    // attempted to share with) rather than the contentMap (those we did
+                                    // share with), because we don't want to try to claim a one-time-key
+                                    // for dead devices on every message.
+                                    for (userId in devicesByUser.keys) {
+                                        val devicesToShareWith = devicesByUser[userId]
 
-                                                for ((deviceId) in devicesToShareWith!!) {
-                                                    session.mSharedWithDevices.setObject(chainIndex, userId, deviceId)
-                                                }
-                                            }
-
-                                            CryptoAsyncHelper.getUiHandler().post {
-                                                callback?.onSuccess(Unit)
-                                            }
+                                        for ((deviceId) in devicesToShareWith!!) {
+                                            session.mSharedWithDevices.setObject(chainIndex, userId, deviceId)
                                         }
                                     }
 
-                                    override fun onFailure(failure: Throwable) {
-                                        Timber.e(failure, "## shareUserDevicesKey() : sendToDevice")
-
-                                        callback?.onFailure(failure)
+                                    CryptoAsyncHelper.getUiHandler().post {
+                                        callback?.onSuccess(Unit)
                                     }
-                                })
-                                .executeBy(mTaskExecutor)
-                    } else {
-                        Timber.d("## shareUserDevicesKey() : no need to sharekey")
+                                }
 
-                        if (null != callback) {
-                            CryptoAsyncHelper.getUiHandler().post { callback.onSuccess(Unit) }
-                        }
+                                override fun onFailure(failure: Throwable) {
+                                    Timber.e(failure, "## shareUserDevicesKey() : sendToDevice")
+
+                                    callback?.onFailure(failure)
+                                }
+                            })
+                            .executeBy(mTaskExecutor)
+                } else {
+                    Timber.d("## shareUserDevicesKey() : no need to sharekey")
+
+                    if (null != callback) {
+                        CryptoAsyncHelper.getUiHandler().post { callback.onSuccess(Unit) }
                     }
                 }
             }
@@ -443,7 +435,7 @@ internal class MXMegolmEncryption : IMXEncrypting {
             for (queuedEncryption in queuedEncryptions) {
                 val payloadJson = HashMap<String, Any>()
 
-                payloadJson["room_id"] = mRoomId!!
+                payloadJson["room_id"] = mRoomId
                 payloadJson["type"] = queuedEncryption.mEventType!!
                 payloadJson["content"] = queuedEncryption.mEventContent!!
 
@@ -487,54 +479,50 @@ internal class MXMegolmEncryption : IMXEncrypting {
         // with them, which means that they will have announced any new devices via
         // an m.new_device.
         mDeviceListManager.downloadKeys(userIds, false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
-            override fun onSuccess(devices: MXUsersDevicesMap<MXDeviceInfo>) {
-                mCrypto!!.encryptingThreadHandler.post {
-                    val encryptToVerifiedDevicesOnly = mCrypto!!.globalBlacklistUnverifiedDevices || mCrypto!!.isRoomBlacklistUnverifiedDevices(mRoomId)
+            override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
+                val encryptToVerifiedDevicesOnly = mCrypto.getGlobalBlacklistUnverifiedDevices() || mCrypto.isRoomBlacklistUnverifiedDevices(mRoomId)
 
-                    val devicesInRoom = MXUsersDevicesMap<MXDeviceInfo>()
-                    val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
+                val devicesInRoom = MXUsersDevicesMap<MXDeviceInfo>()
+                val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
 
-                    val userIds = devices.userIds
+                for (userId in data.userIds) {
+                    val deviceIds = data.getUserDeviceIds(userId)
 
-                    for (userId in userIds) {
-                        val deviceIds = devices.getUserDeviceIds(userId)
+                    for (deviceId in deviceIds!!) {
+                        val deviceInfo = data.getObject(deviceId, userId)
 
-                        for (deviceId in deviceIds!!) {
-                            val deviceInfo = devices.getObject(deviceId, userId)
-
-                            if (mCrypto!!.warnOnUnknownDevices() && deviceInfo!!.isUnknown) {
-                                // The device is not yet known by the user
-                                unknownDevices.setObject(deviceInfo, userId, deviceId)
-                                continue
-                            }
-
-                            if (deviceInfo!!.isBlocked) {
-                                // Remove any blocked devices
-                                continue
-                            }
-
-                            if (!deviceInfo.isVerified && encryptToVerifiedDevicesOnly) {
-                                continue
-                            }
-
-                            if (TextUtils.equals(deviceInfo.identityKey(), olmDevice.deviceCurve25519Key)) {
-                                // Don't bother sending to ourself
-                                continue
-                            }
-
-                            devicesInRoom.setObject(deviceInfo, userId, deviceId)
+                        if (mCrypto.warnOnUnknownDevices() && deviceInfo!!.isUnknown) {
+                            // The device is not yet known by the user
+                            unknownDevices.setObject(deviceInfo, userId, deviceId)
+                            continue
                         }
+
+                        if (deviceInfo!!.isBlocked) {
+                            // Remove any blocked devices
+                            continue
+                        }
+
+                        if (!deviceInfo.isVerified && encryptToVerifiedDevicesOnly) {
+                            continue
+                        }
+
+                        if (TextUtils.equals(deviceInfo.identityKey(), olmDevice.deviceCurve25519Key)) {
+                            // Don't bother sending to ourself
+                            continue
+                        }
+
+                        devicesInRoom.setObject(deviceInfo, userId, deviceId)
                     }
+                }
 
-                    CryptoAsyncHelper.getUiHandler().post {
-                        // Check if any of these devices are not yet known to the user.
-                        // if so, warn the user so they can verify or ignore.
-                        if (0 != unknownDevices.map.size) {
-                            callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
-                                    MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
-                        } else {
-                            callback.onSuccess(devicesInRoom)
-                        }
+                CryptoAsyncHelper.getUiHandler().post {
+                    // Check if any of these devices are not yet known to the user.
+                    // if so, warn the user so they can verify or ignore.
+                    if (0 != unknownDevices.map.size) {
+                        callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
+                                MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
+                    } else {
+                        callback.onSuccess(devicesInRoom)
                     }
                 }
             }

@@ -20,11 +20,11 @@ package im.vector.matrix.android.internal.crypto
 import android.os.Handler
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareCancellation
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -36,9 +36,6 @@ internal class MXOutgoingRoomKeyRequestManager(
         private val mSendToDeviceTask: SendToDeviceTask,
         private val mTaskExecutor: TaskExecutor) {
 
-    // working handler (should not be the UI thread)
-    private lateinit var mWorkingHandler: Handler
-
     // running
     var mClientRunning: Boolean = false
 
@@ -48,10 +45,6 @@ internal class MXOutgoingRoomKeyRequestManager(
     // sanity check to ensure that we don't end up with two concurrent runs
     // of mSendOutgoingRoomKeyRequestsTimer
     private var mSendOutgoingRoomKeyRequestsRunning: Boolean = false
-
-    fun setWorkingHandler(encryptingThreadHandler: Handler) {
-        mWorkingHandler = encryptingThreadHandler
-    }
 
     /**
      * Called when the client is started. Sets background processes running.
@@ -90,14 +83,12 @@ internal class MXOutgoingRoomKeyRequestManager(
      * @param recipients  recipients
      */
     fun sendRoomKeyRequest(requestBody: RoomKeyRequestBody?, recipients: List<Map<String, String>>) {
-        mWorkingHandler.post {
-            val req = mCryptoStore.getOrAddOutgoingRoomKeyRequest(
-                    OutgoingRoomKeyRequest(requestBody, recipients, makeTxnId(), OutgoingRoomKeyRequest.RequestState.UNSENT))
+        val req = mCryptoStore.getOrAddOutgoingRoomKeyRequest(
+                OutgoingRoomKeyRequest(requestBody, recipients, makeTxnId(), OutgoingRoomKeyRequest.RequestState.UNSENT))
 
 
-            if (req!!.mState === OutgoingRoomKeyRequest.RequestState.UNSENT) {
-                startTimer()
-            }
+        if (req!!.mState === OutgoingRoomKeyRequest.RequestState.UNSENT) {
+            startTimer()
         }
     }
 
@@ -154,21 +145,19 @@ internal class MXOutgoingRoomKeyRequestManager(
      * Start the background timer to send queued requests, if the timer isn't already running.
      */
     private fun startTimer() {
-        mWorkingHandler.post(Runnable {
+        if (mSendOutgoingRoomKeyRequestsRunning) {
+            return
+        }
+
+        Handler().postDelayed(Runnable {
             if (mSendOutgoingRoomKeyRequestsRunning) {
+                Timber.d("## startTimer() : RoomKeyRequestSend already in progress!")
                 return@Runnable
             }
 
-            mWorkingHandler.postDelayed(Runnable {
-                if (mSendOutgoingRoomKeyRequestsRunning) {
-                    Timber.d("## startTimer() : RoomKeyRequestSend already in progress!")
-                    return@Runnable
-                }
-
-                mSendOutgoingRoomKeyRequestsRunning = true
-                sendOutgoingRoomKeyRequests()
-            }, SEND_KEY_REQUESTS_DELAY_MS.toLong())
-        })
+            mSendOutgoingRoomKeyRequestsRunning = true
+            sendOutgoingRoomKeyRequests()
+        }, SEND_KEY_REQUESTS_DELAY_MS.toLong())
     }
 
     // look for and send any queued requests. Runs itself recursively until
@@ -215,17 +204,15 @@ internal class MXOutgoingRoomKeyRequestManager(
 
         sendMessageToDevices(requestMessage, request.mRecipients, request.mRequestId, object : MatrixCallback<Unit> {
             private fun onDone(state: OutgoingRoomKeyRequest.RequestState) {
-                mWorkingHandler.post {
-                    if (request.mState !== OutgoingRoomKeyRequest.RequestState.UNSENT) {
-                        Timber.d("## sendOutgoingRoomKeyRequest() : Cannot update room key request from UNSENT as it was already updated to " + request.mState)
-                    } else {
-                        request.mState = state
-                        mCryptoStore.updateOutgoingRoomKeyRequest(request)
-                    }
-
-                    mSendOutgoingRoomKeyRequestsRunning = false
-                    startTimer()
+                if (request.mState !== OutgoingRoomKeyRequest.RequestState.UNSENT) {
+                    Timber.d("## sendOutgoingRoomKeyRequest() : Cannot update room key request from UNSENT as it was already updated to " + request.mState)
+                } else {
+                    request.mState = state
+                    mCryptoStore.updateOutgoingRoomKeyRequest(request)
                 }
+
+                mSendOutgoingRoomKeyRequestsRunning = false
+                startTimer()
             }
 
             override fun onSuccess(data: Unit) {
@@ -256,11 +243,9 @@ internal class MXOutgoingRoomKeyRequestManager(
 
         sendMessageToDevices(roomKeyShareCancellation, request.mRecipients, request.mCancellationTxnId, object : MatrixCallback<Unit> {
             private fun onDone() {
-                mWorkingHandler.post {
-                    mCryptoStore.deleteOutgoingRoomKeyRequest(request.mRequestId)
-                    mSendOutgoingRoomKeyRequestsRunning = false
-                    startTimer()
-                }
+                mCryptoStore.deleteOutgoingRoomKeyRequest(request.mRequestId)
+                mSendOutgoingRoomKeyRequestsRunning = false
+                startTimer()
             }
 
 

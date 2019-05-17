@@ -43,11 +43,11 @@ interface CryptoService {
 
     fun getKeysBackupService(): KeysBackupService
 
-    fun isRoomBlacklistUnverifiedDevices(roomId: String, callback: MatrixCallback<Boolean>?)
+    fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean
 
     fun setWarnOnUnknownDevices(warn: Boolean)
 
-    fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String, callback: MatrixCallback<Unit>)
+    fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String)
 
     fun getUserDevices(userId: String): MutableList<MXDeviceInfo>
 
@@ -57,11 +57,11 @@ interface CryptoService {
 
     fun getMyDevice(): MXDeviceInfo
 
-    fun getGlobalBlacklistUnverifiedDevices(callback: MatrixCallback<Boolean>?)
+    fun getGlobalBlacklistUnverifiedDevices() : Boolean
 
-    fun setGlobalBlacklistUnverifiedDevices(block: Boolean, callback: MatrixCallback<Unit>?)
+    fun setGlobalBlacklistUnverifiedDevices(block: Boolean)
 
-    fun setRoomUnBlacklistUnverifiedDevices(roomId: String, callback: MatrixCallback<Unit>)
+    fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
 
     fun getDeviceTrackingStatus(userId: String): Int
 
@@ -69,9 +69,9 @@ interface CryptoService {
 
     fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>)
 
-    fun setRoomBlacklistUnverifiedDevices(roomId: String, callback: MatrixCallback<Unit>)
+    fun setRoomBlacklistUnverifiedDevices(roomId: String)
 
-    fun getDeviceInfo(userId: String, deviceId: String?, callback: MatrixCallback<MXDeviceInfo?>)
+    fun getDeviceInfo(userId: String, deviceId: String?): MXDeviceInfo?
 
     fun reRequestRoomKeyForEvent(event: Event)
 
