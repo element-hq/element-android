@@ -73,7 +73,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent.body))
                 }
 
-                if(canRedact(event, currentSession.sessionParams.credentials.userId)) {
+                if (canRedact(event, currentSession.sessionParams.credentials.userId)) {
                     this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_material_delete, event.root.eventId))
                 }
 
@@ -172,8 +172,6 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 else -> false
             }
         }
-
-
 
 
         private fun canShare(type: String): Boolean {
