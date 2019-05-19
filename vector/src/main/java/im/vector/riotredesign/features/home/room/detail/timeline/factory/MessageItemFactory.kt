@@ -85,7 +85,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
         if (event.root.unsignedData?.redactedEvent != null) {
             //message is redacted
-            return buildRedactedItem(informationData)
+            return buildRedactedItem(informationData, callback)
         }
 
         val messageContent: MessageContent = event.root.content.toModel() ?: return null
@@ -350,9 +350,17 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun buildRedactedItem(informationData: MessageInformationData): RedactedMessageItem? {
+    private fun buildRedactedItem(informationData: MessageInformationData, callback: TimelineEventController.Callback?): RedactedMessageItem? {
         return RedactedMessageItem_()
                 .informationData(informationData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .memberClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onMemberNameClicked(informationData)
+                        }))
     }
 
     private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {

@@ -12,6 +12,8 @@ abstract class RedactedMessageItem : AbsMessageItem<RedactedMessageItem.Holder>(
 
     override fun getStubType(): Int = STUB_ID
 
+    override fun shouldShowReactionAtBottom() = false
+
     class Holder : AbsMessageItem.Holder() {
         override fun getStubId(): Int = STUB_ID
     }

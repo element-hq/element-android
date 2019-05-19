@@ -80,17 +80,23 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.timeView.text = informationData.time
             holder.memberNameView.text = informationData.memberName
             AvatarRenderer.render(informationData.avatarUrl, informationData.senderId, informationData.memberName?.toString(), holder.avatarImageView)
+            holder.view.setOnClickListener(cellClickListener)
+            holder.view.setOnLongClickListener(longClickListener)
+            holder.avatarImageView.setOnLongClickListener(longClickListener)
+            holder.memberNameView.setOnLongClickListener(longClickListener)
         } else {
             holder.avatarImageView.setOnClickListener(null)
             holder.memberNameView.setOnClickListener(null)
             holder.avatarImageView.visibility = View.GONE
             holder.memberNameView.visibility = View.GONE
             holder.timeView.visibility = View.GONE
+            holder.view.setOnClickListener(null)
+            holder.view.setOnLongClickListener(null)
+            holder.avatarImageView.setOnLongClickListener(null)
+            holder.memberNameView.setOnLongClickListener(null)
         }
-        holder.view.setOnClickListener(cellClickListener)
-        holder.view.setOnLongClickListener(longClickListener)
 
-        if (informationData.orderedReactionList.isNullOrEmpty()) {
+        if (!shouldShowReactionAtBottom() || informationData.orderedReactionList.isNullOrEmpty()) {
             holder.reactionWrapper?.isVisible = false
         } else {
             //inflate if needed
@@ -121,6 +127,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             }
 
         }
+    }
+
+    open fun shouldShowReactionAtBottom() : Boolean {
+        return true
     }
 
     protected fun View.renderSendState() {
