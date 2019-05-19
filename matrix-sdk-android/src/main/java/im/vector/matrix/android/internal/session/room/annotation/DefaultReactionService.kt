@@ -21,11 +21,6 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionService
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.helper.addSendingEvent
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
@@ -33,7 +28,6 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import java.util.concurrent.TimeUnit
 
 private const val REACTION_WORK = "REACTION_WORK"
@@ -52,9 +46,10 @@ internal class DefaultReactionService(private val roomId: String,
 
 
     override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
-        val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction).also {
-            saveLocalEcho(it)
-        }
+        val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
+//                .also {
+//            //saveLocalEcho(it)
+//        }
         val sendRelationWork = createSendRelationWork(event)
         WorkManager.getInstance()
                 .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, sendRelationWork)
@@ -104,16 +99,16 @@ internal class DefaultReactionService(private val roomId: String,
         return "${roomId}_$identifier"
     }
 
-    private fun saveLocalEcho(event: Event) {
-        monarchy.tryTransactionAsync { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                    ?: return@tryTransactionAsync
-            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-                    ?: return@tryTransactionAsync
-
-            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
-        }
-    }
+//    private fun saveLocalEcho(event: Event) {
+//        monarchy.tryTransactionAsync { realm ->
+//            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
+//                    ?: return@tryTransactionAsync
+//            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
+//                    ?: return@tryTransactionAsync
+//
+//            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
+//        }
+//    }
 
     //TODO duplicate with send service?
     private fun createRedactEventWork(eventId: String, reason: String?): OneTimeWorkRequest {
