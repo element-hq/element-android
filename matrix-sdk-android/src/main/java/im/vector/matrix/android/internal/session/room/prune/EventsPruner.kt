@@ -20,6 +20,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -29,7 +30,7 @@ import im.vector.matrix.android.internal.util.WorkerParamsFactory
 
 private const val PRUNE_EVENT_WORKER = "PRUNE_EVENT_WORKER"
 
-internal class EventsPruner(monarchy: Monarchy) :
+internal class EventsPruner(monarchy: Monarchy, private val credentials: Credentials) :
         RealmLiveEntityObserver<EventEntity>(monarchy) {
 
     override val query = Monarchy.Query<EventEntity> { EventEntity.where(it, type = EventType.REDACTION) }
@@ -38,7 +39,7 @@ internal class EventsPruner(monarchy: Monarchy) :
         val redactionEvents = inserted
                 .mapNotNull { it.asDomain() }
 
-        val pruneEventWorkerParams = PruneEventWorker.Params(redactionEvents)
+        val pruneEventWorkerParams = PruneEventWorker.Params(redactionEvents, credentials.userId)
         val workData = WorkerParamsFactory.toData(pruneEventWorkerParams)
 
         val sendWork = OneTimeWorkRequestBuilder<PruneEventWorker>()

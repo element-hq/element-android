@@ -154,7 +154,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             val groupSummaryUpdater = GroupSummaryUpdater(get())
-            val eventsPruner = EventsPruner(get())
+            val eventsPruner = EventsPruner(get(), get())
             val userEntityUpdater = UserEntityUpdater(get(), get(), get())
             listOf<LiveEntityObserver>(groupSummaryUpdater, eventsPruner, userEntityUpdater)
         }

@@ -40,13 +40,15 @@ import io.realm.Realm
 import org.koin.standalone.inject
 import timber.log.Timber
 
+//TODO should be a task instead of worker
 internal class PruneEventWorker(context: Context,
                                 workerParameters: WorkerParameters
 ) : Worker(context, workerParameters), MatrixKoinComponent {
 
     @JsonClass(generateAdapter = true)
     internal class Params(
-            val redactionEvents: List<Event>
+            val redactionEvents: List<Event>,
+            val userId: String
     )
 
     private val monarchy by inject<Monarchy>()
@@ -57,7 +59,7 @@ internal class PruneEventWorker(context: Context,
 
         val result = monarchy.tryTransactionSync { realm ->
             params.redactionEvents.forEach { event ->
-                pruneEvent(realm, event)
+                pruneEvent(realm, event, params.userId)
             }
         }
         return result.fold({
@@ -67,7 +69,7 @@ internal class PruneEventWorker(context: Context,
         })
     }
 
-    private fun pruneEvent(realm: Realm, redactionEvent: Event) {
+    private fun pruneEvent(realm: Realm, redactionEvent: Event, userId: String) {
         if (redactionEvent.redacts.isNullOrBlank()) {
             return
         }
@@ -88,6 +90,7 @@ internal class PruneEventWorker(context: Context,
                     val modified = unsignedData.copy(redactedEvent = redactionEvent)
                     eventToPrune.content = ContentMapper.map(emptyMap())
                     eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
+
                 }
                 EventType.REACTION -> {
                     Timber.d("REDACTION of reaction ${eventToPrune.eventId}")
@@ -110,6 +113,10 @@ internal class PruneEventWorker(context: Context,
                                         summary.sourceEvents.remove(eventToPrune.eventId)
                                         Timber.d("Known reactions after  ${summary.sourceEvents.joinToString(",")}")
                                         summary.count = summary.count - 1
+                                        if (eventToPrune.sender == userId) {
+                                            //Was it a redact on my reaction?
+                                            summary.addedByMe = false
+                                        }
                                         if (summary.count == 0) {
                                             //delete!
                                             summary.deleteFromRealm()
