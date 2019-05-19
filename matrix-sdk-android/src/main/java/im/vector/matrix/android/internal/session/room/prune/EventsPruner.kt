@@ -16,9 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.prune
 
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -26,11 +23,14 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 
-private const val PRUNE_EVENT_WORKER = "PRUNE_EVENT_WORKER"
 
-internal class EventsPruner(monarchy: Monarchy, private val credentials: Credentials) :
+internal class EventsPruner(monarchy: Monarchy,
+                            private val credentials: Credentials,
+                            private val pruneEventTask: PruneEventTask,
+                            private val taskExecutor: TaskExecutor) :
         RealmLiveEntityObserver<EventEntity>(monarchy) {
 
     override val query = Monarchy.Query<EventEntity> { EventEntity.where(it, type = EventType.REDACTION) }
@@ -39,16 +39,14 @@ internal class EventsPruner(monarchy: Monarchy, private val credentials: Credent
         val redactionEvents = inserted
                 .mapNotNull { it.asDomain() }
 
-        val pruneEventWorkerParams = PruneEventWorker.Params(redactionEvents, credentials.userId)
-        val workData = WorkerParamsFactory.toData(pruneEventWorkerParams)
+        val params = PruneEventTask.Params(
+                redactionEvents,
+                credentials.userId
+        )
 
-        val sendWork = OneTimeWorkRequestBuilder<PruneEventWorker>()
-                .setInputData(workData)
-                .build()
+        pruneEventTask.configureWith(params)
+                .executeBy(taskExecutor)
 
-        WorkManager.getInstance()
-                .beginUniqueWork(PRUNE_EVENT_WORKER, ExistingWorkPolicy.APPEND, sendWork)
-                .enqueue()
     }
 
 }

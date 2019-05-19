@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package im.vector.matrix.android.internal.session.room.prune
 
-import android.content.Context
-import androidx.work.Worker
-import androidx.work.WorkerParameters
-import com.squareup.moshi.JsonClass
+import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -32,41 +28,30 @@ import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryE
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
-import org.koin.standalone.inject
 import timber.log.Timber
 
-//TODO should be a task instead of worker
-internal class PruneEventWorker(context: Context,
-                                workerParameters: WorkerParameters
-) : Worker(context, workerParameters), MatrixKoinComponent {
 
-    @JsonClass(generateAdapter = true)
-    internal class Params(
+internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
+
+    data class Params(
             val redactionEvents: List<Event>,
             val userId: String
     )
 
-    private val monarchy by inject<Monarchy>()
+}
 
-    override fun doWork(): Result {
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.failure()
+internal class DefaultPruneEventTask(private val monarchy: Monarchy) : PruneEventTask {
 
-        val result = monarchy.tryTransactionSync { realm ->
+    override fun execute(params: PruneEventTask.Params): Try<Unit> {
+        return monarchy.tryTransactionSync { realm ->
             params.redactionEvents.forEach { event ->
                 pruneEvent(realm, event, params.userId)
             }
         }
-        return result.fold({
-            Result.retry()
-        }, {
-            Result.success()
-        })
     }
 
     private fun pruneEvent(realm: Realm, redactionEvent: Event, userId: String) {
@@ -154,5 +139,4 @@ internal class PruneEventWorker(context: Context,
             else -> emptyList()
         }
     }
-
 }
