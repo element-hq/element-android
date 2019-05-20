@@ -37,7 +37,8 @@ typealias RoomListFilterName = CharSequence
 class RoomListViewModel(initialState: RoomListViewState,
                         private val session: Session,
                         private val homeRoomListObservableSource: HomeRoomListObservableStore,
-                        private val roomSummaryComparator: RoomSummaryComparator)
+                        private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
+                        private val chronologicalRoomComparator: ChronologicalRoomComparator)
     : VectorViewModel<RoomListViewState>(initialState) {
 
     companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
@@ -46,8 +47,9 @@ class RoomListViewModel(initialState: RoomListViewState,
         override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
             val currentSession = viewModelContext.activity.get<Session>()
             val homeRoomListObservableSource = viewModelContext.activity.get<HomeRoomListObservableStore>()
-            val roomSummaryComparator = viewModelContext.activity.get<RoomSummaryComparator>()
-            return RoomListViewModel(state, currentSession, homeRoomListObservableSource, roomSummaryComparator)
+            val chronologicalRoomComparator = viewModelContext.activity.get<ChronologicalRoomComparator>()
+            val alphabeticalRoomComparator = viewModelContext.activity.get<AlphabeticalRoomComparator>()
+            return RoomListViewModel(state, currentSession, homeRoomListObservableSource, alphabeticalRoomComparator, chronologicalRoomComparator)
         }
     }
 
@@ -135,13 +137,19 @@ class RoomListViewModel(initialState: RoomListViewState,
             }
         }
 
+        val roomComparator = when (displayMode) {
+            RoomListFragment.DisplayMode.HOME   -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.PEOPLE -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.ROOMS  -> alphabeticalRoomComparator
+        }
+
         return RoomSummaries().apply {
-            put(RoomCategory.INVITE, invites.sortedWith(roomSummaryComparator))
-            put(RoomCategory.FAVOURITE, favourites.sortedWith(roomSummaryComparator))
-            put(RoomCategory.DIRECT, directChats.sortedWith(roomSummaryComparator))
-            put(RoomCategory.GROUP, groupRooms.sortedWith(roomSummaryComparator))
-            put(RoomCategory.LOW_PRIORITY, lowPriorities.sortedWith(roomSummaryComparator))
-            put(RoomCategory.SERVER_NOTICE, serverNotices.sortedWith(roomSummaryComparator))
+            put(RoomCategory.INVITE, invites.sortedWith(roomComparator))
+            put(RoomCategory.FAVOURITE, favourites.sortedWith(roomComparator))
+            put(RoomCategory.DIRECT, directChats.sortedWith(roomComparator))
+            put(RoomCategory.GROUP, groupRooms.sortedWith(roomComparator))
+            put(RoomCategory.LOW_PRIORITY, lowPriorities.sortedWith(roomComparator))
+            put(RoomCategory.SERVER_NOTICE, serverNotices.sortedWith(roomComparator))
         }
     }
 

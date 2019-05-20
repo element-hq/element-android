@@ -25,7 +25,8 @@ import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
-import im.vector.riotredesign.features.home.room.list.RoomSummaryComparator
+import im.vector.riotredesign.features.home.room.list.AlphabeticalRoomComparator
+import im.vector.riotredesign.features.home.room.list.ChronologicalRoomComparator
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import org.koin.dsl.module.module
 
@@ -58,7 +59,11 @@ class AppModule(private val context: Context) {
         }
 
         single {
-            RoomSummaryComparator()
+            ChronologicalRoomComparator()
+        }
+
+        single {
+            AlphabeticalRoomComparator()
         }
 
         single {
