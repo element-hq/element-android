@@ -157,18 +157,6 @@ internal class DefaultTimeline(
                 }
             }
         }
-        changeSet.deletions?.forEach {
-            val eventRelations = collection[it]
-            if (eventRelations != null) {
-                builtEventsIdMap[eventRelations.eventId]?.let { builtIndex ->
-                    //Update the relation of existing event
-                    builtEvents[builtIndex]?.let { te ->
-                        builtEvents[builtIndex] = te.copy(annotations = null)
-                        hasChange = true
-                    }
-                }
-            }
-        }
         if (hasChange)
             postSnapshot()
     }
