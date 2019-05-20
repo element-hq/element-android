@@ -21,8 +21,16 @@ import im.vector.matrix.android.internal.session.room.annotation.DefaultFindReac
 import im.vector.matrix.android.internal.session.room.annotation.FindReactionEventForUndoTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
-import im.vector.matrix.android.internal.session.room.prune.PruneEventTask
+import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.joining.DefaultInviteTask
+import im.vector.matrix.android.internal.session.room.membership.joining.DefaultJoinRoomTask
+import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
+import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
+import im.vector.matrix.android.internal.session.room.membership.leaving.DefaultLeaveRoomTask
+import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
 import im.vector.matrix.android.internal.session.room.prune.DefaultPruneEventTask
+import im.vector.matrix.android.internal.session.room.prune.PruneEventTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
@@ -67,7 +75,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
