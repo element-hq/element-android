@@ -32,14 +32,20 @@ interface ReactionService {
      * Undo a reaction (emoji) to the targetedEvent.
      * @param reaction the reaction (preferably emoji)
      * @param targetEventId the id of the event being reacted
+     * @param myUserId used to know if a reaction event was made by the user
      */
     fun undoReaction(reaction: String, targetEventId: String, myUserId: String)//: Cancelable
 
 
     /**
-     * Undo a reaction (emoji) to the targetedEvent.
+     * Update a quick reaction (toggle).
+     * If you have reacted with agree and then you click on disagree, this call will delete(redact)
+     * the disagree and add the agree
+     * If you click on a reaction that you already reacted with, it will undo it
      * @param reaction the reaction (preferably emoji)
+     * @param oppositeReaction the opposite reaction(preferably emoji)
      * @param targetEventId the id of the event being reacted
+     * @param myUserId used to know if a reaction event was made by the user
      */
     fun updateQuickReaction(reaction: String, oppositeReaction: String, targetEventId: String, myUserId: String)
 
