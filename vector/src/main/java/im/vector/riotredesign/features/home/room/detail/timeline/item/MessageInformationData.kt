@@ -31,5 +31,6 @@ data class MessageInformationData(
         val memberName: CharSequence? = null,
         val showInformation: Boolean = true,
         /*List of reactions (emoji,count,isSelected)*/
-        var orderedReactionList: List<Triple<String,Int,Boolean>>? = null
+        var orderedReactionList: List<Triple<String,Int,Boolean>>? = null,
+        var hasBeenEdited: Boolean = false
 ) : Parcelable

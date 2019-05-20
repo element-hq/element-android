@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.riotredesign.features.home.room.detail.timeline.item
 
-package im.vector.matrix.android.api.session.room.model.message
+import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.riotredesign.R
+import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
-data class FileInfo(
-        @Json(name = "mimetype") val mimeType: String?,
-        @Json(name = "size") val size: Long = 0,
-        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,
-        @Json(name = "thumbnail_url") val thumbnailUrl: String? = null
-)
+@EpoxyModelClass(layout = R.layout.item_timeline_event_blank_stub)
+abstract class BlankItem : VectorEpoxyModel<BlankItem.BlankHolder>() {
+    class BlankHolder : VectorEpoxyHolder()
+}

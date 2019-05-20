@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.internal.database.model
 
-package im.vector.matrix.android.api.session.room.model.message
+import io.realm.RealmList
+import io.realm.RealmObject
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+/**
+ * Keep the latest state of edition of a message
+ */
+internal open class EditAggregatedSummaryEntity(
+        var aggregatedContent: String? = null,
+        // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
+        var sourceEvents: RealmList<String> = RealmList(),
+        var lastEditTs: Long = 0
+) : RealmObject() {
 
-@JsonClass(generateAdapter = true)
-data class FileInfo(
-        @Json(name = "mimetype") val mimeType: String?,
-        @Json(name = "size") val size: Long = 0,
-        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,
-        @Json(name = "thumbnail_url") val thumbnailUrl: String? = null
-)
+    companion object
+
+}

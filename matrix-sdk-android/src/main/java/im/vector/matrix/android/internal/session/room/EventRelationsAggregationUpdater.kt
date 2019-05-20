@@ -3,6 +3,9 @@ package im.vector.matrix.android.internal.session.room
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
+import im.vector.matrix.android.internal.database.model.EditAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.query.create
@@ -22,14 +25,64 @@ internal class EventRelationsAggregationUpdater(private val credentials: Credent
                     handleReaction(event, roomId, realm)
                 }
                 EventType.MESSAGE -> {
-                    event.unsignedData?.relations?.annotations?.let {
+                    if (event.unsignedData?.relations?.annotations != null) {
                         Timber.v("###REACTION Agreggation in room $roomId for event ${event.eventId}")
-                        handleInitialAggregatedRelations(event, roomId, it, realm)
+                        handleInitialAggregatedRelations(event, roomId, event.unsignedData.relations.annotations, realm)
+                    } else {
+                        val content: MessageContent? = event.content.toModel()
+                        if (content?.relatesTo?.type == RelationType.REPLACE) {
+                            Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
+                            //A replace!
+                            handleReplace(event, content, roomId, realm)
+                        }
                     }
-                    //TODO message edits
                 }
             }
         }
+    }
+
+    private fun handleReplace(event: Event, content: MessageContent, roomId: String, realm: Realm) {
+        val eventId = event.eventId ?: return
+        val targetEventId = content.relatesTo?.eventId ?: return
+        val newContent = content.newContent ?: return
+        //ok, this is a replace
+        var existing = EventAnnotationsSummaryEntity.where(realm, targetEventId).findFirst()
+        if (existing == null) {
+            Timber.v("###REPLACE creating no relation summary for ${targetEventId}")
+            existing = EventAnnotationsSummaryEntity.create(realm, targetEventId)
+            existing.roomId = roomId
+        }
+
+        //we have it
+        val existingSummary = existing.editSummary
+        if (existingSummary == null) {
+            Timber.v("###REPLACE no edit summary for ${targetEventId}, creating one")
+            //create the edit summary
+            val editSummary = realm.createObject(EditAggregatedSummaryEntity::class.java)
+            editSummary.lastEditTs = event.originServerTs ?: System.currentTimeMillis()
+            editSummary.aggregatedContent = ContentMapper.map(newContent)
+            editSummary.sourceEvents.add(eventId)
+
+            existing.editSummary = editSummary
+        } else {
+            if (existingSummary.sourceEvents.contains(eventId)) {
+                //ignore this event, we already know it (??)
+                Timber.v("###REPLACE ignoring event for summary, it's known ${eventId}")
+                return
+            }
+            //This message has already been edited
+            if (event.originServerTs ?: 0 > existingSummary.lastEditTs ?: 0) {
+                Timber.v("###REPLACE Computing aggregated edit summary")
+                existingSummary.lastEditTs = event.originServerTs ?: System.currentTimeMillis()
+                existingSummary.aggregatedContent = ContentMapper.map(newContent)
+                existingSummary.sourceEvents.add(eventId)
+            } else {
+                //ignore this event for the summary
+                Timber.v("###REPLACE ignoring event for summary, it's to old ${eventId}")
+
+            }
+        }
+
     }
 
     private fun handleInitialAggregatedRelations(event: Event, roomId: String, aggregation: AggregatedAnnotation, realm: Realm) {

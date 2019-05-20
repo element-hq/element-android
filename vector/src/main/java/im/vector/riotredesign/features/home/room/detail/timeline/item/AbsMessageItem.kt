@@ -129,7 +129,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         }
     }
 
-    open fun shouldShowReactionAtBottom() : Boolean {
+    open fun shouldShowReactionAtBottom(): Boolean {
         return true
     }
 

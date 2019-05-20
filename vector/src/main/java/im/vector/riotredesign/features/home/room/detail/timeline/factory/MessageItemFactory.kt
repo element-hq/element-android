@@ -16,12 +16,16 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
+import android.graphics.Color
 import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.annotation.ColorRes
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -73,6 +77,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             textColor = colorProvider.getColor(AvatarRenderer.getColorFromUserId(event.root.sender
                     ?: ""))
         }
+        val hasBeenEdited = event.annotations?.editSummary != null
         val informationData = MessageInformationData(eventId = eventId,
                 senderId = event.root.sender ?: "",
                 sendState = event.sendState,
@@ -80,7 +85,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 avatarUrl = avatarUrl,
                 memberName = formattedMemberName,
                 showInformation = showInformation,
-                orderedReactionList = event.annotations?.reactionsSummary?.map { Triple(it.key, it.count, it.addedByMe) }
+                orderedReactionList = event.annotations?.reactionsSummary?.map { Triple(it.key, it.count, it.addedByMe) },
+                hasBeenEdited = hasBeenEdited
         )
 
         if (event.root.unsignedData?.redactedEvent != null) {
@@ -88,13 +94,21 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             return buildRedactedItem(informationData, callback)
         }
 
-        val messageContent: MessageContent = event.root.content.toModel() ?: return null
+        val messageContent: MessageContent =
+                event.annotations?.editSummary?.aggregatedContent?.toModel()
+                        ?: event.root.content.toModel()
+                        ?: return null
 
+        if (messageContent.relatesTo?.type == RelationType.REPLACE) {
+            //TODO blank item or ignore??
+            // ignore this event
+            return BlankItem_()
+        }
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
             is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, callback)
-            is MessageTextContent -> buildTextMessageItem(event.sendState, messageContent, informationData, callback)
+            is MessageTextContent -> buildTextMessageItem(event.sendState, messageContent, informationData, hasBeenEdited, callback)
             is MessageImageContent -> buildImageMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
             is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, callback)
@@ -254,6 +268,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
     private fun buildTextMessageItem(sendState: SendState, messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
+                                     hasBeenEdited: Boolean,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val bodyToUse = messageContent.formattedBody?.let {
@@ -261,8 +276,20 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         } ?: messageContent.body
 
         val linkifiedBody = linkifyBody(bodyToUse, callback)
+
         return MessageTextItem_()
-                .message(linkifiedBody)
+                .apply {
+                    if (hasBeenEdited) {
+                        val spannable = SpannableStringBuilder()
+                        spannable.append(linkifiedBody)
+                        val editedSuffix = "(edited)"
+                        spannable.append(" ").append(editedSuffix)
+                        spannable.setSpan(ForegroundColorSpan(Color.LTGRAY), spannable.indexOf(editedSuffix), spannable.indexOf(editedSuffix) + editedSuffix.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        message(spannable)
+                    } else {
+                        message(linkifiedBody)
+                    }
+                }
                 .informationData(informationData)
                 .reactionPillCallback(callback)
                 .avatarClickListener(

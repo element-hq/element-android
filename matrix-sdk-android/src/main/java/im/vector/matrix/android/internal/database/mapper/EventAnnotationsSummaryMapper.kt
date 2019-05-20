@@ -1,5 +1,6 @@
 package im.vector.matrix.android.internal.database.mapper
 
+import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
@@ -15,6 +16,13 @@ internal object EventAnnotationsSummaryMapper {
                             it.addedByMe,
                             it.firstTimestamp,
                             it.sourceEvents.toList()
+                    )
+                },
+                editSummary = annotationsSummary.editSummary?.let {
+                    EditAggregatedSummary(
+                            ContentMapper.map(it.aggregatedContent),
+                            it.sourceEvents.toList(),
+                            it.lastEditTs
                     )
                 }
         )

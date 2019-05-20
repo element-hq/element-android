@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.api.session.room.model
 
-package im.vector.matrix.android.api.session.room.model.message
+import im.vector.matrix.android.api.session.events.model.Content
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = true)
-data class FileInfo(
-        @Json(name = "mimetype") val mimeType: String?,
-        @Json(name = "size") val size: Long = 0,
-        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,
-        @Json(name = "thumbnail_url") val thumbnailUrl: String? = null
+data class EditAggregatedSummary(
+        val aggregatedContent: Content? = null,
+        // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
+        val sourceEvents: List<String>,
+        val lastEditTs: Long = 0
 )
