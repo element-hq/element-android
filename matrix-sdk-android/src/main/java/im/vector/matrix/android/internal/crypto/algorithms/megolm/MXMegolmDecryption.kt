@@ -18,7 +18,6 @@
 package im.vector.matrix.android.internal.crypto.algorithms.megolm
 
 import android.text.TextUtils
-import androidx.annotation.Keep
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
@@ -26,8 +25,11 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.*
+import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
+import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
 import im.vector.matrix.android.internal.crypto.algorithms.MXDecryptionResult
+import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -42,44 +44,22 @@ import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import java.util.*
 
-@Keep
-internal class MXMegolmDecryption : IMXDecrypting {
-    /**
-     * The olm device interface
-     */
-
-    // the matrix credentials
-    private lateinit var mCredentials: Credentials
-
-    private lateinit var mCrypto: CryptoManager
-    private lateinit var mOlmDevice: MXOlmDevice
-    private lateinit var mDeviceListManager: DeviceListManager
-    private lateinit var mCryptoStore: IMXCryptoStore
-    private lateinit var mSendToDeviceTask: SendToDeviceTask
-    private lateinit var mTaskExecutor: TaskExecutor
+internal class MXMegolmDecryption(private val mCredentials: Credentials,
+                                  private val mOlmDevice: MXOlmDevice,
+                                  private val mDeviceListManager: DeviceListManager,
+                                  private val mOutgoingRoomKeyRequestManager: MXOutgoingRoomKeyRequestManager,
+                                  private val mMessageEncrypter: MessageEncrypter,
+                                  private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+                                  private val mCryptoStore: IMXCryptoStore,
+                                  private val mSendToDeviceTask: SendToDeviceTask,
+                                  private val mTaskExecutor: TaskExecutor)
+    : IMXDecrypting {
 
     /**
      * Events which we couldn't decrypt due to unknown sessions / indexes: map from
      * senderKey|sessionId to timelines to list of MatrixEvents.
      */
-    private var mPendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>>  = HashMap()
-
-    /**
-     * Init the object fields
-     */
-    override fun initWithMatrixSession(credentials: Credentials,
-                                       crypto: CryptoManager,
-                                       olmDevice: MXOlmDevice,
-                                       deviceListManager: DeviceListManager,
-                                       sendToDeviceTask: SendToDeviceTask,
-                                       taskExecutor: TaskExecutor) {
-        mCredentials = credentials
-        mCrypto = crypto
-        mOlmDevice = olmDevice
-        mDeviceListManager = deviceListManager
-        mSendToDeviceTask = sendToDeviceTask
-        mTaskExecutor = taskExecutor
-    }
+    private var mPendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>> = HashMap()
 
     @Throws(MXDecryptionException::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
@@ -87,8 +67,8 @@ internal class MXMegolmDecryption : IMXDecrypting {
     }
 
     @Throws(MXDecryptionException::class)
-    private fun decryptEvent(event: Event?, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult? {
-        // sanity check
+    private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult? {
+        // sanity check // TODO Remove check
         if (null == event) {
             Timber.e("## decryptEvent() : null event")
             return null
@@ -185,7 +165,7 @@ internal class MXMegolmDecryption : IMXDecrypting {
         requestBody.senderKey = encryptedEventContent.senderKey
         requestBody.sessionId = encryptedEventContent.sessionId
 
-        mCrypto.requestRoomKey(requestBody, recipients)
+        mOutgoingRoomKeyRequestManager.sendRoomKeyRequest(requestBody, recipients)
     }
 
     /**
@@ -217,9 +197,9 @@ internal class MXMegolmDecryption : IMXDecrypting {
     /**
      * Handle a key event.
      *
-     * @param roomKeyEvent the key event.
+     * @param event the key event.
      */
-    override fun onRoomKeyEvent(event: Event) {
+    override fun onRoomKeyEvent(event: Event, keysBackup: KeysBackup) {
         var exportFormat = false
         val roomKeyContent = event.content.toModel<RoomKeyContent>()!!
 
@@ -274,7 +254,7 @@ internal class MXMegolmDecryption : IMXDecrypting {
         val added = mOlmDevice.addInboundGroupSession(roomKeyContent.sessionId!!, roomKeyContent.sessionKey!!, roomKeyContent.roomId!!, senderKey, forwarding_curve25519_key_chain!!, keysClaimed, exportFormat)
 
         if (added) {
-            mCrypto.getKeysBackupService().maybeBackupKeys()
+            keysBackup.maybeBackupKeys()
 
             val content = RoomKeyRequestBody()
 
@@ -283,7 +263,7 @@ internal class MXMegolmDecryption : IMXDecrypting {
             content.sessionId = roomKeyContent.sessionId
             content.senderKey = senderKey
 
-            mCrypto.cancelRoomKeyRequest(content)
+            mOutgoingRoomKeyRequestManager.cancelRoomKeyRequest(content)
 
             onNewSession(senderKey, roomKeyContent.sessionId!!)
         }
@@ -334,14 +314,13 @@ internal class MXMegolmDecryption : IMXDecrypting {
     }
 
     override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {
-        return (null != request
-                && null != request.mRequestBody
+        return (null != request.mRequestBody
                 && mOlmDevice.hasInboundSessionKeys(request.mRequestBody!!.roomId!!, request.mRequestBody!!.senderKey!!, request.mRequestBody!!.sessionId!!))
     }
 
     override fun shareKeysWithDevice(request: IncomingRoomKeyRequest) {
         // sanity checks
-        if (null == request || null == request.mRequestBody) {
+        if (request.mRequestBody == null) {
             return
         }
 
@@ -358,9 +337,9 @@ internal class MXMegolmDecryption : IMXDecrypting {
                     val devicesByUser = HashMap<String, List<MXDeviceInfo>>()
                     devicesByUser[userId] = ArrayList(Arrays.asList(deviceInfo))
 
-                    mCrypto.ensureOlmSessionsForDevices(devicesByUser, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
-                        override fun onSuccess(map: MXUsersDevicesMap<MXOlmSessionResult>) {
-                            val olmSessionResult = map.getObject(deviceId, userId)
+                    mEnsureOlmSessionsForDevicesAction.handle(devicesByUser, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
+                        override fun onSuccess(data: MXUsersDevicesMap<MXOlmSessionResult>) {
+                            val olmSessionResult = data.getObject(deviceId, userId)
 
                             if (null == olmSessionResult || null == olmSessionResult.mSessionId) {
                                 // no session with this device, probably because there
@@ -380,7 +359,7 @@ internal class MXMegolmDecryption : IMXDecrypting {
                             payloadJson["type"] = EventType.FORWARDED_ROOM_KEY
                             payloadJson["content"] = inboundGroupSession!!.exportKeys()!!
 
-                            val encodedPayload = mCrypto.encryptMessage(payloadJson, Arrays.asList(deviceInfo))
+                            val encodedPayload = mMessageEncrypter.encryptMessage(payloadJson, Arrays.asList(deviceInfo))
                             val sendToDeviceMap = MXUsersDevicesMap<Any>()
                             sendToDeviceMap.setObject(encodedPayload, userId, deviceId)
 

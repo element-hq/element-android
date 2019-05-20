@@ -17,19 +17,15 @@
 package im.vector.matrix.android.internal.crypto
 
 import android.text.TextUtils
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmDecryptionFactory
+import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
 import timber.log.Timber
 import java.util.*
 
 internal class RoomDecryptorProvider(
-        val mCredentials: Credentials,
-        val olmDevice: MXOlmDevice,
-        val deviceListManager: DeviceListManager,
-        val mSendToDeviceTask: SendToDeviceTask,
-        val mTaskExecutor: TaskExecutor
+        private val mMXOlmDecryptionFactory: MXOlmDecryptionFactory,
+        private val mMXMegolmDecryptionFactory: MXMegolmDecryptionFactory
 ) {
 
     // A map from algorithm to MXDecrypting instance, for each room
@@ -43,17 +39,12 @@ internal class RoomDecryptorProvider(
      * @param roomId    the room id
      * @param algorithm the crypto algorithm
      * @return the decryptor
-     * TODO do not provide cryptoManager? // TODO Create another method for the case of roomId is null
+     * // TODO Create another method for the case of roomId is null
      */
-    fun getOrCreateRoomDecryptor(cryptoManager: CryptoManager, roomId: String?, algorithm: String?): IMXDecrypting? {
+    fun getOrCreateRoomDecryptor(roomId: String?, algorithm: String?): IMXDecrypting? {
         // sanity check
         if (TextUtils.isEmpty(algorithm)) {
             Timber.e("## getRoomDecryptor() : null algorithm")
-            return null
-        }
-
-        if (null == mRoomDecryptors) {
-            Timber.e("## getRoomDecryptor() : null mRoomDecryptors")
             return null
         }
 
@@ -73,27 +64,21 @@ internal class RoomDecryptorProvider(
             }
         }
 
-        val decryptingClass = MXCryptoAlgorithms.decryptorClassForAlgorithm(algorithm)
+        val decryptingClass = MXCryptoAlgorithms.hasDecryptorClassForAlgorithm(algorithm)
 
-        if (null != decryptingClass) {
-            try {
-                val ctor = decryptingClass.constructors[0]
-                alg = ctor.newInstance() as IMXDecrypting
-
-                if (null != alg) {
-                    alg!!.initWithMatrixSession(mCredentials, cryptoManager, olmDevice, deviceListManager, mSendToDeviceTask, mTaskExecutor)
-
-                    if (!TextUtils.isEmpty(roomId)) {
-                        synchronized(mRoomDecryptors) {
-                            mRoomDecryptors[roomId]!!.put(algorithm!!, alg!!)
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "## getRoomDecryptor() : fail to load the class")
-                return null
+        if (decryptingClass) {
+            alg = when (algorithm) {
+                MXCRYPTO_ALGORITHM_MEGOLM -> mMXMegolmDecryptionFactory.instantiate()
+                else                      -> mMXOlmDecryptionFactory.instantiate()
             }
 
+            if (null != alg) {
+                if (!TextUtils.isEmpty(roomId)) {
+                    synchronized(mRoomDecryptors) {
+                        mRoomDecryptors[roomId]!!.put(algorithm!!, alg!!)
+                    }
+                }
+            }
         }
 
         return alg

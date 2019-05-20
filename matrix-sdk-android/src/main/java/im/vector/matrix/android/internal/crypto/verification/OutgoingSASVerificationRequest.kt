@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
@@ -33,6 +34,7 @@ import timber.log.Timber
 
 internal class OutgoingSASVerificationRequest(
         private val mSasVerificationService: DefaultSasVerificationService,
+        private val mSetDeviceVerificationAction: SetDeviceVerificationAction,
         private val mCredentials: Credentials,
         private val mCryptoStore: IMXCryptoStore,
         private val mSendToDeviceTask: SendToDeviceTask,
@@ -43,6 +45,7 @@ internal class OutgoingSASVerificationRequest(
         otherDeviceId: String)
     : SASVerificationTransaction(
         mSasVerificationService,
+        mSetDeviceVerificationAction,
         mCredentials,
         mCryptoStore,
         mSendToDeviceTask,

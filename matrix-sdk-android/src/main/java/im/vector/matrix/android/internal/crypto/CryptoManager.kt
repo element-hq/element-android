@@ -37,15 +37,19 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
+import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
+import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
+import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.*
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
-import im.vector.matrix.android.internal.crypto.model.rest.EncryptedMessage
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
@@ -53,7 +57,6 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.convertToUTF8
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.*
@@ -71,11 +74,13 @@ import java.util.*
 internal class CryptoManager(
         // The credentials,
         private val mCredentials: Credentials,
+        private val mMyDeviceInfoHolder: MyDeviceInfoHolder,
         // the crypto store
         private val mCryptoStore: IMXCryptoStore,
         // Olm device
         private val mOlmDevice: MXOlmDevice,
-        cryptoConfig: MXCryptoConfig?,
+        // Set of parameters used to configure/customize the end-to-end crypto.
+        private val mCryptoConfig: MXCryptoConfig = MXCryptoConfig(),
         // Device list manager
         private val deviceListManager: DeviceListManager,
         // The key backup service.
@@ -98,6 +103,12 @@ internal class CryptoManager(
         private val mOlmManager: OlmManager,
         // Actions
         private val mSetDeviceVerificationAction: SetDeviceVerificationAction,
+        private val mMegolmSessionDataImporter: MegolmSessionDataImporter,
+        private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+        // Repository
+        private val mWarnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
+        private val mMXMegolmEncryptionFactory: MXMegolmEncryptionFactory,
+        private val mMXOlmEncryptionFactory: MXOlmEncryptionFactory,
         // Tasks
         private val mClaimOneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
         private val mDeleteDeviceTask: DeleteDeviceTask,
@@ -108,18 +119,10 @@ internal class CryptoManager(
         private val mUploadKeysTask: UploadKeysTask,
         // TaskExecutor
         private val mTaskExecutor: TaskExecutor
-) : KeysBackup.KeysBackupCryptoListener,
-        DefaultSasVerificationService.SasCryptoListener,
-        CryptoService {
+) : CryptoService {
 
     // MXEncrypting instance for each room.
     private val mRoomEncryptors: MutableMap<String, IMXEncrypting> = HashMap()
-
-    // Our device keys
-    /**
-     * @return my device info
-     */
-    private val myDevice: MXDeviceInfo
 
     // the encryption is starting
     private var mIsStarting: Boolean = false
@@ -148,84 +151,6 @@ internal class CryptoManager(
     // initialization callbacks
     private val mInitializationCallbacks = ArrayList<MatrixCallback<Unit>>()
 
-    // Warn the user if some new devices are detected while encrypting a message.
-    private var mWarnOnUnknownDevices = true
-
-    // Set of parameters used to configure/customize the end-to-end crypto.
-    private var mCryptoConfig: MXCryptoConfig? = null
-
-    init {
-        if (null != cryptoConfig) {
-            mCryptoConfig = cryptoConfig
-        } else {
-            // Consider the default configuration value
-            mCryptoConfig = MXCryptoConfig()
-        }
-
-        var deviceId = mCredentials.deviceId
-        // deviceId should always be defined
-        val refreshDevicesList = !TextUtils.isEmpty(deviceId)
-
-        if (TextUtils.isEmpty(deviceId)) {
-            // use the stored one
-            deviceId = this.mCryptoStore.getDeviceId()
-
-            // Should not happen anymore
-            TODO()
-            //mSession.setDeviceId(deviceId)
-        }
-
-        if (TextUtils.isEmpty(deviceId)) {
-            deviceId = UUID.randomUUID().toString()
-            // Should not happen anymore
-            TODO()
-            //mSession.setDeviceId(deviceId)
-            Timber.d("Warning: No device id in MXCredentials. An id was created. Think of storing it")
-            this.mCryptoStore.storeDeviceId(deviceId)
-        }
-
-        myDevice = MXDeviceInfo(deviceId!!, mCredentials.userId)
-
-        val keys = HashMap<String, String>()
-
-        if (!TextUtils.isEmpty(mOlmDevice.deviceEd25519Key)) {
-            keys["ed25519:" + mCredentials.deviceId] = mOlmDevice.deviceEd25519Key!!
-        }
-
-        if (!TextUtils.isEmpty(mOlmDevice.deviceCurve25519Key)) {
-            keys["curve25519:" + mCredentials.deviceId] = mOlmDevice.deviceCurve25519Key!!
-        }
-
-        myDevice.keys = keys
-
-        myDevice.algorithms = MXCryptoAlgorithms.supportedAlgorithms()
-        myDevice.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED
-
-        // Add our own deviceinfo to the store
-        val endToEndDevicesForUser = this.mCryptoStore.getUserDevices(mCredentials.userId)
-
-        val myDevices: MutableMap<String, MXDeviceInfo>
-
-        if (null != endToEndDevicesForUser) {
-            myDevices = HashMap(endToEndDevicesForUser)
-        } else {
-            myDevices = HashMap()
-        }
-
-        myDevices[myDevice.deviceId] = myDevice
-
-        this.mCryptoStore.storeUserDevices(mCredentials.userId, myDevices)
-
-        if (refreshDevicesList) {
-            // ensure to have the up-to-date devices list
-            // got some issues when upgrading from Riot < 0.6.4
-            deviceListManager.handleDeviceListsChanges(listOf(mCredentials.userId), null)
-        }
-
-        mKeysBackup.setCryptoInternalListener(this)
-        mSasVerificationService.setCryptoInternalListener(this)
-    }
-
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         mSetDeviceNameTask
                 .configureWith(SetDeviceNameTask.Params(deviceId, deviceName))
@@ -245,7 +170,7 @@ internal class CryptoManager(
     }
 
     override fun getMyDevice(): MXDeviceInfo {
-        return myDevice
+        return mMyDeviceInfoHolder.myDevice
     }
 
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
@@ -462,7 +387,6 @@ internal class CryptoManager(
      *
      * @param userId   the user id
      * @param deviceId the device id
-     * @param callback the asynchronous callback
      */
     override fun getDeviceInfo(userId: String, deviceId: String?): MXDeviceInfo? {
         return if (!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(deviceId)) {
@@ -529,7 +453,6 @@ internal class CryptoManager(
      * @param verificationStatus the new verification status
      * @param deviceId           the unique identifier for the device.
      * @param userId             the owner of the device
-     * @param callback           the asynchronous callback
      */
     override fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String) {
         mSetDeviceVerificationAction.handle(verificationStatus, deviceId, userId)
@@ -555,33 +478,19 @@ internal class CryptoManager(
             return false
         }
 
-        val encryptingClass = MXCryptoAlgorithms.encryptorClassForAlgorithm(algorithm)
+        val encryptingClass = MXCryptoAlgorithms.hasEncryptorClassForAlgorithm(algorithm)
 
-        if (null == encryptingClass) {
+        if (!encryptingClass) {
             Timber.e("## setEncryptionInRoom() : Unable to encrypt with " + algorithm!!)
             return false
         }
 
         mCryptoStore.storeRoomAlgorithm(roomId, algorithm!!)
 
-        val alg: IMXEncrypting
-
-        try {
-            val ctor = encryptingClass.constructors[0]
-            alg = ctor.newInstance() as IMXEncrypting
-        } catch (e: Exception) {
-            Timber.e(e, "## setEncryptionInRoom() : fail to load the class")
-            return false
+        val alg: IMXEncrypting = when (algorithm) {
+            MXCRYPTO_ALGORITHM_MEGOLM -> mMXMegolmEncryptionFactory.instantiate(roomId)
+            else                      -> mMXOlmEncryptionFactory.instantiate(roomId)
         }
-
-        alg.initWithMatrixSession(this,
-                mOlmDevice,
-                mKeysBackup,
-                deviceListManager,
-                mCredentials,
-                mSendToDeviceTask,
-                mTaskExecutor,
-                roomId)
 
         synchronized(mRoomEncryptors) {
             mRoomEncryptors.put(roomId, alg)
@@ -641,44 +550,7 @@ internal class CryptoManager(
         return if (null != map) ArrayList(map.values) else ArrayList()
     }
 
-    /**
-     * Try to make sure we have established olm sessions for the given users.
-     * It must be called in getEncryptingThreadHandler() thread.
-     * The callback is called in the UI thread.
-     *
-     * @param users    a list of user ids.
-     * @param callback the asynchronous callback
-     */
-    fun ensureOlmSessionsForUsers(users: List<String>, callback: MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>>) {
-        Timber.d("## ensureOlmSessionsForUsers() : ensureOlmSessionsForUsers $users")
-
-        val devicesByUser = HashMap<String /* userId */, MutableList<MXDeviceInfo>>()
-
-        for (userId in users) {
-            devicesByUser[userId] = ArrayList()
-
-            val devices = getUserDevices(userId)
-
-            for (device in devices) {
-                val key = device.identityKey()
-
-                if (TextUtils.equals(key, mOlmDevice.deviceCurve25519Key)) {
-                    // Don't bother setting up session to ourself
-                    continue
-                }
-
-                if (device.isVerified) {
-                    // Don't bother setting up sessions with blocked users
-                    continue
-                }
-
-                devicesByUser[userId]!!.add(device)
-            }
-        }
-
-        ensureOlmSessionsForDevices(devicesByUser, callback)
-    }
-
+    // TODO Remove ?
     /**
      * Try to make sure we have established olm sessions for the given devices.
      * It must be called in getCryptoHandler() thread.
@@ -689,149 +561,8 @@ internal class CryptoManager(
      */
     fun ensureOlmSessionsForDevices(devicesByUser: Map<String, List<MXDeviceInfo>>,
                                     callback: MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>>?) {
-        val devicesWithoutSession = ArrayList<MXDeviceInfo>()
-
-        val results = MXUsersDevicesMap<MXOlmSessionResult>()
-
-        val userIds = devicesByUser.keys
-
-        for (userId in userIds) {
-            val deviceInfos = devicesByUser[userId]
-
-            for (deviceInfo in deviceInfos!!) {
-                val deviceId = deviceInfo.deviceId
-                val key = deviceInfo.identityKey()
-
-                val sessionId = mOlmDevice.getSessionId(key!!)
-
-                if (TextUtils.isEmpty(sessionId)) {
-                    devicesWithoutSession.add(deviceInfo)
-                }
-
-                val olmSessionResult = MXOlmSessionResult(deviceInfo, sessionId)
-                results.setObject(olmSessionResult, userId, deviceId)
-            }
-        }
-
-        if (devicesWithoutSession.size == 0) {
-            callback?.onSuccess(results)
-            return
-        }
-
-        // Prepare the request for claiming one-time keys
-        val usersDevicesToClaim = MXUsersDevicesMap<String>()
-
-        val oneTimeKeyAlgorithm = MXKey.KEY_SIGNED_CURVE_25519_TYPE
-
-        for (device in devicesWithoutSession) {
-            usersDevicesToClaim.setObject(oneTimeKeyAlgorithm, device.userId, device.deviceId)
-        }
-
-        // TODO: this has a race condition - if we try to send another message
-        // while we are claiming a key, we will end up claiming two and setting up
-        // two sessions.
-        //
-        // That should eventually resolve itself, but it's poor form.
-
-        Timber.d("## claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
-
-        mClaimOneTimeKeysForUsersDeviceTask
-                .configureWith(ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim))
-                .dispatchTo(object : MatrixCallback<MXUsersDevicesMap<MXKey>> {
-                    override fun onSuccess(data: MXUsersDevicesMap<MXKey>) {
-                        try {
-                            Timber.d("## claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $data")
-
-                            for (userId in userIds) {
-                                val deviceInfos = devicesByUser[userId]
-
-                                for (deviceInfo in deviceInfos!!) {
-
-                                    var oneTimeKey: MXKey? = null
-
-                                    val deviceIds = data.getUserDeviceIds(userId)
-
-                                    if (null != deviceIds) {
-                                        for (deviceId in deviceIds) {
-                                            val olmSessionResult = results.getObject(deviceId, userId)
-
-                                            if (null != olmSessionResult!!.mSessionId) {
-                                                // We already have a result for this device
-                                                continue
-                                            }
-
-                                            val key = data.getObject(deviceId, userId)
-
-                                            if (TextUtils.equals(key!!.type, oneTimeKeyAlgorithm)) {
-                                                oneTimeKey = key
-                                            }
-
-                                            if (null == oneTimeKey) {
-                                                Timber.d("## ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm
-                                                        + " for device " + userId + " : " + deviceId)
-                                                continue
-                                            }
-
-                                            // Update the result for this device in results
-                                            olmSessionResult.mSessionId = verifyKeyAndStartSession(oneTimeKey, userId, deviceInfo)
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (e: Exception) {
-                            Timber.e(e, "## ensureOlmSessionsForDevices() " + e.message)
-                        }
-
-                        callback?.onSuccess(results)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## ensureOlmSessionsForUsers(): claimOneTimeKeysForUsersDevices request failed")
-
-                        callback?.onFailure(failure)
-                    }
-                })
-                .executeBy(mTaskExecutor)
+        mEnsureOlmSessionsForDevicesAction.handle(devicesByUser, callback)
     }
-
-    private fun verifyKeyAndStartSession(oneTimeKey: MXKey, userId: String, deviceInfo: MXDeviceInfo): String? {
-        var sessionId: String? = null
-
-        val deviceId = deviceInfo.deviceId
-        val signKeyId = "ed25519:$deviceId"
-        val signature = oneTimeKey.signatureForUserId(userId, signKeyId)
-
-        if (!TextUtils.isEmpty(signature) && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
-            var isVerified = false
-            var errorMessage: String? = null
-
-            try {
-                mOlmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
-                isVerified = true
-            } catch (e: Exception) {
-                errorMessage = e.message
-            }
-
-            // Check one-time key signature
-            if (isVerified) {
-                sessionId = mOlmDevice.createOutboundSession(deviceInfo.identityKey()!!, oneTimeKey.value)
-
-                if (!TextUtils.isEmpty(sessionId)) {
-                    Timber.d("## verifyKeyAndStartSession() : Started new sessionid " + sessionId
-                            + " for device " + deviceInfo + "(theirOneTimeKey: " + oneTimeKey.value + ")")
-                } else {
-                    // Possibly a bad key
-                    Timber.e("## verifyKeyAndStartSession() : Error starting session with device $userId:$deviceId")
-                }
-            } else {
-                Timber.e("## verifyKeyAndStartSession() : Unable to verify signature on one-time key for device " + userId
-                        + ":" + deviceId + " Error " + errorMessage)
-            }
-        }
-
-        return sessionId
-    }
-
 
     /**
      * Encrypt an event content according to the configuration of the room.
@@ -865,7 +596,7 @@ internal class CryptoManager(
         }
 
         // Check whether the event content must be encrypted for the invited members.
-        val encryptForInvitedMembers = mCryptoConfig!!.mEnableEncryptionForInvitedMembers && room.shouldEncryptForInvitedMembers()
+        val encryptForInvitedMembers = mCryptoConfig.mEnableEncryptionForInvitedMembers && room.shouldEncryptForInvitedMembers()
 
         val userIds = if (encryptForInvitedMembers) {
             room.getActiveRoomMemberIds()
@@ -939,7 +670,7 @@ internal class CryptoManager(
         val exceptions = ArrayList<MXDecryptionException>()
 
         var result: MXEventDecryptionResult? = null
-        val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(this, event.roomId, eventContent["algorithm"] as String)
+        val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, eventContent["algorithm"] as String)
 
         if (null == alg) {
             val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, eventContent["algorithm"] as String)
@@ -954,7 +685,7 @@ internal class CryptoManager(
             }
 
             if (null != result) {
-                results.add(result)
+                results.add(result) // TODO simplify
             }
         }
 
@@ -977,72 +708,6 @@ internal class CryptoManager(
     }
 
     /**
-     * Encrypt an event payload for a list of devices.
-     * This method must be called from the getCryptoHandler() thread.
-     *
-     * @param payloadFields fields to include in the encrypted payload.
-     * @param deviceInfos   list of device infos to encrypt for.
-     * @return the content for an m.room.encrypted event.
-     */
-    fun encryptMessage(payloadFields: Map<String, Any>, deviceInfos: List<MXDeviceInfo>): EncryptedMessage {
-        val deviceInfoParticipantKey = HashMap<String, MXDeviceInfo>()
-        val participantKeys = ArrayList<String>()
-
-        for (di in deviceInfos) {
-            participantKeys.add(di.identityKey()!!)
-            deviceInfoParticipantKey[di.identityKey()!!] = di
-        }
-
-        val payloadJson = HashMap(payloadFields)
-
-        payloadJson["sender"] = mCredentials.userId
-        payloadJson["sender_device"] = mCredentials.deviceId
-
-        // Include the Ed25519 key so that the recipient knows what
-        // device this message came from.
-        // We don't need to include the curve25519 key since the
-        // recipient will already know this from the olm headers.
-        // When combined with the device keys retrieved from the
-        // homeserver signed by the ed25519 key this proves that
-        // the curve25519 key and the ed25519 key are owned by
-        // the same device.
-        val keysMap = HashMap<String, String>()
-        keysMap["ed25519"] = mOlmDevice.deviceEd25519Key!!
-        payloadJson["keys"] = keysMap
-
-        val ciphertext = HashMap<String, Any>()
-
-        for (deviceKey in participantKeys) {
-            val sessionId = mOlmDevice.getSessionId(deviceKey)
-
-            if (!TextUtils.isEmpty(sessionId)) {
-                Timber.d("Using sessionid $sessionId for device $deviceKey")
-                val deviceInfo = deviceInfoParticipantKey[deviceKey]
-
-                payloadJson["recipient"] = deviceInfo!!.userId
-
-                val recipientsKeysMap = HashMap<String, String>()
-                recipientsKeysMap["ed25519"] = deviceInfo.fingerprint()!!
-                payloadJson["recipient_keys"] = recipientsKeysMap
-
-                // FIXME We have to canonicalize the JSON
-                //JsonUtility.canonicalize(JsonUtility.getGson(false).toJsonTree(payloadJson)).toString()
-
-                val payloadString = convertToUTF8(MoshiProvider.getCanonicalJson(Map::class.java, payloadJson))
-                ciphertext[deviceKey] = mOlmDevice.encryptMessage(deviceKey, sessionId!!, payloadString!!)!!
-            }
-        }
-
-        val res = EncryptedMessage()
-
-        res.algorithm = MXCRYPTO_ALGORITHM_OLM
-        res.senderKey = mOlmDevice.deviceCurve25519Key
-        res.cipherText = ciphertext
-
-        return res
-    }
-
-    /**
      * Handle the 'toDevice' event
      *
      * @param event the event
@@ -1061,13 +726,7 @@ internal class CryptoManager(
      *
      * @param event the key event.
      */
-    private fun onRoomKeyEvent(event: Event?) {
-        // sanity check
-        if (null == event) {
-            Timber.e("## onRoomKeyEvent() : null event")
-            return
-        }
-
+    private fun onRoomKeyEvent(event: Event) {
         val roomKeyContent = event.content.toModel<RoomKeyContent>()!!
 
         if (TextUtils.isEmpty(roomKeyContent.roomId) || TextUtils.isEmpty(roomKeyContent.algorithm)) {
@@ -1075,14 +734,14 @@ internal class CryptoManager(
             return
         }
 
-        val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(this, roomKeyContent.roomId, roomKeyContent.algorithm)
+        val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(roomKeyContent.roomId, roomKeyContent.algorithm)
 
         if (null == alg) {
-            Timber.e("## onRoomKeyEvent() : Unable to handle keys for " + roomKeyContent.algorithm!!)
+            Timber.e("## onRoomKeyEvent() : Unable to handle keys for " + roomKeyContent.algorithm)
             return
         }
 
-        alg.onRoomKeyEvent(event)
+        alg.onRoomKeyEvent(event, mKeysBackup)
     }
 
     /**
@@ -1097,7 +756,7 @@ internal class CryptoManager(
         val room = mRoomService.getRoom(roomId)!!
 
         // Check whether the event content must be encrypted for the invited members.
-        val encryptForInvitedMembers = mCryptoConfig!!.mEnableEncryptionForInvitedMembers && room.shouldEncryptForInvitedMembers()
+        val encryptForInvitedMembers = mCryptoConfig.mEnableEncryptionForInvitedMembers && room.shouldEncryptForInvitedMembers()
 
         val userIds = if (encryptForInvitedMembers) {
             room.getActiveRoomMemberIds()
@@ -1138,7 +797,7 @@ internal class CryptoManager(
                 deviceListManager.startTrackingDeviceList(Arrays.asList(userId))
             } else if (membership == Membership.INVITE
                     && room.shouldEncryptForInvitedMembers()
-                    && mCryptoConfig!!.mEnableEncryptionForInvitedMembers) {
+                    && mCryptoConfig.mEnableEncryptionForInvitedMembers) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
                 // know what other servers are in the room at the time they've been invited.
@@ -1159,14 +818,14 @@ internal class CryptoManager(
     private fun uploadDeviceKeys(callback: MatrixCallback<KeysUploadResponse>) {
         // Prepare the device keys data to send
         // Sign it
-        val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, myDevice.signalableJSONDictionary())
+        val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
 
-        myDevice.signatures = mObjectSigner.signObject(canonicalJson)
+        getMyDevice().signatures = mObjectSigner.signObject(canonicalJson)
 
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
         mUploadKeysTask
-                .configureWith(UploadKeysTask.Params(myDevice.toDeviceKeys(), null, myDevice.deviceId))
+                .configureWith(UploadKeysTask.Params(getMyDevice().toDeviceKeys(), null, getMyDevice().deviceId))
                 .dispatchTo(callback)
                 .executeBy(mTaskExecutor)
     }
@@ -1264,98 +923,7 @@ internal class CryptoManager(
 
         Timber.d("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
 
-        importMegolmSessionsData(importedSessions, true, progressListener, callback)
-    }
-
-    /**
-     * Import a list of megolm session keys.
-     *
-     * @param megolmSessionsData megolm sessions.
-     * @param backUpKeys         true to back up them to the homeserver.
-     * @param progressListener   the progress listener
-     * @param callback
-     */
-    override fun importMegolmSessionsData(megolmSessionsData: List<MegolmSessionData>,
-                                          backUpKeys: Boolean,
-                                          progressListener: ProgressListener?,
-                                          callback: MatrixCallback<ImportRoomKeysResult>) {
-        val t0 = System.currentTimeMillis()
-
-        val totalNumbersOfKeys = megolmSessionsData.size
-        var cpt = 0
-        var lastProgress = 0
-        var totalNumbersOfImportedKeys = 0
-
-        if (progressListener != null) {
-            progressListener.onProgress(0, 100)
-        }
-
-        val sessions = mOlmDevice.importInboundGroupSessions(megolmSessionsData)
-
-        for (megolmSessionData in megolmSessionsData) {
-            cpt++
-
-
-            val decrypting = roomDecryptorProvider.getOrCreateRoomDecryptor(this, megolmSessionData.roomId, megolmSessionData.algorithm)
-
-            if (null != decrypting) {
-                try {
-                    val sessionId = megolmSessionData.sessionId
-                    Timber.d("## importRoomKeys retrieve mSenderKey " + megolmSessionData.senderKey + " sessionId " + sessionId)
-
-                    totalNumbersOfImportedKeys++
-
-                    // cancel any outstanding room key requests for this session
-                    val roomKeyRequestBody = RoomKeyRequestBody()
-
-                    roomKeyRequestBody.algorithm = megolmSessionData.algorithm
-                    roomKeyRequestBody.roomId = megolmSessionData.roomId
-                    roomKeyRequestBody.senderKey = megolmSessionData.senderKey
-                    roomKeyRequestBody.sessionId = megolmSessionData.sessionId
-
-                    cancelRoomKeyRequest(roomKeyRequestBody)
-
-                    // Have another go at decrypting events sent with this session
-                    decrypting.onNewSession(megolmSessionData.senderKey!!, sessionId!!)
-                } catch (e: Exception) {
-                    Timber.e(e, "## importRoomKeys() : onNewSession failed")
-                }
-            }
-
-            if (progressListener != null) {
-                val progress = 100 * cpt / totalNumbersOfKeys
-
-                if (lastProgress != progress) {
-                    lastProgress = progress
-
-                    progressListener.onProgress(progress, 100)
-                }
-            }
-        }
-
-        // Do not back up the key if it comes from a backup recovery
-        if (backUpKeys) {
-            mKeysBackup.maybeBackupKeys()
-        } else {
-            mCryptoStore.markBackupDoneForInboundGroupSessions(sessions)
-        }
-
-        val t1 = System.currentTimeMillis()
-
-        Timber.d("## importMegolmSessionsData : sessions import " + (t1 - t0) + " ms (" + megolmSessionsData.size + " sessions)")
-
-        val finalTotalNumbersOfImportedKeys = totalNumbersOfImportedKeys
-
-        callback.onSuccess(ImportRoomKeysResult(totalNumbersOfKeys, finalTotalNumbersOfImportedKeys))
-    }
-
-    /**
-     * Tells if the encryption must fail if some unknown devices are detected.
-     *
-     * @return true to warn when some unknown devices are detected.
-     */
-    fun warnOnUnknownDevices(): Boolean {
-        return mWarnOnUnknownDevices
+        mMegolmSessionDataImporter.handle(importedSessions, true, progressListener, callback)
     }
 
     /**
@@ -1364,7 +932,7 @@ internal class CryptoManager(
      * @param warn true to warn when some unknown devices are detected.
      */
     override fun setWarnOnUnknownDevices(warn: Boolean) {
-        mWarnOnUnknownDevices = warn
+        mWarnOnUnknownDevicesRepository.setWarnOnUnknownDevices(warn)
     }
 
     /**
@@ -1468,7 +1036,6 @@ internal class CryptoManager(
      * Add this room to the ones which don't encrypt messages to unverified devices.
      *
      * @param roomId   the room id
-     * @param callback the asynchronous callback
      */
     override fun setRoomBlacklistUnverifiedDevices(roomId: String) {
         setRoomBlacklistUnverifiedDevices(roomId, true)
@@ -1478,22 +1045,12 @@ internal class CryptoManager(
      * Remove this room to the ones which don't encrypt messages to unverified devices.
      *
      * @param roomId   the room id
-     * @param callback the asynchronous callback
      */
     override fun setRoomUnBlacklistUnverifiedDevices(roomId: String) {
         setRoomBlacklistUnverifiedDevices(roomId, false)
     }
 
-    /**
-     * Send a request for some room keys, if we have not already done so.
-     *
-     * @param requestBody requestBody
-     * @param recipients  recipients
-     */
-    fun requestRoomKey(requestBody: RoomKeyRequestBody, recipients: List<Map<String, String>>) {
-        mOutgoingRoomKeyRequestManager.sendRoomKeyRequest(requestBody, recipients)
-    }
-
+    // TODO Check if this method is still necessary
     /**
      * Cancel any earlier room key request
      *
@@ -1548,7 +1105,7 @@ internal class CryptoManager(
      * ========================================================================================== */
 
     override fun toString(): String {
-        return myDevice.userId + " (" + myDevice.deviceId + ")"
+        return "CryptoManager of " + mCredentials.userId + " (" + mCredentials.deviceId + ")"
 
     }
 

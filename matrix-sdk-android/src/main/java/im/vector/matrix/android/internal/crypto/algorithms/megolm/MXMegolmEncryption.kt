@@ -19,7 +19,6 @@
 package im.vector.matrix.android.internal.crypto.algorithms.megolm
 
 import android.text.TextUtils
-import androidx.annotation.Keep
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.failure.Failure
@@ -27,13 +26,20 @@ import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.internal.crypto.*
+import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
+import im.vector.matrix.android.internal.crypto.DeviceListManager
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import im.vector.matrix.android.internal.crypto.MXOlmDevice
+import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
+import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXQueuedEncryption
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
+import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -42,22 +48,22 @@ import im.vector.matrix.android.internal.util.convertToUTF8
 import timber.log.Timber
 import java.util.*
 
-@Keep
-internal class MXMegolmEncryption : IMXEncrypting {
+internal class MXMegolmEncryption(
+        // The id of the room we will be sending to.
+        private var mRoomId: String,
 
-    private lateinit var mCrypto: CryptoManager
-    private lateinit var olmDevice: MXOlmDevice
-    private lateinit var mKeysBackup: KeysBackup
-    private lateinit var mDeviceListManager: DeviceListManager
+        private val olmDevice: MXOlmDevice,
+        private val mKeysBackup: KeysBackup,
+        private val mCryptoStore: IMXCryptoStore,
+        private val mDeviceListManager: DeviceListManager,
+        private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+        private val mCredentials: Credentials,
+        private val mSendToDeviceTask: SendToDeviceTask,
+        private val mTaskExecutor: TaskExecutor,
+        private val mMessageEncrypter: MessageEncrypter,
+        private val mWarnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository
+        ) : IMXEncrypting {
 
-    private lateinit var mCredentials: Credentials
-    private lateinit var mSendToDeviceTask: SendToDeviceTask
-    private lateinit var mTaskExecutor: TaskExecutor
-
-    // The id of the room we will be sending to.
-    private lateinit var mRoomId: String
-
-    private var mDeviceId: String? = null
 
     // OutboundSessionInfo. Null if we haven't yet started setting one up. Note
     // that even if this is non-null, it may not be ready for use (in which
@@ -69,9 +75,11 @@ internal class MXMegolmEncryption : IMXEncrypting {
 
     private val mPendingEncryptions = ArrayList<MXQueuedEncryption>()
 
+    // Default rotation periods
+    // TODO: Make it configurable via parameters
     // Session rotation periods
-    private var mSessionRotationPeriodMsgs: Int = 0
-    private var mSessionRotationPeriodMs: Int = 0
+    private var mSessionRotationPeriodMsgs: Int = 100
+    private var mSessionRotationPeriodMs: Int = 7 * 24 * 3600 * 1000
 
     /**
      * @return a snapshot of the pending encryptions
@@ -86,32 +94,6 @@ internal class MXMegolmEncryption : IMXEncrypting {
 
             return list
         }
-
-    override fun initWithMatrixSession(crypto: CryptoManager,
-                                       olmDevice: MXOlmDevice,
-                                       keysBackup: KeysBackup,
-                                       deviceListManager: DeviceListManager,
-                                       credentials: Credentials,
-                                       sendToDeviceTask: SendToDeviceTask,
-                                       taskExecutor: TaskExecutor,
-                                       roomId: String) {
-        mCrypto = crypto
-        this.olmDevice = olmDevice
-        mDeviceListManager = deviceListManager
-        mKeysBackup = keysBackup
-        mCredentials = credentials
-        mSendToDeviceTask = sendToDeviceTask
-        mTaskExecutor = taskExecutor
-
-        mRoomId = roomId
-        mDeviceId = mCredentials.deviceId
-
-
-        // Default rotation periods
-        // TODO: Make it configurable via parameters
-        mSessionRotationPeriodMsgs = 100
-        mSessionRotationPeriodMs = 7 * 24 * 3600 * 1000
-    }
 
     override fun encryptEventContent(eventContent: Content,
                                      eventType: String,
@@ -334,7 +316,7 @@ internal class MXMegolmEncryption : IMXEncrypting {
         val t0 = System.currentTimeMillis()
         Timber.d("## shareUserDevicesKey() : starts")
 
-        mCrypto.ensureOlmSessionsForDevices(devicesByUser, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
+        mEnsureOlmSessionsForDevicesAction.handle(devicesByUser, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXOlmSessionResult>) {
                 Timber.d("## shareUserDevicesKey() : ensureOlmSessionsForDevices succeeds after "
                         + (System.currentTimeMillis() - t0) + " ms")
@@ -367,7 +349,7 @@ internal class MXMegolmEncryption : IMXEncrypting {
 
                         Timber.d("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
                         //noinspection ArraysAsListWithZeroOrOneArgument,ArraysAsListWithZeroOrOneArgument
-                        contentMap.setObject(mCrypto.encryptMessage(payload, Arrays.asList(sessionResult.mDevice)), userId, deviceID)
+                        contentMap.setObject(mMessageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.mDevice)), userId, deviceID)
                         haveTargets = true
                     }
                 }
@@ -453,7 +435,7 @@ internal class MXMegolmEncryption : IMXEncrypting {
 
                 // Include our device ID so that recipients can send us a
                 // m.new_device message if they don't have our session key.
-                map["device_id"] = mDeviceId!!
+                map["device_id"] = mCredentials.deviceId!!
 
                 CryptoAsyncHelper.getUiHandler().post { queuedEncryption.mApiCallback?.onSuccess(map.toContent()!!) }
 
@@ -480,7 +462,8 @@ internal class MXMegolmEncryption : IMXEncrypting {
         // an m.new_device.
         mDeviceListManager.downloadKeys(userIds, false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                val encryptToVerifiedDevicesOnly = mCrypto.getGlobalBlacklistUnverifiedDevices() || mCrypto.isRoomBlacklistUnverifiedDevices(mRoomId)
+                val encryptToVerifiedDevicesOnly = mCryptoStore.getGlobalBlacklistUnverifiedDevices()
+                        || mCryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(mRoomId)
 
                 val devicesInRoom = MXUsersDevicesMap<MXDeviceInfo>()
                 val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
@@ -491,7 +474,7 @@ internal class MXMegolmEncryption : IMXEncrypting {
                     for (deviceId in deviceIds!!) {
                         val deviceInfo = data.getObject(deviceId, userId)
 
-                        if (mCrypto.warnOnUnknownDevices() && deviceInfo!!.isUnknown) {
+                        if (mWarnOnUnknownDevicesRepository.warnOnUnknownDevices() && deviceInfo!!.isUnknown) {
                             // The device is not yet known by the user
                             unknownDevices.setObject(deviceInfo, userId, deviceId)
                             continue

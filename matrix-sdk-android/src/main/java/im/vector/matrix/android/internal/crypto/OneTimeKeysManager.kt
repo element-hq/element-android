@@ -108,7 +108,9 @@ internal class OneTimeKeysManager(
                             // But that message might never arrive leaving us stuck with duff
                             // private keys clogging up our local storage.
                             // So we need some kind of engineering compromise to balance all of
-                            // these factors. // TODO Why we do not set mOneTimeKeyCount here?
+                            // these factors.
+                            // TODO Why we do not set mOneTimeKeyCount here?
+                            // TODO This is not needed anymore, see https://github.com/matrix-org/matrix-js-sdk/pull/493 (TODO on iOS also)
                             val keyCount = data.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)
                             uploadOTK(keyCount, keyLimit, callback)
                         }

@@ -34,7 +34,6 @@ interface KeysBackupService {
     fun backupAllGroupSessions(progressListener: ProgressListener?, callback: MatrixCallback<Unit>?)
     fun getKeysBackupTrust(keysBackupVersion: KeysVersionResult, callback: MatrixCallback<KeysBackupVersionTrust>)
     fun getBackupProgress(progressListener: ProgressListener)
-    fun maybeBackupKeys()
     fun getVersion(version: String, callback: MatrixCallback<KeysVersionResult?>)
     fun forceUsingLastVersion(callback: MatrixCallback<Boolean>)
     fun checkAndStartKeysBackup()

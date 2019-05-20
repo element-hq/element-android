@@ -19,49 +19,30 @@
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
 import android.text.TextUtils
-import androidx.annotation.Keep
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
+import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForUsersAction
+import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
-import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import java.util.*
 
-@Keep
-internal class MXOlmEncryption : IMXEncrypting {
-    private lateinit var mCrypto: CryptoManager
-    private lateinit var mOlmDevice: MXOlmDevice
-    private lateinit var mDeviceListManager: DeviceListManager
+internal class MXOlmEncryption(
+        private var mRoomId: String,
 
-    private lateinit var mCredentials: Credentials
-    private lateinit var mSendToDeviceTask: SendToDeviceTask
-    private lateinit var mTaskExecutor: TaskExecutor
+        private val mOlmDevice: MXOlmDevice,
+        private val mCryptoStore: IMXCryptoStore,
+        private val mMessageEncrypter: MessageEncrypter,
+        private val mDeviceListManager: DeviceListManager,
+        private val mEnsureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction)
+    : IMXEncrypting {
 
-    private lateinit var mRoomId: String
-
-    override fun initWithMatrixSession(crypto: CryptoManager,
-                                       olmDevice: MXOlmDevice,
-                                       keysBackup: KeysBackup,
-                                       deviceListManager: DeviceListManager,
-                                       credentials: Credentials,
-                                       sendToDeviceTask: SendToDeviceTask,
-                                       taskExecutor: TaskExecutor,
-                                       roomId: String) {
-        mCrypto = crypto
-        mOlmDevice = olmDevice
-        mDeviceListManager = deviceListManager
-
-        mRoomId = roomId
-    }
 
     override fun encryptEventContent(eventContent: Content,
                                      eventType: String,
@@ -75,24 +56,22 @@ internal class MXOlmEncryption : IMXEncrypting {
                 val deviceInfos = ArrayList<MXDeviceInfo>()
 
                 for (userId in userIds) {
-                    val devices = mCrypto.getUserDevices(userId)
+                    val devices = mCryptoStore.getUserDevices(userId)?.values ?: emptyList()
 
-                    if (null != devices) {
-                        for (device in devices) {
-                            val key = device.identityKey()
+                    for (device in devices) {
+                        val key = device.identityKey()
 
-                            if (TextUtils.equals(key, mOlmDevice.deviceCurve25519Key)) {
-                                // Don't bother setting up session to ourself
-                                continue
-                            }
-
-                            if (device.isBlocked) {
-                                // Don't bother setting up sessions with blocked users
-                                continue
-                            }
-
-                            deviceInfos.add(device)
+                        if (TextUtils.equals(key, mOlmDevice.deviceCurve25519Key)) {
+                            // Don't bother setting up session to ourself
+                            continue
                         }
+
+                        if (device.isBlocked) {
+                            // Don't bother setting up sessions with blocked users
+                            continue
+                        }
+
+                        deviceInfos.add(device)
                     }
                 }
 
@@ -101,7 +80,7 @@ internal class MXOlmEncryption : IMXEncrypting {
                 messageMap["type"] = eventType
                 messageMap["content"] = eventContent
 
-                mCrypto.encryptMessage(messageMap, deviceInfos)
+                mMessageEncrypter.encryptMessage(messageMap, deviceInfos)
 
                 callback.onSuccess(messageMap.toContent()!!)
             }
@@ -118,7 +97,7 @@ internal class MXOlmEncryption : IMXEncrypting {
         mDeviceListManager.downloadKeys(users, false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
 
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                mCrypto.ensureOlmSessionsForUsers(users, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
+                mEnsureOlmSessionsForUsersAction.handle(users, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
                     override fun onSuccess(data: MXUsersDevicesMap<MXOlmSessionResult>) {
                         callback?.onSuccess(Unit)
                     }

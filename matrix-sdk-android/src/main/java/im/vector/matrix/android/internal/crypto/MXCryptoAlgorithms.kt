@@ -17,48 +17,7 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import android.text.TextUtils
-import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
-import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
-import timber.log.Timber
-import java.util.*
-
 internal object MXCryptoAlgorithms {
-
-    // encryptors map
-    private val mEncryptors: MutableMap<String, Class<IMXEncrypting>>
-
-    // decryptors map
-    private val mDecryptors: MutableMap<String, Class<IMXDecrypting>>
-
-    init {
-        mEncryptors = HashMap()
-        try {
-            mEncryptors[MXCRYPTO_ALGORITHM_MEGOLM] = Class.forName("im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryption") as Class<IMXEncrypting>
-        } catch (e: Exception) {
-            Timber.e("## MXCryptoAlgorithms() : fails to add MXCRYPTO_ALGORITHM_MEGOLM")
-        }
-
-        try {
-            mEncryptors[MXCRYPTO_ALGORITHM_OLM] = Class.forName("im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryption") as Class<IMXEncrypting>
-        } catch (e: Exception) {
-            Timber.e("## MXCryptoAlgorithms() : fails to add MXCRYPTO_ALGORITHM_OLM")
-        }
-
-        mDecryptors = HashMap()
-        try {
-            mDecryptors[MXCRYPTO_ALGORITHM_MEGOLM] = Class.forName("im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmDecryption") as Class<IMXDecrypting>
-        } catch (e: Exception) {
-            Timber.e("## MXCryptoAlgorithms() : fails to add MXCRYPTO_ALGORITHM_MEGOLM")
-        }
-
-        try {
-            mDecryptors[MXCRYPTO_ALGORITHM_OLM] = Class.forName("im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryption") as Class<IMXDecrypting>
-        } catch (e: Exception) {
-            Timber.e("## MXCryptoAlgorithms() : fails to add MXCRYPTO_ALGORITHM_OLM")
-        }
-
-    }
 
     /**
      * Get the class implementing encryption for the provided algorithm.
@@ -66,11 +25,11 @@ internal object MXCryptoAlgorithms {
      * @param algorithm the algorithm tag.
      * @return A class implementing 'IMXEncrypting'.
      */
-    fun encryptorClassForAlgorithm(algorithm: String?): Class<IMXEncrypting>? {
-        return if (!TextUtils.isEmpty(algorithm)) {
-            mEncryptors[algorithm]
-        } else {
-            null
+    fun hasEncryptorClassForAlgorithm(algorithm: String?): Boolean {
+        return when (algorithm) {
+            MXCRYPTO_ALGORITHM_MEGOLM,
+            MXCRYPTO_ALGORITHM_OLM -> true
+            else                   -> false
         }
     }
 
@@ -81,11 +40,11 @@ internal object MXCryptoAlgorithms {
      * @return A class implementing 'IMXDecrypting'.
      */
 
-    fun decryptorClassForAlgorithm(algorithm: String?): Class<IMXDecrypting>? {
-        return if (!TextUtils.isEmpty(algorithm)) {
-            mDecryptors[algorithm]
-        } else {
-            null
+    fun hasDecryptorClassForAlgorithm(algorithm: String?): Boolean {
+        return when (algorithm) {
+            MXCRYPTO_ALGORITHM_MEGOLM,
+            MXCRYPTO_ALGORITHM_OLM -> true
+            else                   -> false
         }
     }
 
@@ -93,6 +52,6 @@ internal object MXCryptoAlgorithms {
      * @return The list of registered algorithms.
      */
     fun supportedAlgorithms(): List<String> {
-        return ArrayList(mEncryptors.keys)
+        return listOf(MXCRYPTO_ALGORITHM_MEGOLM, MXCRYPTO_ALGORITHM_OLM)
     }
 }

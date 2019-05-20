@@ -19,11 +19,16 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
+import im.vector.matrix.android.internal.crypto.actions.*
+import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmDecryptionFactory
+import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
+import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
+import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.*
+import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
@@ -88,7 +93,7 @@ internal class CryptoModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomDecryptorProvider(get(), get(), get(), get(), get())
+            RoomDecryptorProvider(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -113,6 +118,56 @@ internal class CryptoModule {
             SetDeviceVerificationAction(get(), get(), get())
         }
 
+        // Device info
+        scope(DefaultSession.SCOPE) {
+            MyDeviceInfoHolder(get(), get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            EnsureOlmSessionsForDevicesAction(get(), get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            EnsureOlmSessionsForUsersAction(get(), get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            MegolmSessionDataImporter(get(), get(), get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            MessageEncrypter(get(), get())
+        }
+
+
+        scope(DefaultSession.SCOPE) {
+            WarnOnUnknownDeviceRepository()
+        }
+
+        // Factories
+        scope(DefaultSession.SCOPE) {
+            MXMegolmDecryptionFactory(
+                    get(), get(), get(), get(), get(), get(), get(), get(), get()
+            )
+        }
+
+        scope(DefaultSession.SCOPE) {
+            MXMegolmEncryptionFactory(
+                    get(), get(), get(), get(), get(), get(), get(), get(), get(), get()
+            )
+        }
+
+        scope(DefaultSession.SCOPE) {
+            MXOlmDecryptionFactory(
+                    get(), get()
+            )
+        }
+
+        scope(DefaultSession.SCOPE) {
+            MXOlmEncryptionFactory(
+                    get(), get(), get(), get(), get()
+            )
+        }
 
         // CryptoManager
         scope(DefaultSession.SCOPE) {
@@ -131,8 +186,14 @@ internal class CryptoModule {
                     get(),
                     get(),
                     get(),
+                    get(),
+                    get(),
                     // Actions
                     get(),
+                    get(),
+                    get(),
+                    // Factory
+                    get(), get(),
                     // Tasks
                     get(), get(), get(), get(), get(), get(), get(),
                     // Task executor
@@ -200,6 +261,7 @@ internal class CryptoModule {
                     get(),
                     get(),
                     get(),
+                    get(),
                     // Task
                     get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
                     // Task executor
@@ -255,7 +317,7 @@ internal class CryptoModule {
          * ========================================================================================== */
 
         scope(DefaultSession.SCOPE) {
-            DefaultSasVerificationService(get(), get(), get(), get(), get())
+            DefaultSasVerificationService(get(), get(), get(), get(), get(), get(), get())
         }
 
     }

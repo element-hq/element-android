@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.DeviceListManager
+import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -48,6 +49,7 @@ import kotlin.collections.HashMap
  */
 internal class DefaultSasVerificationService(private val mCredentials: Credentials,
                                              private val mCryptoStore: IMXCryptoStore,
+                                             private val mMyDeviceInfoHolder: MyDeviceInfoHolder,
                                              private val deviceListManager: DeviceListManager,
                                              private val setDeviceVerificationAction: SetDeviceVerificationAction,
                                              private val mSendToDeviceTask: SendToDeviceTask,
@@ -85,10 +87,6 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
             }
         }
     }
-
-    // Internal listener
-    private lateinit var mCryptoListener: SasCryptoListener
-
 
     private var listeners = ArrayList<SasVerificationService.SasVerificationListener>()
 
@@ -188,11 +186,12 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                             Timber.d("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
                             val tx = IncomingSASVerificationTransaction(
                                     this,
+                                    setDeviceVerificationAction,
                                     mCredentials,
                                     mCryptoStore,
                                     mSendToDeviceTask,
                                     mTaskExecutor,
-                                    mCryptoListener.getMyDevice().fingerprint()!!,
+                                    mMyDeviceInfoHolder.myDevice.fingerprint()!!,
                                     startReq.transactionID!!,
                                     otherUserId)
                             addTransaction(tx)
@@ -362,11 +361,12 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
         if (KeyVerificationStart.VERIF_METHOD_SAS == method) {
             val tx = OutgoingSASVerificationRequest(
                     this,
+                    setDeviceVerificationAction,
                     mCredentials,
                     mCryptoStore,
                     mSendToDeviceTask,
                     mTaskExecutor,
-                    mCryptoListener.getMyDevice().fingerprint()!!,
+                    mMyDeviceInfoHolder.myDevice.fingerprint()!!,
                     txID,
                     userId,
                     deviceID)
@@ -423,13 +423,5 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                     }
                 })
                 .executeBy(mTaskExecutor)
-    }
-
-    fun setCryptoInternalListener(listener: SasCryptoListener) {
-        mCryptoListener = listener
-    }
-
-    interface SasCryptoListener {
-        fun getMyDevice(): MXDeviceInfo
     }
 }

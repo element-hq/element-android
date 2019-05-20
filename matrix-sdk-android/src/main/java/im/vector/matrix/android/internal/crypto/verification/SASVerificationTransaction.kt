@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
+import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -42,6 +43,7 @@ import kotlin.properties.Delegates
  */
 internal abstract class SASVerificationTransaction(
         private val mSasVerificationService: DefaultSasVerificationService,
+        private val mSetDeviceVerificationAction: SetDeviceVerificationAction,
         private val mCredentials: Credentials,
         private val mCryptoStore: IMXCryptoStore,
         private val mSendToDeviceTask: SendToDeviceTask,
@@ -245,7 +247,7 @@ internal abstract class SASVerificationTransaction(
     }
 
     private fun setDeviceVerified(deviceId: String, userId: String) {
-        mSasVerificationService.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
+        mSetDeviceVerificationAction.handle(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
                 deviceId,
                 userId)
     }

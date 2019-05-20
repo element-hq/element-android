@@ -38,7 +38,7 @@ internal class IncomingRoomKeyRequestManager(
     private val mReceivedRoomKeyRequestCancellations = ArrayList<IncomingRoomKeyRequestCancellation>()
 
     // the listeners
-    val mRoomKeysRequestListeners: MutableSet<RoomKeysRequestListener> = HashSet()
+    private val mRoomKeysRequestListeners: MutableSet<RoomKeysRequestListener> = HashSet()
 
     init {
         mReceivedRoomKeyRequests.addAll(mCryptoStore.getPendingIncomingRoomKeyRequests())

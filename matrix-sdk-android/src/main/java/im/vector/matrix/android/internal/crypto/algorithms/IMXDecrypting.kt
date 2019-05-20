@@ -17,29 +17,16 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms
 
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.internal.crypto.*
-import im.vector.matrix.android.internal.crypto.CryptoManager
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.MXDecryptionException
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 
 /**
  * An interface for decrypting data
  */
 internal interface IMXDecrypting {
-
-    /**
-     * Init the object fields
-     *
-     * @param matrixSession the session
-     */
-    fun initWithMatrixSession(credentials: Credentials,
-                              crypto: CryptoManager,
-                              olmDevice: MXOlmDevice,
-                              deviceListManager: DeviceListManager,
-                              sendToDeviceTask: SendToDeviceTask,
-                              taskExecutor: TaskExecutor)
 
     /**
      * Decrypt an event
@@ -57,7 +44,7 @@ internal interface IMXDecrypting {
      *
      * @param event the key event.
      */
-    fun onRoomKeyEvent(event: Event)
+    fun onRoomKeyEvent(event: Event, keysBackup: KeysBackup) {}
 
     /**
      * Check if the some messages can be decrypted with a new session
@@ -65,7 +52,7 @@ internal interface IMXDecrypting {
      * @param senderKey the session sender key
      * @param sessionId the session id
      */
-    fun onNewSession(senderKey: String, sessionId: String)
+    fun onNewSession(senderKey: String, sessionId: String) {}
 
     /**
      * Determine if we have the keys necessary to respond to a room key request
@@ -73,12 +60,12 @@ internal interface IMXDecrypting {
      * @param request keyRequest
      * @return true if we have the keys and could (theoretically) share
      */
-    fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean
+    fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean = false
 
     /**
      * Send the response to a room key request.
      *
      * @param request keyRequest
      */
-    fun shareKeysWithDevice(request: IncomingRoomKeyRequest)
+    fun shareKeysWithDevice(request: IncomingRoomKeyRequest) {}
 }

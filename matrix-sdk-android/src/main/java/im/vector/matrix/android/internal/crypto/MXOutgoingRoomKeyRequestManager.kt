@@ -37,7 +37,7 @@ internal class MXOutgoingRoomKeyRequestManager(
         private val mTaskExecutor: TaskExecutor) {
 
     // running
-    var mClientRunning: Boolean = false
+    private var mClientRunning: Boolean = false
 
     // transaction counter
     private var mTxnCtr: Int = 0

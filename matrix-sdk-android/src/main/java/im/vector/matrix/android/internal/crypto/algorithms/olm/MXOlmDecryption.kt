@@ -18,60 +18,30 @@
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
 import android.text.TextUtils
-import androidx.annotation.Keep
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.internal.crypto.*
+import im.vector.matrix.android.internal.crypto.MXDecryptionException
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
 import im.vector.matrix.android.internal.crypto.model.event.OlmEventContent
 import im.vector.matrix.android.internal.crypto.model.event.OlmPayloadContent
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.convertFromUTF8
 import timber.log.Timber
 import java.util.*
 
-/**
- * An interface for encrypting data
- */
-@Keep
-internal class MXOlmDecryption : IMXDecrypting {
+internal class MXOlmDecryption(
+        // The olm device interface
+        private val mOlmDevice: MXOlmDevice,
 
-    // The olm device interface
-    private lateinit var mOlmDevice: MXOlmDevice
-
-    // the matrix credentials
-    private lateinit var mCredentials: Credentials
-
-    private lateinit var mCrypto: CryptoManager
-    private lateinit var mCryptoStore: IMXCryptoStore
-    private lateinit var mSendToDeviceTask: SendToDeviceTask
-    private lateinit var mTaskExecutor: TaskExecutor
-
-    override fun initWithMatrixSession(credentials: Credentials,
-                                       crypto: CryptoManager,
-                                       olmDevice: MXOlmDevice,
-                                       deviceListManager: DeviceListManager,
-                                       sendToDeviceTask: SendToDeviceTask,
-                                       taskExecutor: TaskExecutor) {
-        mCredentials = credentials
-        mCrypto = crypto
-        mOlmDevice = olmDevice
-        mSendToDeviceTask = sendToDeviceTask
-        mTaskExecutor = taskExecutor
-    }
+        // the matrix credentials
+        private val mCredentials: Credentials)
+    : IMXDecrypting {
 
     @Throws(MXDecryptionException::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
-        // sanity check
-        if (null == event) {
-            Timber.e("## decryptEvent() : null event")
-            return null
-        }
-
         val olmEventContent = event.content.toModel<OlmEventContent>()!!
 
         if (null == olmEventContent.ciphertext) {
@@ -89,7 +59,7 @@ internal class MXOlmDecryption : IMXDecrypting {
 
         // The message for myUser
         val message = olmEventContent.ciphertext!![mOlmDevice.deviceCurve25519Key] as Map<String, Any>
-        val payloadString = decryptMessage(message, olmEventContent.senderKey)
+        val payloadString = decryptMessage(message, olmEventContent.senderKey!!)
 
         if (null == payloadString) {
             Timber.e("## decryptEvent() Failed to decrypt Olm event (id= " + event.eventId + " ) from " + olmEventContent.senderKey)
@@ -164,26 +134,12 @@ internal class MXOlmDecryption : IMXDecrypting {
         }
 
         val result = MXEventDecryptionResult()
-        // TODO result.mClearEvent = payload
+        // FIXME result.mClearEvent = payload
         result.mSenderCurve25519Key = olmEventContent.senderKey
         result.mClaimedEd25519Key = olmPayloadContent.keys!!.get("ed25519")
 
         return result
     }
-
-    override fun onRoomKeyEvent(event: Event) {
-        // No impact for olm
-    }
-
-    override fun onNewSession(senderKey: String, sessionId: String) {
-        // No impact for olm
-    }
-
-    override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {
-        return false
-    }
-
-    override fun shareKeysWithDevice(request: IncomingRoomKeyRequest) {}
 
     /**
      * Attempt to decrypt an Olm message.
@@ -192,8 +148,8 @@ internal class MXOlmDecryption : IMXDecrypting {
      * @param message                message object, with 'type' and 'body' fields.
      * @return payload, if decrypted successfully.
      */
-    private fun decryptMessage(message: Map<String, Any>, theirDeviceIdentityKey: String?): String? {
-        val sessionIdsSet = mOlmDevice.getSessionIds(theirDeviceIdentityKey!!)
+    private fun decryptMessage(message: Map<String, Any>, theirDeviceIdentityKey: String): String? {
+        val sessionIdsSet = mOlmDevice.getSessionIds(theirDeviceIdentityKey)
 
         val sessionIds: List<String>
 

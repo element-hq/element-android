@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.listeners.StepProgressListener
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.internal.crypto.*
+import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrustSignature
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupAuthData
@@ -67,6 +68,8 @@ internal class KeysBackup(
         private val mCryptoStore: IMXCryptoStore,
         private val mOlmDevice: MXOlmDevice,
         private val mObjectSigner: ObjectSigner,
+        // Actions
+        private val mMegolmSessionDataImporter: MegolmSessionDataImporter,
         // Tasks
         private val mCreateKeysBackupVersionTask: CreateKeysBackupVersionTask,
         private val mDeleteBackupTask: DeleteBackupTask,
@@ -114,9 +117,6 @@ internal class KeysBackup(
 
     override val currentBackupVersion: String?
         get() = mKeysBackupVersion?.version
-
-    // Internal listener
-    private lateinit var mKeysBackupCryptoListener: KeysBackupCryptoListener
 
     override fun addListener(listener: KeysBackupService.KeysBackupStateListener) {
         mKeysBackupStateManager.addListener(listener)
@@ -749,7 +749,20 @@ internal class KeysBackup(
                         null
                     }
 
-                    mKeysBackupCryptoListener.importMegolmSessionsData(sessionsData, backUp, progressListener, callback)
+                    mMegolmSessionDataImporter.handle(sessionsData, !backUp, progressListener, object : MatrixCallback<ImportRoomKeysResult> {
+                        override fun onSuccess(data: ImportRoomKeysResult) {
+                            // Do not back up the key if it comes from a backup recovery
+                            if (backUp) {
+                                maybeBackupKeys()
+                            }
+
+                            callback.onSuccess(data)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            callback.onFailure(failure)
+                        }
+                    })
                 }
 
                 override fun onFailure(failure: Throwable) {
@@ -887,7 +900,7 @@ internal class KeysBackup(
     /**
      * Do a backup if there are new keys, with a delay
      */
-    override fun maybeBackupKeys() {
+    fun maybeBackupKeys() {
         when {
             isStucked                              -> {
                 // If not already done, or in error case, check for a valid backup version on the homeserver.
@@ -1388,7 +1401,7 @@ internal class KeysBackup(
     @WorkerThread
     fun encryptGroupSession(session: MXOlmInboundGroupSession2): KeyBackupData {
         // Gather information for each key
-        val device = mKeysBackupCryptoListener.deviceWithIdentityKey(session.mSenderKey!!, MXCRYPTO_ALGORITHM_MEGOLM)
+        val device = mCryptoStore.deviceWithIdentityKey(session.mSenderKey!!)
 
         // Build the m.megolm_backup.v1.curve25519-aes-sha2 data as defined at
         // https://github.com/uhoreg/matrix-doc/blob/e2e_backup/proposals/1219-storing-megolm-keys-serverside.md#mmegolm_backupv1curve25519-aes-sha2-key-format
@@ -1478,21 +1491,6 @@ internal class KeysBackup(
         // Maximum number of keys to send at a time to the homeserver.
         private const val KEY_BACKUP_SEND_KEYS_MAX_COUNT = 100
     }
-
-
-    fun setCryptoInternalListener(listener: KeysBackupCryptoListener) {
-        mKeysBackupCryptoListener = listener
-    }
-
-    interface KeysBackupCryptoListener {
-        fun importMegolmSessionsData(megolmSessionsData: List<MegolmSessionData>,
-                                     backUpKeys: Boolean,
-                                     progressListener: ProgressListener?,
-                                     callback: MatrixCallback<ImportRoomKeysResult>)
-
-        fun deviceWithIdentityKey(senderKey: String, algorithm: String): MXDeviceInfo?
-    }
-
 
     /* ==========================================================================================
      * DEBUG INFO
