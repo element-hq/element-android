@@ -292,7 +292,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                 summary.lastMessage?.sender?.let { senderId ->
                     session.getUser(senderId)
                 }?.also {
-                    setState { copy(inviter = Success(it)) }
+                    setState { copy(asyncInviter = Success(it)) }
                 }
             }
         }

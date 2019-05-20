@@ -57,6 +57,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
+        app:labelVisibilityMode="unlabeled"
         app:itemIconTint="@android:color/white"
         app:itemTextColor="@color/home_bottom_nav_view_tint"
         app:layout_constraintBottom_toBottomOf="parent"

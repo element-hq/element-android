@@ -41,7 +41,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
         val expandedArrowDrawable = ContextCompat.getDrawable(holder.rootView.context, expandedArrowDrawableRes)?.also {
             DrawableCompat.setTint(it, tintColor)
         }
-        holder.unreadCounterBadgeView.render(unreadCount, showHighlighted)
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadCount, showHighlighted))
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(expandedArrowDrawable, null, null, null)
         holder.titleView.text = title
         holder.rootView.setOnClickListener { listener?.invoke() }

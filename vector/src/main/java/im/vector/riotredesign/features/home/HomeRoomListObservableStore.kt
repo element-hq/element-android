@@ -18,5 +18,18 @@ package im.vector.riotredesign.features.home
 
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.core.utils.RxStore
+import im.vector.riotredesign.features.home.room.list.RoomListDisplayModeFilter
+import im.vector.riotredesign.features.home.room.list.RoomListFragment
+import io.reactivex.Observable
 
-class HomeRoomListObservableStore : RxStore<List<RoomSummary>>(emptyList())
+class HomeRoomListObservableStore : RxStore<List<RoomSummary>>() {
+
+    fun observeFilteredBy(displayMode: RoomListFragment.DisplayMode): Observable<List<RoomSummary>> {
+        return observe()
+                .flatMapSingle {
+                    Observable.fromIterable(it).filter(RoomListDisplayModeFilter(displayMode)).toList()
+                }
+    }
+
+
+}

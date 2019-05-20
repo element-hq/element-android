@@ -389,15 +389,15 @@ class RoomDetailFragment :
     private fun renderState(state: RoomDetailViewState) {
         renderRoomSummary(state)
         val summary = state.asyncRoomSummary()
-        val inviter = state.inviter()
+        val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
             timelineEventController.setTimeline(state.timeline)
             inviteView.visibility = View.GONE
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
-        } else {
-            //TODO : close the screen
+        } else if (state.asyncInviter.complete) {
+            vectorBaseActivity.finish()
         }
     }
 

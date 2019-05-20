@@ -46,7 +46,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.titleView.text = roomName
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
-        holder.unreadCounterBadgeView.render(unreadCount, showHighlighted)
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadCount, showHighlighted))
         AvatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
     }
 

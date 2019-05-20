@@ -21,8 +21,6 @@ import androidx.fragment.app.FragmentManager
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceFragment
-import im.vector.riotredesign.features.home.group.SelectedGroupFragment
-import im.vector.riotredesign.features.home.group.SelectedGroupParams
 import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity
 import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import kotlinx.android.synthetic.main.activity_home.*
@@ -37,10 +35,10 @@ class HomeNavigator {
     fun openSelectedGroup(groupSummary: GroupSummary) {
         Timber.v("Open selected group ${groupSummary.groupId}")
         activity?.let {
-            val args = SelectedGroupParams(groupSummary.groupId, groupSummary.displayName, groupSummary.avatarUrl)
-            val selectedGroupFragment = SelectedGroupFragment.newInstance(args)
+            val args = HomeDetailParams(groupSummary.groupId, groupSummary.displayName, groupSummary.avatarUrl)
+            val homeDetailFragment = HomeDetailFragment.newInstance(args)
             it.drawerLayout?.closeDrawer(GravityCompat.START)
-            it.replaceFragment(selectedGroupFragment, R.id.homeDetailFragmentContainer)
+            it.replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
         }
     }
 
