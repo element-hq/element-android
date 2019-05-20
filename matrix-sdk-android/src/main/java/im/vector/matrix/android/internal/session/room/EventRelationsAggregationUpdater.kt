@@ -18,7 +18,7 @@ internal class EventRelationsAggregationUpdater(private val credentials: Credent
             when (event.type) {
                 EventType.REACTION -> {
                     //we got a reaction!!
-                    Timber.v("###REACTION in room $roomId")
+                    Timber.v("###REACTION in room $roomId for event ${event.eventId}")
                     handleReaction(event, roomId, realm)
                 }
                 EventType.MESSAGE -> {

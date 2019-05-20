@@ -24,12 +24,14 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionInfo
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import org.koin.standalone.inject
+import java.util.*
 
 class SendRelationWorker(context: Context, params: WorkerParameters)
     : Worker(context, params), MatrixKoinComponent {
@@ -57,14 +59,17 @@ class SendRelationWorker(context: Context, params: WorkerParameters)
         val relatedEventId = relationContent.relatesTo?.eventId ?: return Result.failure()
         val relationType = (relationContent.relatesTo as? ReactionInfo)?.type ?: params.relationType
         ?: return Result.failure()
+        val key = relationContent.relatesTo.key
 
         val result = executeRequest<SendResponse> {
             apiCall = roomAPI.sendRelation(
+                    txId = UUID.randomUUID().toString(),
                     roomId = params.roomId,
-                    parent_id = relatedEventId,
+                    parentId = relatedEventId,
                     relationType = relationType,
                     eventType = localEvent.type,
-                    content = localEvent.content
+                    content = emptyMap(),
+                    key = key
             )
         }
         return result.fold({

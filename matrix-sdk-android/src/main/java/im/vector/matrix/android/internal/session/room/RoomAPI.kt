@@ -27,12 +27,7 @@ import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 internal interface RoomAPI {
 
@@ -170,11 +165,13 @@ internal interface RoomAPI {
      * @param eventType the event type
      * @param content   the event content
      */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send_relation/{parent_id}/{relation_type}/{event_type}")
-    fun sendRelation(@Path("roomId") roomId: String,
-                     @Path("parentId") parent_id: String,
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/send_relation/{parent_id}/{relation_type}/{event_type}/{txnId}")
+    fun sendRelation(@Path("txnId") txId: String,
+                     @Path("roomId") roomId: String,
+                     @Path("parent_id") parentId: String,
                      @Path("relation_type") relationType: String,
-                     @Path("eventType") eventType: String,
+                     @Path("event_type") eventType: String,
+                     @Query("key") key: String,
                      @Body content: Content?
     ): Call<SendResponse>
 
@@ -213,6 +210,6 @@ internal interface RoomAPI {
             @Path("txnId") txId: String,
             @Path("roomId") roomId: String,
             @Path("eventId") parent_id: String,
-            @Body reason:  Map<String, String>
+            @Body reason: Map<String, String>
     ): Call<SendResponse>
 }

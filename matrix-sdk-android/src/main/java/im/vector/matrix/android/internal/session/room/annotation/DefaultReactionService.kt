@@ -18,11 +18,11 @@ package im.vector.matrix.android.internal.session.room.annotation
 import androidx.work.*
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
-import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
@@ -46,9 +46,6 @@ internal class DefaultReactionService(private val roomId: String,
 
     override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
         val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
-//                .also {
-//            //saveLocalEcho(it)
-//        }
         val sendRelationWork = createSendRelationWork(event)
         WorkManager.getInstance()
                 .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, sendRelationWork)
@@ -58,12 +55,13 @@ internal class DefaultReactionService(private val roomId: String,
 
 
     private fun createSendRelationWork(event: Event): OneTimeWorkRequest {
-        //TODO use the new API to send relation (for now use regular send)
-        val sendContentWorkerParams = SendEventWorker.Params(
-                roomId, event)
+//        val sendContentWorkerParams = SendEventWorker.Params(
+//                roomId, event)
+        val sendContentWorkerParams = SendRelationWorker.Params(
+                roomId, event, RelationType.ANNOTATION)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
-        return OneTimeWorkRequestBuilder<SendEventWorker>()
+        return OneTimeWorkRequestBuilder<SendRelationWorker>()
                 .setConstraints(WORK_CONSTRAINTS)
                 .setInputData(sendWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
@@ -123,17 +121,6 @@ internal class DefaultReactionService(private val roomId: String,
     private fun buildWorkIdentifier(identifier: String): String {
         return "${roomId}_$identifier"
     }
-
-//    private fun saveLocalEcho(event: Event) {
-//        monarchy.tryTransactionAsync { realm ->
-//            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-//                    ?: return@tryTransactionAsync
-//            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-//                    ?: return@tryTransactionAsync
-//
-//            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
-//        }
-//    }
 
     //TODO duplicate with send service?
     private fun createRedactEventWork(eventId: String, reason: String?): OneTimeWorkRequest {
