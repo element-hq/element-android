@@ -29,7 +29,7 @@ internal class KeysBackupStateManager(private val uiHandler: Handler) {
     // Backup state
     var state = KeysBackupState.Unknown
         set(newState) {
-            Timber.d("KeysBackup", "setState: $field -> $newState")
+            Timber.v("KeysBackup", "setState: $field -> $newState")
 
             field = newState
 

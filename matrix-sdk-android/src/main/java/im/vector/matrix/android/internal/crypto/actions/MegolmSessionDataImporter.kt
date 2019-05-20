@@ -65,7 +65,7 @@ internal class MegolmSessionDataImporter(private val mOlmDevice: MXOlmDevice,
             if (null != decrypting) {
                 try {
                     val sessionId = megolmSessionData.sessionId
-                    Timber.d("## importRoomKeys retrieve mSenderKey " + megolmSessionData.senderKey + " sessionId " + sessionId)
+                    Timber.v("## importRoomKeys retrieve mSenderKey " + megolmSessionData.senderKey + " sessionId " + sessionId)
 
                     totalNumbersOfImportedKeys++
 
@@ -106,7 +106,7 @@ internal class MegolmSessionDataImporter(private val mOlmDevice: MXOlmDevice,
 
         val t1 = System.currentTimeMillis()
 
-        Timber.d("## importMegolmSessionsData : sessions import " + (t1 - t0) + " ms (" + megolmSessionsData.size + " sessions)")
+        Timber.v("## importMegolmSessionsData : sessions import " + (t1 - t0) + " ms (" + megolmSessionsData.size + " sessions)")
 
         val finalTotalNumbersOfImportedKeys = totalNumbersOfImportedKeys
 

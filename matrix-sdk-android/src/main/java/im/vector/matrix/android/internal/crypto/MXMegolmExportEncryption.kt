@@ -354,7 +354,7 @@ object MXMegolmExportEncryption {
             }
         }
 
-        Timber.d("## deriveKeys() : " + iterations + " in " + (System.currentTimeMillis() - t0) + " ms")
+        Timber.v("## deriveKeys() : " + iterations + " in " + (System.currentTimeMillis() - t0) + " ms")
 
         return key
     }

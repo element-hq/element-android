@@ -28,7 +28,7 @@ import timber.log.Timber
 class DebugReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        Timber.d("Received debug action: ${intent.action}")
+        Timber.v("Received debug action: ${intent.action}")
 
         intent.action?.let {
             when {
@@ -44,11 +44,11 @@ class DebugReceiver : BroadcastReceiver() {
     }
 
     private fun logPrefs(name: String, sharedPreferences: SharedPreferences?) {
-        Timber.d("SharedPreferences $name:")
+        Timber.v("SharedPreferences $name:")
 
         sharedPreferences?.let { prefs ->
             prefs.all.keys.forEach { key ->
-                Timber.d("$key : ${prefs.all[key]}")
+                Timber.v("$key : ${prefs.all[key]}")
             }
         }
     }

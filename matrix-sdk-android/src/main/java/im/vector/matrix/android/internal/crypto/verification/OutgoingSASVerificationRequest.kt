@@ -117,7 +117,7 @@ internal class OutgoingSASVerificationRequest(
     }
 
     override fun onVerificationAccept(accept: KeyVerificationAccept) {
-        Timber.d("## onVerificationAccept id:$transactionId")
+        Timber.v("## onVerificationAccept id:$transactionId")
         if (state != SasVerificationTxState.Started) {
             Timber.e("## received accept request from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
@@ -154,7 +154,7 @@ internal class OutgoingSASVerificationRequest(
     }
 
     override fun onKeyVerificationKey(userId: String, vKey: KeyVerificationKey) {
-        Timber.d("## onKeyVerificationKey id:$transactionId")
+        Timber.v("## onKeyVerificationKey id:$transactionId")
         if (state != SasVerificationTxState.SendingKey && state != SasVerificationTxState.KeySent) {
             Timber.e("## received key from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
@@ -196,7 +196,7 @@ internal class OutgoingSASVerificationRequest(
     }
 
     override fun onKeyVerificationMac(vKey: KeyVerificationMac) {
-        Timber.d("## onKeyVerificationMac id:$transactionId")
+        Timber.v("## onKeyVerificationMac id:$transactionId")
         if (state != SasVerificationTxState.OnKeyReceived
                 && state != SasVerificationTxState.ShortCodeReady
                 && state != SasVerificationTxState.ShortCodeAccepted

@@ -296,7 +296,7 @@ object BugReporter {
                             mBugReportCall!!.cancel()
                         }
 
-                        Timber.d("## onWrite() : $percentage%")
+                        Timber.v("## onWrite() : $percentage%")
                         publishProgress(percentage)
                     }
 
@@ -638,7 +638,7 @@ object BugReporter {
      * @return the gzipped file
      */
     private fun compressFile(fin: File): File? {
-        Timber.d("## compressFile() : compress " + fin.name)
+        Timber.v("## compressFile() : compress " + fin.name)
 
         val dstFile = File(fin.parent, fin.name + ".gz")
 
@@ -665,7 +665,7 @@ object BugReporter {
             gos.close()
             inputStream.close()
 
-            Timber.d("## compressFile() : " + fin.length() + " compressed to " + dstFile.length() + " bytes")
+            Timber.v("## compressFile() : " + fin.length() + " compressed to " + dstFile.length() + " bytes")
             return dstFile
         } catch (e: Exception) {
             Timber.e(e, "## compressFile() failed " + e.message)

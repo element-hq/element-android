@@ -119,7 +119,7 @@ internal class SyncThread(private val syncTask: SyncTask,
                                 if (failure is Failure.NetworkConnection
                                         && failure.cause is SocketTimeoutException) {
                                     // Timeout are not critical
-                                    Timber.d("Timeout")
+                                    Timber.v("Timeout")
                                 } else {
                                     Timber.e(failure)
                                 }

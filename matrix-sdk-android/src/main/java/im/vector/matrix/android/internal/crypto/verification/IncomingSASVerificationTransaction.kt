@@ -80,7 +80,7 @@ internal class IncomingSASVerificationTransaction(
         }
 
     override fun onVerificationStart(startReq: KeyVerificationStart) {
-        Timber.d("## SAS received verification request from state $state")
+        Timber.v("## SAS received verification request from state $state")
         if (state != SasVerificationTxState.None) {
             Timber.e("## received verification request from invalid state")
             //should I cancel??
@@ -148,7 +148,7 @@ internal class IncomingSASVerificationTransaction(
 
     private fun doAccept(accept: KeyVerificationAccept) {
         this.accepted = accept
-        Timber.d("## SAS accept request id:$transactionId")
+        Timber.v("## SAS accept request id:$transactionId")
 
         //The hash commitment is the hash (using the selected hash algorithm) of the unpadded base64 representation of QB,
         // concatenated with the canonical JSON representation of the content of the m.key.verification.start message
@@ -166,12 +166,12 @@ internal class IncomingSASVerificationTransaction(
 
 
     override fun onVerificationAccept(accept: KeyVerificationAccept) {
-        Timber.d("## SAS invalid message for incoming request id:$transactionId")
+        Timber.v("## SAS invalid message for incoming request id:$transactionId")
         cancel(CancelCode.UnexpectedMessage)
     }
 
     override fun onKeyVerificationKey(userId: String, vKey: KeyVerificationKey) {
-        Timber.d("## SAS received key for request id:$transactionId")
+        Timber.v("## SAS received key for request id:$transactionId")
         if (state != SasVerificationTxState.SendingAccept && state != SasVerificationTxState.Accepted) {
             Timber.e("## received key from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
@@ -222,7 +222,7 @@ internal class IncomingSASVerificationTransaction(
     }
 
     override fun onKeyVerificationMac(vKey: KeyVerificationMac) {
-        Timber.d("## SAS received mac for request id:$transactionId")
+        Timber.v("## SAS received mac for request id:$transactionId")
         //Check for state?
         if (state != SasVerificationTxState.SendingKey
                 && state != SasVerificationTxState.KeySent

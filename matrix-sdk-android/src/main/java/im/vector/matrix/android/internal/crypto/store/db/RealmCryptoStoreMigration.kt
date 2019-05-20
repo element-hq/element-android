@@ -25,6 +25,6 @@ internal object RealmCryptoStoreMigration : RealmMigration {
     const val CRYPTO_STORE_SCHEMA_VERSION = 0L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
-        Timber.d("Migrating Realm Crypto from $oldVersion to $newVersion")
+        Timber.v("Migrating Realm Crypto from $oldVersion to $newVersion")
     }
 }

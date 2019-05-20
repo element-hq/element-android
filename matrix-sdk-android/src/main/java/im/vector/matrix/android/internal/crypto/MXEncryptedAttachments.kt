@@ -117,7 +117,7 @@ object MXEncryptedAttachments {
 
             outStream.close()
 
-            Timber.d("Encrypt in " + (System.currentTimeMillis() - t0) + " ms")
+            Timber.v("Encrypt in " + (System.currentTimeMillis() - t0) + " ms")
             return result
         } catch (oom: OutOfMemoryError) {
             Timber.e(oom, "## encryptAttachment failed " + oom.message)
@@ -214,7 +214,7 @@ object MXEncryptedAttachments {
             val decryptedStream = ByteArrayInputStream(outStream.toByteArray())
             outStream.close()
 
-            Timber.d("Decrypt in " + (System.currentTimeMillis() - t0) + " ms")
+            Timber.v("Decrypt in " + (System.currentTimeMillis() - t0) + " ms")
 
             return decryptedStream
         } catch (oom: OutOfMemoryError) {

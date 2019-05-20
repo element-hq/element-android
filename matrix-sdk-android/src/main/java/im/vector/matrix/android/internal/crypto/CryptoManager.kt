@@ -134,7 +134,7 @@ internal class CryptoManager(
     //private val mNetworkListener = object : IMXNetworkEventListener {
     //    override fun onNetworkConnectionUpdate(isConnected: Boolean) {
     //        if (isConnected && !isStarted()) {
-    //            Timber.d("Start MXCrypto because a network connection has been retrieved ")
+    //            Timber.v("Start MXCrypto because a network connection has been retrieved ")
     //            start(false, null)
     //        }
     //    }
@@ -257,13 +257,13 @@ internal class CryptoManager(
             }
 
             override fun onSuccess(data: KeysUploadResponse) {
-                Timber.d("###########################################################")
-                Timber.d("uploadDeviceKeys done for " + mCredentials.userId)
-                Timber.d("  - device id  : " + mCredentials.deviceId)
-                Timber.d("  - ed25519    : " + mOlmDevice.deviceEd25519Key)
-                Timber.d("  - curve25519 : " + mOlmDevice.deviceCurve25519Key)
-                Timber.d("  - oneTimeKeys: " + mOneTimeKeysUploader.mLastPublishedOneTimeKeys)
-                Timber.d("")
+                Timber.v("###########################################################")
+                Timber.v("uploadDeviceKeys done for " + mCredentials.userId)
+                Timber.v("  - device id  : " + mCredentials.deviceId)
+                Timber.v("  - ed25519    : " + mOlmDevice.deviceEd25519Key)
+                Timber.v("  - curve25519 : " + mOlmDevice.deviceCurve25519Key)
+                Timber.v("  - oneTimeKeys: " + mOneTimeKeysUploader.mLastPublishedOneTimeKeys)
+                Timber.v("")
 
                 mOneTimeKeysUploader.maybeUploadOneTimeKeys(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
@@ -502,7 +502,7 @@ internal class CryptoManager(
         // e2e rooms with them, so there is room for optimisation here, but for now
         // we just invalidate everyone in the room.
         if (null == existingAlgorithm) {
-            Timber.d("Enabling encryption in $roomId for the first time; invalidating device lists for all users therein")
+            Timber.v("Enabling encryption in $roomId for the first time; invalidating device lists for all users therein")
 
             val userIds = ArrayList(membersId)
 
@@ -578,7 +578,7 @@ internal class CryptoManager(
                             callback: MatrixCallback<MXEncryptEventContentResult>) {
         // wait that the crypto is really started
         if (!isStarted()) {
-            Timber.d("## encryptEventContent() : wait after e2e init")
+            Timber.v("## encryptEventContent() : wait after e2e init")
 
             start(false, object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
@@ -626,11 +626,11 @@ internal class CryptoManager(
 
         if (null != alg) {
             val t0 = System.currentTimeMillis()
-            Timber.d("## encryptEventContent() starts")
+            Timber.v("## encryptEventContent() starts")
 
             alg!!.encryptEventContent(eventContent, eventType, userIds, object : MatrixCallback<Content> {
                 override fun onSuccess(data: Content) {
-                    Timber.d("## encryptEventContent() : succeeds after " + (System.currentTimeMillis() - t0) + " ms")
+                    Timber.v("## encryptEventContent() : succeeds after " + (System.currentTimeMillis() - t0) + " ms")
 
                     callback.onSuccess(MXEncryptEventContentResult(data, EventType.ENCRYPTED))
                 }
@@ -890,7 +890,7 @@ internal class CryptoManager(
                                 password: String,
                                 progressListener: ProgressListener?,
                                 callback: MatrixCallback<ImportRoomKeysResult>) {
-        Timber.d("## importRoomKeys starts")
+        Timber.v("## importRoomKeys starts")
 
         val t0 = System.currentTimeMillis()
         val roomKeys: String
@@ -906,7 +906,7 @@ internal class CryptoManager(
 
         val t1 = System.currentTimeMillis()
 
-        Timber.d("## importRoomKeys : decryptMegolmKeyFile done in " + (t1 - t0) + " ms")
+        Timber.v("## importRoomKeys : decryptMegolmKeyFile done in " + (t1 - t0) + " ms")
 
         try {
             val list = MoshiProvider.providesMoshi()
@@ -921,7 +921,7 @@ internal class CryptoManager(
 
         val t2 = System.currentTimeMillis()
 
-        Timber.d("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
+        Timber.v("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
 
         mMegolmSessionDataImporter.handle(importedSessions, true, progressListener, callback)
     }

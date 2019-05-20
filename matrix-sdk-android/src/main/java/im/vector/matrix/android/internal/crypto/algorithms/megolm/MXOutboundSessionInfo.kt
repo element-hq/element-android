@@ -39,7 +39,7 @@ internal class MXOutboundSessionInfo(
         val sessionLifetime = System.currentTimeMillis() - mCreationTime
 
         if (mUseCount >= rotationPeriodMsgs || sessionLifetime >= rotationPeriodMs) {
-            Timber.d("## needsRotation() : Rotating megolm session after " + mUseCount + ", " + sessionLifetime + "ms")
+            Timber.v("## needsRotation() : Rotating megolm session after " + mUseCount + ", " + sessionLifetime + "ms")
             needsRotation = true
         }
 
@@ -57,7 +57,7 @@ internal class MXOutboundSessionInfo(
 
         for (userId in userIds) {
             if (null == devicesInRoom.getUserDeviceIds(userId)) {
-                Timber.d("## sharedWithTooManyDevices() : Starting new session because we shared with $userId")
+                Timber.v("## sharedWithTooManyDevices() : Starting new session because we shared with $userId")
                 return true
             }
 
@@ -65,7 +65,7 @@ internal class MXOutboundSessionInfo(
 
             for (deviceId in deviceIds!!) {
                 if (null == devicesInRoom.getObject(deviceId, userId)) {
-                    Timber.d("## sharedWithTooManyDevices() : Starting new session because we shared with $userId:$deviceId")
+                    Timber.v("## sharedWithTooManyDevices() : Starting new session because we shared with $userId:$deviceId")
                     return true
                 }
             }

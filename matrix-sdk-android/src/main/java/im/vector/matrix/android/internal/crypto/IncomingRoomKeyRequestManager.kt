@@ -86,7 +86,7 @@ internal class IncomingRoomKeyRequestManager(
                 val roomId = body!!.roomId
                 val alg = body.algorithm
 
-                Timber.d("m.room_key_request from " + userId + ":" + deviceId + " for " + roomId + " / " + body.sessionId + " id " + request.mRequestId)
+                Timber.v("m.room_key_request from " + userId + ":" + deviceId + " for " + roomId + " / " + body.sessionId + " id " + request.mRequestId)
 
                 if (!TextUtils.equals(mCredentials.userId, userId)) {
                     // TODO: determine if we sent this device the keys already: in
@@ -114,7 +114,7 @@ internal class IncomingRoomKeyRequestManager(
                 }
 
                 if (TextUtils.equals(deviceId, mCredentials.deviceId) && TextUtils.equals(mCredentials.userId, userId)) {
-                    Timber.d("## processReceivedRoomKeyRequests() : oneself device - ignored")
+                    Timber.v("## processReceivedRoomKeyRequests() : oneself device - ignored")
                     mCryptoStore.deleteIncomingRoomKeyRequest(request)
                     continue
                 }
@@ -131,14 +131,14 @@ internal class IncomingRoomKeyRequestManager(
 
                 if (null != device) {
                     if (device.isVerified) {
-                        Timber.d("## processReceivedRoomKeyRequests() : device is already verified: sharing keys")
+                        Timber.v("## processReceivedRoomKeyRequests() : device is already verified: sharing keys")
                         mCryptoStore.deleteIncomingRoomKeyRequest(request)
                         request.mShare!!.run()
                         continue
                     }
 
                     if (device.isBlocked) {
-                        Timber.d("## processReceivedRoomKeyRequests() : device is blocked -> ignored")
+                        Timber.v("## processReceivedRoomKeyRequests() : device is blocked -> ignored")
                         mCryptoStore.deleteIncomingRoomKeyRequest(request)
                         continue
                     }
@@ -160,7 +160,7 @@ internal class IncomingRoomKeyRequestManager(
 
         if (null != receivedRoomKeyRequestCancellations) {
             for (request in receivedRoomKeyRequestCancellations!!) {
-                Timber.d("## ## processReceivedRoomKeyRequests() : m.room_key_request cancellation for " + request.mUserId
+                Timber.v("## ## processReceivedRoomKeyRequests() : m.room_key_request cancellation for " + request.mUserId
                         + ":" + request.mDeviceId + " id " + request.mRequestId)
 
                 // we should probably only notify the app of cancellations we told it

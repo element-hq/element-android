@@ -70,7 +70,7 @@ internal class MessageEncrypter(private val mCredentials: Credentials,
             val sessionId = mOlmDevice.getSessionId(deviceKey)
 
             if (!TextUtils.isEmpty(sessionId)) {
-                Timber.d("Using sessionid $sessionId for device $deviceKey")
+                Timber.v("Using sessionid $sessionId for device $deviceKey")
                 val deviceInfo = deviceInfoParticipantKey[deviceKey]
 
                 payloadJson["recipient"] = deviceInfo!!.userId

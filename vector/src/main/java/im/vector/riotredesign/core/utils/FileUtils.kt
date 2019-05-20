@@ -59,9 +59,9 @@ fun lsFiles(context: Context) {
 
 private fun logAction(file: File): Boolean {
     if (file.isDirectory) {
-        Timber.d(file.toString())
+        Timber.v(file.toString())
     } else {
-        Timber.d(file.toString() + " " + file.length() + " bytes")
+        Timber.v(file.toString() + " " + file.length() + " bytes")
     }
     return true
 }

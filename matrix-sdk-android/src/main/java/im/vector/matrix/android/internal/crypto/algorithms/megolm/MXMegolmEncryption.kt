@@ -112,7 +112,7 @@ internal class MXMegolmEncryption(
         }
 
         val t0 = System.currentTimeMillis()
-        Timber.d("## encryptEventContent () starts")
+        Timber.v("## encryptEventContent () starts")
 
         getDevicesInRoom(userIds, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
 
@@ -136,7 +136,7 @@ internal class MXMegolmEncryption(
             override fun onSuccess(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>) {
                 ensureOutboundSession(devicesInRoom, object : MatrixCallback<MXOutboundSessionInfo> {
                     override fun onSuccess(data: MXOutboundSessionInfo) {
-                        Timber.d("## encryptEventContent () processPendingEncryptions after " + (System.currentTimeMillis() - t0) + "ms")
+                        Timber.v("## encryptEventContent () processPendingEncryptions after " + (System.currentTimeMillis() - t0) + "ms")
                         processPendingEncryptions(data)
                     }
 
@@ -190,7 +190,7 @@ internal class MXMegolmEncryption(
         }
 
         if (mShareOperationIsProgress) {
-            Timber.d("## ensureOutboundSessionInRoom() : already in progress")
+            Timber.v("## ensureOutboundSessionInRoom() : already in progress")
             // Key share already in progress
             return
         }
@@ -245,7 +245,7 @@ internal class MXMegolmEncryption(
                          callback: MatrixCallback<Unit>?) {
         // nothing to send, the task is done
         if (0 == devicesByUsers.size) {
-            Timber.d("## shareKey() : nothing more to do")
+            Timber.v("## shareKey() : nothing more to do")
 
             if (null != callback) {
                 CryptoAsyncHelper.getUiHandler().post { callback.onSuccess(Unit) }
@@ -273,7 +273,7 @@ internal class MXMegolmEncryption(
             }
         }
 
-        Timber.d("## shareKey() ; userId $userIds")
+        Timber.v("## shareKey() ; userId $userIds")
         shareUserDevicesKey(session, subMap, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 for (userId in userIds) {
@@ -314,11 +314,11 @@ internal class MXMegolmEncryption(
         payload["content"] = submap
 
         val t0 = System.currentTimeMillis()
-        Timber.d("## shareUserDevicesKey() : starts")
+        Timber.v("## shareUserDevicesKey() : starts")
 
         mEnsureOlmSessionsForDevicesAction.handle(devicesByUser, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXOlmSessionResult>) {
-                Timber.d("## shareUserDevicesKey() : ensureOlmSessionsForDevices succeeds after "
+                Timber.v("## shareUserDevicesKey() : ensureOlmSessionsForDevices succeeds after "
                         + (System.currentTimeMillis() - t0) + " ms")
                 val contentMap = MXUsersDevicesMap<Any>()
 
@@ -347,7 +347,7 @@ internal class MXMegolmEncryption(
                             continue
                         }
 
-                        Timber.d("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
+                        Timber.v("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
                         //noinspection ArraysAsListWithZeroOrOneArgument,ArraysAsListWithZeroOrOneArgument
                         contentMap.setObject(mMessageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.mDevice)), userId, deviceID)
                         haveTargets = true
@@ -356,12 +356,12 @@ internal class MXMegolmEncryption(
 
                 if (haveTargets) {
                     val t0 = System.currentTimeMillis()
-                    Timber.d("## shareUserDevicesKey() : has target")
+                    Timber.v("## shareUserDevicesKey() : has target")
 
                     mSendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ENCRYPTED, contentMap))
                             .dispatchTo(object : MatrixCallback<Unit> {
                                 override fun onSuccess(data: Unit) {
-                                    Timber.d("## shareUserDevicesKey() : sendToDevice succeeds after "
+                                    Timber.v("## shareUserDevicesKey() : sendToDevice succeeds after "
                                             + (System.currentTimeMillis() - t0) + " ms")
 
                                     // Add the devices we have shared with to session.sharedWithDevices.
@@ -390,7 +390,7 @@ internal class MXMegolmEncryption(
                             })
                             .executeBy(mTaskExecutor)
                 } else {
-                    Timber.d("## shareUserDevicesKey() : no need to sharekey")
+                    Timber.v("## shareUserDevicesKey() : no need to sharekey")
 
                     if (null != callback) {
                         CryptoAsyncHelper.getUiHandler().post { callback.onSuccess(Unit) }

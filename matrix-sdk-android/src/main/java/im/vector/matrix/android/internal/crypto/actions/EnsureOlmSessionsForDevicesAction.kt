@@ -79,14 +79,14 @@ internal class EnsureOlmSessionsForDevicesAction(private val mOlmDevice: MXOlmDe
         //
         // That should eventually resolve itself, but it's poor form.
 
-        Timber.d("## claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
+        Timber.v("## claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
 
         mClaimOneTimeKeysForUsersDeviceTask
                 .configureWith(ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim))
                 .dispatchTo(object : MatrixCallback<MXUsersDevicesMap<MXKey>> {
                     override fun onSuccess(data: MXUsersDevicesMap<MXKey>) {
                         try {
-                            Timber.d("## claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $data")
+                            Timber.v("## claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $data")
 
                             for (userId in userIds) {
                                 val deviceInfos = devicesByUser[userId]
@@ -113,7 +113,7 @@ internal class EnsureOlmSessionsForDevicesAction(private val mOlmDevice: MXOlmDe
                                             }
 
                                             if (null == oneTimeKey) {
-                                                Timber.d("## ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm
+                                                Timber.v("## ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm
                                                         + " for device " + userId + " : " + deviceId)
                                                 continue
                                             }
@@ -164,7 +164,7 @@ internal class EnsureOlmSessionsForDevicesAction(private val mOlmDevice: MXOlmDe
                 sessionId = mOlmDevice.createOutboundSession(deviceInfo.identityKey()!!, oneTimeKey.value)
 
                 if (!TextUtils.isEmpty(sessionId)) {
-                    Timber.d("## verifyKeyAndStartSession() : Started new sessionid " + sessionId
+                    Timber.v("## verifyKeyAndStartSession() : Started new sessionid " + sessionId
                             + " for device " + deviceInfo + "(theirOneTimeKey: " + oneTimeKey.value + ")")
                 } else {
                     // Possibly a bad key

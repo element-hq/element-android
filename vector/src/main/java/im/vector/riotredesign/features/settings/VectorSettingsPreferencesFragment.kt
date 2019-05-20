@@ -1159,7 +1159,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         val matrixInstance = Matrix.getInstance(context)
         val pushManager = matrixInstance.pushManager
 
-        Timber.d("onPushRuleClick $preferenceKey : set to $newValue")
+        Timber.v("onPushRuleClick $preferenceKey : set to $newValue")
 
         when (preferenceKey) {
 

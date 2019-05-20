@@ -36,7 +36,7 @@ abstract class VectorPreferenceFragment : PreferenceFragmentCompat() {
     override fun onResume() {
         super.onResume()
 
-        Timber.d("onResume Fragment ${this.javaClass.simpleName}")
+        Timber.v("onResume Fragment ${this.javaClass.simpleName}")
     }
 
     /* ==========================================================================================

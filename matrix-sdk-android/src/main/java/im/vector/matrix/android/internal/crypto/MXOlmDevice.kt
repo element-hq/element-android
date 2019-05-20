@@ -87,7 +87,7 @@ internal class MXOlmDevice(
         mOlmAccount = mStore.getAccount()
 
         if (null == mOlmAccount) {
-            Timber.d("MXOlmDevice : create a new olm account")
+            Timber.v("MXOlmDevice : create a new olm account")
             // Else, create it
             try {
                 mOlmAccount = OlmAccount()
@@ -97,7 +97,7 @@ internal class MXOlmDevice(
             }
 
         } else {
-            Timber.d("MXOlmDevice : use an existing account")
+            Timber.v("MXOlmDevice : use an existing account")
         }
 
         try {
@@ -198,7 +198,7 @@ internal class MXOlmDevice(
      * @return the session id for the outbound session.
      */
     fun createOutboundSession(theirIdentityKey: String, theirOneTimeKey: String): String? {
-        Timber.d("## createOutboundSession() ; theirIdentityKey $theirIdentityKey theirOneTimeKey $theirOneTimeKey")
+        Timber.v("## createOutboundSession() ; theirIdentityKey $theirIdentityKey theirOneTimeKey $theirOneTimeKey")
         var olmSession: OlmSession? = null
 
         try {
@@ -216,7 +216,7 @@ internal class MXOlmDevice(
 
             val sessionIdentifier = olmSession.sessionIdentifier()
 
-            Timber.d("## createOutboundSession() ;  olmSession.sessionIdentifier: $sessionIdentifier")
+            Timber.v("## createOutboundSession() ;  olmSession.sessionIdentifier: $sessionIdentifier")
             return sessionIdentifier
 
         } catch (e: Exception) {
@@ -238,7 +238,7 @@ internal class MXOlmDevice(
      */
     fun createInboundSession(theirDeviceIdentityKey: String, messageType: Int, ciphertext: String): Map<String, String>? {
 
-        Timber.d("## createInboundSession() : theirIdentityKey: $theirDeviceIdentityKey")
+        Timber.v("## createInboundSession() : theirIdentityKey: $theirDeviceIdentityKey")
 
         var olmSession: OlmSession? = null
 
@@ -251,7 +251,7 @@ internal class MXOlmDevice(
                 return null
             }
 
-            Timber.d("## createInboundSession() : sessionId: " + olmSession.sessionIdentifier())
+            Timber.v("## createInboundSession() : sessionId: " + olmSession.sessionIdentifier())
 
             try {
                 mOlmAccount!!.removeOneTimeKeys(olmSession)
@@ -260,10 +260,10 @@ internal class MXOlmDevice(
                 Timber.e(e, "## createInboundSession() : removeOneTimeKeys failed")
             }
 
-            Timber.d("## createInboundSession() : ciphertext: $ciphertext")
+            Timber.v("## createInboundSession() : ciphertext: $ciphertext")
             try {
                 val sha256 = mOlmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))
-                Timber.d("## createInboundSession() :ciphertext: SHA256:" + sha256)
+                Timber.v("## createInboundSession() :ciphertext: SHA256:" + sha256)
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
             }
@@ -343,8 +343,8 @@ internal class MXOlmDevice(
 
         if (mxOlmSession != null) {
             try {
-                Timber.d("## encryptMessage() : olmSession.sessionIdentifier: $sessionId")
-                //Timber.d("## encryptMessage() : payloadString: " + payloadString);
+                Timber.v("## encryptMessage() : olmSession.sessionIdentifier: $sessionId")
+                //Timber.v("## encryptMessage() : payloadString: " + payloadString);
 
                 olmMessage = mxOlmSession.olmSession.encryptMessage(payloadString)
                 mStore.storeSession(mxOlmSession, theirDeviceIdentityKey)

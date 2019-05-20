@@ -39,7 +39,7 @@ internal class EnsureOlmSessionsForUsersAction(private val mOlmDevice: MXOlmDevi
      * @param callback the asynchronous callback
      */
     fun handle(users: List<String>, callback: MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>>) {
-        Timber.d("## ensureOlmSessionsForUsers() : ensureOlmSessionsForUsers $users")
+        Timber.v("## ensureOlmSessionsForUsers() : ensureOlmSessionsForUsers $users")
 
         val devicesByUser = HashMap<String /* userId */, MutableList<MXDeviceInfo>>()
 

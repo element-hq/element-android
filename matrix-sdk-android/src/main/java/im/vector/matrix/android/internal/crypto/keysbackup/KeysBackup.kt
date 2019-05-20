@@ -334,7 +334,7 @@ internal class KeysBackup(
             override fun onProgress(progress: Int, total: Int) {
                 // Reset previous listeners if any
                 resetBackupAllGroupSessionsListeners()
-                Timber.d("backupAllGroupSessions: backupProgress: $progress/$total")
+                Timber.v("backupAllGroupSessions: backupProgress: $progress/$total")
                 try {
                     progressListener?.onProgress(progress, total)
                 } catch (e: Exception) {
@@ -342,7 +342,7 @@ internal class KeysBackup(
                 }
 
                 if (progress == total) {
-                    Timber.d("backupAllGroupSessions: complete")
+                    Timber.v("backupAllGroupSessions: complete")
                     callback?.onSuccess(Unit)
                     return
                 }
@@ -417,13 +417,13 @@ internal class KeysBackup(
                 || authData == null
                 || authData.publicKey.isEmpty()
                 || authData.signatures.isNullOrEmpty()) {
-            Timber.d("getKeysBackupTrust: Key backup is absent or missing required data")
+            Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
             return keysBackupVersionTrust
         }
 
         val mySigs: Map<String, *> = authData.signatures!![myUserId] as Map<String, *>
         if (mySigs.isEmpty()) {
-            Timber.d("getKeysBackupTrust: Ignoring key backup because it lacks any signatures from this user")
+            Timber.v("getKeysBackupTrust: Ignoring key backup because it lacks any signatures from this user")
             return keysBackupVersionTrust
         }
 
@@ -442,13 +442,13 @@ internal class KeysBackup(
                 var isSignatureValid = false
 
                 if (device == null) {
-                    Timber.d("getKeysBackupTrust: Signature from unknown device $deviceId")
+                    Timber.v("getKeysBackupTrust: Signature from unknown device $deviceId")
                 } else {
                     try {
                         mOlmDevice.verifySignature(device.fingerprint()!!, authData.signalableJSONDictionary(), mySigs[keyId] as String)
                         isSignatureValid = true
                     } catch (e: OlmException) {
-                        Timber.d("getKeysBackupTrust: Bad signature from device " + device.deviceId + " " + e.localizedMessage)
+                        Timber.v("getKeysBackupTrust: Bad signature from device " + device.deviceId + " " + e.localizedMessage)
                     }
 
                     if (isSignatureValid && device.isVerified) {
@@ -478,7 +478,7 @@ internal class KeysBackup(
     override fun trustKeysBackupVersion(keysBackupVersion: KeysVersionResult,
                                         trust: Boolean,
                                         callback: MatrixCallback<Unit>) {
-        Timber.d("trustKeyBackupVersion: $trust, version ${keysBackupVersion.version}")
+        Timber.v("trustKeyBackupVersion: $trust, version ${keysBackupVersion.version}")
 
         CryptoAsyncHelper.getDecryptBackgroundHandler().post {
             val myUserId = mCredentials.userId
@@ -572,7 +572,7 @@ internal class KeysBackup(
     override fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult,
                                                        recoveryKey: String,
                                                        callback: MatrixCallback<Unit>) {
-        Timber.d("trustKeysBackupVersionWithRecoveryKey: version ${keysBackupVersion.version}")
+        Timber.v("trustKeysBackupVersionWithRecoveryKey: version ${keysBackupVersion.version}")
 
         CryptoAsyncHelper.getDecryptBackgroundHandler().post {
             if (!isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
@@ -598,7 +598,7 @@ internal class KeysBackup(
     override fun trustKeysBackupVersionWithPassphrase(keysBackupVersion: KeysVersionResult,
                                                       password: String,
                                                       callback: MatrixCallback<Unit>) {
-        Timber.d("trustKeysBackupVersionWithPassphrase: version ${keysBackupVersion.version}")
+        Timber.v("trustKeysBackupVersionWithPassphrase: version ${keysBackupVersion.version}")
 
         CryptoAsyncHelper.getDecryptBackgroundHandler().post {
             val recoveryKey = recoveryKeyFromPassword(password, keysBackupVersion, null)
@@ -686,7 +686,7 @@ internal class KeysBackup(
                                             sessionId: String?,
                                             stepProgressListener: StepProgressListener?,
                                             callback: MatrixCallback<ImportRoomKeysResult>) {
-        Timber.d("restoreKeysWithRecoveryKey: From backup version: ${keysVersionResult.version}")
+        Timber.v("restoreKeysWithRecoveryKey: From backup version: ${keysVersionResult.version}")
 
         CryptoAsyncHelper.getDecryptBackgroundHandler().post(Runnable {
             // Check if the recovery is valid before going any further
@@ -728,13 +728,13 @@ internal class KeysBackup(
                             }
                         }
                     }
-                    Timber.d("restoreKeysWithRecoveryKey: Decrypted " + sessionsData.size + " keys out of "
+                    Timber.v("restoreKeysWithRecoveryKey: Decrypted " + sessionsData.size + " keys out of "
                             + sessionsFromHsCount + " from the backup store on the homeserver")
 
                     // Do not trigger a backup for them if they come from the backup version we are using
                     val backUp = keysVersionResult.version != mKeysBackupVersion?.version
                     if (backUp) {
-                        Timber.d("restoreKeysWithRecoveryKey: Those keys will be backed up to backup version: " + mKeysBackupVersion?.version)
+                        Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up to backup version: " + mKeysBackupVersion?.version)
                     }
 
                     // Import them into the crypto store
@@ -788,7 +788,7 @@ internal class KeysBackup(
                                               sessionId: String?,
                                               stepProgressListener: StepProgressListener?,
                                               callback: MatrixCallback<ImportRoomKeysResult>) {
-        Timber.d("[MXKeyBackup] restoreKeyBackup with password: From backup version: ${keysBackupVersion.version}")
+        Timber.v("[MXKeyBackup] restoreKeyBackup with password: From backup version: ${keysBackupVersion.version}")
 
         CryptoAsyncHelper.getDecryptBackgroundHandler().post {
             val progressListener = if (stepProgressListener != null) {
@@ -807,7 +807,7 @@ internal class KeysBackup(
 
             if (recoveryKey == null) {
                 mUIHandler.post {
-                    Timber.d("backupKeys: Invalid configuration")
+                    Timber.v("backupKeys: Invalid configuration")
                     callback.onFailure(IllegalStateException("Invalid configuration"))
                 }
 
@@ -918,7 +918,7 @@ internal class KeysBackup(
                 mUIHandler.postDelayed({ backupKeys() }, delayInMs)
             }
             else                                   -> {
-                Timber.d("maybeBackupKeys: Skip it because state: $state")
+                Timber.v("maybeBackupKeys: Skip it because state: $state")
             }
         }
     }
@@ -1062,12 +1062,12 @@ internal class KeysBackup(
     }
 
     private fun checkAndStartWithKeysBackupVersion(keyBackupVersion: KeysVersionResult?) {
-        Timber.d("checkAndStartWithKeyBackupVersion: ${keyBackupVersion?.version}")
+        Timber.v("checkAndStartWithKeyBackupVersion: ${keyBackupVersion?.version}")
 
         mKeysBackupVersion = keyBackupVersion
 
         if (keyBackupVersion == null) {
-            Timber.d("checkAndStartWithKeysBackupVersion: Found no key backup version on the homeserver")
+            Timber.v("checkAndStartWithKeysBackupVersion: Found no key backup version on the homeserver")
             resetKeysBackupData()
             mKeysBackupStateManager.state = KeysBackupState.Disabled
         } else {
@@ -1077,19 +1077,19 @@ internal class KeysBackup(
                     val versionInStore = mCryptoStore.getKeyBackupVersion()
 
                     if (data.usable) {
-                        Timber.d("checkAndStartWithKeysBackupVersion: Found usable key backup. version: " + keyBackupVersion.version)
+                        Timber.v("checkAndStartWithKeysBackupVersion: Found usable key backup. version: " + keyBackupVersion.version)
                         // Check the version we used at the previous app run
                         if (versionInStore != null && versionInStore != keyBackupVersion.version) {
-                            Timber.d(" -> clean the previously used version $versionInStore")
+                            Timber.v(" -> clean the previously used version $versionInStore")
                             resetKeysBackupData()
                         }
 
-                        Timber.d("   -> enabling key backups")
+                        Timber.v("   -> enabling key backups")
                         enableKeysBackup(keyBackupVersion)
                     } else {
-                        Timber.d("checkAndStartWithKeysBackupVersion: No usable key backup. version: " + keyBackupVersion.version)
+                        Timber.v("checkAndStartWithKeysBackupVersion: No usable key backup. version: " + keyBackupVersion.version)
                         if (versionInStore != null) {
-                            Timber.d("   -> disabling key backup")
+                            Timber.v("   -> disabling key backup")
                             resetKeysBackupData()
                         }
 
@@ -1273,11 +1273,11 @@ internal class KeysBackup(
      */
     @UiThread
     private fun backupKeys() {
-        Timber.d("backupKeys")
+        Timber.v("backupKeys")
 
         // Sanity check, as this method can be called after a delay, the state may have change during the delay
         if (!isEnabled || mBackupKey == null || mKeysBackupVersion == null) {
-            Timber.d("backupKeys: Invalid configuration")
+            Timber.v("backupKeys: Invalid configuration")
             backupAllGroupSessionsCallback?.onFailure(IllegalStateException("Invalid configuration"))
             resetBackupAllGroupSessionsListeners()
 
@@ -1286,14 +1286,14 @@ internal class KeysBackup(
 
         if (state === KeysBackupState.BackingUp) {
             // Do nothing if we are already backing up
-            Timber.d("backupKeys: Invalid state: $state")
+            Timber.v("backupKeys: Invalid state: $state")
             return
         }
 
         // Get a chunk of keys to backup
         val sessions = mCryptoStore.inboundGroupSessionsToBackup(KEY_BACKUP_SEND_KEYS_MAX_COUNT)
 
-        Timber.d("backupKeys: 1 - " + sessions.size + " sessions to back up")
+        Timber.v("backupKeys: 1 - " + sessions.size + " sessions to back up")
 
         if (sessions.isEmpty()) {
             // Backup is up to date
@@ -1307,7 +1307,7 @@ internal class KeysBackup(
         mKeysBackupStateManager.state = KeysBackupState.BackingUp
 
         CryptoAsyncHelper.getEncryptBackgroundHandler().post {
-            Timber.d("backupKeys: 2 - Encrypting keys")
+            Timber.v("backupKeys: 2 - Encrypting keys")
 
             // Gather data to send to the homeserver
             // roomId -> sessionId -> MXKeyBackupData
@@ -1329,7 +1329,7 @@ internal class KeysBackup(
                 }
             }
 
-            Timber.d("backupKeys: 4 - Sending request")
+            Timber.v("backupKeys: 4 - Sending request")
 
             // Make the request
             mStoreSessionDataTask
@@ -1337,19 +1337,19 @@ internal class KeysBackup(
                     .dispatchTo(object : MatrixCallback<BackupKeysResult> {
                         override fun onSuccess(data: BackupKeysResult) {
                             mUIHandler.post {
-                                Timber.d("backupKeys: 5a - Request complete")
+                                Timber.v("backupKeys: 5a - Request complete")
 
                                 // Mark keys as backed up
                                 mCryptoStore.markBackupDoneForInboundGroupSessions(sessions)
 
                                 if (sessions.size < KEY_BACKUP_SEND_KEYS_MAX_COUNT) {
-                                    Timber.d("backupKeys: All keys have been backed up")
+                                    Timber.v("backupKeys: All keys have been backed up")
                                     onServerDataRetrieved(data.count, data.hash)
 
                                     // Note: Changing state will trigger the call to backupAllGroupSessionsCallback.onSuccess()
                                     mKeysBackupStateManager.state = KeysBackupState.ReadyToBackUp
                                 } else {
-                                    Timber.d("backupKeys: Continue to back up keys")
+                                    Timber.v("backupKeys: Continue to back up keys")
                                     mKeysBackupStateManager.state = KeysBackupState.WillBackUp
 
                                     backupKeys()

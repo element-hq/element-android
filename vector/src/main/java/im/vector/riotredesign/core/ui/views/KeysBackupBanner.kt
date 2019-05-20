@@ -83,10 +83,10 @@ class KeysBackupBanner @JvmOverloads constructor(
      */
     fun render(newState: State, force: Boolean = false) {
         if (newState == state && !force) {
-            Timber.d("State unchanged")
+            Timber.v("State unchanged")
             return
         }
-        Timber.d("Rendering $newState")
+        Timber.v("Rendering $newState")
 
         state = newState
 

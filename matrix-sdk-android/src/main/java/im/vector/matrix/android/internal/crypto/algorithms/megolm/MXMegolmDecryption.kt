@@ -183,7 +183,7 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
         }
 
         if (mPendingEvents[k]!![timelineId]!!.indexOf(event) < 0) {
-            Timber.d("## addEventToPendingList() : add Event " + event.eventId + " in room id " + event.roomId)
+            Timber.v("## addEventToPendingList() : add Event " + event.eventId + " in room id " + event.roomId)
             mPendingEvents[k]!![timelineId]!!.add(event)
         }
     }
@@ -207,7 +207,7 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
         }
 
         if (event.type == EventType.FORWARDED_ROOM_KEY) {
-            Timber.d("## onRoomKeyEvent(), forward adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
+            Timber.v("## onRoomKeyEvent(), forward adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
                     + " sessionKey " + roomKeyContent.sessionKey) // from " + event);
             val forwardedRoomKeyContent = event.content.toModel<ForwardedRoomKeyContent>()!!
 
@@ -233,7 +233,7 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
 
             keysClaimed["ed25519"] = forwardedRoomKeyContent.senderClaimedEd25519Key!!
         } else {
-            Timber.d("## onRoomKeyEvent(), Adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
+            Timber.v("## onRoomKeyEvent(), Adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
                     + " sessionKey " + roomKeyContent.sessionKey) // from " + event);
 
             if (null == senderKey) {
@@ -300,7 +300,7 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
                             TODO()
                             //mSession!!.onEventDecrypted(event)
                         }
-                        Timber.d("## onNewSession() : successful re-decryption of " + event.eventId)
+                        Timber.v("## onNewSession() : successful re-decryption of " + event.eventId)
                     }
                 }
             }
@@ -344,7 +344,7 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
                                 return
                             }
 
-                            Timber.d("## shareKeysWithDevice() : sharing keys for session " + body!!.senderKey + "|" + body.sessionId
+                            Timber.v("## shareKeysWithDevice() : sharing keys for session " + body!!.senderKey + "|" + body.sessionId
                                     + " with device " + userId + ":" + deviceId)
 
                             val inboundGroupSession = mOlmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId)
@@ -357,11 +357,11 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
                             val sendToDeviceMap = MXUsersDevicesMap<Any>()
                             sendToDeviceMap.setObject(encodedPayload, userId, deviceId)
 
-                            Timber.d("## shareKeysWithDevice() : sending to $userId:$deviceId")
+                            Timber.v("## shareKeysWithDevice() : sending to $userId:$deviceId")
                             mSendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap))
                                     .dispatchTo(object : MatrixCallback<Unit> {
                                         override fun onSuccess(data: Unit) {
-                                            Timber.d("## shareKeysWithDevice() : sent to $userId:$deviceId")
+                                            Timber.v("## shareKeysWithDevice() : sent to $userId:$deviceId")
                                         }
 
                                         override fun onFailure(failure: Throwable) {

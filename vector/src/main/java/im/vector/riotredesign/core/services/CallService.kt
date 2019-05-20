@@ -70,20 +70,20 @@ class CallService : VectorService() {
      * @param callId   the callId
      */
     private fun displayIncomingCallNotification(intent: Intent) {
-        Timber.d("displayIncomingCallNotification")
+        Timber.v("displayIncomingCallNotification")
 
         // TODO
         /*
 
         // the incoming call in progress is already displayed
         if (!TextUtils.isEmpty(mIncomingCallId)) {
-            Timber.d("displayIncomingCallNotification : the incoming call in progress is already displayed")
+            Timber.v("displayIncomingCallNotification : the incoming call in progress is already displayed")
         } else if (!TextUtils.isEmpty(mCallIdInProgress)) {
-            Timber.d("displayIncomingCallNotification : a 'call in progress' notification is displayed")
+            Timber.v("displayIncomingCallNotification : a 'call in progress' notification is displayed")
         } else if (null == CallsManager.getSharedInstance().activeCall) {
             val callId = intent.getStringExtra(EXTRA_CALL_ID)
 
-            Timber.d("displayIncomingCallNotification : display the dedicated notification")
+            Timber.v("displayIncomingCallNotification : display the dedicated notification")
             val notification = NotificationUtils.buildIncomingCallNotification(
                     this,
                     intent.getBooleanExtra(EXTRA_IS_VIDEO, false),

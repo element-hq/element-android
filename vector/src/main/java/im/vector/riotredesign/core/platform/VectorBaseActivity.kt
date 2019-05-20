@@ -138,7 +138,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
     override fun onResume() {
         super.onResume()
 
-        Timber.d("onResume Activity ${this.javaClass.simpleName}")
+        Timber.v("onResume Activity ${this.javaClass.simpleName}")
 
         if (this !is BugReportActivity) {
             rageShake?.start()

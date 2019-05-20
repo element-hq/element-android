@@ -125,7 +125,7 @@ internal abstract class SASVerificationTransaction(
      * both short codes do match
      */
     override fun userHasVerifiedShortCode() {
-        Timber.d("## SAS short code verified by user for id:$transactionId")
+        Timber.v("## SAS short code verified by user for id:$transactionId")
         if (state != SasVerificationTxState.ShortCodeReady) {
             //ignore and cancel?
             Timber.e("## Accepted short code from invalid state $state")
@@ -199,7 +199,7 @@ internal abstract class SASVerificationTransaction(
     abstract fun onKeyVerificationMac(vKey: KeyVerificationMac)
 
     protected fun verifyMacs() {
-        Timber.d("## SAS verifying macs for id:$transactionId")
+        Timber.v("## SAS verifying macs for id:$transactionId")
         state = SasVerificationTxState.Verifying
 
         //Keys have been downloaded earlier in process
@@ -277,7 +277,7 @@ internal abstract class SASVerificationTransaction(
         mSendToDeviceTask.configureWith(SendToDeviceTask.Params(type, contentMap, transactionId))
                 .dispatchTo(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
-                        Timber.d("## SAS verification [$transactionId] toDevice type '$type' success.")
+                        Timber.v("## SAS verification [$transactionId] toDevice type '$type' success.")
                         CryptoAsyncHelper.getDecryptBackgroundHandler().post {
                             if (onDone != null) {
                                 onDone()

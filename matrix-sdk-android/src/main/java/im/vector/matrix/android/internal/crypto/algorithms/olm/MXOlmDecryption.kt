@@ -184,7 +184,7 @@ internal class MXOlmDecryption(
             val payload = mOlmDevice.decryptMessage(messageBody, messageType, sessionId, theirDeviceIdentityKey)
 
             if (null != payload) {
-                Timber.d("## decryptMessage() : Decrypted Olm message from $theirDeviceIdentityKey with session $sessionId")
+                Timber.v("## decryptMessage() : Decrypted Olm message from $theirDeviceIdentityKey with session $sessionId")
                 return payload
             } else {
                 val foundSession = mOlmDevice.matchesSession(theirDeviceIdentityKey, sessionId, messageType, messageBody)
@@ -220,7 +220,7 @@ internal class MXOlmDecryption(
             return null
         }
 
-        Timber.d("## decryptMessage() :  Created new inbound Olm session get id " + res["session_id"] + " with " + theirDeviceIdentityKey)
+        Timber.v("## decryptMessage() :  Created new inbound Olm session get id " + res["session_id"] + " with " + theirDeviceIdentityKey)
 
         return res["payload"]
     }

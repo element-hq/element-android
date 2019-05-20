@@ -62,7 +62,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
     override fun onResume() {
         super.onResume()
 
-        Timber.d("onResume Fragment ${this.javaClass.simpleName}")
+        Timber.v("onResume Fragment ${this.javaClass.simpleName}")
     }
 
     @CallSuper

@@ -176,7 +176,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
 
             for (userId in userIds) {
                 if (!deviceTrackingStatuses.containsKey(userId) || TRACKING_STATUS_NOT_TRACKED == deviceTrackingStatuses[userId]) {
-                    Timber.d("## startTrackingDeviceList() : Now tracking device list for $userId")
+                    Timber.v("## startTrackingDeviceList() : Now tracking device list for $userId")
                     deviceTrackingStatuses.put(userId, TRACKING_STATUS_PENDING_DOWNLOAD)
                     isUpdated = true
                 }
@@ -203,7 +203,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
 
             for (userId in changed) {
                 if (deviceTrackingStatuses.containsKey(userId)) {
-                    Timber.d("## invalidateUserDeviceList() : Marking device list outdated for $userId")
+                    Timber.v("## invalidateUserDeviceList() : Marking device list outdated for $userId")
                     deviceTrackingStatuses.put(userId, TRACKING_STATUS_PENDING_DOWNLOAD)
                     isUpdated = true
                 }
@@ -215,7 +215,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
 
             for (userId in left) {
                 if (deviceTrackingStatuses.containsKey(userId)) {
-                    Timber.d("## invalidateUserDeviceList() : No longer tracking device list for $userId")
+                    Timber.v("## invalidateUserDeviceList() : No longer tracking device list for $userId")
                     deviceTrackingStatuses.put(userId, TRACKING_STATUS_NOT_TRACKED)
                     isUpdated = true
                 }
@@ -319,7 +319,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                                     // we didn't get any new invalidations since this download started:
                                     //  this user's device list is now up to date.
                                     deviceTrackingStatuses.put(userId, TRACKING_STATUS_UP_TO_DATE)
-                                    Timber.d("Device list for $userId now up to date")
+                                    Timber.v("Device list for $userId now up to date")
                                 }
 
                                 // And the response result
@@ -359,7 +359,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
      * @param callback      the asynchronous callback
      */
     fun downloadKeys(userIds: List<String>?, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>?) {
-        Timber.d("## downloadKeys() : forceDownload $forceDownload : $userIds")
+        Timber.v("## downloadKeys() : forceDownload $forceDownload : $userIds")
 
         // Map from userid -> deviceid -> DeviceInfo
         val stored = MXUsersDevicesMap<MXDeviceInfo>()
@@ -393,18 +393,18 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
         }
 
         if (0 == downloadUsers.size) {
-            Timber.d("## downloadKeys() : no new user device")
+            Timber.v("## downloadKeys() : no new user device")
 
             if (null != callback) {
                 CryptoAsyncHelper.getUiHandler().post { callback.onSuccess(stored) }
             }
         } else {
-            Timber.d("## downloadKeys() : starts")
+            Timber.v("## downloadKeys() : starts")
             val t0 = System.currentTimeMillis()
 
             doKeyDownloadForUsers(downloadUsers, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
                 override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                    Timber.d("## downloadKeys() : doKeyDownloadForUsers succeeds after " + (System.currentTimeMillis() - t0) + " ms")
+                    Timber.v("## downloadKeys() : doKeyDownloadForUsers succeeds after " + (System.currentTimeMillis() - t0) + " ms")
 
                     data.addEntriesFromMap(stored)
 
@@ -428,7 +428,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
      * @param callback      the asynchronous callback
      */
     private fun doKeyDownloadForUsers(downloadUsers: MutableList<String>, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>?) {
-        Timber.d("## doKeyDownloadForUsers() : doKeyDownloadForUsers $downloadUsers")
+        Timber.v("## doKeyDownloadForUsers() : doKeyDownloadForUsers $downloadUsers")
 
         // get the user ids which did not already trigger a keys download
         val filteredUsers = addDownloadKeysPromise(downloadUsers, callback)
@@ -460,7 +460,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                 .dispatchTo(object : MatrixCallback<KeysQueryResponse> {
                     override fun onSuccess(data: KeysQueryResponse) {
                         CryptoAsyncHelper.getEncryptBackgroundHandler().post {
-                            Timber.d("## doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
+                            Timber.v("## doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
                             val userIdsList = ArrayList(filteredUsers)
 
                             for (userId in userIdsList) {
@@ -472,7 +472,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                                 } else {
                                     val devices = data.deviceKeys!![userId]
 
-                                    Timber.d("## doKeyDownloadForUsers() : Got keys for $userId : $devices")
+                                    Timber.v("## doKeyDownloadForUsers() : Got keys for $userId : $devices")
 
                                     if (null != devices) {
                                         val mutableDevices = HashMap(devices)
@@ -690,7 +690,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
 
         doKeyDownloadForUsers(users, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                CryptoAsyncHelper.getEncryptBackgroundHandler().post { Timber.d("## refreshOutdatedDeviceLists() : done") }
+                CryptoAsyncHelper.getEncryptBackgroundHandler().post { Timber.v("## refreshOutdatedDeviceLists() : done") }
             }
 
             override fun onFailure(failure: Throwable) {

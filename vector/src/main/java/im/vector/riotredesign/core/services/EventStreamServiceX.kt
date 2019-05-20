@@ -469,7 +469,7 @@ class EventStreamServiceX : VectorService() {
         // But it could be triggered because of multi accounts management.
         // The dedicated account is removing but some pushes are still received.
         if (null == session || !session.isAlive) {
-            Timber.d("prepareCallNotification : don't bing - no session")
+            Timber.v("prepareCallNotification : don't bing - no session")
             return
         }
 

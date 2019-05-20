@@ -26,7 +26,7 @@ public class OnApplicationUpgradeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Timber.d("## onReceive() : Application has been upgraded, restart event stream service.");
+        Timber.v("## onReceive() : Application has been upgraded, restart event stream service.");
 
         // Start Event stream
         // TODO EventStreamServiceX.Companion.onApplicationUpgrade(context);

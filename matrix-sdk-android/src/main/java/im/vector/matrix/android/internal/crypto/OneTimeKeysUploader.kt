@@ -146,7 +146,7 @@ internal class OneTimeKeysUploader(
             }
 
             override fun onSuccess(data: Unit) {
-                Timber.d("## maybeUploadOneTimeKeys() : succeeded")
+                Timber.v("## maybeUploadOneTimeKeys() : succeeded")
                 uploadKeysDone(null)
 
                 callback?.onSuccess(Unit)

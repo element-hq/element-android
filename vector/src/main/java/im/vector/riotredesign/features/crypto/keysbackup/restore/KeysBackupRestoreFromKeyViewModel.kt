@@ -105,7 +105,7 @@ class KeysBackupRestoreFromKeyViewModel : ViewModel() {
                 object : MatrixCallback<Unit> {
 
                     override fun onSuccess(data: Unit) {
-                        Timber.d("##### trustKeysBackupVersion onSuccess")
+                        Timber.v("##### trustKeysBackupVersion onSuccess")
                     }
 
                 })

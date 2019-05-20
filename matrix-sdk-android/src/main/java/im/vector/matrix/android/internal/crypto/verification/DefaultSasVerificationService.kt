@@ -164,17 +164,17 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                 otherUserId!!,
                 startReq,
                 success = {
-                    Timber.d("## SAS onStartRequestReceived ${startReq.transactionID!!}")
+                    Timber.v("## SAS onStartRequestReceived ${startReq.transactionID!!}")
                     val tid = startReq.transactionID!!
                     val existing = getExistingTransaction(otherUserId, tid)
                     val existingTxs = getExistingTransactionsForUser(otherUserId)
                     if (existing != null) {
                         //should cancel both!
-                        Timber.d("## SAS onStartRequestReceived - Request exist with same if ${startReq.transactionID!!}")
+                        Timber.v("## SAS onStartRequestReceived - Request exist with same if ${startReq.transactionID!!}")
                         existing.cancel(CancelCode.UnexpectedMessage)
                         cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
                     } else if (existingTxs?.isEmpty() == false) {
-                        Timber.d("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID!!}")
+                        Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID!!}")
                         //Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
                         existingTxs.forEach {
                             it.cancel(CancelCode.UnexpectedMessage)
@@ -183,7 +183,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                     } else {
                         //Ok we can create
                         if (KeyVerificationStart.VERIF_METHOD_SAS == startReq.method) {
-                            Timber.d("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
+                            Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
                             val tx = IncomingSASVerificationTransaction(
                                     this,
                                     setDeviceVerificationAction,
@@ -232,7 +232,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     }
 
     private fun onCancelReceived(event: Event) {
-        Timber.d("## SAS onCancelReceived")
+        Timber.v("## SAS onCancelReceived")
         val cancelReq = event.content.toModel<KeyVerificationCancel>()!!
 
         if (!cancelReq.isValid()) {
@@ -242,7 +242,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
         }
         val otherUserId = event.sender!!
 
-        Timber.d("## SAS onCancelReceived otherUser:$otherUserId reason:${cancelReq.reason}")
+        Timber.v("## SAS onCancelReceived otherUser:$otherUserId reason:${cancelReq.reason}")
         val existing = getExistingTransaction(otherUserId, cancelReq.transactionID!!)
         if (existing == null) {
             Timber.e("## Received invalid cancel request")
@@ -415,7 +415,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
         mSendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId))
                 .dispatchTo(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
-                        Timber.d("## SAS verification [$transactionId] canceled for reason ${code.value}")
+                        Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
                     }
 
                     override fun onFailure(failure: Throwable) {

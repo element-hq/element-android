@@ -78,10 +78,10 @@ fun logPermissionStatuses(context: Context) {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_CONTACTS)
 
-        Timber.d("## logPermissionStatuses() : log the permissions status used by the app")
+        Timber.v("## logPermissionStatuses() : log the permissions status used by the app")
 
         for (permission in permissions) {
-            Timber.d(("Status of [$permission] : " +
+            Timber.v(("Status of [$permission] : " +
                       if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, permission))
                           "PERMISSION_GRANTED"
                       else
@@ -244,7 +244,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                             }
                             explanationMessage += activity.getString(R.string.permissions_rationale_msg_contacts)
                         }
-                        else                                       -> Timber.d("## checkPermissions(): already denied permission not supported")
+                        else                                       -> Timber.v("## checkPermissions(): already denied permission not supported")
                     }
                 }
             }

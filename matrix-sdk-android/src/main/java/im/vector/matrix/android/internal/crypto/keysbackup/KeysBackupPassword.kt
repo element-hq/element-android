@@ -133,7 +133,7 @@ private fun deriveKey(password: String,
         }
     }
 
-    Timber.d("KeysBackupPassword", "## deriveKeys() : " + iterations + " in " + (System.currentTimeMillis() - t0) + " ms")
+    Timber.v("KeysBackupPassword", "## deriveKeys() : " + iterations + " in " + (System.currentTimeMillis() - t0) + " ms")
 
     return dk
 }
