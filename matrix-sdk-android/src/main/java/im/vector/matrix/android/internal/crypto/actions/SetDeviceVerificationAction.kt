@@ -21,9 +21,9 @@ import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 
-internal class SetDeviceVerificationAction(val mCryptoStore: IMXCryptoStore,
-                                          val mCredentials: Credentials,
-                                          val mKeysBackup: KeysBackup) {
+internal class SetDeviceVerificationAction(private val mCryptoStore: IMXCryptoStore,
+                                           private val mCredentials: Credentials,
+                                           private val mKeysBackup: KeysBackup) {
 
     fun handle(verificationStatus: Int, deviceId: String, userId: String) {
         val device = mCryptoStore.getUserDevice(deviceId, userId)

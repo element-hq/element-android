@@ -21,7 +21,7 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import timber.log.Timber
 
-class MXOutboundSessionInfo(
+internal class MXOutboundSessionInfo(
         // The id of the session
         val mSessionId: String) {
     // When the session was created

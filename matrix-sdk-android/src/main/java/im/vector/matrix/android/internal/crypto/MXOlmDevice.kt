@@ -187,7 +187,6 @@ internal class MXOlmDevice(
         } catch (e: Exception) {
             Timber.e(e, "## generateOneTimeKeys() : failed")
         }
-
     }
 
     /**

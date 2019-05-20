@@ -28,7 +28,7 @@ import org.matrix.olm.OlmAccount
 import timber.log.Timber
 import java.util.*
 
-internal class OneTimeKeysManager(
+internal class OneTimeKeysUploader(
         private val mCredentials: Credentials,
         private val mOlmDevice: MXOlmDevice,
         private val mObjectSigner: ObjectSigner,

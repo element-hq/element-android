@@ -85,7 +85,7 @@ internal class CryptoModule {
 
         //
         scope(DefaultSession.SCOPE) {
-            MXOutgoingRoomKeyRequestManager(get(), get(), get())
+            OutgoingRoomKeyRequestManager(get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -108,9 +108,9 @@ internal class CryptoModule {
             ObjectSigner(get(), get())
         }
 
-        // OneTimeKeysManager
+        // OneTimeKeysUploader
         scope(DefaultSession.SCOPE) {
-            OneTimeKeysManager(get(), get(), get(), get(), get())
+            OneTimeKeysUploader(get(), get(), get(), get(), get())
         }
 
         // Actions

@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.crypto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.di.MoshiProvider
 
 /**
  * The type of object we use for importing and exporting megolm session data.
@@ -71,10 +70,4 @@ data class MegolmSessionData(
          */
         @Json(name = "forwarding_curve25519_key_chain")
         var forwardingCurve25519KeyChain: List<String>? = null
-) {
-
-    fun toJsonString(): String {
-        return MoshiProvider.providesMoshi().adapter(MegolmSessionData::class.java).toJson(this)
-    }
-}
-
+)

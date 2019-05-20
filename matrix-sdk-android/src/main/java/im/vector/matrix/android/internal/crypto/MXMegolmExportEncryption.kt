@@ -18,19 +18,15 @@ package im.vector.matrix.android.internal.crypto
 
 import android.text.TextUtils
 import android.util.Base64
-
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
+import java.nio.charset.Charset
 import java.security.SecureRandom
-import java.util.Arrays
-
+import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.Mac
-import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-
-import timber.log.Timber
-import java.nio.charset.Charset
 import kotlin.experimental.and
 import kotlin.experimental.xor
 
@@ -363,11 +359,3 @@ object MXMegolmExportEncryption {
         return key
     }
 }
-/**
- * Encrypt a string into the megolm export format.
- *
- * @param data     the data to encrypt.
- * @param password the password
- * @return the encrypted data
- * @throws Exception the failure reason
- */

@@ -88,7 +88,7 @@ internal class CryptoManager(
         //
         private val mObjectSigner: ObjectSigner,
         //
-        private val mOneTimeKeysManager: OneTimeKeysManager,
+        private val mOneTimeKeysUploader: OneTimeKeysUploader,
         //
         private val roomDecryptorProvider: RoomDecryptorProvider,
         // The SAS verification service.
@@ -96,7 +96,7 @@ internal class CryptoManager(
         //
         private val mIncomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
         //
-        private val mOutgoingRoomKeyRequestManager: MXOutgoingRoomKeyRequestManager,
+        private val mOutgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
         // Room service
         private val mRoomService: RoomService,
         // Olm Manager
@@ -262,10 +262,10 @@ internal class CryptoManager(
                 Timber.d("  - device id  : " + mCredentials.deviceId)
                 Timber.d("  - ed25519    : " + mOlmDevice.deviceEd25519Key)
                 Timber.d("  - curve25519 : " + mOlmDevice.deviceCurve25519Key)
-                Timber.d("  - oneTimeKeys: " + mOneTimeKeysManager.mLastPublishedOneTimeKeys)
+                Timber.d("  - oneTimeKeys: " + mOneTimeKeysUploader.mLastPublishedOneTimeKeys)
                 Timber.d("")
 
-                mOneTimeKeysManager.maybeUploadOneTimeKeys(object : MatrixCallback<Unit> {
+                mOneTimeKeysUploader.maybeUploadOneTimeKeys(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         // TODO
                         //if (null != mNetworkConnectivityReceiver) {
@@ -353,7 +353,7 @@ internal class CryptoManager(
 
         if (null != syncResponse.deviceOneTimeKeysCount) {
             val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
-            mOneTimeKeysManager.updateOneTimeKeyCount(currentCount)
+            mOneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
         }
 
         if (isStarted()) {
@@ -362,7 +362,7 @@ internal class CryptoManager(
         }
 
         if (!isCatchingUp && isStarted()) {
-            mOneTimeKeysManager.maybeUploadOneTimeKeys()
+            mOneTimeKeysUploader.maybeUploadOneTimeKeys()
 
             mIncomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
         }
@@ -865,8 +865,8 @@ internal class CryptoManager(
         val encryptedRoomKeys: ByteArray
 
         try {
-            val moshi = MoshiProvider.providesMoshi()
-            val adapter = moshi.adapter(List::class.java)
+            val adapter = MoshiProvider.providesMoshi()
+                    .adapter(List::class.java)
 
             encryptedRoomKeys = MXMegolmExportEncryption
                     .encryptMegolmKeyFile(adapter.toJson(exportedSessions), password, iterationCount)
@@ -909,9 +909,9 @@ internal class CryptoManager(
         Timber.d("## importRoomKeys : decryptMegolmKeyFile done in " + (t1 - t0) + " ms")
 
         try {
-            val moshi = MoshiProvider.providesMoshi()
-            val adapter = moshi.adapter(List::class.java)
-            val list = adapter.fromJson(roomKeys)
+            val list = MoshiProvider.providesMoshi()
+                    .adapter(List::class.java)
+                    .fromJson(roomKeys)
             importedSessions = list as List<MegolmSessionData>
         } catch (e: Exception) {
             Timber.e(e, "## importRoomKeys failed")
@@ -949,7 +949,7 @@ internal class CryptoManager(
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
                 val unknownDevices = getUnknownDevices(data)
 
-                if (unknownDevices.map.size == 0) {
+                if (unknownDevices.map.isEmpty()) {
                     callback.onSuccess(Unit)
                 } else {
                     // trigger an an unknown devices exception
@@ -1100,6 +1100,30 @@ internal class CryptoManager(
         mIncomingRoomKeyRequestManager.removeRoomKeysRequestListener(listener)
     }
 
+    /**
+     * Provides the list of unknown devices
+     *
+     * @param devicesInRoom the devices map
+     * @return the unknown devices map
+     */
+    private fun getUnknownDevices(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>): MXUsersDevicesMap<MXDeviceInfo> {
+        val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
+
+        val userIds = devicesInRoom.userIds
+        for (userId in userIds) {
+            val deviceIds = devicesInRoom.getUserDeviceIds(userId)
+            for (deviceId in deviceIds!!) {
+                val deviceInfo = devicesInRoom.getObject(deviceId, userId)
+
+                if (deviceInfo!!.isUnknown) {
+                    unknownDevices.setObject(deviceInfo, userId, deviceId)
+                }
+            }
+        }
+
+        return unknownDevices
+    }
+
     /* ==========================================================================================
      * DEBUG INFO
      * ========================================================================================== */
@@ -1107,31 +1131,5 @@ internal class CryptoManager(
     override fun toString(): String {
         return "CryptoManager of " + mCredentials.userId + " (" + mCredentials.deviceId + ")"
 
-    }
-
-    companion object {
-        /**
-         * Provides the list of unknown devices
-         *
-         * @param devicesInRoom the devices map
-         * @return the unknown devices map
-         */
-        fun getUnknownDevices(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>): MXUsersDevicesMap<MXDeviceInfo> {
-            val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
-
-            val userIds = devicesInRoom.userIds
-            for (userId in userIds) {
-                val deviceIds = devicesInRoom.getUserDeviceIds(userId)
-                for (deviceId in deviceIds!!) {
-                    val deviceInfo = devicesInRoom.getObject(deviceId, userId)
-
-                    if (deviceInfo!!.isUnknown) {
-                        unknownDevices.setObject(deviceInfo, userId, deviceId)
-                    }
-                }
-            }
-
-            return unknownDevices
-        }
     }
 }

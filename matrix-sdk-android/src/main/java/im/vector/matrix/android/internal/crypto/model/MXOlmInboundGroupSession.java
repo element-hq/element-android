@@ -29,8 +29,6 @@ import timber.log.Timber;
  * This allows additional checks. The class implements NSCoding so that the context can be stored.
  */
 public class MXOlmInboundGroupSession implements Serializable {
-    //
-    private static final String LOG_TAG = "OlmInboundGroupSession";
 
     // The associated olm inbound group session.
     public OlmInboundGroupSession mSession;

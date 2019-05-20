@@ -62,7 +62,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
      * @param callback the asynchronous callback
      */
     internal inner class DownloadKeysPromise(userIds: List<String>,
-                                             val mCallback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>?) {
+                                             val callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>?) {
         // list of remain pending device keys
         val mPendingUserIdsList: MutableList<String>
 
@@ -327,7 +327,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                             }
                         }
 
-                        val callback = promise.mCallback
+                        val callback = promise.callback
 
                         if (null != callback) {
                             CryptoAsyncHelper.getUiHandler().post { callback.onSuccess(usersDevicesInfoMap) }

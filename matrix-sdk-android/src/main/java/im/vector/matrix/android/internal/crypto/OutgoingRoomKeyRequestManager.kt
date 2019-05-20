@@ -31,7 +31,7 @@ import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import java.util.*
 
-internal class MXOutgoingRoomKeyRequestManager(
+internal class OutgoingRoomKeyRequestManager(
         private val mCryptoStore: IMXCryptoStore,
         private val mSendToDeviceTask: SendToDeviceTask,
         private val mTaskExecutor: TaskExecutor) {

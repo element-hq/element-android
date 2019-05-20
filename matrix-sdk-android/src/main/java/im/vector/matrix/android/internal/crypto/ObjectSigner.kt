@@ -19,9 +19,8 @@ package im.vector.matrix.android.internal.crypto
 import im.vector.matrix.android.api.auth.data.Credentials
 import java.util.*
 
-internal class ObjectSigner(
-        private val mCredentials: Credentials,
-        private val mOlmDevice: MXOlmDevice) {
+internal class ObjectSigner(private val mCredentials: Credentials,
+                            private val mOlmDevice: MXOlmDevice) {
 
     /**
      * Sign Object

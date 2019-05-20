@@ -47,7 +47,7 @@ import java.util.*
 internal class MXMegolmDecryption(private val mCredentials: Credentials,
                                   private val mOlmDevice: MXOlmDevice,
                                   private val mDeviceListManager: DeviceListManager,
-                                  private val mOutgoingRoomKeyRequestManager: MXOutgoingRoomKeyRequestManager,
+                                  private val mOutgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
                                   private val mMessageEncrypter: MessageEncrypter,
                                   private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
                                   private val mCryptoStore: IMXCryptoStore,
@@ -68,12 +68,6 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
 
     @Throws(MXDecryptionException::class)
     private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult? {
-        // sanity check // TODO Remove check
-        if (null == event) {
-            Timber.e("## decryptEvent() : null event")
-            return null
-        }
-
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()!!
 
         if (TextUtils.isEmpty(encryptedEventContent.senderKey) || TextUtils.isEmpty(encryptedEventContent.sessionId) || TextUtils.isEmpty(encryptedEventContent.ciphertext)) {
@@ -147,7 +141,7 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
         val recipients = ArrayList<Map<String, String>>()
 
         val selfMap = HashMap<String, String>()
-        selfMap["userId"] = mCredentials.userId // TODO Replace this hard coded keys (see MXOutgoingRoomKeyRequestManager)
+        selfMap["userId"] = mCredentials.userId // TODO Replace this hard coded keys (see OutgoingRoomKeyRequestManager)
         selfMap["deviceId"] = "*"
         recipients.add(selfMap)
 

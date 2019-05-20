@@ -26,7 +26,7 @@ import timber.log.Timber
 
 internal class MegolmSessionDataImporter(private val mOlmDevice: MXOlmDevice,
                                          private val roomDecryptorProvider: RoomDecryptorProvider,
-                                         private val mOutgoingRoomKeyRequestManager: MXOutgoingRoomKeyRequestManager,
+                                         private val mOutgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
                                          private val mCryptoStore: IMXCryptoStore) {
 
     /**
