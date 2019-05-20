@@ -119,12 +119,14 @@ class QuickReactionFragment : BaseMvRxFragment() {
         }
 
         if (it.selectionResult != null) {
-            interactionListener?.didQuickReactWith(it.selectionResult.first, it.selectionResult.second, it.eventId)
+            val clikedOn = it.selectionResult.first
+            interactionListener?.didQuickReactWith(clikedOn, QuickReactionViewModel.getOpposite(clikedOn)
+                    ?: "", it.selectionResult.second, it.eventId)
         }
     }
 
     interface InteractionListener {
-        fun didQuickReactWith(clikedOn: String, reactions: List<String>, eventId: String)
+        fun didQuickReactWith(clikedOn: String, opposite: String, reactions: List<String>, eventId: String)
     }
 
     companion object {

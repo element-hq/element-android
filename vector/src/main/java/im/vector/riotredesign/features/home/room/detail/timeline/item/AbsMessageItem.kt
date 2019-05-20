@@ -125,7 +125,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && !holder.view.isInLayout) {
                 holder.reactionFlowHelper?.requestLayout()
             }
-
+            holder.reactionWrapper?.setOnLongClickListener(longClickListener)
         }
     }
 

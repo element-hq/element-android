@@ -18,7 +18,9 @@ package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.annotation.DefaultFindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.annotation.DefaultUpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.annotation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.annotation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
@@ -75,7 +77,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -100,6 +102,10 @@ class RoomModule {
 
         scope(DefaultSession.SCOPE) {
             DefaultFindReactionEventForUndoTask(get()) as FindReactionEventForUndoTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultUpdateQuickReactionTask(get()) as UpdateQuickReactionTask
         }
 
         scope(DefaultSession.SCOPE) {

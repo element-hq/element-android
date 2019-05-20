@@ -35,4 +35,12 @@ interface ReactionService {
      */
     fun undoReaction(reaction: String, targetEventId: String, myUserId: String)//: Cancelable
 
+
+    /**
+     * Undo a reaction (emoji) to the targetedEvent.
+     * @param reaction the reaction (preferably emoji)
+     * @param targetEventId the id of the event being reacted
+     */
+    fun updateQuickReaction(reaction: String, oppositeReaction: String, targetEventId: String, myUserId: String)
+
 }

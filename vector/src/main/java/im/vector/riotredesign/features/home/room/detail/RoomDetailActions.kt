@@ -30,6 +30,7 @@ sealed class RoomDetailActions {
     data class SendReaction(val reaction: String, val targetEventId: String) : RoomDetailActions()
     data class RedactAction(val targetEventId: String, val reason: String? = "") : RoomDetailActions()
     data class UndoReaction(val targetEventId: String, val key: String, val reason: String? = "") : RoomDetailActions()
+    data class UpdateQuickReactAction(val targetEventId: String,val selectedReaction: String,val opposite: String) : RoomDetailActions()
     object AcceptInvite : RoomDetailActions()
     object RejectInvite : RoomDetailActions()
 

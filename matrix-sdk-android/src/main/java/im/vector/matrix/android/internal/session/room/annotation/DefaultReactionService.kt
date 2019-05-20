@@ -16,7 +16,6 @@
 package im.vector.matrix.android.internal.session.room.annotation
 
 import androidx.work.*
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionService
@@ -39,8 +38,8 @@ private val WORK_CONSTRAINTS = Constraints.Builder()
 
 internal class DefaultReactionService(private val roomId: String,
                                       private val eventFactory: LocalEchoEventFactory,
-                                      private val monarchy: Monarchy,
                                       private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
+                                      private val updateQuickReactionTask: UpdateQuickReactionTask,
                                       private val taskExecutor: TaskExecutor)
     : ReactionService {
 
@@ -93,6 +92,32 @@ internal class DefaultReactionService(private val roomId: String,
                 })
                 .executeBy(taskExecutor)
 
+    }
+
+
+    override fun updateQuickReaction(reaction: String, oppositeReaction: String, targetEventId: String, myUserId: String) {
+
+        val params = UpdateQuickReactionTask.Params(
+                roomId,
+                targetEventId,
+                reaction,
+                oppositeReaction,
+                myUserId
+        )
+
+        updateQuickReactionTask.configureWith(params)
+                .dispatchTo(object : MatrixCallback<UpdateQuickReactionTask.Result> {
+                    override fun onSuccess(data: UpdateQuickReactionTask.Result) {
+                        data.reactionToAdd?.also { sendReaction(it, targetEventId) }
+                        data.reactionToRedact.forEach {
+                            val redactWork = createRedactEventWork(it, null)
+                            WorkManager.getInstance()
+                                    .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, redactWork)
+                                    .enqueue()
+                        }
+                    }
+                })
+                .executeBy(taskExecutor)
     }
 
     private fun buildWorkIdentifier(identifier: String): String {

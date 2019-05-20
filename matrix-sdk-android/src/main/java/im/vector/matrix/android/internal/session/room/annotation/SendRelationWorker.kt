@@ -19,6 +19,7 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
@@ -66,6 +67,11 @@ class SendRelationWorker(context: Context, params: WorkerParameters)
                     content = localEvent.content
             )
         }
-        return result.fold({ Result.retry() }, { Result.success() })
+        return result.fold({
+            when (it) {
+                is Failure.NetworkConnection -> Result.retry()
+                else -> Result.failure()
+            }
+        }, { Result.success() })
     }
 }
