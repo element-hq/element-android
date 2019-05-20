@@ -81,21 +81,29 @@
         android:layout="@layout/item_timeline_event_file_stub"
         tools:ignore="MissingConstraints" />
 
+    <ViewStub
+        android:id="@+id/messageContentRedactedStub"
+        style="@style/TimelineContentStubLayoutParams"
+        android:layout_height="20dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginRight="56dp"
+        android:layout="@layout/item_timeline_event_redacted_stub"
+        tools:ignore="MissingConstraints" />
 
 
     <!-- TODO: For now we show 8 reactions maximum, this will need rework when needed-->
     <ViewStub
         android:id="@+id/messageBottomInfo"
-        android:inflatedId="@+id/messageBottomInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:inflatedId="@+id/messageBottomInfo"
         android:layout="@layout/item_timeline_event_bottom_reactions_stub"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/messageStartGuideline"
         app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginBottom="4dp"
         tools:visibility="visible">
 
     </ViewStub>

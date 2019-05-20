@@ -110,6 +110,16 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
         val likePositive = "🙂"
         val likeNegative = "😔"
 
+        fun getOpposite(reaction: String): String? {
+            return when (reaction) {
+                agreePositive -> agreeNegative
+                agreeNegative -> agreePositive
+                likePositive -> likeNegative
+                likeNegative -> likePositive
+                else -> null
+            }
+        }
+
         override fun initialState(viewModelContext: ViewModelContext): QuickReactionState? {
             // Args are accessible from the context.
             // val foo = vieWModelContext.args<MyArgs>.foo

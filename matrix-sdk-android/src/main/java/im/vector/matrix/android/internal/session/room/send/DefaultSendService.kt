@@ -16,13 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
@@ -74,16 +68,14 @@ internal class DefaultSendService(private val roomId: String,
         return cancelableBag
     }
 
-
-    override fun sendReaction(reaction: String, targetEventId: String) : Cancelable {
-        val event = eventFactory.createReactionEvent(roomId,targetEventId,reaction).also {
-            saveLocalEcho(it)
-        }
-        val sendRelationWork = createSendRelationWork(event)
+    override fun redactEvent(event: Event, reason: String?): Cancelable {
+        //TODO manage local echo ?
+        //TODO manage media/attachements?
+        val redactWork = createRedactEventWork(event, reason)
         WorkManager.getInstance()
-                .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, sendRelationWork)
+                .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, redactWork)
                 .enqueue()
-        return CancelableWork(sendRelationWork.id)
+        return CancelableWork(redactWork.id)
     }
 
     override fun sendMedia(attachment: ContentAttachmentData): Cancelable {
@@ -105,9 +97,9 @@ internal class DefaultSendService(private val roomId: String,
     private fun saveLocalEcho(event: Event) {
         monarchy.tryTransactionAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                             ?: return@tryTransactionAsync
+                    ?: return@tryTransactionAsync
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-                            ?: return@tryTransactionAsync
+                    ?: return@tryTransactionAsync
 
             roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
         }
@@ -128,15 +120,17 @@ internal class DefaultSendService(private val roomId: String,
                 .build()
     }
 
-    private fun createSendRelationWork(event: Event): OneTimeWorkRequest {
-        //TODO use the new API to send relation (for now use regular send)
-        val sendContentWorkerParams = SendEventWorker.Params(
-                roomId, event)
-        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+    private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
 
-        return OneTimeWorkRequestBuilder<SendEventWorker>()
+        //TODO create local echo of m.room.redaction event?
+
+        val sendContentWorkerParams = RedactEventWorker.Params(
+                roomId, event.eventId!!, reason)
+        val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+
+        return OneTimeWorkRequestBuilder<RedactEventWorker>()
                 .setConstraints(WORK_CONSTRAINTS)
-                .setInputData(sendWorkData)
+                .setInputData(redactWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()
     }

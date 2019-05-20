@@ -92,7 +92,7 @@ internal class DefaultTimeline(
 
     private lateinit var eventRelations: RealmResults<EventAnnotationsSummaryEntity>
 
-    private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<EventEntity>> { _, changeSet ->
+    private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<EventEntity>> { results, changeSet ->
         if (changeSet.state == OrderedCollectionChangeSet.State.INITIAL) {
             handleInitialLoad()
         } else {
@@ -122,8 +122,22 @@ internal class DefaultTimeline(
                     buildTimelineEvents(startDisplayIndex, direction, range.length.toLong())
                     postSnapshot()
                 }
-
             }
+
+            var hasChanged = false
+            changeSet.changes.forEach {index ->
+                val eventEntity = results[index]
+                eventEntity?.eventId?.let { eventId ->
+                    builtEventsIdMap[eventId]?.let { builtIndex ->
+                        //Update the relation of existing event
+                        builtEvents[builtIndex]?.let { te ->
+                            builtEvents[builtIndex] = timelineEventFactory.create(eventEntity)
+                            hasChanged = true
+                        }
+                    }
+                }
+            }
+            if (hasChanged) postSnapshot()
         }
     }
 
@@ -138,18 +152,6 @@ internal class DefaultTimeline(
                     //Update the relation of existing event
                     builtEvents[builtIndex]?.let { te ->
                         builtEvents[builtIndex] = te.copy(annotations = eventRelations.asDomain())
-                        hasChange = true
-                    }
-                }
-            }
-        }
-        changeSet.deletions?.forEach {
-            val eventRelations = collection[it]
-            if (eventRelations != null) {
-                builtEventsIdMap[eventRelations.eventId]?.let { builtIndex ->
-                    //Update the relation of existing event
-                    builtEvents[builtIndex]?.let { te ->
-                        builtEvents[builtIndex] = te.copy(annotations = null)
                         hasChange = true
                     }
                 }

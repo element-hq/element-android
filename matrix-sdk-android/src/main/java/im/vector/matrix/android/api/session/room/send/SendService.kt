@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.room.send
 
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -48,7 +49,6 @@ interface SendService {
      */
     fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable
 
-
-    fun sendReaction(reaction: String, targetEventId: String) : Cancelable
+    fun redactEvent(event: Event, reason: String?): Cancelable
 
 }

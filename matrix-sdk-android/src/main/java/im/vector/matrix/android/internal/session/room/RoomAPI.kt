@@ -197,4 +197,22 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/leave")
     fun leave(@Path("roomId") roomId: String,
               @Body params: Map<String, String>): Call<Unit>
+
+    /**
+     * Strips all information out of an event which isn't critical to the integrity of the server-side representation of the room.
+     * This cannot be undone.
+     * Users may redact their own events, and any user with a power level greater than or equal to the redact power level of the room may redact events there.
+     *
+     * @param txId      the transaction Id
+     * @param roomId    the room id
+     * @param eventId   the event to delete
+     * @param reason   json containing reason key {"reason": "Indecent material"}
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/redact/{eventId}/{txnId}")
+    fun redactEvent(
+            @Path("txnId") txId: String,
+            @Path("roomId") roomId: String,
+            @Path("eventId") parent_id: String,
+            @Body reason:  Map<String, String>
+    ): Call<SendResponse>
 }
