@@ -110,8 +110,15 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, callback)
-            is MessageTextContent -> buildTextMessageItem(event.sendState, messageContent, informationData, hasBeenEdited,
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent,
+                    informationData,
+                    hasBeenEdited,
+                    event.annotations?.editSummary,
+                    callback)
+            is MessageTextContent -> buildTextMessageItem(event.sendState,
+                    messageContent,
+                    informationData,
+                    hasBeenEdited,
                     event.annotations?.editSummary,
                     callback
             )
@@ -287,32 +294,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .apply {
                     if (hasBeenEdited) {
-                        val spannable = SpannableStringBuilder()
-                        spannable.append(linkifiedBody)
-                        val editedSuffix = "(edited)"
-                        spannable.append(" ").append(editedSuffix)
-                        val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
-                        val editStart = spannable.indexOf(editedSuffix)
-                        val editEnd = editStart + editedSuffix.length
-                        spannable.setSpan(
-                                ForegroundColorSpan(color),
-                                editStart,
-                                editEnd,
-                                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-
-                        spannable.setSpan(RelativeSizeSpan(.9f), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                        spannable.setSpan(object : ClickableSpan() {
-                            override fun onClick(widget: View?) {
-                                callback?.onEditedDecorationClicked(informationData, editSummary)
-                            }
-
-                            override fun updateDrawState(ds: TextPaint?) {
-                                //nop
-                            }
-                        },
-                                editStart,
-                                editEnd,
-                                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        val spannable = annotateWithEdited(linkifiedBody, callback, informationData, editSummary)
                         message(spannable)
                     } else {
                         message(linkifiedBody)
@@ -341,6 +323,36 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
+    }
+
+    private fun annotateWithEdited(linkifiedBody: CharSequence, callback: TimelineEventController.Callback?, informationData: MessageInformationData, editSummary: EditAggregatedSummary?): SpannableStringBuilder {
+        val spannable = SpannableStringBuilder()
+        spannable.append(linkifiedBody)
+        val editedSuffix = "(edited)"
+        spannable.append(" ").append(editedSuffix)
+        val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
+        val editStart = spannable.indexOf(editedSuffix)
+        val editEnd = editStart + editedSuffix.length
+        spannable.setSpan(
+                ForegroundColorSpan(color),
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+
+        spannable.setSpan(RelativeSizeSpan(.9f), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View?) {
+                callback?.onEditedDecorationClicked(informationData, editSummary)
+            }
+
+            override fun updateDrawState(ds: TextPaint?) {
+                //nop
+            }
+        },
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        return spannable
     }
 
     private fun buildNoticeMessageItem(messageContent: MessageNoticeContent, informationData: MessageInformationData,
@@ -377,6 +389,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
     }
 
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent, informationData: MessageInformationData,
+                                      hasBeenEdited: Boolean,
+                                      editSummary: EditAggregatedSummary?,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -384,7 +398,14 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             linkifyBody(formattedBody, callback)
         }
         return MessageTextItem_()
-                .message(message)
+                .apply {
+                    if (hasBeenEdited) {
+                        val spannable = annotateWithEdited(message, callback, informationData, editSummary)
+                        message(spannable)
+                    } else {
+                        message(message)
+                    }
+                }
                 .informationData(informationData)
                 .reactionPillCallback(callback)
                 .avatarClickListener(
