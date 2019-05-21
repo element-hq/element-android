@@ -325,7 +325,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun annotateWithEdited(linkifiedBody: CharSequence, callback: TimelineEventController.Callback?, informationData: MessageInformationData, editSummary: EditAggregatedSummary?): SpannableStringBuilder {
+    private fun annotateWithEdited(linkifiedBody: CharSequence,
+                                   callback: TimelineEventController.Callback?,
+                                   informationData: MessageInformationData,
+                                   editSummary: EditAggregatedSummary?): SpannableStringBuilder {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
         val editedSuffix = "(edited)"

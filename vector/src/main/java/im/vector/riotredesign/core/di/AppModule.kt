@@ -39,7 +39,7 @@ class AppModule(private val context: Context) {
         single {
             StringProvider(context.resources)
         }
-        
+
         single {
             context.getSharedPreferences("im.vector.riot", MODE_PRIVATE)
         }
