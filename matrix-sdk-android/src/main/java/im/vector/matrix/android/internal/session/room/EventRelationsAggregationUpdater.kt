@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -13,7 +28,11 @@ import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
 import timber.log.Timber
 
-
+/**
+ * Acts as a listener of incoming messages in order to incrementally computes a summary of annotations.
+ * For reactions will build a EventAnnotationsSummaryEntity, ans for edits a EditAggregatedSummaryEntity.
+ * The summaries can then be extracted and added (as a decoration) to a TimelineEvent for final display.
+ */
 internal class EventRelationsAggregationUpdater(private val credentials: Credentials) {
 
     fun update(realm: Realm, roomId: String, events: List<Event>?) {
@@ -79,7 +98,6 @@ internal class EventRelationsAggregationUpdater(private val credentials: Credent
             } else {
                 //ignore this event for the summary
                 Timber.v("###REPLACE ignoring event for summary, it's to old ${eventId}")
-
             }
         }
 
