@@ -16,10 +16,12 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
-import android.graphics.Color
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.view.View
 import androidx.annotation.ColorRes
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
@@ -27,6 +29,7 @@ import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -108,7 +111,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
             is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, callback)
-            is MessageTextContent -> buildTextMessageItem(event.sendState, messageContent, informationData, hasBeenEdited, callback)
+            is MessageTextContent -> buildTextMessageItem(event.sendState, messageContent, informationData, hasBeenEdited,
+                    event.annotations?.editSummary,
+                    callback
+            )
             is MessageImageContent -> buildImageMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
             is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, callback)
@@ -269,6 +275,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
     private fun buildTextMessageItem(sendState: SendState, messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
                                      hasBeenEdited: Boolean,
+                                     editSummary: EditAggregatedSummary?,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val bodyToUse = messageContent.formattedBody?.let {
@@ -284,7 +291,28 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         spannable.append(linkifiedBody)
                         val editedSuffix = "(edited)"
                         spannable.append(" ").append(editedSuffix)
-                        spannable.setSpan(ForegroundColorSpan(Color.LTGRAY), spannable.indexOf(editedSuffix), spannable.indexOf(editedSuffix) + editedSuffix.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
+                        val editStart = spannable.indexOf(editedSuffix)
+                        val editEnd = editStart + editedSuffix.length
+                        spannable.setSpan(
+                                ForegroundColorSpan(color),
+                                editStart,
+                                editEnd,
+                                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+
+                        spannable.setSpan(RelativeSizeSpan(.9f), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        spannable.setSpan(object : ClickableSpan() {
+                            override fun onClick(widget: View?) {
+                                callback?.onEditedDecorationClicked(informationData, editSummary)
+                            }
+
+                            override fun updateDrawState(ds: TextPaint?) {
+                                //nop
+                            }
+                        },
+                                editStart,
+                                editEnd,
+                                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                         message(spannable)
                     } else {
                         message(linkifiedBody)

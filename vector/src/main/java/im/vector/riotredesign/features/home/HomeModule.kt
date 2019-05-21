@@ -18,6 +18,7 @@ package im.vector.riotredesign.features.home
 
 import androidx.fragment.app.Fragment
 import im.vector.riotredesign.core.glide.GlideApp
+import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandController
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserController
@@ -58,7 +59,8 @@ class HomeModule {
             val eventHtmlRenderer = EventHtmlRenderer(GlideApp.with(fragment), fragment.requireContext(), get())
             val timelineDateFormatter = TimelineDateFormatter(get())
             val timelineMediaSizeProvider = TimelineMediaSizeProvider()
-            val messageItemFactory = MessageItemFactory(get(), timelineMediaSizeProvider, timelineDateFormatter, eventHtmlRenderer)
+            val colorProvider = ColorProvider(fragment.requireContext())
+            val messageItemFactory = MessageItemFactory(colorProvider, timelineMediaSizeProvider, timelineDateFormatter, eventHtmlRenderer)
 
             val timelineItemFactory = TimelineItemFactory(messageItemFactory = messageItemFactory,
                     roomNameItemFactory = RoomNameItemFactory(get()),

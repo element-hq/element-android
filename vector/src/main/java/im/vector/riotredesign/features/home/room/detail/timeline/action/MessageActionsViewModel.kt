@@ -51,7 +51,8 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
 
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
             return if (event != null) {
-                val messageContent: MessageContent? = event.root.content.toModel()
+                val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
+                        ?: event.root.content.toModel()
                 val originTs = event.root.originServerTs
                 MessageActionState(
                         event.root.sender ?: "",

@@ -53,6 +53,7 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -177,6 +178,12 @@ class RoomDetailFragment :
         textComposerViewModel.subscribe { renderTextComposerState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
 
+        roomDetailViewModel.nonBlockingPopAlert.observe(this, Observer { liveEvent ->
+            liveEvent.getContentIfNotHandled()?.let {
+                val message = requireContext().getString(it.first, *it.second.toTypedArray())
+                showSnackWithMessage(message, Snackbar.LENGTH_LONG)
+            }
+        })
         actionViewModel.actionCommandEvent.observe(this, Observer {
             handleActions(it)
         })
@@ -514,6 +521,12 @@ class RoomDetailFragment :
         }
     }
 
+    override fun onEditedDecorationClicked(informationData: MessageInformationData, editAggregatedSummary: EditAggregatedSummary?) {
+        editAggregatedSummary?.also {
+            roomDetailViewModel.process(RoomDetailActions.ShowEditHistoryAction(informationData.eventId, it))
+        }
+
+    }
 // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
@@ -639,6 +652,12 @@ class RoomDetailFragment :
             val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.showSoftInput(composerEditText, InputMethodManager.SHOW_FORCED)
         }
+    }
+
+    fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+        val snack = Snackbar.make(view!!, message, Snackbar.LENGTH_SHORT)
+        snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
+        snack.show()
     }
 
     // VectorInviteView.Callback
