@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.rx.rx
+import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.command.CommandParser
@@ -36,6 +37,8 @@ import im.vector.riotredesign.features.home.room.VisibleRoomStore
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.get
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class RoomDetailViewModel(initialState: RoomDetailViewState,
@@ -83,8 +86,14 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             is RoomDetailActions.RedactAction -> handleRedactEvent(action)
             is RoomDetailActions.UndoReaction -> handleUndoReact(action)
             is RoomDetailActions.UpdateQuickReactAction -> handleUpdateQuickReaction(action)
+            is RoomDetailActions.ShowEditHistoryAction -> handleShowEditHistoryReaction(action)
         }
     }
+
+
+    private val _nonBlockingPopAlert = MutableLiveData<LiveEvent<Pair<Int, List<Any>>>>()
+    val nonBlockingPopAlert: LiveData<LiveEvent<Pair<Int, List<Any>>>>
+        get() = _nonBlockingPopAlert
 
 
     private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
@@ -160,6 +169,22 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             }
         }
     }
+
+    private fun handleShowEditHistoryReaction(action: RoomDetailActions.ShowEditHistoryAction) {
+        //TODO temporary implementation
+        val lastReplace = action.editAggregatedSummary.sourceEvents.lastOrNull()?.let {
+            room.getTimeLineEvent(it)
+        } ?: return
+
+        val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
+        _nonBlockingPopAlert.postValue(LiveEvent(
+                Pair(R.string.last_edited_info_message, listOf(
+                        lastReplace.senderName ?: "?",
+                        dateFormat.format(Date(lastReplace.root.originServerTs ?: 0)))
+                ))
+        )
+    }
+
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
         _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))

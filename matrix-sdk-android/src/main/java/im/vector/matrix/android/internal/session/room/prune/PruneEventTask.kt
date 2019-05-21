@@ -17,18 +17,14 @@ package im.vector.matrix.android.internal.session.room.prune
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.UnsignedData
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
+import im.vector.matrix.android.api.session.events.model.*
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
-import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
@@ -44,7 +40,9 @@ internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
 
 }
 
-internal class DefaultPruneEventTask(private val monarchy: Monarchy) : PruneEventTask {
+internal class DefaultPruneEventTask(
+        private val monarchy: Monarchy,
+        private val eventRelationsAggregationUpdater: EventRelationsAggregationUpdater) : PruneEventTask {
 
     override fun execute(params: PruneEventTask.Params): Try<Unit> {
         return monarchy.tryTransactionSync { realm ->
@@ -72,51 +70,25 @@ internal class DefaultPruneEventTask(private val monarchy: Monarchy) : PruneEven
                     Timber.d("REDACTION for message ${eventToPrune.eventId}")
                     val unsignedData = EventMapper.map(eventToPrune).unsignedData
                             ?: UnsignedData(null, null)
+
+                    //was this event a m.replace
+                    val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
+                    if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
+                        eventRelationsAggregationUpdater.handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
+                    }
+
                     val modified = unsignedData.copy(redactedEvent = redactionEvent)
                     eventToPrune.content = ContentMapper.map(emptyMap())
                     eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
 
                 }
                 EventType.REACTION -> {
-                    Timber.d("REDACTION of reaction ${eventToPrune.eventId}")
-                    //delete a reaction, need to update the annotation summary if any
-                    val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel()
-                            ?: return
-                    val eventThatWasReacted = reactionContent.relatesTo?.eventId ?: return
-
-                    val reactionkey = reactionContent.relatesTo.key
-                    Timber.d("REMOVE reaction for key $reactionkey")
-                    val summary = EventAnnotationsSummaryEntity.where(realm, eventThatWasReacted).findFirst()
-                    if (summary != null) {
-                        summary.reactionsSummary.where()
-                                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reactionkey)
-                                .findFirst()?.let { summary ->
-                                    Timber.d("Find summary for key with  ${summary.sourceEvents.size} known reactions (count:${summary.count})")
-                                    Timber.d("Known reactions  ${summary.sourceEvents.joinToString(",")}")
-                                    if (summary.sourceEvents.contains(eventToPrune.eventId)) {
-                                        Timber.d("REMOVE reaction for key $reactionkey")
-                                        summary.sourceEvents.remove(eventToPrune.eventId)
-                                        Timber.d("Known reactions after  ${summary.sourceEvents.joinToString(",")}")
-                                        summary.count = summary.count - 1
-                                        if (eventToPrune.sender == userId) {
-                                            //Was it a redact on my reaction?
-                                            summary.addedByMe = false
-                                        }
-                                        if (summary.count == 0) {
-                                            //delete!
-                                            summary.deleteFromRealm()
-                                        }
-                                    } else {
-                                        Timber.e("## Cannot remove summary from count, corresponding reaction ${eventToPrune.eventId} is not known")
-                                    }
-                                }
-                    } else {
-                        Timber.e("## Cannot find summary for key $reactionkey")
-                    }
+                    eventRelationsAggregationUpdater.handleReactionRedact(eventToPrune, realm, userId)
                 }
             }
         }
     }
+
 
     private fun computeAllowedKeys(type: String): List<String> {
         // Add filtered content, allowed keys in content depends on the event type

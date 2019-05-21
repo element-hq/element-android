@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -58,6 +59,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean
         fun onAvatarClicked(informationData: MessageInformationData)
         fun onMemberNameClicked(informationData: MessageInformationData)
+        fun onEditedDecorationClicked(informationData: MessageInformationData, editAggregatedSummary: EditAggregatedSummary?)
     }
 
     interface ReactionPillCallback {
