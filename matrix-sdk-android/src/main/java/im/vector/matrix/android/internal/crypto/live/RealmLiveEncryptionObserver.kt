@@ -41,6 +41,10 @@ internal class RoomEncryptionEnabler(monarchy: Monarchy) : RealmLiveEntityObserv
 
         val eventIds = inserted.mapNotNull { it.asDomain().eventId }
 
+        if (eventIds.isEmpty()) {
+            return
+        }
+
         val workParam = EnableEncryptionWorker.Params(eventIds)
         val workData = WorkerParamsFactory.toData(workParam)
 
