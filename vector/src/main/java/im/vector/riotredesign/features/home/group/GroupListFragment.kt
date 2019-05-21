@@ -48,7 +48,6 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(HomeModule.GROUP_LIST_SCOPE))
         groupController.callback = this
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(groupController)

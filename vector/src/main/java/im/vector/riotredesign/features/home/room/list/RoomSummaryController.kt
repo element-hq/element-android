@@ -22,9 +22,11 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.DateProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 
 class RoomSummaryController(private val stringProvider: StringProvider,
+                            private val eventFormatter: NoticeEventFormatter,
                             private val timelineDateFormatter: TimelineDateFormatter
 ) : TypedEpoxyController<RoomListViewState>() {
 

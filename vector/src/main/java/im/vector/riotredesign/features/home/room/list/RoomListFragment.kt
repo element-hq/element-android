@@ -71,7 +71,6 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(HomeModule.ROOM_LIST_SCOPE))
         setupRecyclerView()
         setupCreateRoomButton()
         roomListViewModel.subscribe { renderState(it) }

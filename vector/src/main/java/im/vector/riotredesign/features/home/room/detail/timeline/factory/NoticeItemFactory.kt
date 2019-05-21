@@ -16,28 +16,24 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotredesign.R
-import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAvatar
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 
-class RoomTopicItemFactory(private val stringProvider: StringProvider) {
+class NoticeItemFactory(private val eventFormatter: NoticeEventFormatter) {
 
     fun create(event: TimelineEvent): NoticeItem? {
+        val formattedText = eventFormatter.format(event) ?: return null
+        val senderName = event.senderName()
+        val senderAvatar = event.senderAvatar()
 
-        val content: RoomTopicContent = event.root.content.toModel() ?: return null
-        val text = if (content.topic.isNullOrEmpty()) {
-            stringProvider.getString(R.string.notice_room_topic_removed, event.senderName)
-        } else {
-            stringProvider.getString(R.string.notice_room_topic_changed, event.senderName, content.topic)
-        }
         return NoticeItem_()
-                .noticeText(text)
-                .avatarUrl(event.senderAvatar)
-                .memberName(event.senderName)
+                .noticeText(formattedText)
+                .avatarUrl(senderAvatar)
+                .memberName(senderName)
     }
 
 
