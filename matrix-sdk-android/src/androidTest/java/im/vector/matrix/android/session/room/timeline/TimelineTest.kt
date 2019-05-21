@@ -21,9 +21,10 @@ import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.session.room.EventRelationExtractor
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
-import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
+import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFactory
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
@@ -49,7 +50,9 @@ internal class TimelineTest : InstrumentedTest {
     fun setup() {
         Timber.plant(Timber.DebugTree())
         Realm.init(context())
-        val testConfiguration = RealmConfiguration.Builder().name("test-realm").build()
+        val testConfiguration = RealmConfiguration.Builder().name("test-realm")
+                .modules(SessionRealmModule()).build()
+
         Realm.deleteRealm(testConfiguration)
         monarchy = Monarchy.Builder().setRealmConfiguration(testConfiguration).build()
         RoomDataHelper.fakeInitialSync(monarchy, ROOM_ID)
