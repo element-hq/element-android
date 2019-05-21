@@ -109,7 +109,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultPruneEventTask(get()) as PruneEventTask
+            DefaultPruneEventTask(get(),get()) as PruneEventTask
         }
 
     }

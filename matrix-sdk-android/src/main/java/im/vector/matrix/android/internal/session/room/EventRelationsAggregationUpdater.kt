@@ -20,9 +20,8 @@ import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.database.model.EditAggregatedSummaryEntity
-import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntity
+import im.vector.matrix.android.internal.database.mapper.EventMapper
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
@@ -123,7 +122,7 @@ internal class EventRelationsAggregationUpdater(private val credentials: Credent
         }
     }
 
-    private fun handleReaction(event: Event, roomId: String, realm: Realm) {
+    fun handleReaction(event: Event, roomId: String, realm: Realm) {
         event.content.toModel<ReactionContent>()?.let { content ->
             //rel_type must be m.annotation
             if (RelationType.ANNOTATION == content.relatesTo?.type) {
@@ -151,6 +150,80 @@ internal class EventRelationsAggregationUpdater(private val credentials: Credent
                 }
 
             }
+        }
+    }
+
+    /**
+     * Called when an event is deleted
+     */
+    fun handleRedactionOfReplace(redacted: EventEntity, relatedEventId: String, realm: Realm) {
+        Timber.d("Handle redaction of m.replace")
+        val eventSummary = EventAnnotationsSummaryEntity.where(realm, relatedEventId).findFirst()
+        if (eventSummary == null) {
+            Timber.w("Redaction of a replace targeting an unknown event $relatedEventId")
+            return
+        }
+        val sourceEvents = eventSummary.editSummary?.sourceEvents
+        val sourceToDiscard = sourceEvents?.indexOf(redacted.eventId)
+        if (sourceToDiscard == null) {
+            Timber.w("Redaction of a replace that was not known in aggregation $sourceToDiscard")
+            return
+        }
+        //Need to remove this event from the redaction list and compute new aggregation state
+        sourceEvents.removeAt(sourceToDiscard)
+        val previousEdit = sourceEvents.mapNotNull { EventEntity.where(realm, it).findFirst() }.sortedBy { it.originServerTs }.lastOrNull()
+        if (previousEdit == null) {
+            //revert to original
+            eventSummary.editSummary?.deleteFromRealm()
+        } else {
+            //I have the last event
+            ContentMapper.map(previousEdit.content)?.toModel<MessageContent>()?.newContent?.let { newContent ->
+                eventSummary.editSummary?.lastEditTs = previousEdit.originServerTs
+                        ?: System.currentTimeMillis()
+                eventSummary.editSummary?.aggregatedContent = ContentMapper.map(newContent)
+            } ?: run {
+                Timber.e("Failed to udate edited summary")
+                //TODO how to reccover that
+            }
+
+        }
+    }
+
+    fun handleReactionRedact(eventToPrune: EventEntity, realm: Realm, userId: String) {
+        Timber.d("REDACTION of reaction ${eventToPrune.eventId}")
+        //delete a reaction, need to update the annotation summary if any
+        val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel()
+                ?: return
+        val eventThatWasReacted = reactionContent.relatesTo?.eventId ?: return
+
+        val reactionkey = reactionContent.relatesTo.key
+        Timber.d("REMOVE reaction for key $reactionkey")
+        val summary = EventAnnotationsSummaryEntity.where(realm, eventThatWasReacted).findFirst()
+        if (summary != null) {
+            summary.reactionsSummary.where()
+                    .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reactionkey)
+                    .findFirst()?.let { summary ->
+                        Timber.d("Find summary for key with  ${summary.sourceEvents.size} known reactions (count:${summary.count})")
+                        Timber.d("Known reactions  ${summary.sourceEvents.joinToString(",")}")
+                        if (summary.sourceEvents.contains(eventToPrune.eventId)) {
+                            Timber.d("REMOVE reaction for key $reactionkey")
+                            summary.sourceEvents.remove(eventToPrune.eventId)
+                            Timber.d("Known reactions after  ${summary.sourceEvents.joinToString(",")}")
+                            summary.count = summary.count - 1
+                            if (eventToPrune.sender == userId) {
+                                //Was it a redact on my reaction?
+                                summary.addedByMe = false
+                            }
+                            if (summary.count == 0) {
+                                //delete!
+                                summary.deleteFromRealm()
+                            }
+                        } else {
+                            Timber.e("## Cannot remove summary from count, corresponding reaction ${eventToPrune.eventId} is not known")
+                        }
+                    }
+        } else {
+            Timber.e("## Cannot find summary for key $reactionkey")
         }
     }
 }
