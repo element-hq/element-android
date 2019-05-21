@@ -80,7 +80,7 @@ internal class CryptoModule {
 
         // CryptoService
         scope(DefaultSession.SCOPE) {
-            DefaultCryptoService(get()) as CryptoService
+            get<CryptoManager>() as CryptoService
         }
 
         //
@@ -172,7 +172,6 @@ internal class CryptoModule {
         // CryptoManager
         scope(DefaultSession.SCOPE) {
             CryptoManager(
-                    get(),
                     get(),
                     get(),
                     get(),

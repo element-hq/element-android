@@ -35,8 +35,8 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.RoomService
-import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
@@ -97,8 +97,6 @@ internal class CryptoManager(
         private val mIncomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
         //
         private val mOutgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
-        // Room service
-        private val mRoomService: RoomService,
         // Olm Manager
         private val mOlmManager: OlmManager,
         // Actions
@@ -140,11 +138,23 @@ internal class CryptoManager(
     //    }
     //}
 
-    fun onLiveEvent(roomId: String, event: Event) {
+    fun onStateEvent(roomId: String, event: Event) {
         if (event.type == EventType.ENCRYPTION) {
-            onRoomEncryptionEvent(roomId, event)
+            // TODO Remove onRoomEncryptionEvent(roomId, event)
         } else if (event.type == EventType.STATE_ROOM_MEMBER) {
             onRoomMembershipEvent(roomId, event)
+        } else if (event.type == EventType.STATE_HISTORY_VISIBILITY) {
+            onRoomHistoryVisibilityEvent(roomId, event)
+        }
+    }
+
+    fun onLiveEvent(roomId: String, event: Event) {
+        if (event.type == EventType.ENCRYPTION) {
+            // TODO Remove onRoomEncryptionEvent(roomId, event)
+        } else if (event.type == EventType.STATE_ROOM_MEMBER) {
+            onRoomMembershipEvent(roomId, event)
+        } else if (event.type == EventType.STATE_HISTORY_VISIBILITY) {
+            onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
 
@@ -522,21 +532,15 @@ internal class CryptoManager(
      * @param roomId the room id
      * @return true if the room is encrypted
      */
-    fun isRoomEncrypted(roomId: String?): Boolean {
-        var res = false
+    override fun isRoomEncrypted(roomId: String): Boolean {
+        var res: Boolean
 
-        if (null != roomId) {
-            synchronized(mRoomEncryptors) {
-                res = mRoomEncryptors.containsKey(roomId)
+        synchronized(mRoomEncryptors) {
+            res = mRoomEncryptors.containsKey(roomId)
+        }
 
-                if (!res) {
-                    val room = mRoomService.getRoom(roomId)
-
-                    if (null != room) {
-                        res = room.isEncrypted()
-                    }
-                }
-            }
+        if (!res) {
+            res = !mCryptoStore.getRoomAlgorithm(roomId).isNullOrBlank()
         }
 
         return res
@@ -564,6 +568,26 @@ internal class CryptoManager(
         mEnsureOlmSessionsForDevicesAction.handle(devicesByUser, callback)
     }
 
+    fun isEncryptionEnabledForInvitedUser(): Boolean {
+        return mCryptoConfig.mEnableEncryptionForInvitedMembers
+    }
+
+    override fun getEncryptionAlgorithm(roomId: String): String? {
+        return mCryptoStore.getRoomAlgorithm(roomId)
+    }
+
+    /**
+     * Determine whether we should encrypt messages for invited users in this room.
+     * <p>
+     * Check here whether the invited members are allowed to read messages in the room history
+     * from the point they were invited onwards.
+     *
+     * @return true if we should encrypt messages for invited users.
+     */
+    override fun shouldEncryptForInvitedMembers(roomId: String): Boolean {
+        return mCryptoStore.shouldEncryptForInvitedMembers(roomId)
+    }
+
     /**
      * Encrypt an event content according to the configuration of the room.
      *
@@ -572,10 +596,10 @@ internal class CryptoManager(
      * @param room         the room the event will be sent.
      * @param callback     the asynchronous callback
      */
-    fun encryptEventContent(eventContent: Content,
-                            eventType: String,
-                            room: Room,
-                            callback: MatrixCallback<MXEncryptEventContentResult>) {
+    override fun encryptEventContent(eventContent: Content,
+                                     eventType: String,
+                                     room: Room,
+                                     callback: MatrixCallback<MXEncryptEventContentResult>) {
         // wait that the crypto is really started
         if (!isStarted()) {
             Timber.v("## encryptEventContent() : wait after e2e init")
@@ -596,13 +620,15 @@ internal class CryptoManager(
         }
 
         // Check whether the event content must be encrypted for the invited members.
-        val encryptForInvitedMembers = mCryptoConfig.mEnableEncryptionForInvitedMembers && room.shouldEncryptForInvitedMembers()
+        val encryptForInvitedMembers = mCryptoConfig.mEnableEncryptionForInvitedMembers && shouldEncryptForInvitedMembers(room.roomId)
 
-        val userIds = if (encryptForInvitedMembers) {
-            room.getActiveRoomMemberIds()
-        } else {
-            room.getJoinedRoomMemberIds()
-        }
+        // TODO
+        //val userIds = if (encryptForInvitedMembers) {
+        //    room.getActiveRoomMemberIds()
+        //} else {
+        //    room.getJoinedRoomMemberIds()
+        //}
+        val userIds = emptyList<String>()
 
         // just as you are sending a secret message?
 
@@ -749,22 +775,8 @@ internal class CryptoManager(
      *
      * @param event the encryption event.
      */
-    private fun onRoomEncryptionEvent(roomId: String, event: Event) {
-        // TODO Parse the event
-        val eventContent = event.content // wireEventContent
-
-        val room = mRoomService.getRoom(roomId)!!
-
-        // Check whether the event content must be encrypted for the invited members.
-        val encryptForInvitedMembers = mCryptoConfig.mEnableEncryptionForInvitedMembers && room.shouldEncryptForInvitedMembers()
-
-        val userIds = if (encryptForInvitedMembers) {
-            room.getActiveRoomMemberIds()
-        } else {
-            room.getJoinedRoomMemberIds()
-        }
-
-        setEncryptionInRoom(roomId, eventContent!!["algorithm"] as String, true, userIds)
+    fun onRoomEncryptionEvent(event: Event, userIds: List<String>) {
+        setEncryptionInRoom(event.roomId!!, event.content!!["algorithm"] as String, true, userIds)
     }
 
     /**
@@ -785,6 +797,8 @@ internal class CryptoManager(
         }
 
         val userId = event.stateKey!!
+
+        /* FIXME
         val room = mRoomService.getRoom(roomId)
 
         val roomMember = room?.getRoomMember(userId)
@@ -796,7 +810,7 @@ internal class CryptoManager(
                 // make sure we are tracking the deviceList for this user.
                 deviceListManager.startTrackingDeviceList(Arrays.asList(userId))
             } else if (membership == Membership.INVITE
-                    && room.shouldEncryptForInvitedMembers()
+                    && shouldEncryptForInvitedMembers(roomId)
                     && mCryptoConfig.mEnableEncryptionForInvitedMembers) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
@@ -806,7 +820,17 @@ internal class CryptoManager(
                 deviceListManager.startTrackingDeviceList(Arrays.asList(userId))
             }
         }
+        */
     }
+
+    private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
+        val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
+
+        eventContent?.historyVisibility?.let {
+            mCryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
+        }
+    }
+
 
     /**
      * Upload my user's device keys.
@@ -996,6 +1020,7 @@ internal class CryptoManager(
      * @param roomId the room id
      * @return true if the client should encrypt messages only for the verified devices.
      */
+    // TODO add this info in CryptoRoomEntity?
     override fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean {
         return if (null != roomId) {
             mCryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
@@ -1011,13 +1036,6 @@ internal class CryptoManager(
      * @param add      true to add the room id to the list, false to remove it.
      */
     private fun setRoomBlacklistUnverifiedDevices(roomId: String, add: Boolean) {
-        val room = mRoomService.getRoom(roomId)
-
-        // sanity check
-        if (null == room) {
-            return
-        }
-
         val roomIds = mCryptoStore.getRoomsListBlacklistUnverifiedDevices().toMutableList()
 
         if (add) {

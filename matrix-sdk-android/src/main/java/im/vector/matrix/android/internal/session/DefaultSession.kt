@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
@@ -44,13 +45,14 @@ import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.MatrixCallbackDelegate
+import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.CryptoModule
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.CryptoManager
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
+import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
@@ -321,6 +323,17 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         cryptoService.setRoomBlacklistUnverifiedDevices(roomId)
     }
 
+    override fun isRoomEncrypted(roomId: String): Boolean {
+        return cryptoService.isRoomEncrypted(roomId)
+    }
+
+    override fun encryptEventContent(eventContent: Content,
+                                     eventType: String,
+                                     room: Room,
+                                     callback: MatrixCallback<MXEncryptEventContentResult>) {
+        cryptoService.encryptEventContent(eventContent, eventType, room, callback)
+    }
+
     override fun getDeviceInfo(userId: String, deviceId: String?): MXDeviceInfo? {
         return cryptoService.getDeviceInfo(userId, deviceId)
     }
@@ -339,6 +352,14 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
         return cryptoService.decryptEvent(event, timeline)
+    }
+
+    override fun getEncryptionAlgorithm(roomId: String): String? {
+        return cryptoService.getEncryptionAlgorithm(roomId)
+    }
+
+    override fun shouldEncryptForInvitedMembers(roomId: String): Boolean {
+        return cryptoService.shouldEncryptForInvitedMembers(roomId)
     }
 
     // Private methods *****************************************************************************

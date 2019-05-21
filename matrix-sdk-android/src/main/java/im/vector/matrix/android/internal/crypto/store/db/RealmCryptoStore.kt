@@ -20,15 +20,15 @@ import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
+import im.vector.matrix.android.internal.crypto.model.MXOlmSession
+import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.model.*
 import im.vector.matrix.android.internal.crypto.store.db.query.delete
 import im.vector.matrix.android.internal.crypto.store.db.query.getById
 import im.vector.matrix.android.internal.crypto.store.db.query.getOrCreate
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
-import im.vector.matrix.android.internal.crypto.model.MXOlmSession
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import io.realm.RealmConfiguration
 import io.realm.Sort
 import io.realm.kotlin.where
@@ -55,7 +55,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
     // Cache for InboundGroupSession, to release them properly
     private val inboundGroupSessionToRelease = HashMap<String, MXOlmInboundGroupSession2>()
 
-     /* ==========================================================================================
+    /* ==========================================================================================
      * Other data
      * ========================================================================================== */
 
@@ -239,6 +239,19 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
             CryptoRoomEntity.getById(it, roomId)
         }
                 ?.algorithm
+    }
+
+    override fun shouldEncryptForInvitedMembers(roomId: String): Boolean {
+        return doRealmQueryAndCopy(realmConfiguration) {
+            CryptoRoomEntity.getById(it, roomId)
+        }
+                ?.shouldEncryptForInvitedMembers ?: false
+    }
+
+    override fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean) {
+        doRealmTransaction(realmConfiguration) {
+            CryptoRoomEntity.getOrCreate(it, roomId).shouldEncryptForInvitedMembers = shouldEncryptForInvitedMembers
+        }
     }
 
     override fun storeSession(session: MXOlmSession, deviceKey: String) {

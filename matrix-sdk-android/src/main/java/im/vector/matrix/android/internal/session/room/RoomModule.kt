@@ -71,7 +71,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get())
+            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

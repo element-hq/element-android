@@ -22,12 +22,15 @@ import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
+import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 
 interface CryptoService {
 
@@ -57,7 +60,7 @@ interface CryptoService {
 
     fun getMyDevice(): MXDeviceInfo
 
-    fun getGlobalBlacklistUnverifiedDevices() : Boolean
+    fun getGlobalBlacklistUnverifiedDevices(): Boolean
 
     fun setGlobalBlacklistUnverifiedDevices(block: Boolean)
 
@@ -83,6 +86,13 @@ interface CryptoService {
 
     fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
 
+    fun isRoomEncrypted(roomId: String): Boolean
+
+    fun encryptEventContent(eventContent: Content,
+                            eventType: String,
+                            room: Room,
+                            callback: MatrixCallback<MXEncryptEventContentResult>)
+
     /*
        fun start(isInitialSync: Boolean, aCallback: MatrixCallback<Unit>?)
 
@@ -92,14 +102,6 @@ interface CryptoService {
 
        fun close()
 
-       fun encryptEventContent(eventContent: Content,
-                               eventType: String,
-                               room: Room,
-                               callback: MatrixCallback<MXEncryptEventContentResult>)
-
-       fun onToDeviceEvent(event: Event)
-
-       fun onSyncCompleted(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean)
 
        fun getOlmDevice(): MXOlmDevice?
 
@@ -118,4 +120,8 @@ interface CryptoService {
     */
 
     fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult?
+
+    fun getEncryptionAlgorithm(roomId: String): String?
+
+    fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 }

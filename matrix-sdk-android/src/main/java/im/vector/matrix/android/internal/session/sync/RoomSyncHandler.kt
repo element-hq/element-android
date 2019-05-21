@@ -63,9 +63,9 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
     private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy) {
         val rooms = when (handlingStrategy) {
-            is HandlingStrategy.JOINED -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
+            is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
             is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
-            is HandlingStrategy.LEFT -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
+            is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(it.key, it.value) }
         }
         realm.insertOrUpdate(rooms)
     }
@@ -91,9 +91,16 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         val numberOfStateEvents = roomSync.state?.events?.size ?: 0
         val stateIndexOffset = lastStateIndex + numberOfStateEvents
 
+        // State event
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             val untimelinedStateIndex = if (isInitialSync) Int.MIN_VALUE else stateIndexOffset
             roomEntity.addStateEvents(roomSync.state.events, filterDuplicates = true, stateIndex = untimelinedStateIndex)
+
+            // Give info to crypto module
+            // TODO Remove
+            roomSync.state.events.forEach {
+                mCrypto.onStateEvent(roomId, it)
+            }
         }
 
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {

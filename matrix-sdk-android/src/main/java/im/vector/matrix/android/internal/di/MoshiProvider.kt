@@ -48,6 +48,7 @@ object MoshiProvider {
         return moshi
     }
 
+    // TODO Move
     fun <T> getCanonicalJson(type: Class<T>, o: T): String {
         val adapter = moshi.adapter<T>(type)
 

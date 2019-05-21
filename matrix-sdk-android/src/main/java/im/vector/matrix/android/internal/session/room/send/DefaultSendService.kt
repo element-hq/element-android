@@ -16,15 +16,10 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.util.Cancelable
@@ -39,6 +34,7 @@ import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import im.vector.matrix.android.internal.util.tryTransactionAsync
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 private const val SEND_WORK = "SEND_WORK"
@@ -51,6 +47,7 @@ private val WORK_CONSTRAINTS = Constraints.Builder()
 
 internal class DefaultSendService(private val roomId: String,
                                   private val eventFactory: LocalEchoEventFactory,
+                                  private val cryptoService: CryptoService,
                                   private val monarchy: Monarchy)
     : SendService {
 
@@ -59,6 +56,33 @@ internal class DefaultSendService(private val roomId: String,
         val event = eventFactory.createTextEvent(roomId, msgType, text).also {
             saveLocalEcho(it)
         }
+
+        // Encrypted room handling
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            Timber.v("Send event in encrypted room")
+            // Encrypt then send
+
+            val encryptWork = createEncryptEventWork(event)
+
+            val sendWork = OneTimeWorkRequestBuilder<SendEventWorker>()
+                    .setConstraints(WORK_CONSTRAINTS)
+                    .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                    .build()
+
+            WorkManager.getInstance()
+                    // Encrypt
+                    .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, encryptWork)
+                    // then send
+                    .then(sendWork)
+                    .enqueue()
+
+            return CancelableWork(encryptWork.id)
+        } else {
+            return sendEvent(event)
+        }
+    }
+
+    private fun sendEvent(event: Event): Cancelable {
         val sendWork = createSendEventWork(event)
         WorkManager.getInstance()
                 .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, sendWork)
@@ -93,9 +117,9 @@ internal class DefaultSendService(private val roomId: String,
     private fun saveLocalEcho(event: Event) {
         monarchy.tryTransactionAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                             ?: return@tryTransactionAsync
+                    ?: return@tryTransactionAsync
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-                            ?: return@tryTransactionAsync
+                    ?: return@tryTransactionAsync
 
             roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
         }
@@ -103,6 +127,18 @@ internal class DefaultSendService(private val roomId: String,
 
     private fun buildWorkIdentifier(identifier: String): String {
         return "${roomId}_$identifier"
+    }
+
+    private fun createEncryptEventWork(event: Event): OneTimeWorkRequest {
+        // Same parameter
+        val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
+        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+
+        return OneTimeWorkRequestBuilder<EncryptEventWorker>()
+                .setConstraints(WORK_CONSTRAINTS)
+                .setInputData(sendWorkData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .build()
     }
 
     private fun createSendEventWork(event: Event): OneTimeWorkRequest {

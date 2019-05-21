@@ -22,6 +22,7 @@ import io.realm.annotations.PrimaryKey
 internal open class CryptoRoomEntity(
         @PrimaryKey var roomId: String? = null,
         var algorithm: String? = null,
+        var shouldEncryptForInvitedMembers: Boolean? = null,
         var blacklistUnverifiedDevices: Boolean = false)
     : RealmObject() {
 

@@ -16,16 +16,11 @@
 
 package im.vector.matrix.android.api.session.room.crypto
 
-import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-
 interface RoomCryptoService {
 
-    // TODO
-    fun isEncrypted(): Boolean = false
+    fun isEncrypted(): Boolean
 
-    // TODO
-    fun encryptionAlgorithm(): String? = MXCRYPTO_ALGORITHM_MEGOLM
+    fun encryptionAlgorithm(): String?
 
-    // TODO
-    fun shouldEncryptForInvitedMembers(): Boolean = false
+    fun shouldEncryptForInvitedMembers(): Boolean
 }

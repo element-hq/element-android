@@ -95,5 +95,38 @@ internal class RoomMembers(private val realm: Realm,
         return getNumberOfJoinedMembers() + getNumberOfInvitedMembers()
     }
 
+    /**
+     * Return all the roomMembers ids which are joined or invited to the room
+     *
+     * @return a roomMember id list of joined or invited members.
+     */
+    fun getActiveRoomMemberIds(): List<String> {
+        return getRoomMemberIdsFiltered { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
+    }
+
+    /**
+     * Return all the roomMembers ids which are joined to the room
+     *
+     * @return a roomMember id list of joined members.
+     */
+    fun getJoinedRoomMemberIds(): List<String> {
+        return getRoomMemberIdsFiltered { it.membership == Membership.JOIN }
+    }
+
+    /* ==========================================================================================
+     * Private
+     * ========================================================================================== */
+
+    private fun getRoomMemberIdsFiltered(predicate: (RoomMember) -> Boolean): List<String> {
+        return RoomMembers(realm, roomId)
+                .queryRoomMembersEvent()
+                .findAll()
+                .map { it.asDomain() }
+                .associateBy { it.stateKey!! }
+                .mapValues { it.value.content.toModel<RoomMember>()!! }
+                .filterValues { predicate(it) }
+                .keys
+                .toList()
+    }
 
 }

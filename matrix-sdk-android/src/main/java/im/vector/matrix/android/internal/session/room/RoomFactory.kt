@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.session.room.invite.InviteTask
 import im.vector.matrix.android.internal.session.room.members.DefaultRoomMembersService
@@ -42,13 +43,14 @@ internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
                            private val contextOfEventTask: GetContextOfEventTask,
                            private val setReadMarkersTask: SetReadMarkersTask,
                            private val eventFactory: LocalEchoEventFactory,
+                           private val cryptoService: CryptoService,
                            private val taskExecutor: TaskExecutor) {
 
     fun instantiate(roomId: String): Room {
         val roomMemberExtractor = SenderRoomMemberExtractor(roomId)
         val timelineEventFactory = TimelineEventFactory(roomMemberExtractor)
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask)
-        val sendService = DefaultSendService(roomId, eventFactory, monarchy)
+        val sendService = DefaultSendService(roomId, eventFactory, cryptoService, monarchy)
         val stateService = DefaultStateService(roomId, sendStateTask, taskExecutor)
         val roomMembersService = DefaultRoomMembersService(roomId, monarchy, loadRoomMembersTask, inviteTask, taskExecutor)
         val readService = DefaultReadService(roomId, monarchy, setReadMarkersTask, taskExecutor)
@@ -60,7 +62,8 @@ internal class RoomFactory(private val loadRoomMembersTask: LoadRoomMembersTask,
                 sendService,
                 stateService,
                 readService,
-                roomMembersService
+                roomMembersService,
+                cryptoService
         )
     }
 

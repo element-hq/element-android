@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.RoomMembersService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -39,7 +40,8 @@ internal class DefaultRoom(
         private val sendService: SendService,
         private val stateService: StateService,
         private val readService: ReadService,
-        private val roomMembersService: RoomMembersService
+        private val roomMembersService: RoomMembersService,
+        private val cryptoService: CryptoService
 ) : Room,
         TimelineService by timelineService,
         SendService by sendService,
@@ -61,6 +63,18 @@ internal class DefaultRoom(
                 roomSummaries.first()
             }
         }
+    }
+
+    override fun isEncrypted(): Boolean {
+        return cryptoService.isRoomEncrypted(roomId)
+    }
+
+    override fun encryptionAlgorithm(): String? {
+        return cryptoService.getEncryptionAlgorithm(roomId)
+    }
+
+    override fun shouldEncryptForInvitedMembers(): Boolean {
+        return cryptoService.shouldEncryptForInvitedMembers(roomId)
     }
 
 }

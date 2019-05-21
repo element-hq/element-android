@@ -19,11 +19,11 @@ package im.vector.matrix.android.internal.crypto.store
 
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
-import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
 import im.vector.matrix.android.internal.crypto.model.MXOlmSession
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
 
 /**
@@ -203,6 +203,10 @@ internal interface IMXCryptoStore {
      * @return the algorithm, null is the room is not encrypted
      */
     fun getRoomAlgorithm(roomId: String): String?
+
+    fun shouldEncryptForInvitedMembers(roomId: String): Boolean
+
+    fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean)
 
     /**
      * Store a session between the logged-in user and another device.
