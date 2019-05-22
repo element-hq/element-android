@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.view_state.view.*
 class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : FrameLayout(context, attrs, defStyle) {
 
+    // TODO Use Async from MvRx?
     sealed class State {
         object Content : State()
         object Loading : State()
