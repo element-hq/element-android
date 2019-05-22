@@ -80,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:listitem="@layout/item_timeline_event_text_message" />
+        tools:listitem="@layout/item_timeline_event_base" />
 
     <View
         android:id="@+id/composerDivider"
@@ -131,6 +131,7 @@
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:hint="@string/room_message_placeholder_not_encrypted"
+            android:inputType="textCapSentences|textMultiLine"
             android:minHeight="48dp"
             android:nextFocusLeft="@id/composerEditText"
             android:nextFocusUp="@id/composerEditText"
@@ -144,11 +145,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
