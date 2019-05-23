@@ -138,13 +138,12 @@ class RoomDetailFragment :
          * @return the sanitized display name
          */
         fun sanitizeDisplayname(displayName: String): String? {
-            var displayName = displayName
             // sanity checks
             if (!TextUtils.isEmpty(displayName)) {
                 val ircPattern = " (IRC)"
 
                 if (displayName.endsWith(ircPattern)) {
-                    displayName = displayName.substring(0, displayName.length - ircPattern.length)
+                    return displayName.substring(0, displayName.length - ircPattern.length)
                 }
             }
 
@@ -202,7 +201,10 @@ class RoomDetailFragment :
             handleActions(it)
         })
 
-        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode, RoomDetailViewState::selectedEvent, RoomDetailViewState::roomId) { mode, event, roomId ->
+        roomDetailViewModel.selectSubscribe(
+                RoomDetailViewState::sendMode,
+                RoomDetailViewState::selectedEvent,
+                RoomDetailViewState::roomId) { mode, event, roomId ->
             when (mode) {
                 SendMode.REGULAR -> {
                     val uid = session.sessionParams.credentials.userId
