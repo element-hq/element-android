@@ -4,6 +4,7 @@
     <declare-styleable name="VectorStyles">
 
         <attr name="vctr_bottom_nav_background_color" format="color" />
+        <attr name="vctr_bottom_nav_background_border_color" format="color" />
 
         <!-- waiting view background -->
         <attr name="vctr_waiting_background_color" format="color" />

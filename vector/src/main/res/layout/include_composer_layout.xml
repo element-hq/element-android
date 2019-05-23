@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/composerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:constraintSet="@layout/constraint_set_composer_layout_compact"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <!-- ========================
+        /!\ Constraints for this layout are defined in external layout files that are used as constraint set for animation.
+        /!\ These 3 files must be modified to stay coherent!
+    ======================== -->
+    <View
+        android:id="@+id/related_message_backround"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?vctr_bottom_nav_background_color"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/related_message_background_top_separator"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?vctr_bottom_nav_background_border_color"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/related_message_background_bottom_separator"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?vctr_bottom_nav_background_border_color"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/composer_related_message_sender"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:text="@tools:sample/first_names"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/composer_related_message_preview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="?vctr_message_text_color"
+        tools:ignore="MissingConstraints"
+        tools:text="@tools:sample/lorem"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/composer_related_message_action_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:tint="?android:attr/textColorTertiary"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/composer_related_message_close"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_close_round"
+        android:tint="@color/rosy_pink"
+        tools:ignore="MissingConstraints" />
+
+
+    <ImageView
+        android:id="@+id/composer_avatar_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/attachmentButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_attachment"
+        android:tint="?attr/colorAccent"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/composer_preview_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:barrierMargin="8dp"
+        app:constraint_referenced_ids="composer_related_message_preview,composer_related_message_action_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/sendButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_send"
+        android:tint="?attr/colorAccent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/composerEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:hint="@string/room_message_placeholder_not_encrypted"
+        android:nextFocusLeft="@id/composerEditText"
+        android:nextFocusUp="@id/composerEditText"
+        android:padding="8dp"
+        android:textColor="?vctr_message_text_color"
+        android:textSize="14sp"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

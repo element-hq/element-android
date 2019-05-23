@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionInfo
+import im.vector.matrix.android.api.session.room.model.annotation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 
@@ -32,6 +33,30 @@ internal class LocalEchoEventFactory(private val credentials: Credentials) {
 
     fun createTextEvent(roomId: String, msgType: String, text: String): Event {
         val content = MessageTextContent(type = msgType, body = text)
+        return createEvent(roomId, content)
+    }
+
+    fun createFormattedTextEvent(roomId: String, text: String, formattedText: String): Event {
+        val content = MessageTextContent(
+                type = MessageType.MSGTYPE_TEXT,
+                format = MessageType.FORMAT_MATRIX_HTML,
+                body = text,
+                formattedBody = formattedText
+        )
+        return createEvent(roomId, content)
+    }
+
+
+    fun createReplaceTextEvent(roomId: String, targetEventId: String, newBodyText: String, msgType: String, compatibilityText: String): Event {
+        val content = MessageTextContent(
+                type = msgType,
+                body = compatibilityText,
+                relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
+                newContent = MessageTextContent(
+                        type = MessageType.MSGTYPE_TEXT,
+                        body = newBodyText
+                ).toContent()
+        )
         return createEvent(roomId, content)
     }
 

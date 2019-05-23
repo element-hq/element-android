@@ -19,6 +19,7 @@ import androidx.work.*
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionService
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
@@ -149,5 +150,24 @@ internal class DefaultReactionService(private val roomId: String,
                 .setInputData(redactWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()
+    }
+
+    override fun editTextMessage(targetEventId: String, newBodyText: String, compatibilityBodyText: String): Cancelable {
+        val event = eventFactory.createReplaceTextEvent(roomId, targetEventId, newBodyText, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
+        val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
+        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+
+        //TODO use relation API?
+        val workRequest = OneTimeWorkRequestBuilder<SendEventWorker>()
+                .setConstraints(WORK_CONSTRAINTS)
+                .setInputData(sendWorkData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .build()
+
+        WorkManager.getInstance()
+                .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, workRequest)
+                .enqueue()
+        return CancelableWork(workRequest.id)
+
     }
 }

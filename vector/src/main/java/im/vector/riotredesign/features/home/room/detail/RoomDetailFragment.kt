@@ -32,14 +32,17 @@ import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
@@ -53,6 +56,7 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -92,6 +96,7 @@ import im.vector.riotredesign.features.media.VideoMediaViewerActivity
 import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
+import kotlinx.android.synthetic.main.include_composer_layout.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
@@ -165,6 +170,15 @@ class RoomDetailFragment :
 
     private lateinit var actionViewModel: ActionsHandler
 
+    @BindView(R.id.composer_related_message_sender)
+    lateinit var composerRelatedMessageTitle: TextView
+    @BindView(R.id.composer_related_message_preview)
+    lateinit var composerRelatedMessageContent: TextView
+    @BindView(R.id.composerLayout)
+    lateinit var composerLayout: ConstraintLayout
+    @BindView(R.id.rootConstraintLayout)
+    lateinit var rootConstraintLayout: ConstraintLayout
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
@@ -187,6 +201,65 @@ class RoomDetailFragment :
         actionViewModel.actionCommandEvent.observe(this, Observer {
             handleActions(it)
         })
+
+        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode, RoomDetailViewState::selectedEvent, RoomDetailViewState::roomId) { mode, event, roomId ->
+            when (mode) {
+                SendMode.REGULAR -> {
+                    val uid = session.sessionParams.credentials.userId
+                    val meMember = session.getRoom(roomId)?.getRoomMember(uid)
+                    AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composer_avatar_view)
+                    composerLayout.updateConstraintSet(R.layout.constraint_set_composer_layout_compact, rootConstraintLayout) {
+                        focusComposerAndShowKeyboard()
+                    }
+                }
+                SendMode.EDIT,
+                SendMode.QUOTE -> {
+                    if (event == null) {
+                        //we should ignore? can this happen?
+                        Timber.e("Enter edit mode with no event selected")
+                        return@selectSubscribe
+                    }
+                    //switch to expanded bar
+                    composerRelatedMessageTitle.text = event.senderName
+                    composerRelatedMessageTitle.setTextColor(
+                            ContextCompat.getColor(requireContext(), AvatarRenderer.getColorFromUserId(event.root.sender
+                                    ?: ""))
+                    )
+
+                    val messageContent: MessageContent? =
+                            event.annotations?.editSummary?.aggregatedContent?.toModel()
+                                    ?: event.root.content.toModel()
+                    val eventTextBody = messageContent?.body
+                    composerRelatedMessageContent.text = eventTextBody
+
+
+                    if (mode == SendMode.EDIT) {
+                        composerEditText.setText(eventTextBody)
+                        composer_related_message_action_image.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit))
+                    } else {
+                        composerEditText.setText("")
+                        composer_related_message_action_image.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_quote))
+                    }
+
+                    AvatarRenderer.render(event.senderAvatar, event.root.sender
+                            ?: "", event.senderName, composer_avatar_view)
+
+                    composerEditText.setSelection(composerEditText.text.length)
+                    composerLayout.updateConstraintSet(R.layout.constraint_set_composer_layout_expanded, rootConstraintLayout) {
+                        focusComposerAndShowKeyboard()
+                    }
+
+                    view?.findViewById<ImageButton>(R.id.composer_related_message_close)?.setOnClickListener {
+
+                        composerRelatedMessageTitle.text = ""
+                        composerRelatedMessageContent.text = ""
+                        composerEditText.setText("")
+                        roomDetailViewModel.resetSendMode()
+                    }
+
+                }
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -398,6 +471,11 @@ class RoomDetailFragment :
         if (summary?.membership == Membership.JOIN) {
             timelineEventController.setTimeline(state.timeline)
             inviteView.visibility = View.GONE
+
+            val uid = session.sessionParams.credentials.userId
+            val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
+            AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composer_avatar_view)
+
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
@@ -601,6 +679,14 @@ class RoomDetailFragment :
                         roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, opposite))
                     }
                 }
+                MessageMenuViewModel.ACTION_EDIT -> {
+                    val eventId = actionData.data.toString() ?: return@let
+                    roomDetailViewModel.process(RoomDetailActions.EnterEditMode(eventId))
+                }
+                MessageMenuViewModel.ACTION_QUOTE -> {
+                    val eventId = actionData.data.toString() ?: return@let
+                    roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(eventId))
+                }
                 else -> {
                     Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()
                 }
@@ -648,10 +734,14 @@ class RoomDetailFragment :
 //                    v.vibrate(100)
 //                }
 //            }
-            composerEditText.requestFocus()
-            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.showSoftInput(composerEditText, InputMethodManager.SHOW_FORCED)
+            focusComposerAndShowKeyboard()
         }
+    }
+
+    private fun focusComposerAndShowKeyboard() {
+        composerEditText.requestFocus()
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.showSoftInput(composerEditText, InputMethodManager.SHOW_IMPLICIT)
     }
 
     fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {

@@ -17,6 +17,7 @@ package im.vector.matrix.android.api.session.room.model.annotation
 
 import im.vector.matrix.android.api.util.Cancelable
 
+//TODO rename in relationService?
 interface ReactionService {
 
 
@@ -48,5 +49,14 @@ interface ReactionService {
      * @param myUserId used to know if a reaction event was made by the user
      */
     fun updateQuickReaction(reaction: String, oppositeReaction: String, targetEventId: String, myUserId: String)
+
+
+    /**
+     * Edit a text message body. Limited to "m.text" contentType
+     * @param targetEventId The event to edit
+     * @param newBodyText The edited body
+     * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
+     */
+    fun editTextMessage(targetEventId: String, newBodyText: String, compatibilityBodyText: String = "* $newBodyText"): Cancelable
 
 }

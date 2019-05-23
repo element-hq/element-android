@@ -60,6 +60,17 @@ internal class DefaultSendService(private val roomId: String,
         return CancelableWork(sendWork.id)
     }
 
+    override fun sendFormattedTextMessage(text: String, formattedText: String): Cancelable {
+        val event = eventFactory.createFormattedTextEvent(roomId, text, formattedText).also {
+            saveLocalEcho(it)
+        }
+        val sendWork = createSendEventWork(event)
+        WorkManager.getInstance()
+                .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, sendWork)
+                .enqueue()
+        return CancelableWork(sendWork.id)
+    }
+
     override fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable {
         val cancelableBag = CancelableBag()
         attachments.forEach {

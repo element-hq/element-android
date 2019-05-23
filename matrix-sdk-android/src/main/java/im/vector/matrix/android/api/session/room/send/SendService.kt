@@ -34,6 +34,7 @@ interface SendService {
      * @return a [Cancelable]
      */
     fun sendTextMessage(text: String, msgType: String = MessageType.MSGTYPE_TEXT): Cancelable
+    fun sendFormattedTextMessage(text: String,formattedText: String): Cancelable
 
     /**
      * Method to send a media asynchronously.
