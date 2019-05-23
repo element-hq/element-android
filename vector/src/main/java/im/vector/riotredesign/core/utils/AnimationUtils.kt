@@ -9,7 +9,9 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 
 
-inline fun ConstraintLayout.updateConstraintSet(@LayoutRes layoutId: Int, rootLayoutForAnimation: ConstraintLayout? = null, noinline onAnimationEnd: (() -> Unit)? = null) {
+inline fun ConstraintLayout.updateConstraintSet(@LayoutRes layoutId: Int,
+                                                rootLayoutForAnimation: ConstraintLayout? = null,
+                                                noinline onAnimationEnd: (() -> Unit)? = null) {
     if (rootLayoutForAnimation != null) {
         val transition = ChangeBounds()
         transition.interpolator = OvershootInterpolator()
