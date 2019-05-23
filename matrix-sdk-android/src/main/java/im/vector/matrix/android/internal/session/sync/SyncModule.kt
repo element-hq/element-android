@@ -56,7 +56,7 @@ internal class SyncModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            SyncResponseHandler(get(), get(), get(), get())
+            SyncResponseHandler(get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

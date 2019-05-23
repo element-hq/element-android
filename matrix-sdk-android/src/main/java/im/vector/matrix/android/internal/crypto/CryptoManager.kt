@@ -35,8 +35,10 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
@@ -44,19 +46,29 @@ import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
-import im.vector.matrix.android.internal.crypto.model.*
+import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
+import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
+import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.*
+import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
+import im.vector.matrix.android.internal.crypto.tasks.GetKeyChangesTask
+import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
+import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.session.room.members.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import org.matrix.olm.OlmManager
 import timber.log.Timber
@@ -230,15 +242,8 @@ internal class CryptoManager(
      * devices.
      *
      * @param isInitialSync true if it starts from an initial sync
-     * @param aCallback     the asynchronous callback
      */
-    fun start(isInitialSync: Boolean, aCallback: MatrixCallback<Unit>?) {
-        synchronized(mInitializationCallbacks) {
-            if (null != aCallback && mInitializationCallbacks.indexOf(aCallback) < 0) {
-                mInitializationCallbacks.add(aCallback)
-            }
-        }
-
+    fun start(isInitialSync: Boolean) {
         if (mIsStarting) {
             return
         }
@@ -260,11 +265,11 @@ internal class CryptoManager(
         uploadDeviceKeys(object : MatrixCallback<KeysUploadResponse> {
             private fun onError() {
                 Handler().postDelayed({
-                    if (!isStarted()) {
-                        mIsStarting = false
-                        start(isInitialSync, null)
-                    }
-                }, 1000)
+                                          if (!isStarted()) {
+                                              mIsStarting = false
+                                              start(isInitialSync)
+                                          }
+                                      }, 1000)
             }
 
             override fun onSuccess(data: KeysUploadResponse) {
@@ -289,13 +294,6 @@ internal class CryptoManager(
                         mOutgoingRoomKeyRequestManager.start()
 
                         mKeysBackup.checkAndStartKeysBackup()
-
-                        synchronized(mInitializationCallbacks) {
-                            for (callback in mInitializationCallbacks) {
-                                callback.onSuccess(Unit)
-                            }
-                            mInitializationCallbacks.clear()
-                        }
 
                         if (isInitialSync) {
                             // refresh the devices list for each known room members
@@ -605,17 +603,7 @@ internal class CryptoManager(
         if (!isStarted()) {
             Timber.v("## encryptEventContent() : wait after e2e init")
 
-            start(false, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    encryptEventContent(eventContent, eventType, room, callback)
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    Timber.e(failure, "## encryptEventContent() : onNetworkError while waiting to start e2e")
-
-                    callback.onFailure(failure)
-                }
-            })
+            start(false)
 
             return
         }
@@ -669,11 +657,11 @@ internal class CryptoManager(
         } else {
             val algorithm = room.encryptionAlgorithm()
             val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
-                    algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                                       algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
             Timber.e("## encryptEventContent() : $reason")
 
             callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNABLE_TO_ENCRYPT_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_ENCRYPT, reason)))
+                                                                 MXCryptoError.UNABLE_TO_ENCRYPT, reason)))
         }
     }
 
@@ -703,7 +691,7 @@ internal class CryptoManager(
             val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, eventContent["algorithm"] as String)
             Timber.e("## decryptEvent() : $reason")
             exceptions.add(MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, reason)))
+                                                               MXCryptoError.UNABLE_TO_DECRYPT, reason)))
         } else {
             try {
                 result = alg.decryptEvent(event, timeline)
@@ -796,23 +784,15 @@ internal class CryptoManager(
             // No encrypting in this room
             return
         }
-
-        val userId = event.stateKey!!
-
-        /* FIXME
-        val room = mRoomService.getRoom(roomId)
-
-        val roomMember = room?.getRoomMember(userId)
-
-        if (null != roomMember) {
-            val membership = roomMember.membership
-
+        event.stateKey?.let { userId ->
+            val roomMember: RoomMember? = event.content.toModel()
+            val membership = roomMember?.membership
             if (membership == Membership.JOIN) {
                 // make sure we are tracking the deviceList for this user.
                 deviceListManager.startTrackingDeviceList(Arrays.asList(userId))
             } else if (membership == Membership.INVITE
-                    && shouldEncryptForInvitedMembers(roomId)
-                    && mCryptoConfig.mEnableEncryptionForInvitedMembers) {
+                       && shouldEncryptForInvitedMembers(roomId)
+                       && mCryptoConfig.mEnableEncryptionForInvitedMembers) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
                 // know what other servers are in the room at the time they've been invited.
@@ -821,7 +801,6 @@ internal class CryptoManager(
                 deviceListManager.startTrackingDeviceList(Arrays.asList(userId))
             }
         }
-        */
     }
 
     private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
@@ -851,6 +830,7 @@ internal class CryptoManager(
         // same one as used in login.
         mUploadKeysTask
                 .configureWith(UploadKeysTask.Params(getMyDevice().toDeviceKeys(), null, getMyDevice().deviceId))
+                .executeOn(TaskThread.ENCRYPTION)
                 .dispatchTo(callback)
                 .executeBy(mTaskExecutor)
     }
@@ -980,7 +960,7 @@ internal class CryptoManager(
                     // trigger an an unknown devices exception
                     callback.onFailure(
                             Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
-                                    MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
+                                                              MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
                 }
             }
 

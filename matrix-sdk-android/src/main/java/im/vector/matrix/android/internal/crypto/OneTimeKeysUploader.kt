@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import org.matrix.olm.OlmAccount
 import timber.log.Timber
@@ -95,6 +96,7 @@ internal class OneTimeKeysUploader(
             // ask the server how many keys we have
             mUploadKeysTask
                     .configureWith(UploadKeysTask.Params(null, null, mCredentials.deviceId!!))
+                    .executeOn(TaskThread.ENCRYPTION)
                     .dispatchTo(object : MatrixCallback<KeysUploadResponse> {
 
                         override fun onSuccess(data: KeysUploadResponse) {
@@ -192,6 +194,7 @@ internal class OneTimeKeysUploader(
         // same one as used in login.
         mUploadKeysTask
                 .configureWith(UploadKeysTask.Params(null, oneTimeJson, mCredentials.deviceId!!))
+                .executeOn(TaskThread.ENCRYPTION)
                 .dispatchTo(object : MatrixCallback<KeysUploadResponse> {
                     override fun onSuccess(data: KeysUploadResponse) {
                         mLastPublishedOneTimeKeys = oneTimeKeys

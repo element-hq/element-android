@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
+import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
@@ -24,7 +25,8 @@ import kotlin.system.measureTimeMillis
 internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
                                    private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
                                    private val groupSyncHandler: GroupSyncHandler,
-                                   private val cryptoSyncHandler: CryptoSyncHandler) {
+                                   private val cryptoSyncHandler: CryptoSyncHandler,
+                                   private val cryptoManager: CryptoManager) {
 
     fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
         return Try {
@@ -44,9 +46,10 @@ internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
                 if (syncResponse.accountData != null) {
                     userAccountDataSyncHandler.handle(syncResponse.accountData)
                 }
-
                 cryptoSyncHandler.onSyncCompleted(syncResponse, fromToken, isCatchingUp)
             }
+            val isInitialSync = fromToken == null
+            cryptoManager.start(isInitialSync)
             Timber.v("Finish handling sync in $measure ms")
             syncResponse
         }

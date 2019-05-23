@@ -22,5 +22,5 @@ enum class RoomHistoryVisibility {
     @Json(name = "shared") SHARED,
     @Json(name = "invited") INVITED,
     @Json(name = "joined") JOINED,
-    @Json(name = "word_readable") WORLD_READABLE
+    @Json(name = "world_readable") WORLD_READABLE
 }

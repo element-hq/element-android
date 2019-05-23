@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.LoadingItemModel_
+import im.vector.riotredesign.core.epoxy.loadingItem
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.*

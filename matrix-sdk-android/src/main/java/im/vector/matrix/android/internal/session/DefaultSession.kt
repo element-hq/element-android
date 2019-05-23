@@ -103,18 +103,17 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         val contentModule = ContentModule().definition
         val cryptoModule = CryptoModule().definition
         MatrixKoinHolder.instance.loadModules(listOf(sessionModule,
-                syncModule,
-                roomModule,
-                groupModule,
-                userModule,
-                signOutModule,
-                contentModule,
-                cryptoModule))
+                                                     syncModule,
+                                                     roomModule,
+                                                     groupModule,
+                                                     userModule,
+                                                     signOutModule,
+                                                     contentModule,
+                                                     cryptoModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         if (!monarchy.isMonarchyThreadOpen) {
             monarchy.openManually()
         }
-        cryptoService.start(false, null)
         liveEntityUpdaters.forEach { it.start() }
     }
 

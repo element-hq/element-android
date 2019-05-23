@@ -21,6 +21,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -50,8 +51,8 @@ internal class EnableEncryptionWorker(context: Context,
 
 
     override fun doWork(): Result {
-        val params = WorkerParamsFactory.fromData<EnableEncryptionWorker.Params>(inputData)
-                ?: return Result.failure()
+        val params = WorkerParamsFactory.fromData<Params>(inputData)
+                     ?: return Result.failure()
 
 
         val events = monarchy.fetchAllMappedSync(
@@ -62,9 +63,17 @@ internal class EnableEncryptionWorker(context: Context,
         events.forEach {
             val roomId = it.roomId!!
 
+            val callback = object : MatrixCallback<Boolean> {
+                override fun onSuccess(data: Boolean) {
+                    super.onSuccess(data)
+
+                }
+            }
+
             loadRoomMembersTask
                     .configureWith(LoadRoomMembersTask.Params(roomId))
-                    .executeOn(TaskThread.CALLER)
+                    .executeOn(TaskThread.ENCRYPTION)
+                    .dispatchTo(callback)
                     .executeBy(taskExecutor)
 
             var userIds: List<String> = emptyList()
@@ -72,7 +81,7 @@ internal class EnableEncryptionWorker(context: Context,
             monarchy.doWithRealm { realm ->
                 // Check whether the event content must be encrypted for the invited members.
                 val encryptForInvitedMembers = cryptoManager.isEncryptionEnabledForInvitedUser()
-                        && cryptoManager.shouldEncryptForInvitedMembers(roomId)
+                                               && cryptoManager.shouldEncryptForInvitedMembers(roomId)
 
 
                 userIds = if (encryptForInvitedMembers) {

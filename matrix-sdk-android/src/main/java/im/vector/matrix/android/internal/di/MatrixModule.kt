@@ -21,7 +21,9 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import org.koin.dsl.module.module
+import java.util.concurrent.Executors
 
 
 class MatrixModule(private val context: Context) {
@@ -33,7 +35,12 @@ class MatrixModule(private val context: Context) {
         }
 
         single {
-            MatrixCoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.IO, main = Dispatchers.Main)
+            MatrixCoroutineDispatchers(io = Dispatchers.IO,
+                                       computation = Dispatchers.IO,
+                                       main = Dispatchers.Main,
+                                       encryption = Executors.newSingleThreadExecutor().asCoroutineDispatcher(),
+                                       decryption = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+            )
         }
 
         single {
