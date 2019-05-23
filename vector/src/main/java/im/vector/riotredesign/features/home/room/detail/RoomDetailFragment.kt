@@ -159,6 +159,7 @@ class RoomDetailFragment :
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
     private val textComposerViewModel: TextComposerViewModel by fragmentViewModel()
     private val timelineEventController: TimelineEventController by inject { parametersOf(this) }
+    private val commandAutocompletePolicy = CommandAutocompletePolicy()
     private val autocompleteCommandPresenter: AutocompleteCommandPresenter by inject { parametersOf(this) }
     private val autocompleteUserPresenter: AutocompleteUserPresenter by inject { parametersOf(this) }
     private val homePermalinkHandler: HomePermalinkHandler by inject()
@@ -207,6 +208,7 @@ class RoomDetailFragment :
                 RoomDetailViewState::roomId) { mode, event, roomId ->
             when (mode) {
                 SendMode.REGULAR -> {
+                    commandAutocompletePolicy.enabled = true
                     val uid = session.sessionParams.credentials.userId
                     val meMember = session.getRoom(roomId)?.getRoomMember(uid)
                     AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composer_avatar_view)
@@ -216,6 +218,7 @@ class RoomDetailFragment :
                 }
                 SendMode.EDIT,
                 SendMode.QUOTE -> {
+                    commandAutocompletePolicy.enabled = false
                     if (event == null) {
                         //we should ignore? can this happen?
                         Timber.e("Enter edit mode with no event selected")
@@ -321,7 +324,7 @@ class RoomDetailFragment :
         val elevation = 6f
         val backgroundDrawable = ColorDrawable(Color.WHITE)
         Autocomplete.on<Command>(composerEditText)
-                .with(CommandAutocompletePolicy())
+                .with(commandAutocompletePolicy)
                 .with(autocompleteCommandPresenter)
                 .with(elevation)
                 .with(backgroundDrawable)
