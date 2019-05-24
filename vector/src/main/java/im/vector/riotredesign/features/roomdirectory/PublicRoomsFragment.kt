@@ -21,13 +21,15 @@ import android.text.Editable
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
-import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.SimpleTextWatcher
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_room_directory.*
+import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
+import kotlinx.android.synthetic.main.fragment_public_rooms.*
 import org.koin.android.ext.android.get
 import timber.log.Timber
 
@@ -38,19 +40,21 @@ import timber.log.Timber
  *
  * FIXME Rotate screen launch again the request
  *
- * For Nad:
+ * TODO For Nad:
  * Display number of rooms?
  * Picto size are not correct
  * Where I put the room directory picker?
+ * World Readable badge
+ * Guest can join badge
  *
  */
-class RoomDirectoryFragment : VectorBaseFragment(), RoomDirectoryController.Callback {
+class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback {
 
-    private val viewModel: RoomDirectoryViewModel by fragmentViewModel()
+    private val viewModel: RoomDirectoryViewModel by activityViewModel()
 
-    private val roomDirectoryController = RoomDirectoryController(get())
+    private val publicRoomsController = PublicRoomsController(get())
 
-    override fun getLayoutResId() = R.layout.fragment_room_directory
+    override fun getLayoutResId() = R.layout.fragment_public_rooms
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,15 +66,19 @@ class RoomDirectoryFragment : VectorBaseFragment(), RoomDirectoryController.Call
             it.setDisplayHomeAsUpEnabled(true)
         }
 
-        roomDirectoryFilter.addTextChangedListener(object : SimpleTextWatcher() {
+        publicRoomsFilter.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
                 // TODO Debounce
-                viewModel.filterWith(roomDirectoryFilter.text.toString())
+                viewModel.filterWith(publicRoomsFilter.text.toString())
             }
         })
 
-        createNewRoom.setOnClickListener {
+        publicRoomsCreateNewRoom.setOnClickListener {
             vectorBaseActivity.notImplemented()
+        }
+
+        publicRoomsChangeDirectory.setOnClickListener {
+            vectorBaseActivity.addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
         }
     }
 
@@ -82,14 +90,14 @@ class RoomDirectoryFragment : VectorBaseFragment(), RoomDirectoryController.Call
 
     private fun setupRecyclerView() {
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
-        epoxyVisibilityTracker.attach(roomDirectoryList)
+        epoxyVisibilityTracker.attach(publicRoomsList)
 
         val layoutManager = LinearLayoutManager(context)
 
-        roomDirectoryList.layoutManager = layoutManager
-        roomDirectoryController.callback = this
+        publicRoomsList.layoutManager = layoutManager
+        publicRoomsController.callback = this
 
-        roomDirectoryList.setController(roomDirectoryController)
+        publicRoomsList.setController(publicRoomsController)
     }
 
     override fun onPublicRoomClicked(publicRoom: PublicRoom) {
@@ -108,6 +116,9 @@ class RoomDirectoryFragment : VectorBaseFragment(), RoomDirectoryController.Call
 
     override fun invalidate() = withState(viewModel) { state ->
         // Populate list with Epoxy
-        roomDirectoryController.setData(state)
+        publicRoomsController.setData(state)
+
+        // Directory name
+        publicRoomsDirectoryName.text = state.roomDirectoryDisplayName
     }
 }

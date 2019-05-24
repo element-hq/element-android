@@ -19,6 +19,7 @@ package im.vector.matrix.android.api.session.room
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
+import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.api.util.Cancelable
 
 /**
@@ -38,5 +39,11 @@ interface RoomDirectoryService {
      */
     fun joinRoom(roomId: String,
                  callback: MatrixCallback<Unit>)
+
+    /**
+     * Fetches the overall metadata about protocols supported by the homeserver.
+     * Includes both the available protocols and all fields required for queries against each protocol.
+     */
+    fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>)
 
 }

@@ -46,12 +46,12 @@ data class PublicRoomsParams(
         /**
          * Whether or not to include all known networks/protocols from application services on the homeserver. Defaults to false.
          */
-        @Json(name = "includeAllNetworks")
+        @Json(name = "include_all_networks")
         var includeAllNetworks: Boolean = false,
 
         /**
          * The specific third party network/protocol to request from the homeserver. Can only be used if include_all_networks is false.
          */
-        @Json(name = "thirdPartyInstanceId")
+        @Json(name = "third_party_instance_id")
         var thirdPartyInstanceId: String? = null
 )

@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.resources.LocaleProvider
+import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
@@ -38,6 +39,10 @@ class AppModule(private val context: Context) {
 
         single {
             StringProvider(context.resources)
+        }
+
+        single {
+            StringArrayProvider(context.resources)
         }
 
         single {

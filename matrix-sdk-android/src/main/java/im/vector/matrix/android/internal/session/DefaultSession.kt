@@ -36,6 +36,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
+import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.user.UserService
@@ -186,6 +187,11 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     override fun joinRoom(roomId: String, callback: MatrixCallback<Unit>) {
         assert(isOpen)
         return roomDirectoryService.joinRoom(roomId, callback)
+    }
+
+    override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>) {
+        assert(isOpen)
+        return roomDirectoryService.getThirdPartyProtocol(callback)
     }
 
     // GROUP SERVICE

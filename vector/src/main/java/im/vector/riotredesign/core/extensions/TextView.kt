@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.roomdirectory
+package im.vector.riotredesign.core.extensions
 
-import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.addFragment
-import im.vector.riotredesign.core.platform.VectorBaseActivity
+import android.widget.TextView
+import androidx.core.view.isVisible
 
-class RoomDirectoryActivity : VectorBaseActivity() {
-
-
-    override fun getLayoutRes() = R.layout.activity_simple
-
-    override fun initUiAndData() {
-        if (isFirstCreation()) {
-            addFragment(PublicRoomsFragment(), R.id.simpleFragmentContainer)
-        }
+/**
+ * Set a text in the TextView, or set visibility to GONE it if the text is null
+ */
+fun TextView.setTextOrHide(newText: String?, hideWhenBlank: Boolean = true) {
+    if (newText == null
+            || (newText.isBlank() && hideWhenBlank)) {
+        isVisible = false
+    } else {
+        this.text = newText
+        isVisible = true
     }
-
 }

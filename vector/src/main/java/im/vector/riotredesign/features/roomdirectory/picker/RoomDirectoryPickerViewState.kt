@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.roomdirectory
+package im.vector.riotredesign.features.roomdirectory.picker
 
-import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.addFragment
-import im.vector.riotredesign.core.platform.VectorBaseActivity
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 
-class RoomDirectoryActivity : VectorBaseActivity() {
-
-
-    override fun getLayoutRes() = R.layout.activity_simple
-
-    override fun initUiAndData() {
-        if (isFirstCreation()) {
-            addFragment(PublicRoomsFragment(), R.id.simpleFragmentContainer)
-        }
-    }
-
-}
+data class RoomDirectoryPickerViewState(
+        val asyncThirdPartyRequest: Async<Map<String, ThirdPartyProtocol>> = Uninitialized
+) : MvRxState

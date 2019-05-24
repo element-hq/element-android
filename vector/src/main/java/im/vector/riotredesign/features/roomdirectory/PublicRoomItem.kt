@@ -29,10 +29,9 @@ import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_room_directory)
-abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_public_room)
+abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
-    // TODO Manage join state waiting from the sync
     enum class JoinState {
         NOT_JOINED,
         JOINING,
@@ -82,15 +81,15 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
 
 
     class Holder : VectorEpoxyHolder() {
-        val rootView by bind<ViewGroup>(R.id.itemRoomDirectoryLayout)
+        val rootView by bind<ViewGroup>(R.id.itemPublicRoomLayout)
 
-        val avatarView by bind<ImageView>(R.id.itemRoomDirectoryAvatar)
-        val nameView by bind<TextView>(R.id.itemRoomDirectoryName)
-        val counterView by bind<TextView>(R.id.itemRoomDirectoryMembersCount)
+        val avatarView by bind<ImageView>(R.id.itemPublicRoomAvatar)
+        val nameView by bind<TextView>(R.id.itemPublicRoomName)
+        val counterView by bind<TextView>(R.id.itemPublicRoomMembersCount)
 
-        val joinedView by bind<View>(R.id.itemRoomDirectoryJoined)
-        val joinButton by bind<View>(R.id.itemRoomDirectoryJoin)
-        val joiningView by bind<View>(R.id.itemRoomDirectoryJoining)
+        val joinedView by bind<View>(R.id.itemPublicRoomJoined)
+        val joinButton by bind<View>(R.id.itemPublicRoomJoin)
+        val joiningView by bind<View>(R.id.itemPublicRoomJoining)
     }
 
 }

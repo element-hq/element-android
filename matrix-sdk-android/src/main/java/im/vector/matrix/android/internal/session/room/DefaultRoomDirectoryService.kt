@@ -20,14 +20,17 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
+import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.session.room.directory.GetPublicRoomTask
+import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyProtocolsTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 
 internal class DefaultRoomDirectoryService(private val getPublicRoomTask: GetPublicRoomTask,
                                            private val joinRoomTask: JoinRoomTask,
+                                           private val getThirdPartyProtocolsTask: GetThirdPartyProtocolsTask,
                                            private val taskExecutor: TaskExecutor) : RoomDirectoryService {
 
     override fun getPublicRooms(server: String?,
@@ -42,6 +45,13 @@ internal class DefaultRoomDirectoryService(private val getPublicRoomTask: GetPub
     override fun joinRoom(roomId: String, callback: MatrixCallback<Unit>) {
         joinRoomTask
                 .configureWith(JoinRoomTask.Params(roomId))
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
+    }
+
+    override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>) {
+        getThirdPartyProtocolsTask
+                .configureWith(Unit)
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }

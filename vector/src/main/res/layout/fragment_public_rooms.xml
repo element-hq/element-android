@@ -8,11 +8,11 @@
     android:background="@color/pale_grey">
 
     <com.airbnb.epoxy.EpoxyRecyclerView
-        android:id="@+id/roomDirectoryList"
+        android:id="@+id/publicRoomsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/item_room_directory" />
+        tools:listitem="@layout/item_public_room" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/roomDirectoryFilter"
+                        android:id="@+id/publicRoomsFilter"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/layout_horizontal_margin"
@@ -45,7 +45,7 @@
                 </androidx.appcompat.widget.Toolbar>
 
                 <Button
-                    android:id="@+id/createNewRoom"
+                    android:id="@+id/publicRoomsCreateNewRoom"
                     style="@style/VectorButtonStyleFlat"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
@@ -55,6 +55,26 @@
                     android:drawableLeft="@drawable/ic_plus_circle"
                     android:drawablePadding="13dp"
                     android:text="@string/create_new_room" />
+
+                <!-- TODO Layout -->
+                <Button
+                    android:id="@+id/publicRoomsChangeDirectory"
+                    style="@style/VectorButtonStyleFlat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="RoomDirectory" />
+
+                <TextView
+                    android:id="@+id/publicRoomsDirectoryName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:textColor="#FFFFFF"
+                    tools:text="RoomDirectoryName" />
 
             </LinearLayout>
 

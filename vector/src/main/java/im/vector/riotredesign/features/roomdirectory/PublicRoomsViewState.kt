@@ -21,7 +21,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 
-data class RoomDirectoryViewState(
+data class PublicRoomsViewState(
         // Store cumul of pagination result
         val publicRooms: List<PublicRoom> = emptyList(),
         // Current pagination request
@@ -31,5 +31,6 @@ data class RoomDirectoryViewState(
         // List of roomIds that the user wants to join
         val joiningRoomsIds: List<String> = emptyList(),
         // List of joined roomId,
-        val joinedRoomsIds: List<String> = emptyList()
+        val joinedRoomsIds: List<String> = emptyList(),
+        val roomDirectoryDisplayName: String? = null
 ) : MvRxState

@@ -36,7 +36,9 @@ import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.*
 import im.vector.matrix.android.internal.session.room.directory.DefaultGetPublicRoomTask
+import im.vector.matrix.android.internal.session.room.directory.DefaultGetThirdPartyProtocolsTask
 import im.vector.matrix.android.internal.session.room.directory.GetPublicRoomTask
+import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyProtocolsTask
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
@@ -116,7 +118,11 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultRoomDirectoryService(get(), get(), get()) as RoomDirectoryService
+            DefaultGetThirdPartyProtocolsTask(get()) as GetThirdPartyProtocolsTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultRoomDirectoryService(get(), get(), get(), get()) as RoomDirectoryService
         }
 
         scope(DefaultSession.SCOPE) {

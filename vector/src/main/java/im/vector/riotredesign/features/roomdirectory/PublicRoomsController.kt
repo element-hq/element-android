@@ -28,11 +28,11 @@ import im.vector.riotredesign.core.epoxy.loadingItem
 import im.vector.riotredesign.core.epoxy.noResultItem
 import im.vector.riotredesign.core.resources.StringProvider
 
-class RoomDirectoryController(private val stringProvider: StringProvider) : TypedEpoxyController<RoomDirectoryViewState>() {
+class PublicRoomsController(private val stringProvider: StringProvider) : TypedEpoxyController<PublicRoomsViewState>() {
 
     var callback: Callback? = null
 
-    override fun buildModels(viewState: RoomDirectoryViewState) {
+    override fun buildModels(viewState: PublicRoomsViewState) {
         val publicRooms = viewState.publicRooms
 
         if (publicRooms.isEmpty()
@@ -74,17 +74,17 @@ class RoomDirectoryController(private val stringProvider: StringProvider) : Type
         }
     }
 
-    private fun buildPublicRoom(publicRoom: PublicRoom, viewState: RoomDirectoryViewState) {
-        roomDirectoryItem {
+    private fun buildPublicRoom(publicRoom: PublicRoom, viewState: PublicRoomsViewState) {
+        publicRoomItem {
             id(publicRoom.roomId)
             roomId(publicRoom.roomId)
             avatarUrl(publicRoom.avatarUrl)
             roomName(publicRoom.name)
             nbOfMembers(publicRoom.numJoinedMembers)
             when {
-                viewState.joinedRoomsIds.contains(publicRoom.roomId)  -> joinState(RoomDirectoryItem.JoinState.JOINED)
-                viewState.joiningRoomsIds.contains(publicRoom.roomId) -> joinState(RoomDirectoryItem.JoinState.JOINING)
-                else                                                  -> joinState(RoomDirectoryItem.JoinState.NOT_JOINED)
+                viewState.joinedRoomsIds.contains(publicRoom.roomId)  -> joinState(PublicRoomItem.JoinState.JOINED)
+                viewState.joiningRoomsIds.contains(publicRoom.roomId) -> joinState(PublicRoomItem.JoinState.JOINING)
+                else                                                  -> joinState(PublicRoomItem.JoinState.NOT_JOINED)
             }
             joinListener {
                 callback?.onPublicRoomJoin(publicRoom)

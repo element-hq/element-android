@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRooms
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
+import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
@@ -32,6 +33,14 @@ import retrofit2.Call
 import retrofit2.http.*
 
 internal interface RoomAPI {
+
+    /**
+     * Get the third party server protocols.
+     *
+     * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#get-matrix-client-r0-thirdparty-protocols
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "thirdparty/protocols")
+    fun thirdPartyProtocols(): Call<Map<String, ThirdPartyProtocol>>
 
     /**
      * Lists the public rooms on the server, with optional filter.

@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsFilter
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
+import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
@@ -32,13 +33,13 @@ import timber.log.Timber
 
 private const val PUBLIC_ROOMS_LIMIT = 20
 
-class RoomDirectoryViewModel(initialState: RoomDirectoryViewState,
-                             private val session: Session) : VectorViewModel<RoomDirectoryViewState>(initialState) {
+class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
+                             private val session: Session) : VectorViewModel<PublicRoomsViewState>(initialState) {
 
-    companion object : MvRxViewModelFactory<RoomDirectoryViewModel, RoomDirectoryViewState> {
+    companion object : MvRxViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomDirectoryViewState): RoomDirectoryViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: PublicRoomsViewState): RoomDirectoryViewModel? {
             val currentSession = viewModelContext.activity.get<Session>()
 
             return RoomDirectoryViewModel(state, currentSession)
@@ -52,9 +53,18 @@ class RoomDirectoryViewModel(initialState: RoomDirectoryViewState,
 
     private var currentTask: Cancelable? = null
 
+    // Default RoomDirectoryData
+    private var roomDirectoryData = RoomDirectoryData()
+
     init {
         // Load with empty filter
         load()
+
+        setState {
+            copy(
+                    roomDirectoryDisplayName = roomDirectoryData.displayName
+            )
+        }
 
         // Observe joined room (from the sync)
         observeJoinedRooms()
@@ -84,11 +94,33 @@ class RoomDirectoryViewModel(initialState: RoomDirectoryViewState,
                 }
     }
 
+    fun setRoomDirectoryData(roomDirectoryData: RoomDirectoryData) {
+        if (this.roomDirectoryData == roomDirectoryData) {
+            return
+        }
+
+        this.roomDirectoryData = roomDirectoryData
+
+        reset()
+
+        load()
+    }
+
     fun filterWith(filter: String) {
+        if (currentFilter == filter) {
+            return
+        }
+
         currentTask?.cancel()
 
         currentFilter = filter
 
+        reset()
+
+        load()
+    }
+
+    private fun reset() {
         // Reset since token
         since = null
 
@@ -96,10 +128,10 @@ class RoomDirectoryViewModel(initialState: RoomDirectoryViewState,
             copy(
                     publicRooms = emptyList(),
                     asyncPublicRoomsRequest = Loading(),
-                    hasMore = false)
+                    hasMore = false,
+                    roomDirectoryDisplayName = roomDirectoryData.displayName
+            )
         }
-
-        load()
     }
 
     fun loadMore() {
@@ -115,13 +147,13 @@ class RoomDirectoryViewModel(initialState: RoomDirectoryViewState,
     }
 
     private fun load() {
-        currentTask = session.getPublicRooms(null, // TODO session.sessionParams.homeServerConnectionConfig.homeServerUri.toString(),
+        currentTask = session.getPublicRooms(roomDirectoryData.homeServer,
                 PublicRoomsParams(
                         limit = PUBLIC_ROOMS_LIMIT,
                         filter = PublicRoomsFilter(searchTerm = currentFilter),
-                        includeAllNetworks = false, // TODO
+                        includeAllNetworks = roomDirectoryData.includeAllNetworks,
                         since = since,
-                        thirdPartyInstanceId = null // TODO
+                        thirdPartyInstanceId = roomDirectoryData.thirdPartyInstanceId
                 ),
                 object : MatrixCallback<PublicRoomsResponse> {
                     override fun onSuccess(data: PublicRoomsResponse) {

@@ -100,7 +100,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
 
     override fun invalidate() {
         //no-ops by default
-        // TODO Remove default implementation?
+        Timber.w("invalidate() method has not been implemented")
     }
 
     protected fun setArguments(args: Parcelable? = null) {
