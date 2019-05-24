@@ -20,6 +20,8 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
+import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
+import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
@@ -27,14 +29,20 @@ import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 internal interface RoomAPI {
+
+    /**
+     * Lists the public rooms on the server, with optional filter.
+     * This API returns paginated responses. The rooms are ordered by the number of joined members, with the largest rooms first.
+     *
+     * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-publicrooms
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "publicRooms")
+    fun publicRooms(@Query("server") server: String?,
+                    @Body publicRoomsParams: PublicRoomsParams
+    ): Call<PublicRoomsResponse>
 
     /**
      * Create a room.
@@ -213,6 +221,6 @@ internal interface RoomAPI {
             @Path("txnId") txId: String,
             @Path("roomId") roomId: String,
             @Path("eventId") parent_id: String,
-            @Body reason:  Map<String, String>
+            @Body reason: Map<String, String>
     ): Call<SendResponse>
 }

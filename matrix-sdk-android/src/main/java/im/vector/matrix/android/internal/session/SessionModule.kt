@@ -21,6 +21,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
@@ -33,10 +34,9 @@ import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
 import im.vector.matrix.android.internal.session.filter.*
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
-import im.vector.matrix.android.internal.session.room.DefaultRoomService
-import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
-import im.vector.matrix.android.internal.session.room.RoomAvatarResolver
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.*
+import im.vector.matrix.android.internal.session.room.directory.DefaultGetPublicRoomTask
+import im.vector.matrix.android.internal.session.room.directory.GetPublicRoomTask
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
@@ -109,6 +109,14 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             DefaultRoomService(get(), get(), get(), get()) as RoomService
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultGetPublicRoomTask(get()) as GetPublicRoomTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultRoomDirectoryService(get(), get(), get()) as RoomDirectoryService
         }
 
         scope(DefaultSession.SCOPE) {

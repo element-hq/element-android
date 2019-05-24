@@ -16,4 +16,9 @@
         android:id="@+id/tmp_menu_create_room"
         android:title="@string/room_recents_create_room" />
 
+    <!-- TODO Temporary code -->
+    <item
+        android:id="@+id/tmp_menu_open_room_directory"
+        android:title="Open room directory" />
+
 </menu>
