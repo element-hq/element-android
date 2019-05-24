@@ -20,4 +20,6 @@
 
     <string name="create_new_room">Create New Room</string>
 
+    <string name="error_no_network">No network. Please check your Internet connection.</string>
+
 </resources>

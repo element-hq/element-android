@@ -20,18 +20,16 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
-import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.errorWithRetryItem
 import im.vector.riotredesign.core.epoxy.loadingItem
-import im.vector.riotredesign.core.resources.StringArrayProvider
+import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.StringProvider
 
 class RoomDirectoryPickerController(private val stringProvider: StringProvider,
-                                    private val stringArrayProvider: StringArrayProvider,
-                                    private val credentials: Credentials
+                                    private val errorFormatter: ErrorFormatter,
+                                    private val roomDirectoryListCreator: RoomDirectoryListCreator
 ) : TypedEpoxyController<RoomDirectoryPickerViewState>() {
 
     var callback: Callback? = null
@@ -43,7 +41,7 @@ class RoomDirectoryPickerController(private val stringProvider: StringProvider,
 
         when (asyncThirdPartyProtocol) {
             is Success    -> {
-                val directories = computeDirectories(asyncThirdPartyProtocol.invoke())
+                val directories = roomDirectoryListCreator.computeDirectories(asyncThirdPartyProtocol.invoke())
 
                 directories.forEach {
                     buildDirectory(it)
@@ -57,59 +55,14 @@ class RoomDirectoryPickerController(private val stringProvider: StringProvider,
             is Fail       -> {
                 errorWithRetryItem {
                     id("error")
-                    text(asyncThirdPartyProtocol.error.localizedMessage)
+                    text(errorFormatter.toHumanReadable(asyncThirdPartyProtocol.error))
                     listener { callback?.retry() }
                 }
             }
         }
     }
 
-    private fun computeDirectories(thirdPartyProtocolData: Map<String, ThirdPartyProtocol>): List<RoomDirectoryData> {
-        val result = ArrayList<RoomDirectoryData>()
-
-        // Add user homeserver name
-        val userHsName = credentials.userId.substring(credentials.userId.indexOf(":") + 1)
-
-        result.add(RoomDirectoryData(
-                displayName = userHsName,
-                includeAllNetworks = true
-        ))
-
-        // Add user's HS but for Matrix public rooms only
-        result.add(RoomDirectoryData())
-
-        // Add custom directory servers
-        val hsNamesList = stringArrayProvider.getStringArray(R.array.room_directory_servers)
-        hsNamesList.forEach {
-            if (it != userHsName) {
-                // Use the server name as a default display name
-                result.add(RoomDirectoryData(
-                        displayName = it,
-                        includeAllNetworks = true
-                ))
-            }
-        }
-
-        // Add result of the request
-        thirdPartyProtocolData.forEach {
-            it.value.instances?.forEach { thirdPartyProtocolInstance ->
-                result.add(RoomDirectoryData(
-                        homeServer = null,
-                        displayName = thirdPartyProtocolInstance.desc ?: "",
-                        thirdPartyInstanceId = thirdPartyProtocolInstance.instanceId,
-                        includeAllNetworks = false,
-                        // Default to protocol icon
-                        avatarUrl = thirdPartyProtocolInstance.icon ?: it.value.icon
-                ))
-            }
-        }
-
-        return result
-    }
-
     private fun buildDirectory(roomDirectoryData: RoomDirectoryData) {
-
-        // TODO
         roomDirectoryItem {
             id(index++)
 

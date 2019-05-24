@@ -27,12 +27,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.widget.RxTextView
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
-import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -52,8 +55,8 @@ import java.util.concurrent.TimeUnit
 class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-
-    private val publicRoomsController = PublicRoomsController(get())
+    private val publicRoomsController: PublicRoomsController by inject()
+    private val errorFormatter: ErrorFormatter by inject()
 
     override fun getLayoutResId() = R.layout.fragment_public_rooms
 
@@ -84,7 +87,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
         viewModel.joinRoomErrorLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { throwable ->
-                Snackbar.make(publicRoomsCoordinator, throwable.localizedMessage, Snackbar.LENGTH_SHORT)
+                Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
                         .show()
             }
         })
@@ -92,6 +95,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
 
         setupRecyclerView()
     }

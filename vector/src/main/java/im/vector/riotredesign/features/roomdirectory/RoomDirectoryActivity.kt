@@ -16,14 +16,23 @@
 
 package im.vector.riotredesign.features.roomdirectory
 
+import android.os.Bundle
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragment
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
 
 class RoomDirectoryActivity : VectorBaseActivity() {
 
 
     override fun getLayoutRes() = R.layout.activity_simple
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
+    }
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

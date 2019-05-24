@@ -26,9 +26,11 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.errorWithRetryItem
 import im.vector.riotredesign.core.epoxy.loadingItem
 import im.vector.riotredesign.core.epoxy.noResultItem
+import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.StringProvider
 
-class PublicRoomsController(private val stringProvider: StringProvider) : TypedEpoxyController<PublicRoomsViewState>() {
+class PublicRoomsController(private val stringProvider: StringProvider,
+                            private val errorFormatter: ErrorFormatter) : TypedEpoxyController<PublicRoomsViewState>() {
 
     var callback: Callback? = null
 
@@ -68,7 +70,7 @@ class PublicRoomsController(private val stringProvider: StringProvider) : TypedE
         if (viewState.asyncPublicRoomsRequest is Fail) {
             errorWithRetryItem {
                 id("error")
-                text(viewState.asyncPublicRoomsRequest.error.localizedMessage)
+                text(errorFormatter.toHumanReadable(viewState.asyncPublicRoomsRequest.error))
                 listener { callback?.loadMore() }
             }
         }

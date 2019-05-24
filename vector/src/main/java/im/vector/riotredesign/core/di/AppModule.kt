@@ -19,6 +19,7 @@ package im.vector.riotredesign.core.di
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import im.vector.matrix.android.api.Matrix
+import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
@@ -63,6 +64,10 @@ class AppModule(private val context: Context) {
 
         single {
             RoomSummaryComparator()
+        }
+
+        single {
+            ErrorFormatter(get())
         }
 
         single {

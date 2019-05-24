@@ -23,24 +23,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseFragment
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryViewModel
 import kotlinx.android.synthetic.main.fragment_public_rooms.toolbar
 import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
-import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
 import timber.log.Timber
 
 // TODO Set title to R.string.select_room_directory
 // TODO Menu to add custom room directory (not done in RiotWeb so far...)
 class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
+
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
-
-    private val roomDirectoryPickerController = RoomDirectoryPickerController(get(), get(), get<Session>().sessionParams.credentials)
+    private val roomDirectoryPickerController: RoomDirectoryPickerController by inject()
 
     override fun getLayoutResId() = R.layout.fragment_room_directory_picker
 
@@ -69,6 +70,7 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
 
         setupRecyclerView()
     }
@@ -87,7 +89,7 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
         viewModel.setRoomDirectoryData(roomDirectoryData)
 
-        // TODO Not the bast way to manage Fragment Backstack...
+        // TODO Not the best way to manage Fragment Backstack...
         vectorBaseActivity.onBackPressed()
     }
 
