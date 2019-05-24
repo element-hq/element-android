@@ -16,6 +16,8 @@
 
 package im.vector.riotredesign.features.roomdirectory
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
@@ -28,6 +30,7 @@ import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryD
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
+import im.vector.riotredesign.core.utils.LiveEvent
 import org.koin.android.ext.android.get
 import timber.log.Timber
 
@@ -45,6 +48,11 @@ class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
             return RoomDirectoryViewModel(state, currentSession)
         }
     }
+
+    private val _joinRoomErrorLiveData = MutableLiveData<LiveEvent<Throwable>>()
+    val joinRoomErrorLiveData: LiveData<LiveEvent<Throwable>>
+        get() = _joinRoomErrorLiveData
+
 
     // TODO Store in ViewState?
     private var currentFilter: String = ""
@@ -85,7 +93,9 @@ class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
                     copy(
                             joinedRoomsIds = joinedRoomIds,
                             // Remove (newly) joined room id from the joining room list
-                            joiningRoomsIds = joiningRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) }
+                            joiningRoomsIds = joiningRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) },
+                            // Remove (newly) joined room id from the joining room list in error
+                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) }
                     )
                 }
     }
@@ -197,10 +207,13 @@ class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
             }
 
             override fun onFailure(failure: Throwable) {
-                // TODO Notify the user
+                // Notify the user
+                _joinRoomErrorLiveData.postValue(LiveEvent(failure))
+
                 setState {
                     copy(
-                            joiningRoomsIds = joiningRoomsIds.toMutableList().apply { remove(publicRoom.roomId) }
+                            joiningRoomsIds = joiningRoomsIds.toMutableList().apply { remove(publicRoom.roomId) },
+                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableList().apply { add(publicRoom.roomId) }
                     )
                 }
             }

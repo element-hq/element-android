@@ -35,6 +35,7 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
     enum class JoinState {
         NOT_JOINED,
         JOINING,
+        JOINING_ERROR,
         JOINED
     }
 
@@ -74,9 +75,11 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
             holder.joinButton.isInvisible = true
         }
         holder.joiningView.isVisible = joinState == JoinState.JOINING
+        holder.retryButton.isVisible = joinState == JoinState.JOINING_ERROR
         holder.joinedView.isVisible = joinState == JoinState.JOINED
 
         holder.joinButton.setOnClickListener { joinListener?.invoke() }
+        holder.retryButton.setOnClickListener { joinListener?.invoke() }
     }
 
 
@@ -90,6 +93,7 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
         val joinedView by bind<View>(R.id.itemPublicRoomJoined)
         val joinButton by bind<View>(R.id.itemPublicRoomJoin)
         val joiningView by bind<View>(R.id.itemPublicRoomJoining)
+        val retryButton by bind<View>(R.id.itemPublicRoomRetry)
     }
 
 }

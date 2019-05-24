@@ -82,9 +82,10 @@ class PublicRoomsController(private val stringProvider: StringProvider) : TypedE
             roomName(publicRoom.name)
             nbOfMembers(publicRoom.numJoinedMembers)
             when {
-                viewState.joinedRoomsIds.contains(publicRoom.roomId)  -> joinState(PublicRoomItem.JoinState.JOINED)
-                viewState.joiningRoomsIds.contains(publicRoom.roomId) -> joinState(PublicRoomItem.JoinState.JOINING)
-                else                                                  -> joinState(PublicRoomItem.JoinState.NOT_JOINED)
+                viewState.joinedRoomsIds.contains(publicRoom.roomId)       -> joinState(PublicRoomItem.JoinState.JOINED)
+                viewState.joiningRoomsIds.contains(publicRoom.roomId)      -> joinState(PublicRoomItem.JoinState.JOINING)
+                viewState.joiningErrorRoomsIds.contains(publicRoom.roomId) -> joinState(PublicRoomItem.JoinState.JOINING_ERROR)
+                else                                                       -> joinState(PublicRoomItem.JoinState.NOT_JOINED)
             }
             joinListener {
                 callback?.onPublicRoomJoin(publicRoom)

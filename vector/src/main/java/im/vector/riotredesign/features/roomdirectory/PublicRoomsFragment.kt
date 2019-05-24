@@ -17,28 +17,29 @@
 package im.vector.riotredesign.features.roomdirectory
 
 import android.os.Bundle
-import android.text.Editable
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.rxbinding2.widget.RxTextView
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
-import im.vector.riotredesign.core.platform.SimpleTextWatcher
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
 import org.koin.android.ext.android.get
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 
 /**
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
- *
- * FIXME Rotate screen launch again the request
  *
  * TODO For Nad:
  * Display number of rooms?
@@ -66,12 +67,12 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
             it.setDisplayHomeAsUpEnabled(true)
         }
 
-        publicRoomsFilter.addTextChangedListener(object : SimpleTextWatcher() {
-            override fun afterTextChanged(s: Editable) {
-                // TODO Debounce
-                viewModel.filterWith(publicRoomsFilter.text.toString())
-            }
-        })
+        RxTextView.textChanges(publicRoomsFilter)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .subscribeBy {
+                    viewModel.filterWith(it.toString())
+                }
+                .disposeOnDestroy()
 
         publicRoomsCreateNewRoom.setOnClickListener {
             vectorBaseActivity.notImplemented()
@@ -80,6 +81,13 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
         publicRoomsChangeDirectory.setOnClickListener {
             vectorBaseActivity.addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
         }
+
+        viewModel.joinRoomErrorLiveData.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { throwable ->
+                Snackbar.make(publicRoomsCoordinator, throwable.localizedMessage, Snackbar.LENGTH_SHORT)
+                        .show()
+            }
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

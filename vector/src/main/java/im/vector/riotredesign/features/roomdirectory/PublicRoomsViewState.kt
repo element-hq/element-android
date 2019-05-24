@@ -30,6 +30,8 @@ data class PublicRoomsViewState(
         val hasMore: Boolean = false,
         // List of roomIds that the user wants to join
         val joiningRoomsIds: List<String> = emptyList(),
+        // List of roomIds that the user wants to join, but an error occurred
+        val joiningErrorRoomsIds: List<String> = emptyList(),
         // List of joined roomId,
         val joinedRoomsIds: List<String> = emptyList(),
         val roomDirectoryDisplayName: String? = null

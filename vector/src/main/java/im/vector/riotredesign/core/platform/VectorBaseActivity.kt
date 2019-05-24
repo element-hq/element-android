@@ -93,6 +93,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
     }
 
     protected fun Disposable.disposeOnDestroy(): Disposable {
+        // TODO Ganfra: never disposed...
         uiDisposables.add(this)
         return this
     }
