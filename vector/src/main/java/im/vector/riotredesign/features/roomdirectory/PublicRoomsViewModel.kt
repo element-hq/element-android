@@ -76,18 +76,14 @@ class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
                 .liveRoomSummaries()
                 .execute { async ->
                     val joinedRoomIds = async.invoke()
-                            ?.filter {
-                                // Keep only joined room
-                                it.membership == Membership.JOIN
-                            }
-                            ?.map {
-                                it.roomId
-                            }
+                            // Keep only joined room
+                            ?.filter { it.membership == Membership.JOIN }
+                            ?.map { it.roomId }
                             ?.toList()
                             ?: emptyList()
 
-
-                    copy(joinedRoomsIds = joinedRoomIds,
+                    copy(
+                            joinedRoomsIds = joinedRoomIds,
                             // Remove (newly) joined room id from the joining room list
                             joiningRoomsIds = joiningRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) }
                     )
@@ -102,7 +98,6 @@ class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
         this.roomDirectoryData = roomDirectoryData
 
         reset()
-
         load()
     }
 
@@ -116,7 +111,6 @@ class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
         currentFilter = filter
 
         reset()
-
         load()
     }
 

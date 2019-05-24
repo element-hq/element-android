@@ -30,7 +30,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotredesign.core.epoxy.LoadingItemModel_
+import im.vector.riotredesign.core.epoxy.LoadingItem_
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.*
@@ -131,14 +131,14 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     }
 
     override fun buildModels() {
-        LoadingItemModel_()
+        LoadingItem_()
                 .id("forward_loading_item")
                 .addWhen(Timeline.Direction.FORWARDS)
 
         val timelineModels = getModels()
         add(timelineModels)
 
-        LoadingItemModel_()
+        LoadingItem_()
                 .id("backward_loading_item")
                 .addWhen(Timeline.Direction.BACKWARDS)
     }
@@ -261,7 +261,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         }
     }
 
-    private fun LoadingItemModel_.addWhen(direction: Timeline.Direction) {
+    private fun LoadingItem_.addWhen(direction: Timeline.Direction) {
         val shouldAdd = timeline?.hasMoreToLoad(direction) ?: false
         addIf(shouldAdd, this@TimelineEventController)
     }
