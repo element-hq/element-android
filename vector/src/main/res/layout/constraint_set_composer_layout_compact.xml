@@ -31,11 +31,21 @@
     <View
         android:id="@+id/related_message_background_bottom_separator"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="1dp"
         android:background="?vctr_bottom_nav_background_border_color"
-        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/composer_related_message_avatar_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        tools:src="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/composer_related_message_sender"
@@ -79,6 +89,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_close_round"
         android:tint="@color/rosy_pink"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintStart_toEndOf="parent" />
 

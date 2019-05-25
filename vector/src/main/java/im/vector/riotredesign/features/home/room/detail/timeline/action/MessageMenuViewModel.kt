@@ -67,6 +67,13 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
             //TODO determine if can copy, forward, reply, quote, report?
             val actions = ArrayList<SimpleAction>().apply {
+
+                if (event.sendState == SendState.SENDING) {
+                    //TODO add cancel?
+                    return@apply
+                }
+                //TODO is downloading attachement?
+
                 this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, event.root.eventId))
                 if (canCopy(type)) {
                     //TODO copy images? html? see ClipBoard
@@ -100,8 +107,6 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     //TODO
                 }
 
-                //TODO is uploading
-                //TODO is downloading
 
                 if (event.sendState == SendState.SENT) {
 

@@ -22,9 +22,9 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="?vctr_bottom_nav_background_border_color"
-        app:layout_constraintTop_toTopOf="@id/related_message_backround"
         app:layout_constraintEnd_toEndOf="@id/related_message_backround"
-        app:layout_constraintStart_toStartOf="@+id/related_message_backround" />
+        app:layout_constraintStart_toStartOf="@+id/related_message_backround"
+        app:layout_constraintTop_toTopOf="@id/related_message_backround" />
 
     <View
         android:id="@+id/related_message_background_bottom_separator"
@@ -35,6 +35,20 @@
         app:layout_constraintEnd_toEndOf="@id/related_message_backround"
         app:layout_constraintStart_toStartOf="@+id/related_message_backround" />
 
+    <ImageView
+        android:id="@+id/composer_related_message_avatar_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/composer_related_message_action_image"
+        app:layout_constraintEnd_toStartOf="@+id/composer_related_message_sender"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/composer_related_message_sender"
+        tools:src="@tools:sample/avatars" />
+
     <TextView
         android:id="@+id/composer_related_message_sender"
         android:layout_width="0dp"
@@ -42,7 +56,7 @@
         android:layout_margin="8dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/composer_related_message_close"
-        app:layout_constraintStart_toEndOf="@id/composer_avatar_view"
+        app:layout_constraintStart_toEndOf="@id/composer_related_message_avatar_view"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/first_names" />
 
@@ -68,9 +82,9 @@
         android:alpha="1"
         android:tint="?android:attr/textColorTertiary"
         android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@id/composer_avatar_view"
-        app:layout_constraintStart_toStartOf="@id/composer_avatar_view"
-        app:layout_constraintTop_toBottomOf="@id/composer_avatar_view"
+        app:layout_constraintEnd_toEndOf="@id/composer_related_message_avatar_view"
+        app:layout_constraintStart_toStartOf="@id/composer_related_message_avatar_view"
+        app:layout_constraintTop_toBottomOf="@id/composer_related_message_avatar_view"
         tools:src="@drawable/ic_edit" />
 
 
@@ -90,16 +104,19 @@
 
     <ImageView
         android:id="@+id/composer_avatar_view"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/composer_related_message_action_image"
-        app:layout_constraintEnd_toStartOf="@+id/composer_related_message_sender"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/composer_related_message_sender"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
         tools:src="@tools:sample/avatars" />
 
 
@@ -149,7 +166,7 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/composer_avatar_view"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         tools:text="@tools:sample/lorem" />
 

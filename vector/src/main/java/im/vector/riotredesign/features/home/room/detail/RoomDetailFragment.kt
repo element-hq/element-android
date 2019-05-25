@@ -32,11 +32,9 @@ import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -79,6 +77,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerActions
+import im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
@@ -96,7 +95,7 @@ import im.vector.riotredesign.features.media.VideoMediaViewerActivity
 import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
-import kotlinx.android.synthetic.main.include_composer_layout.*
+import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
@@ -170,14 +169,8 @@ class RoomDetailFragment :
 
     private lateinit var actionViewModel: ActionsHandler
 
-    @BindView(R.id.composer_related_message_sender)
-    lateinit var composerRelatedMessageTitle: TextView
-    @BindView(R.id.composer_related_message_preview)
-    lateinit var composerRelatedMessageContent: TextView
     @BindView(R.id.composerLayout)
-    lateinit var composerLayout: ConstraintLayout
-    @BindView(R.id.rootConstraintLayout)
-    lateinit var rootConstraintLayout: ConstraintLayout
+    lateinit var composerLayout: TextComposerView
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -211,10 +204,8 @@ class RoomDetailFragment :
                     commandAutocompletePolicy.enabled = true
                     val uid = session.sessionParams.credentials.userId
                     val meMember = session.getRoom(roomId)?.getRoomMember(uid)
-                    AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composer_avatar_view)
-                    composerLayout.updateConstraintSet(R.layout.constraint_set_composer_layout_compact, rootConstraintLayout) {
-                        focusComposerAndShowKeyboard()
-                    }
+                    AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
+                    composerLayout.collapse()
                 }
                 SendMode.EDIT,
                 SendMode.QUOTE -> {
@@ -225,40 +216,37 @@ class RoomDetailFragment :
                         return@selectSubscribe
                     }
                     //switch to expanded bar
-                    composerRelatedMessageTitle.text = event.senderName
-                    composerRelatedMessageTitle.setTextColor(
-                            ContextCompat.getColor(requireContext(), AvatarRenderer.getColorFromUserId(event.root.sender
-                                    ?: ""))
-                    )
+                    composerLayout.composerRelatedMessageTitle.apply {
+                        text = event.senderName
+                        setTextColor(ContextCompat.getColor(requireContext(), AvatarRenderer.getColorFromUserId(event.root.sender
+                                ?: "")))
+                    }
 
+                    //TODO this is used at several places, find way to refactor?
                     val messageContent: MessageContent? =
                             event.annotations?.editSummary?.aggregatedContent?.toModel()
                                     ?: event.root.content.toModel()
                     val eventTextBody = messageContent?.body
-                    composerRelatedMessageContent.text = eventTextBody
+                    composerLayout.composerRelatedMessageContent.text = eventTextBody
 
 
                     if (mode == SendMode.EDIT) {
-                        composerEditText.setText(eventTextBody)
-                        composer_related_message_action_image.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit))
+                        composerLayout.composerEditText.setText(eventTextBody)
+                        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit))
                     } else {
-                        composerEditText.setText("")
-                        composer_related_message_action_image.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_quote))
+                        composerLayout.composerEditText.setText("")
+                        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_quote))
                     }
 
                     AvatarRenderer.render(event.senderAvatar, event.root.sender
-                            ?: "", event.senderName, composer_avatar_view)
+                            ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
-                    composerEditText.setSelection(composerEditText.text.length)
-                    composerLayout.updateConstraintSet(R.layout.constraint_set_composer_layout_expanded, rootConstraintLayout) {
+                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+                    composerLayout.expand {
                         focusComposerAndShowKeyboard()
                     }
-
-                    view?.findViewById<ImageButton>(R.id.composer_related_message_close)?.setOnClickListener {
-
-                        composerRelatedMessageTitle.text = ""
-                        composerRelatedMessageContent.text = ""
-                        composerEditText.setText("")
+                    composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
+                        composerLayout.composerEditText.setText("")
                         roomDetailViewModel.resetSendMode()
                     }
 
@@ -323,7 +311,7 @@ class RoomDetailFragment :
     private fun setupComposer() {
         val elevation = 6f
         val backgroundDrawable = ColorDrawable(Color.WHITE)
-        Autocomplete.on<Command>(composerEditText)
+        Autocomplete.on<Command>(composerLayout.composerEditText)
                 .with(commandAutocompletePolicy)
                 .with(autocompleteCommandPresenter)
                 .with(elevation)
@@ -343,7 +331,7 @@ class RoomDetailFragment :
                 .build()
 
         autocompleteUserPresenter.callback = this
-        Autocomplete.on<User>(composerEditText)
+        Autocomplete.on<User>(composerLayout.composerEditText)
                 .with(CharPolicy('@', true))
                 .with(autocompleteUserPresenter)
                 .with(elevation)
@@ -371,7 +359,7 @@ class RoomDetailFragment :
                         // Add the span
                         val user = session.getUser(item.userId)
                         val span = PillImageSpan(glideRequests, context!!, item.userId, user)
-                        span.bind(composerEditText)
+                        span.bind(composerLayout.composerEditText)
 
                         editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
@@ -383,8 +371,8 @@ class RoomDetailFragment :
                 })
                 .build()
 
-        sendButton.setOnClickListener {
-            val textMessage = composerEditText.text.toString()
+        composerLayout.sendButton.setOnClickListener {
+            val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage))
             }
@@ -392,7 +380,7 @@ class RoomDetailFragment :
     }
 
     private fun setupAttachmentButton() {
-        attachmentButton.setOnClickListener {
+        composerLayout.attachmentButton.setOnClickListener {
             val intent = Intent(requireContext(), FilePickerActivity::class.java)
             intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
                     .setCheckPermission(true)
@@ -479,7 +467,7 @@ class RoomDetailFragment :
 
             val uid = session.sessionParams.credentials.userId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
-            AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composer_avatar_view)
+            AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
 
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
@@ -511,7 +499,7 @@ class RoomDetailFragment :
             is SendMessageResult.MessageSent,
             is SendMessageResult.SlashCommandHandled -> {
                 // Clear composer
-                composerEditText.text = null
+                composerLayout.composerEditText.text = null
             }
             is SendMessageResult.SlashCommandError -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
@@ -705,6 +693,7 @@ class RoomDetailFragment :
      *
      * @param text the text to insert.
      */
+    //TODO legacy, refactor
     private fun insertUserDisplayNameInTextEditor(text: String?) {
         //TODO move logic outside of fragment
         if (null != text) {
@@ -713,21 +702,21 @@ class RoomDetailFragment :
             val myDisplayName = session.getUser(session.sessionParams.credentials.userId)?.displayName
             if (TextUtils.equals(myDisplayName, text)) {
                 // current user
-                if (TextUtils.isEmpty(composerEditText.text)) {
-                    composerEditText.append(Command.EMOTE.command + " ")
-                    composerEditText.setSelection(composerEditText.text.length)
+                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
+                    composerLayout.composerEditText.append(Command.EMOTE.command + " ")
+                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
 //                    vibrate = true
                 }
             } else {
                 // another user
-                if (TextUtils.isEmpty(composerEditText.text)) {
+                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
                     // Ensure displayName will not be interpreted as a Slash command
                     if (text.startsWith("/")) {
-                        composerEditText.append("\\")
+                        composerLayout.composerEditText.append("\\")
                     }
-                    composerEditText.append(sanitizeDisplayname(text)!! + ": ")
+                    composerLayout.composerEditText.append(sanitizeDisplayname(text)!! + ": ")
                 } else {
-                    composerEditText.text.insert(composerEditText.selectionStart, sanitizeDisplayname(text)!! + " ")
+                    composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayname(text)!! + " ")
                 }
 
 //                vibrate = true
@@ -744,9 +733,9 @@ class RoomDetailFragment :
     }
 
     private fun focusComposerAndShowKeyboard() {
-        composerEditText.requestFocus()
+        composerLayout.composerEditText.requestFocus()
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        imm?.showSoftInput(composerEditText, InputMethodManager.SHOW_IMPLICIT)
+        imm?.showSoftInput(composerLayout.composerEditText, InputMethodManager.SHOW_IMPLICIT)
     }
 
     fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {

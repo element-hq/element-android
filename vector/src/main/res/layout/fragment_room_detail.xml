@@ -77,20 +77,20 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/composerDivider"
+        app:layout_constraintBottom_toTopOf="@+id/composerLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:listitem="@layout/item_timeline_event_text_message" />
 
-    <View
-        android:id="@+id/composerDivider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?vctr_list_divider_color"
-        app:layout_constraintBottom_toTopOf="@+id/composerLayout" />
 
-    <include layout="@layout/include_composer_layout" />
+    <im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
+        android:id="@+id/composerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <im.vector.riotredesign.features.invite.VectorInviteView
         android:id="@+id/inviteView"
