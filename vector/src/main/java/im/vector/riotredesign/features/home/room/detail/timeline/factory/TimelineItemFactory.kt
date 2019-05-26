@@ -38,7 +38,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
 
         val computedModel = try {
-            when (event.root.type) {
+            when (event.root.getClearType()) {
                 EventType.MESSAGE                  -> messageItemFactory.create(event, nextEvent, callback)
                 EventType.STATE_ROOM_NAME          -> roomNameItemFactory.create(event)
                 EventType.STATE_ROOM_TOPIC         -> roomTopicItemFactory.create(event)

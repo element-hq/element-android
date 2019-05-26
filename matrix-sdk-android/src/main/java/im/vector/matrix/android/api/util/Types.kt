@@ -16,4 +16,9 @@
 
 package im.vector.matrix.android.api.util
 
+import com.squareup.moshi.Types
+import java.lang.reflect.ParameterizedType
+
 typealias JsonDict = Map<String, @JvmSuppressWildcards Any>
+
+internal val JSON_DICT_PARAMETERIZED_TYPE: ParameterizedType = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)

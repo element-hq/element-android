@@ -120,7 +120,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
         private fun canReply(event: TimelineEvent, messageContent: MessageContent): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.type != EventType.MESSAGE) return false
+            if (event.root.getClearType() != EventType.MESSAGE) return false
             return when (messageContent.type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
@@ -129,13 +129,13 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 MessageType.MSGTYPE_VIDEO,
                 MessageType.MSGTYPE_AUDIO,
                 MessageType.MSGTYPE_FILE -> true
-                else -> false
+                else                     -> false
             }
         }
 
         private fun canQuote(event: TimelineEvent, messageContent: MessageContent): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.type != EventType.MESSAGE) return false
+            if (event.root.getClearType() != EventType.MESSAGE) return false
             return when (messageContent.type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
@@ -144,7 +144,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 MessageType.MSGTYPE_LOCATION -> {
                     true
                 }
-                else -> false
+                else                         -> false
             }
         }
 
@@ -157,7 +157,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 MessageType.MSGTYPE_LOCATION -> {
                     true
                 }
-                else -> false
+                else                         -> false
             }
         }
 
@@ -169,7 +169,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 MessageType.MSGTYPE_VIDEO -> {
                     true
                 }
-                else -> false
+                else                      -> false
             }
         }
 

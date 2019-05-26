@@ -191,14 +191,14 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                 roomId: String,
                                 ephemeral: RoomSyncEphemeral) {
         ephemeral.events
-                .filter { it.type == EventType.RECEIPT }
+                .filter { it.getClearType() == EventType.RECEIPT }
                 .map { it.content.toModel<ReadReceiptContent>() }
                 .forEach { readReceiptHandler.handle(realm, roomId, it) }
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
         accountData.events
-                .filter { it.type == EventType.TAG }
+                .filter { it.getClearType() == EventType.TAG }
                 .map { it.content.toModel<RoomTagContent>() }
                 .forEach { roomTagHandler.handle(realm, roomId, it) }
     }

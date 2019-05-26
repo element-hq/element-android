@@ -59,18 +59,22 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         var result: MXEncryptEventContentResult? = null
         var error: Throwable? = null
 
-        crypto.encryptEventContent(localEvent.content!!, localEvent.type, roomService.getRoom(params.roomId)!!, object : MatrixCallback<MXEncryptEventContentResult> {
-            override fun onSuccess(data: MXEncryptEventContentResult) {
-                result = data
-                latch.countDown()
-            }
+        try {
+            crypto.encryptEventContent(localEvent.content!!, localEvent.getClearType(), roomService.getRoom(params.roomId)!!, object : MatrixCallback<MXEncryptEventContentResult> {
+                override fun onSuccess(data: MXEncryptEventContentResult) {
+                    result = data
+                    latch.countDown()
+                }
 
-            override fun onFailure(failure: Throwable) {
-                error = failure
-                latch.countDown()
-            }
-        })
-
+                override fun onFailure(failure: Throwable) {
+                    error = failure
+                    latch.countDown()
+                }
+            })
+        } catch (e: Throwable) {
+            error = e
+            latch.countDown()
+        }
         latch.await()
 
         // TODO Update local echo

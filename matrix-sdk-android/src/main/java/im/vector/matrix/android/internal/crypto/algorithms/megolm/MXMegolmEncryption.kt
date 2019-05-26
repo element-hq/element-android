@@ -25,7 +25,6 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -62,7 +61,7 @@ internal class MXMegolmEncryption(
         private val mTaskExecutor: TaskExecutor,
         private val mMessageEncrypter: MessageEncrypter,
         private val mWarnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository
-        ) : IMXEncrypting {
+) : IMXEncrypting {
 
 
     // OutboundSessionInfo. Null if we haven't yet started setting one up. Note
@@ -422,9 +421,8 @@ internal class MXMegolmEncryption(
                 payloadJson["content"] = queuedEncryption.mEventContent!!
 
                 // Get canonical Json from
-                val content = payloadJson.toContent()!!
 
-                val payloadString = convertToUTF8(MoshiProvider.getCanonicalJson(Map::class.java, content))
+                val payloadString = convertToUTF8(MoshiProvider.getCanonicalJson(Map::class.java, payloadJson))
                 val ciphertext = olmDevice.encryptGroupMessage(session.mSessionId, payloadString!!)
 
                 val map = HashMap<String, Any>()
@@ -437,7 +435,7 @@ internal class MXMegolmEncryption(
                 // m.new_device message if they don't have our session key.
                 map["device_id"] = mCredentials.deviceId!!
 
-                CryptoAsyncHelper.getUiHandler().post { queuedEncryption.mApiCallback?.onSuccess(map.toContent()!!) }
+                CryptoAsyncHelper.getUiHandler().post { queuedEncryption.mApiCallback?.onSuccess(map) }
 
                 session.mUseCount++
             }

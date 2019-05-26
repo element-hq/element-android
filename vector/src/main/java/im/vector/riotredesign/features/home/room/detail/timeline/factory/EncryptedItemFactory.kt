@@ -22,10 +22,12 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.MXDecryptionException
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.resources.StringProvider
@@ -42,7 +44,7 @@ class EncryptedItemFactory(
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
 
         return when {
-            EventType.ENCRYPTED == timelineEvent.root.type -> {
+            EventType.ENCRYPTED == timelineEvent.root.getClearType() -> {
                 val decrypted: MXEventDecryptionResult?
                 try {
                     decrypted = session.decryptEvent(timelineEvent.root, "TODO")
@@ -68,12 +70,12 @@ class EncryptedItemFactory(
                 if (decrypted == null) {
                     return null
                 }
-
                 if (decrypted.mClearEvent == null) {
                     return null
                 }
-
-                val decryptedTimelineEvent = timelineEvent.copy(root = decrypted.mClearEvent!!)
+                val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
+                val clearEvent = adapter.fromJsonValue(decrypted.mClearEvent) ?: return null
+                val decryptedTimelineEvent = timelineEvent.copy(root = clearEvent)
 
                 // Success
                 return messageItemFactory.create(decryptedTimelineEvent, nextEvent, callback)

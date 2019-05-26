@@ -40,7 +40,7 @@ object TimelineDisplayableEvents {
 }
 
 fun TimelineEvent.isDisplayable(): Boolean {
-    return TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.type) && !root.content.isNullOrEmpty()
+    return TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.getClearType()) && !root.content.isNullOrEmpty()
 }
 
 fun List<TimelineEvent>.filterDisplayableEvents(): List<TimelineEvent> {
@@ -50,7 +50,7 @@ fun List<TimelineEvent>.filterDisplayableEvents(): List<TimelineEvent> {
 }
 
 fun TimelineEvent.canBeMerged(): Boolean {
-    return root.type == EventType.STATE_ROOM_MEMBER
+    return root.getClearType() == EventType.STATE_ROOM_MEMBER
 }
 
 fun List<TimelineEvent>.nextSameTypeEvents(index: Int, minSize: Int): List<TimelineEvent> {
@@ -69,7 +69,7 @@ fun List<TimelineEvent>.nextSameTypeEvents(index: Int, minSize: Int): List<Timel
     } else {
         nextSubList.subList(0, indexOfNextDay)
     }
-    val indexOfFirstDifferentEventType = nextSameDayEvents.indexOfFirst { it.root.type != timelineEvent.root.type }
+    val indexOfFirstDifferentEventType = nextSameDayEvents.indexOfFirst { it.root.getClearType() != timelineEvent.root.getClearType() }
     val sameTypeEvents = if (indexOfFirstDifferentEventType == -1) {
         nextSameDayEvents
     } else {

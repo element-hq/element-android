@@ -19,7 +19,8 @@ package im.vector.matrix.android.internal.crypto
 
 import android.text.TextUtils
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.algorithms.MXDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
 import im.vector.matrix.android.internal.crypto.model.MXOlmSession
@@ -677,9 +678,10 @@ internal class MXOlmDevice(
 
                     mStore.storeInboundGroupSessions(listOf(session))
                     try {
-                        val moshi = MoshiProvider.providesMoshi()
-                        val adapter = moshi.adapter(Map::class.java)
-                        result.mPayload = adapter.fromJson(convertFromUTF8(decryptResult.mDecryptedMessage)) as Event?
+                        val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
+                        val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
+                        val payload = adapter.fromJson(payloadString)
+                        result.mPayload = payload
                     } catch (e: Exception) {
                         Timber.e(e, "## decryptGroupMessage() : RLEncoder.encode failed " + e.message)
                         return null

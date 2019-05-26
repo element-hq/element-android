@@ -195,7 +195,7 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
      */
     override fun onRoomKeyEvent(event: Event, keysBackup: KeysBackup) {
         var exportFormat = false
-        val roomKeyContent = event.content.toModel<RoomKeyContent>()!!
+        val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>()!!
 
         var senderKey: String? = event.getSenderKey()
         var keysClaimed: MutableMap<String, String> = HashMap()
@@ -206,10 +206,10 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
             return
         }
 
-        if (event.type == EventType.FORWARDED_ROOM_KEY) {
+        if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
             Timber.v("## onRoomKeyEvent(), forward adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
                     + " sessionKey " + roomKeyContent.sessionKey) // from " + event);
-            val forwardedRoomKeyContent = event.content.toModel<ForwardedRoomKeyContent>()!!
+            val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>()!!
 
             if (null == forwardedRoomKeyContent.forwardingCurve25519KeyChain) {
                 forwarding_curve25519_key_chain = ArrayList()
@@ -297,7 +297,6 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
                         val fResut = result
                         CryptoAsyncHelper.getUiHandler().post {
                             event.setClearData(fResut)
-                            TODO()
                             //mSession!!.onEventDecrypted(event)
                         }
                         Timber.v("## onNewSession() : successful re-decryption of " + event.eventId)

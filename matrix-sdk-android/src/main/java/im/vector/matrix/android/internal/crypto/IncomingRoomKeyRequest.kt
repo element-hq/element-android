@@ -66,8 +66,7 @@ open class IncomingRoomKeyRequest {
      */
     constructor(event: Event) {
         mUserId = event.sender
-
-        val roomKeyShareRequest = event.content.toModel<RoomKeyShareRequest>()!!
+        val roomKeyShareRequest = event.getClearContent().toModel<RoomKeyShareRequest>()!!
         mDeviceId = roomKeyShareRequest.requestingDeviceId
         mRequestId = roomKeyShareRequest.requestId
         mRequestBody = if (null != roomKeyShareRequest.body) roomKeyShareRequest.body else RoomKeyRequestBody()

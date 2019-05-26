@@ -38,7 +38,7 @@ class EncryptionItemFactory(private val stringProvider: StringProvider) {
 
     private fun buildNoticeText(event: Event, senderName: String?): CharSequence? {
         return when {
-            EventType.ENCRYPTION == event.type -> {
+            EventType.ENCRYPTION == event.getClearType() -> {
                 val content = event.content.toModel<EncryptionEventContent>() ?: return null
                 stringProvider.getString(R.string.notice_end_to_end, senderName, content.algorithm)
             }

@@ -63,10 +63,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val showInformation = addDaySeparator
                 || event.senderAvatar != nextEvent?.senderAvatar
                 || event.senderName != nextEvent?.senderName
-                || nextEvent?.root?.type != EventType.MESSAGE
+                || nextEvent?.root?.getClearType() != EventType.MESSAGE
                 || isNextMessageReceivedMoreThanOneHourAgo
 
-        val messageContent: MessageContent = event.root.content.toModel() ?: return null
+        val messageContent: MessageContent = event.root.getClearContent().toModel() ?: return null
         val time = timelineDateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
         val memberName = event.senderName ?: event.root.sender ?: ""

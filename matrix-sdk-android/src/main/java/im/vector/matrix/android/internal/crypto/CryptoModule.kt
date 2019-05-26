@@ -99,7 +99,6 @@ internal class CryptoModule {
         scope(DefaultSession.SCOPE) {
             // Ensure OlmManager is loaded first
             get<OlmManager>()
-
             MXOlmDevice(get())
         }
 
@@ -172,31 +171,38 @@ internal class CryptoModule {
         // CryptoManager
         scope(DefaultSession.SCOPE) {
             CryptoManager(
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    get(),
-                    // Actions
-                    get(),
-                    get(),
-                    get(),
-                    // Factory
-                    get(), get(),
+                    mCredentials = get(),
+                    mMyDeviceInfoHolder = get(),
+                    mCryptoStore = get(),
+                    mOlmDevice = get(),
+                    mCryptoConfig = get(),
+                    deviceListManager = get(),
+                    mKeysBackup = get(),
+                    mObjectSigner = get(),
+                    mOneTimeKeysUploader = get(),
+                    roomDecryptorProvider = get(),
+                    mSasVerificationService = get(),
+                    mIncomingRoomKeyRequestManager = get(),
+                    mOutgoingRoomKeyRequestManager = get(),
+                    mOlmManager = get(),
+                    mSetDeviceVerificationAction = get(),
+                    mMegolmSessionDataImporter = get(),
+                    mEnsureOlmSessionsForDevicesAction = get(),
+                    mWarnOnUnknownDevicesRepository = get(),
+                    mMXMegolmEncryptionFactory = get(),
+                    mMXOlmEncryptionFactory = get(),
+                    mClaimOneTimeKeysForUsersDeviceTask = get(),
                     // Tasks
-                    get(), get(), get(), get(), get(), get(), get(),
-                    // Task executor
-                    get()
+                    mDeleteDeviceTask = get(),
+                    mGetDevicesTask = get(),
+                    mGetKeyChangesTask = get(),
+                    mSendToDeviceTask = get(),
+                    mSetDeviceNameTask = get(),
+                    mUploadKeysTask = get(),
+                    loadRoomMembersTask = get(),
+                    monarchy = get(),
+                    coroutineDispatchers = get(),
+                    mTaskExecutor = get()
             )
         }
 

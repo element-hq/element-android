@@ -131,8 +131,8 @@ internal class DefaultSendService(private val roomId: String,
 
     private fun createEncryptEventWork(event: Event): OneTimeWorkRequest {
         // Same parameter
-        val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
-        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+        val params = EncryptEventWorker.Params(roomId, event)
+        val sendWorkData = WorkerParamsFactory.toData(params)
 
         return OneTimeWorkRequestBuilder<EncryptEventWorker>()
                 .setConstraints(WORK_CONSTRAINTS)

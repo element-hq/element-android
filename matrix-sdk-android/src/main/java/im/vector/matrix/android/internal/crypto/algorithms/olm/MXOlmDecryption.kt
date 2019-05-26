@@ -18,16 +18,20 @@
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
 import android.text.TextUtils
+import com.squareup.moshi.Json
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.MXDecryptionException
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
 import im.vector.matrix.android.internal.crypto.model.event.OlmEventContent
 import im.vector.matrix.android.internal.crypto.model.event.OlmPayloadContent
+import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.util.convertFromUTF8
 import timber.log.Timber
 import java.util.*
@@ -58,24 +62,30 @@ internal class MXOlmDecryption(
         }
 
         // The message for myUser
-        val message = olmEventContent.ciphertext!![mOlmDevice.deviceCurve25519Key] as Map<String, Any>
-        val payloadString = decryptMessage(message, olmEventContent.senderKey!!)
+        val message = olmEventContent.ciphertext!![mOlmDevice.deviceCurve25519Key] as JsonDict
+        val decryptedPayload = decryptMessage(message, olmEventContent.senderKey!!)
 
-        if (null == payloadString) {
+        if (decryptedPayload == null) {
             Timber.e("## decryptEvent() Failed to decrypt Olm event (id= " + event.eventId + " ) from " + olmEventContent.senderKey)
             throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_ENCRYPTED_MESSAGE_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
         }
+        val payloadString = convertFromUTF8(decryptedPayload)
+        if (payloadString == null) {
+            Timber.e("## decryptEvent() Failed to decrypt Olm event (id= " + event.eventId + " ) from " + olmEventContent.senderKey)
+            throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_ENCRYPTED_MESSAGE_ERROR_CODE,
+                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
+        }
+        val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
+        val payload = adapter.fromJson(payloadString)
 
-        val payload = convertFromUTF8(payloadString)
-
-        if (null == payload) {
+        if (payload == null) {
             Timber.e("## decryptEvent failed : null payload")
             throw MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_CIPHER_TEXT_REASON))
         }
 
-        val olmPayloadContent = OlmPayloadContent.fromJsonString(payload)
+        val olmPayloadContent = OlmPayloadContent.fromJsonString(payloadString)
 
         if (TextUtils.isEmpty(olmPayloadContent.recipient)) {
             val reason = String.format(MXCryptoError.ERROR_MISSING_PROPERTY_REASON, "recipient")
@@ -134,7 +144,7 @@ internal class MXOlmDecryption(
         }
 
         val result = MXEventDecryptionResult()
-        // FIXME result.mClearEvent = payload
+        result.mClearEvent = payload
         result.mSenderCurve25519Key = olmEventContent.senderKey
         result.mClaimedEd25519Key = olmPayloadContent.keys!!.get("ed25519")
 
@@ -148,7 +158,7 @@ internal class MXOlmDecryption(
      * @param message                message object, with 'type' and 'body' fields.
      * @return payload, if decrypted successfully.
      */
-    private fun decryptMessage(message: Map<String, Any>, theirDeviceIdentityKey: String): String? {
+    private fun decryptMessage(message: JsonDict, theirDeviceIdentityKey: String): String? {
         val sessionIdsSet = mOlmDevice.getSessionIds(theirDeviceIdentityKey)
 
         val sessionIds: List<String>

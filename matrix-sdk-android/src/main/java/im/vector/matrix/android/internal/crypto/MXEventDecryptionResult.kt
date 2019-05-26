@@ -17,7 +17,7 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.util.JsonDict
 import java.util.*
 
 /**
@@ -28,7 +28,7 @@ data class MXEventDecryptionResult(
         /**
          * The plaintext payload for the event (typically containing "type" and "content" fields).
          */
-        var mClearEvent: Event? = null,
+        var mClearEvent: JsonDict? = null,
 
         /**
          * Key owned by the sender of this event.

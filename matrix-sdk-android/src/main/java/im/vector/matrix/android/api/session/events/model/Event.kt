@@ -19,13 +19,11 @@ package im.vector.matrix.android.api.session.events.model
 import android.text.TextUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Types
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
 import timber.log.Timber
-import java.lang.reflect.ParameterizedType
 import java.util.*
 
 typealias Content = JsonDict
@@ -77,11 +75,7 @@ data class Event(
      * @return true if event is state event.
      */
     fun isStateEvent(): Boolean {
-        return EventType.isStateEvent(type)
-    }
-
-    companion object {
-        internal val CONTENT_TYPE: ParameterizedType = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)
+        return EventType.isStateEvent(getClearType())
     }
 
     //==============================================================================================================
@@ -138,24 +132,18 @@ data class Event(
      *
      * @param decryptionResult the decryption result, including the plaintext and some key info.
      */
-    fun setClearData(decryptionResult: MXEventDecryptionResult?) {
+    internal fun setClearData(decryptionResult: MXEventDecryptionResult?) {
         mClearEvent = null
+        if (decryptionResult != null) {
+            if (decryptionResult.mClearEvent != null) {
+                val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
+                mClearEvent = adapter.fromJsonValue(decryptionResult.mClearEvent)
 
-        if (null != decryptionResult) {
-            if (null != decryptionResult.mClearEvent) {
-                mClearEvent = decryptionResult.mClearEvent
             }
-
-            if (null != mClearEvent) {
-                mClearEvent!!.mSenderCurve25519Key = decryptionResult.mSenderCurve25519Key
-                mClearEvent!!.mClaimedEd25519Key = decryptionResult.mClaimedEd25519Key
-
-                if (null != decryptionResult.mForwardingCurve25519KeyChain) {
-                    mClearEvent!!.mForwardingCurve25519KeyChain = decryptionResult.mForwardingCurve25519KeyChain
-                } else {
-                    mClearEvent!!.mForwardingCurve25519KeyChain = ArrayList()
-                }
-
+            mClearEvent?.apply {
+                mSenderCurve25519Key = decryptionResult.mSenderCurve25519Key
+                mClaimedEd25519Key = decryptionResult.mClaimedEd25519Key
+                mForwardingCurve25519KeyChain = decryptionResult.mForwardingCurve25519KeyChain
                 try {
                     // Add "m.relates_to" data from e2e event to the unencrypted event
                     // TODO
@@ -166,11 +154,9 @@ data class Event(
                 } catch (e: Exception) {
                     Timber.e(e, "Unable to restore 'm.relates_to' the clear event")
                 }
-
             }
-
-            mCryptoError = null
         }
+        mCryptoError = null
     }
 
     /**
@@ -203,11 +189,14 @@ data class Event(
      * @return the event type
      */
     fun getClearType(): String {
-        return if (null != mClearEvent) {
-            mClearEvent!!.type
-        } else {
-            type
-        }
+        return mClearEvent?.type ?: type
+    }
+
+    /**
+     * @return the event type
+     */
+    fun getClearContent(): Content? {
+        return mClearEvent?.content ?: content
     }
 
     /**

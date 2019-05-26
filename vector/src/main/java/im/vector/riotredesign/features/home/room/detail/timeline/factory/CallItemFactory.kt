@@ -39,7 +39,7 @@ class CallItemFactory(private val stringProvider: StringProvider) {
 
     private fun buildNoticeText(event: Event, senderName: String?): CharSequence? {
         return when {
-            EventType.CALL_INVITE == event.type -> {
+            EventType.CALL_INVITE == event.getClearType() -> {
                 val content = event.content.toModel<CallInviteContent>() ?: return null
                 val isVideoCall = content.offer.sdp == CallInviteContent.Offer.SDP_VIDEO
                 return if (isVideoCall) {
@@ -48,8 +48,8 @@ class CallItemFactory(private val stringProvider: StringProvider) {
                     stringProvider.getString(R.string.notice_placed_voice_call, senderName)
                 }
             }
-            EventType.CALL_ANSWER == event.type -> stringProvider.getString(R.string.notice_answered_call, senderName)
-            EventType.CALL_HANGUP == event.type -> stringProvider.getString(R.string.notice_ended_call, senderName)
+            EventType.CALL_ANSWER == event.getClearType() -> stringProvider.getString(R.string.notice_answered_call, senderName)
+            EventType.CALL_HANGUP == event.getClearType() -> stringProvider.getString(R.string.notice_ended_call, senderName)
             else                                -> null
         }
 

@@ -53,10 +53,10 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
             apiCall = roomAPI.send(
                     localEvent.eventId,
                     params.roomId,
-                    localEvent.type,
+                    localEvent.getClearType(),
                     localEvent.content
             )
         }
-        return result.fold({ Result.retry() }, { Result.success() })
+        return result.fold({ Result.failure() }, { Result.success() })
     }
 }

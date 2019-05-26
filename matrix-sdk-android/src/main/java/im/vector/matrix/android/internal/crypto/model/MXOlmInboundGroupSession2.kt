@@ -22,13 +22,14 @@ import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
 import org.matrix.olm.OlmInboundGroupSession
 import timber.log.Timber
+import java.io.Serializable
 import java.util.*
 
 /**
  * This class adds more context to a OLMInboundGroupSession object.
- * This allows additional checks. The class implements NSCoding so that the context can be stored.
+ * This allows additional checks. The class implements Serializable so that the context can be stored.
  */
-class MXOlmInboundGroupSession2 {
+class MXOlmInboundGroupSession2 : Serializable {
 
     // The associated olm inbound group session.
     var mSession: OlmInboundGroupSession? = null

@@ -65,7 +65,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     fun onToDeviceEvent(event: Event) {
         CryptoAsyncHelper.getDecryptBackgroundHandler().post {
             // TODO We are already in a BG thread
-            when (event.type) {
+            when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
                     onStartRequestReceived(event)
                 }
@@ -144,7 +144,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     }
 
     private fun onStartRequestReceived(event: Event) {
-        val startReq = event.content.toModel<KeyVerificationStart>()!!
+        val startReq = event.getClearContent().toModel<KeyVerificationStart>()!!
 
         val otherUserId = event.sender
         if (!startReq.isValid()) {
@@ -233,7 +233,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
 
     private fun onCancelReceived(event: Event) {
         Timber.v("## SAS onCancelReceived")
-        val cancelReq = event.content.toModel<KeyVerificationCancel>()!!
+        val cancelReq = event.getClearContent().toModel<KeyVerificationCancel>()!!
 
         if (!cancelReq.isValid()) {
             //ignore
@@ -255,7 +255,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     }
 
     private fun onAcceptReceived(event: Event) {
-        val acceptReq = event.content.toModel<KeyVerificationAccept>()!!
+        val acceptReq = event.getClearContent().toModel<KeyVerificationAccept>()!!
 
         if (!acceptReq.isValid()) {
             //ignore
@@ -279,7 +279,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
 
 
     private fun onKeyReceived(event: Event) {
-        val keyReq = event.content.toModel<KeyVerificationKey>()!!
+        val keyReq = event.getClearContent().toModel<KeyVerificationKey>()!!
 
         if (!keyReq.isValid()) {
             //ignore
@@ -300,7 +300,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     }
 
     private fun onMacReceived(event: Event) {
-        val macReq = event.content.toModel<KeyVerificationMac>()!!
+        val macReq = event.getClearContent().toModel<KeyVerificationMac>()!!
 
         if (!macReq.isValid()) {
             //ignore

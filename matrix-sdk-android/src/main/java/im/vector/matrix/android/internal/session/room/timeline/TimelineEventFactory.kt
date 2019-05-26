@@ -16,13 +16,17 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
+import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
 import io.realm.Realm
+import timber.log.Timber
 
-internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomMemberExtractor) {
+internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomMemberExtractor,
+                                    private val cryptoService: CryptoService) {
 
     private val cached = mutableMapOf<String, SenderData>()
 
@@ -30,11 +34,20 @@ internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomM
         val sender = eventEntity.sender
         val cacheKey = sender + eventEntity.stateIndex
         val senderData = cached.getOrPut(cacheKey) {
-            val senderRoomMember = roomMemberExtractor.extractFrom(eventEntity,realm)
+            val senderRoomMember = roomMemberExtractor.extractFrom(eventEntity, realm)
             SenderData(senderRoomMember?.displayName, senderRoomMember?.avatarUrl)
         }
+        val event = eventEntity.asDomain()
+        if (event.getClearType() == EventType.ENCRYPTED) {
+            try {
+                val result = cryptoService.decryptEvent(event, "TODO")
+                event.setClearData(result)
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
         return TimelineEvent(
-                eventEntity.asDomain(),
+                event,
                 eventEntity.localId,
                 eventEntity.displayIndex,
                 senderData.senderName,
@@ -43,7 +56,7 @@ internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomM
         )
     }
 
-    fun clear(){
+    fun clear() {
         cached.clear()
     }
 

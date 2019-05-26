@@ -61,7 +61,7 @@ internal class CryptoSyncHandler(private val cryptoManager: CryptoManager,
      * @return true if the event has been decrypted
      */
     private fun decryptEvent(event: Event, timelineId: String?): Boolean {
-        if (event.type == EventType.ENCRYPTED) {
+        if (event.getClearType() == EventType.ENCRYPTED) {
             var result: MXEventDecryptionResult? = null
             try {
                 result = cryptoManager.decryptEvent(event, timelineId ?: "")

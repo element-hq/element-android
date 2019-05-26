@@ -51,7 +51,7 @@ internal class IncomingRoomKeyRequestManager(
      * @param event the announcement event.
      */
     fun onRoomKeyRequestEvent(event: Event) {
-        val roomKeyShare = event.content.toModel<RoomKeyShare>()
+        val roomKeyShare = event.getClearContent().toModel<RoomKeyShare>()
 
         when (roomKeyShare?.action) {
             RoomKeyShare.ACTION_SHARE_REQUEST      -> synchronized(mReceivedRoomKeyRequests) {

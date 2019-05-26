@@ -87,7 +87,7 @@ class EventStreamServiceX : VectorService() {
                 return
             }
 
-            if (EventType.CALL_INVITE == event.type) {
+            if (EventType.CALL_INVITE == event.getClearType()) {
                 handleCallInviteEvent(event)
                 return
             }
