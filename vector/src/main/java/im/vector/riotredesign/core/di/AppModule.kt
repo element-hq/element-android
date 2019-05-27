@@ -19,7 +19,9 @@ package im.vector.riotredesign.core.di
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import im.vector.matrix.android.api.Matrix
+import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.LocaleProvider
+import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.VisibleRoomStore
@@ -41,6 +43,10 @@ class AppModule(private val context: Context) {
         }
 
         single {
+            StringArrayProvider(context.resources)
+        }
+
+        single {
             context.getSharedPreferences("im.vector.riot", MODE_PRIVATE)
         }
 
@@ -58,6 +64,10 @@ class AppModule(private val context: Context) {
 
         single {
             RoomSummaryComparator()
+        }
+
+        single {
+            ErrorFormatter(get())
         }
 
         single {

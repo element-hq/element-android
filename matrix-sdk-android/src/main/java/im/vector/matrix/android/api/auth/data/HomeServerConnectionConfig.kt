@@ -70,11 +70,11 @@ data class HomeServerConnectionConfig(
             if (hsUri.scheme != "http" && hsUri.scheme != "https") {
                 throw RuntimeException("Invalid home server URI: " + hsUri)
             }
-            // remove trailing /
-            homeServerUri = if (hsUri.toString().endsWith("/")) {
+            // ensure trailing /
+            homeServerUri = if (!hsUri.toString().endsWith("/")) {
                 try {
                     val url = hsUri.toString()
-                    Uri.parse(url.substring(0, url.length - 1))
+                    Uri.parse("$url/")
                 } catch (e: Exception) {
                     throw RuntimeException("Invalid home server URI: $hsUri")
                 }
@@ -96,11 +96,11 @@ data class HomeServerConnectionConfig(
             if (identityServerUri.scheme != "http" && identityServerUri.scheme != "https") {
                 throw RuntimeException("Invalid identity server URI: $identityServerUri")
             }
-            // remove trailing /
-            if (identityServerUri.toString().endsWith("/")) {
+            // ensure trailing /
+            if (!identityServerUri.toString().endsWith("/")) {
                 try {
                     val url = identityServerUri.toString()
-                    this.identityServerUri = Uri.parse(url.substring(0, url.length - 1))
+                    this.identityServerUri = Uri.parse("$url/")
                 } catch (e: Exception) {
                     throw RuntimeException("Invalid identity server URI: $identityServerUri")
                 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.core.epoxy
+package im.vector.riotredesign.core.extensions
 
-import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.riotredesign.R
+import android.widget.TextView
+import androidx.core.view.isVisible
 
-@EpoxyModelClass(layout = R.layout.item_loading)
-abstract class LoadingItem : VectorEpoxyModel<LoadingItem.Holder>() {
-
-    class Holder : VectorEpoxyHolder()
+/**
+ * Set a text in the TextView, or set visibility to GONE it if the text is null
+ */
+fun TextView.setTextOrHide(newText: String?, hideWhenBlank: Boolean = true) {
+    if (newText == null
+            || (newText.isBlank() && hideWhenBlank)) {
+        isVisible = false
+    } else {
+        this.text = newText
+        isVisible = true
+    }
 }

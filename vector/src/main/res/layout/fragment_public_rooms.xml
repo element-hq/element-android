@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/publicRoomsCoordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pale_grey">
+
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/publicRoomsList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_public_room" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:expandedTitleGravity="top"
+            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed|snap">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/publicRoomsFilter"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                        android:layout_marginRight="@dimen/layout_horizontal_margin"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/bg_search_edit_text"
+                        android:drawableStart="@drawable/ic_search_white"
+                        android:drawableLeft="@drawable/ic_search_white"
+                        android:drawablePadding="8dp"
+                        android:drawableTint="#9fa9ba"
+                        android:hint="@string/home_filter_placeholder_rooms"
+                        android:lines="1"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp" />
+
+                </androidx.appcompat.widget.Toolbar>
+
+                <Button
+                    android:id="@+id/publicRoomsCreateNewRoom"
+                    style="@style/VectorButtonStyleFlat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:drawableStart="@drawable/ic_plus_circle"
+                    android:drawableLeft="@drawable/ic_plus_circle"
+                    android:drawablePadding="13dp"
+                    android:text="@string/create_new_room" />
+
+                <!-- TODO Layout with Nad -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/layout_horizontal_margin"
+                    android:layout_marginRight="@dimen/layout_horizontal_margin"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/publicRoomsDirectoryName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="#FFFFFF"
+                        tools:text="RoomDirectoryName" />
+
+                    <Button
+                        android:id="@+id/publicRoomsChangeDirectory"
+                        style="@style/VectorButtonStyleFlat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/action_change" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

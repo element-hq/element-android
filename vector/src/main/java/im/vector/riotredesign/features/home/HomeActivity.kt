@@ -40,6 +40,7 @@ import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
 import kotlinx.android.synthetic.main.activity_home.*
@@ -124,21 +125,22 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
+            android.R.id.home                 -> {
                 drawerLayout.openDrawer(GravityCompat.START)
                 return true
             }
-            R.id.sliding_menu_settings -> {
+            R.id.sliding_menu_settings        -> {
                 startActivity(VectorSettingsActivity.getIntent(this, "TODO"))
                 return true
             }
-            R.id.sliding_menu_sign_out -> {
+            R.id.sliding_menu_sign_out        -> {
                 SignOutUiWorker(this).perform(Matrix.getInstance().currentSession!!)
                 return true
             }
             // TODO Temporary code here to create a room
-            R.id.tmp_menu_create_room -> {
-                homeActivityViewModel.createRoom()
+            R.id.tmp_menu_create_room         -> {
+                // Start Activity for now
+                startActivity(Intent(this, RoomDirectoryActivity::class.java))
                 return true
             }
         }
