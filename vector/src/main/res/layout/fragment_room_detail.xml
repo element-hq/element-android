@@ -81,7 +81,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:listitem="@layout/item_timeline_event_text_message" />
+        tools:listitem="@layout/item_timeline_event_base" />
 
 
     <im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
