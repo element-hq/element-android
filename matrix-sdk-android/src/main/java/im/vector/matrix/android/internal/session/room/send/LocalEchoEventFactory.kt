@@ -231,16 +231,8 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
 //        This is where the reply goes.
         val body = bodyForReply(eventReplied.content.toModel<MessageContent>())
         val replyFallbackTemplateFormatted = """
-           <mx-reply>
-              <blockquote>
-                <a href="%s">${stringProvider.getString(R.string.in_reply_to)}</a>
-                <a href="%s">%s</a>
-                <br />
-                %s
-              </blockquote>
-            </mx-reply>
-            %s
-        """.trim().format(permalink, userLink, userId, body.second ?: body.first, replyText)
+           <mx-reply><blockquote><a href="%s">${stringProvider.getString(R.string.in_reply_to)}</a><a href="%s">%s</a><br />%s</blockquote></mx-reply>%s
+        """.trimIndent().format(permalink, userLink, userId, body.second ?: body.first, replyText)
 //
 //        > <@alice:example.org> This is the original body
 //
