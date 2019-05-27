@@ -208,7 +208,8 @@ class RoomDetailFragment :
                     composerLayout.collapse()
                 }
                 SendMode.EDIT,
-                SendMode.QUOTE -> {
+                SendMode.QUOTE,
+                SendMode.REPLY -> {
                     commandAutocompletePolicy.enabled = false
                     if (event == null) {
                         //we should ignore? can this happen?
@@ -233,9 +234,12 @@ class RoomDetailFragment :
                     if (mode == SendMode.EDIT) {
                         composerLayout.composerEditText.setText(eventTextBody)
                         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit))
-                    } else {
+                    } else if (mode == SendMode.QUOTE) {
                         composerLayout.composerEditText.setText("")
                         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_quote))
+                    } else if (mode == SendMode.REPLY) {
+                        composerLayout.composerEditText.setText("")
+                        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_reply))
                     }
 
                     AvatarRenderer.render(event.senderAvatar, event.root.sender
@@ -673,12 +677,16 @@ class RoomDetailFragment :
                     }
                 }
                 MessageMenuViewModel.ACTION_EDIT -> {
-                    val eventId = actionData.data.toString() ?: return@let
+                    val eventId = actionData.data.toString()
                     roomDetailViewModel.process(RoomDetailActions.EnterEditMode(eventId))
                 }
                 MessageMenuViewModel.ACTION_QUOTE -> {
-                    val eventId = actionData.data.toString() ?: return@let
+                    val eventId = actionData.data.toString()
                     roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(eventId))
+                }
+                MessageMenuViewModel.ACTION_REPLY -> {
+                    val eventId = actionData.data.toString()
+                    roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
                 }
                 else -> {
                     Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()

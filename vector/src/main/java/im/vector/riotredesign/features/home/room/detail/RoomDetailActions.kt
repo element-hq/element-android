@@ -38,6 +38,7 @@ sealed class RoomDetailActions {
 
     data class EnterEditMode(val eventId: String) : RoomDetailActions()
     data class EnterQuoteMode(val eventId: String) : RoomDetailActions()
+    data class EnterReplyMode(val eventId: String) : RoomDetailActions()
 
 
 }

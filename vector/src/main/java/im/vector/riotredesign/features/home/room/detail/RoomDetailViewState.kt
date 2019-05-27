@@ -36,7 +36,8 @@ import im.vector.matrix.android.api.session.user.model.User
 enum class SendMode {
     REGULAR,
     QUOTE,
-    EDIT
+    EDIT,
+    REPLY
 }
 
 data class RoomDetailViewState(

@@ -39,6 +39,7 @@ import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.*
+import im.vector.matrix.android.internal.util.StringProvider
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 
@@ -73,7 +74,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            LocalEchoEventFactory(get())
+            LocalEchoEventFactory(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -109,7 +110,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultPruneEventTask(get(),get()) as PruneEventTask
+            DefaultPruneEventTask(get(), get()) as PruneEventTask
         }
 
     }

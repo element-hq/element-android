@@ -17,4 +17,7 @@
     <string name="event_redacted_by_admin_reason">Event moderated by room admin</string>
     <string name="last_edited_info_message">Last edited by %s on %s</string>
 
+
+    <string name="malformed_message">Malformed event, cannot display</string>
+
 </resources>

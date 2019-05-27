@@ -16,11 +16,17 @@
 package im.vector.matrix.android.internal.session.room.annotation
 
 import androidx.work.*
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.annotation.ReactionService
+import im.vector.matrix.android.api.session.room.model.annotation.RelationService
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.database.helper.addSendingEvent
+import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
@@ -28,6 +34,7 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.util.tryTransactionAsync
 import java.util.concurrent.TimeUnit
 
 private const val REACTION_WORK = "REACTION_WORK"
@@ -37,12 +44,13 @@ private val WORK_CONSTRAINTS = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
         .build()
 
-internal class DefaultReactionService(private val roomId: String,
+internal class DefaultRelationService(private val roomId: String,
                                       private val eventFactory: LocalEchoEventFactory,
                                       private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
                                       private val updateQuickReactionTask: UpdateQuickReactionTask,
+                                      private val monarchy: Monarchy,
                                       private val taskExecutor: TaskExecutor)
-    : ReactionService {
+    : RelationService {
 
 
     override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
@@ -169,5 +177,39 @@ internal class DefaultReactionService(private val roomId: String,
                 .enqueue()
         return CancelableWork(workRequest.id)
 
+    }
+
+    /**
+     * Reply to an event in the timeline
+     * Users may wish to reference another message when forming their own message
+     * https://matrix.org/docs/spec/client_server/r0.4.0.html#id350
+     */
+    override fun replyToMessage(eventReplied: Event, replyText: String): Cancelable? {
+        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText)?.also {
+            saveLocalEcho(it)
+        } ?: return null
+        val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
+        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+        val workRequest = OneTimeWorkRequestBuilder<SendEventWorker>()
+                .setConstraints(WORK_CONSTRAINTS)
+                .setInputData(sendWorkData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .build()
+
+        WorkManager.getInstance()
+                .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, workRequest)
+                .enqueue()
+        return CancelableWork(workRequest.id)
+    }
+
+    private fun saveLocalEcho(event: Event) {
+        monarchy.tryTransactionAsync { realm ->
+            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
+                    ?: return@tryTransactionAsync
+            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
+                    ?: return@tryTransactionAsync
+
+            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
+        }
     }
 }

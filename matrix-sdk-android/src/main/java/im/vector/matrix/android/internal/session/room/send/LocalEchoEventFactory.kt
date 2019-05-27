@@ -17,19 +17,20 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
+import im.vector.matrix.android.R
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.RelationType
-import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.annotation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.annotation.RelationDefaultContent
+import im.vector.matrix.android.api.session.room.model.annotation.ReplyToContent
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
+import im.vector.matrix.android.internal.util.StringProvider
 
-internal class LocalEchoEventFactory(private val credentials: Credentials) {
+internal class LocalEchoEventFactory(private val credentials: Credentials, private val stringProvider: StringProvider) {
 
     fun createTextEvent(roomId: String, msgType: String, text: String): Event {
         val content = MessageTextContent(type = msgType, body = text)
@@ -182,5 +183,81 @@ internal class LocalEchoEventFactory(private val credentials: Credentials) {
 
     private fun dummyEventId(roomId: String): String {
         return roomId + "-" + dummyOriginServerTs()
+    }
+
+    fun createReplyTextEvent(roomId: String, eventReplied: Event, replyText: String): Event? {
+        //Fallbacks and event representation
+        //TODO Add error/warning logs when any of this is null
+        val permalink = PermalinkFactory.createPermalink(eventReplied) ?: return null
+        val userId = eventReplied.sender ?: return null
+        val userLink = PermalinkFactory.createPermalink(userId) ?: return null
+//        <mx-reply>
+//            <blockquote>
+//                <a href="https://matrix.to/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
+//                <a href="https://matrix.to/#/@alice:example.org">@alice:example.org</a>
+//                <br />
+//                <!-- This is where the related event's HTML would be. -->
+//            </blockquote>
+//        </mx-reply>
+//        This is where the reply goes.
+        val body = bodyForReply(eventReplied.content.toModel<MessageContent>())
+        val replyFallbackTemplateFormatted = """
+           <mx-reply>
+              <blockquote>
+                <a href="%s">${stringProvider.getString(R.string.in_reply_to)}</a>
+                <a href="%s">%s</a>
+                <br />
+                %s
+              </blockquote>
+            </mx-reply>
+            %s
+        """.trim().format(permalink, userLink, userId, body.second ?: body.first, replyText)
+//
+//        > <@alice:example.org> This is the original body
+//
+//        This is where the reply goes
+        val lines = body.first.split("\n")
+        val plainTextBody = StringBuffer("><${userId}>")
+        lines.firstOrNull()?.also { plainTextBody.append(" $it") }
+        lines.forEachIndexed { index, s ->
+            if (index > 0) {
+                plainTextBody.append("\n>$s")
+            }
+        }
+        plainTextBody.append("\n\n").append(replyText)
+
+        val eventId = eventReplied.eventId ?: return null
+        val content = MessageTextContent(
+                type = MessageType.MSGTYPE_TEXT,
+                format = MessageType.FORMAT_MATRIX_HTML,
+                body = plainTextBody.toString(),
+                formattedBody = replyFallbackTemplateFormatted,
+                relatesTo = RelationDefaultContent(null, null, ReplyToContent(eventId))
+        )
+        return createEvent(roomId, content)
+    }
+
+    private fun bodyForReply(content: MessageContent?): Pair<String, String?> {
+        when (content?.type) {
+            MessageType.MSGTYPE_EMOTE,
+            MessageType.MSGTYPE_TEXT,
+            MessageType.MSGTYPE_NOTICE -> {
+                //If we already have formatted body, return it?
+                var formattedText: String? = null
+                if (content is MessageTextContent) {
+                    if (content.format == MessageType.FORMAT_MATRIX_HTML) {
+                        formattedText = content.formattedBody
+                    }
+                }
+                return content.body to formattedText
+            }
+            MessageType.MSGTYPE_FILE -> return stringProvider.getString(R.string.sent_a_file) to null
+            MessageType.MSGTYPE_AUDIO -> return stringProvider.getString(R.string.sent_an_audio_file) to null
+            MessageType.MSGTYPE_IMAGE -> return stringProvider.getString(R.string.sent_an_image) to null
+            MessageType.MSGTYPE_VIDEO -> return stringProvider.getString(R.string.sent_a_video) to null
+            else -> return (content?.body ?: "") to null
+
+        }
+
     }
 }

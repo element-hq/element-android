@@ -96,6 +96,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             is RoomDetailActions.ShowEditHistoryAction -> handleShowEditHistoryReaction(action)
             is RoomDetailActions.EnterEditMode -> handleEditAction(action)
             is RoomDetailActions.EnterQuoteMode -> handleQuoteAction(action)
+            is RoomDetailActions.EnterReplyMode -> handleReplyAction(action)
         }
     }
 
@@ -208,24 +209,34 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                     _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
                 }
                 SendMode.QUOTE -> {
-                    withState { state ->
-                        val messageContent: MessageContent? =
-                                state.selectedEvent?.annotations?.editSummary?.aggregatedContent?.toModel()
-                                        ?: state.selectedEvent?.root?.content.toModel()
-                        val textMsg = messageContent?.body
+                    val messageContent: MessageContent? =
+                            state.selectedEvent?.annotations?.editSummary?.aggregatedContent?.toModel()
+                                    ?: state.selectedEvent?.root?.content.toModel()
+                    val textMsg = messageContent?.body
 
-                        val finalText = legacyRiotQuoteText(textMsg, action.text)
+                    val finalText = legacyRiotQuoteText(textMsg, action.text)
 
-                        //TODO Refactor this, just temporary for quotes
-                        val parser = Parser.builder().build()
-                        val document = parser.parse(finalText)
-                        val renderer = HtmlRenderer.builder().build()
-                        val htmlText = renderer.render(document)
-                        if (TextUtils.equals(finalText, htmlText)) {
-                            room.sendTextMessage(finalText)
-                        } else {
-                            room.sendFormattedTextMessage(finalText, htmlText)
-                        }
+                    //TODO Refactor this, just temporary for quotes
+                    val parser = Parser.builder().build()
+                    val document = parser.parse(finalText)
+                    val renderer = HtmlRenderer.builder().build()
+                    val htmlText = renderer.render(document)
+                    if (TextUtils.equals(finalText, htmlText)) {
+                        room.sendTextMessage(finalText)
+                    } else {
+                        room.sendFormattedTextMessage(finalText, htmlText)
+                    }
+                    setState {
+                        copy(
+                                sendMode = SendMode.REGULAR,
+                                selectedEvent = null
+                        )
+                    }
+                    _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+                }
+                SendMode.REPLY -> {
+                    state.selectedEvent?.let {
+                        room.replyToMessage(it.root, action.text)
                         setState {
                             copy(
                                     sendMode = SendMode.REGULAR,
@@ -377,6 +388,17 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             }
         }
     }
+    private fun handleReplyAction(action: RoomDetailActions.EnterReplyMode) {
+        room.getTimeLineEvent(action.eventId)?.let {
+            setState {
+                copy(
+                        sendMode = SendMode.REPLY,
+                        selectedEvent = it
+                )
+            }
+        }
+    }
+
 
 
     private fun observeEventDisplayedActions() {

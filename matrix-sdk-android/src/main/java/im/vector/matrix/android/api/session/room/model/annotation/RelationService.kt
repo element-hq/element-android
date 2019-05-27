@@ -15,10 +15,13 @@
  */
 package im.vector.matrix.android.api.session.room.model.annotation
 
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 
 //TODO rename in relationService?
-interface ReactionService {
+interface RelationService {
 
 
     /**
@@ -58,5 +61,8 @@ interface ReactionService {
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
     fun editTextMessage(targetEventId: String, newBodyText: String, compatibilityBodyText: String = "* $newBodyText"): Cancelable
+
+
+    fun replyToMessage(eventReplied: Event, replyText: String) : Cancelable?
 
 }

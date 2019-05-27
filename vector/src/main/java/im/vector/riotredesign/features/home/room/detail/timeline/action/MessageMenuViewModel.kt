@@ -57,7 +57,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 //Resend and Delete
                 return MessageMenuState(
                         listOf(
-                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_corner_down_right, event.root.eventId),
+                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_send, event.root.eventId),
                                 //TODO delete icon
                                 SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId)
                         )
@@ -80,6 +80,10 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent.body))
                 }
 
+                if (canReply(event, messageContent)) {
+                    this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, event.root.eventId))
+                }
+
                 if (canEdit(event, currentSession.sessionParams.credentials.userId)) {
                     this.add(SimpleAction(ACTION_EDIT, R.string.edit, R.drawable.ic_edit, event.root.eventId))
                 }
@@ -93,9 +97,6 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, parcel.eventId))
                 }
 
-                if (canReply(event, messageContent)) {
-                    this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_corner_down_right))
-                }
                 if (canShare(type)) {
                     if (messageContent is MessageImageContent) {
                         this.add(
