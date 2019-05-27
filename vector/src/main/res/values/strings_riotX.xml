@@ -17,4 +17,11 @@
     <string name="event_redacted_by_admin_reason">Event moderated by room admin</string>
     <string name="last_edited_info_message">Last edited by %s on %s</string>
 
+
+    <string name="create_new_room">Create New Room</string>
+
+    <string name="error_no_network">No network. Please check your Internet connection.</string>
+
+    <string name="action_change">"Change"</string>
+
 </resources>

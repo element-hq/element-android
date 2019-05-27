@@ -30,6 +30,7 @@ import im.vector.riotredesign.core.di.AppModule
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import org.koin.log.EmptyLogger
 import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
@@ -56,7 +57,8 @@ class VectorApplication : Application() {
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         val appModule = AppModule(applicationContext).definition
         val homeModule = HomeModule().definition
-        startKoin(listOf(appModule, homeModule), logger = EmptyLogger())
+        val roomDirectoryModule = RoomDirectoryModule().definition
+        startKoin(listOf(appModule, homeModule, roomDirectoryModule), logger = EmptyLogger())
 
         Matrix.getInstance().setApplicationFlavor(BuildConfig.FLAVOR_DESCRIPTION)
     }
