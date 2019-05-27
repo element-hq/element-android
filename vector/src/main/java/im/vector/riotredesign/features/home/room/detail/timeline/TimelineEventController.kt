@@ -24,9 +24,7 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -229,10 +227,8 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
             } else {
                 val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
                 val mergedData = mergedEvents.map { mergedEvent ->
-                    val eventContent: RoomMember? = mergedEvent.root.content.toModel()
-                    val prevEventContent: RoomMember? = mergedEvent.root.prevContent.toModel()
-                    val senderAvatar = RoomMemberEventHelper.senderAvatar(eventContent, prevEventContent, mergedEvent)
-                    val senderName = RoomMemberEventHelper.senderName(eventContent, prevEventContent, mergedEvent)
+                    val senderAvatar = mergedEvent.senderAvatar()
+                    val senderName = mergedEvent.senderName()
                     MergedHeaderItem.Data(
                             userId = mergedEvent.root.sender ?: "",
                             avatarUrl = senderAvatar,
