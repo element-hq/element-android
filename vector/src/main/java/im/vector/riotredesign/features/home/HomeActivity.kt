@@ -139,11 +139,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
             // TODO Temporary code here to create a room
             R.id.tmp_menu_create_room         -> {
-                homeActivityViewModel.createRoom()
-                return true
-            }
-            // TODO Temporary code here to open room directory
-            R.id.tmp_menu_open_room_directory -> {
                 // Start Activity for now
                 startActivity(Intent(this, RoomDirectoryActivity::class.java))
                 return true

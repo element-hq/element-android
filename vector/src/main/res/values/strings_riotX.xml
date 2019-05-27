@@ -22,4 +22,6 @@
 
     <string name="error_no_network">No network. Please check your Internet connection.</string>
 
+    <string name="action_change">"Change"</string>
+
 </resources>

@@ -78,6 +78,8 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
                 .disposeOnDestroy()
 
         publicRoomsCreateNewRoom.setOnClickListener {
+            // TODO homeActivityViewModel.createRoom()
+
             vectorBaseActivity.notImplemented()
         }
 

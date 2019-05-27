@@ -69,9 +69,12 @@ class RoomDirectoryPickerController(private val stringProvider: StringProvider,
             directoryName(roomDirectoryData.displayName)
 
             val description = when {
-                roomDirectoryData.includeAllNetworks      -> stringProvider.getString(R.string.directory_server_all_rooms_on_server, roomDirectoryData.displayName)
-                "Matrix" == roomDirectoryData.displayName -> stringProvider.getString(R.string.directory_server_native_rooms, roomDirectoryData.displayName)
-                else                                      -> null
+                roomDirectoryData.includeAllNetworks      ->
+                    stringProvider.getString(R.string.directory_server_all_rooms_on_server, roomDirectoryData.displayName)
+                "Matrix" == roomDirectoryData.displayName ->
+                    stringProvider.getString(R.string.directory_server_native_rooms, roomDirectoryData.displayName)
+                else                                      ->
+                    null
             }
 
             directoryDescription(description)
