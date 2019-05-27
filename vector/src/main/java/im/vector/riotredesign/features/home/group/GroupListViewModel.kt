@@ -85,16 +85,13 @@ class GroupListViewModel(initialState: GroupListViewState,
         session
                 .rx().liveGroupSummaries()
                 .map {
-                    if (it.isEmpty()) {
-                        it
-                    } else {
-                        val myUser = session.getUser(session.sessionParams.credentials.userId)
-                        val allCommunityGroup = GroupSummary(
-                                groupId = ALL_COMMUNITIES_GROUP_ID,
-                                displayName = "All Communities",
-                                avatarUrl = myUser?.avatarUrl ?: "")
-                        listOf(allCommunityGroup) + it
-                    }
+                    val myUser = session.getUser(session.sessionParams.credentials.userId)
+                    val allCommunityGroup = GroupSummary(
+                            groupId = ALL_COMMUNITIES_GROUP_ID,
+                            // TODO i18n
+                            displayName = "All Communities",
+                            avatarUrl = myUser?.avatarUrl ?: "")
+                    listOf(allCommunityGroup) + it
                 }
                 .execute { async ->
                     val newSelectedGroup = selectedGroup ?: async()?.firstOrNull()
