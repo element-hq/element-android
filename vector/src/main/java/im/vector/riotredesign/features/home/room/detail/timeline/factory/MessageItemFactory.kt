@@ -105,10 +105,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         ?: //Malformed content, we should echo something on screen
                         return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 
-        //TODO this should be filtered as not displayable?
         if (messageContent.relatesTo?.type == RelationType.REPLACE) {
-            //TODO blank item or ignore??
-            // ignore this event
+            // ignore replace event, the targeted id is already edited
             return BlankItem_()
         }
 //        val all = event.root.toContent()

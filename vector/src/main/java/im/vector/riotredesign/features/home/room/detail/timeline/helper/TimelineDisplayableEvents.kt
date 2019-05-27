@@ -17,6 +17,10 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.helper
 
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.extensions.localDateTime
 
@@ -40,14 +44,25 @@ object TimelineDisplayableEvents {
 }
 
 fun TimelineEvent.isDisplayable(): Boolean {
-    return TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.type) && !root.content.isNullOrEmpty()
-}
-
-fun List<TimelineEvent>.filterDisplayableEvents(): List<TimelineEvent> {
-    return this.filter {
-        it.isDisplayable()
+    if (!TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.type)) {
+        return false
     }
+    if (root.content.isNullOrEmpty()) {
+        return false
+    }
+    //Edits should be filtered out!
+    if (EventType.MESSAGE == root.type
+            && root.content.toModel<MessageContent>()?.relatesTo?.type == RelationType.REPLACE) {
+        return false
+    }
+    return true
 }
+//
+//fun List<TimelineEvent>.filterDisplayableEvents(): List<TimelineEvent> {
+//    return this.filter {
+//        it.isDisplayable()
+//    }
+//}
 
 fun TimelineEvent.canBeMerged(): Boolean {
     return root.type == EventType.STATE_ROOM_MEMBER
