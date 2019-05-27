@@ -505,6 +505,7 @@ internal class MXMegolmEncryption(
                     } else {
                         callback.onSuccess(devicesInRoom)
                     }
+
                 }
             }
 

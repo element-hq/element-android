@@ -326,11 +326,8 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return cryptoService.isRoomEncrypted(roomId)
     }
 
-    override fun encryptEventContent(eventContent: Content,
-                                     eventType: String,
-                                     room: Room,
-                                     callback: MatrixCallback<MXEncryptEventContentResult>) {
-        cryptoService.encryptEventContent(eventContent, eventType, room, callback)
+    override fun encryptEventContent(eventContent: Content, eventType: String, roomId: String, callback: MatrixCallback<MXEncryptEventContentResult>) {
+        cryptoService.encryptEventContent(eventContent, eventType, roomId, callback)
     }
 
     override fun getDeviceInfo(userId: String, deviceId: String?): MXDeviceInfo? {

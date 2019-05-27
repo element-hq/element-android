@@ -24,7 +24,6 @@ import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListe
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
@@ -90,7 +89,7 @@ interface CryptoService {
 
     fun encryptEventContent(eventContent: Content,
                             eventType: String,
-                            room: Room,
+                            roomId: String,
                             callback: MatrixCallback<MXEncryptEventContentResult>)
 
     /*

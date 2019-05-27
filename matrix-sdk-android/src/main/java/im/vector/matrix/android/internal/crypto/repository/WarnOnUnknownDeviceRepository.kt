@@ -18,8 +18,9 @@ package im.vector.matrix.android.internal.crypto.repository
 
 internal class WarnOnUnknownDeviceRepository {
 
+    // TODO: set it back to true by default. Need UI
     // Warn the user if some new devices are detected while encrypting a message.
-    private var mWarnOnUnknownDevices = true
+    private var mWarnOnUnknownDevices = false
 
     /**
      * Tells if the encryption must fail if some unknown devices are detected.

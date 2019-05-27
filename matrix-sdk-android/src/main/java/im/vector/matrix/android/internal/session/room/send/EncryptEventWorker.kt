@@ -23,7 +23,6 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
@@ -41,12 +40,11 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     )
 
     private val crypto by inject<CryptoService>()
-    private val roomService by inject<RoomService>()
 
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.failure()
+                     ?: return Result.failure()
 
         val localEvent = params.event
         if (localEvent.eventId == null) {
@@ -60,7 +58,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         var error: Throwable? = null
 
         try {
-            crypto.encryptEventContent(localEvent.content!!, localEvent.getClearType(), roomService.getRoom(params.roomId)!!, object : MatrixCallback<MXEncryptEventContentResult> {
+            crypto.encryptEventContent(localEvent.content!!, localEvent.type, params.roomId, object : MatrixCallback<MXEncryptEventContentResult> {
                 override fun onSuccess(data: MXEncryptEventContentResult) {
                     result = data
                     latch.countDown()
@@ -77,16 +75,20 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         }
         latch.await()
 
+        val safeResult = result
         // TODO Update local echo
+        return if (error != null) {
+            Result.failure() // TODO Pass error!!)
+        } else if (safeResult != null) {
+            val encryptedEvent = localEvent.copy(
+                    type = safeResult.mEventType,
+                    content = safeResult.mEventContent
+            )
+            val nextWorkerParams = SendEventWorker.Params(params.roomId, encryptedEvent)
+            Result.success(WorkerParamsFactory.toData(nextWorkerParams))
 
-        if (error != null) {
-            return Result.failure() // TODO Pass error!!)
-        } else if (result != null) {
-            return Result.success(WorkerParamsFactory.toData(SendEventWorker.Params(params.roomId,
-                    Event(type = result!!.mEventType,
-                            content = result!!.mEventContent))))
         } else {
-            return Result.failure()
+            Result.failure()
         }
     }
 }

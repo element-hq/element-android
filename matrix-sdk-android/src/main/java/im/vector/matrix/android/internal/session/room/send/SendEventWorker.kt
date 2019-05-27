@@ -53,7 +53,7 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
             apiCall = roomAPI.send(
                     localEvent.eventId,
                     params.roomId,
-                    localEvent.getClearType(),
+                    localEvent.type,
                     localEvent.content
             )
         }

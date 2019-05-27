@@ -16,7 +16,13 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.crypto.CryptoService
@@ -50,7 +56,6 @@ internal class DefaultSendService(private val roomId: String,
                                   private val cryptoService: CryptoService,
                                   private val monarchy: Monarchy)
     : SendService {
-
 
     override fun sendTextMessage(text: String, msgType: String): Cancelable {
         val event = eventFactory.createTextEvent(roomId, msgType, text).also {
