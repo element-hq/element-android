@@ -24,6 +24,7 @@ import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.rx.rx
+import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.LiveEvent
@@ -88,8 +89,7 @@ class GroupListViewModel(initialState: GroupListViewState,
                     val myUser = session.getUser(session.sessionParams.credentials.userId)
                     val allCommunityGroup = GroupSummary(
                             groupId = ALL_COMMUNITIES_GROUP_ID,
-                            // TODO i18n
-                            displayName = "All Communities",
+                            displayName = stringProvider.getString(R.string.group_all_communities),
                             avatarUrl = myUser?.avatarUrl ?: "")
                     listOf(allCommunityGroup) + it
                 }

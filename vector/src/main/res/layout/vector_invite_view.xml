@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inviteNameView"
-        tools:text="\@matthew:matrix.org" />
+        tools:text=" @matthew:matrix.org" />
 
     <TextView
         android:id="@+id/inviteLabelView"
@@ -55,11 +55,13 @@
 
     <Button
         android:id="@+id/inviteRejectView"
+        style="@style/VectorButtonStyleFlat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
+        android:minWidth="120dp"
         android:text="@string/reject"
         app:layout_constraintEnd_toStartOf="@+id/inviteAcceptView"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -68,10 +70,12 @@
 
     <Button
         android:id="@+id/inviteAcceptView"
+        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
+        android:minWidth="120dp"
         android:text="@string/accept"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"

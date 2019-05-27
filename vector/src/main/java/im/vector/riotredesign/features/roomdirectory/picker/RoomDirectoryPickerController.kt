@@ -88,7 +88,7 @@ class RoomDirectoryPickerController(private val stringProvider: StringProvider,
     }
 
     interface Callback {
-        fun onRoomDirectoryClicked(roomDirectory: RoomDirectoryData)
+        fun onRoomDirectoryClicked(roomDirectoryData: RoomDirectoryData)
         fun retry()
     }
 

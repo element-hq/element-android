@@ -30,6 +30,8 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.VectorBaseFragment
+import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity
+import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
@@ -114,9 +116,25 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
         publicRoomsList.setController(publicRoomsController)
     }
 
-    override fun onPublicRoomClicked(publicRoom: PublicRoom) {
+    override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: PublicRoomItem.JoinState) {
         Timber.v("PublicRoomClicked: $publicRoom")
-        vectorBaseActivity.notImplemented()
+
+        when (joinState) {
+            PublicRoomItem.JoinState.JOINED        -> {
+                val args = RoomDetailArgs(publicRoom.roomId)
+                val roomDetailIntent = RoomDetailActivity.newIntent(requireActivity(), args)
+                requireActivity().startActivity(roomDetailIntent)
+            }
+            PublicRoomItem.JoinState.NOT_JOINED,
+            PublicRoomItem.JoinState.JOINING_ERROR -> {
+                // ROOM PREVIEW
+                vectorBaseActivity.notImplemented("Opening room preview")
+            }
+            else                                   -> {
+                Snackbar.make(publicRoomsCoordinator, getString(R.string.please_wait), Snackbar.LENGTH_SHORT)
+                        .show()
+            }
+        }
     }
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {

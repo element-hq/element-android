@@ -27,5 +27,7 @@
     <string name="error_no_network">No network. Please check your Internet connection.</string>
 
     <string name="action_change">"Change"</string>
+    <string name="please_wait">"Please wait…"</string>
+    <string name="group_all_communities">"All Communities"</string>
 
 </resources>

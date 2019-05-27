@@ -6,9 +6,4 @@
         android:icon="@drawable/ic_material_exit_to_app"
         android:title="@string/action_sign_out" />
 
-    <!-- TODO Temporary code -->
-    <item
-        android:id="@+id/tmp_menu_create_room"
-        android:title="@string/room_recents_create_room" />
-
 </menu>

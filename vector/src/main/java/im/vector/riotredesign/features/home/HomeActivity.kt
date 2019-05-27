@@ -123,12 +123,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 SignOutUiWorker(this).perform(Matrix.getInstance().currentSession!!)
                 return true
             }
-            // TODO Temporary code here to create a room
-            R.id.tmp_menu_create_room  -> {
-                // Start Activity for now
-                startActivity(Intent(this, RoomDirectoryActivity::class.java))
-                return true
-            }
         }
 
         return true

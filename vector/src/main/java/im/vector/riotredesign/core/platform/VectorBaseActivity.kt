@@ -296,8 +296,8 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
      * Temporary method
      * ========================================================================================== */
 
-    fun notImplemented() {
-        toast(getString(R.string.not_implemented))
+    fun notImplemented(message: String = "") {
+        toast(getString(R.string.not_implemented) + message.takeIf { message.isNotBlank() }.run { ": $message" })
     }
 
 }

@@ -16,15 +16,12 @@
 
 package im.vector.riotredesign.features.home.room.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
@@ -32,13 +29,11 @@ import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomeNavigator
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
 
 @Parcelize
 data class RoomListParams(
@@ -82,7 +77,8 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
     private fun setupCreateRoomButton() {
         createRoomButton.setImageResource(R.drawable.ic_add_white)
         createRoomButton.setOnClickListener {
-            vectorBaseActivity.notImplemented()
+            // Start Activity for now
+            startActivity(Intent(requireActivity(), RoomDirectoryActivity::class.java))
         }
     }
 
