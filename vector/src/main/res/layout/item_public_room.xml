@@ -55,54 +55,21 @@
         android:textColor="#7E899C"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
-        app:layout_constraintEnd_toStartOf="@id/itemPublicRoomJoin"
+        app:layout_constraintEnd_toStartOf="@id/itemPublicRoomButtonState"
         app:layout_constraintStart_toEndOf="@id/itemPublicRoomName"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="148" />
 
-    <Button
-        android:id="@+id/itemPublicRoomJoin"
-        style="@style/VectorButtonStyleFlat"
+    <im.vector.riotredesign.core.platform.ButtonStateView
+        android:id="@+id/itemPublicRoomButtonState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="@string/join"
+        app:bsv_button_text="@string/join"
+        app:bsv_loaded_image_src="@drawable/ic_tick"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/itemPublicRoomJoined"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_tick"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
-        app:layout_constraintEnd_toEndOf="@+id/itemPublicRoomJoin"
-        app:layout_constraintStart_toStartOf="@+id/itemPublicRoomJoin"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/itemPublicRoomJoining"
-        android:layout_width="0dp"
-        android:layout_height="24dp"
-        android:scaleType="center"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
-        app:layout_constraintEnd_toEndOf="@+id/itemPublicRoomJoin"
-        app:layout_constraintStart_toStartOf="@+id/itemPublicRoomJoin"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/itemPublicRoomRetry"
-        style="@style/VectorButtonStyleFlat"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="@string/global_retry"
-        android:textColor="@color/vector_warning_color"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
-        app:layout_constraintEnd_toEndOf="@+id/itemPublicRoomJoin"
-        app:layout_constraintStart_toStartOf="@+id/itemPublicRoomJoin"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View

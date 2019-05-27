@@ -16,17 +16,15 @@
 
 package im.vector.riotredesign.features.roomdirectory
 
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
+import im.vector.riotredesign.core.platform.ButtonStateView
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_public_room)
@@ -68,20 +66,26 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
         // TODO Use formatter for big numbers?
         holder.counterView.text = nbOfMembers.toString()
 
-        if (joinState == JoinState.NOT_JOINED) {
-            holder.joinButton.isVisible = true
-        } else {
-            // We use isInvisible because we want to keep button space in the layout
-            holder.joinButton.isInvisible = true
+        holder.buttonState.render(
+                when (joinState) {
+                    JoinState.NOT_JOINED    -> ButtonStateView.State.Button
+                    JoinState.JOINING       -> ButtonStateView.State.Loading
+                    JoinState.JOINED        -> ButtonStateView.State.Loaded
+                    JoinState.JOINING_ERROR -> ButtonStateView.State.Error
+                }
+        )
+
+        holder.buttonState.callback = object : ButtonStateView.Callback {
+            override fun onButtonClicked() {
+                joinListener?.invoke()
+            }
+
+            override fun onRetryClicked() {
+                // Same action
+                onButtonClicked()
+            }
         }
-        holder.joiningView.isVisible = joinState == JoinState.JOINING
-        holder.retryButton.isVisible = joinState == JoinState.JOINING_ERROR
-        holder.joinedView.isVisible = joinState == JoinState.JOINED
-
-        holder.joinButton.setOnClickListener { joinListener?.invoke() }
-        holder.retryButton.setOnClickListener { joinListener?.invoke() }
     }
-
 
     class Holder : VectorEpoxyHolder() {
         val rootView by bind<ViewGroup>(R.id.itemPublicRoomLayout)
@@ -90,11 +94,7 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
         val nameView by bind<TextView>(R.id.itemPublicRoomName)
         val counterView by bind<TextView>(R.id.itemPublicRoomMembersCount)
 
-        val joinedView by bind<View>(R.id.itemPublicRoomJoined)
-        val joinButton by bind<View>(R.id.itemPublicRoomJoin)
-        val joiningView by bind<View>(R.id.itemPublicRoomJoining)
-        val retryButton by bind<View>(R.id.itemPublicRoomRetry)
+        val buttonState by bind<ButtonStateView>(R.id.itemPublicRoomButtonState)
     }
-
 }
 
