@@ -38,10 +38,22 @@
                     <EditText
                         android:id="@+id/publicRoomsFilter"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="@dimen/layout_horizontal_margin"
                         android:layout_marginRight="@dimen/layout_horizontal_margin"
-                        android:hint="@string/home_filter_placeholder_rooms" />
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/bg_search_edit_text"
+                        android:drawableStart="@drawable/ic_search_white"
+                        android:drawableLeft="@drawable/ic_search_white"
+                        android:drawablePadding="8dp"
+                        android:drawableTint="#9fa9ba"
+                        android:hint="@string/home_filter_placeholder_rooms"
+                        android:lines="1"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp" />
 
                 </androidx.appcompat.widget.Toolbar>
 
@@ -57,25 +69,34 @@
                     android:drawablePadding="13dp"
                     android:text="@string/create_new_room" />
 
-                <!-- TODO Layout -->
-                <Button
-                    android:id="@+id/publicRoomsChangeDirectory"
-                    style="@style/VectorButtonStyleFlat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:text="RoomDirectory" />
-
-                <TextView
-                    android:id="@+id/publicRoomsDirectoryName"
-                    android:layout_width="wrap_content"
+                <!-- TODO Layout with Nad -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:textColor="#FFFFFF"
-                    tools:text="RoomDirectoryName" />
+                    android:layout_marginLeft="@dimen/layout_horizontal_margin"
+                    android:layout_marginRight="@dimen/layout_horizontal_margin"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/publicRoomsDirectoryName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="#FFFFFF"
+                        tools:text="RoomDirectoryName" />
+
+                    <Button
+                        android:id="@+id/publicRoomsChangeDirectory"
+                        style="@style/VectorButtonStyleFlat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="Change" />
+
+
+                </RelativeLayout>
 
             </LinearLayout>
 
