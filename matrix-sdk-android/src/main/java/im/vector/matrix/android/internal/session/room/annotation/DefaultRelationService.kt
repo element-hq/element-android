@@ -160,8 +160,8 @@ internal class DefaultRelationService(private val roomId: String,
                 .build()
     }
 
-    override fun editTextMessage(targetEventId: String, newBodyText: String, compatibilityBodyText: String): Cancelable {
-        val event = eventFactory.createReplaceTextEvent(roomId, targetEventId, newBodyText, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
+    override fun editTextMessage(targetEventId: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String): Cancelable {
+        val event = eventFactory.createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
         val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 

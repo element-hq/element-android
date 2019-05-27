@@ -33,7 +33,7 @@ interface SendService {
      * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE
      * @return a [Cancelable]
      */
-    fun sendTextMessage(text: String, msgType: String = MessageType.MSGTYPE_TEXT): Cancelable
+    fun sendTextMessage(text: String, msgType: String = MessageType.MSGTYPE_TEXT, autoMarkdown: Boolean = false): Cancelable
     fun sendFormattedTextMessage(text: String,formattedText: String): Cancelable
 
     /**

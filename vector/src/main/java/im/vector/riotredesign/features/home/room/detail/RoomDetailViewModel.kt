@@ -138,7 +138,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                     when (slashCommandResult) {
                         is ParsedCommand.ErrorNotACommand -> {
                             // Send the text message to the room
-                            room.sendTextMessage(action.text)
+                            room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
                             _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
                         }
                         is ParsedCommand.ErrorSyntax -> {
@@ -199,7 +199,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                     }
                 }
                 SendMode.EDIT -> {
-                    room.editTextMessage(state?.selectedEvent?.root?.eventId ?: "", action.text)
+                    room.editTextMessage(state.selectedEvent?.root?.eventId ?: "", action.text, action.autoMarkdown)
                     setState {
                         copy(
                                 sendMode = SendMode.REGULAR,

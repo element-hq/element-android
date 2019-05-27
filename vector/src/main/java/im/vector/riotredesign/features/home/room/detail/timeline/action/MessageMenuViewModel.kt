@@ -50,7 +50,8 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
                     ?: return null
 
-            val messageContent: MessageContent = event.root.content.toModel() ?: return null
+            val messageContent: MessageContent =  event.annotations?.editSummary?.aggregatedContent?.toModel()
+                    ?: event.root.content.toModel() ?: return null
             val type = messageContent.type
 
             if (event.sendState == SendState.UNSENT) {

@@ -93,13 +93,17 @@ import im.vector.riotredesign.features.media.ImageMediaViewerActivity
 import im.vector.riotredesign.features.media.VideoContentRenderer
 import im.vector.riotredesign.features.media.VideoMediaViewerActivity
 import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
+import im.vector.riotredesign.features.settings.PreferencesManager
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import org.commonmark.parser.Parser
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 import org.koin.core.parameter.parametersOf
+import ru.noties.markwon.Markwon
+import ru.noties.markwon.html.HtmlPlugin
 import timber.log.Timber
 import java.io.File
 
@@ -227,12 +231,20 @@ class RoomDetailFragment :
                     val messageContent: MessageContent? =
                             event.annotations?.editSummary?.aggregatedContent?.toModel()
                                     ?: event.root.content.toModel()
-                    val eventTextBody = messageContent?.body
-                    composerLayout.composerRelatedMessageContent.text = eventTextBody
+                    val nonFormattedBody = messageContent?.body ?: ""
+                    var formattedBody: CharSequence? = null
+                    if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
+                        val parser = Parser.builder().build()
+                        val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
+                        formattedBody = Markwon.builder(requireContext())
+                                .usePlugin(HtmlPlugin.create()).build().render(document)
+                    }
+                    composerLayout.composerRelatedMessageContent.text = formattedBody ?: nonFormattedBody
 
 
                     if (mode == SendMode.EDIT) {
-                        composerLayout.composerEditText.setText(eventTextBody)
+                        //TODO if it's a reply we should trim the top part of message
+                        composerLayout.composerEditText.setText(nonFormattedBody)
                         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit))
                     } else if (mode == SendMode.QUOTE) {
                         composerLayout.composerEditText.setText("")
@@ -378,7 +390,7 @@ class RoomDetailFragment :
         composerLayout.sendButton.setOnClickListener {
             val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
-                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage))
+                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, PreferencesManager.isMarkdownEnabled(requireContext())))
             }
         }
     }

@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 sealed class RoomDetailActions {
 
-    data class SendMessage(val text: String) : RoomDetailActions()
+    data class SendMessage(val text: String, val autoMarkdown: Boolean) : RoomDetailActions()
     data class SendMedia(val mediaFiles: List<MediaFile>) : RoomDetailActions()
     object IsDisplayed : RoomDetailActions()
     data class EventDisplayed(val event: TimelineEvent) : RoomDetailActions()

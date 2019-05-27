@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
+import android.text.TextUtils
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
@@ -29,10 +30,21 @@ import im.vector.matrix.android.api.session.room.model.annotation.ReplyToContent
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.util.StringProvider
+import org.commonmark.parser.Parser
+import org.commonmark.renderer.html.HtmlRenderer
 
 internal class LocalEchoEventFactory(private val credentials: Credentials, private val stringProvider: StringProvider) {
 
-    fun createTextEvent(roomId: String, msgType: String, text: String): Event {
+    fun createTextEvent(roomId: String, msgType: String, text: String, autoMarkdown: Boolean): Event {
+        if (autoMarkdown && msgType == MessageType.MSGTYPE_TEXT) {
+            val parser = Parser.builder().build()
+            val document = parser.parse(text)
+            val renderer = HtmlRenderer.builder().build()
+            val htmlText = renderer.render(document)
+            if (!TextUtils.equals(text, htmlText)) {
+                return createFormattedTextEvent(roomId, text, htmlText)
+            }
+        }
         val content = MessageTextContent(type = msgType, body = text)
         return createEvent(roomId, content)
     }
@@ -48,15 +60,32 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
     }
 
 
-    fun createReplaceTextEvent(roomId: String, targetEventId: String, newBodyText: String, msgType: String, compatibilityText: String): Event {
+    fun createReplaceTextEvent(roomId: String, targetEventId: String, newBodyText: String, newBodyAutoMarkdown: Boolean, msgType: String, compatibilityText: String): Event {
+
+        var newContent = MessageTextContent(
+                type = MessageType.MSGTYPE_TEXT,
+                body = newBodyText
+        )
+        if (newBodyAutoMarkdown) {
+            val parser = Parser.builder().build()
+            val document = parser.parse(newBodyText)
+            val renderer = HtmlRenderer.builder().build()
+            val htmlText = renderer.render(document)
+            if (!TextUtils.equals(newBodyText, htmlText)) {
+                newContent = MessageTextContent(
+                        type = MessageType.MSGTYPE_TEXT,
+                        format = MessageType.FORMAT_MATRIX_HTML,
+                        body = newBodyText,
+                        formattedBody = htmlText
+                )
+            }
+        }
+
         val content = MessageTextContent(
                 type = msgType,
                 body = compatibilityText,
                 relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
-                newContent = MessageTextContent(
-                        type = MessageType.MSGTYPE_TEXT,
-                        body = newBodyText
-                ).toContent()
+                newContent = newContent.toContent()
         )
         return createEvent(roomId, content)
     }

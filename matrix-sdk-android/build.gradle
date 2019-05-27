@@ -91,6 +91,7 @@ dependencies {
     def moshi_version = '1.8.0'
     def lifecycle_version = '2.0.0'
     def coroutines_version = "1.0.1"
+    def markwon_version = '3.0.0-SNAPSHOT'
 
     implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -111,6 +112,8 @@ dependencies {
     implementation 'com.novoda:merlin:1.1.6'
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
+    implementation "ru.noties.markwon:core:$markwon_version"
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.5.1'
