@@ -231,7 +231,7 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
 //        This is where the reply goes.
         val body = bodyForReply(eventReplied.content.toModel<MessageContent>())
         val replyFallbackTemplateFormatted = """
-           <mx-reply><blockquote><a href="%s">${stringProvider.getString(R.string.in_reply_to)}</a><a href="%s">%s</a><br />%s</blockquote></mx-reply>%s
+           <mx-reply><blockquote><a href="%s">${stringProvider.getString(R.string.message_reply_to_prefix)}</a><a href="%s">%s</a><br />%s</blockquote></mx-reply>%s
         """.trimIndent().format(permalink, userLink, userId, body.second ?: body.first, replyText)
 //
 //        > <@alice:example.org> This is the original body
@@ -272,10 +272,10 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
                 }
                 return content.body to formattedText
             }
-            MessageType.MSGTYPE_FILE -> return stringProvider.getString(R.string.sent_a_file) to null
-            MessageType.MSGTYPE_AUDIO -> return stringProvider.getString(R.string.sent_an_audio_file) to null
-            MessageType.MSGTYPE_IMAGE -> return stringProvider.getString(R.string.sent_an_image) to null
-            MessageType.MSGTYPE_VIDEO -> return stringProvider.getString(R.string.sent_a_video) to null
+            MessageType.MSGTYPE_FILE -> return stringProvider.getString(R.string.reply_to_a_file) to null
+            MessageType.MSGTYPE_AUDIO -> return stringProvider.getString(R.string.reply_to_an_audio_file) to null
+            MessageType.MSGTYPE_IMAGE -> return stringProvider.getString(R.string.reply_to_an_image) to null
+            MessageType.MSGTYPE_VIDEO -> return stringProvider.getString(R.string.reply_to_a_video) to null
             else -> return (content?.body ?: "") to null
 
         }

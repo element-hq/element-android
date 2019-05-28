@@ -31,9 +31,17 @@ interface SendService {
      * Method to send a text message asynchronously.
      * @param text the text message to send
      * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE
+     * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      * @return a [Cancelable]
      */
     fun sendTextMessage(text: String, msgType: String = MessageType.MSGTYPE_TEXT, autoMarkdown: Boolean = false): Cancelable
+
+    /**
+     * Method to send a text message with a formatted body.
+     * @param text the text message to send
+     * @param formattedText The formatted body using MessageType#FORMAT_MATRIX_HTML
+     * @return a [Cancelable]
+     */
     fun sendFormattedTextMessage(text: String,formattedText: String): Cancelable
 
     /**
@@ -50,6 +58,11 @@ interface SendService {
      */
     fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable
 
+    /**
+     * Redacts (delete) the given event.
+     * @param event The event to redact
+     * @param reason Optional reason string
+     */
     fun redactEvent(event: Event, reason: String?): Cancelable
 
 }

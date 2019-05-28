@@ -20,7 +20,7 @@ import android.content.res.Resources
 import androidx.annotation.NonNull
 import androidx.annotation.StringRes
 
-class StringProvider(private val resources: Resources) {
+internal class StringProvider(private val resources: Resources) {
 
     /**
      * Returns a localized string from the application's package's

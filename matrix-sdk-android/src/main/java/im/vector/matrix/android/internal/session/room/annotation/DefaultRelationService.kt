@@ -179,11 +179,7 @@ internal class DefaultRelationService(private val roomId: String,
 
     }
 
-    /**
-     * Reply to an event in the timeline
-     * Users may wish to reference another message when forming their own message
-     * https://matrix.org/docs/spec/client_server/r0.4.0.html#id350
-     */
+
     override fun replyToMessage(eventReplied: Event, replyText: String): Cancelable? {
         val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText)?.also {
             saveLocalEcho(it)

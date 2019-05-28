@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Strings not defined in Riot -->
-    <string name="in_reply_to">In reply to</string>
-    <string name="sent_a_file">sent a file.</string>
-    <string name="sent_an_image">sent an image.</string>
-    <string name="sent_a_video">sent a video.</string>
-    <string name="sent_an_audio_file">sent an audio file.</string>
-</resources>
