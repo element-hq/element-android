@@ -93,8 +93,10 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
         roomPreviewNoPreviewError.setTextOrHide(errorFormatter.toHumanReadable(state.lastError))
 
         if (state.roomJoinState == JoinState.JOINED) {
-            // TODO Quit this screen and open the room
-            vectorBaseActivity.notImplemented("Open newly join room")
+            // Quit this screen
+            requireActivity().finish()
+            // Open room
+            navigator.openRoom(roomPreviewData.roomId)
         }
     }
 }

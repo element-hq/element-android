@@ -18,6 +18,7 @@ package im.vector.riotredesign.core.di
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.LocaleProvider
@@ -27,6 +28,8 @@ import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.list.AlphabeticalRoomComparator
 import im.vector.riotredesign.features.home.room.list.ChronologicalRoomComparator
+import im.vector.riotredesign.features.navigation.DefaultNavigator
+import im.vector.riotredesign.features.navigation.Navigator
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import org.koin.dsl.module.module
 
@@ -76,6 +79,10 @@ class AppModule(private val context: Context) {
 
         factory {
             Matrix.getInstance().currentSession!!
+        }
+
+        factory { (fragment: Fragment) ->
+            DefaultNavigator(fragment) as Navigator
         }
 
     }

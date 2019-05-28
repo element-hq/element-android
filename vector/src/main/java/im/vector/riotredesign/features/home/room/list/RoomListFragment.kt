@@ -29,7 +29,6 @@ import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.features.home.HomeNavigator
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
@@ -59,7 +58,6 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
 
     private val roomListParams: RoomListParams by args()
     private val roomController by inject<RoomSummaryController>()
-    private val homeNavigator by inject<HomeNavigator>()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
@@ -70,15 +68,14 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         setupCreateRoomButton()
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.openRoomLiveData.observeEvent(this) {
-            homeNavigator.openRoomDetail(it, null)
+            navigator.openRoom(it)
         }
     }
 
     private fun setupCreateRoomButton() {
         createRoomButton.setImageResource(R.drawable.ic_add_white)
         createRoomButton.setOnClickListener {
-            // Start Activity for now
-            startActivity(Intent(requireActivity(), RoomDirectoryActivity::class.java))
+            navigator.openRoomDirectory()
         }
     }
 

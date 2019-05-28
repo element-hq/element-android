@@ -21,8 +21,7 @@ import androidx.fragment.app.FragmentManager
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceFragment
-import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity
-import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
+import im.vector.riotredesign.features.navigation.Navigator
 import kotlinx.android.synthetic.main.activity_home.*
 import timber.log.Timber
 
@@ -43,14 +42,13 @@ class HomeNavigator {
     }
 
     fun openRoomDetail(roomId: String,
-                       eventId: String?) {
+                       eventId: String?,
+                       navigator: Navigator) {
         Timber.v("Open room detail $roomId - $eventId")
         activity?.let {
             //TODO enable eventId permalink. It doesn't work enough at the moment.
             it.drawerLayout?.closeDrawer(GravityCompat.START)
-            val args = RoomDetailArgs(roomId)
-            val roomDetailIntent = RoomDetailActivity.newIntent(it, args)
-            it.startActivity(roomDetailIntent)
+            navigator.openRoom(roomId)
         }
     }
 

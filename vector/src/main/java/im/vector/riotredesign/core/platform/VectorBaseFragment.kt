@@ -28,9 +28,11 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
-import com.google.android.material.snackbar.Snackbar
+import im.vector.riotredesign.features.navigation.Navigator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
@@ -41,6 +43,12 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
     val vectorBaseActivity: VectorBaseActivity by lazy {
         activity as VectorBaseActivity
     }
+
+    /* ==========================================================================================
+     * Navigator
+     * ========================================================================================== */
+
+    protected val navigator: Navigator  by inject { parametersOf(this) }
 
     /* ==========================================================================================
      * Life cycle

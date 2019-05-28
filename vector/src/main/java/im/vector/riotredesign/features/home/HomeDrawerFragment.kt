@@ -52,7 +52,7 @@ class HomeDrawerFragment : VectorBaseFragment() {
             }
         }
         homeDrawerHeaderSettingsView.setOnClickListener {
-            startActivity(VectorSettingsActivity.getIntent(requireContext(), "TODO"))
+            navigator.openSettings()
         }
     }
 }

@@ -19,8 +19,10 @@ package im.vector.riotredesign.features.home
 import android.net.Uri
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
+import im.vector.riotredesign.features.navigation.Navigator
 
-class HomePermalinkHandler(private val navigator: HomeNavigator) {
+class HomePermalinkHandler(private val homeNavigator: HomeNavigator,
+                           private val navigator: Navigator) {
 
     fun launch(deepLink: String?) {
         val uri = deepLink?.let { Uri.parse(it) }
@@ -34,16 +36,16 @@ class HomePermalinkHandler(private val navigator: HomeNavigator) {
         val permalinkData = PermalinkParser.parse(deepLink)
         when (permalinkData) {
             is PermalinkData.EventLink -> {
-                navigator.openRoomDetail(permalinkData.roomIdOrAlias, permalinkData.eventId)
+                homeNavigator.openRoomDetail(permalinkData.roomIdOrAlias, permalinkData.eventId, navigator)
             }
             is PermalinkData.RoomLink -> {
-                navigator.openRoomDetail(permalinkData.roomIdOrAlias, null)
+                homeNavigator.openRoomDetail(permalinkData.roomIdOrAlias, null, navigator)
             }
             is PermalinkData.GroupLink -> {
-                navigator.openGroupDetail(permalinkData.groupId)
+                homeNavigator.openGroupDetail(permalinkData.groupId)
             }
             is PermalinkData.UserLink -> {
-                navigator.openUserDetail(permalinkData.userId)
+                homeNavigator.openUserDetail(permalinkData.userId)
             }
             is PermalinkData.FallbackLink -> {
 

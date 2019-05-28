@@ -30,8 +30,6 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity
-import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewActivity
 import io.reactivex.rxkotlin.subscribeBy
@@ -122,14 +120,12 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
         when (joinState) {
             JoinState.JOINED        -> {
-                val args = RoomDetailArgs(publicRoom.roomId)
-                val roomDetailIntent = RoomDetailActivity.newIntent(requireActivity(), args)
-                requireActivity().startActivity(roomDetailIntent)
+                navigator.openRoom(publicRoom.roomId)
             }
             JoinState.NOT_JOINED,
             JoinState.JOINING_ERROR -> {
                 // ROOM PREVIEW
-                requireActivity().startActivity(RoomPreviewActivity.getIntent(requireActivity(), publicRoom))
+                navigator.openRoomPreview(publicRoom)
             }
             else                    -> {
                 Snackbar.make(publicRoomsCoordinator, getString(R.string.please_wait), Snackbar.LENGTH_SHORT)
