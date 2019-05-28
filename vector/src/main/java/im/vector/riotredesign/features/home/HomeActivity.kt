@@ -37,8 +37,6 @@ import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
-import im.vector.riotredesign.features.settings.VectorSettingsActivity
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.android.ext.android.inject
@@ -108,7 +106,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     override fun configure(toolbar: Toolbar) {
-        setSupportActionBar(toolbar)
+        configureToolbar(toolbar, false)
     }
 
     override fun getMenuRes() = R.menu.home

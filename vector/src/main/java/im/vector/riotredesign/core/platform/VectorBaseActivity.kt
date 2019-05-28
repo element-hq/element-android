@@ -51,11 +51,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
 
     @Nullable
     @JvmField
-    @BindView(R.id.toolbar)
-    var toolbar: Toolbar? = null
-
-    @Nullable
-    @JvmField
     @BindView(R.id.vector_coordinator_layout)
     var coordinatorLayout: CoordinatorLayout? = null
 
@@ -244,14 +239,16 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
     protected fun isFirstCreation() = savedInstanceState == null
 
     /**
-     * Configure the Toolbar. It MUST be present in your layout with id "toolbar"
+     * Configure the Toolbar, with default back button.
      */
-    protected fun configureToolbar() {
+    protected fun configureToolbar(toolbar: Toolbar, displayBack: Boolean = true) {
         setSupportActionBar(toolbar)
 
-        supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-            it.setDisplayHomeAsUpEnabled(true)
+        if (displayBack) {
+            supportActionBar?.let {
+                it.setDisplayShowHomeEnabled(true)
+                it.setDisplayHomeAsUpEnabled(true)
+            }
         }
     }
 

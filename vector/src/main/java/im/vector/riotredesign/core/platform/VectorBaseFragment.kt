@@ -22,6 +22,7 @@ import android.view.*
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
+import androidx.appcompat.widget.Toolbar
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
@@ -121,6 +122,20 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
         assertMainThread()
         restorables.add(this)
         return this
+    }
+
+    /* ==========================================================================================
+     * Toolbar
+     * ========================================================================================== */
+
+    /**
+     * Configure the Toolbar.
+     */
+    protected fun setupToolbar(toolbar: Toolbar) {
+        val parentActivity = vectorBaseActivity
+        if (parentActivity is ToolbarConfigurable) {
+            parentActivity.configure(toolbar)
+        }
     }
 
     /* ==========================================================================================

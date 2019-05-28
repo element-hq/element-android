@@ -169,7 +169,7 @@ class RoomDetailFragment :
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
         bindScope(getOrCreateScope(HomeModule.ROOM_DETAIL_SCOPE))
-        setupToolbar()
+        setupToolbar(roomToolbar)
         setupRecyclerView()
         setupComposer()
         setupAttachmentButton()
@@ -187,13 +187,6 @@ class RoomDetailFragment :
         actionViewModel.actionCommandEvent.observe(this, Observer {
             handleActions(it)
         })
-    }
-
-    private fun setupToolbar() {
-        val parentActivity = vectorBaseActivity
-        if (parentActivity is ToolbarConfigurable) {
-            parentActivity.configure(roomToolbar)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

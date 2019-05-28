@@ -30,4 +30,6 @@
     <string name="please_wait">"Please wait…"</string>
     <string name="group_all_communities">"All Communities"</string>
 
+    <string name="room_preview_no_preview">"This room can't be previewed"</string>
+
 </resources>

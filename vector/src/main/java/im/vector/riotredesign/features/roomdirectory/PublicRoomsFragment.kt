@@ -33,6 +33,7 @@ import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity
 import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
+import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewActivity
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
 import org.koin.android.ext.android.inject
@@ -128,7 +129,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
             PublicRoomItem.JoinState.NOT_JOINED,
             PublicRoomItem.JoinState.JOINING_ERROR -> {
                 // ROOM PREVIEW
-                vectorBaseActivity.notImplemented("Opening room preview")
+                requireActivity().startActivity(RoomPreviewActivity.getIntent(requireActivity(), publicRoom))
             }
             else                                   -> {
                 Snackbar.make(publicRoomsCoordinator, getString(R.string.please_wait), Snackbar.LENGTH_SHORT)

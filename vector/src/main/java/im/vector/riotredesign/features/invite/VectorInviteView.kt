@@ -21,7 +21,6 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.setPadding
 import androidx.core.view.updateLayoutParams
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R

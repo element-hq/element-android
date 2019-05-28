@@ -24,6 +24,7 @@ import androidx.preference.PreferenceFragmentCompat
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import kotlinx.android.synthetic.main.activity_vector_settings.*
 import org.koin.android.ext.android.inject
 
 /**
@@ -45,7 +46,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
     private val session by inject<Session>()
 
     override fun initUiAndData() {
-        configureToolbar()
+        configureToolbar(settingsToolbar)
 
         if (isFirstCreation()) {
             vectorSettingsPreferencesFragment = VectorSettingsPreferencesFragment.newInstance(session.sessionParams.credentials.userId)

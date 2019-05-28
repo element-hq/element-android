@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/roomPreviewNoPreviewToolbar"
+            style="@style/VectorToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/layout_horizontal_margin"
+                android:paddingRight="@dimen/layout_horizontal_margin">
+
+                <ImageView
+                    android:id="@+id/roomPreviewNoPreviewAvatar"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_marginTop="123dp"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/roomPreviewNoPreviewName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="56dp"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.Vector.Title"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:text="Matrix HQ" />
+
+                <TextView
+                    android:id="@+id/roomPreviewNoPreviewTopic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_vertical_margin"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.Vector.Subtitle"
+                    android:textSize="15sp"
+                    tools:text="Welcome to Matrix HQ! Here is the rest of the room topic…" />
+
+                <TextView
+                    android:id="@+id/roomPreviewNoPreviewLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="@string/room_preview_no_preview"
+                    android:textAppearance="@style/TextAppearance.Vector.Subtitle2"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/roomPreviewNoPreviewJoin"
+                    style="@style/VectorButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_vertical_margin"
+                    android:layout_marginBottom="@dimen/layout_vertical_margin"
+                    android:minWidth="120dp"
+                    android:text="@string/join" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -44,11 +44,7 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     override fun configure(toolbar: Toolbar) {
-        setSupportActionBar(toolbar)
-        supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-            it.setDisplayHomeAsUpEnabled(true)
-        }
+        configureToolbar(toolbar)
     }
 
     companion object {
