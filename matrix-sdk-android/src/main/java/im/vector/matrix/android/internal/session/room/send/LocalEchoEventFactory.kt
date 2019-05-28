@@ -258,6 +258,10 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
         return createEvent(roomId, content)
     }
 
+    /**
+     * Returns a pair of <Plain Text, Formatted Text?> used for the fallback event representation
+     * in a reply message.
+     */
     private fun bodyForReply(content: MessageContent?): Pair<String, String?> {
         when (content?.type) {
             MessageType.MSGTYPE_EMOTE,
