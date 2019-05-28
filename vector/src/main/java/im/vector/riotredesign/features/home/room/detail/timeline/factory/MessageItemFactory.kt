@@ -38,6 +38,7 @@ import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
+import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.DebouncedClickListener
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
@@ -52,7 +53,8 @@ import me.gujun.android.span.span
 class MessageItemFactory(private val colorProvider: ColorProvider,
                          private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                          private val timelineDateFormatter: TimelineDateFormatter,
-                         private val htmlRenderer: EventHtmlRenderer) {
+                         private val htmlRenderer: EventHtmlRenderer,
+                         private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -100,11 +102,11 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val messageContent: MessageContent =
                 event.annotations?.editSummary?.aggregatedContent?.toModel()
                         ?: event.root.content.toModel()
-                        ?: return null
+                        ?: //Malformed content, we should echo something on screen
+                        return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 
         if (messageContent.relatesTo?.type == RelationType.REPLACE) {
-            //TODO blank item or ignore??
-            // ignore this event
+            // ignore replace event, the targeted id is already edited
             return BlankItem_()
         }
 //        val all = event.root.toContent()

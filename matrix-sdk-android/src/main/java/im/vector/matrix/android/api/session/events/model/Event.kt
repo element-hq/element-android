@@ -18,8 +18,10 @@ package im.vector.matrix.android.api.session.events.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Types
 import im.vector.matrix.android.internal.di.MoshiProvider
+import timber.log.Timber
 import java.lang.reflect.ParameterizedType
 
 typealias Content = Map<String, @JvmSuppressWildcards Any>
@@ -31,7 +33,12 @@ inline fun <reified T> Content?.toModel(): T? {
     return this?.let {
         val moshi = MoshiProvider.providesMoshi()
         val moshiAdapter = moshi.adapter(T::class.java)
-        return moshiAdapter.fromJsonValue(it)
+        try {
+            return moshiAdapter.fromJsonValue(it)
+        } catch (e: JsonDataException) {
+            Timber.e(e, "Failed to parse content")
+            return null
+        }
     }
 }
 

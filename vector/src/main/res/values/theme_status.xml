@@ -23,6 +23,7 @@
         <item name="android:colorBackground">@color/riot_primary_background_color_status</item>
         <item name="vctr_bottom_nav_background_color">@color/riot_primary_background_color_status
         </item>
+        <item name="vctr_bottom_nav_background_border_color">#FFE9EDF1</item>
 
         <item name="buttonStyle">@style/Widget.Vector.Button</item>
 

@@ -17,7 +17,7 @@ package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.*
-import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
+import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper

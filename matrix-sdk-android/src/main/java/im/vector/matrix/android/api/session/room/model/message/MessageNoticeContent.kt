@@ -19,7 +19,7 @@ package im.vector.matrix.android.api.session.room.model.message
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Content
-import im.vector.matrix.android.api.session.room.model.annotation.RelationDefaultContent
+import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 
 @JsonClass(generateAdapter = true)
 data class MessageNoticeContent(

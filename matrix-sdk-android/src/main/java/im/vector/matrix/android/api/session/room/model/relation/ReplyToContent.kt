@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.api.session.room.model.annotation
+
+package im.vector.matrix.android.api.session.room.model.relation
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class RelationDefaultContent(
-        @Json(name = "rel_type") override val type: String?,
-        @Json(name = "event_id") override val eventId: String?
-) : RelationContent
+data class ReplyToContent(
+        @Json(name = "event_id") val eventId: String
+)

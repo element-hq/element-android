@@ -49,8 +49,19 @@ internal class DefaultSendService(private val roomId: String,
     : SendService {
 
 
-    override fun sendTextMessage(text: String, msgType: String): Cancelable {
-        val event = eventFactory.createTextEvent(roomId, msgType, text).also {
+    override fun sendTextMessage(text: String, msgType: String, autoMarkdown: Boolean): Cancelable {
+        val event = eventFactory.createTextEvent(roomId, msgType, text, autoMarkdown).also {
+            saveLocalEcho(it)
+        }
+        val sendWork = createSendEventWork(event)
+        WorkManager.getInstance()
+                .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, sendWork)
+                .enqueue()
+        return CancelableWork(sendWork.id)
+    }
+
+    override fun sendFormattedTextMessage(text: String, formattedText: String): Cancelable {
+        val event = eventFactory.createFormattedTextEvent(roomId, text, formattedText).also {
             saveLocalEcho(it)
         }
         val sendWork = createSendEventWork(event)

@@ -20,6 +20,7 @@ import android.content.Context
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.StringProvider
 import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module.module
 
@@ -38,6 +39,9 @@ class MatrixModule(private val context: Context) {
 
         single {
             TaskExecutor(get())
+        }
+        single {
+            StringProvider(context.resources)
         }
 
         single {

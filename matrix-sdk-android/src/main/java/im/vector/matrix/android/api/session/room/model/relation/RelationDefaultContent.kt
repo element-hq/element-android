@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package im.vector.matrix.android.api.session.room.model.message
+package im.vector.matrix.android.api.session.room.model.relation
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.events.model.Content
-import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 
 @JsonClass(generateAdapter = true)
-data class MessageImageContent(
-        @Json(name = "msgtype") override val type: String,
-        @Json(name = "body") override val body: String,
-        @Json(name = "info") val info: ImageInfo? = null,
-        @Json(name = "url") val url: String? = null,
-        @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
-        @Json(name = "m.new_content") override val newContent: Content? = null
-) : MessageContent
+data class RelationDefaultContent(
+        @Json(name = "rel_type") override val type: String?,
+        @Json(name = "event_id") override val eventId: String?,
+        @Json(name = "m.in_reply_to") override val inReplyTo: ReplyToContent? = null
+) : RelationContent

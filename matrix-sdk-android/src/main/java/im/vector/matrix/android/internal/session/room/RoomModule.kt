@@ -17,10 +17,10 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.session.DefaultSession
-import im.vector.matrix.android.internal.session.room.annotation.DefaultFindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.annotation.DefaultUpdateQuickReactionTask
-import im.vector.matrix.android.internal.session.room.annotation.FindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.annotation.UpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultFindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
@@ -73,7 +73,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            LocalEchoEventFactory(get())
+            LocalEchoEventFactory(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -109,7 +109,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultPruneEventTask(get(),get()) as PruneEventTask
+            DefaultPruneEventTask(get(), get()) as PruneEventTask
         }
 
     }
