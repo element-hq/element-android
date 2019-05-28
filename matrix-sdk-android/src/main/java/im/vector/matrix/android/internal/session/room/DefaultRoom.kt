@@ -22,7 +22,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.model.annotation.RelationService
+import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService

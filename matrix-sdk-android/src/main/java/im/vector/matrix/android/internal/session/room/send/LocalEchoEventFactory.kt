@@ -23,10 +23,10 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.*
-import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
-import im.vector.matrix.android.api.session.room.model.annotation.ReactionInfo
-import im.vector.matrix.android.api.session.room.model.annotation.RelationDefaultContent
-import im.vector.matrix.android.api.session.room.model.annotation.ReplyToContent
+import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
+import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
+import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
+import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.util.StringProvider

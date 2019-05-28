@@ -17,7 +17,7 @@
 package im.vector.matrix.android.api.session.room.model.message
 
 import im.vector.matrix.android.api.session.events.model.Content
-import im.vector.matrix.android.api.session.room.model.annotation.RelationDefaultContent
+import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 
 
 interface MessageContent {

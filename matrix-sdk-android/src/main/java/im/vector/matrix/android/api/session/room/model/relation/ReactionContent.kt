@@ -1,4 +1,4 @@
-package im.vector.matrix.android.api.session.room.model.annotation
+package im.vector.matrix.android.api.session.room.model.relation
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

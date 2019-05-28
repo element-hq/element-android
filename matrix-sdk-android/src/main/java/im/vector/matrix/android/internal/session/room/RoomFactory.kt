@@ -18,9 +18,9 @@ package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.internal.session.room.annotation.DefaultRelationService
-import im.vector.matrix.android.internal.session.room.annotation.FindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.annotation.UpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultRelationService
+import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor

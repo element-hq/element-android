@@ -17,10 +17,10 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.session.DefaultSession
-import im.vector.matrix.android.internal.session.room.annotation.DefaultFindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.annotation.DefaultUpdateQuickReactionTask
-import im.vector.matrix.android.internal.session.room.annotation.FindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.annotation.UpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultFindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
@@ -39,7 +39,6 @@ import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.*
-import im.vector.matrix.android.internal.util.StringProvider
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 

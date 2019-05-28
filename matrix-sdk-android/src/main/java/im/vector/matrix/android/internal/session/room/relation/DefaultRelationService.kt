@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.session.room.annotation
+package im.vector.matrix.android.internal.session.room.relation
 
 import androidx.work.*
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.annotation.RelationService
+import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.helper.addSendingEvent

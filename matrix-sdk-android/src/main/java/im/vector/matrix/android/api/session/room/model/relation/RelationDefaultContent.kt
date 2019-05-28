@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.api.session.room.model.annotation
+package im.vector.matrix.android.api.session.room.model.relation
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
