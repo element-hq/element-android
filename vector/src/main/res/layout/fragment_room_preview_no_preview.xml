@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/roomPreviewNoPreviewRoot"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -64,15 +66,31 @@
                     android:textAppearance="@style/TextAppearance.Vector.Subtitle2"
                     android:textSize="14sp" />
 
-                <Button
-                    android:id="@+id/roomPreviewNoPreviewJoin"
-                    style="@style/VectorButtonStyle"
+                <TextView
+                    android:id="@+id/roomPreviewNoPreviewError"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
+                    android:gravity="center"
+                    android:textColor="@color/vector_error_color"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    tools:text="Error"
+                    tools:visibility="visible" />
+
+                <im.vector.riotredesign.core.platform.ButtonStateView
+                    android:id="@+id/roomPreviewNoPreviewJoin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_vertical_margin"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_marginBottom="@dimen/layout_vertical_margin"
                     android:minWidth="120dp"
-                    android:text="@string/join" />
+                    app:bsv_button_text="@string/join"
+                    app:bsv_loaded_image_src="@drawable/ic_tick"
+                    app:bsv_use_flat_button="false"
+                    app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator" />
 
             </LinearLayout>
 

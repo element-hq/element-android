@@ -20,6 +20,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -43,13 +44,12 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
         fun onRetryClicked()
     }
 
+    // Big or Flat button
+    var button: Button
+
     init {
         View.inflate(context, R.layout.view_button_state, this)
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-        buttonStateButton.setOnClickListener {
-            callback?.onButtonClicked()
-        }
 
         buttonStateRetry.setOnClickListener {
             callback?.onRetryClicked()
@@ -62,20 +62,32 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
                 0, 0)
                 .apply {
                     try {
-                        buttonStateButton.text = getString(R.styleable.ButtonStateView_bsv_button_text)
+                        if (getBoolean(R.styleable.ButtonStateView_bsv_use_flat_button, true)) {
+                            button = buttonStateButtonFlat
+                            buttonStateButtonBig.isVisible = false
+                        } else {
+                            button = buttonStateButtonBig
+                            buttonStateButtonFlat.isVisible = false
+                        }
+
+                        button.text = getString(R.styleable.ButtonStateView_bsv_button_text)
                         buttonStateLoaded.setImageDrawable(getDrawable(R.styleable.ButtonStateView_bsv_loaded_image_src))
                     } finally {
                         recycle()
                     }
                 }
+
+        button.setOnClickListener {
+            callback?.onButtonClicked()
+        }
     }
 
     fun render(newState: State) {
         if (newState == State.Button) {
-            buttonStateButton.isVisible = true
+            button.isVisible = true
         } else {
             // We use isInvisible because we want to keep button space in the layout
-            buttonStateButton.isInvisible = true
+            button.isInvisible = true
         }
 
         buttonStateLoading.isVisible = newState == State.Loading

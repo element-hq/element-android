@@ -28,9 +28,10 @@ class ErrorFormatter(val stringProvider: StringProvider) {
         return failure.localizedMessage
     }
 
-    fun toHumanReadable(throwable: Throwable): String {
+    fun toHumanReadable(throwable: Throwable?): String {
 
         return when (throwable) {
+            null                         -> ""
             is Failure.NetworkConnection -> stringProvider.getString(R.string.error_no_network)
             else                         -> throwable.localizedMessage
         }

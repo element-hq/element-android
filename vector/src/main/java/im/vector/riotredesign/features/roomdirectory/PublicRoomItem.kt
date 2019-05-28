@@ -30,13 +30,6 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 @EpoxyModelClass(layout = R.layout.item_public_room)
 abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
-    enum class JoinState {
-        NOT_JOINED,
-        JOINING,
-        JOINING_ERROR,
-        JOINED
-    }
-
     @EpoxyAttribute
     var avatarUrl: String? = null
 

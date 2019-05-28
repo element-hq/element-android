@@ -65,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        app:bsv_use_flat_button="true"
         app:bsv_button_text="@string/join"
         app:bsv_loaded_image_src="@drawable/ic_tick"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"

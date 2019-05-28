@@ -19,13 +19,20 @@ package im.vector.riotredesign.features.roomdirectory.roompreview
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.transition.TransitionManager
 import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.setTextOrHide
+import im.vector.riotredesign.core.platform.ButtonStateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.roomdirectory.JoinState
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import kotlinx.android.synthetic.main.fragment_room_preview_no_preview.*
+import org.koin.android.ext.android.get
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 
@@ -37,12 +44,17 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
         }
     }
 
+    private val errorFormatter = get<ErrorFormatter>()
+    private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
+
     private val roomPreviewData: RoomPreviewData by args()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
         setupToolbar(roomPreviewNoPreviewToolbar)
+
+        roomPreviewViewModel.init(roomPreviewData.roomId)
     }
 
     override fun getLayoutResId() = R.layout.fragment_room_preview_no_preview
@@ -54,8 +66,35 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
         roomPreviewNoPreviewName.text = roomPreviewData.roomName
         roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
 
-        roomPreviewNoPreviewJoin.setOnClickListener {
-            vectorBaseActivity.notImplemented("Join from preview")
+        roomPreviewNoPreviewJoin.callback = object : ButtonStateView.Callback {
+            override fun onButtonClicked() {
+                roomPreviewViewModel.joinRoom()
+            }
+
+            override fun onRetryClicked() {
+                // Same action
+                onButtonClicked()
+            }
+        }
+    }
+
+    override fun invalidate() = withState(roomPreviewViewModel) { state ->
+        TransitionManager.beginDelayedTransition(roomPreviewNoPreviewRoot)
+
+        roomPreviewNoPreviewJoin.render(
+                when (state.roomJoinState) {
+                    JoinState.NOT_JOINED    -> ButtonStateView.State.Button
+                    JoinState.JOINING       -> ButtonStateView.State.Loading
+                    JoinState.JOINED        -> ButtonStateView.State.Loaded
+                    JoinState.JOINING_ERROR -> ButtonStateView.State.Error
+                }
+        )
+
+        roomPreviewNoPreviewError.setTextOrHide(errorFormatter.toHumanReadable(state.lastError))
+
+        if (state.roomJoinState == JoinState.JOINED) {
+            // TODO Quit this screen and open the room
+            vectorBaseActivity.notImplemented("Open newly join room")
         }
     }
 }

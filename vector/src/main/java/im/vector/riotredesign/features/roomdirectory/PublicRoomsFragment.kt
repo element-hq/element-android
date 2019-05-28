@@ -117,21 +117,21 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
         publicRoomsList.setController(publicRoomsController)
     }
 
-    override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: PublicRoomItem.JoinState) {
+    override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {
         Timber.v("PublicRoomClicked: $publicRoom")
 
         when (joinState) {
-            PublicRoomItem.JoinState.JOINED        -> {
+            JoinState.JOINED        -> {
                 val args = RoomDetailArgs(publicRoom.roomId)
                 val roomDetailIntent = RoomDetailActivity.newIntent(requireActivity(), args)
                 requireActivity().startActivity(roomDetailIntent)
             }
-            PublicRoomItem.JoinState.NOT_JOINED,
-            PublicRoomItem.JoinState.JOINING_ERROR -> {
+            JoinState.NOT_JOINED,
+            JoinState.JOINING_ERROR -> {
                 // ROOM PREVIEW
                 requireActivity().startActivity(RoomPreviewActivity.getIntent(requireActivity(), publicRoom))
             }
-            else                                   -> {
+            else                    -> {
                 Snackbar.make(publicRoomsCoordinator, getString(R.string.please_wait), Snackbar.LENGTH_SHORT)
                         .show()
             }

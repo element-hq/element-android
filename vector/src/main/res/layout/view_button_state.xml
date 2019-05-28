@@ -7,11 +7,23 @@
     tools:parentTag="android.widget.FrameLayout">
 
     <Button
-        android:id="@+id/buttonStateButton"
+        android:id="@+id/buttonStateButtonFlat"
         style="@style/VectorButtonStyleFlat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/join" />
+
+    <Button
+        android:id="@+id/buttonStateButtonBig"
+        style="@style/VectorButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minWidth="120dp"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

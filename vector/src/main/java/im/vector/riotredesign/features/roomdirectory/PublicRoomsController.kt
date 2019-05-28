@@ -85,10 +85,10 @@ class PublicRoomsController(private val stringProvider: StringProvider,
             nbOfMembers(publicRoom.numJoinedMembers)
 
             val joinState = when {
-                viewState.joinedRoomsIds.contains(publicRoom.roomId)       -> PublicRoomItem.JoinState.JOINED
-                viewState.joiningRoomsIds.contains(publicRoom.roomId)      -> PublicRoomItem.JoinState.JOINING
-                viewState.joiningErrorRoomsIds.contains(publicRoom.roomId) -> PublicRoomItem.JoinState.JOINING_ERROR
-                else                                                       -> PublicRoomItem.JoinState.NOT_JOINED
+                viewState.joinedRoomsIds.contains(publicRoom.roomId)       -> JoinState.JOINED
+                viewState.joiningRoomsIds.contains(publicRoom.roomId)      -> JoinState.JOINING
+                viewState.joiningErrorRoomsIds.contains(publicRoom.roomId) -> JoinState.JOINING_ERROR
+                else                                                       -> JoinState.NOT_JOINED
             }
 
             joinState(joinState)
@@ -103,7 +103,7 @@ class PublicRoomsController(private val stringProvider: StringProvider,
     }
 
     interface Callback {
-        fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: PublicRoomItem.JoinState)
+        fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState)
         fun onPublicRoomJoin(publicRoom: PublicRoom)
         fun loadMore()
     }
