@@ -21,9 +21,18 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 
 
 private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
-internal const val URI_PREFIX_CONTENT_API = "_matrix/media/v1/"
+private const val URI_PREFIX_CONTENT_API = "_matrix/media/v1/"
 
 internal class DefaultContentUrlResolver(private val homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
+
+    companion object {
+        fun getUploadUrl(homeServerConnectionConfig: HomeServerConnectionConfig): String {
+            val baseUrl = homeServerConnectionConfig.homeServerUri.toString()
+            val sep = if (baseUrl.endsWith("/")) "" else "/"
+
+            return baseUrl + sep + URI_PREFIX_CONTENT_API + "upload"
+        }
+    }
 
     override fun resolveFullSize(contentUrl: String?): String? {
         if (contentUrl?.isValidMatrixContentUrl() == true) {
@@ -57,7 +66,10 @@ internal class DefaultContentUrlResolver(private val homeServerConnectionConfig:
             fragment = serverAndMediaId.substring(fragmentOffset)
             serverAndMediaId = serverAndMediaId.substring(0, fragmentOffset)
         }
-        return baseUrl + prefix + serverAndMediaId + (params ?: "") + fragment
+
+        val sep = if (baseUrl.endsWith("/")) "" else "/"
+
+        return baseUrl + sep + prefix + serverAndMediaId + (params ?: "") + fragment
     }
 
     private fun String.isValidMatrixContentUrl(): Boolean {

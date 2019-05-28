@@ -21,19 +21,15 @@ import arrow.core.Try.Companion.raise
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.ProgressRequestBody
-import okhttp3.HttpUrl
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.*
 import java.io.File
 import java.io.IOException
 
 
 internal class FileUploader(private val okHttpClient: OkHttpClient,
-                            private val sessionParams: SessionParams) {
+                            sessionParams: SessionParams) {
 
-    private val uploadUrl = sessionParams.homeServerConnectionConfig.homeServerUri.toString() + URI_PREFIX_CONTENT_API + "upload"
+    private val uploadUrl = DefaultContentUrlResolver.getUploadUrl(sessionParams.homeServerConnectionConfig)
 
     private val moshi = MoshiProvider.providesMoshi()
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
@@ -82,7 +78,7 @@ internal class FileUploader(private val okHttpClient: OkHttpClient,
                     response.body()?.source()?.let {
                         responseAdapter.fromJson(it)
                     }
-                    ?: throw IOException()
+                            ?: throw IOException()
                 }
             }
         }
