@@ -56,7 +56,7 @@ class HomeDetailFragment : VectorBaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         currentDisplayMode = savedInstanceState?.getSerializable(CURRENT_DISPLAY_MODE) as? RoomListFragment.DisplayMode
-                             ?: RoomListFragment.DisplayMode.HOME
+                ?: RoomListFragment.DisplayMode.HOME
         switchDisplayMode(currentDisplayMode)
         setupBottomNavigationView()
         setupToolbar()
@@ -87,10 +87,11 @@ class HomeDetailFragment : VectorBaseFragment() {
 
     private fun setupBottomNavigationView() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
-            val displayMode = when {
-                it.itemId == R.id.bottom_action_people -> RoomListFragment.DisplayMode.PEOPLE
-                it.itemId == R.id.bottom_action_rooms  -> RoomListFragment.DisplayMode.ROOMS
-                else                                   -> RoomListFragment.DisplayMode.HOME
+            val displayMode = when (it.itemId) {
+                R.id.bottom_action_home   -> RoomListFragment.DisplayMode.HOME
+                R.id.bottom_action_people -> RoomListFragment.DisplayMode.PEOPLE
+                R.id.bottom_action_rooms  -> RoomListFragment.DisplayMode.ROOMS
+                else                      -> RoomListFragment.DisplayMode.HOME
             }
             if (currentDisplayMode != displayMode) {
                 currentDisplayMode = displayMode
@@ -98,6 +99,7 @@ class HomeDetailFragment : VectorBaseFragment() {
             }
             true
         }
+
         val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
         menuView.forEachIndexed { index, view ->
             val itemView = view as BottomNavigationItemView

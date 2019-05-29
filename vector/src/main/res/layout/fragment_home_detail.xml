@@ -11,6 +11,7 @@
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="#FFFFFF"
         app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,20 +26,21 @@
 
             <ImageView
                 android:id="@+id/groupToolbarAvatarImageView"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 tools:src="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/groupToolbarTitleView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?vctr_toolbar_primary_text_color"
-                android:textSize="18sp"
+                android:textColor="@color/dark_grey"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 tools:text="@tools:sample/lorem/random" />
 
         </LinearLayout>
@@ -49,20 +51,21 @@
         android:id="@+id/roomListContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="#F3F8FD"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintTop_toBottomOf="@+id/groupToolbar" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:itemIconTint="@android:color/white"
+        android:layout_height="48dp"
+        android:background="#FFFFFF"
+        app:itemIconTint="@color/home_bottom_nav_view_tint"
         app:itemTextColor="@color/home_bottom_nav_view_tint"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu='@menu/selected_group_navigation' />
+        app:menu="@menu/home_bottom_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

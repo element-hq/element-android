@@ -16,10 +16,10 @@
 
 package im.vector.riotredesign.features.home.room.list
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.failure.Failure
@@ -29,7 +29,6 @@ import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.koin.android.ext.android.inject
@@ -73,8 +72,17 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
     }
 
     private fun setupCreateRoomButton() {
-        createRoomButton.setImageResource(R.drawable.ic_add_white)
+        createRoomButton.isVisible = roomListParams.displayMode == DisplayMode.HOME
+        createChatRoomButton.isVisible = roomListParams.displayMode == DisplayMode.PEOPLE
+        createGroupRoomButton.isVisible = roomListParams.displayMode == DisplayMode.ROOMS
+
         createRoomButton.setOnClickListener {
+            navigator.openRoomDirectory()
+        }
+        createChatRoomButton.setOnClickListener {
+            navigator.openRoomDirectory()
+        }
+        createGroupRoomButton.setOnClickListener {
             navigator.openRoomDirectory()
         }
     }

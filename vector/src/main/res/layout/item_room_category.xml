@@ -9,12 +9,11 @@
     android:focusable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="16dp"
-    android:paddingLeft="16dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="8dp"
-    android:paddingRight="8dp"
-    android:paddingBottom="8dp"
+    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingLeft="@dimen/layout_horizontal_margin"
+    android:paddingTop="@dimen/layout_vertical_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    android:paddingRight="@dimen/layout_horizontal_margin"
     tools:background="@color/pale_grey">
 
     <TextView
@@ -29,8 +28,9 @@
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="@color/bluey_grey_two"
-        tools:text="@string/room_recents_favourites" />
+        android:textColor="#7E899C"
+        android:textSize="14sp"
+        tools:text="@string/room_participants_header_direct_chats" />
 
     <im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomCategoryUnreadCounterBadgeView"
@@ -39,12 +39,11 @@
         android:gravity="center"
         android:minWidth="16dp"
         android:minHeight="16dp"
-        android:paddingRight="4dp"
         android:paddingLeft="4dp"
-        android:textSize="10sp"
+        android:paddingRight="4dp"
         android:textColor="@android:color/white"
-         tools:background="@drawable/bg_unread_highlight"
+        android:textSize="10sp"
+        tools:background="@drawable/bg_unread_highlight"
         tools:text="24" />
-
 
 </LinearLayout>

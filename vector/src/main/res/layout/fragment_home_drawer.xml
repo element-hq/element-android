@@ -29,28 +29,33 @@
 
         <TextView
             android:id="@+id/homeDrawerUsernameView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@id/homeDrawerHeaderSettingsView"
             app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderAvatarView"
             tools:text="@sample/matrix.json/data/displayName" />
 
         <TextView
             android:id="@+id/homeDrawerUserIdView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="17dp"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/homeDrawerHeaderSettingsView"
             app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView"
             tools:text="@sample/matrix.json/data/mxid" />
 
-        <!-- TODO Design Picto -->
         <ImageView
             android:id="@+id/homeDrawerHeaderSettingsView"
             android:layout_width="wrap_content"
@@ -62,8 +67,7 @@
             android:paddingEnd="16dp"
             android:paddingRight="16dp"
             android:paddingBottom="16dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_settings"
+            android:src="@drawable/ic_settings_x"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

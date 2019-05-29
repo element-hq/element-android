@@ -2,6 +2,8 @@
 
 
 <im.vector.riotredesign.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/stateView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,11 +14,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- Create several FABs to manage different icon size. maxImageSize cannot be set programmatically -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createRoomButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_fab_add"
+        app:maxImageSize="14dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createChatRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_fab_add_chat"
+        app:maxImageSize="34dp"
+        tools:layout_margin="66dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createGroupRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_fab_add_room"
+        app:maxImageSize="32dp"
+        tools:layout_margin="116dp" />
 
 </im.vector.riotredesign.core.platform.StateView>
