@@ -44,7 +44,7 @@
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@id/messageStartGuideline"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/full_names" />
+        tools:text="@sample/matrix.json/data/displayName" />
 
 
     <TextView

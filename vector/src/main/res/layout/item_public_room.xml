@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toStartOf="@id/itemPublicRoomMembersCount"
         app:layout_constraintStart_toEndOf="@id/itemPublicRoomAvatar"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem/random" />
+        tools:text="@sample/matrix.json/data/roomName" />
 
     <TextView
         android:id="@+id/itemPublicRoomMembersCount"
@@ -65,9 +65,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        app:bsv_use_flat_button="true"
         app:bsv_button_text="@string/join"
         app:bsv_loaded_image_src="@drawable/ic_tick"
+        app:bsv_use_flat_button="true"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

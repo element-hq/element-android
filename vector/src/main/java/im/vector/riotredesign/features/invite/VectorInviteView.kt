@@ -51,13 +51,13 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     fun render(sender: User, mode: Mode = Mode.LARGE) {
         if (mode == Mode.LARGE) {
-            updateLayoutParams { height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT }
+            updateLayoutParams { height = LayoutParams.MATCH_CONSTRAINT }
             AvatarRenderer.render(sender.avatarUrl, sender.userId, sender.displayName, inviteAvatarView)
             inviteIdentifierView.text = sender.userId
             inviteNameView.text = sender.displayName
             inviteLabelView.text = context.getString(R.string.send_you_invite)
         } else {
-            updateLayoutParams { height = ConstraintLayout.LayoutParams.WRAP_CONTENT }
+            updateLayoutParams { height = LayoutParams.WRAP_CONTENT }
             inviteAvatarView.visibility = View.GONE
             inviteIdentifierView.visibility = View.GONE
             inviteNameView.visibility = View.GONE

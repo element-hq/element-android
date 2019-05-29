@@ -25,6 +25,6 @@
         android:textColor="@color/slate_grey"
         android:textSize="14sp"
         android:textStyle="italic"
-        tools:text="Jhon doe changed their avatar" />
+        tools:text="John doe changed their avatar" />
 
 </LinearLayout>

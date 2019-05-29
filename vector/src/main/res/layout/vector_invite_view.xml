@@ -22,25 +22,29 @@
 
     <TextView
         android:id="@+id/inviteNameView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="40dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:textAppearance="@style/TextAppearance.Vector.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inviteAvatarView"
-        tools:text="Matthew" />
+        tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
         android:id="@+id/inviteIdentifierView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:textAppearance="@style/TextAppearance.Vector.Subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inviteNameView"
-        tools:text=" @matthew:matrix.org" />
+        tools:text="@sample/matrix.json/data/mxid" />
 
     <TextView
         android:id="@+id/inviteLabelView"

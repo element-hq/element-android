@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/roomPreviewNoPreviewRoot"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/roomPreviewNoPreviewRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -45,7 +45,7 @@
                     android:textAppearance="@style/TextAppearance.Vector.Title"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    tools:text="Matrix HQ" />
+                    tools:text="@sample/matrix.json/data/roomName" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewTopic"
@@ -55,7 +55,7 @@
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.Vector.Subtitle"
                     android:textSize="15sp"
-                    tools:text="Welcome to Matrix HQ! Here is the rest of the room topic…" />
+                    tools:text="@sample/matrix.json/data/roomTopic" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewLabel"
@@ -83,14 +83,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginBottom="@dimen/layout_vertical_margin"
                     android:minWidth="120dp"
                     app:bsv_button_text="@string/join"
                     app:bsv_loaded_image_src="@drawable/ic_tick"
-                    app:bsv_use_flat_button="false"
-                    app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator" />
+                    app:bsv_use_flat_button="false" />
 
             </LinearLayout>
 
