@@ -95,17 +95,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         createGroupRoomButton.setOnClickListener {
             navigator.openRoomDirectory()
         }
-    }
 
-    private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-        val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
-        epoxyRecyclerView.layoutManager = layoutManager
-        epoxyRecyclerView.itemAnimator = RoomListAnimator()
-        roomController.callback = this
-        roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
-        stateView.contentView = epoxyRecyclerView
-        epoxyRecyclerView.setController(roomController)
         // Hide FAB when list is scrolling
         epoxyRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -122,6 +112,17 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
                 }
             }
         })
+    }
+
+    private fun setupRecyclerView() {
+        val layoutManager = LinearLayoutManager(context)
+        val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
+        epoxyRecyclerView.layoutManager = layoutManager
+        epoxyRecyclerView.itemAnimator = RoomListAnimator()
+        roomController.callback = this
+        roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
+        stateView.contentView = epoxyRecyclerView
+        epoxyRecyclerView.setController(roomController)
     }
 
     private val showFabRunnable = Runnable {

@@ -22,11 +22,11 @@
 
     <TextView
         android:id="@+id/inviteNameView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:paddingStart="@dimen/layout_horizontal_margin"
+        android:paddingEnd="@dimen/layout_horizontal_margin"
         android:textAppearance="@style/TextAppearance.Vector.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,11 +35,11 @@
 
     <TextView
         android:id="@+id/inviteIdentifierView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:paddingStart="@dimen/layout_horizontal_margin"
+        android:paddingEnd="@dimen/layout_horizontal_margin"
         android:textAppearance="@style/TextAppearance.Vector.Subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
