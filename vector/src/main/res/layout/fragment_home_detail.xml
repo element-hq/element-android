@@ -60,6 +60,7 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:background="#FFFFFF"
+        app:itemIconSize="20dp"
         app:itemIconTint="@color/home_bottom_nav_view_tint"
         app:itemTextColor="@color/home_bottom_nav_view_tint"
         app:labelVisibilityMode="unlabeled"

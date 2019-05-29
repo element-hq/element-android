@@ -21,7 +21,9 @@ import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
@@ -40,6 +42,8 @@ data class RoomListParams(
 
 
 class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
+
+    lateinit var fabButton: FloatingActionButton
 
     enum class DisplayMode(@StringRes val titleRes: Int) {
         HOME(R.string.bottom_action_home),
@@ -63,8 +67,8 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setupRecyclerView()
         setupCreateRoomButton()
+        setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.openRoomLiveData.observeEvent(this) {
             navigator.openRoom(it)
@@ -72,14 +76,20 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
     }
 
     private fun setupCreateRoomButton() {
-        createRoomButton.isVisible = roomListParams.displayMode == DisplayMode.HOME
-        createChatRoomButton.isVisible = roomListParams.displayMode == DisplayMode.PEOPLE
-        createGroupRoomButton.isVisible = roomListParams.displayMode == DisplayMode.ROOMS
+        fabButton = when (roomListParams.displayMode) {
+            DisplayMode.HOME   -> createRoomButton
+            DisplayMode.PEOPLE -> createChatRoomButton
+            else               -> createGroupRoomButton
+        }
+
+        fabButton.isVisible = true
 
         createRoomButton.setOnClickListener {
+            // TODO Is it the expected action?
             navigator.openRoomDirectory()
         }
         createChatRoomButton.setOnClickListener {
+            // TODO Is it the expected action?
             navigator.openRoomDirectory()
         }
         createGroupRoomButton.setOnClickListener {
@@ -96,6 +106,26 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
+        // Hide FAB when list is scrolling
+        epoxyRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                fabButton.removeCallbacks(showFabRunnable)
+
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE     -> {
+                        fabButton.postDelayed(showFabRunnable, 1000)
+                    }
+                    RecyclerView.SCROLL_STATE_DRAGGING,
+                    RecyclerView.SCROLL_STATE_SETTLING -> {
+                        fabButton.hide()
+                    }
+                }
+            }
+        })
+    }
+
+    private val showFabRunnable = Runnable {
+        fabButton.show()
     }
 
     private fun renderState(state: RoomListViewState) {

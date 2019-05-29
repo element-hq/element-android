@@ -22,7 +22,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_fab_add"
-        app:maxImageSize="14dp" />
+        android:visibility="gone"
+        app:maxImageSize="14dp"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createChatRoomButton"
@@ -32,8 +34,10 @@
         android:layout_margin="16dp"
         android:scaleType="center"
         android:src="@drawable/ic_fab_add_chat"
+        android:visibility="gone"
         app:maxImageSize="34dp"
-        tools:layout_margin="66dp" />
+        tools:layout_margin="66dp"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createGroupRoomButton"
@@ -43,7 +47,9 @@
         android:layout_margin="16dp"
         android:scaleType="center"
         android:src="@drawable/ic_fab_add_room"
+        android:visibility="gone"
         app:maxImageSize="32dp"
-        tools:layout_margin="116dp" />
+        tools:layout_margin="116dp"
+        tools:visibility="visible" />
 
 </im.vector.riotredesign.core.platform.StateView>
