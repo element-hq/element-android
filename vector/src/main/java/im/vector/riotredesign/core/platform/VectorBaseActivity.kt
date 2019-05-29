@@ -294,7 +294,11 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
      * ========================================================================================== */
 
     fun notImplemented(message: String = "") {
-        toast(getString(R.string.not_implemented) + message.takeIf { message.isNotBlank() }?.let { ": $it" })
+        if (message.isNotBlank()) {
+            toast(getString(R.string.not_implemented) + ": $message")
+        } else {
+            toast(getString(R.string.not_implemented))
+        }
     }
 
 }
