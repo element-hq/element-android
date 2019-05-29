@@ -64,7 +64,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         bindScope(getOrCreateScope(HomeModule.HOME_SCOPE))
         homeNavigator.activity = this
         drawerLayout.addDrawerListener(drawerListener)
-        if (savedInstanceState == null) {
+        if (isFirstCreation()) {
             val homeDrawerFragment = HomeDrawerFragment.newInstance()
             val loadingDetail = LoadingFragment.newInstance()
             replaceFragment(loadingDetail, R.id.homeDetailFragmentContainer)

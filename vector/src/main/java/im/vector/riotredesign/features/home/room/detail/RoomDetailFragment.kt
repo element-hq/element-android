@@ -41,7 +41,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
@@ -64,7 +64,6 @@ import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.glide.GlideApp
-import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
@@ -147,6 +146,7 @@ class RoomDetailFragment :
         }
     }
 
+    private val roomDetailArgs: RoomDetailArgs by args()
     private val session by inject<Session>()
     private val glideRequests by lazy {
         GlideApp.with(this)
@@ -180,6 +180,7 @@ class RoomDetailFragment :
 
         roomDetailViewModel.nonBlockingPopAlert.observe(this, Observer { liveEvent ->
             liveEvent.getContentIfNotHandled()?.let {
+                // TODO Valere: what is the aim of `*` ?
                 val message = requireContext().getString(it.first, *it.second.toTypedArray())
                 showSnackWithMessage(message, Snackbar.LENGTH_LONG)
             }
@@ -478,8 +479,9 @@ class RoomDetailFragment :
 
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-        val roomId = (arguments?.get(MvRx.KEY_ARG) as? RoomDetailArgs)?.roomId
-        if (roomId.isNullOrBlank()) {
+        val roomId = roomDetailArgs.roomId
+        if (roomId.isBlank()) {
+            // Benoit to Valere: can this happen?
             Timber.e("Missing RoomId, cannot open bottomsheet")
             return false
         }
@@ -643,7 +645,7 @@ class RoomDetailFragment :
     }
 
     fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
-        val snack = Snackbar.make(view!!, message, Snackbar.LENGTH_SHORT)
+        val snack = Snackbar.make(view!!, message, duration)
         snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
         snack.show()
     }

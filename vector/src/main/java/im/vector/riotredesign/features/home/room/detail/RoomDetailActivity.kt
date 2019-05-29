@@ -35,7 +35,7 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
+        if (isFirstCreation()) {
             val roomDetailArgs: RoomDetailArgs = intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
                                                  ?: return
             val roomDetailFragment = RoomDetailFragment.newInstance(roomDetailArgs)
