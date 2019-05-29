@@ -23,7 +23,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
-import im.vector.riotredesign.core.platform.CheckableFrameLayout
+import im.vector.riotredesign.core.platform.CheckableConstraintLayout
 import im.vector.riotredesign.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_group)
@@ -46,7 +46,7 @@ abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
     class Holder : VectorEpoxyHolder() {
         val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
         val groupNameView by bind<TextView>(R.id.groupNameView)
-        val rootView by bind<CheckableFrameLayout>(R.id.itemGroupLayout)
+        val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
     }
 
 }

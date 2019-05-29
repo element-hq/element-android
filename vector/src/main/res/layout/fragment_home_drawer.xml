@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,6 +20,8 @@
             android:id="@+id/homeDrawerHeaderAvatarView"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:layout_marginStart="@dimen/layout_horizontal_margin"
+            android:layout_marginLeft="@dimen/layout_horizontal_margin"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,33 +31,41 @@
             android:id="@+id/homeDrawerUsernameView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:textColor="@android:color/white"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderAvatarView"
-            tools:text="@tools:sample/full_names" />
+            tools:text="@sample/matrix.json/data/displayName" />
 
         <TextView
             android:id="@+id/homeDrawerUserIdView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="17dp"
             android:textColor="@android:color/white"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/homeDrawerUsernameView"
+            app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView"
-            tools:text="@tools:sample/full_names" />
+            tools:text="@sample/matrix.json/data/mxid" />
 
+        <!-- TODO Design Picto -->
         <ImageView
             android:id="@+id/homeDrawerHeaderSettingsView"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="6dp"
-            android:scaleType="fitCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
+            android:paddingStart="8dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp"
+            android:scaleType="center"
             android:src="@drawable/ic_settings"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -64,7 +73,7 @@
         android:id="@+id/homeDrawerGroupListContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/white"
+        android:background="#FAFAFA"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

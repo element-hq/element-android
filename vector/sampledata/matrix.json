@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "displayName": "benoit",
+      "mxid": "@benoit:matrix.org",
+      "message": "Hello!"
+    },
+    {
+      "displayName": "ganfra",
+      "mxid": "@ganfra:matrix.org",
+      "message": "How are you?"
+    },
+    {
+      "displayName": "Manu",
+      "mxid": "@manu:matrix.org",
+      "message": "Great weather today!"
+    },
+    {
+      "displayName": "Giom",
+      "mxid": "@giom:matrix.org",
+      "message": "Let's do a picnic"
+    },
+    {
+      "displayName": "Nad",
+      "mxid": "@nadonomy:matrix.org",
+      "message": "Yes, great idea"
+    }
+  ]
+}
