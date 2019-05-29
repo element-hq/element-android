@@ -62,19 +62,19 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     private fun update(newState: State) {
         when (newState) {
-            is StateView.State.Content -> {
+            is State.Content -> {
                 progressBar.visibility = View.INVISIBLE
                 errorView.visibility = View.INVISIBLE
                 emptyView.visibility = View.INVISIBLE
                 contentView?.visibility = View.VISIBLE
             }
-            is StateView.State.Loading -> {
+            is State.Loading -> {
                 progressBar.visibility = View.VISIBLE
                 errorView.visibility = View.INVISIBLE
                 emptyView.visibility = View.INVISIBLE
                 contentView?.visibility = View.INVISIBLE
             }
-            is StateView.State.Empty   -> {
+            is State.Empty   -> {
                 progressBar.visibility = View.INVISIBLE
                 errorView.visibility = View.INVISIBLE
                 emptyView.visibility = View.VISIBLE
@@ -85,7 +85,7 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                     contentView!!.visibility = View.INVISIBLE
                 }
             }
-            is StateView.State.Error   -> {
+            is State.Error   -> {
                 progressBar.visibility = View.INVISIBLE
                 errorView.visibility = View.VISIBLE
                 emptyView.visibility = View.INVISIBLE

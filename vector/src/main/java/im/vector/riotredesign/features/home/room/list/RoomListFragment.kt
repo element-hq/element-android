@@ -19,12 +19,14 @@ package im.vector.riotredesign.features.home.room.list
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
@@ -149,17 +151,38 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
     }
 
     private fun renderEmptyState(allRooms: List<RoomSummary>?) {
-        val hasNoRoom = allRooms.isNullOrEmpty()
+        val hasNoRoom = allRooms
+                ?.filter {
+                    it.membership == Membership.JOIN || it.membership == Membership.INVITE
+                }
+                .isNullOrEmpty()
         val emptyState = when (roomListParams.displayMode) {
             DisplayMode.HOME   -> {
                 if (hasNoRoom) {
-                    StateView.State.Empty(getString(R.string.room_list_catchup_welcome_title), null, getString(R.string.room_list_catchup_welcome_body))
+                    StateView.State.Empty(
+                            getString(R.string.room_list_catchup_welcome_title),
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_catchup),
+                            getString(R.string.room_list_catchup_welcome_body)
+                    )
                 } else {
-                    StateView.State.Empty(getString(R.string.room_list_catchup_empty_title), null, getString(R.string.room_list_catchup_empty_body))
+                    StateView.State.Empty(
+                            getString(R.string.room_list_catchup_empty_title),
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
+                            getString(R.string.room_list_catchup_empty_body))
                 }
             }
-            DisplayMode.PEOPLE -> StateView.State.Empty()
-            DisplayMode.ROOMS  -> StateView.State.Empty()
+            DisplayMode.PEOPLE ->
+                StateView.State.Empty(
+                        getString(R.string.room_list_people_empty_title),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_chat),
+                        getString(R.string.room_list_people_empty_body)
+                )
+            DisplayMode.ROOMS  ->
+                StateView.State.Empty(
+                        getString(R.string.room_list_rooms_empty_title),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
+                        getString(R.string.room_list_rooms_empty_body)
+                )
         }
         stateView.state = emptyState
     }
