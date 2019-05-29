@@ -18,12 +18,10 @@ package im.vector.matrix.android.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.session.room.EventRelationExtractor
-import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFactory
@@ -60,8 +58,7 @@ internal class TimelineTest : InstrumentedTest {
 
     private fun createTimeline(initialEventId: String? = null): Timeline {
         val taskExecutor = TaskExecutor(testCoroutineDispatchers)
-        val erau = EventRelationsAggregationUpdater(Credentials("", "", "", null, null))
-        val tokenChunkEventPersistor = TokenChunkEventPersistor(monarchy, erau)
+        val tokenChunkEventPersistor = TokenChunkEventPersistor(monarchy)
         val paginationTask = FakePaginationTask(tokenChunkEventPersistor)
         val getContextOfEventTask = FakeGetContextOfEventTask(tokenChunkEventPersistor)
         val roomMemberExtractor = SenderRoomMemberExtractor(ROOM_ID)

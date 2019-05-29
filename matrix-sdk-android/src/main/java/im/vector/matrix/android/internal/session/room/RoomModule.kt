@@ -17,10 +17,6 @@
 package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.internal.session.DefaultSession
-import im.vector.matrix.android.internal.session.room.relation.DefaultFindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuickReactionTask
-import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
@@ -35,6 +31,10 @@ import im.vector.matrix.android.internal.session.room.prune.DefaultPruneEventTas
 import im.vector.matrix.android.internal.session.room.prune.PruneEventTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultFindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
@@ -57,7 +57,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            TokenChunkEventPersistor(get(), get())
+            TokenChunkEventPersistor(get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -109,7 +109,11 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultPruneEventTask(get(), get()) as PruneEventTask
+            DefaultPruneEventTask(get()) as PruneEventTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultEventRelationsAggregationTask(get()) as EventRelationsAggregationTask
         }
 
     }

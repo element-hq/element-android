@@ -18,21 +18,37 @@ package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
 import android.text.TextUtils
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.*
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.internal.database.helper.addSendingEvent
+import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.util.StringProvider
+import im.vector.matrix.android.internal.util.tryTransactionAsync
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 
+/**
+ * Creates local echo of events for room events.
+ * A local echo is an event that is persisted even if not yet sent to the server,
+ * in an optimistic way (as if the server as responded immediately). Local echo are using a local id,
+ * (the transaction ID), this id is used when receiving an event from a sync to check if this event
+ * is matching an existing local echo.
+ *
+ * The transactionID is used as loc
+ */
 internal class LocalEchoEventFactory(private val credentials: Credentials, private val stringProvider: StringProvider) {
 
     fun createTextEvent(roomId: String, msgType: String, text: String, autoMarkdown: Boolean): Event {
@@ -41,13 +57,16 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
             val document = parser.parse(text)
             val renderer = HtmlRenderer.builder().build()
             val htmlText = renderer.render(document)
-            if (!TextUtils.equals(text, htmlText)) {
+            if (isFormattedTextPertinent(text, htmlText)) { //FIX that
                 return createFormattedTextEvent(roomId, text, htmlText)
             }
         }
         val content = MessageTextContent(type = msgType, body = text)
         return createEvent(roomId, content)
     }
+
+    private fun isFormattedTextPertinent(text: String, htmlText: String?) =
+            text != htmlText && htmlText != "<p>$text</p>\n"
 
     fun createFormattedTextEvent(roomId: String, text: String, formattedText: String): Event {
         val content = MessageTextContent(
@@ -71,7 +90,7 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
             val document = parser.parse(newBodyText)
             val renderer = HtmlRenderer.builder().build()
             val htmlText = renderer.render(document)
-            if (!TextUtils.equals(newBodyText, htmlText)) {
+            if (isFormattedTextPertinent(newBodyText, htmlText)) {
                 newContent = MessageTextContent(
                         type = MessageType.MSGTYPE_TEXT,
                         format = MessageType.FORMAT_MATRIX_HTML,
@@ -107,14 +126,16 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
                         reaction
                 )
         )
+        val localId = dummyEventId(roomId)
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 sender = credentials.userId,
-                eventId = dummyEventId(roomId),
+                eventId = localId,
                 type = EventType.REACTION,
-                content = content.toContent()
-        )
+                content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localId))
+
     }
 
 
@@ -196,13 +217,15 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
     }
 
     private fun createEvent(roomId: String, content: Any? = null): Event {
+        val localID = dummyEventId(roomId)
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 sender = credentials.userId,
-                eventId = dummyEventId(roomId),
+                eventId = localID,
                 type = EventType.MESSAGE,
-                content = content.toContent()
+                content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localID)
         )
     }
 
@@ -211,7 +234,7 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
     }
 
     private fun dummyEventId(roomId: String): String {
-        return roomId + "-" + dummyOriginServerTs()
+        return "m.${txNCounter++}"
     }
 
     fun createReplyTextEvent(roomId: String, eventReplied: Event, replyText: String): Event? {
@@ -284,5 +307,50 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
 
         }
 
+    }
+
+    /*
+     * {
+        "content": {
+            "reason": "Spamming"
+            },
+            "event_id": "$143273582443PhrSn:domain.com",
+            "origin_server_ts": 1432735824653,
+            "redacts": "$fukweghifu23:localhost",
+            "room_id": "!jEsUZKDJdhlrceRyVU:domain.com",
+            "sender": "@example:domain.com",
+            "type": "m.room.redaction",
+            "unsigned": {
+            "age": 1234
+        }
+    }
+     */
+    fun createRedactEvent(roomId: String, eventId: String, reason: String?): Event {
+        val localID = dummyEventId(roomId)
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                sender = credentials.userId,
+                eventId = localID,
+                type = EventType.REDACTION,
+                redacts = eventId,
+                content = reason?.let { mapOf("reason" to it).toContent() },
+                unsignedData = UnsignedData(age = null, transactionId = localID)
+        )
+    }
+
+    fun saveLocalEcho(monarchy: Monarchy, event: Event) {
+        monarchy.tryTransactionAsync { realm ->
+            val roomEntity = RoomEntity.where(realm, roomId = event.roomId!!).findFirst()
+                    ?: return@tryTransactionAsync
+            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = event.roomId)
+                    ?: return@tryTransactionAsync
+
+            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
+        }
+    }
+
+    companion object {
+        var txNCounter = System.currentTimeMillis()
     }
 }

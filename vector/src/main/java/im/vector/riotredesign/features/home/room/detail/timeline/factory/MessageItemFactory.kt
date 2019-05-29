@@ -90,7 +90,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 avatarUrl = avatarUrl,
                 memberName = formattedMemberName,
                 showInformation = showInformation,
-                orderedReactionList = event.annotations?.reactionsSummary?.map { Triple(it.key, it.count, it.addedByMe) },
+                orderedReactionList = event.annotations?.reactionsSummary?.map {
+                    ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
+                },
                 hasBeenEdited = hasBeenEdited
         )
 

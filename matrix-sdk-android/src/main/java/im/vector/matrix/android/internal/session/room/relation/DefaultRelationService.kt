@@ -15,12 +15,12 @@
  */
 package im.vector.matrix.android.internal.session.room.relation
 
-import androidx.work.*
+import androidx.work.OneTimeWorkRequest
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -30,19 +30,14 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
+import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import im.vector.matrix.android.internal.util.tryTransactionAsync
-import java.util.concurrent.TimeUnit
+import timber.log.Timber
 
-private const val REACTION_WORK = "REACTION_WORK"
-private const val BACKOFF_DELAY = 10_000L
-
-private val WORK_CONSTRAINTS = Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
 
 internal class DefaultRelationService(private val roomId: String,
                                       private val eventFactory: LocalEchoEventFactory,
@@ -55,28 +50,22 @@ internal class DefaultRelationService(private val roomId: String,
 
     override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
         val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
-//                .also {
-//            //saveLocalEcho(it)
-//        }
+                .also {
+                    saveLocalEcho(it)
+                }
         val sendRelationWork = createSendRelationWork(event)
-        WorkManager.getInstance()
-                .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, sendRelationWork)
-                .enqueue()
+        TimelineSendEventWorkCommon.postWork(roomId, sendRelationWork)
         return CancelableWork(sendRelationWork.id)
     }
 
 
     private fun createSendRelationWork(event: Event): OneTimeWorkRequest {
-        //TODO use the new API to send relation (for now use regular send)
         val sendContentWorkerParams = SendEventWorker.Params(
                 roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
-        return OneTimeWorkRequestBuilder<SendEventWorker>()
-                .setConstraints(WORK_CONSTRAINTS)
-                .setInputData(sendWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
-                .build()
+        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
+
     }
 
     override fun undoReaction(reaction: String, targetEventId: String, myUserId: String)/*: Cancelable*/ {
@@ -91,11 +80,19 @@ internal class DefaultRelationService(private val roomId: String,
                 .enableRetry()
                 .dispatchTo(object : MatrixCallback<FindReactionEventForUndoTask.Result> {
                     override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
+                        if (data.redactEventId == null) {
+                            Timber.w("Cannot find reaction to undo (not yet synced?)")
+                            //TODO?
+                        }
                         data.redactEventId?.let { toRedact ->
-                            val redactWork = createRedactEventWork(toRedact, null)
-                            WorkManager.getInstance()
-                                    .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, redactWork)
-                                    .enqueue()
+
+                            val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null).also {
+                                saveLocalEcho(it)
+                            }
+                            val redactWork = createRedactEventWork(redactEvent, toRedact, null)
+
+                            TimelineSendEventWorkCommon.postWork(roomId, redactWork)
+
                         }
                     }
                 })
@@ -119,10 +116,11 @@ internal class DefaultRelationService(private val roomId: String,
                     override fun onSuccess(data: UpdateQuickReactionTask.Result) {
                         data.reactionToAdd?.also { sendReaction(it, targetEventId) }
                         data.reactionToRedact.forEach {
-                            val redactWork = createRedactEventWork(it, null)
-                            WorkManager.getInstance()
-                                    .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, redactWork)
-                                    .enqueue()
+                            val redactEvent = eventFactory.createRedactEvent(roomId, it, null).also {
+                                saveLocalEcho(it)
+                            }
+                            val redactWork = createRedactEventWork(redactEvent, it, null)
+                            TimelineSendEventWorkCommon.postWork(roomId, redactWork)
                         }
                     }
                 })
@@ -133,48 +131,26 @@ internal class DefaultRelationService(private val roomId: String,
         return "${roomId}_$identifier"
     }
 
-//    private fun saveLocalEcho(event: Event) {
-//        monarchy.tryTransactionAsync { realm ->
-//            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-//                    ?: return@tryTransactionAsync
-//            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-//                    ?: return@tryTransactionAsync
-//
-//            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
-//        }
-//    }
-
     //TODO duplicate with send service?
-    private fun createRedactEventWork(eventId: String, reason: String?): OneTimeWorkRequest {
+    private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
 
-        //TODO create local echo of m.room.redaction event?
-
-        val sendContentWorkerParams = RedactEventWorker.Params(
+        val sendContentWorkerParams = RedactEventWorker.Params(localEvent.eventId!!,
                 roomId, eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-
-        return OneTimeWorkRequestBuilder<RedactEventWorker>()
-                .setConstraints(WORK_CONSTRAINTS)
-                .setInputData(redactWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
-                .build()
+        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
 
     override fun editTextMessage(targetEventId: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String): Cancelable {
-        val event = eventFactory.createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
+        val event = eventFactory.createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, MessageType.MSGTYPE_TEXT, compatibilityBodyText).also {
+            saveLocalEcho(it)
+        }
         val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         //TODO use relation API?
-        val workRequest = OneTimeWorkRequestBuilder<SendEventWorker>()
-                .setConstraints(WORK_CONSTRAINTS)
-                .setInputData(sendWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
-                .build()
 
-        WorkManager.getInstance()
-                .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, workRequest)
-                .enqueue()
+        val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
+        TimelineSendEventWorkCommon.postWork(roomId, workRequest)
         return CancelableWork(workRequest.id)
 
     }
@@ -186,18 +162,19 @@ internal class DefaultRelationService(private val roomId: String,
         } ?: return null
         val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        val workRequest = OneTimeWorkRequestBuilder<SendEventWorker>()
-                .setConstraints(WORK_CONSTRAINTS)
-                .setInputData(sendWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
-                .build()
 
-        WorkManager.getInstance()
-                .beginUniqueWork(buildWorkIdentifier(REACTION_WORK), ExistingWorkPolicy.APPEND, workRequest)
-                .enqueue()
+
+        val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
+        TimelineSendEventWorkCommon.postWork(roomId, workRequest)
         return CancelableWork(workRequest.id)
     }
 
+    /**
+     * Saves the event in database as a local echo.
+     * SendState is set to UNSENT and it's added to a the sendingTimelineEvents list of the room.
+     * The sendingTimelineEvents is checked on new sync and will remove the local echo if an event with
+     * the same transaction id is received (in unsigned data)
+     */
     private fun saveLocalEcho(event: Event) {
         monarchy.tryTransactionAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
