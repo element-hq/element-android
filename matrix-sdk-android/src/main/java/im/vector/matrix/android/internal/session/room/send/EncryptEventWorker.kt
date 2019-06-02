@@ -44,11 +44,11 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.failure()
+                     ?: return Result.success()
 
         val localEvent = params.event
         if (localEvent.eventId == null) {
-            return Result.failure()
+            return Result.success()
         }
 
         // TODO Better async handling
@@ -78,7 +78,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         val safeResult = result
         // TODO Update local echo
         return if (error != null) {
-            Result.failure() // TODO Pass error!!)
+            Result.success() // TODO Pass error!!)
         } else if (safeResult != null) {
             val encryptedEvent = localEvent.copy(
                     type = safeResult.mEventType,
@@ -88,7 +88,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             Result.success(WorkerParamsFactory.toData(nextWorkerParams))
 
         } else {
-            Result.failure()
+            Result.success()
         }
     }
 }

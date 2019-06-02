@@ -33,27 +33,27 @@ import timber.log.Timber
 import java.util.*
 
 // Legacy name: MXDeviceList
-internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
-                                 private val mOlmDevice: MXOlmDevice,
-                                 private val mSyncTokenStore: SyncTokenStore,
-                                 private val mCredentials: Credentials,
-                                 private val mDownloadKeysForUsersTask: DownloadKeysForUsersTask,
-                                 private val mTaskExecutor: TaskExecutor) {
+internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
+                                 private val olmDevice: MXOlmDevice,
+                                 private val syncTokenStore: SyncTokenStore,
+                                 private val credentials: Credentials,
+                                 private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
+                                 private val taskExecutor: TaskExecutor) {
 
     // keys in progress
-    private val mUserKeyDownloadsInProgress = HashSet<String>()
+    private val userKeyDownloadsInProgress = HashSet<String>()
 
     // HS not ready for retry
-    private val mNotReadyToRetryHS = HashSet<String>()
+    private val notReadyToRetryHS = HashSet<String>()
 
     // indexed by UserId
-    private val mPendingDownloadKeysRequestToken = HashMap<String, String>()
+    private val pendingDownloadKeysRequestToken = HashMap<String, String>()
 
     // pending queues list
-    private val mDownloadKeysQueues = ArrayList<DownloadKeysPromise>()
+    private val downloadKeysQueues = ArrayList<DownloadKeysPromise>()
 
     // tells if there is a download keys request in progress
-    private var mIsDownloadingKeys = false
+    private var isDownloadingKeys = false
 
     /**
      * Creator
@@ -78,7 +78,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
     init {
         var isUpdated = false
 
-        val deviceTrackingStatuses = mCryptoStore.getDeviceTrackingStatuses().toMutableMap()
+        val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
         for (userId in deviceTrackingStatuses.keys) {
             val status = deviceTrackingStatuses[userId]!!
 
@@ -90,7 +90,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
         }
 
         if (isUpdated) {
-            mCryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
+            cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
         }
     }
 
@@ -105,8 +105,8 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
 
         if (!TextUtils.isEmpty(userId) && userId.contains(":")) {
             try {
-                synchronized(mNotReadyToRetryHS) {
-                    res = !mNotReadyToRetryHS.contains(userId.substring(userId.lastIndexOf(":") + 1))
+                synchronized(notReadyToRetryHS) {
+                    res = !notReadyToRetryHS.contains(userId.substring(userId.lastIndexOf(":") + 1))
                 }
             } catch (e: Exception) {
                 Timber.e(e, "## canRetryKeysDownload() failed")
@@ -138,15 +138,15 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                 }
             }
 
-            synchronized(mUserKeyDownloadsInProgress) {
-                filteredUserIds.removeAll(mUserKeyDownloadsInProgress)
-                mUserKeyDownloadsInProgress.addAll(userIds)
+            synchronized(userKeyDownloadsInProgress) {
+                filteredUserIds.removeAll(userKeyDownloadsInProgress)
+                userKeyDownloadsInProgress.addAll(userIds)
                 // got some email addresses instead of matrix ids
-                mUserKeyDownloadsInProgress.removeAll(invalidUserIds)
+                userKeyDownloadsInProgress.removeAll(invalidUserIds)
                 userIds.removeAll(invalidUserIds)
             }
 
-            mDownloadKeysQueues.add(DownloadKeysPromise(userIds, callback))
+            downloadKeysQueues.add(DownloadKeysPromise(userIds, callback))
 
             return filteredUserIds
         } else {
@@ -158,8 +158,8 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
      * Clear the unavailable server lists
      */
     private fun clearUnavailableServersList() {
-        synchronized(mNotReadyToRetryHS) {
-            mNotReadyToRetryHS.clear()
+        synchronized(notReadyToRetryHS) {
+            notReadyToRetryHS.clear()
         }
     }
 
@@ -172,7 +172,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
     fun startTrackingDeviceList(userIds: List<String>?) {
         if (null != userIds) {
             var isUpdated = false
-            val deviceTrackingStatuses = mCryptoStore.getDeviceTrackingStatuses().toMutableMap()
+            val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
             for (userId in userIds) {
                 if (!deviceTrackingStatuses.containsKey(userId) || TRACKING_STATUS_NOT_TRACKED == deviceTrackingStatuses[userId]) {
@@ -183,7 +183,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
             }
 
             if (isUpdated) {
-                mCryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
+                cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
             }
         }
     }
@@ -196,7 +196,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
      */
     fun handleDeviceListsChanges(changed: List<String>?, left: List<String>?) {
         var isUpdated = false
-        val deviceTrackingStatuses = mCryptoStore.getDeviceTrackingStatuses().toMutableMap()
+        val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
         if (changed?.isNotEmpty() == true) {
             clearUnavailableServersList()
@@ -223,7 +223,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
         }
 
         if (isUpdated) {
-            mCryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
+            cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
         }
     }
 
@@ -232,7 +232,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
      * + update
      */
     fun invalidateAllDeviceLists() {
-        handleDeviceListsChanges(ArrayList(mCryptoStore.getDeviceTrackingStatuses().keys), null)
+        handleDeviceListsChanges(ArrayList(cryptoStore.getDeviceTrackingStatuses().keys), null)
     }
 
     /**
@@ -242,19 +242,19 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
      */
     private fun onKeysDownloadFailed(userIds: List<String>?) {
         if (null != userIds) {
-            synchronized(mUserKeyDownloadsInProgress) {
-                val deviceTrackingStatuses = mCryptoStore.getDeviceTrackingStatuses().toMutableMap()
+            synchronized(userKeyDownloadsInProgress) {
+                val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
                 for (userId in userIds) {
-                    mUserKeyDownloadsInProgress.remove(userId)
+                    userKeyDownloadsInProgress.remove(userId)
                     deviceTrackingStatuses.put(userId, TRACKING_STATUS_PENDING_DOWNLOAD)
                 }
 
-                mCryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
+                cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
             }
         }
 
-        mIsDownloadingKeys = false
+        isDownloadingKeys = false
     }
 
     /**
@@ -281,21 +281,21 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                     }
 
                     if (statusCode == 503) {
-                        synchronized(mNotReadyToRetryHS) {
-                            mNotReadyToRetryHS.add(k)
+                        synchronized(notReadyToRetryHS) {
+                            notReadyToRetryHS.add(k)
                         }
                     }
                 }
             }
         }
 
-        val deviceTrackingStatuses = mCryptoStore.getDeviceTrackingStatuses().toMutableMap()
+        val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
         if (null != userIds) {
-            if (mDownloadKeysQueues.size > 0) {
+            if (downloadKeysQueues.size > 0) {
                 val promisesToRemove = ArrayList<DownloadKeysPromise>()
 
-                for (promise in mDownloadKeysQueues) {
+                for (promise in downloadKeysQueues) {
                     promise.mPendingUserIdsList.removeAll(userIds)
 
                     if (promise.mPendingUserIdsList.size == 0) {
@@ -303,7 +303,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                         val usersDevicesInfoMap = MXUsersDevicesMap<MXDeviceInfo>()
 
                         for (userId in promise.mUserIdsList) {
-                            val devices = mCryptoStore.getUserDevices(userId)
+                            val devices = cryptoStore.getUserDevices(userId)
                             if (null == devices) {
                                 if (canRetryKeysDownload(userId)) {
                                     deviceTrackingStatuses.put(userId, TRACKING_STATUS_PENDING_DOWNLOAD)
@@ -336,17 +336,17 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                         promisesToRemove.add(promise)
                     }
                 }
-                mDownloadKeysQueues.removeAll(promisesToRemove)
+                downloadKeysQueues.removeAll(promisesToRemove)
             }
 
             for (userId in userIds) {
-                mUserKeyDownloadsInProgress.remove(userId)
+                userKeyDownloadsInProgress.remove(userId)
             }
 
-            mCryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
+            cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
         }
 
-        mIsDownloadingKeys = false
+        isDownloadingKeys = false
     }
 
     /**
@@ -372,14 +372,14 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                 downloadUsers.addAll(userIds)
             } else {
                 for (userId in userIds) {
-                    val status = mCryptoStore.getDeviceTrackingStatus(userId, TRACKING_STATUS_NOT_TRACKED)
+                    val status = cryptoStore.getDeviceTrackingStatus(userId, TRACKING_STATUS_NOT_TRACKED)
 
                     // downloading keys ->the keys download won't be triggered twice but the callback requires the dedicated keys
                     // not yet retrieved
-                    if (mUserKeyDownloadsInProgress.contains(userId) || TRACKING_STATUS_UP_TO_DATE != status && TRACKING_STATUS_UNREACHABLE_SERVER != status) {
+                    if (userKeyDownloadsInProgress.contains(userId) || TRACKING_STATUS_UP_TO_DATE != status && TRACKING_STATUS_UNREACHABLE_SERVER != status) {
                         downloadUsers.add(userId)
                     } else {
-                        val devices = mCryptoStore.getUserDevices(userId)
+                        val devices = cryptoStore.getUserDevices(userId)
 
                         // should always be true
                         if (null != devices) {
@@ -444,7 +444,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
         //    return
         //}
 
-        mIsDownloadingKeys = true
+        isDownloadingKeys = true
 
         // track the race condition while sending requests
         // we defines a tag for each request
@@ -452,11 +452,11 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
         val downloadToken = filteredUsers.hashCode().toString() + " " + System.currentTimeMillis()
 
         for (userId in filteredUsers) {
-            mPendingDownloadKeysRequestToken[userId] = downloadToken
+            pendingDownloadKeysRequestToken[userId] = downloadToken
         }
 
-        mDownloadKeysForUsersTask
-                .configureWith(DownloadKeysForUsersTask.Params(filteredUsers, mSyncTokenStore.getLastToken()))
+        downloadKeysForUsersTask
+                .configureWith(DownloadKeysForUsersTask.Params(filteredUsers, syncTokenStore.getLastToken()))
                 .dispatchTo(object : MatrixCallback<KeysQueryResponse> {
                     override fun onSuccess(data: KeysQueryResponse) {
                         CryptoAsyncHelper.getEncryptBackgroundHandler().post {
@@ -465,7 +465,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
 
                             for (userId in userIdsList) {
                                 // test if the response is the latest request one
-                                if (!TextUtils.equals(mPendingDownloadKeysRequestToken[userId], downloadToken)) {
+                                if (!TextUtils.equals(pendingDownloadKeysRequestToken[userId], downloadToken)) {
                                     Timber.e("## doKeyDownloadForUsers() : Another update in the queue for "
                                             + userId + " not marking up-to-date")
                                     filteredUsers.remove(userId)
@@ -486,12 +486,12 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                                             //}
 
                                             // Get the potential previously store device keys for this device
-                                            val previouslyStoredDeviceKeys = mCryptoStore.getUserDevice(deviceId, userId)
+                                            val previouslyStoredDeviceKeys = cryptoStore.getUserDevice(deviceId, userId)
                                             val deviceInfo = mutableDevices[deviceId]
 
                                             // in some race conditions (like unit tests)
                                             // the self device must be seen as verified
-                                            if (TextUtils.equals(deviceInfo!!.deviceId, mCredentials.deviceId) && TextUtils.equals(userId, mCredentials.userId)) {
+                                            if (TextUtils.equals(deviceInfo!!.deviceId, credentials.deviceId) && TextUtils.equals(userId, credentials.userId)) {
                                                 deviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED
                                             }
 
@@ -514,11 +514,11 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
 
                                         // Update the store
                                         // Note that devices which aren't in the response will be removed from the stores
-                                        mCryptoStore.storeUserDevices(userId, mutableDevices)
+                                        cryptoStore.storeUserDevices(userId, mutableDevices)
                                     }
 
                                     // the response is the latest request one
-                                    mPendingDownloadKeysRequestToken.remove(userId)
+                                    pendingDownloadKeysRequestToken.remove(userId)
                                 }
                             }
 
@@ -532,12 +532,12 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
 
                             // test if the response is the latest request one
                             for (userId in userIdsList) {
-                                if (!TextUtils.equals(mPendingDownloadKeysRequestToken[userId], downloadToken)) {
+                                if (!TextUtils.equals(pendingDownloadKeysRequestToken[userId], downloadToken)) {
                                     Timber.e("## doKeyDownloadForUsers() : Another update in the queue for $userId not marking up-to-date")
                                     filteredUsers.remove(userId)
                                 } else {
                                     // the response is the latest request one
-                                    mPendingDownloadKeysRequestToken.remove(userId)
+                                    pendingDownloadKeysRequestToken.remove(userId)
                                 }
                             }
 
@@ -553,7 +553,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
                         callback?.onFailure(failure)
                     }
                 })
-                .executeBy(mTaskExecutor)
+                .executeBy(taskExecutor)
     }
 
     /**
@@ -619,7 +619,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
         var errorMessage: String? = null
 
         try {
-            mOlmDevice.verifySignature(signKey, deviceKeys.signalableJSONDictionary(), signature)
+            olmDevice.verifySignature(signKey, deviceKeys.signalableJSONDictionary(), signature)
             isVerified = true
         } catch (e: Exception) {
             errorMessage = e.message
@@ -658,7 +658,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
     fun refreshOutdatedDeviceLists() {
         val users = ArrayList<String>()
 
-        val deviceTrackingStatuses = mCryptoStore.getDeviceTrackingStatuses().toMutableMap()
+        val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
         for (userId in deviceTrackingStatuses.keys) {
             if (TRACKING_STATUS_PENDING_DOWNLOAD == deviceTrackingStatuses[userId]) {
@@ -670,7 +670,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
             return
         }
 
-        if (mIsDownloadingKeys) {
+        if (isDownloadingKeys) {
             // request already in progress - do nothing. (We will automatically
             // make another request if there are more users with outdated
             // device lists when the current request completes).
@@ -686,7 +686,7 @@ internal class DeviceListManager(private val mCryptoStore: IMXCryptoStore,
             }
         }
 
-        mCryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
+        cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
 
         doKeyDownloadForUsers(users, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {

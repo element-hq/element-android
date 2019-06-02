@@ -67,9 +67,9 @@ internal class MXMegolmDecryption(private val mCredentials: Credentials,
     }
 
     @Throws(MXDecryptionException::class)
+
     private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult? {
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()!!
-
         if (TextUtils.isEmpty(encryptedEventContent.senderKey) || TextUtils.isEmpty(encryptedEventContent.sessionId) || TextUtils.isEmpty(encryptedEventContent.ciphertext)) {
             throw MXDecryptionException(MXCryptoError(MXCryptoError.MISSING_FIELDS_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_FIELDS_REASON))

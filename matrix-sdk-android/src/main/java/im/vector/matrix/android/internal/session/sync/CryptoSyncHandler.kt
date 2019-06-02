@@ -49,7 +49,7 @@ internal class CryptoSyncHandler(private val cryptoManager: CryptoManager,
     }
 
     fun onSyncCompleted(syncResponse: SyncResponse, fromToken: String?, catchingUp: Boolean) {
-        cryptoManager.onSyncCompleted(syncResponse, fromToken, catchingUp)
+        cryptoManager.onSyncCompleted(syncResponse)
     }
 
 

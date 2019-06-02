@@ -57,11 +57,8 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
 import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
-import im.vector.matrix.android.internal.crypto.tasks.GetKeyChangesTask
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
@@ -80,74 +77,71 @@ import timber.log.Timber
 import java.util.*
 
 /**
- * A `MXCrypto` class instance manages the end-to-end crypto for a MXSession instance.
+ * A `CryptoService` class instance manages the end-to-end crypto for a session.
  *
  *
- * Messages posted by the user are automatically redirected to MXCrypto in order to be encrypted
+ * Messages posted by the user are automatically redirected to CryptoService in order to be encrypted
  * before sending.
- * In the other hand, received events goes through MXCrypto for decrypting.
- * MXCrypto maintains all necessary keys and their sharing with other devices required for the crypto.
+ * In the other hand, received events goes through CryptoService for decrypting.
+ * CryptoService maintains all necessary keys and their sharing with other devices required for the crypto.
  * Specially, it tracks all room membership changes events in order to do keys updates.
  */
 internal class CryptoManager(
         // The credentials,
-        private val mCredentials: Credentials,
-        private val mMyDeviceInfoHolder: MyDeviceInfoHolder,
+        private val credentials: Credentials,
+        private val myDeviceInfoHolder: MyDeviceInfoHolder,
         // the crypto store
-        private val mCryptoStore: IMXCryptoStore,
+        private val cryptoStore: IMXCryptoStore,
         // Olm device
-        private val mOlmDevice: MXOlmDevice,
+        private val olmDevice: MXOlmDevice,
         // Set of parameters used to configure/customize the end-to-end crypto.
-        private val mCryptoConfig: MXCryptoConfig = MXCryptoConfig(),
+        private val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
         // Device list manager
         private val deviceListManager: DeviceListManager,
         // The key backup service.
-        private val mKeysBackup: KeysBackup,
+        private val keysBackup: KeysBackup,
         //
-        private val mObjectSigner: ObjectSigner,
+        private val objectSigner: ObjectSigner,
         //
-        private val mOneTimeKeysUploader: OneTimeKeysUploader,
+        private val oneTimeKeysUploader: OneTimeKeysUploader,
         //
         private val roomDecryptorProvider: RoomDecryptorProvider,
         // The SAS verification service.
-        private val mSasVerificationService: DefaultSasVerificationService,
+        private val sasVerificationService: DefaultSasVerificationService,
         //
-        private val mIncomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
+        private val incomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
         //
-        private val mOutgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+        private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
         // Olm Manager
-        private val mOlmManager: OlmManager,
+        private val olmManager: OlmManager,
         // Actions
-        private val mSetDeviceVerificationAction: SetDeviceVerificationAction,
-        private val mMegolmSessionDataImporter: MegolmSessionDataImporter,
-        private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+        private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        private val megolmSessionDataImporter: MegolmSessionDataImporter,
+        private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         // Repository
-        private val mWarnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
-        private val mMXMegolmEncryptionFactory: MXMegolmEncryptionFactory,
-        private val mMXOlmEncryptionFactory: MXOlmEncryptionFactory,
+        private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
+        private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
+        private val olmEncryptionFactory: MXOlmEncryptionFactory,
         // Tasks
-        private val mClaimOneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
-        private val mDeleteDeviceTask: DeleteDeviceTask,
-        private val mGetDevicesTask: GetDevicesTask,
-        private val mGetKeyChangesTask: GetKeyChangesTask,
-        private val mSendToDeviceTask: SendToDeviceTask,
-        private val mSetDeviceNameTask: SetDeviceNameTask,
-        private val mUploadKeysTask: UploadKeysTask,
+        private val deleteDeviceTask: DeleteDeviceTask,
+        private val getDevicesTask: GetDevicesTask,
+        private val setDeviceNameTask: SetDeviceNameTask,
+        private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         // TaskExecutor
-        private val mTaskExecutor: TaskExecutor
+        private val taskExecutor: TaskExecutor
 ) : CryptoService {
 
     // MXEncrypting instance for each room.
-    private val mRoomEncryptors: MutableMap<String, IMXEncrypting> = HashMap()
+    private val roomEncryptors: MutableMap<String, IMXEncrypting> = HashMap()
 
     // the encryption is starting
-    private var mIsStarting: Boolean = false
+    private var isStarting: Boolean = false
 
     // tell if the crypto is started
-    private var mIsStarted: Boolean = false
+    private var isStarted: Boolean = false
 
     // TODO
     //private val mNetworkListener = object : IMXNetworkEventListener {
@@ -179,36 +173,36 @@ internal class CryptoManager(
     private val mInitializationCallbacks = ArrayList<MatrixCallback<Unit>>()
 
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
-        mSetDeviceNameTask
+        setDeviceNameTask
                 .configureWith(SetDeviceNameTask.Params(deviceId, deviceName))
                 .dispatchTo(callback)
-                .executeBy(mTaskExecutor)
+                .executeBy(taskExecutor)
     }
 
     override fun deleteDevice(deviceId: String, accountPassword: String, callback: MatrixCallback<Unit>) {
-        mDeleteDeviceTask
+        deleteDeviceTask
                 .configureWith(DeleteDeviceTask.Params(deviceId, accountPassword))
                 .dispatchTo(callback)
-                .executeBy(mTaskExecutor)
+                .executeBy(taskExecutor)
     }
 
     override fun getCryptoVersion(context: Context, longFormat: Boolean): String {
-        return if (longFormat) mOlmManager.getDetailedVersion(context) else mOlmManager.version
+        return if (longFormat) olmManager.getDetailedVersion(context) else olmManager.version
     }
 
     override fun getMyDevice(): MXDeviceInfo {
-        return mMyDeviceInfoHolder.myDevice
+        return myDeviceInfoHolder.myDevice
     }
 
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
-        mGetDevicesTask
+        getDevicesTask
                 .configureWith(Unit)
                 .dispatchTo(callback)
-                .executeBy(mTaskExecutor)
+                .executeBy(taskExecutor)
     }
 
     override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
-        return mCryptoStore.inboundGroupSessionsCount(onlyBackedUp)
+        return cryptoStore.inboundGroupSessionsCount(onlyBackedUp)
     }
 
     /**
@@ -218,7 +212,7 @@ internal class CryptoManager(
      * @return the tracking status
      */
     override fun getDeviceTrackingStatus(userId: String): Int {
-        return mCryptoStore.getDeviceTrackingStatus(userId, DeviceListManager.TRACKING_STATUS_NOT_TRACKED)
+        return cryptoStore.getDeviceTrackingStatus(userId, DeviceListManager.TRACKING_STATUS_NOT_TRACKED)
     }
 
     /**
@@ -227,7 +221,7 @@ internal class CryptoManager(
      * @return true if the crypto is started
      */
     fun isStarted(): Boolean {
-        return mIsStarted
+        return isStarted
     }
 
     /**
@@ -236,7 +230,7 @@ internal class CryptoManager(
      * @return true if the crypto is starting
      */
     fun isStarting(): Boolean {
-        return mIsStarting
+        return isStarting
     }
 
     /**
@@ -248,7 +242,7 @@ internal class CryptoManager(
      * @param isInitialSync true if it starts from an initial sync
      */
     fun start(isInitialSync: Boolean) {
-        if (mIsStarting) {
+        if (isStarting) {
             return
         }
 
@@ -261,16 +255,16 @@ internal class CryptoManager(
         //    return
         //}
 
-        mIsStarting = true
+        isStarting = true
 
         // Open the store
-        mCryptoStore.open()
+        cryptoStore.open()
 
         uploadDeviceKeys(object : MatrixCallback<KeysUploadResponse> {
             private fun onError() {
                 Handler().postDelayed({
                                           if (!isStarted()) {
-                                              mIsStarting = false
+                                              isStarting = false
                                               start(isInitialSync)
                                           }
                                       }, 1000)
@@ -278,33 +272,33 @@ internal class CryptoManager(
 
             override fun onSuccess(data: KeysUploadResponse) {
                 Timber.v("###########################################################")
-                Timber.v("uploadDeviceKeys done for " + mCredentials.userId)
-                Timber.v("  - device id  : " + mCredentials.deviceId)
-                Timber.v("  - ed25519    : " + mOlmDevice.deviceEd25519Key)
-                Timber.v("  - curve25519 : " + mOlmDevice.deviceCurve25519Key)
-                Timber.v("  - oneTimeKeys: " + mOneTimeKeysUploader.mLastPublishedOneTimeKeys)
+                Timber.v("uploadDeviceKeys done for " + credentials.userId)
+                Timber.v("  - device id  : " + credentials.deviceId)
+                Timber.v("  - ed25519    : " + olmDevice.deviceEd25519Key)
+                Timber.v("  - curve25519 : " + olmDevice.deviceCurve25519Key)
+                Timber.v("  - oneTimeKeys: " + oneTimeKeysUploader.mLastPublishedOneTimeKeys)
                 Timber.v("")
 
-                mOneTimeKeysUploader.maybeUploadOneTimeKeys(object : MatrixCallback<Unit> {
+                oneTimeKeysUploader.maybeUploadOneTimeKeys(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         // TODO
                         //if (null != mNetworkConnectivityReceiver) {
                         //    mNetworkConnectivityReceiver!!.removeEventListener(mNetworkListener)
                         //}
 
-                        mIsStarting = false
-                        mIsStarted = true
+                        isStarting = false
+                        isStarted = true
 
-                        mOutgoingRoomKeyRequestManager.start()
+                        outgoingRoomKeyRequestManager.start()
 
-                        mKeysBackup.checkAndStartKeysBackup()
+                        keysBackup.checkAndStartKeysBackup()
 
                         if (isInitialSync) {
                             // refresh the devices list for each known room members
                             deviceListManager.invalidateAllDeviceLists()
                             deviceListManager.refreshOutdatedDeviceLists()
                         } else {
-                            mIncomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+                            incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
                         }
                     }
 
@@ -326,58 +320,51 @@ internal class CryptoManager(
      * Close the crypto
      */
     fun close() {
-        mOlmDevice.release()
+        olmDevice.release()
 
-        mCryptoStore.close()
+        cryptoStore.close()
 
-        mOutgoingRoomKeyRequestManager.stop()
+        outgoingRoomKeyRequestManager.stop()
     }
 
     override fun isCryptoEnabled(): Boolean {
         // TODO Check that this test is correct
-        return mOlmDevice != null
+        return olmDevice != null
     }
 
     /**
      * @return the Keys backup Service
      */
     override fun getKeysBackupService(): KeysBackupService {
-        return mKeysBackup
+        return keysBackup
     }
 
     /**
      * @return the SasVerificationService
      */
     override fun getSasVerificationService(): SasVerificationService {
-        return mSasVerificationService
+        return sasVerificationService
     }
 
     /**
      * A sync response has been received
      *
      * @param syncResponse the syncResponse
-     * @param fromToken    the start sync token
-     * @param isCatchingUp true if there is a catch-up in progress.
      */
-    fun onSyncCompleted(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean) {
-        if (null != syncResponse.deviceLists) {
+    fun onSyncCompleted(syncResponse: SyncResponse) {
+        if (syncResponse.deviceLists != null) {
             deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
         }
-
-        if (null != syncResponse.deviceOneTimeKeysCount) {
+        if (syncResponse.deviceOneTimeKeysCount != null) {
             val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
-            mOneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
+            oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
         }
 
         if (isStarted()) {
             // Make sure we process to-device messages before generating new one-time-keys #2782
             deviceListManager.refreshOutdatedDeviceLists()
-        }
-
-        if (!isCatchingUp && isStarted()) {
-            mOneTimeKeysUploader.maybeUploadOneTimeKeys()
-
-            mIncomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+            oneTimeKeysUploader.maybeUploadOneTimeKeys()
+            incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
         }
     }
 
@@ -392,7 +379,7 @@ internal class CryptoManager(
         return if (!TextUtils.equals(algorithm, MXCRYPTO_ALGORITHM_MEGOLM) && !TextUtils.equals(algorithm, MXCRYPTO_ALGORITHM_OLM)) {
             // We only deal in olm keys
             null
-        } else mCryptoStore.deviceWithIdentityKey(senderKey)
+        } else cryptoStore.deviceWithIdentityKey(senderKey)
     }
 
     /**
@@ -403,7 +390,7 @@ internal class CryptoManager(
      */
     override fun getDeviceInfo(userId: String, deviceId: String?): MXDeviceInfo? {
         return if (!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(deviceId)) {
-            mCryptoStore.getUserDevice(deviceId!!, userId)
+            cryptoStore.getUserDevice(deviceId!!, userId)
         } else {
             null
         }
@@ -432,7 +419,7 @@ internal class CryptoManager(
         val userIds = devicesIdListByUserId.keys
 
         for (userId in userIds) {
-            val storedDeviceIDs = mCryptoStore.getUserDevices(userId)
+            val storedDeviceIDs = cryptoStore.getUserDevices(userId)
 
             // sanity checks
             if (null != storedDeviceIDs) {
@@ -451,7 +438,7 @@ internal class CryptoManager(
                 }
 
                 if (isUpdated) {
-                    mCryptoStore.storeUserDevices(userId, storedDeviceIDs)
+                    cryptoStore.storeUserDevices(userId, storedDeviceIDs)
                 }
             }
         }
@@ -468,7 +455,7 @@ internal class CryptoManager(
      * @param userId             the owner of the device
      */
     override fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String) {
-        mSetDeviceVerificationAction.handle(verificationStatus, deviceId, userId)
+        setDeviceVerificationAction.handle(verificationStatus, deviceId, userId)
     }
 
     /**
@@ -484,7 +471,7 @@ internal class CryptoManager(
     private fun setEncryptionInRoom(roomId: String, algorithm: String?, inhibitDeviceQuery: Boolean, membersId: List<String>): Boolean {
         // If we already have encryption in this room, we should ignore this event
         // (for now at least. Maybe we should alert the user somehow?)
-        val existingAlgorithm = mCryptoStore.getRoomAlgorithm(roomId)
+        val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
 
         if (!TextUtils.isEmpty(existingAlgorithm) && !TextUtils.equals(existingAlgorithm, algorithm)) {
             Timber.e("## setEncryptionInRoom() : Ignoring m.room.encryption event which requests a change of config in $roomId")
@@ -498,15 +485,15 @@ internal class CryptoManager(
             return false
         }
 
-        mCryptoStore.storeRoomAlgorithm(roomId, algorithm!!)
+        cryptoStore.storeRoomAlgorithm(roomId, algorithm!!)
 
         val alg: IMXEncrypting = when (algorithm) {
-            MXCRYPTO_ALGORITHM_MEGOLM -> mMXMegolmEncryptionFactory.instantiate(roomId)
-            else                      -> mMXOlmEncryptionFactory.instantiate(roomId)
+            MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.instantiate(roomId)
+            else                      -> olmEncryptionFactory.instantiate(roomId)
         }
 
-        synchronized(mRoomEncryptors) {
-            mRoomEncryptors.put(roomId, alg)
+        synchronized(roomEncryptors) {
+            roomEncryptors.put(roomId, alg)
         }
 
         // if encryption was not previously enabled in this room, we will have been
@@ -538,12 +525,12 @@ internal class CryptoManager(
     override fun isRoomEncrypted(roomId: String): Boolean {
         var res: Boolean
 
-        synchronized(mRoomEncryptors) {
-            res = mRoomEncryptors.containsKey(roomId)
+        synchronized(roomEncryptors) {
+            res = roomEncryptors.containsKey(roomId)
         }
 
         if (!res) {
-            res = !mCryptoStore.getRoomAlgorithm(roomId).isNullOrBlank()
+            res = !cryptoStore.getRoomAlgorithm(roomId).isNullOrBlank()
         }
 
         return res
@@ -553,7 +540,7 @@ internal class CryptoManager(
      * @return the stored device keys for a user.
      */
     override fun getUserDevices(userId: String): MutableList<MXDeviceInfo> {
-        val map = mCryptoStore.getUserDevices(userId)
+        val map = cryptoStore.getUserDevices(userId)
         return if (null != map) ArrayList(map.values) else ArrayList()
     }
 
@@ -568,15 +555,15 @@ internal class CryptoManager(
      */
     fun ensureOlmSessionsForDevices(devicesByUser: Map<String, List<MXDeviceInfo>>,
                                     callback: MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>>?) {
-        mEnsureOlmSessionsForDevicesAction.handle(devicesByUser, callback)
+        ensureOlmSessionsForDevicesAction.handle(devicesByUser, callback)
     }
 
     fun isEncryptionEnabledForInvitedUser(): Boolean {
-        return mCryptoConfig.mEnableEncryptionForInvitedMembers
+        return cryptoConfig.mEnableEncryptionForInvitedMembers
     }
 
     override fun getEncryptionAlgorithm(roomId: String): String? {
-        return mCryptoStore.getRoomAlgorithm(roomId)
+        return cryptoStore.getRoomAlgorithm(roomId)
     }
 
     /**
@@ -588,7 +575,7 @@ internal class CryptoManager(
      * @return true if we should encrypt messages for invited users.
      */
     override fun shouldEncryptForInvitedMembers(roomId: String): Boolean {
-        return mCryptoStore.shouldEncryptForInvitedMembers(roomId)
+        return cryptoStore.shouldEncryptForInvitedMembers(roomId)
     }
 
     /**
@@ -612,15 +599,15 @@ internal class CryptoManager(
         }
 
         val userIds = getRoomUserIds(roomId)
-        var alg = synchronized(mRoomEncryptors) {
-            mRoomEncryptors[roomId]
+        var alg = synchronized(roomEncryptors) {
+            roomEncryptors[roomId]
         }
         if (null == alg) {
             val algorithm = getEncryptionAlgorithm(roomId)
             if (null != algorithm) {
                 if (setEncryptionInRoom(roomId, algorithm, false, userIds)) {
-                    synchronized(mRoomEncryptors) {
-                        alg = mRoomEncryptors[roomId]
+                    synchronized(roomEncryptors) {
+                        alg = roomEncryptors[roomId]
                     }
                 }
             }
@@ -706,7 +693,7 @@ internal class CryptoManager(
      * @param timelineId the timeline id
      */
     fun resetReplayAttackCheckInTimeline(timelineId: String) {
-        mOlmDevice.resetReplayAttackCheckInTimeline(timelineId)
+        olmDevice.resetReplayAttackCheckInTimeline(timelineId)
     }
 
     /**
@@ -718,7 +705,7 @@ internal class CryptoManager(
         if (event.getClearType() == EventType.ROOM_KEY || event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
             onRoomKeyEvent(event)
         } else if (event.getClearType() == EventType.ROOM_KEY_REQUEST) {
-            mIncomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
+            incomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
         }
     }
 
@@ -743,7 +730,7 @@ internal class CryptoManager(
             return
         }
 
-        alg.onRoomKeyEvent(event, mKeysBackup)
+        alg.onRoomKeyEvent(event, keysBackup)
     }
 
     /**
@@ -759,7 +746,6 @@ internal class CryptoManager(
                     .map { allLoaded ->
                         val userIds = getRoomUserIds(roomId)
                         setEncryptionInRoom(roomId, event.content!!["algorithm"] as String, true, userIds)
-                        allLoaded
                     }
         }
     }
@@ -789,8 +775,8 @@ internal class CryptoManager(
     private fun onRoomMembershipEvent(roomId: String, event: Event) {
         val alg: IMXEncrypting?
 
-        synchronized(mRoomEncryptors) {
-            alg = mRoomEncryptors[roomId]
+        synchronized(roomEncryptors) {
+            alg = roomEncryptors[roomId]
         }
 
         if (null == alg) {
@@ -805,7 +791,7 @@ internal class CryptoManager(
                 deviceListManager.startTrackingDeviceList(Arrays.asList(userId))
             } else if (membership == Membership.INVITE
                        && shouldEncryptForInvitedMembers(roomId)
-                       && mCryptoConfig.mEnableEncryptionForInvitedMembers) {
+                       && cryptoConfig.mEnableEncryptionForInvitedMembers) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
                 // know what other servers are in the room at the time they've been invited.
@@ -820,7 +806,7 @@ internal class CryptoManager(
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
 
         eventContent?.historyVisibility?.let {
-            mCryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
+            cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
         }
     }
 
@@ -837,15 +823,15 @@ internal class CryptoManager(
         // Sign it
         val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
 
-        getMyDevice().signatures = mObjectSigner.signObject(canonicalJson)
+        getMyDevice().signatures = objectSigner.signObject(canonicalJson)
 
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
-        mUploadKeysTask
+        uploadKeysTask
                 .configureWith(UploadKeysTask.Params(getMyDevice().toDeviceKeys(), null, getMyDevice().deviceId))
                 .executeOn(TaskThread.ENCRYPTION)
                 .dispatchTo(callback)
-                .executeBy(mTaskExecutor)
+                .executeBy(taskExecutor)
     }
 
     /**
@@ -870,7 +856,7 @@ internal class CryptoManager(
 
         val exportedSessions = ArrayList<MegolmSessionData>()
 
-        val inboundGroupSessions = mCryptoStore.getInboundGroupSessions()
+        val inboundGroupSessions = cryptoStore.getInboundGroupSessions()
 
         for (session in inboundGroupSessions) {
             val megolmSessionData = session.exportKeys()
@@ -941,7 +927,7 @@ internal class CryptoManager(
 
         Timber.v("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
 
-        mMegolmSessionDataImporter.handle(importedSessions, true, progressListener, callback)
+        megolmSessionDataImporter.handle(importedSessions, true, progressListener, callback)
     }
 
     /**
@@ -950,7 +936,7 @@ internal class CryptoManager(
      * @param warn true to warn when some unknown devices are detected.
      */
     override fun setWarnOnUnknownDevices(warn: Boolean) {
-        mWarnOnUnknownDevicesRepository.setWarnOnUnknownDevices(warn)
+        warnOnUnknownDevicesRepository.setWarnOnUnknownDevices(warn)
     }
 
     /**
@@ -992,7 +978,7 @@ internal class CryptoManager(
      * @param block    true to unilaterally blacklist all
      */
     override fun setGlobalBlacklistUnverifiedDevices(block: Boolean) {
-        mCryptoStore.setGlobalBlacklistUnverifiedDevices(block)
+        cryptoStore.setGlobalBlacklistUnverifiedDevices(block)
     }
 
     /**
@@ -1003,7 +989,7 @@ internal class CryptoManager(
      * @return true to unilaterally blacklist all unverified devices.
      */
     override fun getGlobalBlacklistUnverifiedDevices(): Boolean {
-        return mCryptoStore.getGlobalBlacklistUnverifiedDevices()
+        return cryptoStore.getGlobalBlacklistUnverifiedDevices()
     }
 
     /**
@@ -1017,7 +1003,7 @@ internal class CryptoManager(
     // TODO add this info in CryptoRoomEntity?
     override fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean {
         return if (null != roomId) {
-            mCryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
+            cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
         } else {
             false
         }
@@ -1030,7 +1016,7 @@ internal class CryptoManager(
      * @param add      true to add the room id to the list, false to remove it.
      */
     private fun setRoomBlacklistUnverifiedDevices(roomId: String, add: Boolean) {
-        val roomIds = mCryptoStore.getRoomsListBlacklistUnverifiedDevices().toMutableList()
+        val roomIds = cryptoStore.getRoomsListBlacklistUnverifiedDevices().toMutableList()
 
         if (add) {
             if (!roomIds.contains(roomId)) {
@@ -1040,7 +1026,7 @@ internal class CryptoManager(
             roomIds.remove(roomId)
         }
 
-        mCryptoStore.setRoomsListBlacklistUnverifiedDevices(roomIds)
+        cryptoStore.setRoomsListBlacklistUnverifiedDevices(roomIds)
     }
 
 
@@ -1069,7 +1055,7 @@ internal class CryptoManager(
      * @param requestBody requestBody
      */
     override fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        mOutgoingRoomKeyRequestManager.cancelRoomKeyRequest(requestBody)
+        outgoingRoomKeyRequestManager.cancelRoomKeyRequest(requestBody)
     }
 
     /**
@@ -1091,7 +1077,7 @@ internal class CryptoManager(
         requestBody.senderKey = senderKey
         requestBody.sessionId = sessionId
 
-        mOutgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
+        outgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
     }
 
     /**
@@ -1100,7 +1086,7 @@ internal class CryptoManager(
      * @param listener listener
      */
     override fun addRoomKeysRequestListener(listener: RoomKeysRequestListener) {
-        mIncomingRoomKeyRequestManager.addRoomKeysRequestListener(listener)
+        incomingRoomKeyRequestManager.addRoomKeysRequestListener(listener)
     }
 
     /**
@@ -1109,7 +1095,7 @@ internal class CryptoManager(
      * @param listener listener
      */
     fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener) {
-        mIncomingRoomKeyRequestManager.removeRoomKeysRequestListener(listener)
+        incomingRoomKeyRequestManager.removeRoomKeysRequestListener(listener)
     }
 
     /**
@@ -1141,7 +1127,7 @@ internal class CryptoManager(
      * ========================================================================================== */
 
     override fun toString(): String {
-        return "CryptoManager of " + mCredentials.userId + " (" + mCredentials.deviceId + ")"
+        return "CryptoManager of " + credentials.userId + " (" + credentials.deviceId + ")"
 
     }
 }

@@ -46,11 +46,11 @@ android {
         debug {
             // Set to true to log privacy or sensible data, such as token
             // TODO Set to false
-            buildConfigField "boolean", "LOG_PRIVATE_DATA", "true"
+            buildConfigField "boolean", "LOG_PRIVATE_DATA", "false"
 
             // Set to BODY instead of NONE to enable logging
             //TODO Revert BODY
-            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BODY"
+            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS"
         }
 
         release {

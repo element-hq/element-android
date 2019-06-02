@@ -499,7 +499,7 @@ internal class MXMegolmEncryption(
                 CryptoAsyncHelper.getUiHandler().post {
                     // Check if any of these devices are not yet known to the user.
                     // if so, warn the user so they can verify or ignore.
-                    if (0 != unknownDevices.map.size) {
+                    if (unknownDevices.map.isNotEmpty()) {
                         callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
                                 MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
                     } else {

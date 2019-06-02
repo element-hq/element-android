@@ -54,9 +54,9 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters)
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.failure()
+                     ?: return Result.success()
 
-        val eventId = params.event.eventId ?: return Result.failure()
+        val eventId = params.event.eventId ?: return Result.success()
         val attachment = params.attachment
 
         val thumbnailData = ThumbnailExtractor.extractThumbnail(params.attachment)
@@ -96,7 +96,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters)
 
     private fun handleFailure(params: Params): Result {
         contentUploadProgressTracker.setFailure(params.event.eventId!!)
-        return Result.failure()
+        return Result.success()
     }
 
     private fun handleSuccess(params: Params,
