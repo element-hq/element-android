@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
+import im.vector.riotredesign.core.extensions.setTextOrHide
 import im.vector.riotredesign.core.platform.ButtonStateView
 import im.vector.riotredesign.features.home.AvatarRenderer
 
@@ -38,6 +39,12 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
     @EpoxyAttribute
     var roomName: String? = null
+
+    @EpoxyAttribute
+    var roomAlias: String? = null
+
+    @EpoxyAttribute
+    var roomTopic: String? = null
 
     @EpoxyAttribute
     var nbOfMembers: Int = 0
@@ -56,6 +63,8 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
         AvatarRenderer.render(avatarUrl, roomId!!, roomName, holder.avatarView)
         holder.nameView.text = roomName
+        holder.aliasView.setTextOrHide(roomAlias)
+        holder.topicView.setTextOrHide(roomTopic)
         // TODO Use formatter for big numbers?
         holder.counterView.text = nbOfMembers.toString()
 
@@ -85,6 +94,8 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
         val avatarView by bind<ImageView>(R.id.itemPublicRoomAvatar)
         val nameView by bind<TextView>(R.id.itemPublicRoomName)
+        val aliasView by bind<TextView>(R.id.itemPublicRoomAlias)
+        val topicView by bind<TextView>(R.id.itemPublicRoomTopic)
         val counterView by bind<TextView>(R.id.itemPublicRoomMembersCount)
 
         val buttonState by bind<ButtonStateView>(R.id.itemPublicRoomButtonState)

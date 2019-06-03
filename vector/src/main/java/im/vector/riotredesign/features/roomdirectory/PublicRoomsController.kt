@@ -82,6 +82,8 @@ class PublicRoomsController(private val stringProvider: StringProvider,
             roomId(publicRoom.roomId)
             avatarUrl(publicRoom.avatarUrl)
             roomName(publicRoom.name)
+            roomAlias(publicRoom.canonicalAlias)
+            roomTopic(publicRoom.topic)
             nbOfMembers(publicRoom.numJoinedMembers)
 
             val joinState = when {

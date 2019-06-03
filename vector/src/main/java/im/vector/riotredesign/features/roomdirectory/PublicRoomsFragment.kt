@@ -17,6 +17,7 @@
 package im.vector.riotredesign.features.roomdirectory
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +32,6 @@ import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
-import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewActivity
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
 import org.koin.android.ext.android.inject
@@ -46,12 +46,20 @@ import java.util.concurrent.TimeUnit
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
  *
  * TODO For Nad:
- * Display number of rooms?
- * Picto size are not correct
- * Where I put the room directory picker?
- * World Readable badge
- * Guest can join badge
+ * Display number of rooms? -> Not displayed
+ * Picto size are not correct -> Fixed
+ * Where I put the room directory picker? -> Menu
+ * World Readable badge -> not displayed
+ * Guest can join badge -> not displayed
+ * Create Room -> Wait for screen
  *
+ *
+ * Home
+ * -> FAB on first screen
+ * -> Counter -> Ok
+ *
+ *
+ * @Benoit: Provide list for event type in last message on home
  */
 class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback {
 
@@ -60,6 +68,8 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     private val errorFormatter: ErrorFormatter by inject()
 
     override fun getLayoutResId() = R.layout.fragment_public_rooms
+
+    override fun getMenuRes() = R.menu.menu_room_directory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,16 +94,23 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
             vectorBaseActivity.notImplemented()
         }
 
-        publicRoomsChangeDirectory.setOnClickListener {
-            vectorBaseActivity.addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
-        }
-
         viewModel.joinRoomErrorLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { throwable ->
                 Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
                         .show()
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_room_directory_change_protocol -> {
+                vectorBaseActivity.addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
+                true
+            }
+            else                                     ->
+                super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -146,8 +163,5 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     override fun invalidate() = withState(viewModel) { state ->
         // Populate list with Epoxy
         publicRoomsController.setData(state)
-
-        // Directory name
-        publicRoomsDirectoryName.text = state.roomDirectoryDisplayName
     }
 }
