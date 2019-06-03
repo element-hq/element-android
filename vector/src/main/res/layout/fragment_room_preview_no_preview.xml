@@ -62,9 +62,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="28dp"
-                    android:text="@string/room_preview_no_preview"
+                    android:gravity="center"
                     android:textAppearance="@style/TextAppearance.Vector.Subtitle2"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:text="@string/room_preview_no_preview" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewError"

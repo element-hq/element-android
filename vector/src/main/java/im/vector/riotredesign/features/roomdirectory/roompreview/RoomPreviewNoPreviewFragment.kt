@@ -36,6 +36,9 @@ import org.koin.android.ext.android.get
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 
+/**
+ * Note: this Fragment is also used for world readable room for the moment
+ */
 class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
 
     companion object {
@@ -63,6 +66,12 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
         AvatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewAvatar)
         roomPreviewNoPreviewName.text = roomPreviewData.roomName
         roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
+
+        if (roomPreviewData.worldReadable) {
+            roomPreviewNoPreviewLabel.setText(R.string.room_preview_world_readable_room_not_supported_yet)
+        } else {
+            roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview)
+        }
 
         roomPreviewNoPreviewJoin.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
