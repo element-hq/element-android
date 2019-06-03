@@ -15,6 +15,45 @@
         android:layout_height="match_parent" />
 
     <!-- Create several FABs to manage different icon size. maxImageSize cannot be set programmatically -->
+
+    <View
+        android:id="@+id/createRoomTouchGuard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="@android:color/background_dark" />
+
+    <!-- Sub menu item 2 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomItemGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_fab_add_room"
+        android:visibility="gone"
+        app:maxImageSize="32dp"
+        tools:fab_colorNormal="?attr/colorAccent"
+        tools:fab_colorPressed="?attr/colorAccent"
+        tools:translationY="-146dp"
+        tools:visibility="visible" />
+
+    <!-- Sub menu item 1 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomItemChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_fab_add_chat"
+        android:visibility="gone"
+        app:maxImageSize="34dp"
+        tools:fab_colorNormal="?attr/colorAccent"
+        tools:fab_colorPressed="?attr/colorAccent"
+        tools:translationY="-76dp"
+        tools:visibility="visible" />
+
+    <!-- Menu -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createRoomButton"
         android:layout_width="wrap_content"
@@ -36,7 +75,7 @@
         android:src="@drawable/ic_fab_add_chat"
         android:visibility="gone"
         app:maxImageSize="34dp"
-        tools:layout_margin="66dp"
+        tools:layout_margin="76dp"
         tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -45,11 +84,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:scaleType="center"
         android:src="@drawable/ic_fab_add_room"
         android:visibility="gone"
         app:maxImageSize="32dp"
-        tools:layout_margin="116dp"
+        tools:layout_margin="136dp"
         tools:visibility="visible" />
 
 </im.vector.riotredesign.core.platform.StateView>

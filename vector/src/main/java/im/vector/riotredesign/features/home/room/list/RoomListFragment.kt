@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.list
 
+import android.animation.Animator
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.StringRes
@@ -29,8 +30,11 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.animations.ANIMATION_DURATION_SHORT
+import im.vector.riotredesign.core.animations.SimpleAnimatorListener
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.observeEvent
+import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import kotlinx.android.parcel.Parcelize
@@ -43,9 +47,11 @@ data class RoomListParams(
 ) : Parcelable
 
 
-class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
+class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, OnBackPressed {
 
     lateinit var fabButton: FloatingActionButton
+
+    private var isFabMenuOpened = false
 
     enum class DisplayMode(@StringRes val titleRes: Int) {
         HOME(R.string.bottom_action_home),
@@ -75,6 +81,8 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         roomListViewModel.openRoomLiveData.observeEvent(this) {
             navigator.openRoom(it)
         }
+
+        isFabMenuOpened = false
     }
 
     private fun setupCreateRoomButton() {
@@ -87,16 +95,29 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
         fabButton.isVisible = true
 
         createRoomButton.setOnClickListener {
-            // TODO Is it the expected action?
-            navigator.openRoomDirectory()
+            toggleFabMenu()
         }
         createChatRoomButton.setOnClickListener {
-            // TODO Is it the expected action?
-            navigator.openRoomDirectory()
+            createDirectChat()
         }
         createGroupRoomButton.setOnClickListener {
-            navigator.openRoomDirectory()
+            openRoomDirectory()
         }
+
+        createRoomItemChat.setOnClickListener {
+            toggleFabMenu()
+            createDirectChat()
+        }
+        createRoomItemGroup.setOnClickListener {
+            toggleFabMenu()
+            openRoomDirectory()
+        }
+
+        createRoomTouchGuard.setOnClickListener {
+            toggleFabMenu()
+        }
+
+        createRoomTouchGuard.isClickable = false
 
         // Hide FAB when list is scrolling
         epoxyRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -114,6 +135,63 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
                 }
             }
         })
+    }
+
+    private fun toggleFabMenu() {
+        isFabMenuOpened = !isFabMenuOpened
+
+        if (isFabMenuOpened) {
+            createRoomItemChat.isVisible = true
+            createRoomItemGroup.isVisible = true
+
+            createRoomButton.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .rotation(135f)
+            createRoomItemChat.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .translationY(-resources.getDimension(R.dimen.fab_menu_offset_1))
+            createRoomItemGroup.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .translationY(-resources.getDimension(R.dimen.fab_menu_offset_2))
+            createRoomTouchGuard.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .alpha(0.6f)
+                    .setListener(null)
+            createRoomTouchGuard.isClickable = true
+        } else {
+            createRoomButton.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .rotation(0f)
+            createRoomItemChat.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .translationY(0f)
+            createRoomItemGroup.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .translationY(0f)
+            createRoomTouchGuard.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .alpha(0f)
+                    .setListener(object : SimpleAnimatorListener() {
+                        override fun onAnimationCancel(animation: Animator?) {
+                            animation?.removeListener(this)
+                        }
+
+                        override fun onAnimationEnd(animation: Animator?) {
+                            // Use isFabMenuOpened because it may have been open meanwhile
+                            createRoomItemChat.isVisible = isFabMenuOpened
+                            createRoomItemGroup.isVisible = isFabMenuOpened
+                        }
+                    })
+            createRoomTouchGuard.isClickable = false
+        }
+    }
+
+    private fun openRoomDirectory() {
+        navigator.openRoomDirectory()
+    }
+
+    private fun createDirectChat() {
+        vectorBaseActivity.notImplemented("creating direct chat")
     }
 
     private fun setupRecyclerView() {
@@ -197,6 +275,15 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
             else                         -> getString(R.string.unknown_error)
         }
         stateView.state = StateView.State.Error(message)
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (isFabMenuOpened) {
+            toggleFabMenu()
+            return true
+        }
+
+        return super.onBackPressed()
     }
 
     // RoomSummaryController.Callback **************************************************************

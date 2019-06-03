@@ -138,8 +138,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        if (fm.backStackEntryCount == 0)
-            return false
+        // if (fm.backStackEntryCount == 0)
+        //     return false
+
         val reverseOrder = fm.fragments.filter { it is OnBackPressed }.reversed()
         for (f in reverseOrder) {
             val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
