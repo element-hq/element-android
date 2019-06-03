@@ -50,19 +50,19 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
         }
     }
 
-    fun update(realm: Realm, events: List<Pair<Event, SendState>>?, userId: String) {
-        events?.forEach { pair ->
+    private fun update(realm: Realm, events: List<Pair<Event, SendState>>, userId: String) {
+        events.forEach { pair ->
             val roomId = pair.first.roomId ?: return@forEach
             val event = pair.first
             val sendState = pair.second
             val isLocalEcho = sendState == SendState.UNSENT
             when (event.type) {
-                EventType.REACTION -> {
+                EventType.REACTION  -> {
                     //we got a reaction!!
                     Timber.v("###REACTION in room $roomId")
                     handleReaction(event, roomId, realm, userId, isLocalEcho)
                 }
-                EventType.MESSAGE -> {
+                EventType.MESSAGE   -> {
                     if (event.unsignedData?.relations?.annotations != null) {
                         Timber.v("###REACTION Agreggation in room $roomId for event ${event.eventId}")
                         handleInitialAggregatedRelations(event, roomId, event.unsignedData.relations.annotations, realm)
@@ -80,7 +80,7 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
                     val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
                             ?: return
                     when (eventToPrune.type) {
-                        EventType.MESSAGE -> {
+                        EventType.MESSAGE  -> {
                             Timber.d("REDACTION for message ${eventToPrune.eventId}")
                             val unsignedData = EventMapper.map(eventToPrune).unsignedData
                                     ?: UnsignedData(null, null)
@@ -174,7 +174,7 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
         }
     }
 
-    fun handleReaction(event: Event, roomId: String, realm: Realm, userId: String, isLocalEcho: Boolean) {
+    private fun handleReaction(event: Event, roomId: String, realm: Realm, userId: String, isLocalEcho: Boolean) {
         event.content.toModel<ReactionContent>()?.let { content ->
             //rel_type must be m.annotation
             if (RelationType.ANNOTATION == content.relatesTo?.type) {
@@ -236,7 +236,7 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
     /**
      * Called when an event is deleted
      */
-    fun handleRedactionOfReplace(redacted: EventEntity, relatedEventId: String, realm: Realm) {
+    private fun handleRedactionOfReplace(redacted: EventEntity, relatedEventId: String, realm: Realm) {
         Timber.d("Handle redaction of m.replace")
         val eventSummary = EventAnnotationsSummaryEntity.where(realm, relatedEventId).findFirst()
         if (eventSummary == null) {
@@ -270,40 +270,40 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
     }
 
     fun handleReactionRedact(eventToPrune: EventEntity, realm: Realm, userId: String) {
-        Timber.d("REDACTION of reaction ${eventToPrune.eventId}")
+        Timber.v("REDACTION of reaction ${eventToPrune.eventId}")
         //delete a reaction, need to update the annotation summary if any
         val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel()
                 ?: return
         val eventThatWasReacted = reactionContent.relatesTo?.eventId ?: return
 
-        val reactionkey = reactionContent.relatesTo.key
-        Timber.d("REMOVE reaction for key $reactionkey")
+        val reactionKey = reactionContent.relatesTo.key
+        Timber.v("REMOVE reaction for key $reactionKey")
         val summary = EventAnnotationsSummaryEntity.where(realm, eventThatWasReacted).findFirst()
         if (summary != null) {
             summary.reactionsSummary.where()
-                    .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reactionkey)
-                    .findFirst()?.let { summary ->
-                        Timber.d("Find summary for key with  ${summary.sourceEvents.size} known reactions (count:${summary.count})")
-                        Timber.d("Known reactions  ${summary.sourceEvents.joinToString(",")}")
-                        if (summary.sourceEvents.contains(eventToPrune.eventId)) {
-                            Timber.d("REMOVE reaction for key $reactionkey")
-                            summary.sourceEvents.remove(eventToPrune.eventId)
-                            Timber.d("Known reactions after  ${summary.sourceEvents.joinToString(",")}")
-                            summary.count = summary.count - 1
+                    .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reactionKey)
+                    .findFirst()?.let { aggregation ->
+                        Timber.v("Find summary for key with  ${aggregation.sourceEvents.size} known reactions (count:${aggregation.count})")
+                        Timber.v("Known reactions  ${aggregation.sourceEvents.joinToString(",")}")
+                        if (aggregation.sourceEvents.contains(eventToPrune.eventId)) {
+                            Timber.v("REMOVE reaction for key $reactionKey")
+                            aggregation.sourceEvents.remove(eventToPrune.eventId)
+                            Timber.v("Known reactions after  ${aggregation.sourceEvents.joinToString(",")}")
+                            aggregation.count = aggregation.count - 1
                             if (eventToPrune.sender == userId) {
                                 //Was it a redact on my reaction?
-                                summary.addedByMe = false
+                                aggregation.addedByMe = false
                             }
-                            if (summary.count == 0) {
+                            if (aggregation.count == 0) {
                                 //delete!
-                                summary.deleteFromRealm()
+                                aggregation.deleteFromRealm()
                             }
                         } else {
                             Timber.e("## Cannot remove summary from count, corresponding reaction ${eventToPrune.eventId} is not known")
                         }
                     }
         } else {
-            Timber.e("## Cannot find summary for key $reactionkey")
+            Timber.e("## Cannot find summary for key $reactionKey")
         }
     }
 }

@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
-import android.text.TextUtils
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -39,6 +38,7 @@ import im.vector.matrix.android.internal.util.StringProvider
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import java.util.*
 
 /**
  * Creates local echo of events for room events.
@@ -57,7 +57,7 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
             val document = parser.parse(text)
             val renderer = HtmlRenderer.builder().build()
             val htmlText = renderer.render(document)
-            if (isFormattedTextPertinent(text, htmlText)) { //FIX that
+            if (isFormattedTextPertinent(text, htmlText)) { //FIXME
                 return createFormattedTextEvent(roomId, text, htmlText)
             }
         }
@@ -114,7 +114,7 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
             ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment)
             ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment)
             ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment)
-            ContentAttachmentData.Type.FILE -> createFileEvent(roomId, attachment)
+            ContentAttachmentData.Type.FILE  -> createFileEvent(roomId, attachment)
         }
     }
 
@@ -234,7 +234,7 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
     }
 
     private fun dummyEventId(roomId: String): String {
-        return "m.${txNCounter++}"
+        return "m.${UUID.randomUUID()}"
     }
 
     fun createReplyTextEvent(roomId: String, eventReplied: Event, replyText: String): Event? {
@@ -299,11 +299,11 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
                 }
                 return content.body to formattedText
             }
-            MessageType.MSGTYPE_FILE -> return stringProvider.getString(R.string.reply_to_a_file) to null
-            MessageType.MSGTYPE_AUDIO -> return stringProvider.getString(R.string.reply_to_an_audio_file) to null
-            MessageType.MSGTYPE_IMAGE -> return stringProvider.getString(R.string.reply_to_an_image) to null
-            MessageType.MSGTYPE_VIDEO -> return stringProvider.getString(R.string.reply_to_a_video) to null
-            else -> return (content?.body ?: "") to null
+            MessageType.MSGTYPE_FILE   -> return stringProvider.getString(R.string.reply_to_a_file) to null
+            MessageType.MSGTYPE_AUDIO  -> return stringProvider.getString(R.string.reply_to_an_audio_file) to null
+            MessageType.MSGTYPE_IMAGE  -> return stringProvider.getString(R.string.reply_to_an_image) to null
+            MessageType.MSGTYPE_VIDEO  -> return stringProvider.getString(R.string.reply_to_a_video) to null
+            else                       -> return (content?.body ?: "") to null
 
         }
 
@@ -350,7 +350,4 @@ internal class LocalEchoEventFactory(private val credentials: Credentials, priva
         }
     }
 
-    companion object {
-        var txNCounter = System.currentTimeMillis()
-    }
 }

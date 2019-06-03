@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
@@ -43,34 +42,11 @@ internal fun EventEntity.Companion.where(realm: Realm,
         query.equalTo(EventEntityFields.TYPE, type)
     }
     return when (linkFilterMode) {
-        LINKED_ONLY -> query.equalTo(EventEntityFields.IS_UNLINKED, false)
+        LINKED_ONLY   -> query.equalTo(EventEntityFields.IS_UNLINKED, false)
         UNLINKED_ONLY -> query.equalTo(EventEntityFields.IS_UNLINKED, true)
-        BOTH -> query
+        BOTH          -> query
     }
 }
-
-//internal fun EventEntity.Companion.unsent(realm: Realm,
-//                                          roomId: String? = null): RealmQuery<EventEntity> {
-//    val query = realm.where<EventEntity>()
-//    if (roomId != null) {
-//        query.equalTo(EventEntityFields.ROOM_ID, roomId)
-//    }
-//    query.equalTo(EventEntityFields.SEND_STATE_STR, SendState.UNSENT.name)
-//    return query
-//}
-//
-//internal fun EventEntity.Companion.byTypes(realm: Realm,
-//                                           types: List<String>): RealmQuery<EventEntity> {
-//    val query = realm.where<EventEntity>()
-//    types.forEachIndexed { index, type ->
-//        if (index == 0) {
-//            query.equalTo(EventEntityFields.TYPE, type)
-//        } else {
-//            query.or().equalTo(EventEntityFields.TYPE, type)
-//        }
-//    }
-//    return query
-//}
 
 
 internal fun EventEntity.Companion.latestEvent(realm: Realm,
