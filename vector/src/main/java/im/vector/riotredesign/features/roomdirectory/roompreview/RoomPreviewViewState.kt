@@ -26,4 +26,7 @@ data class RoomPreviewViewState(
         val roomJoinState: JoinState = JoinState.NOT_JOINED,
         // Last error of join room request
         val lastError: Throwable? = null
-) : MvRxState
+) : MvRxState {
+
+    constructor(args: RoomPreviewData) : this(roomId = args.roomId)
+}

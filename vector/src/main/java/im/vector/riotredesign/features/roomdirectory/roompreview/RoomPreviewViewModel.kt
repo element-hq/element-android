@@ -70,15 +70,6 @@ class RoomPreviewViewModel(initialState: RoomPreviewViewState,
                 .disposeOnClear()
     }
 
-    // TODO I should not have to do that
-    fun init(roomId: String) = withState {
-        setState {
-            copy(
-                    roomId = roomId
-            )
-        }
-    }
-
     fun joinRoom() = withState { state ->
         if (state.roomJoinState == JoinState.JOINING) {
             // Request already sent, should not happen

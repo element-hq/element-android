@@ -53,8 +53,6 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
         super.onActivityCreated(savedInstanceState)
         bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
         setupToolbar(roomPreviewNoPreviewToolbar)
-
-        roomPreviewViewModel.init(roomPreviewData.roomId)
     }
 
     override fun getLayoutResId() = R.layout.fragment_room_preview_no_preview
