@@ -57,25 +57,25 @@ object MatrixLinkify {
         return hasMatch
     }
 
-    fun addLinks(textView: TextView, callback: MatrixPermalinkSpan.Callback?): Boolean {
-        val text = textView.text
-        if (text is Spannable) {
-            if (addLinks(text, callback)) {
-                addLinkMovementMethod(textView)
-                return true
-            }
-
-            return false
-        } else {
-            val spannableString = SpannableString.valueOf(text)
-            if (addLinks(spannableString, callback)) {
-                addLinkMovementMethod(textView)
-                textView.text = spannableString
-                return true
-            }
-            return false
-        }
-    }
+//    fun addLinks(textView: TextView, callback: MatrixPermalinkSpan.Callback?): Boolean {
+//        val text = textView.text
+//        if (text is Spannable) {
+//            if (addLinks(text, callback)) {
+//                addLinkMovementMethod(textView)
+//                return true
+//            }
+//
+//            return false
+//        } else {
+//            val spannableString = SpannableString.valueOf(text)
+//            if (addLinks(spannableString, callback)) {
+//                addLinkMovementMethod(textView)
+//                textView.text = spannableString
+//                return true
+//            }
+//            return false
+//        }
+//    }
 
     /**
      * Add linkMovementMethod on textview if not already set

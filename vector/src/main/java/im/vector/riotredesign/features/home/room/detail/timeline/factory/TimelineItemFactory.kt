@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.EmptyItem_
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import timber.log.Timber
 
 class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                           private val roomNameItemFactory: RoomNameItemFactory,
@@ -55,6 +56,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 else                               -> null
             }
         } catch (e: Exception) {
+            Timber.e(e,"failed to create message item")
             defaultItemFactory.create(event, e)
         }
         return (computedModel ?: EmptyItem_())
