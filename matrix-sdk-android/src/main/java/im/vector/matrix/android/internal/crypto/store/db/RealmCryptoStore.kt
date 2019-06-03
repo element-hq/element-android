@@ -666,18 +666,18 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
         doRealmTransaction(realmConfiguration) {
             // Delete any previous store request with the same parameters
             it.where<IncomingRoomKeyRequestEntity>()
-                    .equalTo(IncomingRoomKeyRequestEntityFields.USER_ID, incomingRoomKeyRequest.mUserId)
-                    .equalTo(IncomingRoomKeyRequestEntityFields.DEVICE_ID, incomingRoomKeyRequest.mDeviceId)
-                    .equalTo(IncomingRoomKeyRequestEntityFields.REQUEST_ID, incomingRoomKeyRequest.mRequestId)
+                    .equalTo(IncomingRoomKeyRequestEntityFields.USER_ID, incomingRoomKeyRequest.userId)
+                    .equalTo(IncomingRoomKeyRequestEntityFields.DEVICE_ID, incomingRoomKeyRequest.deviceId)
+                    .equalTo(IncomingRoomKeyRequestEntityFields.REQUEST_ID, incomingRoomKeyRequest.requestId)
                     .findAll()
                     .deleteAllFromRealm()
 
             // Then store it
             it.createObject(IncomingRoomKeyRequestEntity::class.java).apply {
-                userId = incomingRoomKeyRequest.mUserId
-                deviceId = incomingRoomKeyRequest.mDeviceId
-                requestId = incomingRoomKeyRequest.mRequestId
-                putRequestBody(incomingRoomKeyRequest.mRequestBody)
+                userId = incomingRoomKeyRequest.userId
+                deviceId = incomingRoomKeyRequest.deviceId
+                requestId = incomingRoomKeyRequest.requestId
+                putRequestBody(incomingRoomKeyRequest.requestBody)
             }
         }
     }
@@ -685,9 +685,9 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
     override fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingRoomKeyRequest) {
         doRealmTransaction(realmConfiguration) {
             it.where<IncomingRoomKeyRequestEntity>()
-                    .equalTo(IncomingRoomKeyRequestEntityFields.USER_ID, incomingRoomKeyRequest.mUserId)
-                    .equalTo(IncomingRoomKeyRequestEntityFields.DEVICE_ID, incomingRoomKeyRequest.mDeviceId)
-                    .equalTo(IncomingRoomKeyRequestEntityFields.REQUEST_ID, incomingRoomKeyRequest.mRequestId)
+                    .equalTo(IncomingRoomKeyRequestEntityFields.USER_ID, incomingRoomKeyRequest.userId)
+                    .equalTo(IncomingRoomKeyRequestEntityFields.DEVICE_ID, incomingRoomKeyRequest.deviceId)
+                    .equalTo(IncomingRoomKeyRequestEntityFields.REQUEST_ID, incomingRoomKeyRequest.requestId)
                     .findAll()
                     .deleteAllFromRealm()
         }

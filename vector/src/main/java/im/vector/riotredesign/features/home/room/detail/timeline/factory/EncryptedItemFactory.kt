@@ -70,11 +70,11 @@ class EncryptedItemFactory(
                 if (decrypted == null) {
                     return null
                 }
-                if (decrypted.mClearEvent == null) {
+                if (decrypted.clearEvent == null) {
                     return null
                 }
                 val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
-                val clearEvent = adapter.fromJsonValue(decrypted.mClearEvent) ?: return null
+                val clearEvent = adapter.fromJsonValue(decrypted.clearEvent) ?: return null
                 val decryptedTimelineEvent = timelineEvent.copy(root = clearEvent)
 
                 // Success

@@ -49,36 +49,36 @@ import java.util.*
 
 internal class MXMegolmEncryption(
         // The id of the room we will be sending to.
-        private var mRoomId: String,
+        private var roomId: String,
 
         private val olmDevice: MXOlmDevice,
-        private val mKeysBackup: KeysBackup,
-        private val mCryptoStore: IMXCryptoStore,
-        private val mDeviceListManager: DeviceListManager,
-        private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-        private val mCredentials: Credentials,
-        private val mSendToDeviceTask: SendToDeviceTask,
-        private val mTaskExecutor: TaskExecutor,
-        private val mMessageEncrypter: MessageEncrypter,
-        private val mWarnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository
+        private val keysBackup: KeysBackup,
+        private val cryptoStore: IMXCryptoStore,
+        private val deviceListManager: DeviceListManager,
+        private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+        private val credentials: Credentials,
+        private val sendToDeviceTask: SendToDeviceTask,
+        private val taskExecutor: TaskExecutor,
+        private val messageEncrypter: MessageEncrypter,
+        private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository
 ) : IMXEncrypting {
 
 
     // OutboundSessionInfo. Null if we haven't yet started setting one up. Note
     // that even if this is non-null, it may not be ready for use (in which
     // case outboundSession.shareOperation will be non-null.)
-    private var mOutboundSession: MXOutboundSessionInfo? = null
+    private var outboundSession: MXOutboundSessionInfo? = null
 
     // true when there is an HTTP operation in progress
-    private var mShareOperationIsProgress: Boolean = false
+    private var shareOperationIsProgress: Boolean = false
 
-    private val mPendingEncryptions = ArrayList<MXQueuedEncryption>()
+    private val _pendingEncryptions = ArrayList<MXQueuedEncryption>()
 
     // Default rotation periods
     // TODO: Make it configurable via parameters
     // Session rotation periods
-    private var mSessionRotationPeriodMsgs: Int = 100
-    private var mSessionRotationPeriodMs: Int = 7 * 24 * 3600 * 1000
+    private var sessionRotationPeriodMsgs: Int = 100
+    private var sessionRotationPeriodMs: Int = 7 * 24 * 3600 * 1000
 
     /**
      * @return a snapshot of the pending encryptions
@@ -86,11 +86,9 @@ internal class MXMegolmEncryption(
     private val pendingEncryptions: List<MXQueuedEncryption>
         get() {
             val list = ArrayList<MXQueuedEncryption>()
-
-            synchronized(mPendingEncryptions) {
-                list.addAll(mPendingEncryptions)
+            synchronized(_pendingEncryptions) {
+                list.addAll(_pendingEncryptions)
             }
-
             return list
         }
 
@@ -102,12 +100,12 @@ internal class MXMegolmEncryption(
         // It will be processed when everything is set up
         val queuedEncryption = MXQueuedEncryption()
 
-        queuedEncryption.mEventContent = eventContent
-        queuedEncryption.mEventType = eventType
-        queuedEncryption.mApiCallback = callback
+        queuedEncryption.eventContent = eventContent
+        queuedEncryption.eventType = eventType
+        queuedEncryption.apiCallback = callback
 
-        synchronized(mPendingEncryptions) {
-            mPendingEncryptions.add(queuedEncryption)
+        synchronized(_pendingEncryptions) {
+            _pendingEncryptions.add(queuedEncryption)
         }
 
         val t0 = System.currentTimeMillis()
@@ -124,11 +122,11 @@ internal class MXMegolmEncryption(
                 val queuedEncryptions = pendingEncryptions
 
                 for (queuedEncryption in queuedEncryptions) {
-                    queuedEncryption.mApiCallback?.onFailure(failure)
+                    queuedEncryption.apiCallback?.onFailure(failure)
                 }
 
-                synchronized(mPendingEncryptions) {
-                    mPendingEncryptions.removeAll(queuedEncryptions)
+                synchronized(_pendingEncryptions) {
+                    _pendingEncryptions.removeAll(queuedEncryptions)
                 }
             }
 
@@ -162,10 +160,10 @@ internal class MXMegolmEncryption(
         val keysClaimedMap = HashMap<String, String>()
         keysClaimedMap["ed25519"] = olmDevice.deviceEd25519Key!!
 
-        olmDevice.addInboundGroupSession(sessionId!!, olmDevice.getSessionKey(sessionId)!!, mRoomId, olmDevice.deviceCurve25519Key!!,
-                ArrayList(), keysClaimedMap, false)
+        olmDevice.addInboundGroupSession(sessionId!!, olmDevice.getSessionKey(sessionId)!!, roomId, olmDevice.deviceCurve25519Key!!,
+                                         ArrayList(), keysClaimedMap, false)
 
-        mKeysBackup.maybeBackupKeys()
+        keysBackup.maybeBackupKeys()
 
         return MXOutboundSessionInfo(sessionId)
     }
@@ -177,18 +175,18 @@ internal class MXMegolmEncryption(
      * @param callback      the asynchronous callback.
      */
     private fun ensureOutboundSession(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>, callback: MatrixCallback<MXOutboundSessionInfo>?) {
-        var session = mOutboundSession
+        var session = outboundSession
 
         if (null == session
-                // Need to make a brand new session?
-                || session.needsRotation(mSessionRotationPeriodMsgs, mSessionRotationPeriodMs)
-                // Determine if we have shared with anyone we shouldn't have
-                || session.sharedWithTooManyDevices(devicesInRoom)) {
+            // Need to make a brand new session?
+            || session.needsRotation(sessionRotationPeriodMsgs, sessionRotationPeriodMs)
+            // Determine if we have shared with anyone we shouldn't have
+            || session.sharedWithTooManyDevices(devicesInRoom)) {
             session = prepareNewSessionInRoom()
-            mOutboundSession = session
+            outboundSession = session
         }
 
-        if (mShareOperationIsProgress) {
+        if (shareOperationIsProgress) {
             Timber.v("## ensureOutboundSessionInRoom() : already in progress")
             // Key share already in progress
             return
@@ -218,7 +216,7 @@ internal class MXMegolmEncryption(
 
         shareKey(fSession, shareMap, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                mShareOperationIsProgress = false
+                shareOperationIsProgress = false
                 callback?.onSuccess(fSession)
             }
 
@@ -226,7 +224,7 @@ internal class MXMegolmEncryption(
                 Timber.e("## ensureOutboundSessionInRoom() : shareKey onFailure")
 
                 callback?.onFailure(failure)
-                mShareOperationIsProgress = false
+                shareOperationIsProgress = false
             }
         })
 
@@ -303,7 +301,7 @@ internal class MXMegolmEncryption(
 
         val submap = HashMap<String, Any>()
         submap["algorithm"] = MXCRYPTO_ALGORITHM_MEGOLM
-        submap["room_id"] = mRoomId
+        submap["room_id"] = roomId
         submap["session_id"] = session.mSessionId
         submap["session_key"] = sessionKey!!
         submap["chain_index"] = chainIndex
@@ -315,10 +313,10 @@ internal class MXMegolmEncryption(
         val t0 = System.currentTimeMillis()
         Timber.v("## shareUserDevicesKey() : starts")
 
-        mEnsureOlmSessionsForDevicesAction.handle(devicesByUser, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
+        ensureOlmSessionsForDevicesAction.handle(devicesByUser, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXOlmSessionResult>) {
                 Timber.v("## shareUserDevicesKey() : ensureOlmSessionsForDevices succeeds after "
-                        + (System.currentTimeMillis() - t0) + " ms")
+                         + (System.currentTimeMillis() - t0) + " ms")
                 val contentMap = MXUsersDevicesMap<Any>()
 
                 var haveTargets = false
@@ -348,7 +346,7 @@ internal class MXMegolmEncryption(
 
                         Timber.v("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
                         //noinspection ArraysAsListWithZeroOrOneArgument,ArraysAsListWithZeroOrOneArgument
-                        contentMap.setObject(mMessageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.mDevice)), userId, deviceID)
+                        contentMap.setObject(messageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.mDevice)), userId, deviceID)
                         haveTargets = true
                     }
                 }
@@ -357,11 +355,11 @@ internal class MXMegolmEncryption(
                     val t0 = System.currentTimeMillis()
                     Timber.v("## shareUserDevicesKey() : has target")
 
-                    mSendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ENCRYPTED, contentMap))
+                    sendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ENCRYPTED, contentMap))
                             .dispatchTo(object : MatrixCallback<Unit> {
                                 override fun onSuccess(data: Unit) {
                                     Timber.v("## shareUserDevicesKey() : sendToDevice succeeds after "
-                                            + (System.currentTimeMillis() - t0) + " ms")
+                                             + (System.currentTimeMillis() - t0) + " ms")
 
                                     // Add the devices we have shared with to session.sharedWithDevices.
                                     // we deliberately iterate over devicesByUser (ie, the devices we
@@ -387,7 +385,7 @@ internal class MXMegolmEncryption(
                                     callback?.onFailure(failure)
                                 }
                             })
-                            .executeBy(mTaskExecutor)
+                            .executeBy(taskExecutor)
                 } else {
                     Timber.v("## shareUserDevicesKey() : no need to sharekey")
 
@@ -416,9 +414,9 @@ internal class MXMegolmEncryption(
             for (queuedEncryption in queuedEncryptions) {
                 val payloadJson = HashMap<String, Any>()
 
-                payloadJson["room_id"] = mRoomId
-                payloadJson["type"] = queuedEncryption.mEventType!!
-                payloadJson["content"] = queuedEncryption.mEventContent!!
+                payloadJson["room_id"] = roomId
+                payloadJson["type"] = queuedEncryption.eventType!!
+                payloadJson["content"] = queuedEncryption.eventContent!!
 
                 // Get canonical Json from
 
@@ -433,15 +431,15 @@ internal class MXMegolmEncryption(
 
                 // Include our device ID so that recipients can send us a
                 // m.new_device message if they don't have our session key.
-                map["device_id"] = mCredentials.deviceId!!
+                map["device_id"] = credentials.deviceId!!
 
-                CryptoAsyncHelper.getUiHandler().post { queuedEncryption.mApiCallback?.onSuccess(map) }
+                CryptoAsyncHelper.getUiHandler().post { queuedEncryption.apiCallback?.onSuccess(map) }
 
                 session.mUseCount++
             }
 
-            synchronized(mPendingEncryptions) {
-                mPendingEncryptions.removeAll(queuedEncryptions)
+            synchronized(_pendingEncryptions) {
+                _pendingEncryptions.removeAll(queuedEncryptions)
             }
         }
     }
@@ -458,10 +456,10 @@ internal class MXMegolmEncryption(
         // have a list of the user's devices, then we already share an e2e room
         // with them, which means that they will have announced any new devices via
         // an m.new_device.
-        mDeviceListManager.downloadKeys(userIds, false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
+        deviceListManager.downloadKeys(userIds, false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                val encryptToVerifiedDevicesOnly = mCryptoStore.getGlobalBlacklistUnverifiedDevices()
-                        || mCryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(mRoomId)
+                val encryptToVerifiedDevicesOnly = cryptoStore.getGlobalBlacklistUnverifiedDevices()
+                                                   || cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
 
                 val devicesInRoom = MXUsersDevicesMap<MXDeviceInfo>()
                 val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
@@ -472,7 +470,7 @@ internal class MXMegolmEncryption(
                     for (deviceId in deviceIds!!) {
                         val deviceInfo = data.getObject(deviceId, userId)
 
-                        if (mWarnOnUnknownDevicesRepository.warnOnUnknownDevices() && deviceInfo!!.isUnknown) {
+                        if (warnOnUnknownDevicesRepository.warnOnUnknownDevices() && deviceInfo!!.isUnknown) {
                             // The device is not yet known by the user
                             unknownDevices.setObject(deviceInfo, userId, deviceId)
                             continue
@@ -501,7 +499,7 @@ internal class MXMegolmEncryption(
                     // if so, warn the user so they can verify or ignore.
                     if (unknownDevices.map.isNotEmpty()) {
                         callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
-                                MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
+                                                                             MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
                     } else {
                         callback.onSuccess(devicesInRoom)
                     }

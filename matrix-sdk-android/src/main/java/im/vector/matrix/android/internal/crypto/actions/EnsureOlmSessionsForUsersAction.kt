@@ -26,9 +26,9 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import java.util.*
 
-internal class EnsureOlmSessionsForUsersAction(private val mOlmDevice: MXOlmDevice,
-                                               private val mCryptoStore: IMXCryptoStore,
-                                               private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction) {
+internal class EnsureOlmSessionsForUsersAction(private val olmDevice: MXOlmDevice,
+                                               private val cryptoStore: IMXCryptoStore,
+                                               private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction) {
 
     /**
      * Try to make sure we have established olm sessions for the given users.
@@ -46,12 +46,12 @@ internal class EnsureOlmSessionsForUsersAction(private val mOlmDevice: MXOlmDevi
         for (userId in users) {
             devicesByUser[userId] = ArrayList()
 
-            val devices = mCryptoStore.getUserDevices(userId)?.values ?: emptyList()
+            val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
 
             for (device in devices) {
                 val key = device.identityKey()
 
-                if (TextUtils.equals(key, mOlmDevice.deviceCurve25519Key)) {
+                if (TextUtils.equals(key, olmDevice.deviceCurve25519Key)) {
                     // Don't bother setting up session to ourself
                     continue
                 }
@@ -65,6 +65,6 @@ internal class EnsureOlmSessionsForUsersAction(private val mOlmDevice: MXOlmDevi
             }
         }
 
-        mEnsureOlmSessionsForDevicesAction.handle(devicesByUser, callback)
+        ensureOlmSessionsForDevicesAction.handle(devicesByUser, callback)
     }
 }

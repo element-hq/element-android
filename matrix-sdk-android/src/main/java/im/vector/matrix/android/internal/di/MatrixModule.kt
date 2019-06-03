@@ -38,8 +38,7 @@ class MatrixModule(private val context: Context) {
             MatrixCoroutineDispatchers(io = Dispatchers.IO,
                                        computation = Dispatchers.IO,
                                        main = Dispatchers.Main,
-                                       encryption = Executors.newSingleThreadExecutor().asCoroutineDispatcher(),
-                                       decryption = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+                                       crypto = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
             )
         }
 

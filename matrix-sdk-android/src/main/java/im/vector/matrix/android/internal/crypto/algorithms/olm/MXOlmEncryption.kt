@@ -31,18 +31,20 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 internal class MXOlmEncryption(
-        private var mRoomId: String,
-
-        private val mOlmDevice: MXOlmDevice,
-        private val mCryptoStore: IMXCryptoStore,
-        private val mMessageEncrypter: MessageEncrypter,
-        private val mDeviceListManager: DeviceListManager,
-        private val mEnsureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction)
+        private var roomId: String,
+        private val olmDevice: MXOlmDevice,
+        private val cryptoStore: IMXCryptoStore,
+        private val messageEncrypter: MessageEncrypter,
+        private val deviceListManager: DeviceListManager,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction)
     : IMXEncrypting {
-
 
     override fun encryptEventContent(eventContent: Content,
                                      eventType: String,
@@ -51,40 +53,42 @@ internal class MXOlmEncryption(
         // pick the list of recipients based on the membership list.
         //
         // TODO: there is a race condition here! What if a new user turns up
-        ensureSession(userIds, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                val deviceInfos = ArrayList<MXDeviceInfo>()
+        CoroutineScope(coroutineDispatchers.crypto).launch {
+            ensureSession(userIds, object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    val deviceInfos = ArrayList<MXDeviceInfo>()
 
-                for (userId in userIds) {
-                    val devices = mCryptoStore.getUserDevices(userId)?.values ?: emptyList()
+                    for (userId in userIds) {
+                        val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
 
-                    for (device in devices) {
-                        val key = device.identityKey()
+                        for (device in devices) {
+                            val key = device.identityKey()
 
-                        if (TextUtils.equals(key, mOlmDevice.deviceCurve25519Key)) {
-                            // Don't bother setting up session to ourself
-                            continue
+                            if (TextUtils.equals(key, olmDevice.deviceCurve25519Key)) {
+                                // Don't bother setting up session to ourself
+                                continue
+                            }
+
+                            if (device.isBlocked) {
+                                // Don't bother setting up sessions with blocked users
+                                continue
+                            }
+
+                            deviceInfos.add(device)
                         }
-
-                        if (device.isBlocked) {
-                            // Don't bother setting up sessions with blocked users
-                            continue
-                        }
-
-                        deviceInfos.add(device)
                     }
+
+                    val messageMap = HashMap<String, Any>()
+                    messageMap["room_id"] = roomId
+                    messageMap["type"] = eventType
+                    messageMap["content"] = eventContent
+
+                    messageEncrypter.encryptMessage(messageMap, deviceInfos)
+
+                    callback.onSuccess(messageMap.toContent()!!)
                 }
-
-                val messageMap = HashMap<String, Any>()
-                messageMap["room_id"] = mRoomId
-                messageMap["type"] = eventType
-                messageMap["content"] = eventContent
-
-                mMessageEncrypter.encryptMessage(messageMap, deviceInfos)
-
-                callback.onSuccess(messageMap.toContent()!!)
-            }
-        })
+            })
+        }
     }
 
     /**
@@ -94,10 +98,10 @@ internal class MXOlmEncryption(
      * @param callback the asynchronous callback
      */
     private fun ensureSession(users: List<String>, callback: MatrixCallback<Unit>?) {
-        mDeviceListManager.downloadKeys(users, false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
+        deviceListManager.downloadKeys(users, false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
 
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                mEnsureOlmSessionsForUsersAction.handle(users, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
+                ensureOlmSessionsForUsersAction.handle(users, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
                     override fun onSuccess(data: MXUsersDevicesMap<MXOlmSessionResult>) {
                         callback?.onSuccess(Unit)
                     }

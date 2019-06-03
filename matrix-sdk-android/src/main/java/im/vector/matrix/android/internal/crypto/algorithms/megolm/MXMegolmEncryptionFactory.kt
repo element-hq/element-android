@@ -40,10 +40,9 @@ internal class MXMegolmEncryptionFactory(
         private val mMessageEncrypter: MessageEncrypter,
         private val mWarnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository) {
 
-    fun instantiate(roomId: String): MXMegolmEncryption {
+    fun create(roomId: String): MXMegolmEncryption {
         return MXMegolmEncryption(
                 roomId,
-
                 olmDevice,
                 mKeysBackup,
                 mCryptoStore,

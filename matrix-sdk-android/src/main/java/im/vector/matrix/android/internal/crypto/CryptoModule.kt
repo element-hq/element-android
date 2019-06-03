@@ -69,8 +69,8 @@ internal class CryptoModule {
         // CryptoStore
         scope(DefaultSession.SCOPE) {
             RealmCryptoStore(false /* TODO*/,
-                    get("CryptoRealmConfiguration"),
-                    get()) as IMXCryptoStore
+                             get("CryptoRealmConfiguration"),
+                             get()) as IMXCryptoStore
         }
 
         scope(DefaultSession.SCOPE) {
@@ -123,7 +123,7 @@ internal class CryptoModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            EnsureOlmSessionsForDevicesAction(get(), get(), get())
+            EnsureOlmSessionsForDevicesAction(get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -146,7 +146,7 @@ internal class CryptoModule {
         // Factories
         scope(DefaultSession.SCOPE) {
             MXMegolmDecryptionFactory(
-                    get(), get(), get(), get(), get(), get(), get(), get(), get()
+                    get(), get(), get(), get(), get(), get(), get(), get(), get(), get()
             )
         }
 
@@ -164,7 +164,7 @@ internal class CryptoModule {
 
         scope(DefaultSession.SCOPE) {
             MXOlmEncryptionFactory(
-                    get(), get(), get(), get(), get()
+                    get(), get(), get(), get(), get(),get()
             )
         }
 
@@ -217,7 +217,7 @@ internal class CryptoModule {
 
         // Device list
         scope(DefaultSession.SCOPE) {
-            DeviceListManager(get(), get(), get(), get(), get(), get())
+            DeviceListManager(get(), get(), get(), get(), get(), get(), get())
         }
 
         // Crypto tasks

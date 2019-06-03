@@ -28,7 +28,9 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import timber.log.Timber
 import java.util.*
 
@@ -38,6 +40,7 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
                                  private val syncTokenStore: SyncTokenStore,
                                  private val credentials: Credentials,
                                  private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
+                                 private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                  private val taskExecutor: TaskExecutor) {
 
     // keys in progress
@@ -457,6 +460,7 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
 
         downloadKeysForUsersTask
                 .configureWith(DownloadKeysForUsersTask.Params(filteredUsers, syncTokenStore.getLastToken()))
+                .executeOn(TaskThread.ENCRYPTION)
                 .dispatchTo(object : MatrixCallback<KeysQueryResponse> {
                     override fun onSuccess(data: KeysQueryResponse) {
                         CryptoAsyncHelper.getEncryptBackgroundHandler().post {

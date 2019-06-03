@@ -135,20 +135,20 @@ data class Event(
     internal fun setClearData(decryptionResult: MXEventDecryptionResult?) {
         mClearEvent = null
         if (decryptionResult != null) {
-            if (decryptionResult.mClearEvent != null) {
+            if (decryptionResult.clearEvent != null) {
                 val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
-                mClearEvent = adapter.fromJsonValue(decryptionResult.mClearEvent)
+                mClearEvent = adapter.fromJsonValue(decryptionResult.clearEvent)
 
             }
             mClearEvent?.apply {
-                mSenderCurve25519Key = decryptionResult.mSenderCurve25519Key
-                mClaimedEd25519Key = decryptionResult.mClaimedEd25519Key
-                mForwardingCurve25519KeyChain = decryptionResult.mForwardingCurve25519KeyChain
+                mSenderCurve25519Key = decryptionResult.senderCurve25519Key
+                mClaimedEd25519Key = decryptionResult.claimedEd25519Key
+                mForwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain
                 try {
                     // Add "m.relates_to" data from e2e event to the unencrypted event
                     // TODO
                     //if (getWireContent().getAsJsonObject().has("m.relates_to")) {
-                    //    mClearEvent!!.getContentAsJsonObject()
+                    //    clearEvent!!.getContentAsJsonObject()
                     //            .add("m.relates_to", getWireContent().getAsJsonObject().get("m.relates_to"))
                     //}
                 } catch (e: Exception) {
@@ -193,7 +193,7 @@ data class Event(
     }
 
     /**
-     * @return the event type
+     * @return the event content
      */
     fun getClearContent(): Content? {
         return mClearEvent?.content ?: content

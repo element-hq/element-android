@@ -28,23 +28,23 @@ data class MXEventDecryptionResult(
         /**
          * The plaintext payload for the event (typically containing "type" and "content" fields).
          */
-        var mClearEvent: JsonDict? = null,
+        var clearEvent: JsonDict? = null,
 
         /**
          * Key owned by the sender of this event.
          * See MXEvent.senderKey.
          */
-        var mSenderCurve25519Key: String? = null,
+        var senderCurve25519Key: String? = null,
 
         /**
          * Ed25519 key claimed by the sender of this event.
          * See MXEvent.claimedEd25519Key.
          */
-        var mClaimedEd25519Key: String? = null,
+        var claimedEd25519Key: String? = null,
 
         /**
          * List of curve25519 keys involved in telling us about the senderCurve25519Key and
          * claimedEd25519Key. See MXEvent.forwardingCurve25519KeyChain.
          */
-        var mForwardingCurve25519KeyChain: List<String> = ArrayList()
+        var forwardingCurve25519KeyChain: List<String> = ArrayList()
 )

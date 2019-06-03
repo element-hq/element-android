@@ -49,7 +49,6 @@ import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
-import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
@@ -488,8 +487,8 @@ internal class CryptoManager(
         cryptoStore.storeRoomAlgorithm(roomId, algorithm!!)
 
         val alg: IMXEncrypting = when (algorithm) {
-            MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.instantiate(roomId)
-            else                      -> olmEncryptionFactory.instantiate(roomId)
+            MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.create(roomId)
+            else                      -> olmEncryptionFactory.create(roomId)
         }
 
         synchronized(roomEncryptors) {
@@ -544,20 +543,6 @@ internal class CryptoManager(
         return if (null != map) ArrayList(map.values) else ArrayList()
     }
 
-    // TODO Remove ?
-    /**
-     * Try to make sure we have established olm sessions for the given devices.
-     * It must be called in getCryptoHandler() thread.
-     * The callback is called in the UI thread.
-     *
-     * @param devicesByUser a map from userid to list of devices.
-     * @param callback      the asynchronous callback
-     */
-    fun ensureOlmSessionsForDevices(devicesByUser: Map<String, List<MXDeviceInfo>>,
-                                    callback: MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>>?) {
-        ensureOlmSessionsForDevicesAction.handle(devicesByUser, callback)
-    }
-
     fun isEncryptionEnabledForInvitedUser(): Boolean {
         return cryptoConfig.mEnableEncryptionForInvitedMembers
     }
@@ -602,7 +587,7 @@ internal class CryptoManager(
         var alg = synchronized(roomEncryptors) {
             roomEncryptors[roomId]
         }
-        if (null == alg) {
+        if (alg == null) {
             val algorithm = getEncryptionAlgorithm(roomId)
             if (null != algorithm) {
                 if (setEncryptionInRoom(roomId, algorithm, false, userIds)) {
@@ -613,7 +598,7 @@ internal class CryptoManager(
             }
         }
 
-        if (null != alg) {
+        if (alg != null) {
             val t0 = System.currentTimeMillis()
             Timber.v("## encryptEventContent() starts")
 
@@ -739,7 +724,7 @@ internal class CryptoManager(
      * @param event the encryption event.
      */
     private fun onRoomEncryptionEvent(roomId: String, event: Event) {
-        CoroutineScope(coroutineDispatchers.encryption).launch {
+        CoroutineScope(coroutineDispatchers.crypto).launch {
             val params = LoadRoomMembersTask.Params(roomId)
             loadRoomMembersTask
                     .execute(params)

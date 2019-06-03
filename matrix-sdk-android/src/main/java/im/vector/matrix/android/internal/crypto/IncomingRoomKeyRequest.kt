@@ -30,34 +30,34 @@ open class IncomingRoomKeyRequest {
     /**
      * The user id
      */
-    var mUserId: String? = null
+    var userId: String? = null
 
     /**
      * The device id
      */
-    var mDeviceId: String? = null
+    var deviceId: String? = null
 
     /**
      * The request id
      */
-    var mRequestId: String? = null
+    var requestId: String? = null
 
     /**
      * The request body
      */
-    var mRequestBody: RoomKeyRequestBody? = null
+    var requestBody: RoomKeyRequestBody? = null
 
     /**
      * The runnable to call to accept to share the keys
      */
     @Transient
-    var mShare: Runnable? = null
+    var share: Runnable? = null
 
     /**
      * The runnable to call to ignore the key share request.
      */
     @Transient
-    var mIgnore: Runnable? = null
+    var ignore: Runnable? = null
 
     /**
      * Constructor
@@ -65,11 +65,11 @@ open class IncomingRoomKeyRequest {
      * @param event the event
      */
     constructor(event: Event) {
-        mUserId = event.sender
+        userId = event.sender
         val roomKeyShareRequest = event.getClearContent().toModel<RoomKeyShareRequest>()!!
-        mDeviceId = roomKeyShareRequest.requestingDeviceId
-        mRequestId = roomKeyShareRequest.requestId
-        mRequestBody = if (null != roomKeyShareRequest.body) roomKeyShareRequest.body else RoomKeyRequestBody()
+        deviceId = roomKeyShareRequest.requestingDeviceId
+        requestId = roomKeyShareRequest.requestId
+        requestBody = if (null != roomKeyShareRequest.body) roomKeyShareRequest.body else RoomKeyRequestBody()
     }
 
     /**

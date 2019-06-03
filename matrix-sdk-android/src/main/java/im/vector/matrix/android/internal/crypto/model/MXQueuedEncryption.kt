@@ -24,11 +24,11 @@ class MXQueuedEncryption {
     /**
      * The data to encrypt.
      */
-    var mEventContent: Content? = null
-    var mEventType: String? = null
+    var eventContent: Content? = null
+    var eventType: String? = null
 
     /**
      * the asynchronous callback
      */
-    var mApiCallback: MatrixCallback<Content>? = null
+    var apiCallback: MatrixCallback<Content>? = null
 }

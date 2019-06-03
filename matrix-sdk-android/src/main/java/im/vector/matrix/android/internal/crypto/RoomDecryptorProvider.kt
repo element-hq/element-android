@@ -68,8 +68,8 @@ internal class RoomDecryptorProvider(
 
         if (decryptingClass) {
             alg = when (algorithm) {
-                MXCRYPTO_ALGORITHM_MEGOLM -> mMXMegolmDecryptionFactory.instantiate()
-                else                      -> mMXOlmDecryptionFactory.instantiate()
+                MXCRYPTO_ALGORITHM_MEGOLM -> mMXMegolmDecryptionFactory.create()
+                else                      -> mMXOlmDecryptionFactory.create()
             }
 
             if (null != alg) {

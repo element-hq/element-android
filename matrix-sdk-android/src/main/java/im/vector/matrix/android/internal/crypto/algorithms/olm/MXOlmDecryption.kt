@@ -18,7 +18,6 @@
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
 import android.text.TextUtils
-import com.squareup.moshi.Json
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
@@ -144,9 +143,9 @@ internal class MXOlmDecryption(
         }
 
         val result = MXEventDecryptionResult()
-        result.mClearEvent = payload
-        result.mSenderCurve25519Key = olmEventContent.senderKey
-        result.mClaimedEd25519Key = olmPayloadContent.keys!!.get("ed25519")
+        result.clearEvent = payload
+        result.senderCurve25519Key = olmEventContent.senderKey
+        result.claimedEd25519Key = olmPayloadContent.keys!!.get("ed25519")
 
         return result
     }

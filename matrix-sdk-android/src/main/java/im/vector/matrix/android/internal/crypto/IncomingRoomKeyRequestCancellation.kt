@@ -24,6 +24,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 class IncomingRoomKeyRequestCancellation(event: Event) : IncomingRoomKeyRequest(event) {
 
     init {
-        mRequestBody = null
+        requestBody = null
     }
 }

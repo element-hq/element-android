@@ -22,7 +22,7 @@ import im.vector.matrix.android.internal.crypto.MXOlmDevice
 internal class MXOlmDecryptionFactory(private val mOlmDevice: MXOlmDevice,
                                       private val mCredentials: Credentials) {
 
-    fun instantiate(): MXOlmDecryption {
+    fun create(): MXOlmDecryption {
         return MXOlmDecryption(
                 mOlmDevice,
                 mCredentials)

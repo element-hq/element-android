@@ -26,12 +26,14 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import timber.log.Timber
 import java.util.*
 
-internal class EnsureOlmSessionsForDevicesAction(private val mOlmDevice: MXOlmDevice,
-                                                 private val mClaimOneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
-                                                 private val mTaskExecutor: TaskExecutor) {
+internal class EnsureOlmSessionsForDevicesAction(private val olmDevice: MXOlmDevice,
+                                                 private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
+                                                 private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                 private val taskExecutor: TaskExecutor) {
 
 
     fun handle(devicesByUser: Map<String, List<MXDeviceInfo>>, callback: MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>>?) {
@@ -48,7 +50,7 @@ internal class EnsureOlmSessionsForDevicesAction(private val mOlmDevice: MXOlmDe
                 val deviceId = deviceInfo.deviceId
                 val key = deviceInfo.identityKey()
 
-                val sessionId = mOlmDevice.getSessionId(key!!)
+                val sessionId = olmDevice.getSessionId(key!!)
 
                 if (TextUtils.isEmpty(sessionId)) {
                     devicesWithoutSession.add(deviceInfo)
@@ -81,7 +83,8 @@ internal class EnsureOlmSessionsForDevicesAction(private val mOlmDevice: MXOlmDe
 
         Timber.v("## claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
 
-        mClaimOneTimeKeysForUsersDeviceTask
+
+        oneTimeKeysForUsersDeviceTask
                 .configureWith(ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim))
                 .dispatchTo(object : MatrixCallback<MXUsersDevicesMap<MXKey>> {
                     override fun onSuccess(data: MXUsersDevicesMap<MXKey>) {
@@ -137,7 +140,7 @@ internal class EnsureOlmSessionsForDevicesAction(private val mOlmDevice: MXOlmDe
                         callback?.onFailure(failure)
                     }
                 })
-                .executeBy(mTaskExecutor)
+                .executeBy(taskExecutor)
     }
 
 
@@ -153,7 +156,7 @@ internal class EnsureOlmSessionsForDevicesAction(private val mOlmDevice: MXOlmDe
             var errorMessage: String? = null
 
             try {
-                mOlmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
+                olmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
                 isVerified = true
             } catch (e: Exception) {
                 errorMessage = e.message
@@ -161,7 +164,7 @@ internal class EnsureOlmSessionsForDevicesAction(private val mOlmDevice: MXOlmDe
 
             // Check one-time key signature
             if (isVerified) {
-                sessionId = mOlmDevice.createOutboundSession(deviceInfo.identityKey()!!, oneTimeKey.value)
+                sessionId = olmDevice.createOutboundSession(deviceInfo.identityKey()!!, oneTimeKey.value)
 
                 if (!TextUtils.isEmpty(sessionId)) {
                     Timber.v("## verifyKeyAndStartSession() : Started new sessionid " + sessionId

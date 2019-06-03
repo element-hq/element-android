@@ -22,44 +22,40 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 
-private const val THREAD_ENCRYPT_NAME = "Crypto_Encrypt_Thread"
-private const val THREAD_DECRYPT_NAME = "Crypto_Decrypt_Thread"
+private const val THREAD_CRYPTO_NAME = "Crypto_Thread"
 
 // TODO Remove and replace by Task
 internal object CryptoAsyncHelper {
 
     private var uiHandler: Handler? = null
-    private var decryptBackgroundHandler: Handler? = null
-    private var encryptBackgroundHandler: Handler? = null
+    private var cryptoBackgroundHandler: Handler? = null
 
     fun getUiHandler(): Handler {
         return uiHandler
-                ?: Handler(Looper.getMainLooper())
-                        .also { uiHandler = it }
+               ?: Handler(Looper.getMainLooper())
+                       .also { uiHandler = it }
     }
 
+
     fun getDecryptBackgroundHandler(): Handler {
-        return decryptBackgroundHandler
-                ?: createDecryptBackgroundHandler()
-                        .also { decryptBackgroundHandler = it }
+        return getCryptoBackgroundHandler()
     }
 
     fun getEncryptBackgroundHandler(): Handler {
-        return encryptBackgroundHandler
-                ?: createEncryptBackgroundHandler()
-                        .also { encryptBackgroundHandler = it }
+        return getCryptoBackgroundHandler()
     }
 
-    private fun createDecryptBackgroundHandler(): Handler {
-        val handlerThread = HandlerThread(THREAD_DECRYPT_NAME)
+    private fun getCryptoBackgroundHandler(): Handler {
+        return cryptoBackgroundHandler
+               ?: createCryptoBackgroundHandler()
+                       .also { cryptoBackgroundHandler = it }
+    }
+
+    private fun createCryptoBackgroundHandler(): Handler {
+        val handlerThread = HandlerThread(THREAD_CRYPTO_NAME)
         handlerThread.start()
         return Handler(handlerThread.looper)
     }
 
-    private fun createEncryptBackgroundHandler(): Handler {
-        val handlerThread = HandlerThread(THREAD_ENCRYPT_NAME)
-        handlerThread.start()
-        return Handler(handlerThread.looper)
-    }
 
 }

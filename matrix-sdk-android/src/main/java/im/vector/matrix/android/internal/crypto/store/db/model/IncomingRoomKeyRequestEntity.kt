@@ -33,10 +33,10 @@ internal open class IncomingRoomKeyRequestEntity(
 
     fun toIncomingRoomKeyRequest(): IncomingRoomKeyRequest {
         return IncomingRoomKeyRequest().apply {
-            mRequestId = requestId
-            mUserId = userId
-            mDeviceId = deviceId
-            mRequestBody = RoomKeyRequestBody().apply {
+            requestId = requestId
+            userId = userId
+            deviceId = deviceId
+            requestBody = RoomKeyRequestBody().apply {
                 algorithm = requestBodyAlgorithm
                 roomId = requestBodyRoomId
                 senderKey = requestBodySenderKey
