@@ -18,21 +18,22 @@ package im.vector.riotredesign.features.home
 
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
 import org.koin.android.ext.android.get
 
+/**
+ * View model used to update the home bottom bar notification counts
+ */
 class HomeDetailViewModel(initialState: HomeDetailViewState,
-                          private val session: Session)
+                          private val homeRoomListStore: HomeRoomListObservableStore)
     : VectorViewModel<HomeDetailViewState>(initialState) {
 
     companion object : MvRxViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeDetailViewState): HomeDetailViewModel? {
-            val currentSession = viewModelContext.activity.get<Session>()
-            return HomeDetailViewModel(state, currentSession)
+            val homeRoomListStore = viewModelContext.activity.get<HomeRoomListObservableStore>()
+            return HomeDetailViewModel(state, homeRoomListStore)
         }
     }
 
@@ -42,13 +43,11 @@ class HomeDetailViewModel(initialState: HomeDetailViewState,
 
     // PRIVATE METHODS *****************************************************************************
 
-    // TODO Filter with selected group
     private fun observeRoomSummaries() {
-        session
-                .rx()
-                .liveRoomSummaries()
-                .execute { state ->
-                    state.invoke()?.let { summaries ->
+        homeRoomListStore
+                .observe()
+                .subscribe { list ->
+                    list.let { summaries ->
                         val peopleNotifications = summaries
                                 .filter { it.isDirect }
                                 .map { it.notificationCount }
@@ -65,19 +64,19 @@ class HomeDetailViewModel(initialState: HomeDetailViewState,
                                 .filter { !it.isDirect }
                                 .any { it.highlightCount > 0 }
 
-                        copy(
-                                notificationCountCatchup = peopleNotifications + roomsNotifications,
-                                notificationHighlightCatchup = peopleHasHighlight || roomsHasHighlight,
-                                notificationCountPeople = peopleNotifications,
-                                notificationHighlightPeople = peopleHasHighlight,
-                                notificationCountRooms = roomsNotifications,
-                                notificationHighlightRooms = roomsHasHighlight
-                        )
-                    } ?: run {
-                        // No change
-                        copy()
+                        setState {
+                            copy(
+                                    notificationCountCatchup = peopleNotifications + roomsNotifications,
+                                    notificationHighlightCatchup = peopleHasHighlight || roomsHasHighlight,
+                                    notificationCountPeople = peopleNotifications,
+                                    notificationHighlightPeople = peopleHasHighlight,
+                                    notificationCountRooms = roomsNotifications,
+                                    notificationHighlightRooms = roomsHasHighlight
+                            )
+                        }
                     }
                 }
+                .disposeOnClear()
     }
 
 }

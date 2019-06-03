@@ -82,22 +82,25 @@ class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
         session
                 .rx()
                 .liveRoomSummaries()
-                .execute { async ->
-                    val joinedRoomIds = async.invoke()
+                .subscribe { list ->
+                    val joinedRoomIds = list
                             // Keep only joined room
                             ?.filter { it.membership == Membership.JOIN }
                             ?.map { it.roomId }
                             ?.toList()
                             ?: emptyList()
 
-                    copy(
-                            joinedRoomsIds = joinedRoomIds,
-                            // Remove (newly) joined room id from the joining room list
-                            joiningRoomsIds = joiningRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) },
-                            // Remove (newly) joined room id from the joining room list in error
-                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) }
-                    )
+                    setState {
+                        copy(
+                                joinedRoomsIds = joinedRoomIds,
+                                // Remove (newly) joined room id from the joining room list
+                                joiningRoomsIds = joiningRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) },
+                                // Remove (newly) joined room id from the joining room list in error
+                                joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) }
+                        )
+                    }
                 }
+                .disposeOnClear()
     }
 
     fun setRoomDirectoryData(roomDirectoryData: RoomDirectoryData) {

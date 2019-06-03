@@ -49,23 +49,25 @@ class RoomPreviewViewModel(initialState: RoomPreviewViewState,
         session
                 .rx()
                 .liveRoomSummaries()
-                .execute { async ->
-                    val isRoomJoined = async.invoke()
-                            // Keep only joined room
-                            ?.filter { it.membership == Membership.JOIN }
-                            ?.map { it.roomId }
-                            ?.toList()
-                            ?.contains(roomId) == true
+                .subscribe { list ->
+                    withState { state ->
+                        val isRoomJoined = list
+                                // Keep only joined room
+                                ?.filter { it.membership == Membership.JOIN }
+                                ?.map { it.roomId }
+                                ?.toList()
+                                ?.contains(state.roomId) == true
 
-                    if (isRoomJoined) {
-                        copy(
-                                roomJoinState = JoinState.JOINED
-                        )
-                    } else {
-                        // TODO No change...
-                        copy()
+                        if (isRoomJoined) {
+                            setState {
+                                copy(
+                                        roomJoinState = JoinState.JOINED
+                                )
+                            }
+                        }
                     }
                 }
+                .disposeOnClear()
     }
 
     // TODO I should not have to do that
@@ -88,7 +90,7 @@ class RoomPreviewViewModel(initialState: RoomPreviewViewState,
             copy(
                     roomJoinState = JoinState.JOINING,
                     lastError = null
-           )
+            )
         }
 
         session.joinRoom(state.roomId, object : MatrixCallback<Unit> {
