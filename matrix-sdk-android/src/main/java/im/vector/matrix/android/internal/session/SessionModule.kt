@@ -106,10 +106,6 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            EventRelationsAggregationUpdater(get())
-        }
-
-        scope(DefaultSession.SCOPE) {
             DefaultRoomService(get(), get(), get(), get()) as RoomService
         }
 
@@ -168,9 +164,11 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             val groupSummaryUpdater = GroupSummaryUpdater(get())
-            val eventsPruner = EventsPruner(get(), get(), get(), get())
             val userEntityUpdater = UserEntityUpdater(get(), get(), get())
-            listOf<LiveEntityObserver>(groupSummaryUpdater, eventsPruner, userEntityUpdater)
+            val aggregationUpdater = EventRelationsAggregationUpdater(get(), get(), get(), get())
+            //Event pruner must be the last one, because it will clear contents
+            val eventsPruner = EventsPruner(get(), get(), get(), get())
+            listOf<LiveEntityObserver>(groupSummaryUpdater, userEntityUpdater, aggregationUpdater, eventsPruner)
         }
 
 

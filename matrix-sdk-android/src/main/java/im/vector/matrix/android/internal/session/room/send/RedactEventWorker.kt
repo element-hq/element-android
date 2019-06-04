@@ -25,13 +25,13 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import org.koin.standalone.inject
-import java.util.*
 
 internal class RedactEventWorker(context: Context, params: WorkerParameters)
     : Worker(context, params), MatrixKoinComponent {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            val txID: String,
             val roomId: String,
             val eventId: String,
             val reason: String?
@@ -40,26 +40,26 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters)
     private val roomAPI by inject<RoomAPI>()
 
     override fun doWork(): Result {
-        val params = WorkerParamsFactory.fromData<RedactEventWorker.Params>(inputData)
+        val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
 
-        if (params.eventId == null) {
-            return Result.failure()
-        }
-        val txID = UUID.randomUUID().toString()
-
+        val eventId = params.eventId
         val result = executeRequest<SendResponse> {
             apiCall = roomAPI.redactEvent(
-                    txID,
+                    params.txID,
                     params.roomId,
-                    params.eventId,
+                    eventId,
                     if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
             )
         }
         return result.fold({
             when (it) {
                 is Failure.NetworkConnection -> Result.retry()
-                else -> Result.failure()
+                else -> {
+                    //TODO mark as failed to send?
+                    //always return success, or the chain will be stuck for ever!
+                    Result.success()
+                }
             }
         }, {
             Result.success()

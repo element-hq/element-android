@@ -16,9 +16,8 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
-import im.vector.matrix.android.api.session.room.send.SendState
-
 import android.os.Parcelable
+import im.vector.matrix.android.api.session.room.send.SendState
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -31,6 +30,15 @@ data class MessageInformationData(
         val memberName: CharSequence? = null,
         val showInformation: Boolean = true,
         /*List of reactions (emoji,count,isSelected)*/
-        var orderedReactionList: List<Triple<String,Int,Boolean>>? = null,
+        var orderedReactionList: List<ReactionInfoData>? = null,
         var hasBeenEdited: Boolean = false
+) : Parcelable
+
+
+@Parcelize
+data class ReactionInfoData(
+        val key: String,
+        val count: Int,
+        val addedByMe: Boolean,
+        val synced: Boolean
 ) : Parcelable

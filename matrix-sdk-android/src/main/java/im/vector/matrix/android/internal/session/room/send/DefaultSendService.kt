@@ -24,18 +24,12 @@ import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.api.util.addTo
-import im.vector.matrix.android.internal.database.helper.addSendingEvent
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
+import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import java.util.concurrent.TimeUnit
 
-private const val SEND_WORK = "SEND_WORK"
 private const val UPLOAD_WORK = "UPLOAD_WORK"
 private const val BACKOFF_DELAY = 10_000L
 
@@ -54,9 +48,7 @@ internal class DefaultSendService(private val roomId: String,
             saveLocalEcho(it)
         }
         val sendWork = createSendEventWork(event)
-        WorkManager.getInstance()
-                .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, sendWork)
-                .enqueue()
+        TimelineSendEventWorkCommon.postWork(roomId, sendWork)
         return CancelableWork(sendWork.id)
     }
 
@@ -65,9 +57,7 @@ internal class DefaultSendService(private val roomId: String,
             saveLocalEcho(it)
         }
         val sendWork = createSendEventWork(event)
-        WorkManager.getInstance()
-                .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, sendWork)
-                .enqueue()
+        TimelineSendEventWorkCommon.postWork(roomId, sendWork)
         return CancelableWork(sendWork.id)
     }
 
@@ -80,12 +70,9 @@ internal class DefaultSendService(private val roomId: String,
     }
 
     override fun redactEvent(event: Event, reason: String?): Cancelable {
-        //TODO manage local echo ?
         //TODO manage media/attachements?
         val redactWork = createRedactEventWork(event, reason)
-        WorkManager.getInstance()
-                .beginUniqueWork(buildWorkIdentifier(SEND_WORK), ExistingWorkPolicy.APPEND, redactWork)
-                .enqueue()
+        TimelineSendEventWorkCommon.postWork(roomId, redactWork)
         return CancelableWork(redactWork.id)
     }
 
@@ -106,14 +93,7 @@ internal class DefaultSendService(private val roomId: String,
     }
 
     private fun saveLocalEcho(event: Event) {
-        monarchy.tryTransactionAsync { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                    ?: return@tryTransactionAsync
-            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-                    ?: return@tryTransactionAsync
-
-            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
-        }
+        eventFactory.saveLocalEcho(monarchy, event)
     }
 
     private fun buildWorkIdentifier(identifier: String): String {
@@ -124,26 +104,20 @@ internal class DefaultSendService(private val roomId: String,
         val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
-        return OneTimeWorkRequestBuilder<SendEventWorker>()
-                .setConstraints(WORK_CONSTRAINTS)
-                .setInputData(sendWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
-                .build()
+        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
     }
 
     private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
 
-        //TODO create local echo of m.room.redaction event?
+        val redactEvent = eventFactory.createRedactEvent(roomId, event.eventId!!, reason).also {
+            saveLocalEcho(it)
+        }
 
-        val sendContentWorkerParams = RedactEventWorker.Params(
-                roomId, event.eventId!!, reason)
+        val sendContentWorkerParams = RedactEventWorker.Params(redactEvent.eventId!!,
+                roomId, event.eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
-        return OneTimeWorkRequestBuilder<RedactEventWorker>()
-                .setConstraints(WORK_CONSTRAINTS)
-                .setInputData(redactWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
-                .build()
+        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
 
     private fun createUploadMediaWork(event: Event, attachment: ContentAttachmentData): OneTimeWorkRequest {

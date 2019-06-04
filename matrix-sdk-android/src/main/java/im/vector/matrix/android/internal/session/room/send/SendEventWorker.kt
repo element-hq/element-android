@@ -61,7 +61,11 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
         return result.fold({
             when (it) {
                 is Failure.NetworkConnection -> Result.retry()
-                else -> Result.failure()
+                else -> {
+                    //TODO mark as failed to send?
+                    //always return success, or the chain will be stuck for ever!
+                    Result.success()
+                }
             }
         }, { Result.success() })
     }

@@ -112,11 +112,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                 (holder.reactionWrapper?.children?.elementAtOrNull(index) as? ReactionButton)?.let { reactionButton ->
                     reactionButton.isVisible = true
                     reactionButton.reactedListener = reactionClickListener
-                    reactionButton.setTag(R.id.messageBottomInfo, reaction.first)
+                    reactionButton.setTag(R.id.messageBottomInfo, reaction.key)
                     idToRefInFlow.add(reactionButton.id)
-                    reactionButton.reactionString = reaction.first
-                    reactionButton.reactionCount = reaction.second
-                    reactionButton.setChecked(reaction.third)
+                    reactionButton.reactionString = reaction.key
+                    reactionButton.reactionCount = reaction.count
+                    reactionButton.setChecked(reaction.addedByMe)
+                    reactionButton.isEnabled = reaction.synced
                 }
             }
             // Just setting the view as gone will break the FlowHelper (and invisible will take too much space),
