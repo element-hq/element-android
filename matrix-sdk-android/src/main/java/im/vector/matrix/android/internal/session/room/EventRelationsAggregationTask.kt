@@ -44,6 +44,9 @@ internal interface EventRelationsAggregationTask : Task<EventRelationsAggregatio
  */
 internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarchy) : EventRelationsAggregationTask {
 
+    //OPT OUT serer aggregation until API mature enough
+    private val SHOULD_HANDLE_SERVER_AGREGGATION = false
+
     override fun execute(params: EventRelationsAggregationTask.Params): Try<Unit> {
         return monarchy.tryTransactionAsync { realm ->
             update(realm, params.events, params.userId)
@@ -155,20 +158,22 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
     }
 
     private fun handleInitialAggregatedRelations(event: Event, roomId: String, aggregation: AggregatedAnnotation, realm: Realm) {
-        aggregation.chunk?.forEach {
-            if (it.type == EventType.REACTION) {
-                val eventId = event.eventId ?: ""
-                val existing = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
-                if (existing == null) {
-                    val eventSummary = EventAnnotationsSummaryEntity.create(realm, eventId)
-                    eventSummary.roomId = roomId
-                    val sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
-                    sum.key = it.key
-                    sum.firstTimestamp = event.originServerTs ?: 0 //TODO how to maintain order?
-                    sum.count = it.count
-                    eventSummary.reactionsSummary.add(sum)
-                } else {
-                    //TODO how to handle that
+        if (SHOULD_HANDLE_SERVER_AGREGGATION) {
+            aggregation.chunk?.forEach {
+                if (it.type == EventType.REACTION) {
+                    val eventId = event.eventId ?: ""
+                    val existing = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
+                    if (existing == null) {
+                        val eventSummary = EventAnnotationsSummaryEntity.create(realm, eventId)
+                        eventSummary.roomId = roomId
+                        val sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
+                        sum.key = it.key
+                        sum.firstTimestamp = event.originServerTs ?: 0 //TODO how to maintain order?
+                        sum.count = it.count
+                        eventSummary.reactionsSummary.add(sum)
+                    } else {
+                        //TODO how to handle that
+                    }
                 }
             }
         }
