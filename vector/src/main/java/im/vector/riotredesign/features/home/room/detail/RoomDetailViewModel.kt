@@ -350,6 +350,12 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
         displayedEventsObservable.accept(action)
+        //We need to update this with the related m.replace also (to move read receipt)
+        action.event.annotations?.editSummary?.sourceEvents?.forEach {
+            room.getTimeLineEvent(it)?.let {event ->
+                displayedEventsObservable.accept(RoomDetailActions.EventDisplayed(event))
+            }
+        }
     }
 
     private fun handleLoadMore(action: RoomDetailActions.LoadMore) {
