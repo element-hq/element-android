@@ -16,6 +16,8 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
 import android.os.Bundle
+import android.os.Parcelable
+import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewModelStore
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -50,6 +52,10 @@ abstract class BaseMvRxBottomSheetDialog : BottomSheetDialogFragment(), MvRxView
         // This ensures that invalidate() is called for static screens that don't
         // subscribe to a ViewModel.
         postInvalidate()
+    }
+
+    protected fun setArguments(args: Parcelable? = null) {
+        arguments = args?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
 }
 

@@ -144,15 +144,15 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
 
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): MessageActionsBottomSheet {
-            val args = Bundle()
-            val parcelableArgs = ParcelableArgs(
-                    informationData.eventId,
-                    roomId,
-                    informationData
-            )
-            args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
-            return MessageActionsBottomSheet().apply { arguments = args }
-
+            return MessageActionsBottomSheet().apply {
+                setArguments(
+                        ParcelableArgs(
+                                informationData.eventId,
+                                roomId,
+                                informationData
+                        )
+                )
+            }
         }
     }
 }

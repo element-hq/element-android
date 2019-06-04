@@ -41,6 +41,7 @@ import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.DebouncedClickListener
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
@@ -79,7 +80,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val avatarUrl = event.senderAvatar
         val memberName = event.senderName ?: event.root.sender ?: ""
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(AvatarRenderer.getColorFromUserId(event.root.sender
+            textColor = colorProvider.getColor(getColorFromUserId(event.root.sender
                     ?: ""))
         }
         val hasBeenEdited = event.annotations?.editSummary != null
@@ -135,7 +136,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         }
     }
 
-    private fun buildAudioMessageItem(messageContent: MessageAudioContent, informationData: MessageInformationData,
+    private fun buildAudioMessageItem(messageContent: MessageAudioContent,
+                                      informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
@@ -164,7 +166,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun buildFileMessageItem(messageContent: MessageFileContent, informationData: MessageInformationData,
+    private fun buildFileMessageItem(messageContent: MessageFileContent,
+                                     informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
@@ -198,7 +201,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return DefaultItem_().text(text)
     }
 
-    private fun buildImageMessageItem(messageContent: MessageImageContent, informationData: MessageInformationData,
+    private fun buildImageMessageItem(messageContent: MessageImageContent,
+                                      informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -233,14 +237,14 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
-
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
     }
 
-    private fun buildVideoMessageItem(messageContent: MessageVideoContent, informationData: MessageInformationData,
+    private fun buildVideoMessageItem(messageContent: MessageVideoContent,
+                                      informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -283,7 +287,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun buildTextMessageItem(sendState: SendState, messageContent: MessageTextContent,
+    private fun buildTextMessageItem(sendState: SendState,
+                                     messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
                                      hasBeenEdited: Boolean,
                                      editSummary: EditAggregatedSummary?,
@@ -335,6 +340,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                    editSummary: EditAggregatedSummary?): SpannableStringBuilder {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
+        // TODO i18n
         val editedSuffix = "(edited)"
         spannable.append(" ").append(editedSuffix)
         val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
@@ -362,7 +368,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return spannable
     }
 
-    private fun buildNoticeMessageItem(messageContent: MessageNoticeContent, informationData: MessageInformationData,
+    private fun buildNoticeMessageItem(messageContent: MessageNoticeContent,
+                                       informationData: MessageInformationData,
                                        callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -395,7 +402,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun buildEmoteMessageItem(messageContent: MessageEmoteContent, informationData: MessageInformationData,
+    private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
+                                      informationData: MessageInformationData,
                                       hasBeenEdited: Boolean,
                                       editSummary: EditAggregatedSummary?,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
@@ -433,7 +441,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun buildRedactedItem(informationData: MessageInformationData, callback: TimelineEventController.Callback?): RedactedMessageItem? {
+    private fun buildRedactedItem(informationData: MessageInformationData,
+                                  callback: TimelineEventController.Callback?): RedactedMessageItem? {
         return RedactedMessageItem_()
                 .informationData(informationData)
                 .avatarClickListener(
@@ -455,33 +464,5 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         })
         VectorLinkify.addLinks(spannable, true)
         return spannable
-    }
-
-    //Based on riot-web implementation
-    @ColorRes
-    private fun getColorFor(sender: String): Int {
-        var hash = 0
-        var i = 0
-        var chr: Char
-        if (sender.isEmpty()) {
-            return R.color.username_1
-        }
-        while (i < sender.length) {
-            chr = sender[i]
-            hash = (hash shl 5) - hash + chr.toInt()
-            hash = hash or 0
-            i++
-        }
-        val cI = Math.abs(hash) % 8 + 1
-        return when (cI) {
-            1 -> R.color.username_1
-            2 -> R.color.username_2
-            3 -> R.color.username_3
-            4 -> R.color.username_4
-            5 -> R.color.username_5
-            6 -> R.color.username_6
-            7 -> R.color.username_7
-            else -> R.color.username_8
-        }
     }
 }

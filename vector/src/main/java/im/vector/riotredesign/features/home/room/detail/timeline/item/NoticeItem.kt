@@ -57,6 +57,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     }
 
     companion object {
-        private val STUB_ID = R.id.messageContentNoticeStub
+        private const val STUB_ID = R.id.messageContentNoticeStub
     }
 }
