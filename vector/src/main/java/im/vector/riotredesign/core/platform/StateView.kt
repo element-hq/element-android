@@ -81,18 +81,14 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 emptyImageView.setImageDrawable(newState.image)
                 emptyMessageView.text = newState.message
                 emptyTitleView.text = newState.title
-                if (contentView != null) {
-                    contentView!!.visibility = View.INVISIBLE
-                }
+                contentView?.visibility = View.INVISIBLE
             }
             is State.Error   -> {
                 progressBar.visibility = View.INVISIBLE
                 errorView.visibility = View.VISIBLE
                 emptyView.visibility = View.INVISIBLE
                 errorMessageView.text = newState.message
-                if (contentView != null) {
-                    contentView!!.visibility = View.INVISIBLE
-                }
+                contentView?.visibility = View.INVISIBLE
             }
         }
     }

@@ -18,7 +18,7 @@ package im.vector.riotredesign.features.home.room.list
 
 import androidx.recyclerview.widget.DefaultItemAnimator
 
-private const val ANIM_DURATION_IN_MILLIS = 100L
+private const val ANIM_DURATION_IN_MILLIS = 200L
 
 class RoomListAnimator : DefaultItemAnimator() {
 

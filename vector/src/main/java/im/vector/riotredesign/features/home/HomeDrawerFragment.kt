@@ -17,14 +17,14 @@
 package im.vector.riotredesign.features.home
 
 import android.os.Bundle
-import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.observeK
 import im.vector.riotredesign.core.extensions.replaceChildFragment
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.group.GroupListFragment
-import im.vector.riotredesign.features.settings.VectorSettingsActivity
 import kotlinx.android.synthetic.main.fragment_home_drawer.*
+import org.koin.android.ext.android.inject
 
 class HomeDrawerFragment : VectorBaseFragment() {
 
@@ -35,6 +35,8 @@ class HomeDrawerFragment : VectorBaseFragment() {
         }
     }
 
+    val session by inject<Session>()
+
     override fun getLayoutResId() = R.layout.fragment_home_drawer
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -43,7 +45,7 @@ class HomeDrawerFragment : VectorBaseFragment() {
             val groupListFragment = GroupListFragment.newInstance()
             replaceChildFragment(groupListFragment, R.id.homeDrawerGroupListContainer)
         }
-        val session = Matrix.getInstance().currentSession ?: return
+
         session.observeUser(session.sessionParams.credentials.userId).observeK(this) { user ->
             if (user != null) {
                 AvatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)

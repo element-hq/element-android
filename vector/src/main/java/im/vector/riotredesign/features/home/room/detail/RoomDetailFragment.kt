@@ -479,11 +479,7 @@ class RoomDetailFragment :
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         val roomId = roomDetailArgs.roomId
-        if (roomId.isBlank()) {
-            // Benoit to Valere: can this happen?
-            Timber.e("Missing RoomId, cannot open bottomsheet")
-            return false
-        }
+
         this.view?.hideKeyboard()
         MessageActionsBottomSheet
                 .newInstance(roomId, informationData)
