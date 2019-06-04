@@ -18,7 +18,10 @@ package im.vector.riotredesign.features.home.room.list
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.DateProvider
 import im.vector.riotredesign.core.resources.StringProvider
@@ -90,7 +93,12 @@ class RoomSummaryController(private val stringProvider: StringProvider,
                 val currentData = DateProvider.currentLocalDateTime()
                 val isSameDay = date.toLocalDate() == currentData.toLocalDate()
                 //TODO: get formatted
-                lastMessageFormatted = lastMessage.content?.toString() ?: ""
+                if (lastMessage.type == EventType.MESSAGE) {
+                    val content = lastMessage.content?.toModel<MessageContent>()
+                    lastMessageFormatted = content?.body ?: ""
+                } else {
+                    lastMessageFormatted = lastMessage.type
+                }
                 lastMessageTime = if (isSameDay) {
                     timelineDateFormatter.formatMessageHour(date)
                 } else {
