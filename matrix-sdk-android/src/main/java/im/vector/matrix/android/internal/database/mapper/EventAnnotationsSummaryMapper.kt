@@ -15,13 +15,15 @@ internal object EventAnnotationsSummaryMapper {
                             it.count,
                             it.addedByMe,
                             it.firstTimestamp,
-                            it.sourceEvents.toList()
+                            it.sourceEvents.toList(),
+                            it.sourceLocalEcho.toList()
                     )
                 },
                 editSummary = annotationsSummary.editSummary?.let {
                     EditAggregatedSummary(
                             ContentMapper.map(it.aggregatedContent),
                             it.sourceEvents.toList(),
+                            it.sourceLocalEchoEvents.toList(),
                             it.lastEditTs
                     )
                 }

@@ -50,16 +50,17 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
                     ?: return null
 
-            val messageContent: MessageContent = event.root.content.toModel() ?: return null
+            val messageContent: MessageContent =  event.annotations?.editSummary?.aggregatedContent?.toModel()
+                    ?: event.root.content.toModel() ?: return null
             val type = messageContent.type
 
             if (event.sendState == SendState.UNSENT) {
                 //Resend and Delete
                 return MessageMenuState(
                         listOf(
-                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_corner_down_right, event.root.eventId),
+                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_send, event.root.eventId),
                                 //TODO delete icon
-                                SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_material_delete, event.root.eventId)
+                                SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId)
                         )
                 )
             }
@@ -67,14 +68,29 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
             //TODO determine if can copy, forward, reply, quote, report?
             val actions = ArrayList<SimpleAction>().apply {
-                this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_smile, event.root.eventId))
+
+                if (event.sendState == SendState.SENDING) {
+                    //TODO add cancel?
+                    return@apply
+                }
+                //TODO is downloading attachement?
+
+                this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, event.root.eventId))
                 if (canCopy(type)) {
                     //TODO copy images? html? see ClipBoard
                     this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent.body))
                 }
 
+                if (canReply(event, messageContent)) {
+                    this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, event.root.eventId))
+                }
+
+                if (canEdit(event, currentSession.sessionParams.credentials.userId)) {
+                    this.add(SimpleAction(ACTION_EDIT, R.string.edit, R.drawable.ic_edit, event.root.eventId))
+                }
+
                 if (canRedact(event, currentSession.sessionParams.credentials.userId)) {
-                    this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_material_delete, event.root.eventId))
+                    this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId))
                 }
 
                 if (canQuote(event, messageContent)) {
@@ -82,9 +98,6 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, parcel.eventId))
                 }
 
-                if (canReply(event, messageContent)) {
-                    this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_corner_down_right))
-                }
                 if (canShare(type)) {
                     if (messageContent is MessageImageContent) {
                         this.add(
@@ -96,8 +109,6 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     //TODO
                 }
 
-                //TODO is uploading
-                //TODO is downloading
 
                 if (event.sendState == SendState.SENT) {
 
@@ -159,6 +170,17 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             return event.root.sender == myUserId
         }
 
+        private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            if (event.root.type != EventType.MESSAGE) return false
+            //TODO if user is admin or moderator
+            val messageContent = event.root.content.toModel<MessageContent>()
+            return event.root.sender == myUserId && (
+                    messageContent?.type == MessageType.MSGTYPE_TEXT
+                            || messageContent?.type == MessageType.MSGTYPE_EMOTE
+                    )
+        }
+
 
         private fun canCopy(type: String): Boolean {
             return when (type) {
@@ -187,6 +209,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
         const val ACTION_ADD_REACTION = "add_reaction"
         const val ACTION_COPY = "copy"
+        const val ACTION_EDIT = "edit"
         const val ACTION_QUOTE = "quote"
         const val ACTION_REPLY = "reply"
         const val ACTION_SHARE = "share"

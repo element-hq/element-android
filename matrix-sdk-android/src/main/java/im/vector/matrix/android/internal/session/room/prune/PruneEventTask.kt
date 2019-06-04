@@ -17,14 +17,15 @@ package im.vector.matrix.android.internal.session.room.prune
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.*
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.UnsignedData
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
@@ -41,8 +42,7 @@ internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
 }
 
 internal class DefaultPruneEventTask(
-        private val monarchy: Monarchy,
-        private val eventRelationsAggregationUpdater: EventRelationsAggregationUpdater) : PruneEventTask {
+        private val monarchy: Monarchy) : PruneEventTask {
 
     override fun execute(params: PruneEventTask.Params): Try<Unit> {
         return monarchy.tryTransactionSync { realm ->
@@ -56,6 +56,12 @@ internal class DefaultPruneEventTask(
         if (redactionEvent.redacts.isNullOrBlank()) {
             return
         }
+
+        val redactionEventEntity = EventEntity.where(realm, eventId = redactionEvent.eventId
+                ?: "").findFirst()
+                ?: return
+        val isLocalEcho = redactionEventEntity.sendState == SendState.UNSENT
+        Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
         val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
                 ?: return
@@ -72,19 +78,19 @@ internal class DefaultPruneEventTask(
                             ?: UnsignedData(null, null)
 
                     //was this event a m.replace
-                    val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
-                    if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
-                        eventRelationsAggregationUpdater.handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
-                    }
+//                    val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
+//                    if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
+//                        eventRelationsAggregationUpdater.handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
+//                    }
 
                     val modified = unsignedData.copy(redactedEvent = redactionEvent)
                     eventToPrune.content = ContentMapper.map(emptyMap())
                     eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
 
                 }
-                EventType.REACTION -> {
-                    eventRelationsAggregationUpdater.handleReactionRedact(eventToPrune, realm, userId)
-                }
+//                EventType.REACTION -> {
+//                    eventRelationsAggregationUpdater.handleReactionRedact(eventToPrune, realm, userId)
+//                }
             }
         }
     }

@@ -20,11 +20,13 @@ import android.text.Spannable
 import com.otaliastudios.autocomplete.AutocompletePolicy
 
 class CommandAutocompletePolicy : AutocompletePolicy {
+
+    var enabled: Boolean = true
+
     override fun getQuery(text: Spannable): CharSequence {
         if (text.length > 0) {
             return text.substring(1, text.length)
         }
-
         // Should not happen
         return ""
     }
@@ -34,7 +36,7 @@ class CommandAutocompletePolicy : AutocompletePolicy {
 
     // Only if text which starts with '/' and without space
     override fun shouldShowPopup(text: Spannable?, cursorPos: Int): Boolean {
-        return text?.startsWith("/") == true
+        return enabled && text?.startsWith("/") == true
                 && !text.contains(" ")
     }
 

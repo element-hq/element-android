@@ -18,10 +18,10 @@ package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.internal.session.room.relation.DefaultRelationService
+import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
-import im.vector.matrix.android.internal.session.room.annotation.FindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.annotation.DefaultReactionService
-import im.vector.matrix.android.internal.session.room.annotation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
@@ -58,7 +58,7 @@ internal class RoomFactory(private val monarchy: Monarchy,
         val timelineEventFactory = TimelineEventFactory(roomMemberExtractor, EventRelationExtractor())
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, timelineEventFactory, contextOfEventTask, paginationTask)
         val sendService = DefaultSendService(roomId, eventFactory, monarchy)
-        val reactionService = DefaultReactionService(roomId, eventFactory, findReactionEventForUndoTask, updateQuickReactionTask, taskExecutor)
+        val reactionService = DefaultRelationService(roomId, eventFactory, findReactionEventForUndoTask, updateQuickReactionTask, monarchy, taskExecutor)
         val stateService = DefaultStateService(roomId, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
         val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask)

@@ -25,8 +25,12 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import timber.log.Timber
 
-
+/**
+ * Listens to the database for the insertion of any redaction event.
+ * As it will actually delete the content, it should be called last in the list of listener.
+ */
 internal class EventsPruner(monarchy: Monarchy,
                             private val credentials: Credentials,
                             private val pruneEventTask: PruneEventTask,
@@ -36,6 +40,7 @@ internal class EventsPruner(monarchy: Monarchy,
     override val query = Monarchy.Query<EventEntity> { EventEntity.where(it, type = EventType.REDACTION) }
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
+        Timber.v("Event pruner called with ${inserted.size} insertions")
         val redactionEvents = inserted
                 .mapNotNull { it.asDomain() }
 

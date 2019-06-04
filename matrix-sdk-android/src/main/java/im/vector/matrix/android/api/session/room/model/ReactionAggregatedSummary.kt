@@ -5,5 +5,6 @@ data class ReactionAggregatedSummary(
         val count: Int,                 // 8
         val addedByMe: Boolean,         // true
         val firstTimestamp: Long,       // unix timestamp
-        val sourceEvents: List<String>
+        val sourceEvents: List<String>,
+        val localEchoEvents: List<String>
 )

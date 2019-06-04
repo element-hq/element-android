@@ -40,6 +40,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -53,6 +54,7 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -74,6 +76,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerActions
+import im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
@@ -89,12 +92,17 @@ import im.vector.riotredesign.features.media.ImageMediaViewerActivity
 import im.vector.riotredesign.features.media.VideoContentRenderer
 import im.vector.riotredesign.features.media.VideoMediaViewerActivity
 import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
+import im.vector.riotredesign.features.settings.PreferencesManager
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
+import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import org.commonmark.parser.Parser
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 import org.koin.core.parameter.parametersOf
+import ru.noties.markwon.Markwon
+import ru.noties.markwon.html.HtmlPlugin
 import timber.log.Timber
 import java.io.File
 
@@ -132,13 +140,12 @@ class RoomDetailFragment :
          * @return the sanitized display name
          */
         fun sanitizeDisplayname(displayName: String): String? {
-            var displayName = displayName
             // sanity checks
             if (!TextUtils.isEmpty(displayName)) {
                 val ircPattern = " (IRC)"
 
                 if (displayName.endsWith(ircPattern)) {
-                    displayName = displayName.substring(0, displayName.length - ircPattern.length)
+                    return displayName.substring(0, displayName.length - ircPattern.length)
                 }
             }
 
@@ -155,6 +162,7 @@ class RoomDetailFragment :
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
     private val textComposerViewModel: TextComposerViewModel by fragmentViewModel()
     private val timelineEventController: TimelineEventController by inject { parametersOf(this) }
+    private val commandAutocompletePolicy = CommandAutocompletePolicy()
     private val autocompleteCommandPresenter: AutocompleteCommandPresenter by inject { parametersOf(this) }
     private val autocompleteUserPresenter: AutocompleteUserPresenter by inject { parametersOf(this) }
     private val homePermalinkHandler: HomePermalinkHandler by inject()
@@ -164,6 +172,9 @@ class RoomDetailFragment :
     override fun getLayoutResId() = R.layout.fragment_room_detail
 
     private lateinit var actionViewModel: ActionsHandler
+
+    @BindView(R.id.composerLayout)
+    lateinit var composerLayout: TextComposerView
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -187,6 +198,77 @@ class RoomDetailFragment :
         actionViewModel.actionCommandEvent.observe(this, Observer {
             handleActions(it)
         })
+
+        roomDetailViewModel.selectSubscribe(
+                RoomDetailViewState::sendMode,
+                RoomDetailViewState::selectedEvent,
+                RoomDetailViewState::roomId) { mode, event, roomId ->
+            when (mode) {
+                SendMode.REGULAR -> {
+                    commandAutocompletePolicy.enabled = true
+                    val uid = session.sessionParams.credentials.userId
+                    val meMember = session.getRoom(roomId)?.getRoomMember(uid)
+                    AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
+                    composerLayout.collapse()
+                }
+                SendMode.EDIT,
+                SendMode.QUOTE,
+                SendMode.REPLY   -> {
+                    commandAutocompletePolicy.enabled = false
+                    if (event == null) {
+                        //we should ignore? can this happen?
+                        Timber.e("Enter edit mode with no event selected")
+                        return@selectSubscribe
+                    }
+                    //switch to expanded bar
+                    composerLayout.composerRelatedMessageTitle.apply {
+                        text = event.senderName
+                        setTextColor(ContextCompat.getColor(requireContext(), AvatarRenderer.getColorFromUserId(event.root.sender
+                                ?: "")))
+                    }
+
+                    //TODO this is used at several places, find way to refactor?
+                    val messageContent: MessageContent? =
+                            event.annotations?.editSummary?.aggregatedContent?.toModel()
+                                    ?: event.root.content.toModel()
+                    val nonFormattedBody = messageContent?.body ?: ""
+                    var formattedBody: CharSequence? = null
+                    if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
+                        val parser = Parser.builder().build()
+                        val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
+                        formattedBody = Markwon.builder(requireContext())
+                                .usePlugin(HtmlPlugin.create()).build().render(document)
+                    }
+                    composerLayout.composerRelatedMessageContent.text = formattedBody ?: nonFormattedBody
+
+
+                    if (mode == SendMode.EDIT) {
+                        //TODO if it's a reply we should trim the top part of message
+                        composerLayout.composerEditText.setText(nonFormattedBody)
+                        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit))
+                    } else if (mode == SendMode.QUOTE) {
+                        composerLayout.composerEditText.setText("")
+                        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_quote))
+                    } else if (mode == SendMode.REPLY) {
+                        composerLayout.composerEditText.setText("")
+                        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_reply))
+                    }
+
+                    AvatarRenderer.render(event.senderAvatar, event.root.sender
+                            ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+
+                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+                    composerLayout.expand {
+                        focusComposerAndShowKeyboard()
+                    }
+                    composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
+                        composerLayout.composerEditText.setText("")
+                        roomDetailViewModel.resetSendMode()
+                    }
+
+                }
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -233,8 +315,8 @@ class RoomDetailFragment :
     private fun setupComposer() {
         val elevation = 6f
         val backgroundDrawable = ColorDrawable(Color.WHITE)
-        Autocomplete.on<Command>(composerEditText)
-                .with(CommandAutocompletePolicy())
+        Autocomplete.on<Command>(composerLayout.composerEditText)
+                .with(commandAutocompletePolicy)
                 .with(autocompleteCommandPresenter)
                 .with(elevation)
                 .with(backgroundDrawable)
@@ -253,7 +335,7 @@ class RoomDetailFragment :
                 .build()
 
         autocompleteUserPresenter.callback = this
-        Autocomplete.on<User>(composerEditText)
+        Autocomplete.on<User>(composerLayout.composerEditText)
                 .with(CharPolicy('@', true))
                 .with(autocompleteUserPresenter)
                 .with(elevation)
@@ -281,7 +363,7 @@ class RoomDetailFragment :
                         // Add the span
                         val user = session.getUser(item.userId)
                         val span = PillImageSpan(glideRequests, context!!, item.userId, user)
-                        span.bind(composerEditText)
+                        span.bind(composerLayout.composerEditText)
 
                         editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
@@ -293,16 +375,16 @@ class RoomDetailFragment :
                 })
                 .build()
 
-        sendButton.setOnClickListener {
-            val textMessage = composerEditText.text.toString()
+        composerLayout.sendButton.setOnClickListener {
+            val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
-                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage))
+                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, PreferencesManager.isMarkdownEnabled(requireContext())))
             }
         }
     }
 
     private fun setupAttachmentButton() {
-        attachmentButton.setOnClickListener {
+        composerLayout.attachmentButton.setOnClickListener {
             val intent = Intent(requireContext(), FilePickerActivity::class.java)
             intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
                     .setCheckPermission(true)
@@ -386,6 +468,11 @@ class RoomDetailFragment :
         if (summary?.membership == Membership.JOIN) {
             timelineEventController.setTimeline(state.timeline)
             inviteView.visibility = View.GONE
+
+            val uid = session.sessionParams.credentials.userId
+            val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
+            AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
+
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
@@ -416,7 +503,7 @@ class RoomDetailFragment :
             is SendMessageResult.MessageSent,
             is SendMessageResult.SlashCommandHandled        -> {
                 // Clear composer
-                composerEditText.text = null
+                composerLayout.composerEditText.text = null
             }
             is SendMessageResult.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
@@ -586,6 +673,18 @@ class RoomDetailFragment :
                         roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, opposite))
                     }
                 }
+                MessageMenuViewModel.ACTION_EDIT           -> {
+                    val eventId = actionData.data.toString()
+                    roomDetailViewModel.process(RoomDetailActions.EnterEditMode(eventId))
+                }
+                MessageMenuViewModel.ACTION_QUOTE          -> {
+                    val eventId = actionData.data.toString()
+                    roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(eventId))
+                }
+                MessageMenuViewModel.ACTION_REPLY          -> {
+                    val eventId = actionData.data.toString()
+                    roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                }
                 else                                       -> {
                     Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()
                 }
@@ -599,6 +698,7 @@ class RoomDetailFragment :
      *
      * @param text the text to insert.
      */
+    //TODO legacy, refactor
     private fun insertUserDisplayNameInTextEditor(text: String?) {
         //TODO move logic outside of fragment
         if (null != text) {
@@ -607,21 +707,21 @@ class RoomDetailFragment :
             val myDisplayName = session.getUser(session.sessionParams.credentials.userId)?.displayName
             if (TextUtils.equals(myDisplayName, text)) {
                 // current user
-                if (TextUtils.isEmpty(composerEditText.text)) {
-                    composerEditText.append(Command.EMOTE.command + " ")
-                    composerEditText.setSelection(composerEditText.text.length)
+                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
+                    composerLayout.composerEditText.append(Command.EMOTE.command + " ")
+                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
 //                    vibrate = true
                 }
             } else {
                 // another user
-                if (TextUtils.isEmpty(composerEditText.text)) {
+                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
                     // Ensure displayName will not be interpreted as a Slash command
                     if (text.startsWith("/")) {
-                        composerEditText.append("\\")
+                        composerLayout.composerEditText.append("\\")
                     }
-                    composerEditText.append(sanitizeDisplayname(text)!! + ": ")
+                    composerLayout.composerEditText.append(sanitizeDisplayname(text)!! + ": ")
                 } else {
-                    composerEditText.text.insert(composerEditText.selectionStart, sanitizeDisplayname(text)!! + " ")
+                    composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayname(text)!! + " ")
                 }
 
 //                vibrate = true
@@ -633,10 +733,14 @@ class RoomDetailFragment :
 //                    v.vibrate(100)
 //                }
 //            }
-            composerEditText.requestFocus()
-            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.showSoftInput(composerEditText, InputMethodManager.SHOW_FORCED)
+            focusComposerAndShowKeyboard()
         }
+    }
+
+    private fun focusComposerAndShowKeyboard() {
+        composerLayout.composerEditText.requestFocus()
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.showSoftInput(composerLayout.composerEditText, InputMethodManager.SHOW_IMPLICIT)
     }
 
     fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {

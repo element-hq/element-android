@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.session.room.annotation
+package im.vector.matrix.android.internal.session.room.relation
 
 import android.content.Context
 import androidx.work.Worker
@@ -22,8 +22,8 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.annotation.ReactionContent
-import im.vector.matrix.android.api.session.room.model.annotation.ReactionInfo
+import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
+import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -70,7 +70,11 @@ class SendRelationWorker(context: Context, params: WorkerParameters)
         return result.fold({
             when (it) {
                 is Failure.NetworkConnection -> Result.retry()
-                else -> Result.failure()
+                else -> {
+                    //TODO mark as failed to send?
+                    //always return success, or the chain will be stuck for ever!
+                    Result.success()
+                }
             }
         }, { Result.success() })
     }

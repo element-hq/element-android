@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout_height="50dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -12,7 +11,8 @@
     android:paddingLeft="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingRight="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:layout_height="50dp">
 
     <ImageView
         android:id="@+id/action_icon"
@@ -21,8 +21,8 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:src="@drawable/ic_material_delete"
-        android:tint="?android:attr/textColorSecondary" />
+        tools:src="@drawable/ic_delete"
+        android:tint="?android:attr/textColorTertiary" />
 
     <TextView
         android:id="@+id/action_title"

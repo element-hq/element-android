@@ -26,10 +26,9 @@
     <string name="last_edited_info_message">Last edited by %s on %s</string>
 
 
+    <string name="malformed_message">Malformed event, cannot display</string>
     <string name="create_new_room">Create New Room</string>
-
     <string name="error_no_network">No network. Please check your Internet connection.</string>
-
     <string name="action_change">"Change"</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>

@@ -25,6 +25,7 @@ internal open class EditAggregatedSummaryEntity(
         var aggregatedContent: String? = null,
         // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
         var sourceEvents: RealmList<String> = RealmList(),
+        var sourceLocalEchoEvents: RealmList<String> = RealmList(),
         var lastEditTs: Long = 0
 ) : RealmObject() {
 

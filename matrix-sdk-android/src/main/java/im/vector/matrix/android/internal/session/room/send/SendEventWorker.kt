@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
@@ -57,6 +58,15 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
                     localEvent.content
             )
         }
-        return result.fold({ Result.retry() }, { Result.success() })
+        return result.fold({
+            when (it) {
+                is Failure.NetworkConnection -> Result.retry()
+                else -> {
+                    //TODO mark as failed to send?
+                    //always return success, or the chain will be stuck for ever!
+                    Result.success()
+                }
+            }
+        }, { Result.success() })
     }
 }

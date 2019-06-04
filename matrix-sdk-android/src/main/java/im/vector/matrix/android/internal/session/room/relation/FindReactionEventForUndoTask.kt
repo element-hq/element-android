@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.session.room.annotation
+package im.vector.matrix.android.internal.session.room.relation
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
