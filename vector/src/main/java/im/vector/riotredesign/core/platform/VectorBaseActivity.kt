@@ -93,7 +93,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
     }
 
     protected fun Disposable.disposeOnDestroy(): Disposable {
-        // TODO Ganfra: never disposed...
         uiDisposables.add(this)
         return this
     }
@@ -133,6 +132,8 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
 
         unBinder?.unbind()
         unBinder = null
+
+        uiDisposables.dispose()
     }
 
     override fun onResume() {
