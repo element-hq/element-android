@@ -41,7 +41,7 @@ class RoomDirectoryPickerController(private val stringProvider: StringProvider,
 
         when (asyncThirdPartyProtocol) {
             is Success    -> {
-                val directories = roomDirectoryListCreator.computeDirectories(asyncThirdPartyProtocol.invoke())
+                val directories = roomDirectoryListCreator.computeDirectories(asyncThirdPartyProtocol())
 
                 directories.forEach {
                     buildDirectory(it)
