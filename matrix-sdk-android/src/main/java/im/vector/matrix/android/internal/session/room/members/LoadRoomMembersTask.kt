@@ -44,7 +44,7 @@ internal class DefaultLoadRoomMembersTask(private val roomAPI: RoomAPI,
                                           private val roomSummaryUpdater: RoomSummaryUpdater
 ) : LoadRoomMembersTask {
 
-    override fun execute(params: LoadRoomMembersTask.Params): Try<Boolean> {
+    override suspend fun execute(params: LoadRoomMembersTask.Params): Try<Boolean> {
         return if (areAllMembersAlreadyLoaded(params.roomId)) {
             Try.just(true)
         } else {

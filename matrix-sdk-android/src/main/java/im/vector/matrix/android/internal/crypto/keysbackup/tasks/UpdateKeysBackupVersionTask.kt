@@ -34,7 +34,7 @@ internal class DefaultUpdateKeysBackupVersionTask(private val roomKeysApi: RoomK
     : UpdateKeysBackupVersionTask {
 
 
-    override fun execute(params: UpdateKeysBackupVersionTask.Params): Try<Unit> {
+    override suspend fun execute(params: UpdateKeysBackupVersionTask.Params): Try<Unit> {
         return executeRequest {
             apiCall = roomKeysApi.updateKeysBackupVersion(params.version, params.keysBackupVersionBody)
         }

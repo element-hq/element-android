@@ -40,7 +40,7 @@ internal class DefaultSyncTask(private val syncAPI: SyncAPI,
 ) : SyncTask {
 
 
-    override fun execute(params: SyncTask.Params): Try<SyncResponse> {
+    override suspend fun execute(params: SyncTask.Params): Try<SyncResponse> {
         val requestParams = HashMap<String, String>()
         var timeout = 0
         if (params.token != null) {

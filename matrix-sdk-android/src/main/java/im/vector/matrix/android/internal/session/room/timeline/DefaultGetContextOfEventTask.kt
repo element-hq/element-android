@@ -36,7 +36,7 @@ internal class DefaultGetContextOfEventTask(private val roomAPI: RoomAPI,
                                             private val tokenChunkEventPersistor: TokenChunkEventPersistor
 ) : GetContextOfEventTask {
 
-    override fun execute(params: GetContextOfEventTask.Params): Try<TokenChunkEventPersistor.Result> {
+    override suspend fun execute(params: GetContextOfEventTask.Params): Try<TokenChunkEventPersistor.Result> {
         val filter = filterRepository.getRoomFilter()
         return executeRequest<EventContextResponse> {
             apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, 0, filter)

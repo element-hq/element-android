@@ -31,7 +31,7 @@ internal interface InviteTask : Task<InviteTask.Params, Unit> {
 
 internal class DefaultInviteTask(private val roomAPI: RoomAPI) : InviteTask {
 
-    override fun execute(params: InviteTask.Params): Try<Unit> {
+    override suspend fun execute(params: InviteTask.Params): Try<Unit> {
         return executeRequest {
             val body = InviteBody(params.userId)
             apiCall = roomAPI.invite(params.roomId, body)

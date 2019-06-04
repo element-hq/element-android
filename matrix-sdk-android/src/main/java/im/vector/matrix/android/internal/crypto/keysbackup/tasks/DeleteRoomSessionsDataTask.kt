@@ -32,7 +32,7 @@ internal interface DeleteRoomSessionsDataTask : Task<DeleteRoomSessionsDataTask.
 internal class DefaultDeleteRoomSessionsDataTask(private val roomKeysApi: RoomKeysApi)
     : DeleteRoomSessionsDataTask {
 
-    override fun execute(params: DeleteRoomSessionsDataTask.Params): Try<Unit> {
+    override suspend fun execute(params: DeleteRoomSessionsDataTask.Params): Try<Unit> {
         return executeRequest {
             apiCall = roomKeysApi.deleteRoomSessionsData(
                     params.roomId,

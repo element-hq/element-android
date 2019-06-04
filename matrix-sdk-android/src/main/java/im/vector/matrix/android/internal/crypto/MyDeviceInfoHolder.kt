@@ -50,7 +50,7 @@ internal class MyDeviceInfoHolder(
         myDevice.keys = keys
 
         myDevice.algorithms = MXCryptoAlgorithms.supportedAlgorithms()
-        myDevice.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED
+        myDevice.verified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED
 
         // Add our own deviceinfo to the store
         val endToEndDevicesForUser = cryptoStore.getUserDevices(credentials.userId)

@@ -25,7 +25,7 @@ import kotlin.random.Random
 
 internal class FakeGetContextOfEventTask(private val tokenChunkEventPersistor: TokenChunkEventPersistor) : GetContextOfEventTask {
 
-    override fun execute(params: GetContextOfEventTask.Params): Try<TokenChunkEventPersistor.Result> {
+    override suspend fun execute(params: GetContextOfEventTask.Params): Try<TokenChunkEventPersistor.Result> {
         val fakeEvents = RoomDataHelper.createFakeListOfEvents(30)
         val tokenChunkEvent = FakeTokenChunkEvent(
                 Random.nextLong(System.currentTimeMillis()).toString(),

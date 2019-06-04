@@ -29,7 +29,7 @@ internal class DefaultGetKeysBackupVersionTask(private val roomKeysApi: RoomKeys
     : GetKeysBackupVersionTask {
 
 
-    override fun execute(params: String): Try<KeysVersionResult> {
+    override suspend fun execute(params: String): Try<KeysVersionResult> {
         return executeRequest {
             apiCall = roomKeysApi.getKeysBackupVersion(params)
         }

@@ -39,7 +39,7 @@ internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadRespon
 internal class DefaultUploadKeysTask(private val cryptoApi: CryptoApi)
     : UploadKeysTask {
 
-    override fun execute(params: UploadKeysTask.Params): Try<KeysUploadResponse> {
+    override suspend fun execute(params: UploadKeysTask.Params): Try<KeysUploadResponse> {
         val encodedDeviceId = convertToUTF8(params.deviceId)
 
         val body = KeysUploadBody()

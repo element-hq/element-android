@@ -24,12 +24,12 @@ import timber.log.Timber
 import java.util.*
 
 internal class RoomDecryptorProvider(
-        private val mMXOlmDecryptionFactory: MXOlmDecryptionFactory,
-        private val mMXMegolmDecryptionFactory: MXMegolmDecryptionFactory
+        private val olmDecryptionFactory: MXOlmDecryptionFactory,
+        private val megolmDecryptionFactory: MXMegolmDecryptionFactory
 ) {
 
     // A map from algorithm to MXDecrypting instance, for each room
-    private val mRoomDecryptors: MutableMap<String /* room id */, MutableMap<String /* algorithm */, IMXDecrypting>> = HashMap()
+    private val roomDecryptors: MutableMap<String /* room id */, MutableMap<String /* algorithm */, IMXDecrypting>> = HashMap()
 
     /**
      * Get a decryptor for a given room and algorithm.
@@ -43,44 +43,36 @@ internal class RoomDecryptorProvider(
      */
     fun getOrCreateRoomDecryptor(roomId: String?, algorithm: String?): IMXDecrypting? {
         // sanity check
-        if (TextUtils.isEmpty(algorithm)) {
+        if (algorithm.isNullOrEmpty() || roomId.isNullOrEmpty()) {
             Timber.e("## getRoomDecryptor() : null algorithm")
             return null
         }
 
-        var alg: IMXDecrypting? = null
-
-        if (!TextUtils.isEmpty(roomId)) {
-            synchronized(mRoomDecryptors) {
-                if (!mRoomDecryptors.containsKey(roomId)) {
-                    mRoomDecryptors[roomId!!] = HashMap()
-                }
-
-                alg = mRoomDecryptors[roomId]!![algorithm]
+        var alg: IMXDecrypting?
+        synchronized(roomDecryptors) {
+            if (!roomDecryptors.containsKey(roomId)) {
+                roomDecryptors[roomId!!] = HashMap()
             }
 
-            if (null != alg) {
-                return alg
-            }
+            alg = roomDecryptors[roomId]!![algorithm]
         }
-
+        if (alg != null) {
+            return alg
+        }
         val decryptingClass = MXCryptoAlgorithms.hasDecryptorClassForAlgorithm(algorithm)
-
         if (decryptingClass) {
             alg = when (algorithm) {
-                MXCRYPTO_ALGORITHM_MEGOLM -> mMXMegolmDecryptionFactory.create()
-                else                      -> mMXOlmDecryptionFactory.create()
+                MXCRYPTO_ALGORITHM_MEGOLM -> megolmDecryptionFactory.create()
+                else                      -> olmDecryptionFactory.create()
             }
-
             if (null != alg) {
                 if (!TextUtils.isEmpty(roomId)) {
-                    synchronized(mRoomDecryptors) {
-                        mRoomDecryptors[roomId]!!.put(algorithm!!, alg!!)
+                    synchronized(roomDecryptors) {
+                        roomDecryptors[roomId]!!.put(algorithm!!, alg!!)
                     }
                 }
             }
         }
-
         return alg
     }
 
@@ -88,7 +80,6 @@ internal class RoomDecryptorProvider(
         if (roomId == null || algorithm == null) {
             return null
         }
-
-        return mRoomDecryptors[roomId]?.get(algorithm)
+        return roomDecryptors[roomId]?.get(algorithm)
     }
 }

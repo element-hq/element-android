@@ -36,7 +36,7 @@ internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Para
 internal class DefaultDownloadKeysForUsers(private val cryptoApi: CryptoApi)
     : DownloadKeysForUsersTask {
 
-    override fun execute(params: DownloadKeysForUsersTask.Params): Try<KeysQueryResponse> {
+    override suspend fun execute(params: DownloadKeysForUsersTask.Params): Try<KeysQueryResponse> {
         val downloadQuery = HashMap<String, Map<String, Any>>()
 
         if (null != params.userIds) {

@@ -21,6 +21,8 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import android.os.Handler
 import android.text.TextUtils
+import arrow.core.Try
+import arrow.instances.`try`.applicativeError.handleError
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -66,14 +68,16 @@ import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTas
 import im.vector.matrix.android.internal.session.room.members.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A `CryptoService` class instance manages the end-to-end crypto for a session.
@@ -137,10 +141,10 @@ internal class CryptoManager(
     private val roomEncryptors: MutableMap<String, IMXEncrypting> = HashMap()
 
     // the encryption is starting
-    private var isStarting: Boolean = false
+    private var isStarting = AtomicBoolean(false)
 
     // tell if the crypto is started
-    private var isStarted: Boolean = false
+    private var isStarted = AtomicBoolean(false)
 
     // TODO
     //private val mNetworkListener = object : IMXNetworkEventListener {
@@ -220,7 +224,7 @@ internal class CryptoManager(
      * @return true if the crypto is started
      */
     fun isStarted(): Boolean {
-        return isStarted
+        return isStarted.get()
     }
 
     /**
@@ -229,7 +233,7 @@ internal class CryptoManager(
      * @return true if the crypto is starting
      */
     fun isStarting(): Boolean {
-        return isStarting
+        return isStarting.get()
     }
 
     /**
@@ -241,7 +245,7 @@ internal class CryptoManager(
      * @param isInitialSync true if it starts from an initial sync
      */
     fun start(isInitialSync: Boolean) {
-        if (isStarting) {
+        if (isStarting.get()) {
             return
         }
 
@@ -254,65 +258,43 @@ internal class CryptoManager(
         //    return
         //}
 
-        isStarting = true
-
+        isStarting.set(true)
         // Open the store
         cryptoStore.open()
-
-        uploadDeviceKeys(object : MatrixCallback<KeysUploadResponse> {
-            private fun onError() {
-                Handler().postDelayed({
-                                          if (!isStarted()) {
-                                              isStarting = false
-                                              start(isInitialSync)
-                                          }
-                                      }, 1000)
-            }
-
-            override fun onSuccess(data: KeysUploadResponse) {
-                Timber.v("###########################################################")
-                Timber.v("uploadDeviceKeys done for " + credentials.userId)
-                Timber.v("  - device id  : " + credentials.deviceId)
-                Timber.v("  - ed25519    : " + olmDevice.deviceEd25519Key)
-                Timber.v("  - curve25519 : " + olmDevice.deviceCurve25519Key)
-                Timber.v("  - oneTimeKeys: " + oneTimeKeysUploader.mLastPublishedOneTimeKeys)
-                Timber.v("")
-
-                oneTimeKeysUploader.maybeUploadOneTimeKeys(object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        // TODO
-                        //if (null != mNetworkConnectivityReceiver) {
-                        //    mNetworkConnectivityReceiver!!.removeEventListener(mNetworkListener)
-                        //}
-
-                        isStarting = false
-                        isStarted = true
-
-                        outgoingRoomKeyRequestManager.start()
-
-                        keysBackup.checkAndStartKeysBackup()
-
-                        if (isInitialSync) {
-                            // refresh the devices list for each known room members
-                            deviceListManager.invalidateAllDeviceLists()
-                            deviceListManager.refreshOutdatedDeviceLists()
-                        } else {
-                            incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
-                        }
+        CoroutineScope(coroutineDispatchers.crypto).launch {
+            uploadDeviceKeys()
+                    .flatMap {
+                        oneTimeKeysUploader.maybeUploadOneTimeKeys()
                     }
-
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## start failed")
-                        onError()
+                    .handleError {
+                        Handler().postDelayed(
+                                {
+                                    if (!isStarted()) {
+                                        isStarting.set(false)
+                                        start(isInitialSync)
+                                    }
+                                }, 1000
+                        )
                     }
-                })
-            }
-
-            override fun onFailure(failure: Throwable) {
-                Timber.e(failure, "## start failed")
-                onError()
-            }
-        })
+                    .fold(
+                            {
+                                Timber.e("Start failed: $it")
+                            },
+                            {
+                                isStarting.set(false)
+                                isStarted.set(true)
+                                outgoingRoomKeyRequestManager.start()
+                                keysBackup.checkAndStartKeysBackup()
+                                if (isInitialSync) {
+                                    // refresh the devices list for each known room members
+                                    deviceListManager.invalidateAllDeviceLists()
+                                    deviceListManager.refreshOutdatedDeviceLists()
+                                } else {
+                                    incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+                                }
+                            }
+                    )
+        }
     }
 
     /**
@@ -320,9 +302,7 @@ internal class CryptoManager(
      */
     fun close() {
         olmDevice.release()
-
         cryptoStore.close()
-
         outgoingRoomKeyRequestManager.stop()
     }
 
@@ -351,19 +331,20 @@ internal class CryptoManager(
      * @param syncResponse the syncResponse
      */
     fun onSyncCompleted(syncResponse: SyncResponse) {
-        if (syncResponse.deviceLists != null) {
-            deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
-        }
-        if (syncResponse.deviceOneTimeKeysCount != null) {
-            val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
-            oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
-        }
-
-        if (isStarted()) {
-            // Make sure we process to-device messages before generating new one-time-keys #2782
-            deviceListManager.refreshOutdatedDeviceLists()
-            oneTimeKeysUploader.maybeUploadOneTimeKeys()
-            incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+        CoroutineScope(coroutineDispatchers.crypto).launch {
+            if (syncResponse.deviceLists != null) {
+                deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
+            }
+            if (syncResponse.deviceOneTimeKeysCount != null) {
+                val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
+                oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
+            }
+            if (isStarted()) {
+                // Make sure we process to-device messages before generating new one-time-keys #2782
+                deviceListManager.refreshOutdatedDeviceLists()
+                oneTimeKeysUploader.maybeUploadOneTimeKeys()
+                incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+            }
         }
     }
 
@@ -398,7 +379,7 @@ internal class CryptoManager(
     /**
      * Set the devices as known
      *
-     * @param devices  the devices. Note that the mVerified member of the devices in this list will not be updated by this method.
+     * @param devices  the devices. Note that the verified member of the devices in this list will not be updated by this method.
      * @param callback the asynchronous callback
      */
     override fun setDevicesKnown(devices: List<MXDeviceInfo>, callback: MatrixCallback<Unit>?) {
@@ -431,7 +412,7 @@ internal class CryptoManager(
                     // assume if the device is either verified or blocked
                     // it means that the device is known
                     if (null != device && device.isUnknown) {
-                        device.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
+                        device.verified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
                         isUpdated = true
                     }
                 }
@@ -459,7 +440,6 @@ internal class CryptoManager(
 
     /**
      * Configure a room to use encryption.
-     * This method must be called in getEncryptingThreadHandler
      *
      * @param roomId             the room id to enable encryption in.
      * @param algorithm          the encryption config for the room.
@@ -467,7 +447,7 @@ internal class CryptoManager(
      * @param membersId          list of members to start tracking their devices
      * @return true if the operation succeeds.
      */
-    private fun setEncryptionInRoom(roomId: String, algorithm: String?, inhibitDeviceQuery: Boolean, membersId: List<String>): Boolean {
+    private suspend fun setEncryptionInRoom(roomId: String, algorithm: String?, inhibitDeviceQuery: Boolean, membersId: List<String>): Boolean {
         // If we already have encryption in this room, we should ignore this event
         // (for now at least. Maybe we should alert the user somehow?)
         val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
@@ -578,49 +558,47 @@ internal class CryptoManager(
         // wait that the crypto is really started
         if (!isStarted()) {
             Timber.v("## encryptEventContent() : wait after e2e init")
-
             start(false)
             return
         }
-
-        val userIds = getRoomUserIds(roomId)
-        var alg = synchronized(roomEncryptors) {
-            roomEncryptors[roomId]
-        }
-        if (alg == null) {
-            val algorithm = getEncryptionAlgorithm(roomId)
-            if (null != algorithm) {
-                if (setEncryptionInRoom(roomId, algorithm, false, userIds)) {
-                    synchronized(roomEncryptors) {
-                        alg = roomEncryptors[roomId]
+        CoroutineScope(coroutineDispatchers.crypto).launch {
+            val userIds = getRoomUserIds(roomId)
+            var alg = synchronized(roomEncryptors) {
+                roomEncryptors[roomId]
+            }
+            if (alg == null) {
+                val algorithm = getEncryptionAlgorithm(roomId)
+                if (algorithm != null) {
+                    if (setEncryptionInRoom(roomId, algorithm, false, userIds)) {
+                        synchronized(roomEncryptors) {
+                            alg = roomEncryptors[roomId]
+                        }
                     }
                 }
             }
-        }
+            val safeAlgorithm = alg
+            if (safeAlgorithm != null) {
+                val t0 = System.currentTimeMillis()
+                Timber.v("## encryptEventContent() starts")
+                safeAlgorithm.encryptEventContent(eventContent, eventType, userIds, object : MatrixCallback<Content> {
+                    override fun onSuccess(data: Content) {
+                        Timber.v("## encryptEventContent() : succeeds after " + (System.currentTimeMillis() - t0) + " ms")
+                        callback.onSuccess(MXEncryptEventContentResult(data, EventType.ENCRYPTED))
+                    }
 
-        if (alg != null) {
-            val t0 = System.currentTimeMillis()
-            Timber.v("## encryptEventContent() starts")
+                    override fun onFailure(failure: Throwable) {
+                        callback.onFailure(failure)
+                    }
+                })
+            } else {
+                val algorithm = getEncryptionAlgorithm(roomId)
+                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
+                                           algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                Timber.e("## encryptEventContent() : $reason")
 
-            alg!!.encryptEventContent(eventContent, eventType, userIds, object : MatrixCallback<Content> {
-                override fun onSuccess(data: Content) {
-                    Timber.v("## encryptEventContent() : succeeds after " + (System.currentTimeMillis() - t0) + " ms")
-
-                    callback.onSuccess(MXEncryptEventContentResult(data, EventType.ENCRYPTED))
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    callback.onFailure(failure)
-                }
-            })
-        } else {
-            val algorithm = getEncryptionAlgorithm(roomId)
-            val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
-                                       algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
-            Timber.e("## encryptEventContent() : $reason")
-
-            callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNABLE_TO_ENCRYPT_ERROR_CODE,
-                                                                 MXCryptoError.UNABLE_TO_ENCRYPT, reason)))
+                callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNABLE_TO_ENCRYPT_ERROR_CODE,
+                                                                     MXCryptoError.UNABLE_TO_ENCRYPT, reason)))
+            }
         }
     }
 
@@ -633,43 +611,23 @@ internal class CryptoManager(
      */
     @Throws(MXDecryptionException::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
-        val eventContent = event.content //wireEventContent?
-
-        if (null == eventContent) {
+        val eventContent = event.content
+        if (eventContent == null) {
             Timber.e("## decryptEvent : empty event content")
             return null
         }
-
-        val results = ArrayList<MXEventDecryptionResult>()
-        val exceptions = ArrayList<MXDecryptionException>()
-
-        var result: MXEventDecryptionResult? = null
         val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, eventContent["algorithm"] as String)
-
-        if (null == alg) {
+        if (alg == null) {
             val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, eventContent["algorithm"] as String)
             Timber.e("## decryptEvent() : $reason")
-            exceptions.add(MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE,
-                                                               MXCryptoError.UNABLE_TO_DECRYPT, reason)))
+            throw MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE, MXCryptoError.UNABLE_TO_DECRYPT, reason))
         } else {
-            try {
-                result = alg.decryptEvent(event, timeline)
-            } catch (decryptionException: MXDecryptionException) {
-                exceptions.add(decryptionException)
-            }
-
-            if (null != result) {
-                results.add(result) // TODO simplify
+            return runBlocking {
+                withContext(coroutineDispatchers.crypto) {
+                    alg.decryptEvent(event, timeline)
+                }
             }
         }
-
-        if (!exceptions.isEmpty()) {
-            throw exceptions[0]
-        }
-
-        return if (!results.isEmpty()) {
-            results[0]
-        } else null
     }
 
     /**
@@ -687,16 +645,17 @@ internal class CryptoManager(
      * @param event the event
      */
     fun onToDeviceEvent(event: Event) {
-        if (event.getClearType() == EventType.ROOM_KEY || event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
-            onRoomKeyEvent(event)
-        } else if (event.getClearType() == EventType.ROOM_KEY_REQUEST) {
-            incomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
+        CoroutineScope(coroutineDispatchers.crypto).launch {
+            if (event.getClearType() == EventType.ROOM_KEY || event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
+                onRoomKeyEvent(event)
+            } else if (event.getClearType() == EventType.ROOM_KEY_REQUEST) {
+                incomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
+            }
         }
     }
 
     /**
      * Handle a key event.
-     * This method must be called on getDecryptingThreadHandler() thread.
      *
      * @param event the key event.
      */
@@ -798,25 +757,17 @@ internal class CryptoManager(
 
     /**
      * Upload my user's device keys.
-     * This method must called on getEncryptingThreadHandler() thread.
-     * The callback will called on UI thread.
-     *
-     * @param callback the asynchronous callback
      */
-    private fun uploadDeviceKeys(callback: MatrixCallback<KeysUploadResponse>) {
+    private suspend fun uploadDeviceKeys(): Try<KeysUploadResponse> {
         // Prepare the device keys data to send
         // Sign it
         val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
-
         getMyDevice().signatures = objectSigner.signObject(canonicalJson)
 
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
-        uploadKeysTask
-                .configureWith(UploadKeysTask.Params(getMyDevice().toDeviceKeys(), null, getMyDevice().deviceId))
-                .executeOn(TaskThread.ENCRYPTION)
-                .dispatchTo(callback)
-                .executeBy(taskExecutor)
+        val uploadDeviceKeysParams = UploadKeysTask.Params(getMyDevice().toDeviceKeys(), null, getMyDevice().deviceId)
+        return uploadKeysTask.execute(uploadDeviceKeysParams)
     }
 
     /**
@@ -934,24 +885,24 @@ internal class CryptoManager(
      */
     fun checkUnknownDevices(userIds: List<String>, callback: MatrixCallback<Unit>) {
         // force the refresh to ensure that the devices list is up-to-date
-        deviceListManager.downloadKeys(userIds, true, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
-            override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                val unknownDevices = getUnknownDevices(data)
-
-                if (unknownDevices.map.isEmpty()) {
-                    callback.onSuccess(Unit)
-                } else {
-                    // trigger an an unknown devices exception
-                    callback.onFailure(
-                            Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
-                                                              MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
-                }
-            }
-
-            override fun onFailure(failure: Throwable) {
-                callback.onFailure(failure)
-            }
-        })
+        CoroutineScope(coroutineDispatchers.crypto).launch {
+            deviceListManager
+                    .downloadKeys(userIds, true)
+                    .fold(
+                            { callback.onFailure(it) },
+                            {
+                                val unknownDevices = getUnknownDevices(it)
+                                if (unknownDevices.map.isEmpty()) {
+                                    callback.onSuccess(Unit)
+                                } else {
+                                    // trigger an an unknown devices exception
+                                    callback.onFailure(
+                                            Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
+                                                                              MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
+                                }
+                            }
+                    )
+        }
     }
 
     /**
@@ -1091,7 +1042,6 @@ internal class CryptoManager(
      */
     private fun getUnknownDevices(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>): MXUsersDevicesMap<MXDeviceInfo> {
         val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
-
         val userIds = devicesInRoom.userIds
         for (userId in userIds) {
             val deviceIds = devicesInRoom.getUserDeviceIds(userId)

@@ -37,7 +37,6 @@ internal class CryptoSyncHandler(private val cryptoManager: CryptoManager,
         toDevice.events?.forEach { event ->
             // Decrypt event if necessary
             decryptEvent(event, null)
-
             if (TextUtils.equals(event.getClearType(), EventType.MESSAGE)
                     && event.mClearEvent?.content?.toModel<MessageContent>()?.type == "m.bad.encrypted") {
                 Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : " + event.content)

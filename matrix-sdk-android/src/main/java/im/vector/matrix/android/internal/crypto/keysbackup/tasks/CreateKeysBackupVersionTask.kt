@@ -30,7 +30,7 @@ internal class DefaultCreateKeysBackupVersionTask(private val roomKeysApi: RoomK
     : CreateKeysBackupVersionTask {
 
 
-    override fun execute(params: CreateKeysBackupVersionBody): Try<KeysVersion> {
+    override suspend fun execute(params: CreateKeysBackupVersionBody): Try<KeysVersion> {
         return executeRequest {
             apiCall = roomKeysApi.createKeysBackupVersion(params)
         }

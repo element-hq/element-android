@@ -34,8 +34,8 @@ internal class SetDeviceVerificationAction(private val mCryptoStore: IMXCryptoSt
             return
         }
 
-        if (device.mVerified != verificationStatus) {
-            device.mVerified = verificationStatus
+        if (device.verified != verificationStatus) {
+            device.verified = verificationStatus
             mCryptoStore.storeUserDevice(userId, device)
 
             if (userId == mCredentials.userId) {

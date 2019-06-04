@@ -32,7 +32,7 @@ internal interface GetSessionsDataTask : Task<GetSessionsDataTask.Params, KeysBa
 internal class DefaultGetSessionsDataTask(private val roomKeysApi: RoomKeysApi)
     : GetSessionsDataTask {
 
-    override fun execute(params: GetSessionsDataTask.Params): Try<KeysBackupData> {
+    override suspend fun execute(params: GetSessionsDataTask.Params): Try<KeysBackupData> {
         return executeRequest {
             apiCall = roomKeysApi.getSessionsData(
                     params.version)

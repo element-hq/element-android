@@ -36,7 +36,7 @@ internal interface StoreRoomSessionDataTask : Task<StoreRoomSessionDataTask.Para
 internal class DefaultStoreRoomSessionDataTask(private val roomKeysApi: RoomKeysApi)
     : StoreRoomSessionDataTask {
 
-    override fun execute(params: StoreRoomSessionDataTask.Params): Try<BackupKeysResult> {
+    override suspend fun execute(params: StoreRoomSessionDataTask.Params): Try<BackupKeysResult> {
         return executeRequest {
             apiCall = roomKeysApi.storeRoomSessionData(
                     params.roomId,

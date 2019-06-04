@@ -37,7 +37,7 @@ internal interface ClaimOneTimeKeysForUsersDeviceTask : Task<ClaimOneTimeKeysFor
 internal class DefaultClaimOneTimeKeysForUsersDevice(private val cryptoApi: CryptoApi)
     : ClaimOneTimeKeysForUsersDeviceTask {
 
-    override fun execute(params: ClaimOneTimeKeysForUsersDeviceTask.Params): Try<MXUsersDevicesMap<MXKey>> {
+    override suspend fun execute(params: ClaimOneTimeKeysForUsersDeviceTask.Params): Try<MXUsersDevicesMap<MXKey>> {
         val body = KeysClaimBody(oneTimeKeys = params.usersDevicesKeyTypesMap.map)
 
         return executeRequest<KeysClaimResponse> {

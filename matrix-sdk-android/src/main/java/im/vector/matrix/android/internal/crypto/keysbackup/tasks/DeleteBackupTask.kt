@@ -32,7 +32,7 @@ internal interface DeleteBackupTask : Task<DeleteBackupTask.Params, Unit> {
 internal class DefaultDeleteBackupTask(private val roomKeysApi: RoomKeysApi)
     : DeleteBackupTask {
 
-    override fun execute(params: DeleteBackupTask.Params): Try<Unit> {
+    override suspend fun execute(params: DeleteBackupTask.Params): Try<Unit> {
         return executeRequest {
             apiCall = roomKeysApi.deleteBackup(
                     params.version)

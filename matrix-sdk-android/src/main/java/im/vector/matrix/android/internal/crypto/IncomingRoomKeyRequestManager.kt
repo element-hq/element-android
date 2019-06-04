@@ -133,7 +133,7 @@ internal class IncomingRoomKeyRequestManager(
                     if (device.isVerified) {
                         Timber.v("## processReceivedRoomKeyRequests() : device is already verified: sharing keys")
                         mCryptoStore.deleteIncomingRoomKeyRequest(request)
-                        request.share!!.run()
+                        request.share?.run()
                         continue
                     }
 

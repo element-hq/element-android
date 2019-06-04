@@ -33,11 +33,18 @@ import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.*
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import kotlin.collections.HashMap
@@ -53,6 +60,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                                              private val deviceListManager: DeviceListManager,
                                              private val setDeviceVerificationAction: SetDeviceVerificationAction,
                                              private val mSendToDeviceTask: SendToDeviceTask,
+                                             private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                              private val mTaskExecutor: TaskExecutor)
     : VerificationTransaction.Listener, SasVerificationService {
 
@@ -63,8 +71,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
 
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
-        CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-            // TODO We are already in a BG thread
+        CoroutineScope(coroutineDispatchers.crypto).launch {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
                     onStartRequestReceived(event)
@@ -131,8 +138,8 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         setDeviceVerificationAction.handle(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
-                deviceID,
-                userId)
+                                           deviceID,
+                                           userId)
 
         listeners.forEach {
             try {
@@ -143,7 +150,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
         }
     }
 
-    private fun onStartRequestReceived(event: Event) {
+    private suspend fun onStartRequestReceived(event: Event) {
         val startReq = event.getClearContent().toModel<KeyVerificationStart>()!!
 
         val otherUserId = event.sender
@@ -199,7 +206,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                         } else {
                             Timber.e("## SAS onStartRequestReceived - unknown method ${startReq.method}")
                             cancelTransaction(tid, otherUserId, startReq.fromDevice
-                                    ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
+                                                                ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
                         }
                     }
                 },
@@ -208,30 +215,24 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                 })
     }
 
-    private fun checkKeysAreDownloaded(otherUserId: String,
-                                       startReq: KeyVerificationStart,
-                                       success: (MXUsersDevicesMap<MXDeviceInfo>) -> Unit,
-                                       error: () -> Unit) {
-        deviceListManager.downloadKeys(listOf(otherUserId), true, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
-            override fun onFailure(failure: Throwable) {
-                CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                    error()
-                }
-            }
-
-            override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                    if (data.getUserDeviceIds(otherUserId).contains(startReq.fromDevice)) {
-                        success(data)
-                    } else {
-                        error()
-                    }
-                }
-            }
-        })
+    private suspend fun checkKeysAreDownloaded(otherUserId: String,
+                                               startReq: KeyVerificationStart,
+                                               success: (MXUsersDevicesMap<MXDeviceInfo>) -> Unit,
+                                               error: () -> Unit) {
+        deviceListManager.downloadKeys(listOf(otherUserId), true)
+                .fold(
+                        { error() },
+                        {
+                            if (it != null && it.getUserDeviceIds(otherUserId).contains(startReq.fromDevice)) {
+                                success(it)
+                            } else {
+                                error()
+                            }
+                        }
+                )
     }
 
-    private fun onCancelReceived(event: Event) {
+    private suspend fun onCancelReceived(event: Event) {
         Timber.v("## SAS onCancelReceived")
         val cancelReq = event.getClearContent().toModel<KeyVerificationCancel>()!!
 
@@ -254,7 +255,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
         }
     }
 
-    private fun onAcceptReceived(event: Event) {
+    private suspend fun onAcceptReceived(event: Event) {
         val acceptReq = event.getClearContent().toModel<KeyVerificationAccept>()!!
 
         if (!acceptReq.isValid()) {
@@ -278,7 +279,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     }
 
 
-    private fun onKeyReceived(event: Event) {
+    private suspend fun onKeyReceived(event: Event) {
         val keyReq = event.getClearContent().toModel<KeyVerificationKey>()!!
 
         if (!keyReq.isValid()) {
@@ -299,7 +300,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
         }
     }
 
-    private fun onMacReceived(event: Event) {
+    private suspend fun onMacReceived(event: Event) {
         val macReq = event.getClearContent().toModel<KeyVerificationMac>()!!
 
         if (!macReq.isValid()) {
@@ -398,9 +399,9 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     override fun transactionUpdated(tx: VerificationTransaction) {
         dispatchTxUpdated(tx)
         if (tx is SASVerificationTransaction
-                && (tx.state == SasVerificationTxState.Cancelled
-                        || tx.state == SasVerificationTxState.OnCancelled
-                        || tx.state == SasVerificationTxState.Verified)
+            && (tx.state == SasVerificationTxState.Cancelled
+                || tx.state == SasVerificationTxState.OnCancelled
+                || tx.state == SasVerificationTxState.Verified)
         ) {
             //remove
             this.removeTransaction(tx.otherUserId, tx.transactionId)

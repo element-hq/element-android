@@ -35,7 +35,7 @@ internal interface SetDeviceNameTask : Task<SetDeviceNameTask.Params, Unit> {
 internal class DefaultSetDeviceNameTask(private val cryptoApi: CryptoApi)
     : SetDeviceNameTask {
 
-    override fun execute(params: SetDeviceNameTask.Params): Try<Unit> {
+    override suspend fun execute(params: SetDeviceNameTask.Params): Try<Unit> {
         val body = UpdateDeviceInfoBody(
                 displayName = if (TextUtils.isEmpty(params.deviceName)) "" else params.deviceName
         )

@@ -32,7 +32,7 @@ internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
 internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi)
     : DeleteDeviceTask {
 
-    override fun execute(params: DeleteDeviceTask.Params): Try<Unit> {
+    override suspend fun execute(params: DeleteDeviceTask.Params): Try<Unit> {
         return executeRequest {
             apiCall = cryptoApi.deleteDevice(params.deviceId,
                     DeleteDeviceParams())

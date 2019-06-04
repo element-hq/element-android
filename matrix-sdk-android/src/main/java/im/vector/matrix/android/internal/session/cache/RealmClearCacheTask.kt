@@ -25,7 +25,7 @@ internal interface ClearCacheTask : Task<Unit, Unit>
 
 internal class RealmClearCacheTask(val realmConfiguration: RealmConfiguration) : ClearCacheTask {
 
-    override fun execute(params: Unit): Try<Unit> {
+    override suspend fun execute(params: Unit): Try<Unit> {
         return Try {
             val realm = Realm.getInstance(realmConfiguration)
 

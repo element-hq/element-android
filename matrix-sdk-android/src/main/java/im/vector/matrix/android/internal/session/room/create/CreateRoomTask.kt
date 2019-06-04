@@ -41,7 +41,7 @@ internal class DefaultCreateRoomTask(private val roomAPI: RoomAPI,
                                      private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
 
 
-    override fun execute(params: CreateRoomParams): Try<String> {
+    override suspend fun execute(params: CreateRoomParams): Try<String> {
         return executeRequest<CreateRoomResponse> {
             apiCall = roomAPI.createRoom(params)
         }.flatMap { createRoomResponse ->

@@ -69,7 +69,7 @@ data class MXDeviceInfo(
         /**
          * Verification state of this device.
          */
-        var mVerified: Int = DEVICE_VERIFICATION_UNKNOWN
+        var verified: Int = DEVICE_VERIFICATION_UNKNOWN
 ) : Serializable {
     /**
      * Tells if the device is unknown
@@ -77,7 +77,7 @@ data class MXDeviceInfo(
      * @return true if the device is unknown
      */
     val isUnknown: Boolean
-        get() = mVerified == DEVICE_VERIFICATION_UNKNOWN
+        get() = verified == DEVICE_VERIFICATION_UNKNOWN
 
     /**
      * Tells if the device is verified.
@@ -85,7 +85,7 @@ data class MXDeviceInfo(
      * @return true if the device is verified
      */
     val isVerified: Boolean
-        get() = mVerified == DEVICE_VERIFICATION_VERIFIED
+        get() = verified == DEVICE_VERIFICATION_VERIFIED
 
     /**
      * Tells if the device is unverified.
@@ -93,7 +93,7 @@ data class MXDeviceInfo(
      * @return true if the device is unverified
      */
     val isUnverified: Boolean
-        get() = mVerified == DEVICE_VERIFICATION_UNVERIFIED
+        get() = verified == DEVICE_VERIFICATION_UNVERIFIED
 
     /**
      * Tells if the device is blocked.
@@ -101,7 +101,7 @@ data class MXDeviceInfo(
      * @return true if the device is blocked
      */
     val isBlocked: Boolean
-        get() = mVerified == DEVICE_VERIFICATION_BLOCKED
+        get() = verified == DEVICE_VERIFICATION_BLOCKED
 
     /**
      * @return the fingerprint

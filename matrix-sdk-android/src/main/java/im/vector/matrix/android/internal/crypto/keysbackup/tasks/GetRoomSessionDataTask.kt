@@ -34,7 +34,7 @@ internal interface GetRoomSessionDataTask : Task<GetRoomSessionDataTask.Params, 
 internal class DefaultGetRoomSessionDataTask(private val roomKeysApi: RoomKeysApi)
     : GetRoomSessionDataTask {
 
-    override fun execute(params: GetRoomSessionDataTask.Params): Try<KeyBackupData> {
+    override suspend fun execute(params: GetRoomSessionDataTask.Params): Try<KeyBackupData> {
         return executeRequest {
             apiCall = roomKeysApi.getRoomSessionData(
                     params.roomId,

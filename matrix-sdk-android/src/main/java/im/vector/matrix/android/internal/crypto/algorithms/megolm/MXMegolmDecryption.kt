@@ -74,7 +74,6 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
     }
 
     @Throws(MXDecryptionException::class)
-
     private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult? {
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()!!
         if (TextUtils.isEmpty(encryptedEventContent.senderKey) || TextUtils.isEmpty(encryptedEventContent.sessionId) || TextUtils.isEmpty(encryptedEventContent.ciphertext)) {
@@ -93,17 +92,17 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
         }
 
         // the decryption succeeds
-        if (decryptGroupMessageResult?.mPayload != null && cryptoError == null) {
+        if (decryptGroupMessageResult?.payload != null && cryptoError == null) {
             eventDecryptionResult = MXEventDecryptionResult()
 
-            eventDecryptionResult.clearEvent = decryptGroupMessageResult.mPayload
-            eventDecryptionResult.senderCurve25519Key = decryptGroupMessageResult.mSenderKey
+            eventDecryptionResult.clearEvent = decryptGroupMessageResult.payload
+            eventDecryptionResult.senderCurve25519Key = decryptGroupMessageResult.senderKey
 
-            if (null != decryptGroupMessageResult.mKeysClaimed) {
-                eventDecryptionResult.claimedEd25519Key = decryptGroupMessageResult.mKeysClaimed!!["ed25519"]
+            if (null != decryptGroupMessageResult.keysClaimed) {
+                eventDecryptionResult.claimedEd25519Key = decryptGroupMessageResult.keysClaimed!!["ed25519"]
             }
 
-            eventDecryptionResult.forwardingCurve25519KeyChain = decryptGroupMessageResult.mForwardingCurve25519KeyChain!!
+            eventDecryptionResult.forwardingCurve25519KeyChain = decryptGroupMessageResult.forwardingCurve25519KeyChain!!
         } else if (cryptoError != null) {
             if (cryptoError.isOlmError) {
                 if (TextUtils.equals("UNKNOWN_MESSAGE_INDEX", cryptoError.message)) {

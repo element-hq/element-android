@@ -34,7 +34,7 @@ internal interface GetKeyChangesTask : Task<GetKeyChangesTask.Params, KeyChanges
 internal class DefaultGetKeyChangesTask(private val cryptoApi: CryptoApi)
     : GetKeyChangesTask {
 
-    override fun execute(params: GetKeyChangesTask.Params): Try<KeyChangesResponse> {
+    override suspend fun execute(params: GetKeyChangesTask.Params): Try<KeyChangesResponse> {
         return executeRequest {
             apiCall = cryptoApi.getKeyChanges(params.from,
                     params.to)

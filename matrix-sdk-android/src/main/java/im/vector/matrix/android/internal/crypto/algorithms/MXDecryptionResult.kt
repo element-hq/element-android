@@ -25,21 +25,21 @@ data class MXDecryptionResult(
         /**
          * The decrypted payload (with properties 'type', 'content')
          */
-        var mPayload: JsonDict? = null,
+        var payload: JsonDict? = null,
 
         /**
          * keys that the sender of the event claims ownership of:
          * map from key type to base64-encoded key.
          */
-        var mKeysClaimed: Map<String, String>? = null,
+        var keysClaimed: Map<String, String>? = null,
 
         /**
          * The curve25519 key that the sender of the event is known to have ownership of.
          */
-        var mSenderKey: String? = null,
+        var senderKey: String? = null,
 
         /**
          * Devices which forwarded this session to us (normally empty).
          */
-        var mForwardingCurve25519KeyChain: List<String>? = null
+        var forwardingCurve25519KeyChain: List<String>? = null
 )

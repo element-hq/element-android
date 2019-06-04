@@ -18,7 +18,11 @@ package im.vector.matrix.android.internal.crypto.actions
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.ProgressListener
-import im.vector.matrix.android.internal.crypto.*
+import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
+import im.vector.matrix.android.internal.crypto.MXOlmDevice
+import im.vector.matrix.android.internal.crypto.MegolmSessionData
+import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequestManager
+import im.vector.matrix.android.internal.crypto.RoomDecryptorProvider
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -53,7 +57,6 @@ internal class MegolmSessionDataImporter(private val mOlmDevice: MXOlmDevice,
                 progressListener.onProgress(0, 100)
             }
         }
-
         val sessions = mOlmDevice.importInboundGroupSessions(megolmSessionsData)
 
         for (megolmSessionData in megolmSessionsData) {
@@ -65,7 +68,7 @@ internal class MegolmSessionDataImporter(private val mOlmDevice: MXOlmDevice,
             if (null != decrypting) {
                 try {
                     val sessionId = megolmSessionData.sessionId
-                    Timber.v("## importRoomKeys retrieve mSenderKey " + megolmSessionData.senderKey + " sessionId " + sessionId)
+                    Timber.v("## importRoomKeys retrieve senderKey " + megolmSessionData.senderKey + " sessionId " + sessionId)
 
                     totalNumbersOfImportedKeys++
 

@@ -38,7 +38,7 @@ internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
 internal class DefaultSendToDeviceTask(private val cryptoApi: CryptoApi)
     : SendToDeviceTask {
 
-    override fun execute(params: SendToDeviceTask.Params): Try<Unit> {
+    override suspend fun execute(params: SendToDeviceTask.Params): Try<Unit> {
         val sendToDeviceBody = SendToDeviceBody()
         sendToDeviceBody.messages = params.contentMap.map
 

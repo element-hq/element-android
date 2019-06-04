@@ -387,7 +387,7 @@ internal class KeysBackup(
                                     callback: MatrixCallback<KeysBackupVersionTrust>) {
         // TODO Validate with François that this is correct
         object : Task<KeysVersionResult, KeysBackupVersionTrust> {
-            override fun execute(params: KeysVersionResult): Try<KeysBackupVersionTrust> {
+            override suspend fun execute(params: KeysVersionResult): Try<KeysBackupVersionTrust> {
                 return Try {
                     getKeysBackupTrustBg(params)
                 }

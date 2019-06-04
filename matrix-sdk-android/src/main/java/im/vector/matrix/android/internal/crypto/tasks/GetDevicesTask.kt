@@ -27,7 +27,7 @@ internal interface GetDevicesTask : Task<Unit, DevicesListResponse>
 internal class DefaultGetDevicesTask(private val cryptoApi: CryptoApi)
     : GetDevicesTask {
 
-    override fun execute(params: Unit): Try<DevicesListResponse> {
+    override suspend fun execute(params: Unit): Try<DevicesListResponse> {
         return executeRequest {
             apiCall = cryptoApi.getDevices()
         }

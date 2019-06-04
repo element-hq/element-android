@@ -50,7 +50,7 @@ internal class DefaultSetReadMarkersTask(private val roomAPI: RoomAPI,
                                          private val monarchy: Monarchy
 ) : SetReadMarkersTask {
 
-    override fun execute(params: SetReadMarkersTask.Params): Try<Unit> {
+    override suspend fun execute(params: SetReadMarkersTask.Params): Try<Unit> {
         val markers = HashMap<String, String>()
         if (params.fullyReadEventId != null && MatrixPatterns.isEventId(params.fullyReadEventId)) {
             markers[READ_MARKER] = params.fullyReadEventId

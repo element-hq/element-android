@@ -39,7 +39,7 @@ internal class DefaultPaginationTask(private val roomAPI: RoomAPI,
                                      private val tokenChunkEventPersistor: TokenChunkEventPersistor
 ) : PaginationTask {
 
-    override fun execute(params: PaginationTask.Params): Try<TokenChunkEventPersistor.Result> {
+    override suspend fun execute(params: PaginationTask.Params): Try<TokenChunkEventPersistor.Result> {
         val filter = filterRepository.getRoomFilter()
         return executeRequest<PaginationResponse> {
             apiCall = roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)

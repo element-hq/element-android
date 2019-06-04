@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import java.util.*
@@ -87,7 +88,7 @@ internal class OutgoingRoomKeyRequestManager(
                 OutgoingRoomKeyRequest(requestBody, recipients, makeTxnId(), OutgoingRoomKeyRequest.RequestState.UNSENT))
 
 
-        if (req!!.mState === OutgoingRoomKeyRequest.RequestState.UNSENT) {
+        if (req?.mState == OutgoingRoomKeyRequest.RequestState.UNSENT) {
             startTimer()
         }
     }
