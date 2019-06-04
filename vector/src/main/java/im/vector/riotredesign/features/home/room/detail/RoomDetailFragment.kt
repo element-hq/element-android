@@ -180,7 +180,6 @@ class RoomDetailFragment :
 
         roomDetailViewModel.nonBlockingPopAlert.observe(this, Observer { liveEvent ->
             liveEvent.getContentIfNotHandled()?.let {
-                // TODO Valere: what is the aim of `*` ?
                 val message = requireContext().getString(it.first, *it.second.toTypedArray())
                 showSnackWithMessage(message, Snackbar.LENGTH_LONG)
             }

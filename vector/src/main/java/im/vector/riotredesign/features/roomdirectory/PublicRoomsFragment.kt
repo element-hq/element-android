@@ -44,22 +44,6 @@ import java.util.concurrent.TimeUnit
 /**
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
- *
- * TODO For Nad:
- * Display number of rooms? -> Not displayed
- * Picto size are not correct -> Fixed
- * Where I put the room directory picker? -> Menu
- * World Readable badge -> not displayed
- * Guest can join badge -> not displayed
- * Create Room -> Wait for screen
- *
- *
- * Home
- * -> FAB on first screen
- * -> Counter -> Ok
- *
- *
- * @Benoit: Provide list for event type in last message on home
  */
 class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback {
 
