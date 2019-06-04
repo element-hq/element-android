@@ -23,11 +23,7 @@ import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 
 class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
-                          private val roomNameItemFactory: RoomNameItemFactory,
-                          private val roomTopicItemFactory: RoomTopicItemFactory,
-                          private val roomMemberItemFactory: RoomMemberItemFactory,
-                          private val roomHistoryVisibilityItemFactory: RoomHistoryVisibilityItemFactory,
-                          private val callItemFactory: CallItemFactory,
+                          private val noticeItemFactory: NoticeItemFactory,
                           private val defaultItemFactory: DefaultItemFactory) {
 
     fun create(event: TimelineEvent,
@@ -36,23 +32,22 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
 
         val computedModel = try {
             when (event.root.type) {
-                EventType.MESSAGE                  -> messageItemFactory.create(event, nextEvent, callback)
-                EventType.STATE_ROOM_NAME          -> roomNameItemFactory.create(event)
-                EventType.STATE_ROOM_TOPIC         -> roomTopicItemFactory.create(event)
-                EventType.STATE_ROOM_MEMBER        -> roomMemberItemFactory.create(event)
-                EventType.STATE_HISTORY_VISIBILITY -> roomHistoryVisibilityItemFactory.create(event)
+                EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, callback)
 
+                EventType.STATE_ROOM_NAME,
+                EventType.STATE_ROOM_TOPIC,
+                EventType.STATE_ROOM_MEMBER,
+                EventType.STATE_HISTORY_VISIBILITY,
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER              -> callItemFactory.create(event)
+                EventType.CALL_ANSWER       -> noticeItemFactory.create(event)
 
                 EventType.ENCRYPTED,
                 EventType.ENCRYPTION,
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STICKER,
-                EventType.STATE_ROOM_CREATE        -> defaultItemFactory.create(event)
-
-                else                               -> null
+                EventType.STATE_ROOM_CREATE -> defaultItemFactory.create(event)
+                else                        -> null
             }
         } catch (e: Exception) {
             defaultItemFactory.create(event, e)

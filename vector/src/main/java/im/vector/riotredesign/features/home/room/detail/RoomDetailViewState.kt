@@ -44,7 +44,7 @@ data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
         val timeline: Timeline? = null,
-        val inviter: Async<User> = Uninitialized,
+        val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val asyncTimelineData: Async<TimelineData> = Uninitialized,
         val sendMode: SendMode = SendMode.REGULAR,

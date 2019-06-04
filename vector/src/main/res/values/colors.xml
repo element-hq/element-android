@@ -16,10 +16,10 @@
     <color name="pale_grey_two">#ebedf8</color>
     <color name="brown_grey">#a5a5a5</color>
     <color name="grey_lynch">#61708B</color>
-
-    <color name="black">#000000</color>
     <color name="black_87">#de000000</color>
     <color name="black_38">#61000000</color>
     <color name="black_37">#5d000000</color>
+
+    <color name="black">#000000</color>
 
 </resources>

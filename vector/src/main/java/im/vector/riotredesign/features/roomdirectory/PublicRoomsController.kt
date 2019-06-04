@@ -82,24 +82,30 @@ class PublicRoomsController(private val stringProvider: StringProvider,
             roomId(publicRoom.roomId)
             avatarUrl(publicRoom.avatarUrl)
             roomName(publicRoom.name)
+            roomAlias(publicRoom.canonicalAlias)
+            roomTopic(publicRoom.topic)
             nbOfMembers(publicRoom.numJoinedMembers)
-            when {
-                viewState.joinedRoomsIds.contains(publicRoom.roomId)       -> joinState(PublicRoomItem.JoinState.JOINED)
-                viewState.joiningRoomsIds.contains(publicRoom.roomId)      -> joinState(PublicRoomItem.JoinState.JOINING)
-                viewState.joiningErrorRoomsIds.contains(publicRoom.roomId) -> joinState(PublicRoomItem.JoinState.JOINING_ERROR)
-                else                                                       -> joinState(PublicRoomItem.JoinState.NOT_JOINED)
+
+            val joinState = when {
+                viewState.joinedRoomsIds.contains(publicRoom.roomId)       -> JoinState.JOINED
+                viewState.joiningRoomsIds.contains(publicRoom.roomId)      -> JoinState.JOINING
+                viewState.joiningErrorRoomsIds.contains(publicRoom.roomId) -> JoinState.JOINING_ERROR
+                else                                                       -> JoinState.NOT_JOINED
             }
+
+            joinState(joinState)
+
             joinListener {
                 callback?.onPublicRoomJoin(publicRoom)
             }
             globalListener {
-                callback?.onPublicRoomClicked(publicRoom)
+                callback?.onPublicRoomClicked(publicRoom, joinState)
             }
         }
     }
 
     interface Callback {
-        fun onPublicRoomClicked(publicRoom: PublicRoom)
+        fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState)
         fun onPublicRoomJoin(publicRoom: PublicRoom)
         fun loadMore()
     }

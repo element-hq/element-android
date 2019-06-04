@@ -19,8 +19,8 @@ package im.vector.riotredesign.features.home.room.detail.timeline.helper
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.extensions.localDateTime
 
@@ -63,6 +63,26 @@ fun TimelineEvent.isDisplayable(): Boolean {
 //        it.isDisplayable()
 //    }
 //}
+
+fun TimelineEvent.senderAvatar(): String? {
+    // We might have no avatar when user leave, so we try to get it from prevContent
+    return senderAvatar
+            ?: if (root.type == EventType.STATE_ROOM_MEMBER) {
+                root.prevContent.toModel<RoomMember>()?.avatarUrl
+            } else {
+                null
+            }
+}
+
+fun TimelineEvent.senderName(): String? {
+    // We might have no senderName when user leave, so we try to get it from prevContent
+    return senderName
+            ?: if (root.type == EventType.STATE_ROOM_MEMBER) {
+                root.prevContent.toModel<RoomMember>()?.displayName
+            } else {
+                null
+            }
+}
 
 fun TimelineEvent.canBeMerged(): Boolean {
     return root.type == EventType.STATE_ROOM_MEMBER

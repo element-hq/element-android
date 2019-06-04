@@ -7,6 +7,14 @@
     <string name="send_you_invite">"Sent you an invitation"</string>
     <string name="invited_by">Invited by %s</string>
 
+    <string name="room_list_catchup_empty_title">You’re all caught up!</string>
+    <string name="room_list_catchup_empty_body">You have no more unread messages</string>
+    <string name="room_list_catchup_welcome_title">Welcome home!</string>
+    <string name="room_list_catchup_welcome_body">Catch up on unread messages here</string>
+    <string name="room_list_people_empty_title">Conversations</string>
+    <string name="room_list_people_empty_body">Your direct message conversation will be displayed here</string>
+    <string name="room_list_rooms_empty_title">Rooms</string>
+    <string name="room_list_rooms_empty_body">Your rooms will be displayed here</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="reactions_agree">Agree</string>
@@ -22,5 +30,11 @@
     <string name="create_new_room">Create New Room</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
     <string name="action_change">"Change"</string>
+    <string name="change_room_directory_network">"Change network"</string>
+    <string name="please_wait">"Please wait…"</string>
+    <string name="group_all_communities">"All Communities"</string>
+
+    <string name="room_preview_no_preview">"This room can't be previewed"</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">"The preview of world-readable room is not supported yet in RiotX"</string>
 
 </resources>

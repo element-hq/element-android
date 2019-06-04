@@ -18,11 +18,10 @@ package im.vector.riotredesign.features.home
 
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.extensions.replaceFragment
-import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
-import im.vector.riotredesign.features.home.room.detail.RoomDetailFragment
+import im.vector.riotredesign.features.navigation.Navigator
 import kotlinx.android.synthetic.main.activity_home.*
 import timber.log.Timber
 
@@ -32,22 +31,24 @@ class HomeNavigator {
 
     private var rootRoomId: String? = null
 
+    fun openSelectedGroup(groupSummary: GroupSummary) {
+        Timber.v("Open selected group ${groupSummary.groupId}")
+        activity?.let {
+            val args = HomeDetailParams(groupSummary.groupId, groupSummary.displayName, groupSummary.avatarUrl)
+            val homeDetailFragment = HomeDetailFragment.newInstance(args)
+            it.drawerLayout?.closeDrawer(GravityCompat.START)
+            it.replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
+        }
+    }
+
     fun openRoomDetail(roomId: String,
                        eventId: String?,
-                       addToBackstack: Boolean = false) {
-        Timber.v("Open room detail $roomId - $eventId - $addToBackstack")
+                       navigator: Navigator) {
+        Timber.v("Open room detail $roomId - $eventId")
         activity?.let {
             //TODO enable eventId permalink. It doesn't work enough at the moment.
-            val args = RoomDetailArgs(roomId)
-            val roomDetailFragment = RoomDetailFragment.newInstance(args)
             it.drawerLayout?.closeDrawer(GravityCompat.START)
-            if (addToBackstack) {
-                it.addFragmentToBackstack(roomDetailFragment, R.id.homeDetailFragmentContainer, roomId)
-            } else {
-                rootRoomId = roomId
-                clearBackStack(it.supportFragmentManager)
-                it.replaceFragment(roomDetailFragment, R.id.homeDetailFragmentContainer)
-            }
+            navigator.openRoom(roomId)
         }
     }
 

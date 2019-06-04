@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.list
+package im.vector.matrix.android.internal.database.mapper
 
-import android.content.SharedPreferences
+import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.internal.database.model.UserEntity
 
-private const val SHARED_PREFS_SELECTED_ROOM_KEY = "SHARED_PREFS_SELECTED_ROOM_KEY"
+internal object UserMapper {
 
-class RoomSelectionRepository(private val sharedPreferences: SharedPreferences) {
-
-    fun lastSelectedRoom(): String? {
-        return sharedPreferences.getString(SHARED_PREFS_SELECTED_ROOM_KEY, null)
+    fun map(userEntity: UserEntity): User {
+        return User(
+                userEntity.userId,
+                userEntity.displayName,
+                userEntity.avatarUrl
+        )
     }
-
-    fun saveLastSelectedRoom(roomId: String) {
-        sharedPreferences.edit()
-                .putString(SHARED_PREFS_SELECTED_ROOM_KEY, roomId)
-                .apply()
-    }
-
 }
 
+internal fun UserEntity.asDomain(): User {
+    return UserMapper.map(this)
+}

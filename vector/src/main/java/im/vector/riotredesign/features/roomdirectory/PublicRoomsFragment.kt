@@ -17,6 +17,7 @@
 package im.vector.riotredesign.features.roomdirectory
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,14 +44,6 @@ import java.util.concurrent.TimeUnit
 /**
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
- *
- * TODO For Nad:
- * Display number of rooms?
- * Picto size are not correct
- * Where I put the room directory picker?
- * World Readable badge
- * Guest can join badge
- *
  */
 class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback {
 
@@ -59,6 +52,8 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     private val errorFormatter: ErrorFormatter by inject()
 
     override fun getLayoutResId() = R.layout.fragment_public_rooms
+
+    override fun getMenuRes() = R.menu.menu_room_directory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,16 +78,23 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
             vectorBaseActivity.notImplemented()
         }
 
-        publicRoomsChangeDirectory.setOnClickListener {
-            vectorBaseActivity.addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
-        }
-
         viewModel.joinRoomErrorLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { throwable ->
                 Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
                         .show()
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_room_directory_change_protocol -> {
+                vectorBaseActivity.addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
+                true
+            }
+            else                                     ->
+                super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -114,9 +116,23 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
         publicRoomsList.setController(publicRoomsController)
     }
 
-    override fun onPublicRoomClicked(publicRoom: PublicRoom) {
+    override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {
         Timber.v("PublicRoomClicked: $publicRoom")
-        vectorBaseActivity.notImplemented()
+
+        when (joinState) {
+            JoinState.JOINED        -> {
+                navigator.openRoom(publicRoom.roomId)
+            }
+            JoinState.NOT_JOINED,
+            JoinState.JOINING_ERROR -> {
+                // ROOM PREVIEW
+                navigator.openRoomPreview(publicRoom)
+            }
+            else                    -> {
+                Snackbar.make(publicRoomsCoordinator, getString(R.string.please_wait), Snackbar.LENGTH_SHORT)
+                        .show()
+            }
+        }
     }
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
@@ -131,8 +147,5 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     override fun invalidate() = withState(viewModel) { state ->
         // Populate list with Epoxy
         publicRoomsController.setData(state)
-
-        // Directory name
-        publicRoomsDirectoryName.text = state.roomDirectoryDisplayName
     }
 }

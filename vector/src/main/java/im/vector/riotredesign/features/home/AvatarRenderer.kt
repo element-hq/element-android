@@ -67,10 +67,12 @@ object AvatarRenderer {
                identifier: String,
                name: String?,
                target: Target<Drawable>) {
-        if (name.isNullOrEmpty()) {
-            return
+        val displayName = if (name.isNullOrBlank()) {
+            identifier
+        } else {
+            name
         }
-        val placeholder = getPlaceholderDrawable(context, identifier, name)
+        val placeholder = getPlaceholderDrawable(context, identifier, displayName)
         buildGlideRequest(glideRequest, avatarUrl)
                 .placeholder(placeholder)
                 .into(target)

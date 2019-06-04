@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -32,16 +31,12 @@ import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.hideKeyboard
-import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseActivity
-import im.vector.riotredesign.features.home.room.detail.LoadingRoomDetailFragment
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
-import im.vector.riotredesign.features.settings.VectorSettingsActivity
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.android.ext.android.inject
@@ -69,15 +64,13 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         bindScope(getOrCreateScope(HomeModule.HOME_SCOPE))
         homeNavigator.activity = this
         drawerLayout.addDrawerListener(drawerListener)
-        if (savedInstanceState == null) {
+        if (isFirstCreation()) {
             val homeDrawerFragment = HomeDrawerFragment.newInstance()
-            val loadingDetail = LoadingRoomDetailFragment.newInstance()
+            val loadingDetail = LoadingFragment.newInstance()
             replaceFragment(loadingDetail, R.id.homeDetailFragmentContainer)
             replaceFragment(homeDrawerFragment, R.id.homeDrawerFragmentContainer)
         }
-        homeActivityViewModel.openRoomLiveData.observeEvent(this) {
-            homeNavigator.openRoomDetail(it, null)
-        }
+
         homeActivityViewModel.isLoading.observe(this, Observer<Boolean> {
             // TODO better UI
             if (it) {
@@ -113,34 +106,19 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     override fun configure(toolbar: Toolbar) {
-        setSupportActionBar(toolbar)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val drawerToggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0)
-        drawerLayout.addDrawerListener(drawerToggle)
-        drawerToggle.syncState()
+        configureToolbar(toolbar, false)
     }
 
     override fun getMenuRes() = R.menu.home
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home                 -> {
+            android.R.id.home          -> {
                 drawerLayout.openDrawer(GravityCompat.START)
                 return true
             }
-            R.id.sliding_menu_settings        -> {
-                startActivity(VectorSettingsActivity.getIntent(this, "TODO"))
-                return true
-            }
-            R.id.sliding_menu_sign_out        -> {
+            R.id.sliding_menu_sign_out -> {
                 SignOutUiWorker(this).perform(Matrix.getInstance().currentSession!!)
-                return true
-            }
-            // TODO Temporary code here to create a room
-            R.id.tmp_menu_create_room         -> {
-                // Start Activity for now
-                startActivity(Intent(this, RoomDirectoryActivity::class.java))
                 return true
             }
         }
@@ -160,8 +138,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        if (fm.backStackEntryCount == 0)
-            return false
+        // if (fm.backStackEntryCount == 0)
+        //     return false
+
         val reverseOrder = fm.fragments.filter { it is OnBackPressed }.reversed()
         for (f in reverseOrder) {
             val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)

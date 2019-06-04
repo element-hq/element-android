@@ -6,4 +6,4 @@
     android:layout_height="wrap_content"
     android:textColor="@color/dark_grey"
     android:textSize="14sp"
-    tools:text="Alright finished work, heading there in about 20 mins… Ping me when you’re outside" />
+    tools:text="@sample/matrix.json/data/message" />

@@ -22,13 +22,12 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.features.home.HomeModule
+import im.vector.riotredesign.features.home.HomeNavigator
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
 
 class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback {
 
@@ -39,17 +38,20 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
     }
 
     private val viewModel: GroupListViewModel by fragmentViewModel()
+    private val homeNavigator by inject<HomeNavigator>()
     private val groupController by inject<GroupSummaryController>()
 
     override fun getLayoutResId() = R.layout.fragment_group_list
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(HomeModule.GROUP_LIST_SCOPE))
         groupController.callback = this
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
+        viewModel.openGroupLiveData.observeEvent(this) {
+            homeNavigator.openSelectedGroup(it)
+        }
     }
 
     private fun renderState(state: GroupListViewState) {

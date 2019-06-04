@@ -27,6 +27,7 @@ import butterknife.OnCheckedChanged
 import butterknife.OnTextChanged
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import kotlinx.android.synthetic.main.activity_bug_report.*
 import timber.log.Timber
 
 /**
@@ -68,7 +69,7 @@ class BugReportActivity : VectorBaseActivity() {
     override fun getLayoutRes() = R.layout.activity_bug_report
 
     override fun initUiAndData() {
-        configureToolbar()
+        configureToolbar(bugReportToolbar)
 
         if (BugReporter.screenshot != null) {
             mScreenShotPreview.setImageBitmap(BugReporter.screenshot)

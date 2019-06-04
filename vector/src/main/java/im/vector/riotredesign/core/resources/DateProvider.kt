@@ -29,4 +29,9 @@ object DateProvider {
         return LocalDateTime.ofInstant(instant, zoneId)
     }
 
+    fun currentLocalDateTime(): LocalDateTime {
+        val instant = Instant.now()
+        return LocalDateTime.ofInstant(instant, zoneId)
+    }
+
 }

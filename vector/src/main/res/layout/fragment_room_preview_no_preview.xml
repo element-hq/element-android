@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/roomPreviewNoPreviewRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/roomPreviewNoPreviewToolbar"
+            style="@style/VectorToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:contentInsetStartWithNavigation="0dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/roomPreviewNoPreviewToolbarAvatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/roomPreviewNoPreviewToolbarTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="?vctr_toolbar_primary_text_color"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/roomPreviewNoPreviewToolbarAvatar"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@sample/matrix.json/data/displayName" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/layout_horizontal_margin"
+                android:paddingRight="@dimen/layout_horizontal_margin">
+
+                <ImageView
+                    android:id="@+id/roomPreviewNoPreviewAvatar"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_marginTop="123dp"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/roomPreviewNoPreviewName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="56dp"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.Vector.Title"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:text="@sample/matrix.json/data/roomName" />
+
+                <TextView
+                    android:id="@+id/roomPreviewNoPreviewTopic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_vertical_margin"
+                    android:autoLink="web"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.Vector.Subtitle"
+                    android:textSize="15sp"
+                    tools:text="@sample/matrix.json/data/roomTopic" />
+
+                <TextView
+                    android:id="@+id/roomPreviewNoPreviewLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.Vector.Subtitle2"
+                    android:textSize="14sp"
+                    tools:text="@string/room_preview_no_preview" />
+
+                <TextView
+                    android:id="@+id/roomPreviewNoPreviewError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_vertical_margin"
+                    android:gravity="center"
+                    android:textColor="@color/vector_error_color"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    tools:text="Error"
+                    tools:visibility="visible" />
+
+                <im.vector.riotredesign.core.platform.ButtonStateView
+                    android:id="@+id/roomPreviewNoPreviewJoin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_vertical_margin"
+                    android:layout_marginBottom="@dimen/layout_vertical_margin"
+                    android:minWidth="120dp"
+                    app:bsv_button_text="@string/join"
+                    app:bsv_loaded_image_src="@drawable/ic_tick"
+                    app:bsv_use_flat_button="false" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

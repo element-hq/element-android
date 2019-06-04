@@ -1,70 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<im.vector.riotredesign.core.platform.CheckableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemRoomLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_room_item"
+    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
-    android:paddingStart="8dp"
-    android:paddingLeft="8dp"
-    android:paddingEnd="16dp"
-    android:paddingRight="16dp">
+    tools:background="@color/pale_grey">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/roomAvatarImageView"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <!-- Margin bottom does not work, so I use space -->
+    <Space
+        android:id="@+id/roomAvatarBottomSpace"
+        android:layout_width="0dp"
+        android:layout_height="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomAvatarImageView"
+        tools:layout_marginStart="20dp" />
+
+    <TextView
+        android:id="@+id/roomNameView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:duplicateParentState="true"
-        android:minHeight="48dp">
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/black_87"
+        android:textSize="15sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/roomAvatarImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@sample/matrix.json/data/displayName" />
 
-        <ImageView
-            android:id="@+id/roomAvatarImageView"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+    <im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
+        android:id="@+id/roomUnreadCounterBadgeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:minWidth="16dp"
+        android:minHeight="16dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
+        app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
+        app:layout_constraintStart_toEndOf="@+id/roomNameView"
+        app:layout_constraintTop_toTopOf="@+id/roomNameView"
+        tools:background="@drawable/bg_unread_highlight"
+        tools:text="4" />
 
-        <TextView
-            android:id="@+id/roomNameView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:duplicateParentState="true"
-            android:textColor="@color/color_room_title"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
-            app:layout_constraintStart_toEndOf="@id/roomAvatarImageView"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/full_names" />
+    <TextView
+        android:id="@+id/roomLastEventTimeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textColor="@color/black_38"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/roomNameView"
+        tools:text="@tools:sample/date/hhmm" />
 
-        <im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
-            android:id="@+id/roomUnreadCounterBadgeView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minWidth="24dp"
-            android:minHeight="24dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:background="@drawable/bg_unread_highlight"
-            tools:text="115" />
+    <TextView
+        android:id="@+id/roomLastEventView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/black_38"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@+id/roomNameView"
+        tools:text="@sample/matrix.json/data/message" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Margin bottom does not work, so I use space -->
+    <Space
+        android:id="@+id/roomLastEventBottomSpace"
+        android:layout_width="0dp"
+        android:layout_height="7dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomLastEventView"
+        tools:layout_marginStart="120dp" />
 
-</im.vector.riotredesign.core.platform.CheckableFrameLayout>
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/roomBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="roomAvatarBottomSpace,roomLastEventBottomSpace" />
+
+    <View
+        android:id="@+id/roomDividerView"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#1e000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomBottomBarrier" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

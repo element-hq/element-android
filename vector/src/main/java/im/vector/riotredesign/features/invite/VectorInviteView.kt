@@ -21,7 +21,6 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.setPadding
 import androidx.core.view.updateLayoutParams
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
@@ -52,13 +51,13 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     fun render(sender: User, mode: Mode = Mode.LARGE) {
         if (mode == Mode.LARGE) {
-            updateLayoutParams { height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT }
+            updateLayoutParams { height = LayoutParams.MATCH_CONSTRAINT }
             AvatarRenderer.render(sender.avatarUrl, sender.userId, sender.displayName, inviteAvatarView)
             inviteIdentifierView.text = sender.userId
             inviteNameView.text = sender.displayName
             inviteLabelView.text = context.getString(R.string.send_you_invite)
         } else {
-            updateLayoutParams { height = ConstraintLayout.LayoutParams.WRAP_CONTENT }
+            updateLayoutParams { height = LayoutParams.WRAP_CONTENT }
             inviteAvatarView.visibility = View.GONE
             inviteIdentifierView.visibility = View.GONE
             inviteNameView.visibility = View.GONE

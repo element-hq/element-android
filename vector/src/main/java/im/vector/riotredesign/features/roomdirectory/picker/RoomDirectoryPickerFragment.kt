@@ -61,7 +61,7 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_add_custom_hs) {
             // TODO
-            vectorBaseActivity.notImplemented()
+            vectorBaseActivity.notImplemented("Entering custom homeserver")
             return true
         }
 

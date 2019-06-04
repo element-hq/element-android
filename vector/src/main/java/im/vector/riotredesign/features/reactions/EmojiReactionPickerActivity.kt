@@ -34,6 +34,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
 import timber.log.Timber
 
 /**
@@ -80,8 +81,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity() {
     }
 
     override fun initUiAndData() {
-
-        configureToolbar()
+        configureToolbar(emojiPickerToolbar)
 
         requestEmojivUnicode10CompatibleFont()
 

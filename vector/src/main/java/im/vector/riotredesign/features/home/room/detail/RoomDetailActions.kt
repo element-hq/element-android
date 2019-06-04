@@ -25,7 +25,6 @@ sealed class RoomDetailActions {
 
     data class SendMessage(val text: String, val autoMarkdown: Boolean) : RoomDetailActions()
     data class SendMedia(val mediaFiles: List<MediaFile>) : RoomDetailActions()
-    object IsDisplayed : RoomDetailActions()
     data class EventDisplayed(val event: TimelineEvent) : RoomDetailActions()
     data class LoadMore(val direction: Timeline.Direction) : RoomDetailActions()
     data class SendReaction(val reaction: String, val targetEventId: String) : RoomDetailActions()

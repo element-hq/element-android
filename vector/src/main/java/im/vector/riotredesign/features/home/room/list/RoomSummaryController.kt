@@ -18,16 +18,25 @@ package im.vector.riotredesign.features.home.room.list
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.riotredesign.core.extensions.localDateTime
+import im.vector.riotredesign.core.resources.DateProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 
-class RoomSummaryController(private val stringProvider: StringProvider
+class RoomSummaryController(private val stringProvider: StringProvider,
+                            private val eventFormatter: NoticeEventFormatter,
+                            private val timelineDateFormatter: TimelineDateFormatter
 ) : TypedEpoxyController<RoomListViewState>() {
 
     var callback: Callback? = null
 
     override fun buildModels(viewState: RoomListViewState) {
-        val roomSummaries = viewState.asyncRooms()
+        val roomSummaries = viewState.asyncFilteredRooms()
         roomSummaries?.forEach { (category, summaries) ->
             if (summaries.isEmpty()) {
                 return@forEach
@@ -37,7 +46,7 @@ class RoomSummaryController(private val stringProvider: StringProvider
                     callback?.onToggleRoomCategory(category)
                 }
                 if (isExpanded) {
-                    buildRoomModels(summaries, viewState.visibleRoomId)
+                    buildRoomModels(summaries)
                 }
             }
         }
@@ -71,18 +80,41 @@ class RoomSummaryController(private val stringProvider: StringProvider
         }
     }
 
-    private fun buildRoomModels(summaries: List<RoomSummary>, selectedRoomId: String?) {
+    private fun buildRoomModels(summaries: List<RoomSummary>) {
         summaries.forEach { roomSummary ->
             val unreadCount = roomSummary.notificationCount
             val showHighlighted = roomSummary.highlightCount > 0
-            val isSelected = roomSummary.roomId == selectedRoomId
 
+            var lastMessageFormatted: CharSequence = ""
+            var lastMessageTime: CharSequence = ""
+            val lastMessage = roomSummary.lastMessage
+            if (lastMessage != null) {
+                val date = lastMessage.localDateTime()
+                val currentData = DateProvider.currentLocalDateTime()
+                val isSameDay = date.toLocalDate() == currentData.toLocalDate()
+                //TODO: get formatted
+                if (lastMessage.type == EventType.MESSAGE) {
+                    val content = lastMessage.content?.toModel<MessageContent>()
+                    lastMessageFormatted = content?.body ?: ""
+                } else {
+                    lastMessageFormatted = lastMessage.type
+                }
+                lastMessageTime = if (isSameDay) {
+                    timelineDateFormatter.formatMessageHour(date)
+                } else {
+                    //TODO: change this
+                    timelineDateFormatter.formatMessageDay(date)
+                }
+
+
+            }
             roomSummaryItem {
                 id(roomSummary.roomId)
                 roomId(roomSummary.roomId)
+                lastEventTime(lastMessageTime)
+                lastFormattedEvent(lastMessageFormatted)
                 roomName(roomSummary.displayName)
                 avatarUrl(roomSummary.avatarUrl)
-                selected(isSelected)
                 showHighlighted(showHighlighted)
                 unreadCount(unreadCount)
                 listener { callback?.onRoomSelected(roomSummary) }

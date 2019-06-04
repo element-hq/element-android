@@ -231,6 +231,11 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return userService.getUser(userId)
     }
 
+    override fun observeUser(userId: String): LiveData<User?> {
+        assert(isOpen)
+        return userService.observeUser(userId)
+    }
+
     // Private methods *****************************************************************************
 
     private fun assertMainThread() {
