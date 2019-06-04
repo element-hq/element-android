@@ -51,7 +51,9 @@ class HomeDetailViewModel(initialState: HomeDetailViewState,
                         val peopleNotifications = summaries
                                 .filter { it.isDirect }
                                 .map { it.notificationCount }
-                                .reduce { acc, i -> acc + i }
+                                .takeIf { it.isNotEmpty() }
+                                ?.reduce { acc, i -> acc + i }
+                                ?: 0
                         val peopleHasHighlight = summaries
                                 .filter { it.isDirect }
                                 .any { it.highlightCount > 0 }
@@ -59,7 +61,9 @@ class HomeDetailViewModel(initialState: HomeDetailViewState,
                         val roomsNotifications = summaries
                                 .filter { !it.isDirect }
                                 .map { it.notificationCount }
-                                .reduce { acc, i -> acc + i }
+                                .takeIf { it.isNotEmpty() }
+                                ?.reduce { acc, i -> acc + i }
+                                ?: 0
                         val roomsHasHighlight = summaries
                                 .filter { !it.isDirect }
                                 .any { it.highlightCount > 0 }
