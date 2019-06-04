@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
+import android.graphics.Typeface
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +50,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     @EpoxyAttribute
     var memberClickListener: View.OnClickListener? = null
+
+    @EpoxyAttribute
+    var emojiTypeFace: Typeface? = null
 
     @EpoxyAttribute
     var reactionPillCallback: TimelineEventController.ReactionPillCallback? = null
@@ -116,6 +120,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                     idToRefInFlow.add(reactionButton.id)
                     reactionButton.reactionString = reaction.key
                     reactionButton.reactionCount = reaction.count
+                    reactionButton.emojiTypeFace = emojiTypeFace
                     reactionButton.setChecked(reaction.addedByMe)
                     reactionButton.isEnabled = reaction.synced
                 }

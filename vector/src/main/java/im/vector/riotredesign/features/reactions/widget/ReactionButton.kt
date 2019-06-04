@@ -21,6 +21,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -56,6 +57,11 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
 
     private var reactionSelector: View? = null
 
+    var emojiTypeFace: Typeface? = null
+        set(value) {
+            field = value
+            emojiView?.typeface = value ?: Typeface.DEFAULT
+        }
 
     private var dotsView: DotsView
     private var circleView: CircleView
@@ -96,6 +102,8 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
         countTextView = findViewById(R.id.reactionCount)
 
         countTextView?.text = reactionCount.toString()
+
+        emojiView?.typeface = this.emojiTypeFace ?: Typeface.DEFAULT
 
         val array = context.obtainStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr, 0)
 
@@ -239,7 +247,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
             return true
 
         when (event.action) {
-            MotionEvent.ACTION_DOWN ->
+            MotionEvent.ACTION_DOWN   ->
                 /*
                 Commented out this line and moved the animation effect to the action up event due to
                 conflicts that were occurring when library is used in sliding type views.
@@ -248,7 +256,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
                 */
                 isPressed = true
 
-            MotionEvent.ACTION_MOVE -> {
+            MotionEvent.ACTION_MOVE   -> {
                 val x = event.x
                 val y = event.y
                 val isInside = x > 0 && x < width && y > 0 && y < height
@@ -257,7 +265,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
                 }
             }
 
-            MotionEvent.ACTION_UP -> {
+            MotionEvent.ACTION_UP     -> {
                 emojiView!!.animate().scaleX(0.7f).scaleY(0.7f).setDuration(150).interpolator = DECCELERATE_INTERPOLATOR
                 emojiView!!.animate().scaleX(1f).scaleY(1f).interpolator = DECCELERATE_INTERPOLATOR
                 if (isPressed) {
