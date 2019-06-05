@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Create several FABs to manage different icon size. maxImageSize cannot be set programmatically -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createRoomContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:constraintSet="@layout/constraint_set_fab_menu_open"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <View
+        android:id="@+id/createRoomTouchGuard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="#323232"
+        tools:alpha="0.5" />
+
+    <!-- Sub menu item 2 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomItemGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_fab_add_room"
+        android:visibility="gone"
+        app:backgroundTint="#FFFFFF"
+        app:fabCustomSize="48dp"
+        app:maxImageSize="26dp"
+        app:tint="@color/black"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/createRoomItemGroupLabel"
+        style="@style/VectorLabel"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/fab_menu_create_room" />
+
+    <!-- Sub menu item 1 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomItemChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_fab_add_chat"
+        android:visibility="gone"
+        app:backgroundTint="#FFFFFF"
+        app:fabCustomSize="48dp"
+        app:maxImageSize="29dp"
+        app:tint="@color/black"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/createRoomItemChatLabel"
+        style="@style/VectorLabel"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/fab_menu_create_chat" />
+
+    <!-- Menu -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_fab_add"
+        android:visibility="gone"
+        app:maxImageSize="14dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
+</merge>

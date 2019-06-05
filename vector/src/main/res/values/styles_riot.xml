@@ -265,4 +265,17 @@
         <item name="layout_constraintTop_toBottomOf">@id/messageMemberNameView</item>
         <item name="layout_constraintBottom_toTopOf">@id/messageBottomInfo</item>
     </style>
+
+    <style name="VectorLabel">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:background">@drawable/vector_label_background</item>
+    </style>
+
 </resources>

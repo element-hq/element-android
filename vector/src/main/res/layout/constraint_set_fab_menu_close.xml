@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/createRoomTouchGuard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="#323232"
+        android:visibility="gone" />
+
+    <!-- Sub menu item 2 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomItemGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_fab_add_room"
+        app:backgroundTint="#FFFFFF"
+        app:fabCustomSize="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/createRoomButton"
+        app:layout_constraintEnd_toEndOf="@+id/createRoomButton"
+        app:layout_constraintStart_toStartOf="@+id/createRoomButton"
+        app:layout_constraintTop_toTopOf="@+id/createRoomButton"
+        app:maxImageSize="26dp"
+        app:tint="@color/black" />
+
+    <TextView
+        android:id="@+id/createRoomItemGroupLabel"
+        style="@style/VectorLabel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/fab_menu_create_room"
+        app:layout_constraintBottom_toBottomOf="@+id/createRoomItemChat"
+        app:layout_constraintEnd_toEndOf="@+id/createRoomItemChat"
+        app:layout_constraintTop_toTopOf="@+id/createRoomItemChat" />
+
+    <!-- Sub menu item 1 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomItemChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_fab_add_chat"
+        app:backgroundTint="#FFFFFF"
+        app:fabCustomSize="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/createRoomButton"
+        app:layout_constraintEnd_toEndOf="@+id/createRoomButton"
+        app:layout_constraintStart_toStartOf="@+id/createRoomButton"
+        app:layout_constraintTop_toTopOf="@+id/createRoomButton"
+        app:maxImageSize="29dp"
+        app:tint="@color/black" />
+
+    <TextView
+        android:id="@+id/createRoomItemChatLabel"
+        style="@style/VectorLabel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/fab_menu_create_chat"
+        app:layout_constraintBottom_toBottomOf="@+id/createRoomItemChat"
+        app:layout_constraintEnd_toEndOf="@+id/createRoomItemChat"
+        app:layout_constraintTop_toTopOf="@+id/createRoomItemChat" />
+
+    <!-- Menu -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_fab_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="14dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

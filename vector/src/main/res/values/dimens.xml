@@ -27,7 +27,4 @@
     <dimen name="pill_min_height">20dp</dimen>
     <dimen name="pill_text_padding">4dp</dimen>
 
-
-    <dimen name="fab_menu_offset_1">76dp</dimen>
-    <dimen name="fab_menu_offset_2">146dp</dimen>
 </resources>

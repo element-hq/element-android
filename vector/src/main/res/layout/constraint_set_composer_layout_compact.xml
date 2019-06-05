@@ -159,6 +159,5 @@
         app:layout_constraintStart_toEndOf="@+id/composer_avatar_view"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
-    <!--tools:text="@tools:sample/lorem/random"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
