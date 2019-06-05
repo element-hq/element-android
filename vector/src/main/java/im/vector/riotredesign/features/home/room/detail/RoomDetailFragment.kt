@@ -84,6 +84,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventCo
 import im.vector.riotredesign.features.home.room.detail.timeline.action.ActionsHandler
 import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageMenuViewModel
+import im.vector.riotredesign.features.home.room.detail.timeline.action.ViewReactionBottomSheet
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.html.PillImageSpan
@@ -235,11 +236,13 @@ class RoomDetailFragment :
                     var formattedBody: CharSequence? = null
                     if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                         val parser = Parser.builder().build()
-                        val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
+                        val document = parser.parse(messageContent.formattedBody
+                                ?: messageContent.body)
                         formattedBody = Markwon.builder(requireContext())
                                 .usePlugin(HtmlPlugin.create()).build().render(document)
                     }
-                    composerLayout.composerRelatedMessageContent.text = formattedBody ?: nonFormattedBody
+                    composerLayout.composerRelatedMessageContent.text = formattedBody
+                            ?: nonFormattedBody
 
 
                     if (mode == SendMode.EDIT) {
@@ -591,6 +594,11 @@ class RoomDetailFragment :
             //I need to redact a reaction
             roomDetailViewModel.process(RoomDetailActions.UndoReaction(informationData.eventId, reaction))
         }
+    }
+
+    override fun onLongClickOnReactionPill(informationData: MessageInformationData, reaction: String) {
+        ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+                .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
     }
 
     override fun onEditedDecorationClicked(informationData: MessageInformationData, editAggregatedSummary: EditAggregatedSummary?) {

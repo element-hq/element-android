@@ -124,7 +124,7 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
             // Args are accessible from the context.
             // val foo = vieWModelContext.args<MyArgs>.foo
             val currentSession = viewModelContext.activity.get<Session>()
-            val parcel = viewModelContext.args as MessageActionsBottomSheet.ParcelableArgs
+            val parcel = viewModelContext.args as TimelineEventFragmentArgs
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
                     ?: return null
             var agreeTriggle: TriggleState = TriggleState.NONE

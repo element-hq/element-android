@@ -101,7 +101,7 @@ class MessageMenuFragment : BaseMvRxFragment() {
 
 
     companion object {
-        fun newInstance(pa: MessageActionsBottomSheet.ParcelableArgs): MessageMenuFragment {
+        fun newInstance(pa: TimelineEventFragmentArgs): MessageMenuFragment {
             val args = Bundle()
             args.putParcelable(MvRx.KEY_ARG, pa)
             val fragment = MessageMenuFragment()

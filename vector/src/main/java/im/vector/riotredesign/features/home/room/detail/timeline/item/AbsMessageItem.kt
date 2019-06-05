@@ -65,6 +65,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         override fun onUnReacted(reactionButton: ReactionButton) {
             reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString, false)
         }
+
+        override fun onLongClick(reactionButton: ReactionButton) {
+            reactionPillCallback?.onLongClickOnReactionPill(informationData, reactionButton.reactionString)
+        }
     }
 
     override fun bind(holder: H) {
@@ -112,7 +116,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             //clear all reaction buttons (but not the Flow helper!)
             holder.reactionWrapper?.children?.forEach { (it as? ReactionButton)?.isGone = true }
             val idToRefInFlow = ArrayList<Int>()
-            informationData.orderedReactionList?.chunked(7)?.firstOrNull()?.forEachIndexed { index, reaction ->
+            informationData.orderedReactionList?.chunked(8)?.firstOrNull()?.forEachIndexed { index, reaction ->
                 (holder.reactionWrapper?.children?.elementAtOrNull(index) as? ReactionButton)?.let { reactionButton ->
                     reactionButton.isVisible = true
                     reactionButton.reactedListener = reactionClickListener

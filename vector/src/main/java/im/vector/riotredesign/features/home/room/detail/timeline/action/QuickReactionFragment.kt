@@ -139,7 +139,7 @@ class QuickReactionFragment : BaseMvRxFragment() {
     }
 
     companion object {
-        fun newInstance(pa: MessageActionsBottomSheet.ParcelableArgs): QuickReactionFragment {
+        fun newInstance(pa: TimelineEventFragmentArgs): QuickReactionFragment {
             val args = Bundle()
             args.putParcelable(MvRx.KEY_ARG, pa)
             val fragment = QuickReactionFragment()

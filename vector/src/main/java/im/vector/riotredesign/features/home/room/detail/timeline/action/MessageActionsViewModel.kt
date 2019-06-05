@@ -25,7 +25,6 @@ import im.vector.matrix.android.api.session.room.model.message.MessageTextConten
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.riotredesign.core.platform.VectorViewModel
 import org.commonmark.parser.Parser
-import org.commonmark.renderer.html.HtmlRenderer
 import org.koin.android.ext.android.get
 import ru.noties.markwon.Markwon
 import ru.noties.markwon.html.HtmlPlugin
@@ -51,7 +50,7 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
 
         override fun initialState(viewModelContext: ViewModelContext): MessageActionState? {
             val currentSession = viewModelContext.activity.get<Session>()
-            val parcel = viewModelContext.args as MessageActionsBottomSheet.ParcelableArgs
+            val parcel = viewModelContext.args as TimelineEventFragmentArgs
 
             val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
 

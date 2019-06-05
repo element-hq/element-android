@@ -46,7 +46,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         override fun initialState(viewModelContext: ViewModelContext): MessageMenuState? {
             // Args are accessible from the context.
             val currentSession = viewModelContext.activity.get<Session>()
-            val parcel = viewModelContext.args as MessageActionsBottomSheet.ParcelableArgs
+            val parcel = viewModelContext.args as TimelineEventFragmentArgs
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
                     ?: return null
 

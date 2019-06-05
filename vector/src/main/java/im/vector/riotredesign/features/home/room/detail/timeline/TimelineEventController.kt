@@ -62,6 +62,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
 
     interface ReactionPillCallback {
         fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean)
+        fun onLongClickOnReactionPill(informationData: MessageInformationData, reaction: String)
     }
 
     private val collapsedEventIds = linkedSetOf<String>()

@@ -17,7 +17,6 @@ package im.vector.riotredesign.features.home.room.detail.timeline.action
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +35,6 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
-import kotlinx.android.parcel.Parcelize
 
 /**
  * Bottom sheet fragment that shows a message preview with list of contextual actions
@@ -74,7 +72,7 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
         val cfm = childFragmentManager
         var menuActionFragment = cfm.findFragmentByTag("MenuActionFragment") as? MessageMenuFragment
         if (menuActionFragment == null) {
-            menuActionFragment = MessageMenuFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as ParcelableArgs)
+            menuActionFragment = MessageMenuFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as TimelineEventFragmentArgs)
             cfm.beginTransaction()
                     .replace(R.id.bottom_sheet_menu_container, menuActionFragment, "MenuActionFragment")
                     .commit()
@@ -89,7 +87,7 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
 
         var quickReactionFragment = cfm.findFragmentByTag("QuickReaction") as? QuickReactionFragment
         if (quickReactionFragment == null) {
-            quickReactionFragment = QuickReactionFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as ParcelableArgs)
+            quickReactionFragment = QuickReactionFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as TimelineEventFragmentArgs)
             cfm.beginTransaction()
                     .replace(R.id.bottom_sheet_quick_reaction_container, quickReactionFragment, "QuickReaction")
                     .commit()
@@ -135,18 +133,11 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
     }
 
 
-    @Parcelize
-    data class ParcelableArgs(
-            val eventId: String,
-            val roomId: String,
-            val informationData: MessageInformationData
-    ) : Parcelable
-
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): MessageActionsBottomSheet {
             return MessageActionsBottomSheet().apply {
                 setArguments(
-                        ParcelableArgs(
+                        TimelineEventFragmentArgs(
                                 informationData.eventId,
                                 roomId,
                                 informationData
