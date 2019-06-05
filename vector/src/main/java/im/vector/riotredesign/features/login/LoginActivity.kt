@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
 import io.reactivex.Observable
@@ -44,14 +45,20 @@ class LoginActivity : VectorBaseActivity() {
 
     private val authenticator = Matrix.getInstance().authenticator()
 
+    private var passwordShown = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         setupAuthButton()
+        setupPasswordReveal()
         homeServerField.setText(DEFAULT_HOME_SERVER_URI)
     }
 
     private fun authenticate() {
+        passwordShown = false
+        renderPasswordField()
+
         val login = loginField.text?.trim().toString()
         val password = passwordField.text?.trim().toString()
         buildHomeServerConnectionConfig().fold(
@@ -103,6 +110,24 @@ class LoginActivity : VectorBaseActivity() {
                 .subscribeBy { authenticateButton.isEnabled = it }
                 .disposeOnDestroy()
         authenticateButton.setOnClickListener { authenticate() }
+    }
+
+    private fun setupPasswordReveal() {
+        passwordShown = false
+
+        passwordReveal.setOnClickListener {
+            passwordShown = !passwordShown
+
+            renderPasswordField()
+        }
+
+        renderPasswordField()
+    }
+
+    private fun renderPasswordField() {
+        passwordField.showPassword(passwordShown)
+
+        passwordReveal.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
     }
 
     private fun goToHome() {
