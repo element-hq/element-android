@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionAsync
+import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import timber.log.Timber
 
@@ -48,7 +49,7 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
 
     override fun execute(params: EventRelationsAggregationTask.Params): Try<Unit> {
-        return monarchy.tryTransactionAsync { realm ->
+        return monarchy.tryTransactionSync { realm ->
             update(realm, params.events, params.userId)
         }
     }
