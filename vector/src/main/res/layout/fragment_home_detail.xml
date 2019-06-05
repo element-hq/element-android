@@ -48,7 +48,7 @@
         android:id="@+id/roomListContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#F3F8FD"
+        android:background="?riotx_header_panel_background"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintTop_toBottomOf="@+id/groupToolbar" />
 
@@ -56,7 +56,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:background="#FFFFFF"
+        android:background="?riotx_background"
         app:itemIconSize="20dp"
         app:itemIconTint="@color/home_bottom_nav_view_tint"
         app:itemTextColor="@color/home_bottom_nav_view_tint"

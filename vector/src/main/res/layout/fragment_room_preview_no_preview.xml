@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:gravity="center"
-                    android:textColor="@color/vector_error_color"
+                    android:textColor="@color/riotx_notice"
                     android:textSize="15sp"
                     android:visibility="gone"
                     tools:text="Error"

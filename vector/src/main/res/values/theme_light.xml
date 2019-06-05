@@ -14,7 +14,7 @@
         <item name="colorSecondary">@color/accent_color_light</item>
         <item name="colorSecondaryVariant">#0039CB</item>
         <item name="colorOnSecondary">@android:color/white</item>
-        <item name="colorError">@color/vector_error_color</item>
+        <item name="colorError">@color/riotx_notice</item>
         <item name="colorOnError">#FFFFFF</item>
         <item name="colorSurface">#FFFFFF</item>
         <item name="colorOnSurface">#212121</item>
@@ -32,7 +32,26 @@
         <item name="android:textColorSecondary">@color/black_38</item>
         <item name="android:textColorTertiary">@color/black_37</item>
 
-        <item name="android:textColorLink">@color/link_color_light</item>
+        <item name="android:textColorLink">@color/riotx_links</item>
+
+        <!-- Riotx attribute for palette -->
+        <item  name="riotx_background">@color/riotx_background</item>
+        <item  name="riotx_base">@color/riotx_base</item>
+        <item  name="riotx_base_text_icon_primary">@color/riotx_base_text_icon_primary_light</item>
+        <item  name="riotx_base_text_icon_secondary">@color/riotx_base_text_icon_secondary_light</item>
+        <item  name="riotx_search_background_mobile">@color/riotx_search_background_mobile_light</item>
+        <item  name="riotx_header_panel_background">@color/riotx_header_panel_background_light</item>
+        <item  name="riotx_header_panel_border_mobile">@color/riotx_header_panel_border_mobile_light</item>
+        <item  name="riotx_header_panel_text_primary">@color/riotx_header_panel_text_primary_light</item>
+        <item  name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_light</item>
+        <item  name="riotx_text_primary">@color/riotx_text_primary_light</item>
+        <item  name="riotx_text_secondary">@color/riotx_text_secondary_light</item>
+        <item  name="riotx_android_secondary">@color/riotx_android_secondary_light</item>
+        <item  name="riotx_search_placeholder">@color/riotx_search_placeholder_light</item>
+        <item  name="riotx_room_highlight">@color/riotx_room_highlight_light</item>
+        <item  name="riotx_unread_room_indent">@color/riotx_unread_room_indent_light</item>
+        <item  name="riotx_android_status_bar">@color/riotx_android_status_bar_light</item>
+        <item  name="riotx_line_break_mobile">@color/riotx_line_break_mobile_light</item>
 
         <!-- Menu text color -->
         <!--item name="android:actionMenuTextColor">#FFFFFFFF</item-->
@@ -49,7 +68,7 @@
         <item name="vctr_toolbar_primary_text_color">@color/riotx_text_primary_light</item>
         <!-- Base Text Secondary-->
         <item name="vctr_toolbar_secondary_text_color">@color/riotx_text_primary_light</item>
-        <item name="vctr_toolbar_link_text_color">@color/link_color_light</item>
+        <item name="vctr_toolbar_link_text_color">@color/riotx_links</item>
 
         <!-- application bar text hint color -->
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_light</item>

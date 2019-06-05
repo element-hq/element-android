@@ -155,14 +155,14 @@
             android:layout_marginRight="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_material_leave"
-            android:tint="@color/vector_error_color" />
+            android:tint="@color/riotx_notice" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/sign_out_bottom_sheet_dont_want_secure_messages"
-            android:textColor="@color/vector_error_color"
+            android:textColor="@color/riotx_notice"
             android:textSize="17sp" />
     </LinearLayout>
 
@@ -188,14 +188,14 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ic_material_exit_to_app"
-            android:tint="@color/vector_error_color" />
+            android:tint="@color/riotx_notice" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/action_sign_out"
-            android:textColor="@color/vector_error_color"
+            android:textColor="@color/riotx_notice"
             android:textSize="17sp" />
     </LinearLayout>
 
