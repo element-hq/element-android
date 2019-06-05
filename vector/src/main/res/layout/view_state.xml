@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="@android:color/black"
+            android:textColor="?riotx_text_primary"
             android:textSize="16sp"
             tools:text="Une erreur est survenue" />
 
@@ -39,8 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="@string/global_retry"
-            android:textColor="@android:color/white" />
+            android:text="@string/global_retry" />
 
     </LinearLayout>
 
@@ -60,7 +59,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="49dp"
             android:gravity="center"
-            android:textColor="#2E2F32"
+            android:textColor="?riotx_text_primary"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/emptyImageView"
@@ -86,7 +85,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="49dp"
             android:gravity="center"
-            android:textColor="#7E899C"
+            android:textColor="?riotx_text_secondary"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -79,7 +79,6 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:minWidth="120dp"
-        android:background="#341DDD"
         android:text="@string/accept"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"

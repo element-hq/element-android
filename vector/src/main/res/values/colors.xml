@@ -12,11 +12,9 @@
     <color name="light_blue_grey">#4ac1c9d6</color>
     <!-- Now use ?colorOnPrimary or ?vctr_toolbar_primary_text_color -->
     <!--color name="dark_grey">#2e2f32</color-->
-    <color name="dark_two">#27303A</color>
     <color name="light_grey_blue">#9fa9ba</color>
     <color name="cool_grey">#a5aab2</color>
     <color name="pale_grey_two">#ebedf8</color>
-    <color name="brown_grey">#a5a5a5</color>
     <color name="grey_lynch">#61708B</color>
     <color name="black_87">#de000000</color>
     <color name="black_38">#61000000</color>

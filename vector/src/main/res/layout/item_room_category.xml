@@ -28,7 +28,7 @@
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="#7E899C"
+        android:textColor="?riotx_text_secondary"
         android:textSize="14sp"
         tools:text="@string/room_participants_header_direct_chats" />
 
