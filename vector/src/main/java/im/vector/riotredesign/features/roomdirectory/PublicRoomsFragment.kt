@@ -58,7 +58,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(toolbar)
+        vectorBaseActivity.setSupportActionBar(publicRoomsToolbar)
 
         vectorBaseActivity.supportActionBar?.let {
             it.setDisplayShowHomeEnabled(true)

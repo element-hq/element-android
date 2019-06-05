@@ -6,25 +6,21 @@
     android:id="@+id/publicRoomsCoordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pale_grey">
+    android:background="?riotx_header_panel_background">
 
-    <com.airbnb.epoxy.EpoxyRecyclerView
-        android:id="@+id/publicRoomsList"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/item_public_room" />
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/publicRoomsToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="4dp"
             app:contentInsetStartWithNavigation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="noScroll">
 
             <EditText
@@ -49,7 +45,7 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/publicRoomsCreateNewRoom"
             style="@style/VectorButtonStyleFlat"
             android:layout_width="wrap_content"
@@ -57,12 +53,22 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="8dp"
-            android:drawableStart="@drawable/ic_plus_circle"
-            android:drawableLeft="@drawable/ic_plus_circle"
-            android:drawablePadding="13dp"
             android:text="@string/create_new_room"
+            app:icon="@drawable/ic_plus_circle"
+            app:iconPadding="13dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/publicRoomsToolbar"
             app:layout_scrollFlags="scroll|enterAlways|snap" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/publicRoomsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/publicRoomsCreateNewRoom"
+            tools:listitem="@layout/item_public_room" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
