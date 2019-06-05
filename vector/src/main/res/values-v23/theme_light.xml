@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Light.v21" parent="AppTheme.Base.Light">
+    <style name="AppTheme.Light.v23" parent="AppTheme.Light.v21">
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/riotx_header_panel_background_light</item>
         <item name="android:navigationBarColor">@color/riotx_header_panel_background_light</item>
 
@@ -9,6 +10,6 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.Light" parent="AppTheme.Light.v21"/>
+    <style name="AppTheme.Light" parent="AppTheme.Light.v23"/>
 
 </resources>

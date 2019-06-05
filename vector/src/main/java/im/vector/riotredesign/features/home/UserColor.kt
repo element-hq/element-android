@@ -23,7 +23,7 @@ import im.vector.riotredesign.R
 @ColorRes
 fun getColorFromUserId(userId: String?): Int {
     if (userId.isNullOrBlank()) {
-        return R.color.username_1
+        return R.color.riotx_username_1
     }
 
     var hash = 0
@@ -37,13 +37,13 @@ fun getColorFromUserId(userId: String?): Int {
     }
 
     return when (Math.abs(hash) % 8 + 1) {
-        1    -> R.color.username_1
-        2    -> R.color.username_2
-        3    -> R.color.username_3
-        4    -> R.color.username_4
-        5    -> R.color.username_5
-        6    -> R.color.username_6
-        7    -> R.color.username_7
-        else -> R.color.username_8
+        1    -> R.color.riotx_username_1
+        2    -> R.color.riotx_username_2
+        3    -> R.color.riotx_username_3
+        4    -> R.color.riotx_username_4
+        5    -> R.color.riotx_username_5
+        6    -> R.color.riotx_username_6
+        7    -> R.color.riotx_username_7
+        else -> R.color.riotx_username_8
     }
 }

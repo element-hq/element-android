@@ -61,7 +61,7 @@
             <Button
                 android:id="@+id/troubleshoot_run_button"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="16dp"
                 android:background="?attr/colorAccent"
@@ -75,7 +75,7 @@
             <Button
                 android:id="@+id/troubleshoot_summ_button"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="16dp"
                 android:background="?attr/colorAccent"

@@ -45,9 +45,9 @@ object AvatarRenderer {
     private const val THUMBNAIL_SIZE = 250
 
     private val AVATAR_COLOR_LIST = listOf(
-            R.color.avatar_color_1,
-            R.color.avatar_color_2,
-            R.color.avatar_color_3
+            R.color.riotx_avatar_fill_1,
+            R.color.riotx_avatar_fill_2,
+            R.color.riotx_avatar_fill_3
     )
 
     @UiThread

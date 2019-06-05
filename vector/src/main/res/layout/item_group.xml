@@ -32,7 +32,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/dark_grey"
+        android:textColor="?colorOnPrimary"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
@@ -41,7 +41,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
 
-    <!-- TODO Design Picto -->
     <ImageView
         android:id="@+id/groupAvatarChevron"
         android:layout_width="wrap_content"

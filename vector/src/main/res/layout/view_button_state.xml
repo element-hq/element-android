@@ -11,15 +11,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        tools:layout_gravity="center_horizontal"
         tools:text="@string/join" />
 
     <Button
         android:id="@+id/buttonStateButtonBig"
-        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:minWidth="120dp"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="100dp"
         tools:text="@string/join" />
 
     <ProgressBar
@@ -27,13 +29,17 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center"
-        android:scaleType="center" />
+        android:scaleType="center"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="200dp" />
 
     <ImageView
         android:id="@+id/buttonStateLoaded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="300dp"
         tools:src="@drawable/ic_tick" />
 
     <Button
@@ -43,6 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/global_retry"
-        android:textColor="@color/vector_warning_color" />
+        android:textColor="@color/vector_warning_color"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="400dp" />
 
 </merge>

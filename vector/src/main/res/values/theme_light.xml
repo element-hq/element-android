@@ -3,13 +3,30 @@
 
     <!-- LIGHT THEME COLORS -->
 
-    <style name="AppTheme.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
-        <item name="colorPrimaryDark">@color/primary_color_dark_light</item>
+    <style name="AppTheme.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!--item name="colorPrimary"></item>
+        <item name="colorPrimaryVariant"></item>
+        <item name="colorOnPrimary">@android:color/white</item-->
+
         <item name="colorPrimary">@color/primary_color_light</item>
         <item name="colorPrimaryVariant">@color/primary_color_dark_light</item>
+        <item name="colorOnPrimary">@color/riotx_text_primary_light</item>
         <item name="colorSecondary">@color/accent_color_light</item>
+        <item name="colorSecondaryVariant">#0039CB</item>
         <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorError">@color/vector_error_color</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#212121</item>
+        <item name="android:colorBackground">@color/riotx_background_light</item>
+        <item name="colorOnBackground">#212121</item>
+
         <item name="colorAccent">@color/accent_color_light</item>
+
+        <item name="materialButtonStyle">@style/VectorButtonStyle</item>
+        <item name="toolbarStyle">@style/VectorToolbarStyle</item>
+        <item name="alertDialogTheme">@style/VectorAlertDialogStyle</item>
+
 
         <item name="android:textColorPrimary">@color/black_87</item>
         <item name="android:textColorSecondary">@color/black_38</item>
@@ -18,24 +35,20 @@
         <item name="android:textColorLink">@color/link_color_light</item>
 
         <!-- Menu text color -->
-        <item name="android:actionMenuTextColor">#FFFFFFFF</item>
+        <!--item name="android:actionMenuTextColor">#FFFFFFFF</item-->
 
         <!-- default background color -->
-        <item name="android:colorBackground">@color/riot_primary_background_color_light</item>
         <item name="vctr_bottom_nav_background_color">#FFF3F8FD</item>
         <item name="vctr_bottom_nav_background_border_color">#FFE9EDF1</item>
-
-        <!-- default button -->
-        <item name="android:buttonStyle">@style/Widget.Vector.Button</item>
 
         <!-- waiting view background -->
         <item name="vctr_waiting_background_color">#AAAAAAAA</item>
 
         <!-- application bar text color -->
         <!-- Base Text Primary-->
-        <item name="vctr_toolbar_primary_text_color">#FFFFFFFF</item>
+        <item name="vctr_toolbar_primary_text_color">@color/riotx_text_primary_light</item>
         <!-- Base Text Secondary-->
-        <item name="vctr_toolbar_secondary_text_color">#FFFFFFFF</item>
+        <item name="vctr_toolbar_secondary_text_color">@color/riotx_text_primary_light</item>
         <item name="vctr_toolbar_link_text_color">@color/link_color_light</item>
 
         <!-- application bar text hint color -->

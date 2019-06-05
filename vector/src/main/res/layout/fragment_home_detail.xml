@@ -8,16 +8,12 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/groupToolbar"
-        style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#FFFFFF"
         android:elevation="4dp"
         app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +35,7 @@
                 android:layout_marginEnd="32dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/dark_grey"
+                android:textColor="?vctr_toolbar_primary_text_color"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 tools:text="@tools:sample/lorem/random" />

@@ -10,7 +10,9 @@
     <color name="sky_blue">#7bb2ea</color>
     <color name="bluey_grey_two">#929eb4</color>
     <color name="light_blue_grey">#4ac1c9d6</color>
-    <color name="dark_grey">#2e2f32</color>
+    <!-- Now use ?colorOnPrimary or ?vctr_toolbar_primary_text_color -->
+    <!--color name="dark_grey">#2e2f32</color-->
+    <color name="dark_two">#27303A</color>
     <color name="light_grey_blue">#9fa9ba</color>
     <color name="cool_grey">#a5aab2</color>
     <color name="pale_grey_two">#ebedf8</color>

@@ -26,8 +26,7 @@
             android:elevation="4dp"
             android:minHeight="0dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

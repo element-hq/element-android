@@ -74,12 +74,12 @@
 
     <Button
         android:id="@+id/inviteAcceptView"
-        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:minWidth="120dp"
+        android:background="#341DDD"
         android:text="@string/accept"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"

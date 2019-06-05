@@ -7,12 +7,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/imageMediaViewerToolbar"
-        style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:elevation="4dp" />
 
     <com.github.piasy.biv.view.BigImageView
         android:id="@+id/imageMediaViewerImageView"
