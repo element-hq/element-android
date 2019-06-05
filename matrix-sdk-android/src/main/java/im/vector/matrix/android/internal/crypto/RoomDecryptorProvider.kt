@@ -43,37 +43,35 @@ internal class RoomDecryptorProvider(
      */
     fun getOrCreateRoomDecryptor(roomId: String?, algorithm: String?): IMXDecrypting? {
         // sanity check
-        if (algorithm.isNullOrEmpty() || roomId.isNullOrEmpty()) {
+        if (algorithm.isNullOrEmpty()) {
             Timber.e("## getRoomDecryptor() : null algorithm")
             return null
         }
-
-        var alg: IMXDecrypting?
-        synchronized(roomDecryptors) {
-            if (!roomDecryptors.containsKey(roomId)) {
-                roomDecryptors[roomId!!] = HashMap()
-            }
-
-            alg = roomDecryptors[roomId]!![algorithm]
-        }
-        if (alg != null) {
-            return alg
-        }
-        val decryptingClass = MXCryptoAlgorithms.hasDecryptorClassForAlgorithm(algorithm)
-        if (decryptingClass) {
-            alg = when (algorithm) {
-                MXCRYPTO_ALGORITHM_MEGOLM -> megolmDecryptionFactory.create()
-                else                      -> olmDecryptionFactory.create()
-            }
-            if (null != alg) {
-                if (!TextUtils.isEmpty(roomId)) {
-                    synchronized(roomDecryptors) {
-                        roomDecryptors[roomId]!!.put(algorithm!!, alg!!)
-                    }
+        if(roomId != null && roomId.isNotEmpty()) {
+            synchronized(roomDecryptors) {
+                if (!roomDecryptors.containsKey(roomId)) {
+                    roomDecryptors[roomId] = HashMap()
+                }
+                val alg = roomDecryptors[roomId]?.get(algorithm)
+                if (alg != null) {
+                    return alg
                 }
             }
         }
-        return alg
+        val decryptingClass = MXCryptoAlgorithms.hasDecryptorClassForAlgorithm(algorithm)
+        if (decryptingClass) {
+            val alg = when (algorithm) {
+                MXCRYPTO_ALGORITHM_MEGOLM -> megolmDecryptionFactory.create()
+                else                      -> olmDecryptionFactory.create()
+            }
+            if (roomId != null && !TextUtils.isEmpty(roomId)) {
+                synchronized(roomDecryptors) {
+                    roomDecryptors[roomId]?.put(algorithm, alg)
+                }
+            }
+            return alg
+        }
+        return null
     }
 
     fun getRoomDecryptor(roomId: String?, algorithm: String?): IMXDecrypting? {

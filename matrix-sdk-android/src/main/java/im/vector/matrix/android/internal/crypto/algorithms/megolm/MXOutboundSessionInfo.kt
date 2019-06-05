@@ -23,23 +23,23 @@ import timber.log.Timber
 
 internal class MXOutboundSessionInfo(
         // The id of the session
-        val mSessionId: String) {
+        val sessionId: String) {
     // When the session was created
-    private val mCreationTime = System.currentTimeMillis()
+    private val creationTime = System.currentTimeMillis()
 
     // Number of times this session has been used
-    var mUseCount: Int = 0
+    var useCount: Int = 0
 
     // Devices with which we have shared the session key
     // userId -> {deviceId -> msgindex}
-    val mSharedWithDevices: MXUsersDevicesMap<Int> = MXUsersDevicesMap()
+    val sharedWithDevices: MXUsersDevicesMap<Int> = MXUsersDevicesMap()
 
     fun needsRotation(rotationPeriodMsgs: Int, rotationPeriodMs: Int): Boolean {
         var needsRotation = false
-        val sessionLifetime = System.currentTimeMillis() - mCreationTime
+        val sessionLifetime = System.currentTimeMillis() - creationTime
 
-        if (mUseCount >= rotationPeriodMsgs || sessionLifetime >= rotationPeriodMs) {
-            Timber.v("## needsRotation() : Rotating megolm session after " + mUseCount + ", " + sessionLifetime + "ms")
+        if (useCount >= rotationPeriodMsgs || sessionLifetime >= rotationPeriodMs) {
+            Timber.v("## needsRotation() : Rotating megolm session after " + useCount + ", " + sessionLifetime + "ms")
             needsRotation = true
         }
 
@@ -53,7 +53,7 @@ internal class MXOutboundSessionInfo(
      * @return true if we have shared the session with devices which aren't in devicesInRoom.
      */
     fun sharedWithTooManyDevices(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>): Boolean {
-        val userIds = mSharedWithDevices.userIds
+        val userIds = sharedWithDevices.userIds
 
         for (userId in userIds) {
             if (null == devicesInRoom.getUserDeviceIds(userId)) {
@@ -61,7 +61,7 @@ internal class MXOutboundSessionInfo(
                 return true
             }
 
-            val deviceIds = mSharedWithDevices.getUserDeviceIds(userId)
+            val deviceIds = sharedWithDevices.getUserDeviceIds(userId)
 
             for (deviceId in deviceIds!!) {
                 if (null == devicesInRoom.getObject(deviceId, userId)) {

@@ -37,7 +37,6 @@ internal class MXOlmEncryptionFactory(private val mOlmDevice: MXOlmDevice,
                 mCryptoStore,
                 mMessageEncrypter,
                 mDeviceListManager,
-                coroutineDispatchers,
                 mEnsureOlmSessionsForUsersAction)
     }
 }

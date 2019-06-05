@@ -50,7 +50,6 @@ internal class MXMegolmEncryptionFactory(
                 mEnsureOlmSessionsForDevicesAction,
                 mCredentials,
                 mSendToDeviceTask,
-                mTaskExecutor,
                 mMessageEncrypter,
                 mWarnOnUnknownDevicesRepository)
     }

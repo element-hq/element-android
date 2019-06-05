@@ -603,11 +603,11 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
     }
 
     override fun getOrAddOutgoingRoomKeyRequest(request: OutgoingRoomKeyRequest): OutgoingRoomKeyRequest? {
-        if (request.mRequestBody == null) {
+        if (request.requestBody == null) {
             return null
         }
 
-        val existingOne = getOutgoingRoomKeyRequest(request.mRequestBody!!)
+        val existingOne = getOutgoingRoomKeyRequest(request.requestBody!!)
 
         if (existingOne != null) {
             return existingOne
@@ -615,11 +615,11 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
 
         // Insert the request and return the one passed in parameter
         doRealmTransaction(realmConfiguration) {
-            it.createObject(OutgoingRoomKeyRequestEntity::class.java, request.mRequestId).apply {
-                putRequestBody(request.mRequestBody)
-                putRecipients(request.mRecipients)
-                cancellationTxnId = request.mCancellationTxnId
-                state = request.mState.ordinal
+            it.createObject(OutgoingRoomKeyRequestEntity::class.java, request.requestId).apply {
+                putRequestBody(request.requestBody)
+                putRecipients(request.recipients)
+                cancellationTxnId = request.cancellationTxnId
+                state = request.state.ordinal
             }
         }
 
@@ -638,11 +638,11 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
     override fun updateOutgoingRoomKeyRequest(request: OutgoingRoomKeyRequest) {
         doRealmTransaction(realmConfiguration) {
             val obj = OutgoingRoomKeyRequestEntity().apply {
-                requestId = request.mRequestId
-                cancellationTxnId = request.mCancellationTxnId
-                state = request.mState.ordinal
-                putRecipients(request.mRecipients)
-                putRequestBody(request.mRequestBody)
+                requestId = request.requestId
+                cancellationTxnId = request.cancellationTxnId
+                state = request.state.ordinal
+                putRecipients(request.recipients)
+                putRequestBody(request.requestBody)
             }
 
             it.insertOrUpdate(obj)

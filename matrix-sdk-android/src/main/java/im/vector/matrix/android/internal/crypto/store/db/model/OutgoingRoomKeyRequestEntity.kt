@@ -52,7 +52,7 @@ internal open class OutgoingRoomKeyRequestEntity(
                 requestId!!,
                 OutgoingRoomKeyRequest.RequestState.from(state)
         ).apply {
-            this.mCancellationTxnId = cancellationTxnId
+            this.cancellationTxnId = cancellationTxnId
         }
     }
 

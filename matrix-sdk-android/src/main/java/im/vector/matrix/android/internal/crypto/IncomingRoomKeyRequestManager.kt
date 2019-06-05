@@ -27,21 +27,21 @@ import timber.log.Timber
 import java.util.*
 
 internal class IncomingRoomKeyRequestManager(
-        private val mCredentials: Credentials,
-        private val mCryptoStore: IMXCryptoStore,
-        private val mRoomDecryptorProvider: RoomDecryptorProvider) {
+        private val credentials: Credentials,
+        private val cryptoStore: IMXCryptoStore,
+        private val roomDecryptorProvider: RoomDecryptorProvider) {
 
 
     // list of IncomingRoomKeyRequests/IncomingRoomKeyRequestCancellations
     // we received in the current sync.
-    private val mReceivedRoomKeyRequests = ArrayList<IncomingRoomKeyRequest>()
-    private val mReceivedRoomKeyRequestCancellations = ArrayList<IncomingRoomKeyRequestCancellation>()
+    private val receivedRoomKeyRequests = ArrayList<IncomingRoomKeyRequest>()
+    private val receivedRoomKeyRequestCancellations = ArrayList<IncomingRoomKeyRequestCancellation>()
 
     // the listeners
-    private val mRoomKeysRequestListeners: MutableSet<RoomKeysRequestListener> = HashSet()
+    private val roomKeysRequestListeners: MutableSet<RoomKeysRequestListener> = HashSet()
 
     init {
-        mReceivedRoomKeyRequests.addAll(mCryptoStore.getPendingIncomingRoomKeyRequests())
+        receivedRoomKeyRequests.addAll(cryptoStore.getPendingIncomingRoomKeyRequests())
     }
 
     /**
@@ -52,13 +52,12 @@ internal class IncomingRoomKeyRequestManager(
      */
     fun onRoomKeyRequestEvent(event: Event) {
         val roomKeyShare = event.getClearContent().toModel<RoomKeyShare>()
-
         when (roomKeyShare?.action) {
-            RoomKeyShare.ACTION_SHARE_REQUEST      -> synchronized(mReceivedRoomKeyRequests) {
-                mReceivedRoomKeyRequests.add(IncomingRoomKeyRequest(event))
+            RoomKeyShare.ACTION_SHARE_REQUEST      -> synchronized(receivedRoomKeyRequests) {
+                receivedRoomKeyRequests.add(IncomingRoomKeyRequest(event))
             }
-            RoomKeyShare.ACTION_SHARE_CANCELLATION -> synchronized(mReceivedRoomKeyRequestCancellations) {
-                mReceivedRoomKeyRequestCancellations.add(IncomingRoomKeyRequestCancellation(event))
+            RoomKeyShare.ACTION_SHARE_CANCELLATION -> synchronized(receivedRoomKeyRequestCancellations) {
+                receivedRoomKeyRequestCancellations.add(IncomingRoomKeyRequestCancellation(event))
             }
             else                                   -> Timber.e("## onRoomKeyRequestEvent() : unsupported action " + roomKeyShare?.action)
         }
@@ -71,10 +70,10 @@ internal class IncomingRoomKeyRequestManager(
     fun processReceivedRoomKeyRequests() {
         var receivedRoomKeyRequests: List<IncomingRoomKeyRequest>? = null
 
-        synchronized(mReceivedRoomKeyRequests) {
-            if (!mReceivedRoomKeyRequests.isEmpty()) {
-                receivedRoomKeyRequests = ArrayList(mReceivedRoomKeyRequests)
-                mReceivedRoomKeyRequests.clear()
+        synchronized(this.receivedRoomKeyRequests) {
+            if (this.receivedRoomKeyRequests.isNotEmpty()) {
+                receivedRoomKeyRequests = ArrayList(this.receivedRoomKeyRequests)
+                this.receivedRoomKeyRequests.clear()
             }
         }
 
@@ -88,7 +87,7 @@ internal class IncomingRoomKeyRequestManager(
 
                 Timber.v("m.room_key_request from " + userId + ":" + deviceId + " for " + roomId + " / " + body.sessionId + " id " + request.requestId)
 
-                if (!TextUtils.equals(mCredentials.userId, userId)) {
+                if (!TextUtils.equals(credentials.userId, userId)) {
                     // TODO: determine if we sent this device the keys already: in
                     Timber.e("## processReceivedRoomKeyRequests() : Ignoring room key request from other user for now")
                     return
@@ -100,7 +99,7 @@ internal class IncomingRoomKeyRequestManager(
                 // if we don't have a decryptor for this room/alg, we don't have
                 // the keys for the requested events, and can drop the requests.
 
-                val decryptor = mRoomDecryptorProvider.getRoomDecryptor(roomId, alg)
+                val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, alg)
 
                 if (null == decryptor) {
                     Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown $alg in room $roomId")
@@ -109,52 +108,52 @@ internal class IncomingRoomKeyRequestManager(
 
                 if (!decryptor.hasKeysForKeyRequest(request)) {
                     Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown session " + body.sessionId!!)
-                    mCryptoStore.deleteIncomingRoomKeyRequest(request)
+                    cryptoStore.deleteIncomingRoomKeyRequest(request)
                     continue
                 }
 
-                if (TextUtils.equals(deviceId, mCredentials.deviceId) && TextUtils.equals(mCredentials.userId, userId)) {
+                if (TextUtils.equals(deviceId, credentials.deviceId) && TextUtils.equals(credentials.userId, userId)) {
                     Timber.v("## processReceivedRoomKeyRequests() : oneself device - ignored")
-                    mCryptoStore.deleteIncomingRoomKeyRequest(request)
+                    cryptoStore.deleteIncomingRoomKeyRequest(request)
                     continue
                 }
 
                 request.share = Runnable {
                     decryptor.shareKeysWithDevice(request)
-                    mCryptoStore.deleteIncomingRoomKeyRequest(request)
+                    cryptoStore.deleteIncomingRoomKeyRequest(request)
                 }
 
-                request.ignore = Runnable { mCryptoStore.deleteIncomingRoomKeyRequest(request) }
+                request.ignore = Runnable { cryptoStore.deleteIncomingRoomKeyRequest(request) }
 
                 // if the device is verified already, share the keys
-                val device = mCryptoStore.getUserDevice(deviceId!!, userId)
+                val device = cryptoStore.getUserDevice(deviceId!!, userId)
 
                 if (null != device) {
                     if (device.isVerified) {
                         Timber.v("## processReceivedRoomKeyRequests() : device is already verified: sharing keys")
-                        mCryptoStore.deleteIncomingRoomKeyRequest(request)
+                        cryptoStore.deleteIncomingRoomKeyRequest(request)
                         request.share?.run()
                         continue
                     }
 
                     if (device.isBlocked) {
                         Timber.v("## processReceivedRoomKeyRequests() : device is blocked -> ignored")
-                        mCryptoStore.deleteIncomingRoomKeyRequest(request)
+                        cryptoStore.deleteIncomingRoomKeyRequest(request)
                         continue
                     }
                 }
 
-                mCryptoStore.storeIncomingRoomKeyRequest(request)
+                cryptoStore.storeIncomingRoomKeyRequest(request)
                 onRoomKeyRequest(request)
             }
         }
 
         var receivedRoomKeyRequestCancellations: List<IncomingRoomKeyRequestCancellation>? = null
 
-        synchronized(mReceivedRoomKeyRequestCancellations) {
-            if (!mReceivedRoomKeyRequestCancellations.isEmpty()) {
-                receivedRoomKeyRequestCancellations = mReceivedRoomKeyRequestCancellations.toList()
-                mReceivedRoomKeyRequestCancellations.clear()
+        synchronized(this.receivedRoomKeyRequestCancellations) {
+            if (!this.receivedRoomKeyRequestCancellations.isEmpty()) {
+                receivedRoomKeyRequestCancellations = this.receivedRoomKeyRequestCancellations.toList()
+                this.receivedRoomKeyRequestCancellations.clear()
             }
         }
 
@@ -167,7 +166,7 @@ internal class IncomingRoomKeyRequestManager(
                 // about, but we don't currently have a record of that, so we just pass
                 // everything through.
                 onRoomKeyRequestCancellation(request)
-                mCryptoStore.deleteIncomingRoomKeyRequest(request)
+                cryptoStore.deleteIncomingRoomKeyRequest(request)
             }
         }
     }
@@ -178,8 +177,8 @@ internal class IncomingRoomKeyRequestManager(
      * @param request the request
      */
     private fun onRoomKeyRequest(request: IncomingRoomKeyRequest) {
-        synchronized(mRoomKeysRequestListeners) {
-            for (listener in mRoomKeysRequestListeners) {
+        synchronized(roomKeysRequestListeners) {
+            for (listener in roomKeysRequestListeners) {
                 try {
                     listener.onRoomKeyRequest(request)
                 } catch (e: Exception) {
@@ -197,8 +196,8 @@ internal class IncomingRoomKeyRequestManager(
      * @param request the cancellation request
      */
     private fun onRoomKeyRequestCancellation(request: IncomingRoomKeyRequestCancellation) {
-        synchronized(mRoomKeysRequestListeners) {
-            for (listener in mRoomKeysRequestListeners) {
+        synchronized(roomKeysRequestListeners) {
+            for (listener in roomKeysRequestListeners) {
                 try {
                     listener.onRoomKeyRequestCancellation(request)
                 } catch (e: Exception) {
@@ -210,14 +209,14 @@ internal class IncomingRoomKeyRequestManager(
     }
 
     fun addRoomKeysRequestListener(listener: RoomKeysRequestListener) {
-        synchronized(mRoomKeysRequestListeners) {
-            mRoomKeysRequestListeners.add(listener)
+        synchronized(roomKeysRequestListeners) {
+            roomKeysRequestListeners.add(listener)
         }
     }
 
     fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener) {
-        synchronized(mRoomKeysRequestListeners) {
-            mRoomKeysRequestListeners.remove(listener)
+        synchronized(roomKeysRequestListeners) {
+            roomKeysRequestListeners.remove(listener)
         }
     }
 

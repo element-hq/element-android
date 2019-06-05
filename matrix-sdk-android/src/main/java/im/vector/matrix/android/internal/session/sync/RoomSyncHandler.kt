@@ -97,7 +97,6 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
             roomEntity.addStateEvents(roomSync.state.events, filterDuplicates = true, stateIndex = untimelinedStateIndex)
 
             // Give info to crypto module
-            // TODO Remove
             roomSync.state.events.forEach {
                 mCrypto.onStateEvent(roomId, it)
             }

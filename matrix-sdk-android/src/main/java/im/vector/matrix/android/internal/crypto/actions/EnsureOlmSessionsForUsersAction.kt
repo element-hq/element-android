@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.crypto.actions
 
 import android.text.TextUtils
+import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
@@ -32,15 +33,10 @@ internal class EnsureOlmSessionsForUsersAction(private val olmDevice: MXOlmDevic
 
     /**
      * Try to make sure we have established olm sessions for the given users.
-     * It must be called in getEncryptingThreadHandler() thread.
-     * The callback is called in the UI thread.
-     *
      * @param users    a list of user ids.
-     * @param callback the asynchronous callback
      */
-    fun handle(users: List<String>, callback: MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>>) {
+    suspend fun handle(users: List<String>) : Try<MXUsersDevicesMap<MXOlmSessionResult>> {
         Timber.v("## ensureOlmSessionsForUsers() : ensureOlmSessionsForUsers $users")
-
         val devicesByUser = HashMap<String /* userId */, MutableList<MXDeviceInfo>>()
 
         for (userId in users) {
@@ -64,7 +60,6 @@ internal class EnsureOlmSessionsForUsersAction(private val olmDevice: MXOlmDevic
                 devicesByUser[userId]!!.add(device)
             }
         }
-
-        ensureOlmSessionsForDevicesAction.handle(devicesByUser, callback)
+        return ensureOlmSessionsForDevicesAction.handle(devicesByUser)
     }
 }

@@ -27,7 +27,6 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import java.util.*
@@ -88,7 +87,7 @@ internal class OutgoingRoomKeyRequestManager(
                 OutgoingRoomKeyRequest(requestBody, recipients, makeTxnId(), OutgoingRoomKeyRequest.RequestState.UNSENT))
 
 
-        if (req?.mState == OutgoingRoomKeyRequest.RequestState.UNSENT) {
+        if (req?.state == OutgoingRoomKeyRequest.RequestState.UNSENT) {
             startTimer()
         }
     }
@@ -122,20 +121,20 @@ internal class OutgoingRoomKeyRequestManager(
                   ?: // no request was made for this key
                   return
 
-        Timber.v("cancelRoomKeyRequest: requestId: " + req.mRequestId + " state: " + req.mState + " andResend: " + andResend)
+        Timber.v("cancelRoomKeyRequest: requestId: " + req.requestId + " state: " + req.state + " andResend: " + andResend)
 
-        if (req.mState === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING || req.mState === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND) {
+        if (req.state === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING || req.state === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND) {
             // nothing to do here
-        } else if (req.mState === OutgoingRoomKeyRequest.RequestState.UNSENT || req.mState === OutgoingRoomKeyRequest.RequestState.FAILED) {
+        } else if (req.state === OutgoingRoomKeyRequest.RequestState.UNSENT || req.state === OutgoingRoomKeyRequest.RequestState.FAILED) {
             Timber.v("## cancelRoomKeyRequest() : deleting unnecessary room key request for $requestBody")
-            cryptoStore.deleteOutgoingRoomKeyRequest(req.mRequestId)
-        } else if (req.mState === OutgoingRoomKeyRequest.RequestState.SENT) {
+            cryptoStore.deleteOutgoingRoomKeyRequest(req.requestId)
+        } else if (req.state === OutgoingRoomKeyRequest.RequestState.SENT) {
             if (andResend) {
-                req.mState = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
+                req.state = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
             } else {
-                req.mState = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING
+                req.state = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING
             }
-            req.mCancellationTxnId = makeTxnId()
+            req.cancellationTxnId = makeTxnId()
             cryptoStore.updateOutgoingRoomKeyRequest(req)
             sendOutgoingRoomKeyRequestCancellation(req)
         }
@@ -149,7 +148,6 @@ internal class OutgoingRoomKeyRequestManager(
         if (sendOutgoingRoomKeyRequestsRunning) {
             return
         }
-
         Handler().postDelayed(Runnable {
             if (sendOutgoingRoomKeyRequestsRunning) {
                 Timber.v("## startTimer() : RoomKeyRequestSend already in progress!")
@@ -182,7 +180,7 @@ internal class OutgoingRoomKeyRequestManager(
             return
         }
 
-        if (OutgoingRoomKeyRequest.RequestState.UNSENT === outgoingRoomKeyRequest.mState) {
+        if (OutgoingRoomKeyRequest.RequestState.UNSENT === outgoingRoomKeyRequest.state) {
             sendOutgoingRoomKeyRequest(outgoingRoomKeyRequest)
         } else {
             sendOutgoingRoomKeyRequestCancellation(outgoingRoomKeyRequest)
@@ -195,20 +193,20 @@ internal class OutgoingRoomKeyRequestManager(
      * @param request the request
      */
     private fun sendOutgoingRoomKeyRequest(request: OutgoingRoomKeyRequest) {
-        Timber.v("## sendOutgoingRoomKeyRequest() : Requesting keys " + request.mRequestBody
-                + " from " + request.mRecipients + " id " + request.mRequestId)
+        Timber.v("## sendOutgoingRoomKeyRequest() : Requesting keys " + request.requestBody
+                + " from " + request.recipients + " id " + request.requestId)
 
         val requestMessage = RoomKeyShareRequest()
         requestMessage.requestingDeviceId = cryptoStore.getDeviceId()
-        requestMessage.requestId = request.mRequestId
-        requestMessage.body = request.mRequestBody
+        requestMessage.requestId = request.requestId
+        requestMessage.body = request.requestBody
 
-        sendMessageToDevices(requestMessage, request.mRecipients, request.mRequestId, object : MatrixCallback<Unit> {
+        sendMessageToDevices(requestMessage, request.recipients, request.requestId, object : MatrixCallback<Unit> {
             private fun onDone(state: OutgoingRoomKeyRequest.RequestState) {
-                if (request.mState !== OutgoingRoomKeyRequest.RequestState.UNSENT) {
-                    Timber.v("## sendOutgoingRoomKeyRequest() : Cannot update room key request from UNSENT as it was already updated to " + request.mState)
+                if (request.state !== OutgoingRoomKeyRequest.RequestState.UNSENT) {
+                    Timber.v("## sendOutgoingRoomKeyRequest() : Cannot update room key request from UNSENT as it was already updated to " + request.state)
                 } else {
-                    request.mState = state
+                    request.state = state
                     cryptoStore.updateOutgoingRoomKeyRequest(request)
                 }
 
@@ -234,17 +232,17 @@ internal class OutgoingRoomKeyRequestManager(
      * @param request the request
      */
     private fun sendOutgoingRoomKeyRequestCancellation(request: OutgoingRoomKeyRequest) {
-        Timber.v("## sendOutgoingRoomKeyRequestCancellation() : Sending cancellation for key request for " + request.mRequestBody
-                + " to " + request.mRecipients
-                + " cancellation id  " + request.mCancellationTxnId)
+        Timber.v("## sendOutgoingRoomKeyRequestCancellation() : Sending cancellation for key request for " + request.requestBody
+                + " to " + request.recipients
+                + " cancellation id  " + request.cancellationTxnId)
 
         val roomKeyShareCancellation = RoomKeyShareCancellation()
         roomKeyShareCancellation.requestingDeviceId = cryptoStore.getDeviceId()
-        roomKeyShareCancellation.requestId = request.mCancellationTxnId
+        roomKeyShareCancellation.requestId = request.cancellationTxnId
 
-        sendMessageToDevices(roomKeyShareCancellation, request.mRecipients, request.mCancellationTxnId, object : MatrixCallback<Unit> {
+        sendMessageToDevices(roomKeyShareCancellation, request.recipients, request.cancellationTxnId, object : MatrixCallback<Unit> {
             private fun onDone() {
-                cryptoStore.deleteOutgoingRoomKeyRequest(request.mRequestId)
+                cryptoStore.deleteOutgoingRoomKeyRequest(request.requestId)
                 sendOutgoingRoomKeyRequestsRunning = false
                 startTimer()
             }
@@ -252,13 +250,13 @@ internal class OutgoingRoomKeyRequestManager(
 
             override fun onSuccess(data: Unit) {
                 Timber.v("## sendOutgoingRoomKeyRequestCancellation() : done")
-                val resend = request.mState === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
+                val resend = request.state === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
 
                 onDone()
 
                 // Resend the request with a new ID
                 if (resend) {
-                    sendRoomKeyRequest(request.mRequestBody, request.mRecipients)
+                    sendRoomKeyRequest(request.requestBody, request.recipients)
                 }
             }
 

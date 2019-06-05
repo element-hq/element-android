@@ -169,7 +169,7 @@ internal class CryptoModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            EnsureOlmSessionsForDevicesAction(get(), get(), get(), get())
+            EnsureOlmSessionsForDevicesAction(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -192,7 +192,7 @@ internal class CryptoModule {
         // Factories
         scope(DefaultSession.SCOPE) {
             MXMegolmDecryptionFactory(
-                    get(), get(), get(), get(), get(), get(), get(), get(), get(), get()
+                    get(), get(), get(), get(), get(), get(), get(), get(), get()
             )
         }
 

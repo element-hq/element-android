@@ -24,15 +24,15 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
  */
 class OutgoingRoomKeyRequest(
         // RequestBody
-        var mRequestBody: RoomKeyRequestBody?, // list of recipients for the request
-        var mRecipients: List<Map<String, String>>, // Unique id for this request. Used for both
+        var requestBody: RoomKeyRequestBody?, // list of recipients for the request
+        var recipients: List<Map<String, String>>, // Unique id for this request. Used for both
         // an id within the request for later pairing with a cancellation, and for
         // the transaction id when sending the to_device messages to our local
-        var mRequestId: String, // current state of this request
-        var mState: RequestState) {
+        var requestId: String, // current state of this request
+        var state: RequestState) {
 
     // transaction id for the cancellation, if any
-    var mCancellationTxnId: String? = null
+    var cancellationTxnId: String? = null
 
     /**
      * Used only for log.
@@ -40,8 +40,8 @@ class OutgoingRoomKeyRequest(
      * @return the room id.
      */
     val roomId: String?
-        get() = if (null != mRequestBody) {
-            mRequestBody!!.roomId
+        get() = if (null != requestBody) {
+            requestBody!!.roomId
         } else null
 
     /**
@@ -50,8 +50,8 @@ class OutgoingRoomKeyRequest(
      * @return the session id
      */
     val sessionId: String?
-        get() = if (null != mRequestBody) {
-            mRequestBody!!.sessionId
+        get() = if (null != requestBody) {
+            requestBody!!.sessionId
         } else null
 
     /**

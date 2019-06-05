@@ -41,7 +41,7 @@ class MXCryptoError(var code: String,
      * @return true if the current error is an olm one.
      */
     val isOlmError: Boolean
-        get() = TextUtils.equals(OLM_ERROR_CODE, code)
+        get() = OLM_ERROR_CODE == code
 
 
     /**
@@ -98,6 +98,7 @@ class MXCryptoError(var code: String,
         const val MISSING_PROPERTY_ERROR_CODE = "MISSING_PROPERTY"
         const val OLM_ERROR_CODE = "OLM_ERROR_CODE"
         const val UNKNOWN_DEVICES_CODE = "UNKNOWN_DEVICES_CODE"
+        const val UNKNOWN_MESSAGE_INDEX = "UNKNOWN_MESSAGE_INDEX"
 
         /**
          * short error reasons

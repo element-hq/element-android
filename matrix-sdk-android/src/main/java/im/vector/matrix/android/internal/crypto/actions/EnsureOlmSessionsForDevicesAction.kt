@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.crypto.actions
 
 import android.text.TextUtils
+import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
@@ -31,12 +32,10 @@ import timber.log.Timber
 import java.util.*
 
 internal class EnsureOlmSessionsForDevicesAction(private val olmDevice: MXOlmDevice,
-                                                 private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
-                                                 private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                 private val taskExecutor: TaskExecutor) {
+                                                 private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
 
 
-    fun handle(devicesByUser: Map<String, List<MXDeviceInfo>>, callback: MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>>?) {
+    suspend fun handle(devicesByUser: Map<String, List<MXDeviceInfo>>): Try<MXUsersDevicesMap<MXOlmSessionResult>> {
         val devicesWithoutSession = ArrayList<MXDeviceInfo>()
 
         val results = MXUsersDevicesMap<MXOlmSessionResult>()
@@ -62,8 +61,7 @@ internal class EnsureOlmSessionsForDevicesAction(private val olmDevice: MXOlmDev
         }
 
         if (devicesWithoutSession.size == 0) {
-            callback?.onSuccess(results)
-            return
+            return Try.just(results)
         }
 
         // Prepare the request for claiming one-time keys
@@ -83,66 +81,41 @@ internal class EnsureOlmSessionsForDevicesAction(private val olmDevice: MXOlmDev
 
         Timber.v("## claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
 
-
-        oneTimeKeysForUsersDeviceTask
-                .configureWith(ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim))
-                .dispatchTo(object : MatrixCallback<MXUsersDevicesMap<MXKey>> {
-                    override fun onSuccess(data: MXUsersDevicesMap<MXKey>) {
-                        try {
-                            Timber.v("## claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $data")
-
-                            for (userId in userIds) {
-                                val deviceInfos = devicesByUser[userId]
-
-                                for (deviceInfo in deviceInfos!!) {
-
-                                    var oneTimeKey: MXKey? = null
-
-                                    val deviceIds = data.getUserDeviceIds(userId)
-
-                                    if (null != deviceIds) {
-                                        for (deviceId in deviceIds) {
-                                            val olmSessionResult = results.getObject(deviceId, userId)
-
-                                            if (null != olmSessionResult!!.mSessionId) {
-                                                // We already have a result for this device
-                                                continue
-                                            }
-
-                                            val key = data.getObject(deviceId, userId)
-
-                                            if (TextUtils.equals(key!!.type, oneTimeKeyAlgorithm)) {
-                                                oneTimeKey = key
-                                            }
-
-                                            if (null == oneTimeKey) {
-                                                Timber.v("## ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm
-                                                        + " for device " + userId + " : " + deviceId)
-                                                continue
-                                            }
-
-                                            // Update the result for this device in results
-                                            olmSessionResult.mSessionId = verifyKeyAndStartSession(oneTimeKey, userId, deviceInfo)
-                                        }
+        val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim)
+        return oneTimeKeysForUsersDeviceTask
+                .execute(claimParams)
+                .map {
+                    Timber.v("## claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $it")
+                    for (userId in userIds) {
+                        val deviceInfos = devicesByUser[userId]
+                        for (deviceInfo in deviceInfos!!) {
+                            var oneTimeKey: MXKey? = null
+                            val deviceIds = it.getUserDeviceIds(userId)
+                            if (null != deviceIds) {
+                                for (deviceId in deviceIds) {
+                                    val olmSessionResult = results.getObject(deviceId, userId)
+                                    if (olmSessionResult!!.mSessionId != null) {
+                                        // We already have a result for this device
+                                        continue
                                     }
+                                    val key = it.getObject(deviceId, userId)
+                                    if (key?.type == oneTimeKeyAlgorithm) {
+                                        oneTimeKey = key
+                                    }
+                                    if (oneTimeKey == null) {
+                                        Timber.v("## ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm
+                                                + " for device " + userId + " : " + deviceId)
+                                        continue
+                                    }
+                                    // Update the result for this device in results
+                                    olmSessionResult.mSessionId = verifyKeyAndStartSession(oneTimeKey, userId, deviceInfo)
                                 }
                             }
-                        } catch (e: Exception) {
-                            Timber.e(e, "## ensureOlmSessionsForDevices() " + e.message)
                         }
-
-                        callback?.onSuccess(results)
                     }
-
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## ensureOlmSessionsForUsers(): claimOneTimeKeysForUsersDevices request failed")
-
-                        callback?.onFailure(failure)
-                    }
-                })
-                .executeBy(taskExecutor)
+                    results
+                }
     }
-
 
     private fun verifyKeyAndStartSession(oneTimeKey: MXKey, userId: String, deviceInfo: MXDeviceInfo): String? {
         var sessionId: String? = null

@@ -17,13 +17,13 @@
 package im.vector.matrix.android.internal.di
 
 import android.content.Context
+import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.android.asCoroutineDispatcher
 import org.koin.dsl.module.module
-import java.util.concurrent.Executors
 
 
 class MatrixModule(private val context: Context) {
@@ -35,10 +35,11 @@ class MatrixModule(private val context: Context) {
         }
 
         single {
+            val cryptoHandler = CryptoAsyncHelper.getDecryptBackgroundHandler()
             MatrixCoroutineDispatchers(io = Dispatchers.IO,
-                                       computation = Dispatchers.IO,
-                                       main = Dispatchers.Main,
-                                       crypto = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+                    computation = Dispatchers.IO,
+                    main = Dispatchers.Main,
+                    crypto = cryptoHandler.asCoroutineDispatcher("crypto")
             )
         }
 

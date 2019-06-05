@@ -19,7 +19,7 @@
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
 import android.text.TextUtils
-import im.vector.matrix.android.api.MatrixCallback
+import arrow.core.Try
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.internal.crypto.DeviceListManager
@@ -28,12 +28,7 @@ import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForUser
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
-import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import java.util.*
 
 internal class MXOlmEncryption(
@@ -42,38 +37,28 @@ internal class MXOlmEncryption(
         private val cryptoStore: IMXCryptoStore,
         private val messageEncrypter: MessageEncrypter,
         private val deviceListManager: DeviceListManager,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction)
     : IMXEncrypting {
 
-    override fun encryptEventContent(eventContent: Content,
-                                     eventType: String,
-                                     userIds: List<String>,
-                                     callback: MatrixCallback<Content>) {
+    override suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Try<Content> {
         // pick the list of recipients based on the membership list.
         //
         // TODO: there is a race condition here! What if a new user turns up
-        CoroutineScope(coroutineDispatchers.crypto).launch {
-            ensureSession(userIds, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
+        return ensureSession(userIds)
+                .map {
                     val deviceInfos = ArrayList<MXDeviceInfo>()
-
                     for (userId in userIds) {
                         val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
-
                         for (device in devices) {
                             val key = device.identityKey()
-
                             if (TextUtils.equals(key, olmDevice.deviceCurve25519Key)) {
                                 // Don't bother setting up session to ourself
                                 continue
                             }
-
                             if (device.isBlocked) {
                                 // Don't bother setting up sessions with blocked users
                                 continue
                             }
-
                             deviceInfos.add(device)
                         }
                     }
@@ -84,12 +69,10 @@ internal class MXOlmEncryption(
                     messageMap["content"] = eventContent
 
                     messageEncrypter.encryptMessage(messageMap, deviceInfos)
-
-                    callback.onSuccess(messageMap.toContent()!!)
+                    messageMap.toContent()!!
                 }
-            })
-        }
     }
+
 
     /**
      * Ensure that the session
@@ -97,24 +80,11 @@ internal class MXOlmEncryption(
      * @param users    the user ids list
      * @param callback the asynchronous callback
      */
-    private fun ensureSession(users: List<String>, callback: MatrixCallback<Unit>?) {
-        deviceListManager.downloadKeys(users, false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
+    private suspend fun ensureSession(users: List<String>): Try<Unit> {
+        return deviceListManager
+                .downloadKeys(users, false)
+                .flatMap { ensureOlmSessionsForUsersAction.handle(users) }
+                .map { Unit }
 
-            override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                ensureOlmSessionsForUsersAction.handle(users, object : MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>> {
-                    override fun onSuccess(data: MXUsersDevicesMap<MXOlmSessionResult>) {
-                        callback?.onSuccess(Unit)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        callback?.onFailure(failure)
-                    }
-                })
-            }
-
-            override fun onFailure(failure: Throwable) {
-                callback?.onFailure(failure)
-            }
-        })
     }
 }

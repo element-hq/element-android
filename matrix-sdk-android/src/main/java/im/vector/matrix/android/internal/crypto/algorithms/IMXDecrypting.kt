@@ -37,7 +37,7 @@ internal interface IMXDecrypting {
      * @throws MXDecryptionException the decryption failure reason
      */
     @Throws(MXDecryptionException::class)
-    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult?
+    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult?
 
     /**
      * Handle a key event.

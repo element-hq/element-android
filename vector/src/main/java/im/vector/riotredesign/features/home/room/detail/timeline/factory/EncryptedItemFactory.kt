@@ -45,15 +45,12 @@ class EncryptedItemFactory(
 
         return when {
             EventType.ENCRYPTED == timelineEvent.root.getClearType() -> {
-                val decrypted: MXEventDecryptionResult?
-                try {
-                    decrypted = session.decryptEvent(timelineEvent.root, "TODO")
-                } catch (e: MXDecryptionException) {
+                    val cryptoError = timelineEvent.root.mCryptoError
                     val errorDescription =
-                            if (e.cryptoError?.code == MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
+                            if (cryptoError?.code == MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
                                 stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
                             } else {
-                                e.localizedMessage
+                                cryptoError?.message
                             }
 
                     val message = stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
@@ -65,20 +62,6 @@ class EncryptedItemFactory(
                             .noticeText(spannableStr)
                             .avatarUrl(timelineEvent.senderAvatar)
                             .memberName(timelineEvent.senderName)
-                }
-
-                if (decrypted == null) {
-                    return null
-                }
-                if (decrypted.clearEvent == null) {
-                    return null
-                }
-                val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
-                val clearEvent = adapter.fromJsonValue(decrypted.clearEvent) ?: return null
-                val decryptedTimelineEvent = timelineEvent.copy(root = clearEvent)
-
-                // Success
-                return messageItemFactory.create(decryptedTimelineEvent, nextEvent, callback)
             }
             else                                           -> null
         }

@@ -16,9 +16,11 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.MXDecryptionException
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.session.room.members.SenderRoomMemberExtractor
@@ -44,6 +46,9 @@ internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomM
                 event.setClearData(result)
             } catch (e: Exception) {
                 Timber.e(e)
+                if (e is MXDecryptionException) {
+                    event.setCryptoError(e.cryptoError)
+                }
             }
         }
         return TimelineEvent(

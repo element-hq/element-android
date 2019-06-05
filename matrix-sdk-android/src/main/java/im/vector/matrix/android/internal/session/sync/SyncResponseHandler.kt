@@ -49,7 +49,9 @@ internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
                 cryptoSyncHandler.onSyncCompleted(syncResponse, fromToken, isCatchingUp)
             }
             val isInitialSync = fromToken == null
-            cryptoManager.start(isInitialSync)
+            if (!cryptoManager.isStarted()) {
+                cryptoManager.start(isInitialSync)
+            }
             Timber.v("Finish handling sync in $measure ms")
             syncResponse
         }

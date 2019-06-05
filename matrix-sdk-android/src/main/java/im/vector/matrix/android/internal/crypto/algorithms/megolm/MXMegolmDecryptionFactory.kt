@@ -24,7 +24,6 @@ import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevi
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 
 internal class MXMegolmDecryptionFactory(private val mCredentials: Credentials,
@@ -35,8 +34,7 @@ internal class MXMegolmDecryptionFactory(private val mCredentials: Credentials,
                                          private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
                                          private val mCryptoStore: IMXCryptoStore,
                                          private val mSendToDeviceTask: SendToDeviceTask,
-                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                         private val mTaskExecutor: TaskExecutor) {
+                                         private val coroutineDispatchers: MatrixCoroutineDispatchers) {
 
     fun create(): MXMegolmDecryption {
         return MXMegolmDecryption(
