@@ -29,6 +29,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.utils.DebouncedClickListener
 import im.vector.riotredesign.core.utils.DimensionUtils.dpToPx
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
@@ -46,9 +47,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     var cellClickListener: View.OnClickListener? = null
 
     @EpoxyAttribute
-    var avatarClickListener: View.OnClickListener? = null
-
-    @EpoxyAttribute
     var memberClickListener: View.OnClickListener? = null
 
     @EpoxyAttribute
@@ -56,6 +54,17 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     @EpoxyAttribute
     var reactionPillCallback: TimelineEventController.ReactionPillCallback? = null
+
+    @EpoxyAttribute
+    var avatarCallback: TimelineEventController.AvatarCallback?= null
+
+    private val _avatarClickListener =  DebouncedClickListener(View.OnClickListener {
+        avatarCallback?.onAvatarClicked(informationData)
+    })
+    private val _memberNameClickListener =  DebouncedClickListener(View.OnClickListener {
+        avatarCallback?.onMemberNameClicked(informationData)
+    })
+
 
     var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
@@ -81,9 +90,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                 width = size
             }
             holder.avatarImageView.visibility = View.VISIBLE
-            holder.avatarImageView.setOnClickListener(avatarClickListener)
+            holder.avatarImageView.setOnClickListener(_avatarClickListener)
             holder.memberNameView.visibility = View.VISIBLE
-            holder.memberNameView.setOnClickListener(memberClickListener)
+            holder.memberNameView.setOnClickListener(_memberNameClickListener)
             holder.timeView.visibility = View.VISIBLE
             holder.timeView.text = informationData.time
             holder.memberNameView.text = informationData.memberName

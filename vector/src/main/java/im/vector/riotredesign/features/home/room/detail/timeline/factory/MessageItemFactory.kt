@@ -143,18 +143,11 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
+                .avatarCallback(callback)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .avatarClickListener(
-                        DebouncedClickListener(View.OnClickListener {
-                            callback?.onAvatarClicked(informationData)
-                        }))
-                .memberClickListener(
-                        DebouncedClickListener(View.OnClickListener {
-                            callback?.onMemberNameClicked(informationData)
-                        }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view: View ->
                             callback?.onEventCellClicked(informationData, messageContent, view)
@@ -174,18 +167,11 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
+                .avatarCallback(callback)
                 .filename(messageContent.body)
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .iconRes(R.drawable.filetype_attachment)
-                .avatarClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onAvatarClicked(informationData)
-                        }))
-                .memberClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onMemberNameClicked(informationData)
-                        }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, messageContent, view)
@@ -223,17 +209,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageImageVideoItem_()
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .informationData(informationData)
+                .avatarCallback(callback)
                 .mediaData(data)
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .avatarClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onAvatarClicked(informationData)
-                        }))
-                .memberClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onMemberNameClicked(informationData)
-                        }))
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onImageMessageClicked(messageContent, data, view)
@@ -271,17 +250,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageImageVideoItem_()
                 .playable(true)
                 .informationData(informationData)
+                .avatarCallback(callback)
                 .mediaData(thumbnailData)
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .avatarClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onAvatarClicked(informationData)
-                        }))
-                .memberClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onMemberNameClicked(informationData)
-                        }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, messageContent, view)
@@ -316,16 +288,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                     }
                 }
                 .informationData(informationData)
+                .avatarCallback(callback)
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .avatarClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onAvatarClicked(informationData)
-                        }))
-                .memberClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onMemberNameClicked(informationData)
-                        }))
                 //click on the text
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -390,12 +355,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
+                .avatarCallback(callback)
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .avatarClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onAvatarClicked(informationData)
-                        }))
                 .memberClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onMemberNameClicked(informationData)
@@ -430,16 +392,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                     }
                 }
                 .informationData(informationData)
+                .avatarCallback(callback)
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .avatarClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onAvatarClicked(informationData)
-                        }))
-                .memberClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onMemberNameClicked(informationData)
-                        }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, messageContent, view)
@@ -454,14 +409,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                   callback: TimelineEventController.Callback?): RedactedMessageItem? {
         return RedactedMessageItem_()
                 .informationData(informationData)
-                .avatarClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onAvatarClicked(informationData)
-                        }))
-                .memberClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onMemberNameClicked(informationData)
-                        }))
+                .avatarCallback(callback)
     }
 
     private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {
