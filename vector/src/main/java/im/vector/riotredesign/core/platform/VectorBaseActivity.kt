@@ -42,7 +42,7 @@ import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.RageShake
 import im.vector.riotredesign.features.themes.ThemeUtils
 import im.vector.riotredesign.receivers.DebugReceiver
-import im.vector.ui.themes.ActivityOtherThemes
+import im.vector.riotredesign.features.themes.ActivityOtherThemes
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import org.koin.android.ext.android.inject

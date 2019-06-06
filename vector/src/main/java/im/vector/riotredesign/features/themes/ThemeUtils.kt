@@ -28,7 +28,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
 import im.vector.riotredesign.R
-import im.vector.ui.themes.ActivityOtherThemes
 import timber.log.Timber
 import java.util.*
 
