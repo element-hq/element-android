@@ -25,13 +25,17 @@
         <item name="android:fontFamily">"sans-serif"</item>
     </style>
 
-    <!-- Alert Dialog: Button color are not colorAccent by default TODO extend Dark for dark theme -->
-    <style name="VectorAlertDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+    <!-- Alert Dialog: Button color are not colorAccent by default -->
+    <style name="VectorAlertDialogStyleLight" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle</item>
+    </style>
+
+    <style name="VectorAlertDialogStyleDark" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle</item>
     </style>
 
     <style name="VectorAlertDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">?colorAccent</item>
+        <item name="android:textColor">@color/riotx_accent</item>
     </style>
 
 
