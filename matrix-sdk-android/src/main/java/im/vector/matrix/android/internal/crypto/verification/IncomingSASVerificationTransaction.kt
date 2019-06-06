@@ -118,7 +118,7 @@ internal class IncomingSASVerificationTransaction(
         }
 
         //Bob’s device ensures that it has a copy of Alice’s device key.
-        val mxDeviceInfo = mCryptoStore.getUserDevice(this.otherUserId, otherDeviceId!!)
+        val mxDeviceInfo = mCryptoStore.getUserDevice(deviceId = otherDeviceId!!, userId = otherUserId)
 
         if (mxDeviceInfo?.fingerprint() == null) {
             Timber.e("## Failed to find device key ")

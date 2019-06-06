@@ -223,7 +223,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                 .fold(
                         { error() },
                         {
-                            if (it != null && it.getUserDeviceIds(otherUserId).contains(startReq.fromDevice)) {
+                            if (it.getUserDeviceIds(otherUserId).contains(startReq.fromDevice)) {
                                 success(it)
                             } else {
                                 error()

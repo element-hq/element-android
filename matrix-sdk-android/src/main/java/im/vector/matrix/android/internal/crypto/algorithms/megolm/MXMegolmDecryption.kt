@@ -194,25 +194,22 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
 
         var senderKey: String? = event.getSenderKey()
         var keysClaimed: MutableMap<String, String> = HashMap()
-        var forwarding_curve25519_key_chain: MutableList<String>? = null
+        var forwardingCurve25519KeyChain: MutableList<String> = ArrayList()
 
         if (TextUtils.isEmpty(roomKeyContent.roomId) || TextUtils.isEmpty(roomKeyContent.sessionId) || TextUtils.isEmpty(roomKeyContent.sessionKey)) {
             Timber.e("## onRoomKeyEvent() :  Key event is missing fields")
             return
         }
-
         if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
             Timber.v("## onRoomKeyEvent(), forward adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
                     + " sessionKey " + roomKeyContent.sessionKey) // from " + event);
             val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>()!!
-
-            if (null == forwardedRoomKeyContent.forwardingCurve25519KeyChain) {
-                forwarding_curve25519_key_chain = ArrayList()
+            forwardingCurve25519KeyChain = if (null == forwardedRoomKeyContent.forwardingCurve25519KeyChain) {
+                ArrayList()
             } else {
-                forwarding_curve25519_key_chain = ArrayList(forwardedRoomKeyContent.forwardingCurve25519KeyChain!!)
+                ArrayList(forwardedRoomKeyContent.forwardingCurve25519KeyChain!!)
             }
-
-            forwarding_curve25519_key_chain.add(senderKey!!)
+            forwardingCurve25519KeyChain.add(senderKey!!)
 
             exportFormat = true
             senderKey = forwardedRoomKeyContent.senderKey
@@ -239,8 +236,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
             // inherit the claimed ed25519 key from the setup message
             keysClaimed = event.getKeysClaimed().toMutableMap()
         }
-
-        val added = olmDevice.addInboundGroupSession(roomKeyContent.sessionId!!, roomKeyContent.sessionKey!!, roomKeyContent.roomId!!, senderKey, forwarding_curve25519_key_chain!!, keysClaimed, exportFormat)
+        val added = olmDevice.addInboundGroupSession(roomKeyContent.sessionId!!, roomKeyContent.sessionKey!!, roomKeyContent.roomId!!, senderKey, forwardingCurve25519KeyChain, keysClaimed, exportFormat)
 
         if (added) {
             keysBackup.maybeBackupKeys()
@@ -318,41 +314,41 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
             deviceListManager
                     .downloadKeys(listOf(userId), false)
                     .flatMap {
-                        val deviceId = request.deviceId
-                        val deviceInfo = cryptoStore.getUserDevice(deviceId!!, userId)
-                        if (deviceInfo == null) {
-                            throw RuntimeException()
-                        } else {
-                            val devicesByUser = HashMap<String, List<MXDeviceInfo>>()
-                            devicesByUser[userId] = ArrayList(Arrays.asList(deviceInfo))
-                            ensureOlmSessionsForDevicesAction
-                                    .handle(devicesByUser)
-                                    .flatMap {
-                                        val body = request.requestBody
-                                        val olmSessionResult = it.getObject(deviceId, userId)
-                                        if (olmSessionResult?.mSessionId == null) {
-                                            // no session with this device, probably because there
-                                            // were no one-time keys.
-                                            Try.just(Unit)
+                            val deviceId = request.deviceId
+                            val deviceInfo = cryptoStore.getUserDevice(deviceId!!, userId)
+                            if (deviceInfo == null) {
+                                throw RuntimeException()
+                            } else {
+                                val devicesByUser = HashMap<String, List<MXDeviceInfo>>()
+                                devicesByUser[userId] = ArrayList(Arrays.asList(deviceInfo))
+                                ensureOlmSessionsForDevicesAction
+                                        .handle(devicesByUser)
+                                        .flatMap {
+                                            val body = request.requestBody
+                                            val olmSessionResult = it.getObject(deviceId, userId)
+                                            if (olmSessionResult?.mSessionId == null) {
+                                                // no session with this device, probably because there
+                                                // were no one-time keys.
+                                                Try.just(Unit)
+                                            }
+                                            Timber.v("## shareKeysWithDevice() : sharing keys for session " + body!!.senderKey + "|" + body.sessionId
+                                                     + " with device " + userId + ":" + deviceId)
+                                            val inboundGroupSession = olmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId)
+
+                                            val payloadJson = HashMap<String, Any>()
+                                            payloadJson["type"] = EventType.FORWARDED_ROOM_KEY
+                                            payloadJson["content"] = inboundGroupSession!!.exportKeys()!!
+
+                                            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, Arrays.asList(deviceInfo))
+                                            val sendToDeviceMap = MXUsersDevicesMap<Any>()
+                                            sendToDeviceMap.setObject(encodedPayload, userId, deviceId)
+                                            Timber.v("## shareKeysWithDevice() : sending to $userId:$deviceId")
+                                            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
+                                            sendToDeviceTask.execute(sendToDeviceParams)
                                         }
-                                        Timber.v("## shareKeysWithDevice() : sharing keys for session " + body!!.senderKey + "|" + body.sessionId
-                                                + " with device " + userId + ":" + deviceId)
-                                        val inboundGroupSession = olmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId)
-
-                                        val payloadJson = HashMap<String, Any>()
-                                        payloadJson["type"] = EventType.FORWARDED_ROOM_KEY
-                                        payloadJson["content"] = inboundGroupSession!!.exportKeys()!!
-
-                                        val encodedPayload = messageEncrypter.encryptMessage(payloadJson, Arrays.asList(deviceInfo))
-                                        val sendToDeviceMap = MXUsersDevicesMap<Any>()
-                                        sendToDeviceMap.setObject(encodedPayload, userId, deviceId)
-                                        Timber.v("## shareKeysWithDevice() : sending to $userId:$deviceId")
-                                        val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-                                        sendToDeviceTask.execute(sendToDeviceParams)
-                                    }
 
 
-                        }
+                            }
                     }
         }
     }

@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShare
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import java.util.*
+import kotlin.collections.ArrayList
 
 internal class IncomingRoomKeyRequestManager(
         private val credentials: Credentials,
@@ -46,19 +47,15 @@ internal class IncomingRoomKeyRequestManager(
 
     /**
      * Called when we get an m.room_key_request event
-     * This method must be called on getEncryptingThreadHandler() thread.
+     * It must be called on CryptoThread
      *
      * @param event the announcement event.
      */
-    fun onRoomKeyRequestEvent(event: Event) {
+    suspend fun onRoomKeyRequestEvent(event: Event) {
         val roomKeyShare = event.getClearContent().toModel<RoomKeyShare>()
         when (roomKeyShare?.action) {
-            RoomKeyShare.ACTION_SHARE_REQUEST      -> synchronized(receivedRoomKeyRequests) {
-                receivedRoomKeyRequests.add(IncomingRoomKeyRequest(event))
-            }
-            RoomKeyShare.ACTION_SHARE_CANCELLATION -> synchronized(receivedRoomKeyRequestCancellations) {
-                receivedRoomKeyRequestCancellations.add(IncomingRoomKeyRequestCancellation(event))
-            }
+            RoomKeyShare.ACTION_SHARE_REQUEST      -> receivedRoomKeyRequests.add(IncomingRoomKeyRequest(event))
+            RoomKeyShare.ACTION_SHARE_CANCELLATION -> receivedRoomKeyRequestCancellations.add(IncomingRoomKeyRequestCancellation(event))
             else                                   -> Timber.e("## onRoomKeyRequestEvent() : unsupported action " + roomKeyShare?.action)
         }
     }
@@ -66,86 +63,68 @@ internal class IncomingRoomKeyRequestManager(
     /**
      * Process any m.room_key_request events which were queued up during the
      * current sync.
+     * It must be called on CryptoThread
      */
     fun processReceivedRoomKeyRequests() {
-        var receivedRoomKeyRequests: List<IncomingRoomKeyRequest>? = null
+        val roomKeyRequestsToProcess = ArrayList(receivedRoomKeyRequests)
+        receivedRoomKeyRequests.clear()
+        for (request in roomKeyRequestsToProcess) {
+            val userId = request.userId
+            val deviceId = request.deviceId
+            val body = request.requestBody
+            val roomId = body!!.roomId
+            val alg = body.algorithm
 
-        synchronized(this.receivedRoomKeyRequests) {
-            if (this.receivedRoomKeyRequests.isNotEmpty()) {
-                receivedRoomKeyRequests = ArrayList(this.receivedRoomKeyRequests)
-                this.receivedRoomKeyRequests.clear()
+            Timber.v("m.room_key_request from " + userId + ":" + deviceId + " for " + roomId + " / " + body.sessionId + " id " + request.requestId)
+            if (userId == null || credentials.userId != userId) {
+                // TODO: determine if we sent this device the keys already: in
+                Timber.e("## processReceivedRoomKeyRequests() : Ignoring room key request from other user for now")
+                return
             }
-        }
-
-        if (null != receivedRoomKeyRequests) {
-            for (request in receivedRoomKeyRequests!!) {
-                val userId = request.userId!!
-                val deviceId = request.deviceId
-                val body = request.requestBody
-                val roomId = body!!.roomId
-                val alg = body.algorithm
-
-                Timber.v("m.room_key_request from " + userId + ":" + deviceId + " for " + roomId + " / " + body.sessionId + " id " + request.requestId)
-
-                if (!TextUtils.equals(credentials.userId, userId)) {
-                    // TODO: determine if we sent this device the keys already: in
-                    Timber.e("## processReceivedRoomKeyRequests() : Ignoring room key request from other user for now")
-                    return
-                }
-
-                // todo: should we queue up requests we don't yet have keys for,
-                // in case they turn up later?
-
-                // if we don't have a decryptor for this room/alg, we don't have
-                // the keys for the requested events, and can drop the requests.
-
-                val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, alg)
-
-                if (null == decryptor) {
-                    Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown $alg in room $roomId")
-                    continue
-                }
-
-                if (!decryptor.hasKeysForKeyRequest(request)) {
-                    Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown session " + body.sessionId!!)
-                    cryptoStore.deleteIncomingRoomKeyRequest(request)
-                    continue
-                }
-
-                if (TextUtils.equals(deviceId, credentials.deviceId) && TextUtils.equals(credentials.userId, userId)) {
-                    Timber.v("## processReceivedRoomKeyRequests() : oneself device - ignored")
-                    cryptoStore.deleteIncomingRoomKeyRequest(request)
-                    continue
-                }
-
-                request.share = Runnable {
-                    decryptor.shareKeysWithDevice(request)
-                    cryptoStore.deleteIncomingRoomKeyRequest(request)
-                }
-
-                request.ignore = Runnable { cryptoStore.deleteIncomingRoomKeyRequest(request) }
-
-                // if the device is verified already, share the keys
-                val device = cryptoStore.getUserDevice(deviceId!!, userId)
-
-                if (null != device) {
-                    if (device.isVerified) {
-                        Timber.v("## processReceivedRoomKeyRequests() : device is already verified: sharing keys")
-                        cryptoStore.deleteIncomingRoomKeyRequest(request)
-                        request.share?.run()
-                        continue
-                    }
-
-                    if (device.isBlocked) {
-                        Timber.v("## processReceivedRoomKeyRequests() : device is blocked -> ignored")
-                        cryptoStore.deleteIncomingRoomKeyRequest(request)
-                        continue
-                    }
-                }
-
-                cryptoStore.storeIncomingRoomKeyRequest(request)
-                onRoomKeyRequest(request)
+            // todo: should we queue up requests we don't yet have keys for, in case they turn up later?
+            // if we don't have a decryptor for this room/alg, we don't have
+            // the keys for the requested events, and can drop the requests.
+            val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, alg)
+            if (null == decryptor) {
+                Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown $alg in room $roomId")
+                continue
             }
+            if (!decryptor.hasKeysForKeyRequest(request)) {
+                Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown session " + body.sessionId!!)
+                cryptoStore.deleteIncomingRoomKeyRequest(request)
+                continue
+            }
+
+            if (TextUtils.equals(deviceId, credentials.deviceId) && TextUtils.equals(credentials.userId, userId)) {
+                Timber.v("## processReceivedRoomKeyRequests() : oneself device - ignored")
+                cryptoStore.deleteIncomingRoomKeyRequest(request)
+                continue
+            }
+            request.share = Runnable {
+                decryptor.shareKeysWithDevice(request)
+                cryptoStore.deleteIncomingRoomKeyRequest(request)
+            }
+            request.ignore = Runnable {
+                cryptoStore.deleteIncomingRoomKeyRequest(request)
+            }
+            // if the device is verified already, share the keys
+            val device = cryptoStore.getUserDevice(deviceId!!, userId)
+            if (device != null) {
+                if (device.isVerified) {
+                    Timber.v("## processReceivedRoomKeyRequests() : device is already verified: sharing keys")
+                    cryptoStore.deleteIncomingRoomKeyRequest(request)
+                    request.share?.run()
+                    continue
+                }
+
+                if (device.isBlocked) {
+                    Timber.v("## processReceivedRoomKeyRequests() : device is blocked -> ignored")
+                    cryptoStore.deleteIncomingRoomKeyRequest(request)
+                    continue
+                }
+            }
+            cryptoStore.storeIncomingRoomKeyRequest(request)
+            onRoomKeyRequest(request)
         }
 
         var receivedRoomKeyRequestCancellations: List<IncomingRoomKeyRequestCancellation>? = null

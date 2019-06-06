@@ -280,11 +280,8 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
 
     /**
      * Download the devices keys for a set of users.
-     * It must be called in getEncryptingThreadHandler() thread.
-     * The callback is called in the UI thread.
      *
      * @param downloadUsers the user ids list
-     * @param callback      the asynchronous callback
      */
     private suspend fun doKeyDownloadForUsers(downloadUsers: MutableList<String>): Try<MXUsersDevicesMap<MXDeviceInfo>> {
         Timber.v("## doKeyDownloadForUsers() : doKeyDownloadForUsers $downloadUsers")

@@ -88,7 +88,7 @@ internal class MXMegolmEncryption(
         keysClaimedMap["ed25519"] = olmDevice.deviceEd25519Key!!
 
         olmDevice.addInboundGroupSession(sessionId!!, olmDevice.getSessionKey(sessionId)!!, roomId, olmDevice.deviceCurve25519Key!!,
-                ArrayList(), keysClaimedMap, false)
+                                         ArrayList(), keysClaimedMap, false)
 
         keysBackup.maybeBackupKeys()
 
@@ -103,10 +103,10 @@ internal class MXMegolmEncryption(
     private suspend fun ensureOutboundSession(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>): Try<MXOutboundSessionInfo> {
         var session = outboundSession
         if (session == null
-                // Need to make a brand new session?
-                || session.needsRotation(sessionRotationPeriodMsgs, sessionRotationPeriodMs)
-                // Determine if we have shared with anyone we shouldn't have
-                || session.sharedWithTooManyDevices(devicesInRoom)) {
+            // Need to make a brand new session?
+            || session.needsRotation(sessionRotationPeriodMsgs, sessionRotationPeriodMs)
+            // Determine if we have shared with anyone we shouldn't have
+            || session.sharedWithTooManyDevices(devicesInRoom)) {
             session = prepareNewSessionInRoom()
             outboundSession = session
         }
@@ -146,10 +146,11 @@ internal class MXMegolmEncryption(
         val userIds = ArrayList<String>()
         var devicesCount = 0
         for (userId in devicesByUsers.keys) {
-            val devicesList = devicesByUsers[userId]
-            userIds.add(userId)
-            subMap[userId] = devicesList!!
-            devicesCount += devicesList.size
+            devicesByUsers[userId]?.let {
+                userIds.add(userId)
+                subMap[userId] = it
+                devicesCount += it.size
+            }
             if (devicesCount > 100) {
                 break
             }
@@ -157,7 +158,7 @@ internal class MXMegolmEncryption(
         Timber.v("## shareKey() ; userId $userIds")
         return shareUserDevicesKey(session, subMap)
                 .flatMap {
-                    val remainingDevices = devicesByUsers.filterKeys { userIds.contains(it) }
+                    val remainingDevices = devicesByUsers.filterKeys { userIds.contains(it).not() }
                     shareKey(session, remainingDevices)
                 }
     }
@@ -191,7 +192,7 @@ internal class MXMegolmEncryption(
         return ensureOlmSessionsForDevicesAction.handle(devicesByUser)
                 .flatMap {
                     Timber.v("## shareUserDevicesKey() : ensureOlmSessionsForDevices succeeds after "
-                            + (System.currentTimeMillis() - t0) + " ms")
+                             + (System.currentTimeMillis() - t0) + " ms")
                     val contentMap = MXUsersDevicesMap<Any>()
                     var haveTargets = false
                     val userIds = it.userIds
@@ -226,7 +227,7 @@ internal class MXMegolmEncryption(
                         sendToDeviceTask.execute(sendToDeviceParams)
                                 .map {
                                     Timber.v("## shareUserDevicesKey() : sendToDevice succeeds after "
-                                            + (System.currentTimeMillis() - t0) + " ms")
+                                             + (System.currentTimeMillis() - t0) + " ms")
 
                                     // Add the devices we have shared with to session.sharedWithDevices.
                                     // we deliberately iterate over devicesByUser (ie, the devices we
@@ -292,7 +293,7 @@ internal class MXMegolmEncryption(
                 .downloadKeys(userIds, false)
                 .map {
                     val encryptToVerifiedDevicesOnly = cryptoStore.getGlobalBlacklistUnverifiedDevices()
-                            || cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
+                                                       || cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
 
                     val devicesInRoom = MXUsersDevicesMap<MXDeviceInfo>()
                     val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()

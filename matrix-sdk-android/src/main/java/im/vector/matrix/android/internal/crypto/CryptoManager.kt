@@ -958,7 +958,7 @@ internal class CryptoManager(
         setRoomBlacklistUnverifiedDevices(roomId, false)
     }
 
-// TODO Check if this method is still necessary
+    // TODO Check if this method is still necessary
     /**
      * Cancel any earlier room key request
      *
@@ -974,7 +974,7 @@ internal class CryptoManager(
      * @param event the event to decrypt again.
      */
     override fun reRequestRoomKeyForEvent(event: Event) {
-        val wireContent = event.content!! // Wireeventcontent?
+        val wireContent = event.content!!
 
         val algorithm = wireContent["algorithm"].toString()
         val senderKey = wireContent["sender_key"].toString()

@@ -34,22 +34,28 @@ internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
             val measure = measureTimeMillis {
                 // Handle the to device events before the room ones
                 // to ensure to decrypt them properly
+                Timber.v("Handle toDevice")
                 if (syncResponse.toDevice != null) {
                     cryptoSyncHandler.handleToDevice(syncResponse.toDevice)
                 }
+                Timber.v("Handle rooms")
                 if (syncResponse.rooms != null) {
                     roomSyncHandler.handle(syncResponse.rooms)
                 }
+                Timber.v("Handle groups")
                 if (syncResponse.groups != null) {
                     groupSyncHandler.handle(syncResponse.groups)
                 }
+                Timber.v("Handle accoundData")
                 if (syncResponse.accountData != null) {
                     userAccountDataSyncHandler.handle(syncResponse.accountData)
                 }
+                Timber.v("On sync completed")
                 cryptoSyncHandler.onSyncCompleted(syncResponse, fromToken, isCatchingUp)
             }
             val isInitialSync = fromToken == null
             if (!cryptoManager.isStarted()) {
+                Timber.v("Should start cryptoManager")
                 cryptoManager.start(isInitialSync)
             }
             Timber.v("Finish handling sync in $measure ms")
