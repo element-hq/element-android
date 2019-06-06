@@ -274,8 +274,9 @@
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">?riotx_text_primary</item>
-        <item name="android:background">@drawable/vector_label_background</item>
+        <item name="android:textColor">?riotx_fab_label_color</item>
+        <!-- Note bg will be updated in the code -->
+        <item name="android:background">@drawable/vector_label_background_light</item>
     </style>
 
 </resources>

@@ -29,6 +29,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.animations.ANIMATION_DURATION_SHORT
 import im.vector.riotredesign.core.animations.SimpleTransitionListener
 import im.vector.riotredesign.core.animations.VectorFullTransitionSet
+import im.vector.riotredesign.features.themes.ThemeUtils
 import kotlinx.android.synthetic.main.merge_fab_menu_view.view.*
 
 class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
@@ -57,6 +58,11 @@ class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         createRoomItemGroupLabel.isVisible = false
         // Collapse end
 
+        // Tint label background
+        listOf(createRoomItemChatLabel, createRoomItemGroupLabel)
+                .forEach {
+                    it.setBackgroundResource(ThemeUtils.getResourceId(context, R.drawable.vector_label_background_light))
+                }
 
         createRoomButton.setOnClickListener {
             toggleFabMenu()

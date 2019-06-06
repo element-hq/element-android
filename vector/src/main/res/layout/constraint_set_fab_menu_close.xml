@@ -8,8 +8,7 @@
         android:id="@+id/createRoomTouchGuard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0"
-        android:background="#323232"
+        android:background="?riotx_touch_guard_bg"
         android:visibility="gone" />
 
     <!-- Sub menu item 2 -->

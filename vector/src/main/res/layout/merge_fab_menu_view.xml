@@ -12,9 +12,7 @@
         android:id="@+id/createRoomTouchGuard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0"
-        android:background="#323232"
-        tools:alpha="0.5" />
+        android:background="?riotx_touch_guard_bg" />
 
     <!-- Sub menu item 2 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -24,10 +22,10 @@
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_fab_add_room"
         android:visibility="gone"
-        app:backgroundTint="#FFFFFF"
+        app:backgroundTint="?riotx_fab_secondary_bg"
         app:fabCustomSize="48dp"
         app:maxImageSize="26dp"
-        app:tint="@color/black"
+        app:tint="?riotx_fab_secondary_color"
         tools:ignore="MissingConstraints"
         tools:visibility="visible" />
 
@@ -46,10 +44,10 @@
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_fab_add_chat"
         android:visibility="gone"
-        app:backgroundTint="#FFFFFF"
+        app:backgroundTint="?riotx_fab_secondary_bg"
         app:fabCustomSize="48dp"
         app:maxImageSize="29dp"
-        app:tint="@color/black"
+        app:tint="?riotx_fab_secondary_color"
         tools:ignore="MissingConstraints"
         tools:visibility="visible" />
 

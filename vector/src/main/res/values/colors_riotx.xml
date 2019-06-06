@@ -119,8 +119,33 @@
     <!-- Other colors, which are not in the pallette -->
     <attr name="riotx_unread_room_badge" format="color" />
     <color name="riotx_unread_room_badge_light">#FF61708B</color>
-    <color name="riotx_unread_room_badge_dark">#FF181B21</color>
+    <color name="riotx_unread_room_badge_dark">#FF61708B</color>
     <color name="riotx_unread_room_badge_black">#FF61708B</color>
+
+    <attr name="riotx_fab_secondary_bg" format="color" />
+    <color name="riotx_fab_secondary_bg_light">@color/white</color>
+    <color name="riotx_fab_secondary_bg_dark">#FF181B21</color>
+    <color name="riotx_fab_secondary_bg_black">#FF181B21</color>
+
+    <attr name="riotx_fab_secondary_color" format="color" />
+    <color name="riotx_fab_secondary_color_light">@color/black</color>
+    <color name="riotx_fab_secondary_color_dark">@color/white</color>
+    <color name="riotx_fab_secondary_color_black">@color/white</color>
+
+    <attr name="riotx_fab_label_bg" format="color" />
+    <color name="riotx_fab_label_bg_light">@color/white</color>
+    <color name="riotx_fab_label_bg_dark">#FF181B21</color>
+    <color name="riotx_fab_label_bg_black">#FF181B21</color>
+
+    <attr name="riotx_fab_label_color" format="color" />
+    <color name="riotx_fab_label_color_light">#FF2E2F32</color>
+    <color name="riotx_fab_label_color_dark">#FFA1B2D1</color>
+    <color name="riotx_fab_label_color_black">#FFA1B2D1</color>
+
+    <attr name="riotx_touch_guard_bg" format="color" />
+    <color name="riotx_touch_guard_bg_light">#66000000</color>
+    <color name="riotx_touch_guard_bg_dark">#BF000000</color>
+    <color name="riotx_touch_guard_bg_black">#BF000000</color>
 
 
 </resources>

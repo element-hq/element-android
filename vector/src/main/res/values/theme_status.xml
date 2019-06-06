@@ -3,7 +3,8 @@
 
     <!-- STATUS.IM THEME COLORS -->
 
-    <style name="AppTheme.Base.Status" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+    <!-- Inherit of Light theme to avoid crash TODO Adapt color (phase 2) -->
+    <style name="AppTheme.Base.Status" parent="AppTheme.Base.Light">
         <item name="colorPrimaryDark">@color/primary_color_dark_status</item>
         <item name="colorPrimary">@color/primary_color_status</item>
         <item name="colorAccent">@color/accent_color_status</item>
