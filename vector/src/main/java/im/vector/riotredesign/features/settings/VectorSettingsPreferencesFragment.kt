@@ -54,6 +54,7 @@ import im.vector.riotredesign.core.preference.UserAvatarPreference
 import im.vector.riotredesign.core.preference.VectorPreference
 import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.MainActivity
+import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.themes.ThemeUtils
 import org.koin.android.ext.android.inject
 import java.lang.ref.WeakReference
@@ -98,6 +99,8 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     // TODO private var mDevicesNameList: List<DeviceInfo> = ArrayList()
     // used to avoid requesting to enter the password for each deletion
     private var mAccountPassword: String? = null
+
+    private val vectorConfiguration by inject<VectorConfiguration>()
 
     // current publicised group list
     private var mPublicisedGroups: MutableSet<String>? = null
@@ -366,8 +369,10 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         findPreference(ThemeUtils.APPLICATION_THEME_KEY)
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
-                // TODO VectorApp.updateApplicationTheme(newValue)
+                vectorConfiguration.updateApplicationTheme(newValue)
+                // Restart the Activity
                 activity?.let {
+                    // Note: recreate does not apply the color correctly
                     it.startActivity(it.intent)
                     it.finish()
                 }
@@ -1359,7 +1364,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                REQUEST_CALL_RINGTONE -> {
+                REQUEST_CALL_RINGTONE         -> {
                     val callRingtoneUri: Uri? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     val thisActivity = activity
                     if (callRingtoneUri != null && thisActivity != null) {
@@ -1368,9 +1373,9 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                     }
                 }
                 REQUEST_E2E_FILE_REQUEST_CODE -> importKeys(data)
-                REQUEST_NEW_PHONE_NUMBER -> refreshPhoneNumbersList()
-                REQUEST_PHONEBOOK_COUNTRY -> onPhonebookCountryUpdate(data)
-                REQUEST_LOCALE -> {
+                REQUEST_NEW_PHONE_NUMBER      -> refreshPhoneNumbersList()
+                REQUEST_PHONEBOOK_COUNTRY     -> onPhonebookCountryUpdate(data)
+                REQUEST_LOCALE                -> {
                     activity?.let {
                         startActivity(it.intent)
                         it.finish()

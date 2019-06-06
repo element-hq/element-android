@@ -55,7 +55,7 @@ object ThemeUtils {
      */
     fun getApplicationTheme(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE)
+                .getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE)!!
     }
 
     /**
@@ -64,20 +64,14 @@ object ThemeUtils {
      * @param aTheme the new theme
      */
     fun setApplicationTheme(context: Context, aTheme: String) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putString(APPLICATION_THEME_KEY, aTheme)
-                .apply()
-
-        /* TODO
         when (aTheme) {
-            THEME_DARK_VALUE -> VectorApp.getInstance().setTheme(R.style.AppTheme_Dark)
-            THEME_BLACK_VALUE -> VectorApp.getInstance().setTheme(R.style.AppTheme_Black)
-            THEME_STATUS_VALUE -> VectorApp.getInstance().setTheme(R.style.AppTheme_Status)
-            else -> VectorApp.getInstance().setTheme(R.style.AppTheme_Light)
+            THEME_DARK_VALUE -> context.setTheme(R.style.AppTheme_Dark)
+            THEME_BLACK_VALUE -> context.setTheme(R.style.AppTheme_Black)
+            THEME_STATUS_VALUE -> context.setTheme(R.style.AppTheme_Status)
+            else -> context.setTheme(R.style.AppTheme_Light)
         }
-        */
 
+        // Clear the cache
         mColorByAttr.clear()
     }
 

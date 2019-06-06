@@ -18,6 +18,7 @@ package im.vector.riotredesign
 
 import android.app.Application
 import android.content.Context
+import android.content.res.Configuration
 import androidx.multidex.MultiDex
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
@@ -27,16 +28,20 @@ import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.di.AppModule
+import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
+import org.koin.android.ext.android.inject
 import org.koin.log.EmptyLogger
 import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
 
 
 class VectorApplication : Application() {
+
+    val vectorConfiguration: VectorConfiguration by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -61,11 +66,19 @@ class VectorApplication : Application() {
         startKoin(listOf(appModule, homeModule, roomDirectoryModule), logger = EmptyLogger())
 
         Matrix.getInstance().setApplicationFlavor(BuildConfig.FLAVOR_DESCRIPTION)
+
+        vectorConfiguration.initConfiguration()
     }
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         MultiDex.install(this)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+
+        vectorConfiguration.onConfigurationChanged(newConfig)
     }
 
 }

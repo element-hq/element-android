@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.core.platform
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
@@ -24,6 +25,8 @@ import android.view.View
 import androidx.annotation.*
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
@@ -33,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.toast
+import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.rageshake.BugReportActivity
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.RageShake
@@ -41,6 +45,7 @@ import im.vector.riotredesign.receivers.DebugReceiver
 import im.vector.ui.themes.ActivityOtherThemes
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 
@@ -58,6 +63,10 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
      * DATA
      * ========================================================================================== */
 
+    private val vectorConfiguration: VectorConfiguration by inject()
+
+    private lateinit var configurationViewModel: ConfigurationViewModel
+
     private var unBinder: Unbinder? = null
 
     private var savedInstanceState: Bundle? = null
@@ -69,6 +78,10 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
     private val restorables = ArrayList<Restorable>()
 
     private var rageShake: RageShake? = null
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(vectorConfiguration.getLocalisedContext(base))
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -94,6 +107,16 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        configurationViewModel = ViewModelProviders.of(this).get(ConfigurationViewModel::class.java)
+
+        configurationViewModel.activityRestarter.observe(this, Observer {
+            if (!it.hasBeenHandled) {
+                // Recreate the Activity because configuration has changed
+                startActivity(intent)
+                finish()
+            }
+        })
 
         // Shake detector
         rageShake = RageShake(this)
@@ -135,6 +158,8 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
         super.onResume()
 
         Timber.d("onResume Activity ${this.javaClass.simpleName}")
+
+        configurationViewModel.onActivityResumed()
 
         if (this !is BugReportActivity) {
             rageShake?.start()
