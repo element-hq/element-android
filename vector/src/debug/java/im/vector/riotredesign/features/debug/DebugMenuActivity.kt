@@ -122,5 +122,16 @@ class DebugMenuActivity : VectorBaseActivity() {
                         .build()
         )
     }
+
+    @OnClick(R.id.debug_test_material_theme_light)
+    fun testMaterialThemeLight() {
+        startActivity(Intent(this, DebugMaterialThemeLightActivity::class.java))
+    }
+
+    @OnClick(R.id.debug_test_material_theme_dark)
+    fun testMaterialThemeDark() {
+        startActivity(Intent(this, DebugMaterialThemeDarkActivity::class.java))
+    }
+
 }
 

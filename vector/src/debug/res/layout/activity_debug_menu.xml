@@ -13,24 +13,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:divider="@drawable/linear_divider"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="@dimen/layout_horizontal_margin">
+            android:padding="@dimen/layout_horizontal_margin"
+            android:showDividers="middle">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_test_text_view_link"
                 style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Test linkification" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_test_notification"
                 style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="Test Notification" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/debug_test_material_theme_light"
+                style="@style/VectorButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Test Material theme Light" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/debug_test_material_theme_dark"
+                style="@style/VectorButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Test Material theme Dark" />
 
         </LinearLayout>
 

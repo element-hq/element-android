@@ -3,6 +3,12 @@
 
     <application>
         <activity android:name="im.vector.riotredesign.features.debug.TestLinkifyActivity" />
+        <activity
+            android:name="im.vector.riotredesign.features.debug.DebugMaterialThemeLightActivity"
+            android:theme="@style/VectorMaterialThemeDebugLight" />
+        <activity
+            android:name="im.vector.riotredesign.features.debug.DebugMaterialThemeDarkActivity"
+            android:theme="@style/VectorMaterialThemeDebugDark" />
     </application>
 
 </manifest>
