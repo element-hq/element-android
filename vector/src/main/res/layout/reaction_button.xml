@@ -55,7 +55,7 @@
         android:layout_marginRight="6dp"
         android:gravity="center"
         android:maxLines="1"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         android:textSize="10sp"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="14sp"

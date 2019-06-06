@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/send_bug_report_placeholder"
                         android:minHeight="40dp"
-                        android:textColor="?android:textColorPrimary" />
+                        android:textColor="?riotx_text_primary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

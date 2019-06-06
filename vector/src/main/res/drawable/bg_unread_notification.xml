@@ -5,5 +5,6 @@
 
     <corners android:radius="40dp" />
 
-    <solid android:color="@color/grey_lynch" />
+    <!-- Note: the 3 theme have the same color for now -->
+    <solid android:color="@color/riotx_unread_room_indent_light" />
 </shape>

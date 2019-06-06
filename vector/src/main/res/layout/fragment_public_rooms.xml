@@ -20,8 +20,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_scrollFlags="noScroll">
+            app:layout_constraintTop_toTopOf="parent">
 
             <!-- Note: Background is modified in the code for other themes -->
             <EditText
@@ -50,22 +49,23 @@
             android:id="@+id/publicRoomsCreateNewRoom"
             style="@style/VectorButtonStyleFlat"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="8dp"
+            android:minHeight="@dimen/layout_touch_size"
             android:text="@string/create_new_room"
             app:icon="@drawable/ic_plus_circle"
             app:iconPadding="13dp"
             app:iconTint="@color/riotx_accent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/publicRoomsToolbar"
-            app:layout_scrollFlags="scroll|enterAlways|snap" />
+            app:layout_constraintTop_toBottomOf="@+id/publicRoomsToolbar" />
 
         <com.airbnb.epoxy.EpoxyRecyclerView
             android:id="@+id/publicRoomsList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/publicRoomsCreateNewRoom"

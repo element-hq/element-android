@@ -4,7 +4,7 @@
     android:id="@+id/roomCategoryRootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
+    android:background="?riotx_header_panel_background"
     android:clickable="true"
     android:focusable="true"
     android:gravity="center_vertical"
@@ -14,7 +14,7 @@
     android:paddingTop="@dimen/layout_vertical_margin"
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingRight="@dimen/layout_horizontal_margin"
-    tools:background="?riotx_header_panel_background">
+    android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/roomCategoryTitleView"

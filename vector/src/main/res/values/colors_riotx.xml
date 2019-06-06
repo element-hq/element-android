@@ -23,6 +23,9 @@
     <color name="riotx_username_7">#5c56f5</color>
     <color name="riotx_username_8">#74d12c</color>
 
+    <!-- Other usefull color -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
 
     <!-- Palette: format fo naming:
       'riotx_<name in the palette snake case>_<theme>'

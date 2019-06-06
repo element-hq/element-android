@@ -35,7 +35,7 @@
         android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomMembersCount"
+        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomTopic"
         app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomButtonState"
         app:layout_constraintStart_toEndOf="@id/itemPublicRoomAvatar"
         app:layout_constraintTop_toTopOf="parent"
@@ -43,10 +43,30 @@
         tools:text="@sample/matrix.json/data/roomName" />
 
     <TextView
+        android:id="@+id/itemPublicRoomTopic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginRight="22dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomMembersCount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
+        app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomName"
+        tools:text="@sample/matrix.json/data/roomTopic"
+        tools:visibility="visible" />
+
+    <TextView
         android:id="@+id/itemPublicRoomMembersCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:drawableStart="@drawable/ic_user"
@@ -57,9 +77,9 @@
         android:minWidth="56dp"
         android:textColor="?riotx_text_secondary"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomTopic"
+        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
-        app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomName"
+        app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomTopic"
         tools:text="148" />
 
     <TextView
@@ -68,7 +88,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginRight="22dp"
         android:gravity="center_vertical"
         android:maxLines="1"
         android:minWidth="40dp"
@@ -76,29 +97,9 @@
         android:textColor="?riotx_text_secondary"
         android:textSize="15sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/itemPublicRoomMembersCount"
-        app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomButtonState"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/itemPublicRoomMembersCount"
         tools:text="@sample/matrix.json/data/roomAlias" />
-
-    <TextView
-        android:id="@+id/itemPublicRoomTopic"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
-        app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomMembersCount"
-        tools:text="@sample/matrix.json/data/roomTopic"
-        tools:visibility="visible" />
 
     <im.vector.riotredesign.core.platform.ButtonStateView
         android:id="@+id/itemPublicRoomButtonState"

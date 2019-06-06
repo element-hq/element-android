@@ -21,7 +21,7 @@
         android:layout_gravity="center"
         android:minWidth="120dp"
         tools:layout_gravity="center_horizontal"
-        tools:layout_marginTop="100dp"
+        tools:layout_marginTop="40dp"
         tools:text="@string/join" />
 
     <ProgressBar
@@ -31,7 +31,7 @@
         android:layout_gravity="center"
         android:scaleType="center"
         tools:layout_gravity="center_horizontal"
-        tools:layout_marginTop="200dp" />
+        tools:layout_marginTop="80dp" />
 
     <ImageView
         android:id="@+id/buttonStateLoaded"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         tools:layout_gravity="center_horizontal"
-        tools:layout_marginTop="300dp"
+        tools:layout_marginTop="120dp"
         tools:src="@drawable/ic_tick" />
 
     <com.google.android.material.button.MaterialButton
@@ -51,6 +51,6 @@
         android:text="@string/global_retry"
         android:textColor="@color/riotx_notice"
         tools:layout_gravity="center_horizontal"
-        tools:layout_marginTop="400dp" />
+        tools:layout_marginTop="160dp" />
 
 </merge>
