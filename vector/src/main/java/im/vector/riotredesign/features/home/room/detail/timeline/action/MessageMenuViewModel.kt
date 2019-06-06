@@ -50,7 +50,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
                     ?: return null
 
-            val messageContent: MessageContent =  event.annotations?.editSummary?.aggregatedContent?.toModel()
+            val messageContent: MessageContent = event.annotations?.editSummary?.aggregatedContent?.toModel()
                     ?: event.root.content.toModel() ?: return null
             val type = messageContent.type
 
@@ -64,9 +64,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                         )
                 )
             }
-
-
-            //TODO determine if can copy, forward, reply, quote, report?
+            
             val actions = ArrayList<SimpleAction>().apply {
 
                 if (event.sendState == SendState.SENDING) {
@@ -94,8 +92,11 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 }
 
                 if (canQuote(event, messageContent)) {
-                    //TODO quote icon
                     this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, parcel.eventId))
+                }
+
+                if (canViewReactions(event)) {
+                    this.add(SimpleAction(ACTION_VIEW_REACTIONS, R.string.message_view_reaction, R.drawable.ic_view_reactions, parcel.informationData))
                 }
 
                 if (canShare(type)) {
@@ -144,7 +145,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 MessageType.MSGTYPE_VIDEO,
                 MessageType.MSGTYPE_AUDIO,
                 MessageType.MSGTYPE_FILE -> true
-                else -> false
+                else                     -> false
             }
         }
 
@@ -159,7 +160,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 MessageType.MSGTYPE_LOCATION -> {
                     true
                 }
-                else -> false
+                else                         -> false
             }
         }
 
@@ -168,6 +169,13 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             if (event.root.type != EventType.MESSAGE) return false
             //TODO if user is admin or moderator
             return event.root.sender == myUserId
+        }
+
+        private fun canViewReactions(event: TimelineEvent): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            if (event.root.type != EventType.MESSAGE) return false
+            //TODO if user is admin or moderator
+            return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
         }
 
         private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
@@ -191,7 +199,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 MessageType.MSGTYPE_LOCATION -> {
                     true
                 }
-                else -> false
+                else                         -> false
             }
         }
 
@@ -203,7 +211,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 MessageType.MSGTYPE_VIDEO -> {
                     true
                 }
-                else -> false
+                else                      -> false
             }
         }
 
@@ -220,6 +228,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         const val PERMALINK = "PERMALINK"
         const val ACTION_FLAG = "ACTION_FLAG"
         const val ACTION_QUICK_REACT = "ACTION_QUICK_REACT"
+        const val ACTION_VIEW_REACTIONS = "ACTION_VIEW_REACTIONS"
 
 
     }

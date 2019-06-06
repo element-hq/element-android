@@ -195,7 +195,8 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                     }
                 }
                 SendMode.EDIT    -> {
-                    room.editTextMessage(state.selectedEvent?.root?.eventId ?: "", action.text, action.autoMarkdown)
+                    room.editTextMessage(state.selectedEvent?.root?.eventId
+                            ?: "", action.text, action.autoMarkdown)
                     setState {
                         copy(
                                 sendMode = SendMode.REGULAR,
@@ -330,7 +331,6 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         room.updateQuickReaction(action.selectedReaction, action.opposite, action.targetEventId, session.sessionParams.credentials.userId)
     }
 
-
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
         val attachments = action.mediaFiles.map {
             ContentAttachmentData(
@@ -352,7 +352,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         displayedEventsObservable.accept(action)
         //We need to update this with the related m.replace also (to move read receipt)
         action.event.annotations?.editSummary?.sourceEvents?.forEach {
-            room.getTimeLineEvent(it)?.let {event ->
+            room.getTimeLineEvent(it)?.let { event ->
                 displayedEventsObservable.accept(RoomDetailActions.EventDisplayed(event))
             }
         }

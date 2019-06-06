@@ -621,6 +621,11 @@ class RoomDetailFragment :
                     val eventId = actionData.data?.toString() ?: return
                     startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), eventId), REACTION_SELECT_REQUEST_CODE)
                 }
+                MessageMenuViewModel.ACTION_VIEW_REACTIONS -> {
+                    val messageInformationData = actionData.data as? MessageInformationData ?: return
+                    ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId,messageInformationData)
+                            .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
+                }
                 MessageMenuViewModel.ACTION_COPY           -> {
                     //I need info about the current selected message :/
                     copyToClipboard(requireContext(), actionData.data?.toString() ?: "", false)
