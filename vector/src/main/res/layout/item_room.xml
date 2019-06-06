@@ -5,10 +5,9 @@
     android:id="@+id/itemRoomLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
+    android:background="?riotx_background"
     android:clickable="true"
-    android:focusable="true"
-    tools:background="@color/pale_grey">
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/roomAvatarImageView"
@@ -42,7 +41,7 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/black_87"
+        android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
@@ -78,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:textColor="@color/black_38"
+        android:textColor="?riotx_text_secondary"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +93,7 @@
         android:layout_marginRight="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/black_38"
+        android:textColor="?riotx_text_secondary"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
@@ -121,7 +120,7 @@
         android:id="@+id/roomDividerView"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="#1e000000"
+        android:background="?riotx_header_panel_border_mobile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

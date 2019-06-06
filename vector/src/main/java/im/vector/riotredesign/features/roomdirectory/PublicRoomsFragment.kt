@@ -32,6 +32,7 @@ import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
+import im.vector.riotredesign.features.themes.ThemeUtils
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
 import org.koin.android.ext.android.inject
@@ -58,12 +59,14 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(toolbar)
+        vectorBaseActivity.setSupportActionBar(publicRoomsToolbar)
 
         vectorBaseActivity.supportActionBar?.let {
             it.setDisplayShowHomeEnabled(true)
             it.setDisplayHomeAsUpEnabled(true)
         }
+
+        publicRoomsFilter.setBackgroundResource(ThemeUtils.getResourceId(requireContext(), R.drawable.bg_search_edit_text_light))
 
         RxTextView.textChanges(publicRoomsFilter)
                 .debounce(500, TimeUnit.MILLISECONDS)

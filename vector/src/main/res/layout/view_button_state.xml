@@ -11,15 +11,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        tools:layout_gravity="center_horizontal"
         tools:text="@string/join" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonStateButtonBig"
-        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:minWidth="120dp"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="40dp"
         tools:text="@string/join" />
 
     <ProgressBar
@@ -27,22 +29,28 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center"
-        android:scaleType="center" />
+        android:scaleType="center"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="80dp" />
 
     <ImageView
         android:id="@+id/buttonStateLoaded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="120dp"
         tools:src="@drawable/ic_tick" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonStateRetry"
         style="@style/VectorButtonStyleFlat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/global_retry"
-        android:textColor="@color/vector_warning_color" />
+        android:textColor="@color/riotx_notice"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="160dp" />
 
 </merge>

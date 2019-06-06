@@ -75,6 +75,7 @@ import im.vector.riotredesign.features.command.Command
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.home.HomePermalinkHandler
+import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerActions
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewModel
@@ -223,8 +224,7 @@ class RoomDetailFragment :
                     //switch to expanded bar
                     composerLayout.composerRelatedMessageTitle.apply {
                         text = event.senderName
-                        setTextColor(ContextCompat.getColor(requireContext(), AvatarRenderer.getColorFromUserId(event.root.sender
-                                ?: "")))
+                        setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.sender)))
                     }
 
                     //TODO this is used at several places, find way to refactor?

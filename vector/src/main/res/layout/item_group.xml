@@ -8,8 +8,7 @@
     android:background="@drawable/bg_group_item"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
-    tools:background="#FAFAFA">
+    android:foreground="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/groupAvatarImageView"
@@ -32,7 +31,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/dark_grey"
+        android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
@@ -41,7 +40,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
 
-    <!-- TODO Design Picto -->
     <ImageView
         android:id="@+id/groupAvatarChevron"
         android:layout_width="wrap_content"
@@ -49,6 +47,7 @@
         android:layout_marginEnd="21dp"
         android:layout_marginRight="21dp"
         android:src="@drawable/ic_arrow_right"
+        android:tint="?riotx_text_primary"
         app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -57,7 +56,7 @@
         android:id="@+id/groupBottomSeparator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="#E9EDF1"
+        android:background="?riotx_header_panel_border_mobile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -13,13 +13,10 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/roomPreviewNoPreviewToolbar"
-            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:contentInsetStartWithNavigation="0dp"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:elevation="4dp"
+            app:contentInsetStartWithNavigation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -115,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:gravity="center"
-                    android:textColor="@color/vector_error_color"
+                    android:textColor="@color/riotx_notice"
                     android:textSize="15sp"
                     android:visibility="gone"
                     tools:text="Error"

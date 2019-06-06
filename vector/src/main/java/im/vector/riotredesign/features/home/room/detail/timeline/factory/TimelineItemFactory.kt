@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.EmptyItem_
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import timber.log.Timber
 
 class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                           private val noticeItemFactory: NoticeItemFactory,
@@ -32,8 +33,10 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
 
         val computedModel = try {
             when (event.root.type) {
+                // Message
                 EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, callback)
 
+                // State and call
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
                 EventType.STATE_ROOM_MEMBER,
@@ -42,12 +45,16 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER       -> noticeItemFactory.create(event)
 
+                // Unhandled event types (yet)
                 EventType.ENCRYPTED,
                 EventType.ENCRYPTION,
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STICKER,
                 EventType.STATE_ROOM_CREATE -> defaultItemFactory.create(event)
-                else                        -> null
+                else                        -> {
+                    Timber.w("Ignored event (type: ${event.root.type}")
+                    null
+                }
             }
         } catch (e: Exception) {
             defaultItemFactory.create(event, e)

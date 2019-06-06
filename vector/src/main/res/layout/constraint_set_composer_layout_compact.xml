@@ -88,10 +88,11 @@
         android:layout_height="22dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_close_round"
-        android:tint="@color/rosy_pink"
+        android:tint="@color/riotx_notice"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="parent"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/composer_avatar_view"
@@ -159,6 +160,5 @@
         app:layout_constraintStart_toEndOf="@+id/composer_avatar_view"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
-    <!--tools:text="@tools:sample/lorem/random"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

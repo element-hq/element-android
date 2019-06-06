@@ -24,6 +24,7 @@ import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.list.AlphabeticalRoomComparator
@@ -36,6 +37,10 @@ import org.koin.dsl.module.module
 class AppModule(private val context: Context) {
 
     val definition = module {
+
+        single {
+            VectorConfiguration(context)
+        }
 
         single {
             LocaleProvider(context.resources)

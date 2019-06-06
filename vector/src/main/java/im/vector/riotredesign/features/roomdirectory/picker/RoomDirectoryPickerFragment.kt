@@ -28,7 +28,6 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryViewModel
-import kotlinx.android.synthetic.main.fragment_public_rooms.toolbar
 import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope

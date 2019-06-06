@@ -3,23 +3,11 @@
 
     <!-- ************************ Common items ************************ -->
 
-    <!-- Launcher Theme, only used for VectorLauncherActivity (will be use even before the Activity is started) -->
-    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash</item>
-
-        <item name="colorPrimaryDark">@color/primary_color_dark</item>
-    </style>
-
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:background">?colorPrimary</item>
-        <item name="background">?colorPrimary</item>
-
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextAppearance">@style/Vector.Toolbar.SubTitle</item>
-
-        <item name="theme">@style/VectorToolbarTheme</item>
     </style>
 
     <style name="VectorToolbarStyle.Group">
@@ -27,22 +15,32 @@
         <item name="background">@color/tab_groups</item>
     </style>
 
-    <style name="VectorToolbarTheme">
-        <!-- toolbar icons -->
-        <item name="colorControlNormal">@android:color/white</item>
-    </style>
-
     <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
     </style>
 
     <style name="Vector.Toolbar.SubTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif"</item>
     </style>
+
+    <!-- Alert Dialog: Button color are not colorAccent by default -->
+    <style name="VectorAlertDialogStyleLight" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle</item>
+    </style>
+
+    <style name="VectorAlertDialogStyleDark" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle</item>
+    </style>
+
+    <style name="VectorAlertDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/riotx_accent</item>
+    </style>
+
+
+    <!-- TextInputLayout -->
+    <style name="VectorTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
 
     <!-- tabbar text color -->
     <style name="Vector.TabText" parent="Widget.AppCompat.ActionBar.TabText">
@@ -66,12 +64,12 @@
     </style>
 
     <!-- actionbar icons color -->
-    <style name="Vector.ActionBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+    <style name="Vector.ActionBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="colorControlNormal">@android:color/white</item>
     </style>
 
     <!-- custom action bar -->
-    <style name="Vector.Styled.ActionBar" parent="Widget.AppCompat.Toolbar">
+    <style name="Vector.Styled.ActionBar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:background">?colorPrimary</item>
         <item name="background">?colorPrimary</item>
 
@@ -114,7 +112,8 @@
         Widget.AppCompat.Button.Colored, which sets the button color to colorAccent,
          using colorControlHighlight as an overlay for focused and pressed states.
     -->
-    <style name="VectorButtonStyle" parent="Widget.AppCompat.Button.Colored">
+    <style name="VectorButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">?colorAccent</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:minWidth">94dp</item>
@@ -128,11 +127,13 @@
 
     <!--Widget.AppCompat.Button.Borderless.Colored, which sets the text color to colorAccent,
         using colorControlHighlight as an overlay for focused and pressed states.-->
-    <style name="VectorButtonStyleFlat" parent="Widget.AppCompat.Button.Borderless.Colored">
+    <style name="VectorButtonStyleFlat" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@null</item>
+        <!--item name="android:textColor">?colorAccent</item-->
         <item name="colorControlHighlight">?colorAccent</item>
     </style>
 
@@ -268,4 +269,18 @@
         <item name="layout_constraintTop_toBottomOf">@id/messageMemberNameView</item>
         <item name="layout_constraintBottom_toTopOf">@id/messageBottomInfo</item>
     </style>
+
+    <style name="VectorLabel">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?riotx_fab_label_color</item>
+        <!-- Note bg will be updated in the code -->
+        <item name="android:background">@drawable/vector_label_background_light</item>
+    </style>
+
 </resources>

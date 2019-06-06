@@ -3,40 +3,72 @@
 
     <!-- LIGHT THEME COLORS -->
 
-    <style name="AppTheme.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
-        <item name="colorPrimaryDark">@color/primary_color_dark_light</item>
-        <item name="colorPrimary">@color/primary_color_light</item>
-        <item name="colorPrimaryVariant">@color/primary_color_dark_light</item>
-        <item name="colorSecondary">@color/accent_color_light</item>
-        <item name="colorOnSecondary">@android:color/white</item>
-        <item name="colorAccent">@color/accent_color_light</item>
+    <style name="AppTheme.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Riotx attribute for palette -->
+        <item name="riotx_background">@color/riotx_background_light</item>
+        <item name="riotx_base">@color/riotx_base_light</item>
+        <item name="riotx_base_text_icon_primary">@color/riotx_base_text_icon_primary_light</item>
+        <item name="riotx_base_text_icon_secondary">@color/riotx_base_text_icon_secondary_light</item>
+        <item name="riotx_search_background_mobile">@color/riotx_search_background_mobile_light</item>
+        <item name="riotx_header_panel_background">@color/riotx_header_panel_background_light</item>
+        <item name="riotx_header_panel_border_mobile">@color/riotx_header_panel_border_mobile_light</item>
+        <item name="riotx_header_panel_text_primary">@color/riotx_header_panel_text_primary_light</item>
+        <item name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_light</item>
+        <item name="riotx_text_primary">@color/riotx_text_primary_light</item>
+        <item name="riotx_text_secondary">@color/riotx_text_secondary_light</item>
+        <item name="riotx_android_secondary">@color/riotx_android_secondary_light</item>
+        <item name="riotx_search_placeholder">@color/riotx_search_placeholder_light</item>
+        <item name="riotx_room_highlight">@color/riotx_room_highlight_light</item>
+        <item name="riotx_unread_room_indent">@color/riotx_unread_room_indent_light</item>
+        <item name="riotx_android_status_bar">@color/riotx_android_status_bar_light</item>
+        <item name="riotx_line_break_mobile">@color/riotx_line_break_mobile_light</item>
+        <item name="riotx_unread_room_badge">@color/riotx_unread_room_badge_light</item>
+        <item name="riotx_fab_secondary_bg">@color/riotx_fab_secondary_bg_light</item>
+        <item name="riotx_fab_secondary_color">@color/riotx_fab_secondary_color_light</item>
+        <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_light</item>
+        <item name="riotx_fab_label_color">@color/riotx_fab_label_color_light</item>
+        <item name="riotx_touch_guard_bg">@color/riotx_touch_guard_bg_light</item>
 
-        <item name="android:textColorPrimary">@color/black_87</item>
-        <item name="android:textColorSecondary">@color/black_38</item>
-        <item name="android:textColorTertiary">@color/black_37</item>
+        <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
+        <item name="colorPrimary">@color/riotx_accent</item>
+        <!--item name="colorPrimaryVariant">@color/primary_color_dark_light</item-->
+        <item name="colorOnPrimary">@color/riotx_text_primary_light</item>
+        <!-- We do not use color secondary, default will be colorPrimary values: It does not work so declare again the value -->
+        <item name="colorSecondary">@color/riotx_accent</item>
+        <item name="colorSecondaryVariant">@color/primary_color_dark_light</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorError">@color/riotx_notice</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <!--item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#212121</item-->
+        <item name="android:colorBackground">?riotx_background</item>
+        <item name="colorOnBackground">?riotx_text_primary</item>
 
-        <item name="android:textColorLink">@color/link_color_light</item>
+        <!-- Keep color accent for legacy widget-->
+        <item name="colorAccent">@color/riotx_accent</item>
+
+        <item name="materialButtonStyle">@style/VectorButtonStyle</item>
+        <item name="toolbarStyle">@style/VectorToolbarStyle</item>
+        <item name="alertDialogTheme">@style/VectorAlertDialogStyleLight</item>
+
+        <item name="android:textColorLink">@color/riotx_links</item>
 
         <!-- Menu text color -->
-        <item name="android:actionMenuTextColor">#FFFFFFFF</item>
+        <!--item name="android:actionMenuTextColor">#FFFFFFFF</item-->
 
         <!-- default background color -->
-        <item name="android:colorBackground">@color/riot_primary_background_color_light</item>
         <item name="vctr_bottom_nav_background_color">#FFF3F8FD</item>
         <item name="vctr_bottom_nav_background_border_color">#FFE9EDF1</item>
-
-        <!-- default button -->
-        <item name="android:buttonStyle">@style/Widget.Vector.Button</item>
 
         <!-- waiting view background -->
         <item name="vctr_waiting_background_color">#AAAAAAAA</item>
 
         <!-- application bar text color -->
         <!-- Base Text Primary-->
-        <item name="vctr_toolbar_primary_text_color">#FFFFFFFF</item>
+        <item name="vctr_toolbar_primary_text_color">@color/riotx_text_primary_light</item>
         <!-- Base Text Secondary-->
-        <item name="vctr_toolbar_secondary_text_color">#FFFFFFFF</item>
-        <item name="vctr_toolbar_link_text_color">@color/link_color_light</item>
+        <item name="vctr_toolbar_secondary_text_color">@color/riotx_text_primary_light</item>
+        <item name="vctr_toolbar_link_text_color">@color/riotx_links</item>
 
         <!-- application bar text hint color -->
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_light</item>
@@ -171,108 +203,9 @@
 
     <style name="AppTheme.Light" parent="AppTheme.Base.Light" />
 
-    <style name="Theme.Vector.Lock.Light" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/primary_color_light</item>
-        <item name="colorAccent">@color/accent_color_light</item>
-
-        <item name="android:textColorPrimary">@color/riot_primary_text_color_light</item>
-        <item name="android:textColorSecondary">@color/riot_secondary_text_color_light</item>
-        <!-- Default color for text View -->
-        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_light</item>
-
-        <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_light</item>
-        <item name="vctr_message_text_color">?android:attr/textColorPrimary</item>
-
-        <item name="android:background">@color/riot_primary_background_color_light</item>
-        <item name="android:textColor">@color/riot_tertiary_text_color_light</item>
-        <item name="editTextColor">?android:attr/textColorPrimary</item>
-        <item name="android:editTextColor">?android:attr/textColorPrimary</item>
-    </style>
-
     <style name="Vector.TabView.Light" parent="Widget.AppCompat.ActionBar.TabView">
         <item name="android:background">@drawable/vector_tabbar_background_light</item>
         <item name="background">@drawable/vector_tabbar_background_light</item>
     </style>
-
-    <!-- home activity -->
-    <style name="HomeActivityTheme.Light" parent="AppTheme.Light">
-        <item name="editTextColor">@android:color/white</item>
-        <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">?attr/vctr_activity_bottom_gradient_color</item>
-    </style>
-
-    <!-- call activity -->
-    <style name="CallActivityTheme.Light" parent="AppTheme.Light">
-        <!-- status bar color -->
-        <item name="colorPrimaryDark">@android:color/black</item>
-    </style>
-
-    <!-- NoActionBar + FullScreen -->
-    <style name="AppTheme.NoActionBar.FullScreen.Light" parent="AppTheme.Light">
-        <item name="android:windowFullscreen">true</item>
-        <!-- activities background -->
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-    <!-- Picker activities -->
-    <style name="CountryPickerTheme.Light" parent="AppTheme.Light">
-        <item name="editTextColor">@android:color/white</item>
-        <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:textColorHint">?attr/vctr_activity_bottom_gradient_color</item>
-    </style>
-
-    <!-- searches activity -->
-    <style name="SearchesAppTheme.Light" parent="AppTheme.Light">
-        <!-- custom action bar -->
-        <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
-        <item name="actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
-
-        <!-- no divider -->
-        <item name="android:actionBarDivider">@null</item>
-
-        <!-- edit text -->
-        <item name="android:editTextStyle">@style/VectorSearches.EditText</item>
-
-        <!-- actionbar icons color -->
-        <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
-    </style>
-
-    <style name="CallAppTheme.Light" parent="AppTheme.Light">
-        <item name="android:colorBackground">?attr/colorBackgroundFloating</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowTitleStyle">@style/RtlOverlay.DialogWindowTitle.AppCompat</item>
-        <item name="android:windowTitleBackgroundStyle">
-            @style/Base.DialogWindowTitleBackground.AppCompat
-        </item>
-        <item name="android:windowBackground">@drawable/abc_dialog_material_background</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowAnimationStyle">@style/Animation.AppCompat.Dialog</item>
-        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
-
-        <item name="windowActionModeOverlay">true</item>
-
-        <item name="listPreferredItemPaddingLeft">24dip</item>
-        <item name="listPreferredItemPaddingRight">24dip</item>
-
-        <item name="android:listDivider">@null</item>
-    </style>
-
-    <style name="GroupAppTheme.Light" parent="AppTheme.Light">
-        <item name="colorPrimaryDark">@color/tab_groups_secondary</item>
-
-        <item name="android:actionBarTabStyle">@style/Vector.TabView.Group</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView.Group</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat">
-        <item name="titleTextColor">?attr/actionMenuTextColor</item>
-        <item name="android:background">?attr/colorPrimary</item>
-    </style>
-
-    <style name="AppTheme.Dialog.Light" parent="Theme.AppCompat.Light.Dialog.Alert" />
 
 </resources>

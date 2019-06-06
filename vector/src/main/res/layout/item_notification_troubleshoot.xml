@@ -49,7 +49,7 @@
         android:layout_marginRight="16dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/troubleshootTestButton"
         app:layout_constraintEnd_toStartOf="@+id/troubleshootStatusIcon"
@@ -62,7 +62,7 @@
     <Button
         android:id="@+id/troubleshootTestButton"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"

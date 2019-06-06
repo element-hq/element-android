@@ -4,6 +4,6 @@
     android:id="@+id/messageTextView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="@color/dark_grey"
+    android:textColor="?riotx_text_primary"
     android:textSize="14sp"
     tools:text="@sample/matrix.json/data/message" />

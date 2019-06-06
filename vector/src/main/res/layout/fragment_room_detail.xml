@@ -8,16 +8,13 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/roomToolbar"
-        style="@style/VectorToolbarStyle"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
         app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,7 +46,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="@tools:sample/full_names" />
+                tools:text="@sample/matrix.json/data/roomName" />
 
             <TextView
                 android:id="@+id/roomToolbarSubtitleView"
@@ -66,7 +63,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
                 app:layout_constraintTop_toBottomOf="@+id/roomToolbarTitleView"
-                tools:text="@tools:sample/date/day_of_week" />
+                tools:text="@sample/matrix.json/data/roomTopic" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

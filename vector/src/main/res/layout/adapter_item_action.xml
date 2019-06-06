@@ -21,8 +21,8 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        tools:src="@drawable/ic_delete"
-        android:tint="?android:attr/textColorTertiary" />
+        android:tint="?riotx_text_secondary"
+        tools:src="@drawable/ic_delete" />
 
     <TextView
         android:id="@+id/action_title"
@@ -31,6 +31,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:textColor="?riotx_text_secondary"
         android:textSize="17sp"
         tools:text="@string/delete" />
 

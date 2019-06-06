@@ -6,30 +6,23 @@
     android:id="@+id/publicRoomsCoordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pale_grey">
+    android:background="?riotx_header_panel_background">
 
-    <com.airbnb.epoxy.EpoxyRecyclerView
-        android:id="@+id/publicRoomsList"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/item_public_room" />
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/VectorToolbarStyle"
+            android:id="@+id/publicRoomsToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
             app:contentInsetStartWithNavigation="0dp"
-            app:layout_scrollFlags="noScroll"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <!-- Note: Background is modified in the code for other themes -->
             <EditText
                 android:id="@+id/publicRoomsFilter"
                 android:layout_width="match_parent"
@@ -40,11 +33,11 @@
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/bg_search_edit_text"
+                android:background="@drawable/bg_search_edit_text_light"
                 android:drawableStart="@drawable/ic_search_white"
                 android:drawableLeft="@drawable/ic_search_white"
                 android:drawablePadding="8dp"
-                android:drawableTint="#9fa9ba"
+                android:drawableTint="?riotx_text_secondary"
                 android:hint="@string/home_filter_placeholder_rooms"
                 android:lines="1"
                 android:paddingLeft="8dp"
@@ -52,20 +45,32 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/publicRoomsCreateNewRoom"
             style="@style/VectorButtonStyleFlat"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="8dp"
-            android:drawableStart="@drawable/ic_plus_circle"
-            android:drawableLeft="@drawable/ic_plus_circle"
-            android:drawablePadding="13dp"
+            android:minHeight="@dimen/layout_touch_size"
             android:text="@string/create_new_room"
-            app:layout_scrollFlags="scroll|enterAlways|snap" />
+            app:icon="@drawable/ic_plus_circle"
+            app:iconPadding="13dp"
+            app:iconTint="@color/riotx_accent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/publicRoomsToolbar" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/publicRoomsList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/publicRoomsCreateNewRoom"
+            tools:listitem="@layout/item_public_room" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

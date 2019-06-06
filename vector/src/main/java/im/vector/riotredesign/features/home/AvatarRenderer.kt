@@ -45,9 +45,9 @@ object AvatarRenderer {
     private const val THUMBNAIL_SIZE = 250
 
     private val AVATAR_COLOR_LIST = listOf(
-            R.color.avatar_color_1,
-            R.color.avatar_color_2,
-            R.color.avatar_color_3
+            R.color.riotx_avatar_fill_1,
+            R.color.riotx_avatar_fill_2,
+            R.color.riotx_avatar_fill_3
     )
 
     @UiThread
@@ -117,34 +117,5 @@ object AvatarRenderer {
         return glideRequest
                 .load(resolvedUrl)
                 .apply(RequestOptions.circleCropTransform())
-    }
-
-
-    //Based on riot-web implementation
-    @ColorRes
-    fun getColorFromUserId(sender: String): Int {
-        var hash = 0
-        var i = 0
-        var chr: Char
-        if (sender.isEmpty()) {
-            return R.color.username_1
-        }
-        while (i < sender.length) {
-            chr = sender[i]
-            hash = (hash shl 5) - hash + chr.toInt()
-            hash = hash or 0
-            i++
-        }
-        val cI = Math.abs(hash) % 8 + 1
-        return when (cI) {
-            1    -> R.color.username_1
-            2    -> R.color.username_2
-            3    -> R.color.username_3
-            4    -> R.color.username_4
-            5    -> R.color.username_5
-            6    -> R.color.username_6
-            7    -> R.color.username_7
-            else -> R.color.username_8
-        }
     }
 }

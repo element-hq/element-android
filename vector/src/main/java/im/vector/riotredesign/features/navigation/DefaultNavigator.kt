@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.riotredesign.features.debug.DebugMenuActivity
 import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity
 import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
@@ -49,5 +50,9 @@ class DefaultNavigator(private val fraqment: Fragment) : Navigator {
     override fun openSettings() {
         val intent = VectorSettingsActivity.getIntent(activity, "TODO")
         activity.startActivity(intent)
+    }
+
+    override fun openDebug() {
+        activity.startActivity(Intent(activity, DebugMenuActivity::class.java))
     }
 }

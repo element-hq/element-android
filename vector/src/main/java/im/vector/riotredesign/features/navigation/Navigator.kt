@@ -28,4 +28,6 @@ interface Navigator {
 
     fun openSettings()
 
+    fun openDebug()
+
 }
