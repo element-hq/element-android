@@ -43,17 +43,16 @@
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/VectorTextInputLayout"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_weight="1"
                     android:hint="@string/auth_password_placeholder">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -62,20 +61,23 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:inputType="textPassword"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:paddingEnd="48dp"
+                        android:paddingRight="48dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
                     android:id="@+id/passwordReveal"
                     android:layout_width="@dimen/layout_touch_size"
                     android:layout_height="@dimen/layout_touch_size"
-                    android:layout_marginTop="16dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="24dp"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="center"
                     android:src="@drawable/ic_eye_black"
                     android:tint="?attr/colorAccent" />
 
-            </LinearLayout>
+            </FrameLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/VectorTextInputLayout"
