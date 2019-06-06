@@ -17,6 +17,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/homeDrawerHeaderDebugView"
+            style="@style/VectorDebug"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
+            android:scaleType="center"
+            android:src="@drawable/ic_settings_x"
+            android:tint="@color/riotx_accent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
             android:id="@+id/homeDrawerHeaderAvatarView"
             android:layout_width="64dp"
             android:layout_height="64dp"

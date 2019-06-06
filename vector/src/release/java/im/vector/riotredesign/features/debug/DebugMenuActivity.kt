@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.navigation
+package im.vector.riotredesign.features.debug
 
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import androidx.appcompat.app.AppCompatActivity
 
-interface Navigator {
-
-    fun openRoom(roomId: String)
-
-    fun openRoomPreview(publicRoom: PublicRoom)
-
-    fun openRoomDirectory()
-
-    fun openSettings()
-
-    fun openDebug()
-
-}
+// This activity is not accessible
+class DebugMenuActivity : AppCompatActivity()
