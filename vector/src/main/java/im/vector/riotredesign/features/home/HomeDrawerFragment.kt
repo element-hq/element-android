@@ -54,7 +54,7 @@ class HomeDrawerFragment : VectorBaseFragment() {
             }
         }
         homeDrawerHeaderSettingsView.setOnClickListener {
-            navigator.openSettings()
+            navigator.openSettings(requireActivity())
         }
 
         // Debug menu

@@ -18,7 +18,6 @@ package im.vector.riotredesign.core.di
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.core.error.ErrorFormatter
@@ -87,8 +86,8 @@ class AppModule(private val context: Context) {
             Matrix.getInstance().currentSession!!
         }
 
-        factory { (fragment: Fragment) ->
-            DefaultNavigator(fragment) as Navigator
+        factory {
+            DefaultNavigator() as Navigator
         }
 
         single {

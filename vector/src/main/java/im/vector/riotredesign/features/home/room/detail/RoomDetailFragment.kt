@@ -53,6 +53,7 @@ import com.jaiselrahman.filepicker.model.MediaFile
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
+import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
@@ -622,16 +623,16 @@ class RoomDetailFragment :
                     startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), eventId), REACTION_SELECT_REQUEST_CODE)
                 }
                 MessageMenuViewModel.ACTION_VIEW_REACTIONS -> {
-                    val messageInformationData = actionData.data as? MessageInformationData ?: return
-                    ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId,messageInformationData)
+                    val messageInformationData = actionData.data as? MessageInformationData
+                            ?: return
+                    ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, messageInformationData)
                             .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
                 }
                 MessageMenuViewModel.ACTION_COPY           -> {
                     //I need info about the current selected message :/
                     copyToClipboard(requireContext(), actionData.data?.toString() ?: "", false)
-                    val snack = Snackbar.make(view!!, requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
-                    snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
-                    snack.show()
+                    val msg = requireContext().getString(R.string.copied_to_clipboard)
+                    showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
                 }
                 MessageMenuViewModel.ACTION_DELETE         -> {
                     val eventId = actionData.data?.toString() ?: return
@@ -697,6 +698,13 @@ class RoomDetailFragment :
                 MessageMenuViewModel.ACTION_REPLY          -> {
                     val eventId = actionData.data.toString()
                     roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                }
+                MessageMenuViewModel.ACTION_COPY_PERMALINK -> {
+                    val eventId = actionData.data.toString()
+                    val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, eventId)
+                    copyToClipboard(requireContext(), permalink, false)
+                    showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+
                 }
                 else                                       -> {
                     Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()

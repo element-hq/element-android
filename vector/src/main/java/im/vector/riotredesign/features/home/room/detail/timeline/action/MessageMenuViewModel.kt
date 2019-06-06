@@ -64,7 +64,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                         )
                 )
             }
-            
+
             val actions = ArrayList<SimpleAction>().apply {
 
                 if (event.sendState == SendState.SENDING) {
@@ -123,7 +123,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 if (event.isEncrypted()) {
                     this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, parcel.eventId))
                 }
-                this.add(SimpleAction(PERMALINK, R.string.permalink, R.drawable.ic_permalink, parcel.eventId))
+                this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, parcel.eventId))
 
                 if (currentSession.sessionParams.credentials.userId != event.root.sender) {
                     //not sent by me
@@ -225,7 +225,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         const val ACTION_DELETE = "delete"
         const val VIEW_SOURCE = "VIEW_SOURCE"
         const val VIEW_DECRYPTED_SOURCE = "VIEW_DECRYPTED_SOURCE"
-        const val PERMALINK = "PERMALINK"
+        const val ACTION_COPY_PERMALINK = "ACTION_COPY_PERMALINK"
         const val ACTION_FLAG = "ACTION_FLAG"
         const val ACTION_QUICK_REACT = "ACTION_QUICK_REACT"
         const val ACTION_VIEW_REACTIONS = "ACTION_VIEW_REACTIONS"
