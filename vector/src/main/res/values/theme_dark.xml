@@ -30,7 +30,7 @@
         <!-- We do not use color secondary, default will be colorPrimary values: It does not work so declare again the value -->
         <item name="colorSecondary">@color/riotx_accent</item>
         <item name="colorSecondaryVariant">@color/primary_color_dark_dark</item>
-        <item name="colorOnSecondary">@color/riotx_text_primary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="colorError">@color/riotx_notice</item>
         <item name="colorOnError">#FFFFFF</item>
         <!--item name="colorSurface">#FFFFFF</item>

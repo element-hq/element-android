@@ -27,10 +27,10 @@
         <item name="colorPrimary">@color/riotx_accent</item>
         <!--item name="colorPrimaryVariant">@color/primary_color_dark_light</item-->
         <item name="colorOnPrimary">@color/riotx_text_primary_light</item>
-        <!-- We do not use color secondary, default will be colorPrimary values-->
-        <!--item name="colorSecondary">@color/accent_color_light</item>
-        <item name="colorSecondaryVariant">#0039CB</item>
-        <item name="colorOnSecondary">@android:color/white</item-->
+        <!-- We do not use color secondary, default will be colorPrimary values: It does not work so declare again the value -->
+        <item name="colorSecondary">@color/riotx_accent</item>
+        <item name="colorSecondaryVariant">@color/primary_color_dark_light</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="colorError">@color/riotx_notice</item>
         <item name="colorOnError">#FFFFFF</item>
         <!--item name="colorSurface">#FFFFFF</item>
