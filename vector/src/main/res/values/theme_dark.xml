@@ -4,17 +4,6 @@
     <!-- DARK THEME COLORS -->
 
     <style name="AppTheme.Base.Dark" parent="Theme.MaterialComponents.NoActionBar.Bridge">
-        <item name="colorPrimaryDark">@color/primary_color_dark_dark</item>
-        <item name="colorPrimary">@color/primary_color_dark</item>
-        <item name="colorAccent">@color/accent_color_dark</item>
-
-        <item name="android:textColorPrimary">@color/primary_text_color_selector_dark</item>
-        <item name="android:textColorSecondary">@color/riot_secondary_text_color_dark</item>
-        <!-- Default color for text View -->
-        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_dark</item>
-
-        <item name="android:textColorLink">@color/link_color_dark</item>
-
         <!-- Riotx attribute for palette -->
         <item name="riotx_background">@color/riotx_background_dark</item>
         <item name="riotx_base">@color/riotx_base_dark</item>
@@ -34,11 +23,34 @@
         <item name="riotx_android_status_bar">@color/riotx_android_status_bar_dark</item>
         <item name="riotx_line_break_mobile">@color/riotx_line_break_mobile_dark</item>
 
+        <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
+        <item name="colorPrimary">@color/riotx_accent</item>
+        <item name="colorPrimaryVariant">@color/primary_color_dark_light</item>
+        <item name="colorOnPrimary">@color/riotx_text_primary_light</item>
+        <!-- We do not use color secondary, default will be colorPrimary values: It does not work so declare again the value -->
+        <item name="colorSecondary">@color/riotx_accent</item>
+        <item name="colorSecondaryVariant">@color/primary_color_dark_dark</item>
+        <item name="colorOnSecondary">@color/riotx_text_primary_dark</item>
+        <item name="colorError">@color/riotx_notice</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <!--item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#212121</item-->
+        <item name="android:colorBackground">?riotx_background</item>
+        <item name="colorOnBackground">?riotx_text_primary</item>
+
+        <!-- Keep color accent for legacy widget-->
+        <item name="colorAccent">@color/riotx_accent</item>
+
+        <item name="materialButtonStyle">@style/VectorButtonStyle</item>
+        <item name="toolbarStyle">@style/VectorToolbarStyle</item>
+        <item name="alertDialogTheme">@style/VectorAlertDialogStyle</item>
+
+        <item name="android:textColorLink">@color/riotx_links</item>
+
         <!-- Menu text color -->
-        <item name="android:actionMenuTextColor">#FFFFFFFF</item>
+        <!--item name="android:actionMenuTextColor">#FFFFFFFF</item-->
 
         <!-- default background color -->
-        <item name="android:colorBackground">@color/riot_primary_background_color_dark</item>
         <item name="vctr_bottom_nav_background_color">@color/primary_color_dark</item>
         <item name="vctr_bottom_nav_background_border_color">#FFE9EDF1</item>
 

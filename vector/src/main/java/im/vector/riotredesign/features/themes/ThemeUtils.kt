@@ -20,7 +20,6 @@ package im.vector.riotredesign.features.themes
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Menu
 import androidx.annotation.AttrRes
@@ -89,8 +88,8 @@ object ThemeUtils {
      */
     fun setActivityTheme(activity: Activity, otherThemes: ActivityOtherThemes) {
         when (getApplicationTheme(activity)) {
-            THEME_DARK_VALUE -> activity.setTheme(otherThemes.dark)
-            THEME_BLACK_VALUE -> activity.setTheme(otherThemes.black)
+            THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
+            THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
             THEME_STATUS_VALUE -> activity.setTheme(otherThemes.status)
         }
 
@@ -164,7 +163,7 @@ object ThemeUtils {
         try {
             val typedValue = TypedValue()
             c.theme.resolveAttribute(attribute, typedValue, true)
-            return  typedValue
+            return typedValue
         } catch (e: Exception) {
             Timber.e(e, "Unable to get color")
         }
@@ -175,19 +174,37 @@ object ThemeUtils {
      * Get the resource Id applied to the current theme
      *
      * @param c          the context
-     * @param resourceId the resource id
+     * @param resourceId the resource id in the light theme
      * @return the resource Id for the current theme
      */
     fun getResourceId(c: Context, resourceId: Int): Int {
-        if (TextUtils.equals(getApplicationTheme(c), THEME_LIGHT_VALUE)
-                || TextUtils.equals(getApplicationTheme(c), THEME_STATUS_VALUE)) {
-            return when (resourceId) {
-                R.drawable.line_divider_dark -> R.drawable.line_divider_light
-                R.style.Floating_Actions_Menu -> R.style.Floating_Actions_Menu_Light
-                else -> resourceId
+        val theme = getApplicationTheme(c)
+
+        return when (theme) {
+            THEME_LIGHT_VALUE -> resourceId
+            THEME_DARK_VALUE  -> {
+                return when (resourceId) {
+                    R.drawable.bg_search_edit_text_light -> R.drawable.bg_search_edit_text_dark
+                    else                                 -> {
+                        Timber.w("Warning, missing case for wanted drawable in dark theme")
+                        resourceId
+                    }
+                }
+            }
+            THEME_BLACK_VALUE -> {
+                return when (resourceId) {
+                    R.drawable.bg_search_edit_text_light -> R.drawable.bg_search_edit_text_black
+                    else                                 -> {
+                        Timber.w("Warning, missing case for wanted drawable in black theme")
+                        resourceId
+                    }
+                }
+            }
+            else              -> {
+                Timber.w("Warning, missing theme: $theme")
+                resourceId
             }
         }
-        return resourceId
     }
 
     /**

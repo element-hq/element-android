@@ -375,7 +375,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val message = messageContent.body.let {
             val formattedBody = span {
                 text = it
-                textColor = colorProvider.getColor(R.color.slate_grey)
+                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
                 textStyle = "italic"
             }
             linkifyBody(formattedBody, callback)

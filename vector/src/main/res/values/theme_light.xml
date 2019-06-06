@@ -25,32 +25,27 @@
 
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/riotx_accent</item>
-        <item name="colorPrimaryVariant">@color/primary_color_dark_light</item>
+        <!--item name="colorPrimaryVariant">@color/primary_color_dark_light</item-->
         <item name="colorOnPrimary">@color/riotx_text_primary_light</item>
-        <item name="colorSecondary">@color/accent_color_light</item>
+        <!-- We do not use color secondary, default will be colorPrimary values-->
+        <!--item name="colorSecondary">@color/accent_color_light</item>
         <item name="colorSecondaryVariant">#0039CB</item>
-        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorOnSecondary">@android:color/white</item-->
         <item name="colorError">@color/riotx_notice</item>
         <item name="colorOnError">#FFFFFF</item>
-        <item name="colorSurface">#FFFFFF</item>
-        <item name="colorOnSurface">#212121</item>
+        <!--item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#212121</item-->
         <item name="android:colorBackground">?riotx_background</item>
         <item name="colorOnBackground">?riotx_text_primary</item>
 
-        <!-- TODO is it still required? -->
-        <item name="colorAccent">@color/accent_color_light</item>
+        <!-- Keep color accent for legacy widget-->
+        <item name="colorAccent">@color/riotx_accent</item>
 
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
         <item name="alertDialogTheme">@style/VectorAlertDialogStyle</item>
 
-
-        <!--item name="android:textColorPrimary">@color/black_87</item>
-        <item name="android:textColorSecondary">@color/black_38</item>
-        <item name="android:textColorTertiary">@color/black_37</item-->
-
         <item name="android:textColorLink">@color/riotx_links</item>
-
 
         <!-- Menu text color -->
         <!--item name="android:actionMenuTextColor">#FFFFFFFF</item-->

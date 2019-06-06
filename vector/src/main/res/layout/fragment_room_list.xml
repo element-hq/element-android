@@ -5,7 +5,7 @@
     android:id="@+id/stateView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pale_grey">
+    android:background="?riotx_header_panel_background">
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/epoxyRecyclerView"

@@ -23,6 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="noScroll">
 
+            <!-- Note: Background is modified in the code for other themes -->
             <EditText
                 android:id="@+id/publicRoomsFilter"
                 android:layout_width="match_parent"
@@ -33,11 +34,11 @@
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/bg_search_edit_text"
+                android:background="@drawable/bg_search_edit_text_light"
                 android:drawableStart="@drawable/ic_search_white"
                 android:drawableLeft="@drawable/ic_search_white"
                 android:drawablePadding="8dp"
-                android:drawableTint="#9fa9ba"
+                android:drawableTint="?riotx_text_secondary"
                 android:hint="@string/home_filter_placeholder_rooms"
                 android:lines="1"
                 android:paddingLeft="8dp"
@@ -56,6 +57,7 @@
             android:text="@string/create_new_room"
             app:icon="@drawable/ic_plus_circle"
             app:iconPadding="13dp"
+            app:iconTint="@color/riotx_accent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/publicRoomsToolbar"
             app:layout_scrollFlags="scroll|enterAlways|snap" />
