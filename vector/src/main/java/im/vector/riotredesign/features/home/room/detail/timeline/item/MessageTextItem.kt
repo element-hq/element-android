@@ -16,10 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
-import android.text.Spannable
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.text.toSpannable
@@ -28,6 +25,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.utils.DimensionUtils
+import im.vector.riotredesign.core.utils.containsOnlyEmojis
 import im.vector.riotredesign.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -47,12 +46,21 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         MatrixLinkify.addLinkMovementMethod(holder.messageView)
-        val textFuture = PrecomputedTextCompat.getTextFuture(message ?: "",
+
+        val msg = message ?: ""
+        if (msg.length <= 4 && containsOnlyEmojis(msg.toString())) {
+            holder.messageView.textSize = 44F
+        } else {
+            holder.messageView.textSize = 14F
+        }
+
+        val textFuture = PrecomputedTextCompat.getTextFuture(msg,
                 TextViewCompat.getTextMetricsParams(holder.messageView),
                 null)
+
         holder.messageView.setTextFuture(textFuture)
         holder.messageView.renderSendState()
-        holder.messageView.setOnClickListener (clickListener)
+        holder.messageView.setOnClickListener(clickListener)
         holder.messageView.setOnLongClickListener(longClickListener)
         findPillsAndProcess { it.bind(holder.messageView) }
     }
