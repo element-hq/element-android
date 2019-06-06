@@ -22,6 +22,7 @@
         <item name="riotx_unread_room_indent">@color/riotx_unread_room_indent_dark</item>
         <item name="riotx_android_status_bar">@color/riotx_android_status_bar_dark</item>
         <item name="riotx_line_break_mobile">@color/riotx_line_break_mobile_dark</item>
+        <item name="riotx_unread_room_badge">@color/riotx_unread_room_badge_dark</item>
 
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/riotx_accent</item>

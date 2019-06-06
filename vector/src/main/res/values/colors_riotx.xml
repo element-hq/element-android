@@ -116,4 +116,11 @@
     <color name="riotx_line_break_mobile_dark">#FF61708B</color>
     <color name="riotx_line_break_mobile_black">#FF22262E</color>
 
+    <!-- Other colors, which are not in the pallette -->
+    <attr name="riotx_unread_room_badge" format="color" />
+    <color name="riotx_unread_room_badge_light">#FF61708B</color>
+    <color name="riotx_unread_room_badge_dark">#FF181B21</color>
+    <color name="riotx_unread_room_badge_black">#FF61708B</color>
+
+
 </resources>
