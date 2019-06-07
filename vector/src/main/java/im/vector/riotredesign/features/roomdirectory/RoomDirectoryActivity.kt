@@ -19,7 +19,9 @@ package im.vector.riotredesign.features.roomdirectory
 import android.os.Bundle
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragment
+import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.features.roomdirectory.createroom.CreateRoomFragment
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 
@@ -40,4 +42,8 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         }
     }
 
+
+    fun gotoCreateRoom() {
+        addFragmentToBackstack(CreateRoomFragment(), R.id.simpleFragmentContainer)
+    }
 }

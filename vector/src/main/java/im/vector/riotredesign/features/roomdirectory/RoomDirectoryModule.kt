@@ -17,11 +17,11 @@
 package im.vector.riotredesign.features.roomdirectory
 
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotredesign.features.roomdirectory.createroom.CreateRoomController
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryListCreator
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerController
 import org.koin.dsl.module.module
 
-// TODO Ganfra: When do we create a new module?
 class RoomDirectoryModule {
 
     companion object {
@@ -41,5 +41,14 @@ class RoomDirectoryModule {
         scope(ROOM_DIRECTORY_SCOPE) {
             PublicRoomsController(get(), get())
         }
+
+        /* ==========================================================================================
+         * Create room
+         * ========================================================================================== */
+
+        scope(ROOM_DIRECTORY_SCOPE) {
+            CreateRoomController(get(), get())
+        }
+
     }
 }

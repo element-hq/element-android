@@ -54,6 +54,7 @@ internal class DefaultCreateRoomTask(private val roomAPI: RoomAPI,
             handlerThread.start()
             val handler = Handler(handlerThread.looper)
 
+            // TODO Maybe do the same code for join room request ?
             handler.post {
                 val realm = Realm.getInstance(realmConfiguration)
 

@@ -76,9 +76,8 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
                 .disposeOnDestroy()
 
         publicRoomsCreateNewRoom.setOnClickListener {
-            // TODO homeActivityViewModel.createRoom()
-
-            vectorBaseActivity.notImplemented()
+            // TODO Not the best navigation pattern
+            (vectorBaseActivity as? RoomDirectoryActivity)?.gotoCreateRoom()
         }
 
         viewModel.joinRoomErrorLiveData.observe(this, Observer {
