@@ -19,12 +19,10 @@ package im.vector.matrix.android.internal.database.model
 import im.vector.matrix.android.api.session.room.send.SendState
 import io.realm.RealmObject
 import io.realm.RealmResults
-import io.realm.annotations.Ignore
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 import java.util.*
-import kotlin.properties.Delegates
 
 internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUID().toString(),
                                 @Index var eventId: String = "",
@@ -51,10 +49,14 @@ internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUI
 
     private var sendStateStr: String = SendState.UNKNOWN.name
 
-    @delegate:Ignore
-    var sendState: SendState by Delegates.observable(SendState.valueOf(sendStateStr)) { _, _, newValue ->
-        sendStateStr = newValue.name
-    }
+    var sendState: SendState
+        get() {
+            return SendState.valueOf(sendStateStr)
+        }
+        set(value) {
+            sendStateStr = value.name
+        }
+
 
     companion object
 
