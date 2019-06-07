@@ -25,7 +25,6 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -44,7 +43,8 @@ import im.vector.riotredesign.core.utils.TextUtils
  * Displays a String reaction (emoji), with a count, and that can be selected or not (toggle)
  */
 class ReactionButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                               defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
+                                               defStyleAttr: Int = 0)
+    : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
 
     companion object {
         private val DECCELERATE_INTERPOLATOR = DecelerateInterpolator()

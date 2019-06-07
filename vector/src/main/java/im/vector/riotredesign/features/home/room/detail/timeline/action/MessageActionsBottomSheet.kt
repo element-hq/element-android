@@ -33,7 +33,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import kotlinx.android.synthetic.main.bottom_sheet_message_actions.*
@@ -122,17 +121,7 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
             senderNameTextView.text = it.senderName
             messageBodyTextView.text = it.messageBody
             messageTimestampText.text = it.ts
-
-            GlideApp.with(this).clear(senderAvatarImageView)
-            if (it.senderAvatarPath != null) {
-                GlideApp.with(this)
-                        .load(it.senderAvatarPath)
-                        .circleCrop()
-                        .placeholder(AvatarRenderer.getPlaceholderDrawable(requireContext(), it.userId, it.senderName))
-                        .into(senderAvatarImageView)
-            } else {
-                senderAvatarImageView.setImageDrawable(AvatarRenderer.getPlaceholderDrawable(requireContext(), it.userId, it.senderName))
-            }
+            AvatarRenderer.render(it.senderAvatarPath, it.userId, it.senderName, senderAvatarImageView)
         } else {
             bottom_sheet_message_preview.isVisible = false
         }

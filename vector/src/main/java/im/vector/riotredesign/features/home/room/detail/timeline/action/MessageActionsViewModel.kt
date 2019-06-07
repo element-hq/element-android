@@ -96,7 +96,7 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
                         ts = dateFormat.format(Date(originTs ?: 0)),
                         showPreview = body != null,
                         canReact = event.root.type == EventType.MESSAGE,
-                        senderAvatarPath = currentSession.contentUrlResolver().resolveFullSize(parcel.informationData.avatarUrl)
+                        senderAvatarPath = parcel.informationData.avatarUrl
                 )
             } else {
                 //can this happen?
