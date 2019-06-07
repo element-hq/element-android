@@ -113,10 +113,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home          -> {
-                drawerLayout.openDrawer(GravityCompat.START)
-                return true
-            }
             R.id.sliding_menu_sign_out -> {
                 SignOutUiWorker(this).perform(Matrix.getInstance().currentSession!!)
                 return true
@@ -124,6 +120,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
 
         return true
+    }
+
+    // Called by HomeDetailFragment
+    fun openDrawer() {
+        drawerLayout.openDrawer(GravityCompat.START)
     }
 
     override fun onBackPressed() {

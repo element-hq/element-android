@@ -89,7 +89,7 @@ class HomeDetailFragment : VectorBaseFragment() {
                 groupToolbarAvatarImageView
         )
         groupToolbarAvatarImageView.setOnClickListener {
-            vectorBaseActivity.notImplemented("Group click in toolbar")
+            (vectorBaseActivity as? HomeActivity)?.openDrawer()
         }
     }
 
