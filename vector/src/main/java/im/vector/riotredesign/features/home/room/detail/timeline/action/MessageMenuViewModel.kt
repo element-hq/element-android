@@ -73,7 +73,9 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 }
                 //TODO is downloading attachement?
 
-                this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, event.root.eventId))
+                if (canReact(event, messageContent)) {
+                    this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, event.root.eventId))
+                }
                 if (canCopy(type)) {
                     //TODO copy images? html? see ClipBoard
                     this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent!!.body))
@@ -125,7 +127,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 }
                 this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, parcel.eventId))
 
-                if (currentSession.sessionParams.credentials.userId != event.root.sender) {
+                if (currentSession.sessionParams.credentials.userId != event.root.sender && event.root.type == EventType.MESSAGE) {
                     //not sent by me
                     this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, parcel.eventId))
                 }
@@ -147,6 +149,11 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 MessageType.MSGTYPE_FILE -> true
                 else                     -> false
             }
+        }
+
+        private fun canReact(event: TimelineEvent, messageContent: MessageContent?): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            return event.root.type == EventType.MESSAGE
         }
 
         private fun canQuote(event: TimelineEvent, messageContent: MessageContent?): Boolean {

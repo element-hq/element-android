@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -35,6 +36,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
+import kotlinx.android.synthetic.main.bottom_sheet_message_actions.*
 
 /**
  * Bottom sheet fragment that shows a message preview with list of contextual actions
@@ -115,20 +117,27 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
     }
 
     override fun invalidate() = withState(viewModel) {
-        senderNameTextView.text = it.senderName
-        messageBodyTextView.text = it.messageBody
-        messageTimestampText.text = it.ts
+        if (it.showPreview) {
+            bottom_sheet_message_preview.isVisible = true
+            senderNameTextView.text = it.senderName
+            messageBodyTextView.text = it.messageBody
+            messageTimestampText.text = it.ts
 
-        GlideApp.with(this).clear(senderAvatarImageView)
-        if (it.senderAvatarPath != null) {
-            GlideApp.with(this)
-                    .load(it.senderAvatarPath)
-                    .circleCrop()
-                    .placeholder(AvatarRenderer.getPlaceholderDrawable(requireContext(), it.userId, it.senderName))
-                    .into(senderAvatarImageView)
+            GlideApp.with(this).clear(senderAvatarImageView)
+            if (it.senderAvatarPath != null) {
+                GlideApp.with(this)
+                        .load(it.senderAvatarPath)
+                        .circleCrop()
+                        .placeholder(AvatarRenderer.getPlaceholderDrawable(requireContext(), it.userId, it.senderName))
+                        .into(senderAvatarImageView)
+            } else {
+                senderAvatarImageView.setImageDrawable(AvatarRenderer.getPlaceholderDrawable(requireContext(), it.userId, it.senderName))
+            }
         } else {
-            senderAvatarImageView.setImageDrawable(AvatarRenderer.getPlaceholderDrawable(requireContext(), it.userId, it.senderName))
+            bottom_sheet_message_preview.isVisible = false
         }
+        quickReactBottomDivider.isVisible = it.canReact
+        bottom_sheet_quick_reaction_container.isVisible = it.canReact
         return@withState
     }
 

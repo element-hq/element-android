@@ -19,6 +19,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
@@ -34,10 +35,12 @@ import java.util.*
 
 
 data class MessageActionState(
-        val userId: String,
-        val senderName: String,
-        val messageBody: CharSequence,
-        val ts: String?,
+        val userId: String = "",
+        val senderName: String = "",
+        val messageBody: CharSequence? = null,
+        val ts: String? = null,
+        val showPreview: Boolean = false,
+        val canReact: Boolean = false,
         val senderAvatarPath: String? = null)
     : MvRxState
 
@@ -59,21 +62,21 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
                 val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
                         ?: event.root.content.toModel()
                 val originTs = event.root.originServerTs
-                var body: CharSequence = messageContent?.body ?: ""
+                var body: CharSequence? = messageContent?.body
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                     val parser = Parser.builder().build()
                     val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
-                   // val renderer = HtmlRenderer.builder().build()
                     body = Markwon.builder(viewModelContext.activity)
                             .usePlugin(HtmlPlugin.create()).build().render(document)
-//                    body = renderer.render(document)
                 }
                 MessageActionState(
-                        event.root.sender ?: "",
-                        parcel.informationData.memberName.toString(),
-                        body,
-                        dateFormat.format(Date(originTs ?: 0)),
-                        currentSession.contentUrlResolver().resolveFullSize(parcel.informationData.avatarUrl)
+                        userId = event.root.sender ?: "",
+                        senderName = parcel.informationData.memberName.toString(),
+                        messageBody = body,
+                        ts = dateFormat.format(Date(originTs ?: 0)),
+                        showPreview = event.root.type == EventType.MESSAGE,
+                        canReact = event.root.type == EventType.MESSAGE,
+                        senderAvatarPath = currentSession.contentUrlResolver().resolveFullSize(parcel.informationData.avatarUrl)
                 )
             } else {
                 //can this happen?

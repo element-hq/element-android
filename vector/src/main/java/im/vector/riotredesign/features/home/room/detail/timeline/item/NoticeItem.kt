@@ -37,7 +37,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     @EpoxyAttribute
     var baseCallback: TimelineEventController.BaseCallback? = null
 
-
     private var longClickListener = View.OnLongClickListener {
         baseCallback?.onEventLongClicked(informationData, null, it)
         baseCallback != null
