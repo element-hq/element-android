@@ -39,8 +39,9 @@ class RoomHistoryVisibilityItemFactory(private val stringProvider: StringProvide
     }
 
     private fun buildNoticeText(event: Event, senderName: String?): CharSequence? {
-        val content = event.content.toModel<RoomHistoryVisibilityContent>() ?: return null
-        val formattedVisibility = when (content.historyVisibility) {
+        val historyVisibility = event.content.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+                ?: return null
+        val formattedVisibility = when (historyVisibility) {
             RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
             RoomHistoryVisibility.INVITED        -> stringProvider.getString(R.string.notice_room_visibility_invited)
             RoomHistoryVisibility.JOINED         -> stringProvider.getString(R.string.notice_room_visibility_joined)

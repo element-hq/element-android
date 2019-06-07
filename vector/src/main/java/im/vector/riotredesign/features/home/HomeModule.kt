@@ -67,7 +67,7 @@ class HomeModule {
                     roomHistoryVisibilityItemFactory = RoomHistoryVisibilityItemFactory(get()),
                     callItemFactory = CallItemFactory(get()),
                     encryptionItemFactory = EncryptionItemFactory(get()),
-                    encryptedItemFactory = EncryptedItemFactory(get(), get(), messageItemFactory),
+                    encryptedItemFactory = EncryptedItemFactory(get()),
                     defaultItemFactory = DefaultItemFactory()
             )
             TimelineEventController(timelineDateFormatter, timelineItemFactory, timelineMediaSizeProvider)

@@ -103,13 +103,13 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         val contentModule = ContentModule().definition
         val cryptoModule = CryptoModule().definition
         MatrixKoinHolder.instance.loadModules(listOf(sessionModule,
-                                                     syncModule,
-                                                     roomModule,
-                                                     groupModule,
-                                                     userModule,
-                                                     signOutModule,
-                                                     contentModule,
-                                                     cryptoModule))
+                syncModule,
+                roomModule,
+                groupModule,
+                userModule,
+                signOutModule,
+                contentModule,
+                cryptoModule))
         scope = getKoin().getOrCreateScope(SCOPE)
         if (!monarchy.isMonarchyThreadOpen) {
             monarchy.openManually()
@@ -348,6 +348,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
         return cryptoService.decryptEvent(event, timeline)
+    }
+
+    override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult?>) {
+        return cryptoService.decryptEventAsync(event, timeline, callback)
     }
 
     override fun getEncryptionAlgorithm(roomId: String): String? {

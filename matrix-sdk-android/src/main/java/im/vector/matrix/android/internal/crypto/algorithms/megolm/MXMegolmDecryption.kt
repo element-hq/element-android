@@ -166,7 +166,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
      * @param timelineId the timeline identifier
      */
     private fun addEventToPendingList(event: Event, timelineId: String) {
-        val encryptedEventContent = event.content.toModel<EncryptedEventContent>()!!
+        val encryptedEventContent = event.content.toModel<EncryptedEventContent>() ?: return
         val pendingEventsKey = "${encryptedEventContent.senderKey}|${encryptedEventContent.sessionId}"
 
         if (!pendingEvents.containsKey(pendingEventsKey)) {
@@ -190,7 +190,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
      */
     override fun onRoomKeyEvent(event: Event, keysBackup: KeysBackup) {
         var exportFormat = false
-        val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>()!!
+        val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>() ?: return
 
         var senderKey: String? = event.getSenderKey()
         var keysClaimed: MutableMap<String, String> = HashMap()
@@ -203,11 +203,11 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
         if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
             Timber.v("## onRoomKeyEvent(), forward adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
                     + " sessionKey " + roomKeyContent.sessionKey) // from " + event);
-            val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>()!!
-            forwardingCurve25519KeyChain = if (null == forwardedRoomKeyContent.forwardingCurve25519KeyChain) {
+            val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return
+            forwardingCurve25519KeyChain = if (forwardedRoomKeyContent.forwardingCurve25519KeyChain == null) {
                 ArrayList()
             } else {
-                ArrayList(forwardedRoomKeyContent.forwardingCurve25519KeyChain!!)
+                ArrayList(forwardedRoomKeyContent.forwardingCurve25519KeyChain)
             }
             forwardingCurve25519KeyChain.add(senderKey!!)
 
@@ -262,6 +262,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
      */
     override fun onNewSession(senderKey: String, sessionId: String) {
         //TODO see how to handle this
+        Timber.v("ON NEW SESSION $sessionId - $senderKey")
         /*val k = "$senderKey|$sessionId"
 
         val pending = pendingEvents[k]

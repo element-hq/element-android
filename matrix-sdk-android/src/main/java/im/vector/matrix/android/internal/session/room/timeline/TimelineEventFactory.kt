@@ -16,7 +16,9 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.MXDecryptionException
@@ -44,23 +46,7 @@ internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomM
         }
         val event = eventEntity.asDomain()
         if (event.getClearType() == EventType.ENCRYPTED) {
-            try {
-                Timber.v("Encrypted event: try to decrypt ${event.eventId}")
-                val result = if (decryptionCache.containsKey(eventEntity.localId)) {
-                    Timber.v("Encrypted event ${event.eventId} cached")
-                    decryptionCache[eventEntity.localId]
-                } else {
-                    cryptoService.decryptEvent(event, timelineId)?.also {
-                        decryptionCache[eventEntity.localId] = it
-                    }
-                }
-                event.setClearData(result)
-            } catch (e: Exception) {
-                Timber.e(e, "Encrypted event: decryption failed")
-                if (e is MXDecryptionException) {
-                    event.setCryptoError(e.cryptoError)
-                }
-            }
+            handleEncryptedEvent(event, eventEntity.localId)
         }
         return TimelineEvent(
                 event,
@@ -70,6 +56,28 @@ internal class TimelineEventFactory(private val roomMemberExtractor: SenderRoomM
                 senderData.senderAvatar,
                 eventEntity.sendState
         )
+    }
+
+    private fun handleEncryptedEvent(event: Event, eventId: String) {
+        Timber.v("Encrypted event: try to decrypt ${event.eventId}")
+        val cachedDecryption = decryptionCache[eventId]
+        if (cachedDecryption != null) {
+            Timber.v("Encrypted event ${event.eventId} cached")
+            event.setClearData(cachedDecryption)
+        } else {
+            try {
+                val result = cryptoService.decryptEvent(event, timelineId)
+                if (result != null) {
+                    decryptionCache[eventId] = result
+                }
+                event.setClearData(result)
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Encrypted event: decryption failed")
+                if (failure is MXDecryptionException) {
+                    event.setCryptoError(failure.cryptoError)
+                }
+            }
+        }
     }
 
     fun clear() {

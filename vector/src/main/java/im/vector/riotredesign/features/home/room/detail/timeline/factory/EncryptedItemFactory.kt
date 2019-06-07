@@ -20,29 +20,18 @@ import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.internal.crypto.MXDecryptionException
-import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.resources.StringProvider
-import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 
-class EncryptedItemFactory(
-        private val session: Session,
-        private val stringProvider: StringProvider,
-        private val messageItemFactory: MessageItemFactory) {
+// This class handles timeline event who haven't been successfully decrypted
+class EncryptedItemFactory(private val stringProvider: StringProvider) {
 
-    fun create(timelineEvent: TimelineEvent,
-               nextEvent: TimelineEvent?,
-               callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
-
+    fun create(timelineEvent: TimelineEvent): VectorEpoxyModel<*>? {
         return when {
             EventType.ENCRYPTED == timelineEvent.root.getClearType() -> {
                     val cryptoError = timelineEvent.root.mCryptoError
@@ -54,7 +43,6 @@ class EncryptedItemFactory(
                             }
 
                     val message = stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
-
                     val spannableStr = SpannableString(message)
                     spannableStr.setSpan(StyleSpan(Typeface.ITALIC), 0, message.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     // TODO This is not correct format for error, change it

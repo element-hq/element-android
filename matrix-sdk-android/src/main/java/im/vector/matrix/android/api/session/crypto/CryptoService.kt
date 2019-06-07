@@ -92,33 +92,9 @@ interface CryptoService {
                             roomId: String,
                             callback: MatrixCallback<MXEncryptEventContentResult>)
 
-    /*
-       fun start(isInitialSync: Boolean, aCallback: MatrixCallback<Unit>?)
-
-       fun isStarted(): Boolean
-
-       fun isStarting(): Boolean
-
-       fun close()
-
-
-       fun getOlmDevice(): MXOlmDevice?
-
-       fun checkUnknownDevices(userIds: List<String>, callback: MatrixCallback<Unit>)
-
-       fun warnOnUnknownDevices(): Boolean
-
-       @Throws(MXDecryptionException::class)
-       fun decryptEvent(event: Event, timelineId: String?): MXEventDecryptionResult?
-
-       fun resetReplayAttackCheckInTimeline(timelineId: String)
-
-
-       @VisibleForTesting
-       fun ensureOlmSessionsForUsers(users: List<String>, callback: MatrixCallback<MXUsersDevicesMap<MXOlmSessionResult>>)
-    */
-
     fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult?
+
+    fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult?>)
 
     fun getEncryptionAlgorithm(roomId: String): String?
 

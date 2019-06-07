@@ -28,29 +28,29 @@ data class EncryptedEventContent(
          * the used algorithm
          */
         @Json(name = "algorithm")
-        var algorithm: String? = null,
+        val algorithm: String? = null,
 
         /**
          * The encrypted event
          */
         @Json(name = "ciphertext")
-        var ciphertext: String? = null,
+        val ciphertext: String? = null,
 
         /**
          * The device id
          */
         @Json(name = "device_id")
-        var deviceId: String? = null,
+        val deviceId: String? = null,
 
         /**
          * the sender key
          */
         @Json(name = "sender_key")
-        var senderKey: String? = null,
+        val senderKey: String? = null,
 
         /**
          * The session id
          */
         @Json(name = "session_id")
-        var sessionId: String? = null
+        val sessionId: String? = null
 )

@@ -73,6 +73,7 @@ import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * A `CryptoService` class instance manages the end-to-end crypto for a session.
@@ -134,22 +135,8 @@ internal class CryptoManager(
 
     // MXEncrypting instance for each room.
     private val roomEncryptors: MutableMap<String, IMXEncrypting> = HashMap()
-
-    // the encryption is starting
-    private var isStarting = AtomicBoolean(false)
-
-    // tell if the crypto is started
-    private var isStarted = AtomicBoolean(false)
-
-    // TODO
-    //private val mNetworkListener = object : IMXNetworkEventListener {
-    //    override fun onNetworkConnectionUpdate(isConnected: Boolean) {
-    //        if (isConnected && !isStarted()) {
-    //            Timber.v("Start MXCrypto because a network connection has been retrieved ")
-    //            start(false, null)
-    //        }
-    //    }
-    //}
+    private val isStarting = AtomicBoolean(false)
+    private val isStarted = AtomicBoolean(false)
 
     fun onStateEvent(roomId: String, event: Event) {
         when {
@@ -262,8 +249,6 @@ internal class CryptoManager(
                             internalStart(isInitialSync)
                         },
                         {
-                            isStarting.set(false)
-                            isStarted.set(true)
                             outgoingRoomKeyRequestManager.start()
                             keysBackup.checkAndStartKeysBackup()
                             if (isInitialSync) {
@@ -273,6 +258,8 @@ internal class CryptoManager(
                             } else {
                                 incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
                             }
+                            isStarting.set(false)
+                            isStarted.set(true)
                         }
                 )
     }
@@ -589,21 +576,54 @@ internal class CryptoManager(
      */
     @Throws(MXDecryptionException::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
-        val eventContent = event.content
-        if (eventContent == null) {
-            Timber.e("## decryptEvent : empty event content")
-            return null
-        }
         return runBlocking {
-            withContext(coroutineDispatchers.crypto) {
-                val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, eventContent["algorithm"] as String)
-                if (alg == null) {
-                    val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, eventContent["algorithm"] as String)
-                    Timber.e("## decryptEvent() : $reason")
-                    throw MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE, MXCryptoError.UNABLE_TO_DECRYPT, reason))
-                } else {
-                    alg.decryptEvent(event, timeline)
-                }
+            internalDecryptEvent(event, timeline).fold(
+                    { throw it },
+                    { it }
+            )
+        }
+    }
+
+    /**
+     * Decrypt an event asynchronously
+     *
+     * @param event    the raw event.
+     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
+     * @param callback the callback to return data or null
+     */
+    override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult?>) {
+        GlobalScope.launch(EmptyCoroutineContext) {
+            val result = withContext(coroutineDispatchers.crypto) {
+                internalDecryptEvent(event, timeline)
+            }
+            result.fold(
+                    { callback.onFailure(it) },
+                    { callback.onSuccess(it) }
+            )
+        }
+    }
+
+    /**
+     * Decrypt an event
+     *
+     * @param event    the raw event.
+     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
+     * @return the MXEventDecryptionResult data, or null in case of error wrapped into [Try]
+     */
+    private suspend fun internalDecryptEvent(event: Event, timeline: String): Try<MXEventDecryptionResult?> {
+        return Try {
+            val eventContent = event.content
+            if (eventContent == null) {
+                Timber.e("## decryptEvent : empty event content")
+                return@Try null
+            }
+            val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, eventContent["algorithm"] as String)
+            if (alg == null) {
+                val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, eventContent["algorithm"] as String)
+                Timber.e("## decryptEvent() : $reason")
+                throw MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE, MXCryptoError.UNABLE_TO_DECRYPT, reason))
+            } else {
+                alg.decryptEvent(event, timeline)
             }
         }
     }
@@ -624,10 +644,16 @@ internal class CryptoManager(
      */
     fun onToDeviceEvent(event: Event) {
         CoroutineScope(coroutineDispatchers.crypto).launch {
-            if (event.getClearType() == EventType.ROOM_KEY || event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
-                onRoomKeyEvent(event)
-            } else if (event.getClearType() == EventType.ROOM_KEY_REQUEST) {
-                incomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
+            when (event.getClearType()) {
+                EventType.ROOM_KEY, EventType.FORWARDED_ROOM_KEY -> {
+                    onRoomKeyEvent(event)
+                }
+                EventType.ROOM_KEY_REQUEST                       -> {
+                    incomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
+                }
+                else                                             -> {
+                    //ignore
+                }
             }
         }
     }
@@ -638,7 +664,7 @@ internal class CryptoManager(
      * @param event the key event.
      */
     private fun onRoomKeyEvent(event: Event) {
-        val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>()!!
+        val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>() ?: return
         if (TextUtils.isEmpty(roomKeyContent.roomId) || TextUtils.isEmpty(roomKeyContent.algorithm)) {
             Timber.e("## onRoomKeyEvent() : missing fields")
             return
@@ -722,7 +748,6 @@ internal class CryptoManager(
 
     private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
-
         eventContent?.historyVisibility?.let {
             cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
         }

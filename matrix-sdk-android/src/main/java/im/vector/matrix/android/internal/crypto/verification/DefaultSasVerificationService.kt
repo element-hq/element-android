@@ -54,14 +54,14 @@ import kotlin.collections.HashMap
  * Short codes interactive verification is a more user friendly way of verifying devices
  * that is still maintaining a good level of security (alternative to the 43-character strings compare method).
  */
-internal class DefaultSasVerificationService(private val mCredentials: Credentials,
-                                             private val mCryptoStore: IMXCryptoStore,
-                                             private val mMyDeviceInfoHolder: MyDeviceInfoHolder,
+internal class DefaultSasVerificationService(private val credentials: Credentials,
+                                             private val cryptoStore: IMXCryptoStore,
+                                             private val myDeviceInfoHolder: MyDeviceInfoHolder,
                                              private val deviceListManager: DeviceListManager,
                                              private val setDeviceVerificationAction: SetDeviceVerificationAction,
-                                             private val mSendToDeviceTask: SendToDeviceTask,
+                                             private val sendToDeviceTask: SendToDeviceTask,
                                              private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                             private val mTaskExecutor: TaskExecutor)
+                                             private val taskExecutor: TaskExecutor)
     : VerificationTransaction.Listener, SasVerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -194,11 +194,11 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                             val tx = IncomingSASVerificationTransaction(
                                     this,
                                     setDeviceVerificationAction,
-                                    mCredentials,
-                                    mCryptoStore,
-                                    mSendToDeviceTask,
-                                    mTaskExecutor,
-                                    mMyDeviceInfoHolder.myDevice.fingerprint()!!,
+                                    credentials,
+                                    cryptoStore,
+                                    sendToDeviceTask,
+                                    taskExecutor,
+                                    myDeviceInfoHolder.myDevice.fingerprint()!!,
                                     startReq.transactionID!!,
                                     otherUserId)
                             addTransaction(tx)
@@ -363,11 +363,11 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
             val tx = OutgoingSASVerificationRequest(
                     this,
                     setDeviceVerificationAction,
-                    mCredentials,
-                    mCryptoStore,
-                    mSendToDeviceTask,
-                    mTaskExecutor,
-                    mMyDeviceInfoHolder.myDevice.fingerprint()!!,
+                    credentials,
+                    cryptoStore,
+                    sendToDeviceTask,
+                    taskExecutor,
+                    myDeviceInfoHolder.myDevice.fingerprint()!!,
                     txID,
                     userId,
                     deviceID)
@@ -387,8 +387,8 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
     private fun createUniqueIDForTransaction(userId: String, deviceID: String): String {
         val buff = StringBuffer()
         buff
-                .append(mCredentials.userId).append("|")
-                .append(mCredentials.deviceId).append("|")
+                .append(credentials.userId).append("|")
+                .append(credentials.deviceId).append("|")
                 .append(userId).append("|")
                 .append(deviceID).append("|")
                 .append(UUID.randomUUID().toString())
@@ -413,7 +413,7 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
         val contentMap = MXUsersDevicesMap<Any>()
         contentMap.setObject(cancelMessage, userId, userDevice)
 
-        mSendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId))
+        sendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId))
                 .dispatchTo(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
@@ -423,6 +423,6 @@ internal class DefaultSasVerificationService(private val mCredentials: Credentia
                         Timber.e(failure, "## SAS verification [$transactionId] failed to cancel.")
                     }
                 })
-                .executeBy(mTaskExecutor)
+                .executeBy(taskExecutor)
     }
 }
