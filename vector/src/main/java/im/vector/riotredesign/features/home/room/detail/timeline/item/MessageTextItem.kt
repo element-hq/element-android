@@ -16,22 +16,20 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
-import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.text.toSpannable
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.utils.DimensionUtils
 import im.vector.riotredesign.core.utils.containsOnlyEmojis
 import im.vector.riotredesign.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -40,12 +38,22 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var message: CharSequence? = null
     @EpoxyAttribute
     override lateinit var informationData: MessageInformationData
-    @EpoxyAttribute
-    var clickListener: View.OnClickListener? = null
+
+    val mvmtMethod = BetterLinkMovementMethod.newInstance().also {
+        it.setOnLinkClickListener { textView, url ->
+            //Return false to let android manage the click on the link
+            false
+        }
+        it.setOnLinkLongClickListener { textView, url ->
+            //Long clicks are handled by parent, return true to block android to do something with url
+            true
+        }
+    }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        MatrixLinkify.addLinkMovementMethod(holder.messageView)
+        holder.messageView.movementMethod = mvmtMethod
+
 
         val msg = message ?: ""
         if (msg.length <= 4 && containsOnlyEmojis(msg.toString())) {
@@ -54,13 +62,13 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             holder.messageView.textSize = 14F
         }
 
-        val textFuture = PrecomputedTextCompat.getTextFuture(msg,
+        val textFuture = PrecomputedTextCompat.getTextFuture(message ?: "",
                 TextViewCompat.getTextMetricsParams(holder.messageView),
                 null)
 
         holder.messageView.setTextFuture(textFuture)
         holder.messageView.renderSendState()
-        holder.messageView.setOnClickListener(clickListener)
+        holder.messageView.setOnClickListener(cellClickListener)
         holder.messageView.setOnLongClickListener(longClickListener)
         findPillsAndProcess { it.bind(holder.messageView) }
     }

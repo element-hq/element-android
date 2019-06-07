@@ -86,6 +86,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 }
             }
         } catch (e: Exception) {
+            Timber.e(e,"failed to create message item")
             defaultItemFactory.create(event, e)
         }
         return (computedModel ?: EmptyItem_())

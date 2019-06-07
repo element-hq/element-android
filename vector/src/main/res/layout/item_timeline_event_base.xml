@@ -73,6 +73,7 @@
     <ViewStub
         android:id="@+id/messageContentMediaStub"
         style="@style/TimelineContentStubLayoutParams"
+        android:inflatedId="@+id/messageContentMedia"
         android:layout="@layout/item_timeline_event_media_message_stub"
         tools:ignore="MissingConstraints" />
 

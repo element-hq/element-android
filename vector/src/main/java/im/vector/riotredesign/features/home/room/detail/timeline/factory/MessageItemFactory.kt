@@ -23,7 +23,6 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.view.View
-import androidx.annotation.ColorRes
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -41,7 +40,6 @@ import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.DebouncedClickListener
-import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
@@ -273,7 +271,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val bodyToUse = messageContent.formattedBody?.let {
-            htmlRenderer.render(it)
+            htmlRenderer.render(it.trim())
         } ?: messageContent.body
 
         val linkifiedBody = linkifyBody(bodyToUse, callback)
@@ -292,10 +290,6 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 //click on the text
-                .clickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
-                        }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, messageContent, view)

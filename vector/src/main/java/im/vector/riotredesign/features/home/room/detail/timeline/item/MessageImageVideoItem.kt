@@ -43,6 +43,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         ContentUploadStateTrackerBinder.bind(informationData.eventId, mediaData, holder.progressLayout)
         holder.imageView.setOnClickListener(clickListener)
         holder.imageView.setOnLongClickListener(longClickListener)
+        holder.mediaContentView.setOnClickListener(cellClickListener)
+        holder.mediaContentView.setOnLongClickListener(longClickListener)
         holder.imageView.renderSendState()
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
     }
@@ -61,6 +63,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
         val imageView by bind<ImageView>(R.id.messageThumbnailView)
         val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
+
+        val mediaContentView by bind<ViewGroup>(R.id.messageContentMedia)
 
     }
 
