@@ -87,7 +87,7 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
         if (value.isNullOrBlank()) {
             viewModel.recoveryCodeErrorText.value = context?.getString(R.string.keys_backup_recovery_code_empty_error_message)
         } else {
-            viewModel.recoverKeys(context!!, sharedViewModel)
+            viewModel.recoverKeys(requireContext(), sharedViewModel)
         }
     }
 

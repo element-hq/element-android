@@ -19,9 +19,9 @@ package im.vector.matrix.android.internal.crypto
 
 import android.text.TextUtils
 import arrow.core.Try
-import arrow.instances.`try`.applicativeError.handleError
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.util.onError
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -270,10 +270,10 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
             Timber.v("## downloadKeys() : starts")
             val t0 = System.currentTimeMillis()
             doKeyDownloadForUsers(downloadUsers)
-                    .flatMap {
+                    .map {
                         Timber.v("## downloadKeys() : doKeyDownloadForUsers succeeds after " + (System.currentTimeMillis() - t0) + " ms")
                         it.addEntriesFromMap(stored)
-                        Try.just(it)
+                        it
                     }
         }
     }
@@ -333,10 +333,9 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
                     }
                     onKeysDownloadSucceed(filteredUsers, response.failures)
                 }
-                .handleError {
+                .onError {
                     Timber.e(it, "##doKeyDownloadForUsers(): error")
                     onKeysDownloadFailed(filteredUsers)
-                    throw it
                 }
     }
 
@@ -411,7 +410,7 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
 
         if (!isVerified) {
             Timber.e("## validateDeviceKeys() : Unable to verify signature on device " + userId + ":"
-                     + deviceKeys.deviceId + " with error " + errorMessage)
+                    + deviceKeys.deviceId + " with error " + errorMessage)
             return false
         }
 
@@ -422,8 +421,8 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
                 //
                 // Should we warn the user about it somehow?
                 Timber.e("## validateDeviceKeys() : WARNING:Ed25519 key for device " + userId + ":"
-                         + deviceKeys.deviceId + " has changed : "
-                         + previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
+                        + deviceKeys.deviceId + " has changed : "
+                        + previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
 
                 Timber.e("## validateDeviceKeys() : $previouslyStoredDeviceKeys -> $deviceKeys")
                 Timber.e("## validateDeviceKeys() : " + previouslyStoredDeviceKeys.keys + " -> " + deviceKeys.keys)
