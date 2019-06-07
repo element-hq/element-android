@@ -19,6 +19,8 @@
 package im.vector.riotredesign.features.html
 
 import android.content.Context
+import android.text.style.ClickableSpan
+import android.text.style.URLSpan
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
 import im.vector.matrix.android.api.session.Session
@@ -82,6 +84,9 @@ private class MatrixPlugin private constructor(private val glideRequests: GlideR
                 .setHandler(
                         "blockquote",
                         BlockquoteHandler())
+                .setHandler(
+                        "font",
+                        FontTagHandler())
                 .setHandler(
                         "sub",
                         SubScriptHandler())
@@ -153,6 +158,13 @@ private class MxLinkHandler(private val glideRequests: GlideRequests,
                     SpannableBuilder.setSpans(
                             visitor.builder(),
                             span,
+                            tag.start(),
+                            tag.end()
+                    )
+                    //also add clickable span
+                    SpannableBuilder.setSpans(
+                            visitor.builder(),
+                            URLSpan(link),
                             tag.start(),
                             tag.end()
                     )

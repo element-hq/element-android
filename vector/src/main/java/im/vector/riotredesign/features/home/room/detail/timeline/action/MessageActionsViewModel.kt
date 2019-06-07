@@ -63,7 +63,7 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
                 var body: CharSequence = messageContent?.body ?: ""
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                     val parser = Parser.builder().build()
-                    val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
+                    val document = parser.parse(messageContent.formattedBody?.trim() ?: messageContent.body)
                    // val renderer = HtmlRenderer.builder().build()
                     body = Markwon.builder(viewModelContext.activity)
                             .usePlugin(HtmlPlugin.create()).build().render(document)

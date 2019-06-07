@@ -295,7 +295,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val bodyToUse = messageContent.formattedBody?.let {
-            htmlRenderer.render(it)
+            htmlRenderer.render(it.trim())
         } ?: messageContent.body
 
         val linkifiedBody = linkifyBody(bodyToUse, callback)
@@ -318,11 +318,6 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .memberClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onMemberNameClicked(informationData)
-                        }))
-                //click on the text
-                .clickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
