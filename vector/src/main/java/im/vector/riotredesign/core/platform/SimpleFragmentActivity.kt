@@ -24,10 +24,11 @@ import butterknife.BindView
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.hideKeyboard
+import kotlinx.android.synthetic.main.activity.*
 import org.koin.android.ext.android.get
 
 /**
- * Simple activity with a toolbar, a waiting overlay, and a fragment container and a mxSession.
+ * Simple activity with a toolbar, a waiting overlay, and a fragment container and a session.
  */
 abstract class SimpleFragmentActivity : VectorBaseActivity() {
 
@@ -42,10 +43,10 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
     @BindView(R.id.waiting_view_status_horizontal_progress)
     lateinit var waitingHorizontalProgress: ProgressBar
 
-    protected val mSession = get<Session>()
+    protected val session = get<Session>()
 
     override fun initUiAndData() {
-        configureToolbar()
+        configureToolbar(toolbar)
         waitingView = findViewById(R.id.waiting_view)
     }
 

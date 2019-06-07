@@ -52,6 +52,7 @@ internal fun EventEntity.Companion.where(realm: Realm,
     }
 }
 
+
 internal fun EventEntity.Companion.latestEvent(realm: Realm,
                                                roomId: String,
                                                includedTypes: List<String> = emptyList(),

@@ -25,6 +25,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
+import im.vector.riotredesign.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_room_category)
 abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
@@ -36,12 +37,12 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
     @EpoxyAttribute var listener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
-        val tintColor = ContextCompat.getColor(holder.rootView.context, R.color.bluey_grey_two)
+        val tintColor = ThemeUtils.getColor(holder.rootView.context, R.attr.riotx_text_secondary)
         val expandedArrowDrawableRes = if (expanded) R.drawable.ic_expand_more_white else R.drawable.ic_expand_less_white
         val expandedArrowDrawable = ContextCompat.getDrawable(holder.rootView.context, expandedArrowDrawableRes)?.also {
             DrawableCompat.setTint(it, tintColor)
         }
-        holder.unreadCounterBadgeView.render(unreadCount, showHighlighted)
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadCount, showHighlighted))
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(expandedArrowDrawable, null, null, null)
         holder.titleView.text = title
         holder.rootView.setOnClickListener { listener?.invoke() }

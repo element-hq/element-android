@@ -17,12 +17,19 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.view.View
 import androidx.annotation.ColorRes
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -31,8 +38,10 @@ import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
+import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.DebouncedClickListener
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
@@ -45,7 +54,8 @@ import me.gujun.android.span.span
 class MessageItemFactory(private val colorProvider: ColorProvider,
                          private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                          private val timelineDateFormatter: TimelineDateFormatter,
-                         private val htmlRenderer: EventHtmlRenderer) {
+                         private val htmlRenderer: EventHtmlRenderer,
+                         private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -66,29 +76,57 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 || nextEvent?.root?.getClearType() != EventType.MESSAGE
                 || isNextMessageReceivedMoreThanOneHourAgo
 
-        val messageContent: MessageContent = event.root.getClearContent().toModel() ?: return null
         val time = timelineDateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
         val memberName = event.senderName ?: event.root.sender ?: ""
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(AvatarRenderer.getColorFromUserId(event.root.sender ?: ""))
+            textColor = colorProvider.getColor(getColorFromUserId(event.root.sender
+                    ?: ""))
         }
+        val hasBeenEdited = event.annotations?.editSummary != null
         val informationData = MessageInformationData(eventId = eventId,
                 senderId = event.root.sender ?: "",
                 sendState = event.sendState,
                 time = time,
                 avatarUrl = avatarUrl,
                 memberName = formattedMemberName,
-                showInformation = showInformation)
+                showInformation = showInformation,
+                orderedReactionList = event.annotations?.reactionsSummary?.map {
+                    ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
+                },
+                hasBeenEdited = hasBeenEdited
+        )
 
-        //Test for reactions UX
-        //informationData.orderedReactionList = listOf( Triple("👍",1,false), Triple("👎",2,false))
+        if (event.root.unsignedData?.redactedEvent != null) {
+            //message is redacted
+            return buildRedactedItem(informationData, callback)
+        }
 
+        val messageContent: MessageContent =
+                event.annotations?.editSummary?.aggregatedContent?.toModel()
+                        ?: event.root.getClearContent().toModel()
+                        ?: //Malformed content, we should echo something on screen
+                        return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
+
+        if (messageContent.relatesTo?.type == RelationType.REPLACE) {
+            // ignore replace event, the targeted id is already edited
+            return BlankItem_()
+        }
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, callback)
-            is MessageTextContent -> buildTextMessageItem(event.sendState, messageContent, informationData, callback)
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent,
+                    informationData,
+                    hasBeenEdited,
+                    event.annotations?.editSummary,
+                    callback)
+            is MessageTextContent -> buildTextMessageItem(event.sendState,
+                    messageContent,
+                    informationData,
+                    hasBeenEdited,
+                    event.annotations?.editSummary,
+                    callback
+            )
             is MessageImageContent -> buildImageMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
             is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, callback)
@@ -98,12 +136,14 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         }
     }
 
-    private fun buildAudioMessageItem(messageContent: MessageAudioContent, informationData: MessageInformationData,
+    private fun buildAudioMessageItem(messageContent: MessageAudioContent,
+                                      informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -126,11 +166,13 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun buildFileMessageItem(messageContent: MessageFileContent, informationData: MessageInformationData,
+    private fun buildFileMessageItem(messageContent: MessageFileContent,
+                                     informationData: MessageInformationData,
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
                 .filename(messageContent.body)
+                .reactionPillCallback(callback)
                 .iconRes(R.drawable.filetype_attachment)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -159,7 +201,8 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return DefaultItem_().text(text)
     }
 
-    private fun buildImageMessageItem(messageContent: MessageImageContent, informationData: MessageInformationData,
+    private fun buildImageMessageItem(messageContent: MessageImageContent,
+                                      informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -177,6 +220,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .informationData(informationData)
                 .mediaData(data)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -193,14 +237,14 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
-
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
     }
 
-    private fun buildVideoMessageItem(messageContent: MessageVideoContent, informationData: MessageInformationData,
+    private fun buildVideoMessageItem(messageContent: MessageVideoContent,
+                                      informationData: MessageInformationData,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -223,6 +267,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .playable(true)
                 .informationData(informationData)
                 .mediaData(thumbnailData)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -242,18 +287,30 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun buildTextMessageItem(sendState: SendState, messageContent: MessageTextContent,
+    private fun buildTextMessageItem(sendState: SendState,
+                                     messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
+                                     hasBeenEdited: Boolean,
+                                     editSummary: EditAggregatedSummary?,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val bodyToUse = messageContent.formattedBody?.let {
-            htmlRenderer.render(it)
+            htmlRenderer.render(it.trim())
         } ?: messageContent.body
 
         val linkifiedBody = linkifyBody(bodyToUse, callback)
+
         return MessageTextItem_()
-                .message(linkifiedBody)
+                .apply {
+                    if (hasBeenEdited) {
+                        val spannable = annotateWithEdited(linkifiedBody, callback, informationData, editSummary)
+                        message(spannable)
+                    } else {
+                        message(linkifiedBody)
+                    }
+                }
                 .informationData(informationData)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -261,11 +318,6 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .memberClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onMemberNameClicked(informationData)
-                        }))
-                //click on the text
-                .clickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
                         }))
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -277,13 +329,48 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun buildNoticeMessageItem(messageContent: MessageNoticeContent, informationData: MessageInformationData,
+    private fun annotateWithEdited(linkifiedBody: CharSequence,
+                                   callback: TimelineEventController.Callback?,
+                                   informationData: MessageInformationData,
+                                   editSummary: EditAggregatedSummary?): SpannableStringBuilder {
+        val spannable = SpannableStringBuilder()
+        spannable.append(linkifiedBody)
+        // TODO i18n
+        val editedSuffix = "(edited)"
+        spannable.append(" ").append(editedSuffix)
+        val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
+        val editStart = spannable.indexOf(editedSuffix)
+        val editEnd = editStart + editedSuffix.length
+        spannable.setSpan(
+                ForegroundColorSpan(color),
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+
+        spannable.setSpan(RelativeSizeSpan(.9f), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View?) {
+                callback?.onEditedDecorationClicked(informationData, editSummary)
+            }
+
+            override fun updateDrawState(ds: TextPaint?) {
+                //nop
+            }
+        },
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        return spannable
+    }
+
+    private fun buildNoticeMessageItem(messageContent: MessageNoticeContent,
+                                       informationData: MessageInformationData,
                                        callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
             val formattedBody = span {
                 text = it
-                textColor = colorProvider.getColor(R.color.slate_grey)
+                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
                 textStyle = "italic"
             }
             linkifyBody(formattedBody, callback)
@@ -291,6 +378,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -309,7 +397,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 }
     }
 
-    private fun buildEmoteMessageItem(messageContent: MessageEmoteContent, informationData: MessageInformationData,
+    private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
+                                      informationData: MessageInformationData,
+                                      hasBeenEdited: Boolean,
+                                      editSummary: EditAggregatedSummary?,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -317,8 +408,16 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             linkifyBody(formattedBody, callback)
         }
         return MessageTextItem_()
-                .message(message)
+                .apply {
+                    if (hasBeenEdited) {
+                        val spannable = annotateWithEdited(message, callback, informationData, editSummary)
+                        message(spannable)
+                    } else {
+                        message(message)
+                    }
+                }
                 .informationData(informationData)
+                .reactionPillCallback(callback)
                 .avatarClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onAvatarClicked(informationData)
@@ -335,6 +434,20 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
                             ?: false
                 }
+    }
+
+    private fun buildRedactedItem(informationData: MessageInformationData,
+                                  callback: TimelineEventController.Callback?): RedactedMessageItem? {
+        return RedactedMessageItem_()
+                .informationData(informationData)
+                .avatarClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onAvatarClicked(informationData)
+                        }))
+                .memberClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onMemberNameClicked(informationData)
+                        }))
     }
 
     private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {
@@ -346,33 +459,5 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         })
         VectorLinkify.addLinks(spannable, true)
         return spannable
-    }
-
-    //Based on riot-web implementation
-    @ColorRes
-    private fun getColorFor(sender: String): Int {
-        var hash = 0
-        var i = 0
-        var chr: Char
-        if (sender.isEmpty()) {
-            return R.color.username_1
-        }
-        while (i < sender.length) {
-            chr = sender[i]
-            hash = (hash shl 5) - hash + chr.toInt()
-            hash = hash or 0
-            i++
-        }
-        val cI = Math.abs(hash) % 8 + 1
-        return when (cI) {
-            1 -> R.color.username_1
-            2 -> R.color.username_2
-            3 -> R.color.username_3
-            4 -> R.color.username_4
-            5 -> R.color.username_5
-            6 -> R.color.username_6
-            7 -> R.color.username_7
-            else -> R.color.username_8
-        }
     }
 }

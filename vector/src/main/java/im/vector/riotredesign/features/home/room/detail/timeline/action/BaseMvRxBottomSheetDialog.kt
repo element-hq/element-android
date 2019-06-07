@@ -16,24 +16,35 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
 import android.os.Bundle
+import android.os.Parcelable
+import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewModelStore
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import java.util.*
 
 /**
  * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)
  */
-abstract class BaseMvRxBottomSheetDialog() : BottomSheetDialogFragment(), MvRxView {
+abstract class BaseMvRxBottomSheetDialog : BottomSheetDialogFragment(), MvRxView {
+
     override val mvrxViewModelStore by lazy { MvRxViewModelStore(viewModelStore) }
+    private lateinit var mvrxPersistedViewId: String
+
+    final override val mvrxViewId: String by lazy { mvrxPersistedViewId }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mvrxViewModelStore.restoreViewModels(this, savedInstanceState)
+        mvrxPersistedViewId = savedInstanceState?.getString(PERSISTED_VIEW_ID_KEY)
+                ?: this::class.java.simpleName + "_" + UUID.randomUUID().toString()
+
         super.onCreate(savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mvrxViewModelStore.saveViewModels(outState)
+        outState.putString(PERSISTED_VIEW_ID_KEY, mvrxViewId)
     }
 
     override fun onStart() {
@@ -42,4 +53,10 @@ abstract class BaseMvRxBottomSheetDialog() : BottomSheetDialogFragment(), MvRxVi
         // subscribe to a ViewModel.
         postInvalidate()
     }
+
+    protected fun setArguments(args: Parcelable? = null) {
+        arguments = args?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
+    }
 }
+
+private const val PERSISTED_VIEW_ID_KEY = "mvrx:bottomsheet_persisted_view_id"

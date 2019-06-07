@@ -53,8 +53,8 @@ open class UserAvatarPreference : Preference {
     open fun refreshAvatar() {
         if (null != mAvatarView && null != mSession) {
             // TODO
-            // val myUser = mSession!!.myUser
-            // VectorUtils.loadUserAvatar(context, mSession, mAvatarView, myUser.avatarUrl, myUser.user_id, myUser.displayname)
+            // val myUser = session!!.myUser
+            // VectorUtils.loadUserAvatar(context, session, mAvatarView, myUser.avatarUrl, myUser.user_id, myUser.displayname)
         }
     }
 

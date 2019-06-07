@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:clipChildren="false"
     android:layout_width="44dp"
-    android:layout_height="26dp">
+    android:layout_height="26dp"
+    android:clipChildren="false">
 
 
     <View
@@ -16,21 +16,21 @@
     <im.vector.riotredesign.features.reactions.widget.DotsView
         android:id="@+id/dots"
         android:layout_width="30dp"
-        android:clipChildren="false"
         android:layout_height="30dp"
+        android:clipChildren="false"
         app:layout_constraintBottom_toBottomOf="@+id/reactionText"
+        app:layout_constraintEnd_toEndOf="@+id/reactionText"
         app:layout_constraintStart_toStartOf="@+id/reactionText"
-        app:layout_constraintTop_toTopOf="@+id/reactionText"
-        app:layout_constraintEnd_toEndOf="@+id/reactionText"/>
+        app:layout_constraintTop_toTopOf="@+id/reactionText" />
 
     <im.vector.riotredesign.features.reactions.widget.CircleView
         android:id="@+id/circle"
         android:layout_width="14dp"
         android:layout_height="14dp"
         app:layout_constraintBottom_toBottomOf="@+id/reactionText"
+        app:layout_constraintEnd_toEndOf="@+id/reactionText"
         app:layout_constraintStart_toStartOf="@+id/reactionText"
-        app:layout_constraintTop_toTopOf="@+id/reactionText"
-        app:layout_constraintEnd_toEndOf="@+id/reactionText"/>
+        app:layout_constraintTop_toTopOf="@+id/reactionText" />
 
     <TextView
         android:id="@+id/reactionText"
@@ -40,11 +40,12 @@
         android:layout_marginStart="6dp"
         android:layout_marginLeft="6dp"
         android:gravity="center"
-        tools:text="👍"
+        android:textColor="@color/black"
         android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        tools:text="👍" />
 
     <TextView
         android:id="@+id/reactionCount"
@@ -54,7 +55,7 @@
         android:layout_marginRight="6dp"
         android:gravity="center"
         android:maxLines="1"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         android:textSize="10sp"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="14sp"

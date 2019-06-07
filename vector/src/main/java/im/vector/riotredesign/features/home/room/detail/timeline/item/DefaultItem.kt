@@ -40,6 +40,6 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     }
 
     companion object {
-        private val STUB_ID = R.id.messageContentDefaultStub
+        private const val STUB_ID = R.id.messageContentDefaultStub
     }
 }

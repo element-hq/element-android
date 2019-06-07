@@ -16,8 +16,13 @@
 
 package im.vector.matrix.android.api.session.room.model.message
 
+import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
+
 
 interface MessageContent {
     val type: String
     val body: String
+    val relatesTo: RelationDefaultContent?
+    val newContent: Content?
 }

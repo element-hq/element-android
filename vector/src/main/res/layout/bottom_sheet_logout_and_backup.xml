@@ -16,6 +16,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:text="@string/action_sign_out"
+        android:textColor="?riotx_text_primary"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -26,7 +27,7 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         tools:text="@string/sign_out_bottom_sheet_warning_no_backup" />
 
     <LinearLayout
@@ -63,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:textColor="?riotx_text_secondary"
             tools:text="@string/keys_backup_info_keys_all_backup_up" />
 
     </LinearLayout>
@@ -95,6 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/keys_backup_setup"
+            android:textColor="?riotx_text_secondary"
             android:textSize="17sp" />
 
     </LinearLayout>
@@ -128,6 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:textColor="?riotx_text_secondary"
             android:text="@string/keys_backup_activate"
             android:textSize="17sp" />
 
@@ -155,14 +159,14 @@
             android:layout_marginRight="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_material_leave"
-            android:tint="@color/vector_error_color" />
+            android:tint="@color/riotx_notice" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/sign_out_bottom_sheet_dont_want_secure_messages"
-            android:textColor="@color/vector_error_color"
+            android:textColor="@color/riotx_notice"
             android:textSize="17sp" />
     </LinearLayout>
 
@@ -188,14 +192,14 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ic_material_exit_to_app"
-            android:tint="@color/vector_error_color" />
+            android:tint="@color/riotx_notice" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/action_sign_out"
-            android:textColor="@color/vector_error_color"
+            android:textColor="@color/riotx_notice"
             android:textSize="17sp" />
     </LinearLayout>
 

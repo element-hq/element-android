@@ -37,13 +37,18 @@ import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
+import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
+import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.MatrixCallbackDelegate
 import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.CryptoModule
@@ -78,6 +83,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val liveEntityUpdaters by inject<List<LiveEntityObserver>>()
     private val sessionListeners by inject<SessionListeners>()
     private val roomService by inject<RoomService>()
+    private val roomDirectoryService by inject<RoomDirectoryService>()
     private val groupService by inject<GroupService>()
     private val userService by inject<UserService>()
     private val filterService by inject<FilterService>()
@@ -195,6 +201,23 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return roomService.liveRoomSummaries()
     }
 
+    // ROOM DIRECTORY SERVICE
+
+    override fun getPublicRooms(server: String?, publicRoomsParams: PublicRoomsParams, callback: MatrixCallback<PublicRoomsResponse>): Cancelable {
+        assert(isOpen)
+        return roomDirectoryService.getPublicRooms(server, publicRoomsParams, callback)
+    }
+
+    override fun joinRoom(roomId: String, callback: MatrixCallback<Unit>) {
+        assert(isOpen)
+        return roomDirectoryService.joinRoom(roomId, callback)
+    }
+
+    override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>) {
+        assert(isOpen)
+        return roomDirectoryService.getThirdPartyProtocol(callback)
+    }
+
     // GROUP SERVICE
 
     override fun getGroup(groupId: String): Group? {
@@ -230,6 +253,11 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     override fun getUser(userId: String): User? {
         assert(isOpen)
         return userService.getUser(userId)
+    }
+
+    override fun observeUser(userId: String): LiveData<User?> {
+        assert(isOpen)
+        return userService.observeUser(userId)
     }
 
     // CRYPTO SERVICE

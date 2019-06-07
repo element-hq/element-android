@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- TODO Design: icon -->
+    <item
+        android:id="@+id/bottom_action_home"
+        android:contentDescription="@string/bottom_action_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_bottom_catchup"
+        android:title="" />
+
+    <item
+        android:id="@+id/bottom_action_people"
+        android:contentDescription="@string/bottom_action_people"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_bottom_chat"
+        android:title="" />
+
+    <item
+        android:id="@+id/bottom_action_rooms"
+        android:contentDescription="@string/bottom_action_rooms"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_bottom_group"
+        android:title="" />
+
+</menu>

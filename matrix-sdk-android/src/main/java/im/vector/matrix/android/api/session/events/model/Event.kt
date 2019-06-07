@@ -31,11 +31,20 @@ typealias Content = JsonDict
 /**
  * This methods is a facility method to map a json content to a model.
  */
-inline fun <reified T> Content?.toModel(): T? {
+inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
     return this?.let {
         val moshi = MoshiProvider.providesMoshi()
         val moshiAdapter = moshi.adapter(T::class.java)
-        return moshiAdapter.fromJsonValue(it)
+        return try {
+            moshiAdapter.fromJsonValue(it)
+        } catch (e: Exception) {
+            if (catchError) {
+                Timber.e(e, "To model failed : $e")
+                null
+            } else {
+                throw e
+            }
+        }
     }
 }
 

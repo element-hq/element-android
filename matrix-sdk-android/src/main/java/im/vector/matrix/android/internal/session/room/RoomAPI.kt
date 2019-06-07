@@ -20,9 +20,12 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
+import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
+import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.internal.network.NetworkConstants
-import im.vector.matrix.android.internal.session.room.invite.InviteBody
-import im.vector.matrix.android.internal.session.room.members.RoomMembersResponse
+import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
+import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
+import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
@@ -30,6 +33,25 @@ import retrofit2.Call
 import retrofit2.http.*
 
 internal interface RoomAPI {
+
+    /**
+     * Get the third party server protocols.
+     *
+     * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#get-matrix-client-r0-thirdparty-protocols
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "thirdparty/protocols")
+    fun thirdPartyProtocols(): Call<Map<String, ThirdPartyProtocol>>
+
+    /**
+     * Lists the public rooms on the server, with optional filter.
+     * This API returns paginated responses. The rooms are ordered by the number of joined members, with the largest rooms first.
+     *
+     * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-publicrooms
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "publicRooms")
+    fun publicRooms(@Query("server") server: String?,
+                    @Body publicRoomsParams: PublicRoomsParams
+    ): Call<PublicRoomsResponse>
 
     /**
      * Create a room.
@@ -156,4 +178,58 @@ internal interface RoomAPI {
                        @Path("state_event_type") stateEventType: String,
                        @Path("state_key") stateKey: String,
                        @Body params: Map<String, String>): Call<Unit>
+
+    /**
+     * Send a relation event to a room.
+     *
+     * @param txId      the transaction Id
+     * @param roomId    the room id
+     * @param eventType the event type
+     * @param content   the event content
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send_relation/{parent_id}/{relation_type}/{event_type}")
+    fun sendRelation(@Path("roomId") roomId: String,
+                     @Path("parentId") parent_id: String,
+                     @Path("relation_type") relationType: String,
+                     @Path("eventType") eventType: String,
+                     @Body content: Content?
+    ): Call<SendResponse>
+
+    /**
+     * Join the given room.
+     *
+     * @param roomId  the room id
+     * @param params the request body
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/join")
+    fun join(@Path("roomId") roomId: String,
+             @Body params: Map<String, String>): Call<Unit>
+
+    /**
+     * Leave the given room.
+     *
+     * @param roomId  the room id
+     * @param params the request body
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/leave")
+    fun leave(@Path("roomId") roomId: String,
+              @Body params: Map<String, String>): Call<Unit>
+
+    /**
+     * Strips all information out of an event which isn't critical to the integrity of the server-side representation of the room.
+     * This cannot be undone.
+     * Users may redact their own events, and any user with a power level greater than or equal to the redact power level of the room may redact events there.
+     *
+     * @param txId      the transaction Id
+     * @param roomId    the room id
+     * @param eventId   the event to delete
+     * @param reason   json containing reason key {"reason": "Indecent material"}
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/redact/{eventId}/{txnId}")
+    fun redactEvent(
+            @Path("txnId") txId: String,
+            @Path("roomId") roomId: String,
+            @Path("eventId") parent_id: String,
+            @Body reason: Map<String, String>
+    ): Call<SendResponse>
 }

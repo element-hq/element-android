@@ -18,12 +18,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.database.helper.addAll
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
-import im.vector.matrix.android.internal.database.helper.addStateEvents
-import im.vector.matrix.android.internal.database.helper.deleteOnCascade
-import im.vector.matrix.android.internal.database.helper.isUnlinked
-import im.vector.matrix.android.internal.database.helper.merge
+import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.create
@@ -116,7 +111,7 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
 
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                                     ?: realm.createObject(roomId)
+                            ?: realm.createObject(roomId)
 
                     val nextToken: String?
                     val prevToken: String?
@@ -139,7 +134,7 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
                     } else {
                         nextChunk?.apply { this.prevToken = prevToken }
                     }
-                                       ?: ChunkEntity.create(realm, prevToken, nextToken)
+                            ?: ChunkEntity.create(realm, prevToken, nextToken)
 
                     if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
                         Timber.v("Reach end of $roomId")
@@ -147,6 +142,7 @@ internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
                     } else {
                         Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
                         currentChunk.addAll(roomId, receivedChunk.events, direction, isUnlinked = currentChunk.isUnlinked())
+
                         // Then we merge chunks if needed
                         if (currentChunk != prevChunk && prevChunk != null) {
                             currentChunk = handleMerge(roomEntity, direction, currentChunk, prevChunk)

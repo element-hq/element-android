@@ -61,6 +61,7 @@ import im.vector.riotredesign.core.preference.UserAvatarPreference
 import im.vector.riotredesign.core.preference.VectorPreference
 import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.MainActivity
+import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
 import org.koin.android.ext.android.inject
@@ -109,6 +110,8 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     private var mDevicesNameList: List<DeviceInfo> = ArrayList()
     // used to avoid requesting to enter the password for each deletion
     private var mAccountPassword: String = ""
+
+    private val vectorConfiguration by inject<VectorConfiguration>()
 
     // current publicised group list
     private var mPublicisedGroups: MutableSet<String>? = null
@@ -261,7 +264,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             return
         }
 
-        mSession = sessionArg
+        session = sessionArg
         */
 
         // define the layout
@@ -278,7 +281,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         // Display name
         mDisplayNamePreference.let {
-            it.summary = "TODO" // mSession.myUser.displayname
+            it.summary = "TODO" // session.myUser.displayname
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 onDisplayNameClick(newValue?.let { (it as String).trim() })
                 false
@@ -318,7 +321,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
             it.setOnPreferenceClickListener {
                 notImplemented()
-                // TODO val intent = PhoneNumberAdditionActivity.getIntent(activity, mSession.credentials.userId)
+                // TODO val intent = PhoneNumberAdditionActivity.getIntent(activity, session.credentials.userId)
                 // startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER)
                 true
             }
@@ -337,14 +340,14 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         (findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference).let {
             /*
             TODO
-            it.isChecked = mSession.isURLPreviewEnabled
+            it.isChecked = session.isURLPreviewEnabled
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                if (null != newValue && newValue as Boolean != mSession.isURLPreviewEnabled) {
+                if (null != newValue && newValue as Boolean != session.isURLPreviewEnabled) {
                     displayLoadingView()
-                    mSession.setURLPreviewStatus(newValue, object : MatrixCallback<Unit> {
+                    session.setURLPreviewStatus(newValue, object : MatrixCallback<Unit> {
                         override fun onSuccess(info: Void?) {
-                            it.isChecked = mSession.isURLPreviewEnabled
+                            it.isChecked = session.isURLPreviewEnabled
                             hideLoadingView()
                         }
 
@@ -377,8 +380,10 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         findPreference(ThemeUtils.APPLICATION_THEME_KEY)
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
-                // TODO VectorApp.updateApplicationTheme(newValue)
+                vectorConfiguration.updateApplicationTheme(newValue)
+                // Restart the Activity
                 activity?.let {
+                    // Note: recreate does not apply the color correctly
                     it.startActivity(it.intent)
                     it.finish()
                 }
@@ -508,13 +513,13 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                         /* TODO
                         displayLoadingView()
 
-                        mSession.enableCrypto(newValue, object : MatrixCallback<Unit> {
+                        session.enableCrypto(newValue, object : MatrixCallback<Unit> {
                             private fun refresh() {
                                 activity?.runOnUiThread {
                                     hideLoadingView()
-                                    useCryptoPref.isChecked = mSession.isCryptoEnabled
+                                    useCryptoPref.isChecked = session.isCryptoEnabled
 
-                                    if (mSession.isCryptoEnabled) {
+                                    if (session.isCryptoEnabled) {
                                         mLabsCategory.removePreference(useCryptoPref)
                                         mLabsCategory.addPreference(cryptoIsEnabledPref)
                                     }
@@ -708,7 +713,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                 val task = ClearMediaCacheAsyncTask(
                         backgroundTask = {
-                            mSession.mediaCache.clear()
+                            session.mediaCache.clear()
                             activity?.let { it -> Glide.get(it).clearDiskCache() }
                         },
                         onCompleteTask = {
@@ -725,7 +730,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 try {
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 } catch (e: Exception) {
-                    Timber.e(e, "## mSession.getMediaCache().clear() failed " + e.message)
+                    Timber.e(e, "## session.getMediaCache().clear() failed " + e.message)
                     task.cancel(true)
                     hideLoadingView()
                 }
@@ -823,14 +828,14 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         mLoadingView = activity?.findViewById(R.id.vector_settings_spinner_views)
 
         /* TODO
-        if (mSession.isAlive) {
+        if (session.isAlive) {
             val context = activity?.applicationContext
 
-            mSession.dataHandler.addListener(mEventsListener)
+            session.dataHandler.addListener(mEventsListener)
 
             Matrix.getInstance(context)?.addNetworkEventListener(mNetworkListener)
 
-            mSession.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Unit>() {
+            session.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Unit>() {
                 override fun onSuccess(info: Void?) {
                     // ensure that the activity still exists
                     // and the result is called in the right thread
@@ -870,8 +875,8 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         val context = activity?.applicationContext
 
         /* TODO
-        if (mSession.isAlive) {
-            mSession.dataHandler.removeListener(mEventsListener)
+        if (session.isAlive) {
+            session.dataHandler.removeListener(mEventsListener)
             Matrix.getInstance(context)?.removeNetworkEventListener(mNetworkListener)
         }
         */
@@ -949,8 +954,8 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         mUserAvatarPreference.isEnabled = isConnected
 
         // refresh the display name
-        mDisplayNamePreference.summary = mSession.myUser.displayname
-        mDisplayNamePreference.text = mSession.myUser.displayname
+        mDisplayNamePreference.summary = session.myUser.displayname
+        mDisplayNamePreference.text = session.myUser.displayname
         mDisplayNamePreference.isEnabled = isConnected
 
         // change password
@@ -959,7 +964,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         // update the push rules
         val preferences = PreferenceManager.getDefaultSharedPreferences(appContext)
 
-        val rules = mSession.dataHandler.pushRules()
+        val rules = session.dataHandler.pushRules()
 
         val pushManager = Matrix.getInstance(appContext)?.pushManager
 
@@ -1109,7 +1114,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                     /* TODO
                     showPasswordLoadingView(true)
 
-                    mSession.updatePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
+                    session.updatePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
                         private fun onDone(@StringRes textResId: Int) {
                             showPasswordLoadingView(false)
 
@@ -1232,7 +1237,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             else -> {
 
                 val ruleId = mPrefKeyToBingRuleId[preferenceKey]
-                val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
+                val rule = session.dataHandler.pushRules()?.findDefaultRule(ruleId)
 
                 // check if there is an update
                 var curValue = null != rule && rule.isEnabled
@@ -1250,7 +1255,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                 if (null != rule) {
                     displayLoadingView()
-                    mSession.dataHandler.bingRulesManager.updateEnableRuleStatus(rule, !rule.isEnabled, object : BingRulesManager.onBingRuleUpdateListener {
+                    session.dataHandler.bingRulesManager.updateEnableRuleStatus(rule, !rule.isEnabled, object : BingRulesManager.onBingRuleUpdateListener {
                         private fun onDone() {
                             refreshDisplay()
                             hideLoadingView()
@@ -1277,10 +1282,10 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     private fun onDisplayNameClick(value: String?) {
         notImplemented()
         /* TODO
-        if (!TextUtils.equals(mSession.myUser.displayname, value)) {
+        if (!TextUtils.equals(session.myUser.displayname, value)) {
             displayLoadingView()
 
-            mSession.myUser.updateDisplayName(value, object : MatrixCallback<Unit> {
+            session.myUser.updateDisplayName(value, object : MatrixCallback<Unit> {
                 override fun onSuccess(info: Void?) {
                     // refresh the settings value
                     PreferenceManager.getDefaultSharedPreferences(activity).edit {
@@ -1389,7 +1394,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 }
                 /* TODO
                 VectorUtils.TAKE_IMAGE -> {
-                    val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, mSession.mediaCache)
+                    val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, session.mediaCache)
 
                     if (null != thumbnailUri) {
                         displayLoadingView()
@@ -1397,7 +1402,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                         val resource = ResourceUtils.openResource(activity, thumbnailUri, null)
 
                         if (null != resource) {
-                            mSession.mediaCache.uploadContent(resource.mContentStream, null, resource.mMimeType, null, object : MXMediaUploadListener() {
+                            session.mediaCache.uploadContent(resource.mContentStream, null, resource.mMimeType, null, object : MXMediaUploadListener() {
 
                                 override fun onUploadError(uploadId: String?, serverResponseCode: Int, serverErrorMessage: String?) {
                                     activity?.runOnUiThread { onCommonDone(serverResponseCode.toString() + " : " + serverErrorMessage) }
@@ -1405,7 +1410,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                                 override fun onUploadComplete(uploadId: String?, contentUri: String?) {
                                     activity?.runOnUiThread {
-                                        mSession.myUser.updateAvatarUrl(contentUri, object : MatrixCallback<Unit> {
+                                        session.myUser.updateAvatarUrl(contentUri, object : MatrixCallback<Unit> {
                                             override fun onSuccess(info: Void?) {
                                                 onCommonDone(null)
                                                 refreshDisplay()
@@ -1446,11 +1451,11 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
      */
     private fun refreshPreferences() {
         PreferenceManager.getDefaultSharedPreferences(activity).edit {
-            putString(PreferencesManager.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, "TODO") //mSession.myUser.displayname)
+            putString(PreferencesManager.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, "TODO") //session.myUser.displayname)
             putString(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY, "TODO") // VectorUtils.getApplicationVersion(activity))
 
             /* TODO
-            mSession.dataHandler.pushRules()?.let {
+            session.dataHandler.pushRules()?.let {
                 for (preferenceKey in mPrefKeyToBingRuleId.keys) {
                     val preference = findPreference(preferenceKey)
 
@@ -1505,7 +1510,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                         /* TODO
                         displayLoadingView()
 
-                        mSession.myUser.delete3Pid(pid, object : MatrixCallback<Unit> {
+                        session.myUser.delete3Pid(pid, object : MatrixCallback<Unit> {
                             override fun onSuccess(info: Void?) {
                                 when (pid.medium) {
                                     ThreePid.MEDIUM_EMAIL -> refreshEmailsList()
@@ -1541,7 +1546,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
      * Refresh the ignored users list
      */
     private fun refreshIgnoredUsersList() {
-        val ignoredUsersList = mutableListOf<String>() // TODO mSession.dataHandler.ignoredUserIds
+        val ignoredUsersList = mutableListOf<String>() // TODO session.dataHandler.ignoredUserIds
 
         ignoredUsersList.sortWith(Comparator { u1, u2 ->
             u1.toLowerCase(VectorLocale.applicationLocale).compareTo(u2.toLowerCase(VectorLocale.applicationLocale))
@@ -1575,7 +1580,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                                     notImplemented()
                                     /* TODO
-                                    mSession.unIgnoreUsers(idsList, object : MatrixCallback<Unit> {
+                                    session.unIgnoreUsers(idsList, object : MatrixCallback<Unit> {
                                         override fun onSuccess(info: Void?) {
                                             onCommonDone(null)
                                         }
@@ -1663,7 +1668,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                                             .setPositiveButton(R.string.remove)
                                             { _, _ ->
                                                 displayLoadingView()
-                                                pushManager.unregister(mSession, pusher, object : MatrixCallback<Unit> {
+                                                pushManager.unregister(session, pusher, object : MatrixCallback<Unit> {
                                                     override fun onSuccess(info: Void?) {
                                                         refreshPushersList()
                                                         onCommonDone(null)
@@ -1703,7 +1708,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
      * Refresh the emails list
      */
     private fun refreshEmailsList() {
-        val currentEmail3PID = emptyList<String>() // TODO ArrayList(mSession.myUser.getlinkedEmails())
+        val currentEmail3PID = emptyList<String>() // TODO ArrayList(session.myUser.getlinkedEmails())
 
         val newEmailsList = ArrayList<String>()
         for (identifier in currentEmail3PID) {
@@ -1809,7 +1814,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         displayLoadingView()
 
-        mSession.myUser.requestEmailValidationToken(pid, object : MatrixCallback<Unit> {
+        session.myUser.requestEmailValidationToken(pid, object : MatrixCallback<Unit> {
             override fun onSuccess(info: Void?) {
                 activity?.runOnUiThread { showEmailValidationDialog(pid) }
             }
@@ -1845,7 +1850,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                     .setTitle(R.string.account_email_validation_title)
                     .setMessage(R.string.account_email_validation_message)
                     .setPositiveButton(R.string._continue) { _, _ ->
-                        mSession.myUser.add3Pid(pid, true, object : MatrixCallback<Unit> {
+                        session.myUser.add3Pid(pid, true, object : MatrixCallback<Unit> {
                             override fun onSuccess(info: Void?) {
                                 it.runOnUiThread {
                                     hideLoadingView()
@@ -1889,7 +1894,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
      */
     private fun refreshPhoneNumbersList() {
         /* TODO
-        val currentPhoneNumber3PID = ArrayList(mSession.myUser.getlinkedPhoneNumbers())
+        val currentPhoneNumber3PID = ArrayList(session.myUser.getlinkedPhoneNumbers())
 
         val phoneNumberList = ArrayList<String>()
         for (identifier in currentPhoneNumber3PID) {
@@ -2477,7 +2482,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         // We have to manage registration flow first, to handle what is necessary to delete a devive
         /*
         displayLoadingView()
-        mSession.deleteDevice(deviceId, mAccountPassword, object : MatrixCallback<Unit> {
+        session.deleteDevice(deviceId, mAccountPassword, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 hideLoadingView()
                 refreshDevicesList() // force settings update
@@ -2552,7 +2557,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                         displayLoadingView()
 
-                        CommonActivityUtils.exportKeys(mSession, passphrase, object : SimpleApiCallback<String>(activity) {
+                        CommonActivityUtils.exportKeys(session, passphrase, object : SimpleApiCallback<String>(activity) {
                             override fun onSuccess(filename: String) {
                                 hideLoadingView()
 
@@ -2667,7 +2672,7 @@ if (sharedDataItems.isNotEmpty() && thisActivity != null) {
 
         displayLoadingView()
 
-        mSession.importRoomKeys(data,
+        session.importRoomKeys(data,
                 password,
                 null,
                 object : MatrixCallback<ImportRoomKeysResult> {
@@ -2720,7 +2725,7 @@ if (sharedDataItems.isNotEmpty() && thisActivity != null) {
 
         /*
         TODO
-        mSession.groupsManager.getUserPublicisedGroups(mSession.myUserId, true, object : MatrixCallback<Set<String>> {
+        session.groupsManager.getUserPublicisedGroups(session.myUserId, true, object : MatrixCallback<Set<String>> {
             override fun onSuccess(publicisedGroups: Set<String>) {
                 // clear everything
                 mGroupsFlairCategory.removeAll()
@@ -2766,7 +2771,7 @@ if (sharedDataItems.isNotEmpty() && thisActivity != null) {
         if (isNewList) {
             /*
             TODO
-            val joinedGroups = ArrayList(mSession.groupsManager.joinedGroups)
+            val joinedGroups = ArrayList(session.groupsManager.joinedGroups)
             Collections.sort(joinedGroups, Group.mGroupsComparator)
 
             mPublicisedGroups = publicisedGroups.toMutableSet()
@@ -2775,7 +2780,7 @@ if (sharedDataItems.isNotEmpty() && thisActivity != null) {
                 val vectorGroupPreference = VectorGroupPreference(activity!!)
                 vectorGroupPreference.key = DEVICES_PREFERENCE_KEY_BASE + prefIndex
 
-                vectorGroupPreference.setGroup(group, mSession)
+                vectorGroupPreference.setGroup(group, session)
                 vectorGroupPreference.title = group.displayName
                 vectorGroupPreference.summary = group.groupId
 
@@ -2793,7 +2798,7 @@ if (sharedDataItems.isNotEmpty() && thisActivity != null) {
 
                         if (newValue != isFlaired) {
                             displayLoadingView()
-                            mSession.groupsManager.updateGroupPublicity(group.groupId, newValue, object : MatrixCallback<Unit> {
+                            session.groupsManager.updateGroupPublicity(group.groupId, newValue, object : MatrixCallback<Unit> {
                                 override fun onSuccess(info: Void?) {
                                     hideLoadingView()
                                     if (newValue) {

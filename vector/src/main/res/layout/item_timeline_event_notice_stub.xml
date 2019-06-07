@@ -22,9 +22,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:textColor="@color/slate_grey"
+        android:textColor="?riotx_text_secondary"
         android:textSize="14sp"
         android:textStyle="italic"
-        tools:text="Jhon doe changed their avatar" />
+        tools:text="John doe changed their avatar" />
 
 </LinearLayout>

@@ -233,12 +233,11 @@ internal class CryptoModule {
                     olmManager = get(),
                     setDeviceVerificationAction = get(),
                     megolmSessionDataImporter = get(),
-                    ensureOlmSessionsForDevicesAction = get(),
                     warnOnUnknownDevicesRepository = get(),
                     megolmEncryptionFactory = get(),
                     olmEncryptionFactory = get(),
-                    // Tasks
                     deleteDeviceTask = get(),
+                    // Tasks
                     getDevicesTask = get(),
                     setDeviceNameTask = get(),
                     uploadKeysTask = get(),

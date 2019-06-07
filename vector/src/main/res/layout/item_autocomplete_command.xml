@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="?riotx_background"
     android:padding="6dp">
 
     <TextView
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:maxLines="1"
+        android:textColor="?riotx_text_primary"
         android:textSize="12sp"
         android:textStyle="bold"
         tools:text="/invite" />
@@ -26,6 +28,7 @@
         android:layout_toEndOf="@+id/commandName"
         android:layout_toRightOf="@+id/commandName"
         android:maxLines="1"
+        android:textColor="?riotx_text_secondary"
         android:textSize="12sp"
         android:textStyle="italic"
         tools:text="&lt;user-id&gt;" />
@@ -39,7 +42,7 @@
         android:layout_alignParentLeft="true"
         android:layout_gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         android:textSize="12sp"
         tools:text="@string/command_description_invite_user" />
 

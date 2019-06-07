@@ -1,0 +1,145 @@
+/*
+ * Copyright 2019 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.riotredesign.features.configuration
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.Configuration
+import android.os.Build
+import im.vector.riotredesign.features.settings.FontScale
+import im.vector.riotredesign.features.settings.VectorLocale
+import im.vector.riotredesign.features.themes.ThemeUtils
+import timber.log.Timber
+import java.util.*
+
+/**
+ * Handle locale configuration change, such as theme, font size and locale chosen by the user
+ */
+class VectorConfiguration(private val context: Context) {
+
+    // TODO Import mLanguageReceiver From Riot?
+    fun onConfigurationChanged(newConfig: Configuration?) {
+        if (Locale.getDefault().toString() != VectorLocale.applicationLocale.toString()) {
+            Timber.v("## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString()
+                    + ", restore the expected value " + VectorLocale.applicationLocale.toString())
+            updateApplicationSettings(VectorLocale.applicationLocale,
+                    FontScale.getFontScalePrefValue(context),
+                    ThemeUtils.getApplicationTheme(context))
+        }
+    }
+
+
+    private fun updateApplicationSettings(locale: Locale, textSize: String, theme: String) {
+        VectorLocale.saveApplicationLocale(context, locale)
+        FontScale.saveFontScale(context, textSize)
+        Locale.setDefault(locale)
+
+        val config = Configuration(context.resources.configuration)
+        config.locale = locale
+        config.fontScale = FontScale.getFontScale(context)
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+
+        ThemeUtils.setApplicationTheme(context, theme)
+        // TODO PhoneNumberUtils.onLocaleUpdate()
+    }
+
+    /**
+     * Update the application theme
+     *
+     * @param theme the new theme
+     */
+    fun updateApplicationTheme(theme: String) {
+        ThemeUtils.setApplicationTheme(context, theme)
+        updateApplicationSettings(VectorLocale.applicationLocale,
+                FontScale.getFontScalePrefValue(context),
+                theme)
+    }
+
+    /**
+     * Init the configuration from the saved one
+     */
+    fun initConfiguration() {
+        VectorLocale.init(context)
+        val locale = VectorLocale.applicationLocale
+        val fontScale = FontScale.getFontScale(context)
+        val theme = ThemeUtils.getApplicationTheme(context)
+
+        Locale.setDefault(locale)
+        val config = Configuration(context.resources.configuration)
+        config.locale = locale
+        config.fontScale = fontScale
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+
+        // init the theme
+        ThemeUtils.setApplicationTheme(context, theme)
+    }
+
+    /**
+     * Update the application locale
+     *
+     * @param locale
+     */
+    // TODO Call from LanguagePickerActivity
+    fun updateApplicationLocale(locale: Locale) {
+        updateApplicationSettings(locale, FontScale.getFontScalePrefValue(context), ThemeUtils.getApplicationTheme(context))
+    }
+
+    /**
+     * Compute a localised context
+     *
+     * @param context the context
+     * @return the localised context
+     */
+    @SuppressLint("NewApi")
+    fun getLocalisedContext(context: Context): Context {
+        try {
+            val resources = context.resources
+            val locale = VectorLocale.applicationLocale
+            val configuration = resources.configuration
+            configuration.fontScale = FontScale.getFontScale(context)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                configuration.setLocale(locale)
+                configuration.setLayoutDirection(locale)
+                return context.createConfigurationContext(configuration)
+            } else {
+                configuration.locale = locale
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    configuration.setLayoutDirection(locale)
+                }
+                resources.updateConfiguration(configuration, resources.displayMetrics)
+                return context
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "## getLocalisedContext() failed")
+        }
+
+        return context
+    }
+
+    /**
+     * Compute the locale status value
+     * @param activity the activity
+     * @return the local status value
+     */
+    // TODO Create data class for this
+    fun getHash(): String {
+        return (VectorLocale.applicationLocale.toString()
+                + "_" + FontScale.getFontScalePrefValue(context)
+                + "_" + ThemeUtils.getApplicationTheme(context))
+    }
+}

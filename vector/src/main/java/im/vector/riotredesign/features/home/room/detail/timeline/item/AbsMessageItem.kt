@@ -19,6 +19,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline.item
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.helper.widget.Flow
@@ -29,6 +30,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.DimensionUtils.dpToPx
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.reactions.widget.ReactionButton
 
 
@@ -48,6 +50,19 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     @EpoxyAttribute
     var memberClickListener: View.OnClickListener? = null
 
+    @EpoxyAttribute
+    var reactionPillCallback: TimelineEventController.ReactionPillCallback? = null
+
+    var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
+        override fun onReacted(reactionButton: ReactionButton) {
+            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString, true)
+        }
+
+        override fun onUnReacted(reactionButton: ReactionButton) {
+            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString, false)
+        }
+    }
+
     override fun bind(holder: H) {
         super.bind(holder)
         if (informationData.showInformation) {
@@ -65,40 +80,58 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.timeView.text = informationData.time
             holder.memberNameView.text = informationData.memberName
             AvatarRenderer.render(informationData.avatarUrl, informationData.senderId, informationData.memberName?.toString(), holder.avatarImageView)
+            holder.view.setOnClickListener(cellClickListener)
+            holder.view.setOnLongClickListener(longClickListener)
+            holder.avatarImageView.setOnLongClickListener(longClickListener)
+            holder.memberNameView.setOnLongClickListener(longClickListener)
         } else {
             holder.avatarImageView.setOnClickListener(null)
             holder.memberNameView.setOnClickListener(null)
             holder.avatarImageView.visibility = View.GONE
             holder.memberNameView.visibility = View.GONE
             holder.timeView.visibility = View.GONE
+            holder.view.setOnClickListener(null)
+            holder.view.setOnLongClickListener(null)
+            holder.avatarImageView.setOnLongClickListener(null)
+            holder.memberNameView.setOnLongClickListener(null)
         }
-        holder.view.setOnClickListener(cellClickListener)
-        holder.view.setOnLongClickListener(longClickListener)
 
-        if (informationData.orderedReactionList.isNullOrEmpty()) {
-            holder.reactionWrapper.isVisible = false
+        if (!shouldShowReactionAtBottom() || informationData.orderedReactionList.isNullOrEmpty()) {
+            holder.reactionWrapper?.isVisible = false
         } else {
-            holder.reactionWrapper.isVisible = true
+            //inflate if needed
+            if (holder.reactionFlowHelper == null) {
+                holder.reactionWrapper = holder.view.findViewById<ViewStub>(R.id.messageBottomInfo).inflate() as? ViewGroup
+                holder.reactionFlowHelper = holder.view.findViewById(R.id.reactionsFlowHelper)
+            }
+            holder.reactionWrapper?.isVisible = true
             //clear all reaction buttons (but not the Flow helper!)
-            holder.reactionWrapper.children.forEach { (it as? ReactionButton)?.isGone = true }
+            holder.reactionWrapper?.children?.forEach { (it as? ReactionButton)?.isGone = true }
             val idToRefInFlow = ArrayList<Int>()
-            informationData.orderedReactionList?.forEachIndexed { index, reaction ->
-                (holder.reactionWrapper.children.elementAt(index) as? ReactionButton)?.let { reactionButton ->
+            informationData.orderedReactionList?.chunked(7)?.firstOrNull()?.forEachIndexed { index, reaction ->
+                (holder.reactionWrapper?.children?.elementAtOrNull(index) as? ReactionButton)?.let { reactionButton ->
                     reactionButton.isVisible = true
+                    reactionButton.reactedListener = reactionClickListener
+                    reactionButton.setTag(R.id.messageBottomInfo, reaction.key)
                     idToRefInFlow.add(reactionButton.id)
-                    reactionButton.reactionString = reaction.first
-                    reactionButton.reactionCount = reaction.second
-                    reactionButton.setChecked(reaction.third)
+                    reactionButton.reactionString = reaction.key
+                    reactionButton.reactionCount = reaction.count
+                    reactionButton.setChecked(reaction.addedByMe)
+                    reactionButton.isEnabled = reaction.synced
                 }
             }
             // Just setting the view as gone will break the FlowHelper (and invisible will take too much space),
             // so have to update ref ids
-            holder.reactionFlowHelper.referencedIds = idToRefInFlow.toIntArray()
+            holder.reactionFlowHelper?.referencedIds = idToRefInFlow.toIntArray()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && !holder.view.isInLayout) {
-                holder.reactionFlowHelper.requestLayout()
+                holder.reactionFlowHelper?.requestLayout()
             }
-
+            holder.reactionWrapper?.setOnLongClickListener(longClickListener)
         }
+    }
+
+    open fun shouldShowReactionAtBottom(): Boolean {
+        return true
     }
 
     protected fun View.renderSendState() {
@@ -112,8 +145,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
 
-        val reactionWrapper: ViewGroup by bind(R.id.messageBottomInfo)
-        val reactionFlowHelper: Flow by bind(R.id.reactionsFlowHelper)
+        var reactionWrapper: ViewGroup? = null
+        var reactionFlowHelper: Flow? = null
     }
 
 }

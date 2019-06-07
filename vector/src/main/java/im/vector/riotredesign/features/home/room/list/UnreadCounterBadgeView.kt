@@ -20,6 +20,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import im.vector.riotredesign.R
+import im.vector.riotredesign.features.themes.ThemeUtils
 
 class UnreadCounterBadgeView : AppCompatTextView {
 
@@ -29,24 +30,24 @@ class UnreadCounterBadgeView : AppCompatTextView {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun render(count: Int, highlighted: Boolean) {
-        if (count == 0) {
+    fun render(state: State) {
+        if (state.count == 0) {
             visibility = View.INVISIBLE
         } else {
             visibility = View.VISIBLE
-            val bgRes = if (highlighted) {
+            val bgRes = if (state.highlighted) {
                 R.drawable.bg_unread_highlight
             } else {
-                R.drawable.bg_unread_notification
+                ThemeUtils.getResourceId(context, R.drawable.bg_unread_notification_light)
             }
             setBackgroundResource(bgRes)
-            text = RoomSummaryFormatter.formatUnreadMessagesCounter(count)
+            text = RoomSummaryFormatter.formatUnreadMessagesCounter(state.count)
         }
     }
 
-    enum class Status {
-        NOTIFICATION,
-        HIGHLIGHT
-    }
+    data class State(
+            val count: Int,
+            val highlighted: Boolean
+    )
 
 }

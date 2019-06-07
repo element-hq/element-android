@@ -24,17 +24,22 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 
 data class RoomListViewState(
-        val asyncRooms: Async<RoomSummaries> = Uninitialized,
-        val visibleRoomId: String? = null,
+        val displayMode: RoomListFragment.DisplayMode,
+        val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
+        val asyncFilteredRooms: Async<RoomSummaries> = Uninitialized,
+        val isInviteExpanded: Boolean = true,
         val isFavouriteRoomsExpanded: Boolean = true,
-        val isDirectRoomsExpanded: Boolean = false,
-        val isGroupRoomsExpanded: Boolean = false,
-        val isLowPriorityRoomsExpanded: Boolean = false,
-        val isServerNoticeRoomsExpanded: Boolean = false
+        val isDirectRoomsExpanded: Boolean = true,
+        val isGroupRoomsExpanded: Boolean = true,
+        val isLowPriorityRoomsExpanded: Boolean = true,
+        val isServerNoticeRoomsExpanded: Boolean = true
 ) : MvRxState {
+
+    constructor(args: RoomListParams) : this(displayMode = args.displayMode)
 
     fun isCategoryExpanded(roomCategory: RoomCategory): Boolean {
         return when (roomCategory) {
+            RoomCategory.INVITE        -> isInviteExpanded
             RoomCategory.FAVOURITE     -> isFavouriteRoomsExpanded
             RoomCategory.DIRECT        -> isDirectRoomsExpanded
             RoomCategory.GROUP         -> isGroupRoomsExpanded
@@ -45,6 +50,7 @@ data class RoomListViewState(
 
     fun toggle(roomCategory: RoomCategory): RoomListViewState {
         return when (roomCategory) {
+            RoomCategory.INVITE        -> copy(isInviteExpanded = !isInviteExpanded)
             RoomCategory.FAVOURITE     -> copy(isFavouriteRoomsExpanded = !isFavouriteRoomsExpanded)
             RoomCategory.DIRECT        -> copy(isDirectRoomsExpanded = !isDirectRoomsExpanded)
             RoomCategory.GROUP         -> copy(isGroupRoomsExpanded = !isGroupRoomsExpanded)
@@ -57,6 +63,7 @@ data class RoomListViewState(
 typealias RoomSummaries = LinkedHashMap<RoomCategory, List<RoomSummary>>
 
 enum class RoomCategory(@StringRes val titleRes: Int) {
+    INVITE(R.string.invitations_header),
     FAVOURITE(R.string.bottom_action_favourites),
     DIRECT(R.string.bottom_action_people),
     GROUP(R.string.bottom_action_rooms),
@@ -65,5 +72,5 @@ enum class RoomCategory(@StringRes val titleRes: Int) {
 }
 
 fun RoomSummaries?.isNullOrEmpty(): Boolean {
-    return this == null || isEmpty()
+    return this == null || this.values.flatten().isEmpty()
 }

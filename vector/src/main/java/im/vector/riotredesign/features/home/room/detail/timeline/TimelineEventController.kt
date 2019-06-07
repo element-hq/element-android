@@ -24,13 +24,11 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotredesign.core.epoxy.LoadingItemModel_
-import im.vector.riotredesign.core.epoxy.loadingItem
+import im.vector.riotredesign.core.epoxy.LoadingItem_
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.*
@@ -48,7 +46,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                               private val backgroundHandler: Handler = TimelineAsyncHelper.getBackgroundHandler()
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
-    interface Callback {
+    interface Callback : ReactionPillCallback {
         fun onEventVisible(event: TimelineEvent)
         fun onUrlClicked(url: String)
         fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
@@ -59,6 +57,11 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean
         fun onAvatarClicked(informationData: MessageInformationData)
         fun onMemberNameClicked(informationData: MessageInformationData)
+        fun onEditedDecorationClicked(informationData: MessageInformationData, editAggregatedSummary: EditAggregatedSummary?)
+    }
+
+    interface ReactionPillCallback {
+        fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean)
     }
 
     private val collapsedEventIds = linkedSetOf<String>()
@@ -126,14 +129,14 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     }
 
     override fun buildModels() {
-        LoadingItemModel_()
+        LoadingItem_()
                 .id("forward_loading_item")
                 .addWhen(Timeline.Direction.FORWARDS)
 
         val timelineModels = getModels()
         add(timelineModels)
 
-        LoadingItemModel_()
+        LoadingItem_()
                 .id("backward_loading_item")
                 .addWhen(Timeline.Direction.BACKWARDS)
     }
@@ -224,10 +227,8 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
             } else {
                 val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
                 val mergedData = mergedEvents.map { mergedEvent ->
-                    val eventContent: RoomMember? = mergedEvent.root.content.toModel()
-                    val prevEventContent: RoomMember? = mergedEvent.root.prevContent.toModel()
-                    val senderAvatar = RoomMemberEventHelper.senderAvatar(eventContent, prevEventContent, mergedEvent)
-                    val senderName = RoomMemberEventHelper.senderName(eventContent, prevEventContent, mergedEvent)
+                    val senderAvatar = mergedEvent.senderAvatar()
+                    val senderName = mergedEvent.senderName()
                     MergedHeaderItem.Data(
                             userId = mergedEvent.root.sender ?: "",
                             avatarUrl = senderAvatar,
@@ -256,7 +257,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         }
     }
 
-    private fun LoadingItemModel_.addWhen(direction: Timeline.Direction) {
+    private fun LoadingItem_.addWhen(direction: Timeline.Direction) {
         val shouldAdd = timeline?.hasMoreToLoad(direction) ?: false
         addIf(shouldAdd, this@TimelineEventController)
     }

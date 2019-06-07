@@ -10,10 +10,10 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/VectorToolbarStyle"
+            android:id="@+id/settingsToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:elevation="4dp" />
 
         <FrameLayout
             android:id="@+id/vector_settings_page"

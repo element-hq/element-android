@@ -50,7 +50,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="?android:textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         android:textIsSelectable="false"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"

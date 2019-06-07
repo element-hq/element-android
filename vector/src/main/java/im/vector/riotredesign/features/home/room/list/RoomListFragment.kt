@@ -17,91 +17,187 @@
 package im.vector.riotredesign.features.home.room.list
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.os.Parcelable
+import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.fragmentViewModel
+import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.observeEvent
-import im.vector.riotredesign.core.extensions.setupAsSearch
+import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.features.home.HomeModule
-import im.vector.riotredesign.features.home.HomeNavigator
+import im.vector.riotredesign.features.home.room.list.widget.FabMenuView
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
 
-class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
+@Parcelize
+data class RoomListParams(
+        val displayMode: RoomListFragment.DisplayMode
+) : Parcelable
+
+
+class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, OnBackPressed, FabMenuView.Listener {
+
+    enum class DisplayMode(@StringRes val titleRes: Int) {
+        HOME(R.string.bottom_action_home),
+        PEOPLE(R.string.bottom_action_people),
+        ROOMS(R.string.bottom_action_rooms)
+    }
 
     companion object {
-        fun newInstance(): RoomListFragment {
-            return RoomListFragment()
+        fun newInstance(roomListParams: RoomListParams): RoomListFragment {
+            return RoomListFragment().apply {
+                setArguments(roomListParams)
+            }
         }
     }
 
+    private val roomListParams: RoomListParams by args()
     private val roomController by inject<RoomSummaryController>()
-    private val homeNavigator by inject<HomeNavigator>()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(HomeModule.ROOM_LIST_SCOPE))
+        setupCreateRoomButton()
         setupRecyclerView()
-        setupFilterView()
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.openRoomLiveData.observeEvent(this) {
-            homeNavigator.openRoomDetail(it, null)
+            navigator.openRoom(it)
         }
+
+        createChatFabMenu.listener = this
+    }
+
+    private fun setupCreateRoomButton() {
+        when (roomListParams.displayMode) {
+            DisplayMode.HOME   -> createChatFabMenu.isVisible = true
+            DisplayMode.PEOPLE -> createChatRoomButton.isVisible = true
+            else               -> createGroupRoomButton.isVisible = true
+        }
+
+        createChatRoomButton.setOnClickListener {
+            createDirectChat()
+        }
+        createGroupRoomButton.setOnClickListener {
+            openRoomDirectory()
+        }
+
+        // Hide FAB when list is scrolling
+        epoxyRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                createChatFabMenu.removeCallbacks(showFabRunnable)
+
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE     -> {
+                        createChatFabMenu.postDelayed(showFabRunnable, 1000)
+                    }
+                    RecyclerView.SCROLL_STATE_DRAGGING,
+                    RecyclerView.SCROLL_STATE_SETTLING -> {
+                        when (roomListParams.displayMode) {
+                            DisplayMode.HOME   -> createChatFabMenu.hide()
+                            DisplayMode.PEOPLE -> createChatRoomButton.hide()
+                            else               -> createGroupRoomButton.hide()
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+
+    override fun openRoomDirectory() {
+        navigator.openRoomDirectory()
+    }
+
+    override fun createDirectChat() {
+        vectorBaseActivity.notImplemented("creating direct chat")
     }
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         epoxyRecyclerView.layoutManager = layoutManager
+        epoxyRecyclerView.itemAnimator = RoomListAnimator()
         roomController.callback = this
         roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
     }
 
-    private fun setupFilterView() {
-        filterRoomView.setupAsSearch()
-        filterRoomView.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) = Unit
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                roomListViewModel.accept(RoomListActions.FilterRooms(s))
+    private val showFabRunnable = Runnable {
+        if (isAdded) {
+            when (roomListParams.displayMode) {
+                DisplayMode.HOME   -> createChatFabMenu.show()
+                DisplayMode.PEOPLE -> createChatRoomButton.show()
+                else               -> createGroupRoomButton.show()
             }
-        })
+        }
     }
 
     private fun renderState(state: RoomListViewState) {
-        when (state.asyncRooms) {
+        when (state.asyncFilteredRooms) {
             is Incomplete -> renderLoading()
             is Success    -> renderSuccess(state)
-            is Fail       -> renderFailure(state.asyncRooms.error)
+            is Fail       -> renderFailure(state.asyncFilteredRooms.error)
         }
     }
 
     private fun renderSuccess(state: RoomListViewState) {
-        if (state.asyncRooms().isNullOrEmpty()) {
-            stateView.state = StateView.State.Empty(getString(R.string.room_list_empty))
+        val allRooms = state.asyncRooms()
+        val filteredRooms = state.asyncFilteredRooms()
+        if (filteredRooms.isNullOrEmpty()) {
+            renderEmptyState(allRooms)
         } else {
             stateView.state = StateView.State.Content
         }
         roomController.setData(state)
+    }
+
+    private fun renderEmptyState(allRooms: List<RoomSummary>?) {
+        val hasNoRoom = allRooms
+                ?.filter {
+                    it.membership == Membership.JOIN || it.membership == Membership.INVITE
+                }
+                .isNullOrEmpty()
+        val emptyState = when (roomListParams.displayMode) {
+            DisplayMode.HOME   -> {
+                if (hasNoRoom) {
+                    StateView.State.Empty(
+                            getString(R.string.room_list_catchup_welcome_title),
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_catchup),
+                            getString(R.string.room_list_catchup_welcome_body)
+                    )
+                } else {
+                    StateView.State.Empty(
+                            getString(R.string.room_list_catchup_empty_title),
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
+                            getString(R.string.room_list_catchup_empty_body))
+                }
+            }
+            DisplayMode.PEOPLE ->
+                StateView.State.Empty(
+                        getString(R.string.room_list_people_empty_title),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_chat),
+                        getString(R.string.room_list_people_empty_body)
+                )
+            DisplayMode.ROOMS  ->
+                StateView.State.Empty(
+                        getString(R.string.room_list_rooms_empty_title),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
+                        getString(R.string.room_list_rooms_empty_body)
+                )
+        }
+        stateView.state = emptyState
     }
 
     private fun renderLoading() {
@@ -114,6 +210,14 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback {
             else                         -> getString(R.string.unknown_error)
         }
         stateView.state = StateView.State.Error(message)
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (createChatFabMenu.onBackPressed()) {
+            return true
+        }
+
+        return super.onBackPressed()
     }
 
     // RoomSummaryController.Callback **************************************************************

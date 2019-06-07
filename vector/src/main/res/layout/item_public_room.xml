@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemPublicRoomLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?riotx_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:minHeight="97dp">
+
+    <ImageView
+        android:id="@+id/itemPublicRoomAvatar"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/itemPublicRoomName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="16dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomTopic"
+        app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomButtonState"
+        app:layout_constraintStart_toEndOf="@id/itemPublicRoomAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@sample/matrix.json/data/roomName" />
+
+    <TextView
+        android:id="@+id/itemPublicRoomTopic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginRight="22dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomMembersCount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
+        app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomName"
+        tools:text="@sample/matrix.json/data/roomTopic"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/itemPublicRoomMembersCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:drawableStart="@drawable/ic_user"
+        android:drawableLeft="@drawable/ic_user"
+        android:drawablePadding="8dp"
+        android:drawableTint="?riotx_text_secondary"
+        android:gravity="center_vertical"
+        android:minWidth="56dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
+        app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
+        app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomTopic"
+        tools:text="148" />
+
+    <TextView
+        android:id="@+id/itemPublicRoomAlias"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginRight="22dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:minWidth="40dp"
+        android:singleLine="true"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/itemPublicRoomMembersCount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemPublicRoomMembersCount"
+        tools:text="@sample/matrix.json/data/roomAlias" />
+
+    <im.vector.riotredesign.core.platform.ButtonStateView
+        android:id="@+id/itemPublicRoomButtonState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:bsv_button_text="@string/join"
+        app:bsv_loaded_image_src="@drawable/ic_tick"
+        app:bsv_use_flat_button="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/itemPublicRoomBottomSeparator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?riotx_header_panel_border_mobile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

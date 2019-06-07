@@ -106,7 +106,7 @@ class EventStreamServiceX : VectorService() {
 
             // do not suspend the application if there is some active calls
             if (ServiceState.CATCHUP == serviceState) {
-                val hasActiveCalls = mSession?.mCallsManager?.hasActiveCalls() == true
+                val hasActiveCalls = session?.mCallsManager?.hasActiveCalls() == true
 
                 // if there are some active calls, the catchup should not be stopped.
                 // because an user could answer to a call from another device.
@@ -351,12 +351,12 @@ class EventStreamServiceX : VectorService() {
         Timber.i("## stop(): the service is stopped")
 
         /* TODO
-        if (null != mSession && mSession!!.isAlive) {
-            mSession!!.stopEventStream()
-            mSession!!.dataHandler.removeListener(mEventsListener)
-            CallsManager.getSharedInstance().removeSession(mSession)
+        if (null != session && session!!.isAlive) {
+            session!!.stopEventStream()
+            session!!.dataHandler.removeListener(mEventsListener)
+            CallsManager.getSharedInstance().removeSession(session)
         }
-        mSession = null
+        session = null
         */
 
         // Stop the service
@@ -389,7 +389,7 @@ class EventStreamServiceX : VectorService() {
 
         if (canCatchup) {
             if (mSession != null) {
-                // TODO mSession!!.catchupEventStream()
+                // TODO session!!.catchupEventStream()
             } else {
                 Timber.i("catchup no session")
             }

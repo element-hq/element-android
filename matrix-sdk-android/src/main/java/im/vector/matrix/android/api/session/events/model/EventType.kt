@@ -74,6 +74,9 @@ object EventType {
     const val KEY_VERIFICATION_MAC = "m.key.verification.mac"
     const val KEY_VERIFICATION_CANCEL = "m.key.verification.cancel"
 
+    // Relation Events
+    const val REACTION = "m.reaction"
+
     private val STATE_EVENTS = listOf(
             STATE_ROOM_NAME,
             STATE_ROOM_TOPIC,

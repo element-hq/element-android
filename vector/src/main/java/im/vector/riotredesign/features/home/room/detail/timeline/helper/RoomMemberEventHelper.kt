@@ -16,25 +16,11 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.helper
 
-import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 object RoomMemberEventHelper {
 
-    fun senderAvatar(eventContent: RoomMember?, prevEventContent: RoomMember?, event: TimelineEvent): String? {
-        return if (eventContent?.membership == Membership.LEAVE && eventContent.avatarUrl == null && prevEventContent?.avatarUrl != null) {
-            prevEventContent.avatarUrl
-        } else {
-            event.senderAvatar
-        }
-    }
 
-    fun senderName(eventContent: RoomMember?, prevEventContent: RoomMember?, event: TimelineEvent): String? {
-        return if (eventContent?.membership == Membership.LEAVE && eventContent.displayName == null && prevEventContent?.displayName != null) {
-            prevEventContent.displayName
-        } else {
-            event.senderName
-        }
-    }
 }

@@ -71,10 +71,21 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('./signature/debug.keystore')
+            storePassword 'android'
+        }
+    }
+
     buildTypes {
         debug {
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
+
+            signingConfig signingConfigs.debug
         }
 
         release {
@@ -121,7 +132,7 @@ dependencies {
     def epoxy_version = "3.3.0"
     def arrow_version = "0.8.2"
     def coroutines_version = "1.0.1"
-    def markwon_version = '3.0.0-SNAPSHOT'
+    def markwon_version = '3.0.0'
     def big_image_viewer_version = '1.5.6'
     def glide_version = '4.9.0'
     def moshi_version = '1.8.0'
@@ -156,7 +167,7 @@ dependencies {
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
-    implementation 'com.airbnb.android:mvrx:0.7.0'
+    implementation 'com.airbnb.android:mvrx:1.0.1'
 
     // Work
     implementation "android.arch.work:work-runtime-ktx:1.0.0"
@@ -173,6 +184,7 @@ dependencies {
     implementation 'me.gujun.android:span:1.7'
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"
+    implementation 'me.saket:better-link-movement-method:2.2.0'
 
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.2.5'

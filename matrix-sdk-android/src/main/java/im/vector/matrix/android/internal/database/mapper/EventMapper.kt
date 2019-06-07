@@ -19,14 +19,17 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.model.EventEntity
-
+import im.vector.matrix.android.internal.di.MoshiProvider
+import java.util.*
 
 internal object EventMapper {
 
 
     fun map(event: Event, roomId: String): EventEntity {
+        val uds = if (event.unsignedData == null) null
+        else MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(event.unsignedData)
         val eventEntity = EventEntity()
-        eventEntity.eventId = event.eventId ?: ""
+        eventEntity.eventId = event.eventId ?: UUID.randomUUID().toString()
         eventEntity.roomId = event.roomId ?: roomId
         eventEntity.content = ContentMapper.map(event.content)
         val resolvedPrevContent = event.prevContent ?: event.unsignedData?.prevContent
@@ -37,10 +40,14 @@ internal object EventMapper {
         eventEntity.originServerTs = event.originServerTs
         eventEntity.redacts = event.redacts
         eventEntity.age = event.unsignedData?.age ?: event.originServerTs
+        eventEntity.unsignedData = uds
         return eventEntity
     }
 
     fun map(eventEntity: EventEntity): Event {
+        //TODO proxy the event to only parse unsigned data when accessed?
+        var ud = if (eventEntity.unsignedData.isNullOrBlank()) null
+        else MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(eventEntity.unsignedData)
         return Event(
                 type = eventEntity.type,
                 eventId = eventEntity.eventId,
@@ -50,7 +57,7 @@ internal object EventMapper {
                 sender = eventEntity.sender,
                 stateKey = eventEntity.stateKey,
                 roomId = eventEntity.roomId,
-                unsignedData = UnsignedData(eventEntity.age),
+                unsignedData = ud,
                 redacts = eventEntity.redacts
         )
     }

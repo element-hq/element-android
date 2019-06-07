@@ -111,7 +111,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
             if (null != preference) {
                 if (preference is BingRulePreference) {
                     //preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
-                    val rule: BingRule? = null // TODO mSession.dataHandler.pushRules()?.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
+                    val rule: BingRule? = null // TODO session.dataHandler.pushRules()?.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
 
                     if (rule == null) {
                         // The rule is not defined, hide the preference
@@ -125,7 +125,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
                                 /*
                                   TODO
                                displayLoadingView()
-                                mSession.dataHandler.bingRulesManager.updateRule(preference.rule,
+                                session.dataHandler.bingRulesManager.updateRule(preference.rule,
                                         rule,
                                         object : BingRulesManager.onBingRuleUpdateListener {
                                             private fun onDone() {
@@ -182,9 +182,9 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
         mLoadingView = activity!!.findViewById(R.id.vector_settings_spinner_views)
 
         /* TODO
-        if (mSession.isAlive) {
+        if (session.isAlive) {
 
-            mSession.dataHandler.addListener(mEventsListener)
+            session.dataHandler.addListener(mEventsListener)
 
             // refresh anything else
             refreshPreferences()
@@ -197,8 +197,8 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
         super.onPause()
 
         /* TODO
-        if (mSession.isAlive) {
-            mSession.dataHandler.removeListener(mEventsListener)
+        if (session.isAlive) {
+            session.dataHandler.removeListener(mEventsListener)
         }
         */
     }
@@ -209,7 +209,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
     private fun refreshPreferences() {
         PreferenceManager.getDefaultSharedPreferences(activity).edit {
             /* TODO
-            mSession.dataHandler.pushRules()?.let {
+            session.dataHandler.pushRules()?.let {
                 for (prefKey in mPrefKeyToBingRuleId.keys) {
                     val preference = findPreference(prefKey)
 

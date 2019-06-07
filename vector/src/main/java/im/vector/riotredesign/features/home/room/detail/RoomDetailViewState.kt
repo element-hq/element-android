@@ -22,13 +22,33 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineData
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.user.model.User
+
+/**
+ * Describes the current send mode:
+ * REGULAR: sends the text as a regular message
+ * QUOTE: User is currently quoting a message
+ * EDIT: User is currently editing an existing message
+ *
+ * Depending on the state the bottom toolbar will change (icons/preview/actions...)
+ */
+enum class SendMode {
+    REGULAR,
+    QUOTE,
+    EDIT,
+    REPLY
+}
 
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
         val timeline: Timeline? = null,
+        val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
-        val asyncTimelineData: Async<TimelineData> = Uninitialized
+        val asyncTimelineData: Async<TimelineData> = Uninitialized,
+        val sendMode: SendMode = SendMode.REGULAR,
+        val selectedEvent: TimelineEvent? = null
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)

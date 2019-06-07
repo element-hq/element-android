@@ -2,18 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/sliding_menu_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/room_sliding_menu_settings" />
-
-    <item
         android:id="@+id/sliding_menu_sign_out"
         android:icon="@drawable/ic_material_exit_to_app"
         android:title="@string/action_sign_out" />
-
-    <!-- TODO Temporary code -->
-    <item
-        android:id="@+id/tmp_menu_create_room"
-        android:title="@string/room_recents_create_room" />
 
 </menu>

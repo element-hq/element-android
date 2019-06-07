@@ -26,4 +26,5 @@
     <dimen name="pill_avatar_size">16dp</dimen>
     <dimen name="pill_min_height">20dp</dimen>
     <dimen name="pill_text_padding">4dp</dimen>
+
 </resources>

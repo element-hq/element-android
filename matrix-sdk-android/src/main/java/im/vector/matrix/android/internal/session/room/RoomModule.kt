@@ -19,20 +19,26 @@ package im.vector.matrix.android.internal.session.room
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
-import im.vector.matrix.android.internal.session.room.invite.DefaultInviteTask
-import im.vector.matrix.android.internal.session.room.invite.InviteTask
-import im.vector.matrix.android.internal.session.room.members.DefaultLoadRoomMembersTask
-import im.vector.matrix.android.internal.session.room.members.LoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.joining.DefaultInviteTask
+import im.vector.matrix.android.internal.session.room.membership.joining.DefaultJoinRoomTask
+import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
+import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
+import im.vector.matrix.android.internal.session.room.membership.leaving.DefaultLeaveRoomTask
+import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
+import im.vector.matrix.android.internal.session.room.prune.DefaultPruneEventTask
+import im.vector.matrix.android.internal.session.room.prune.PruneEventTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultFindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
-import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
+import im.vector.matrix.android.internal.session.room.timeline.*
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 
@@ -67,11 +73,11 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            LocalEchoEventFactory(get())
+            LocalEchoEventFactory(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -83,7 +89,31 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
+            DefaultJoinRoomTask(get()) as JoinRoomTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultLeaveRoomTask(get()) as LeaveRoomTask
+        }
+
+        scope(DefaultSession.SCOPE) {
             DefaultSendStateTask(get()) as SendStateTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultFindReactionEventForUndoTask(get()) as FindReactionEventForUndoTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultUpdateQuickReactionTask(get()) as UpdateQuickReactionTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultPruneEventTask(get()) as PruneEventTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultEventRelationsAggregationTask(get()) as EventRelationsAggregationTask
         }
 
     }

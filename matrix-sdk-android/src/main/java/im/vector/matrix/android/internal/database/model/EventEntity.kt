@@ -36,6 +36,7 @@ internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUI
                                 var originServerTs: Long? = null,
                                 @Index var sender: String? = null,
                                 var age: Long? = 0,
+                                var unsignedData: String? = null,
                                 var redacts: String? = null,
                                 @Index var stateIndex: Int = 0,
                                 @Index var displayIndex: Int = 0,

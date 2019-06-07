@@ -21,6 +21,7 @@ package im.vector.matrix.android.internal.session.room
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -28,8 +29,8 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.members.RoomDisplayNameResolver
-import im.vector.matrix.android.internal.session.room.members.RoomMembers
+import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
@@ -41,11 +42,12 @@ internal class RoomSummaryUpdater(private val credentials: Credentials,
 
     fun update(realm: Realm,
                roomId: String,
+               membership: Membership? = null,
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null) {
 
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                                ?: realm.createObject(roomId)
 
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -65,8 +67,11 @@ internal class RoomSummaryUpdater(private val credentials: Credentials,
         if (unreadNotifications?.notificationCount != null) {
             roomSummaryEntity.notificationCount = unreadNotifications.notificationCount
         }
+        if (membership != null) {
+            roomSummaryEntity.membership = membership
+        }
 
-        val lastEvent = EventEntity.latestEvent(realm, roomId, includedTypes = listOf(EventType.MESSAGE))
+        val lastEvent = EventEntity.latestEvent(realm, roomId)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()?.asDomain()
         val otherRoomMembers = RoomMembers(realm, roomId).getLoaded().filterKeys { it != credentials.userId }
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()

@@ -16,9 +16,11 @@
 
 package im.vector.riotredesign.core.epoxy
 
-import android.content.Context
-import android.widget.ProgressBar
-import com.airbnb.epoxy.ModelView
+import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.riotredesign.R
 
-@ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
-class LoadingItem(context: Context) : ProgressBar(context)
+@EpoxyModelClass(layout = R.layout.item_loading)
+abstract class LoadingItem : VectorEpoxyModel<LoadingItem.Holder>() {
+
+    class Holder : VectorEpoxyHolder()
+}

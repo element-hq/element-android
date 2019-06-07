@@ -21,8 +21,14 @@ import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.riotredesign.core.platform.VectorViewModel
+import org.commonmark.parser.Parser
+import org.commonmark.renderer.html.HtmlRenderer
 import org.koin.android.ext.android.get
+import ru.noties.markwon.Markwon
+import ru.noties.markwon.html.HtmlPlugin
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +37,7 @@ import java.util.*
 data class MessageActionState(
         val userId: String,
         val senderName: String,
-        val messageBody: String,
+        val messageBody: CharSequence,
         val ts: String?,
         val senderAvatarPath: String? = null)
     : MvRxState
@@ -51,12 +57,22 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
 
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
             return if (event != null) {
-                val messageContent: MessageContent? = event.root.content.toModel()
+                val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
+                        ?: event.root.content.toModel()
                 val originTs = event.root.originServerTs
+                var body: CharSequence = messageContent?.body ?: ""
+                if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
+                    val parser = Parser.builder().build()
+                    val document = parser.parse(messageContent.formattedBody?.trim() ?: messageContent.body)
+                   // val renderer = HtmlRenderer.builder().build()
+                    body = Markwon.builder(viewModelContext.activity)
+                            .usePlugin(HtmlPlugin.create()).build().render(document)
+//                    body = renderer.render(document)
+                }
                 MessageActionState(
                         event.root.sender ?: "",
                         parcel.informationData.memberName.toString(),
-                        messageContent?.body ?: "",
+                        body,
                         dateFormat.format(Date(originTs ?: 0)),
                         currentSession.contentUrlResolver().resolveFullSize(parcel.informationData.avatarUrl)
                 )

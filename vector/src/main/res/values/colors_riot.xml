@@ -19,6 +19,7 @@
     <color name="tab_rooms">@color/accent_color_light</color>
     <color name="tab_rooms_secondary">#5EA584</color>
     <color name="tab_groups">#a6d0e5</color>
+
     <color name="tab_groups_secondary">#81bddb</color>
 
     <!-- color of the direct chat avatar ring (it's 50% of color accent) -->
@@ -40,7 +41,7 @@
     <!--Default/Android Status Bar-->
     <color name="primary_color_dark_light">#FF1A2027</color>
     <!--Default/Base-->
-    <color name="primary_color_light">#FF27303A</color>
+    <color name="primary_color_light">#03b381</color>
     <!--Default/Accent-->
     <color name="accent_color_light">#03b381</color>
 
@@ -112,11 +113,6 @@
     <color name="soft_resource_limit_exceeded">#2f9edb</color>
     <color name="hard_resource_limit_exceeded">@color/vector_fuchsia_color</color>
 
-    <!-- Avatar colors -->
-    <color name="avatar_color_1">#03b381</color>
-    <color name="avatar_color_2">#368bd6</color>
-    <color name="avatar_color_3">#ac3ba8</color>
-
     <!-- Password Strength bar colors -->
     <color name="password_strength_bar_weak">#FFF56679</color>
     <color name="password_strength_bar_low">#FFFFC666</color>
@@ -127,16 +123,6 @@
     <!-- Button color -->
     <color name="button_enabled_text_color">#FFFFFFFF</color>
     <color name="button_disabled_text_color">#FF7F7F7F</color>
-
-    <!-- User names color -->
-    <color name="username_1">#368bd6</color>
-    <color name="username_2">#ac3ba8</color>
-    <color name="username_3">#03b381</color>
-    <color name="username_4">#e64f7a</color>
-    <color name="username_5">#ff812d</color>
-    <color name="username_6">#2dc2c5</color>
-    <color name="username_7">#5c56f5</color>
-    <color name="username_8">#74d12c</color>
 
     <!-- Link color -->
     <color name="link_color_light">#368BD6</color>

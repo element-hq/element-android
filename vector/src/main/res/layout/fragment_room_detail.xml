@@ -2,28 +2,26 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/VectorToolbarStyle"
+        android:id="@+id/roomToolbar"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
         app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/toolbarAvatarImageView"
+                android:id="@+id/roomToolbarAvatarImageView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -34,7 +32,7 @@
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/toolbarTitleView"
+                android:id="@+id/roomToolbarTitleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -43,15 +41,15 @@
                 android:maxLines="1"
                 android:textColor="?vctr_toolbar_primary_text_color"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/toolbarSubtitleView"
+                app:layout_constraintBottom_toTopOf="@+id/roomToolbarSubtitleView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/toolbarAvatarImageView"
+                app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="@tools:sample/full_names" />
+                tools:text="@sample/matrix.json/data/roomName" />
 
             <TextView
-                android:id="@+id/toolbarSubtitleView"
+                android:id="@+id/roomToolbarSubtitleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -63,9 +61,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/toolbarAvatarImageView"
-                app:layout_constraintTop_toBottomOf="@+id/toolbarTitleView"
-                tools:text="@tools:sample/date/day_of_week" />
+                app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
+                app:layout_constraintTop_toBottomOf="@+id/roomToolbarTitleView"
+                tools:text="@sample/matrix.json/data/roomTopic" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -76,67 +74,30 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/composerDivider"
+        app:layout_constraintBottom_toTopOf="@+id/composerLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:listitem="@layout/item_timeline_event_text_message" />
+        app:layout_constraintTop_toBottomOf="@id/roomToolbar"
+        tools:listitem="@layout/item_timeline_event_base" />
 
-    <View
-        android:id="@+id/composerDivider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?vctr_list_divider_color"
-        app:layout_constraintBottom_toTopOf="@+id/composerLayout" />
 
-    <RelativeLayout
+    <im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
         android:id="@+id/composerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageButton
-            android:id="@+id/attachmentButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/sendButton"
-            android:layout_toLeftOf="@id/sendButton"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_attach_file_white"
-            android:tint="?attr/colorAccent" />
-
-        <ImageButton
-            android:id="@+id/sendButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_send_white"
-            android:tint="?attr/colorAccent" />
-
-        <EditText
-            android:id="@+id/composerEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/attachmentButton"
-            android:layout_toLeftOf="@id/attachmentButton"
-            android:background="@android:color/transparent"
-            android:gravity="center_vertical"
-            android:hint="@string/room_message_placeholder_not_encrypted"
-            android:minHeight="48dp"
-            android:nextFocusLeft="@id/composerEditText"
-            android:nextFocusUp="@id/composerEditText"
-            android:padding="16dp"
-            android:textSize="14sp" />
-
-    </RelativeLayout>
+    <im.vector.riotredesign.features.invite.VectorInviteView
+        android:id="@+id/inviteView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomToolbar"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

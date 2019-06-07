@@ -44,7 +44,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
         viewModel = ViewModelProviders.of(this).get(KeysBackupSettingsViewModel::class.java)
-        viewModel.initSession(mSession)
+        viewModel.initSession(session)
 
 
         if (supportFragmentManager.fragments.isEmpty()) {
@@ -52,7 +52,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
                     .replace(R.id.container, KeysBackupSettingsFragment.newInstance())
                     .commitNow()
 
-            mSession.getKeysBackupService()
+            session.getKeysBackupService()
                     .forceUsingLastVersion(object : MatrixCallback<Boolean> {})
         }
 

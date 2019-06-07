@@ -89,14 +89,14 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
 
         var quickReactionFragment = cfm.findFragmentByTag("QuickReaction") as? QuickReactionFragment
         if (quickReactionFragment == null) {
-            quickReactionFragment = QuickReactionFragment.newInstance()
+            quickReactionFragment = QuickReactionFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as ParcelableArgs)
             cfm.beginTransaction()
                     .replace(R.id.bottom_sheet_quick_reaction_container, quickReactionFragment, "QuickReaction")
                     .commit()
         }
         quickReactionFragment.interactionListener = object : QuickReactionFragment.InteractionListener {
-            override fun didQuickReactWith(reactions: List<String>) {
-                actionHandlerModel.fireAction("Quick React", reactions)
+            override fun didQuickReactWith(clikedOn: String, opposite: String, reactions: List<String>, eventId: String) {
+                actionHandlerModel.fireAction(MessageMenuViewModel.ACTION_QUICK_REACT, Triple(eventId, clikedOn, opposite))
                 dismiss()
             }
         }
@@ -144,15 +144,15 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
 
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): MessageActionsBottomSheet {
-            val args = Bundle()
-            val parcelableArgs = ParcelableArgs(
-                    informationData.eventId,
-                    roomId,
-                    informationData
-            )
-            args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
-            return MessageActionsBottomSheet().apply { arguments = args }
-
+            return MessageActionsBottomSheet().apply {
+                setArguments(
+                        ParcelableArgs(
+                                informationData.eventId,
+                                roomId,
+                                informationData
+                        )
+                )
+            }
         }
     }
 }

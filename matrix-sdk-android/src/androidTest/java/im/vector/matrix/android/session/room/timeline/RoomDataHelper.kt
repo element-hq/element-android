@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.MyMembership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
@@ -78,7 +77,7 @@ object RoomDataHelper {
     fun fakeInitialSync(monarchy: Monarchy, roomId: String) {
         monarchy.runTransactionSync { realm ->
             val roomEntity = realm.createObject<RoomEntity>(roomId)
-            roomEntity.membership = MyMembership.JOINED
+            roomEntity.membership = Membership.JOIN
             val eventList = createFakeListOfEvents(10)
             val chunkEntity = realm.createObject<ChunkEntity>().apply {
                 nextToken = null

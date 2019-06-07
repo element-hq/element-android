@@ -22,11 +22,17 @@ import android.view.*
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
+import androidx.appcompat.widget.Toolbar
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
+import im.vector.riotredesign.features.navigation.Navigator
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
@@ -37,6 +43,12 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
     val vectorBaseActivity: VectorBaseActivity by lazy {
         activity as VectorBaseActivity
     }
+
+    /* ==========================================================================================
+     * Navigator
+     * ========================================================================================== */
+
+    protected val navigator: Navigator  by inject { parametersOf(this) }
 
     /* ==========================================================================================
      * Life cycle
@@ -78,6 +90,12 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
         mUnBinder = null
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        uiDisposables.dispose()
+    }
+
     /* ==========================================================================================
      * Restorable
      * ========================================================================================== */
@@ -100,6 +118,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
 
     override fun invalidate() {
         //no-ops by default
+        Timber.w("invalidate() method has not been implemented")
     }
 
     protected fun setArguments(args: Parcelable? = null) {
@@ -113,6 +132,30 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
         return this
     }
 
+    /* ==========================================================================================
+     * Toolbar
+     * ========================================================================================== */
+
+    /**
+     * Configure the Toolbar.
+     */
+    protected fun setupToolbar(toolbar: Toolbar) {
+        val parentActivity = vectorBaseActivity
+        if (parentActivity is ToolbarConfigurable) {
+            parentActivity.configure(toolbar)
+        }
+    }
+
+    /* ==========================================================================================
+     * Disposable
+     * ========================================================================================== */
+
+    private val uiDisposables = CompositeDisposable()
+
+    protected fun Disposable.disposeOnDestroy(): Disposable {
+        uiDisposables.add(this)
+        return this
+    }
 
     /* ==========================================================================================
      * MENU MANAGEMENT

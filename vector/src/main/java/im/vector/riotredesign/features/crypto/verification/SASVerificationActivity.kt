@@ -90,9 +90,9 @@ class SASVerificationActivity : SimpleFragmentActivity() {
             val isIncoming = intent.getBooleanExtra(EXTRA_IS_INCOMING, false)
             if (isIncoming) {
                 //incoming always have a transaction id
-                viewModel.initIncoming(mSession, intent.getStringExtra(EXTRA_OTHER_USER_ID), transactionID)
+                viewModel.initIncoming(session, intent.getStringExtra(EXTRA_OTHER_USER_ID), transactionID)
             } else {
-                viewModel.initOutgoing(mSession, intent.getStringExtra(EXTRA_OTHER_USER_ID), intent.getStringExtra(EXTRA_OTHER_DEVICE_ID))
+                viewModel.initOutgoing(session, intent.getStringExtra(EXTRA_OTHER_USER_ID), intent.getStringExtra(EXTRA_OTHER_DEVICE_ID))
             }
 
             if (isIncoming) {

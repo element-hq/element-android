@@ -39,7 +39,7 @@ class RoomAvatarPreference : UserAvatarPreference {
     override fun refreshAvatar() {
         if (null != mAvatarView && null != mRoom) {
             // TODO
-            // VectorUtils.loadRoomAvatar(context, mSession, mAvatarView, mRoom)
+            // VectorUtils.loadRoomAvatar(context, session, mAvatarView, mRoom)
         }
     }
 

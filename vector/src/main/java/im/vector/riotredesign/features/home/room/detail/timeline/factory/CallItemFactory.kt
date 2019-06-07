@@ -19,7 +19,6 @@ package im.vector.riotredesign.features.home.room.detail.timeline.factory
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
@@ -50,7 +49,7 @@ class CallItemFactory(private val stringProvider: StringProvider) {
             }
             EventType.CALL_ANSWER == event.getClearType() -> stringProvider.getString(R.string.notice_answered_call, senderName)
             EventType.CALL_HANGUP == event.getClearType() -> stringProvider.getString(R.string.notice_ended_call, senderName)
-            else                                -> null
+            else                                          -> null
         }
 
     }

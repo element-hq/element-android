@@ -43,7 +43,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
         viewModel = ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
         viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT, false)
-        viewModel.initSession(mSession)
+        viewModel.initSession(session)
 
 
         viewModel.isCreatingBackupVersion.observe(this, Observer {
@@ -124,7 +124,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                 /*
                 showWaitingView()
 
-                CommonActivityUtils.exportKeys(mSession, passphrase, object : SimpleApiCallback<String>(this@KeysBackupSetupActivity) {
+                CommonActivityUtils.exportKeys(session, passphrase, object : SimpleApiCallback<String>(this@KeysBackupSetupActivity) {
                     override fun onSuccess(filename: String) {
                         hideWaitingView()
 

@@ -18,6 +18,7 @@ package im.vector.riotredesign.features.home
 
 import androidx.fragment.app.Fragment
 import im.vector.riotredesign.core.glide.GlideApp
+import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandController
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserController
@@ -25,10 +26,12 @@ import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresent
 import im.vector.riotredesign.features.home.group.GroupSummaryController
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.*
+import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.list.RoomSummaryController
 import im.vector.riotredesign.features.html.EventHtmlRenderer
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module.module
 
 class HomeModule {
@@ -36,8 +39,6 @@ class HomeModule {
     companion object {
         const val HOME_SCOPE = "HOME_SCOPE"
         const val ROOM_DETAIL_SCOPE = "ROOM_DETAIL_SCOPE"
-        const val ROOM_LIST_SCOPE = "ROOM_LIST_SCOPE"
-        const val GROUP_LIST_SCOPE = "GROUP_LIST_SCOPE"
     }
 
     val definition = module {
@@ -49,32 +50,38 @@ class HomeModule {
         }
 
         scope(HOME_SCOPE) {
-            HomePermalinkHandler(get())
+            HomePermalinkHandler(get(), get())
         }
 
         // Fragment scopes
 
-        factory { (fragment: Fragment) ->
-            val eventHtmlRenderer = EventHtmlRenderer(GlideApp.with(fragment), fragment.requireContext(), get())
-            val timelineDateFormatter = TimelineDateFormatter(get())
-            val timelineMediaSizeProvider = TimelineMediaSizeProvider()
-            val messageItemFactory = MessageItemFactory(get(), timelineMediaSizeProvider, timelineDateFormatter, eventHtmlRenderer)
+        factory {
+            TimelineDateFormatter(get())
+        }
 
-            val timelineItemFactory = TimelineItemFactory(messageItemFactory = messageItemFactory,
-                    roomNameItemFactory = RoomNameItemFactory(get()),
-                    roomTopicItemFactory = RoomTopicItemFactory(get()),
-                    roomMemberItemFactory = RoomMemberItemFactory(get()),
-                    roomHistoryVisibilityItemFactory = RoomHistoryVisibilityItemFactory(get()),
-                    callItemFactory = CallItemFactory(get()),
+        factory {
+            NoticeEventFormatter(get())
+        }
+
+        factory { (fragment: Fragment) ->
+            val colorProvider = ColorProvider(fragment.requireContext())
+            val timelineDateFormatter = get<TimelineDateFormatter>()
+            val eventHtmlRenderer = EventHtmlRenderer(GlideApp.with(fragment), fragment.requireContext(), get())
+            val noticeEventFormatter = get<NoticeEventFormatter>(parameters = { parametersOf(fragment) })
+            val timelineMediaSizeProvider = TimelineMediaSizeProvider()
+            val messageItemFactory = MessageItemFactory(colorProvider, timelineMediaSizeProvider, timelineDateFormatter, eventHtmlRenderer, get())
+            val timelineItemFactory = TimelineItemFactory(
+                    messageItemFactory = messageItemFactory,
+                    noticeItemFactory = NoticeItemFactory(noticeEventFormatter),
+                    defaultItemFactory = DefaultItemFactory(),
                     encryptionItemFactory = EncryptionItemFactory(get()),
-                    encryptedItemFactory = EncryptedItemFactory(get()),
-                    defaultItemFactory = DefaultItemFactory()
+                    encryptedItemFactory = EncryptedItemFactory(get())
             )
             TimelineEventController(timelineDateFormatter, timelineItemFactory, timelineMediaSizeProvider)
         }
 
         factory {
-            RoomSummaryController(get())
+            RoomSummaryController(get(), get(), get())
         }
 
         factory {

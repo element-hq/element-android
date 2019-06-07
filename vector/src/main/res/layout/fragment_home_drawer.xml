@@ -1,23 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/stateView"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/homeDrawerHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?riotx_base"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/homeDrawerHeaderDebugView"
+            style="@style/VectorDebug"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
+            android:scaleType="center"
+            android:src="@drawable/ic_settings_x"
+            android:tint="@color/riotx_accent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/homeDrawerHeaderAvatarView"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="@dimen/layout_horizontal_margin"
+            android:layout_marginLeft="@dimen/layout_horizontal_margin"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/homeDrawerUsernameView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@id/homeDrawerHeaderSettingsView"
+            app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
+            app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderAvatarView"
+            tools:text="@sample/matrix.json/data/displayName" />
+
+        <TextView
+            android:id="@+id/homeDrawerUserIdView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/homeDrawerHeaderSettingsView"
+            app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
+            app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView"
+            tools:text="@sample/matrix.json/data/mxid" />
+
+        <ImageView
+            android:id="@+id/homeDrawerHeaderSettingsView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:padding="16dp"
+            android:src="@drawable/ic_settings_x"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
-        android:id="@+id/groupListFragmentContainer"
-        android:layout_width="64dp"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/roomListFragmentContainer"
+        android:id="@+id/homeDrawerGroupListContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="?riotx_header_panel_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/groupListFragmentContainer"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeader" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

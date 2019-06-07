@@ -32,6 +32,8 @@
         android:id="@+id/messageContentBlankStub"
         style="@style/TimelineContentStubNoInfoLayoutParams"
         android:layout="@layout/item_timeline_event_blank_stub"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         tools:ignore="MissingConstraints" />
 
     <ViewStub
