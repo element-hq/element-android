@@ -27,7 +27,6 @@ import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import timber.log.Timber
@@ -49,60 +48,75 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
 
     override fun execute(params: EventRelationsAggregationTask.Params): Try<Unit> {
+        val events = params.events
+        val userId = params.userId
         return monarchy.tryTransactionSync { realm ->
-            update(realm, params.events, params.userId)
+            Timber.v(">>> DefaultEventRelationsAggregationTask[${params.hashCode()}] called with ${events.size} events")
+            update(realm, events, userId)
+            Timber.v("<<< DefaultEventRelationsAggregationTask[${params.hashCode()}] finished")
         }
     }
 
     private fun update(realm: Realm, events: List<Pair<Event, SendState>>, userId: String) {
         events.forEach { pair ->
-            val roomId = pair.first.roomId ?: return@forEach
-            val event = pair.first
-            val sendState = pair.second
-            val isLocalEcho = sendState == SendState.UNSENT
-            when (event.type) {
-                EventType.REACTION  -> {
-                    //we got a reaction!!
-                    Timber.v("###REACTION in room $roomId")
-                    handleReaction(event, roomId, realm, userId, isLocalEcho)
+            try { //Temporary catch, should be removed
+                val roomId = pair.first.roomId
+                if (roomId == null) {
+                    Timber.w("Event has no room id ${pair.first.eventId}")
+                    return@forEach
                 }
-                EventType.MESSAGE   -> {
-                    if (event.unsignedData?.relations?.annotations != null) {
-                        Timber.v("###REACTION Agreggation in room $roomId for event ${event.eventId}")
-                        handleInitialAggregatedRelations(event, roomId, event.unsignedData.relations.annotations, realm)
-                    } else {
-                        val content: MessageContent? = event.content.toModel()
-                        if (content?.relatesTo?.type == RelationType.REPLACE) {
-                            Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
-                            //A replace!
-                            handleReplace(realm, event, content, roomId, isLocalEcho)
-                        }
+                val event = pair.first
+                val sendState = pair.second
+                val isLocalEcho = sendState == SendState.UNSENT
+                when (event.type) {
+                    EventType.REACTION  -> {
+                        //we got a reaction!!
+                        Timber.v("###REACTION in room $roomId , reaction eventID ${event.eventId}")
+                        handleReaction(event, roomId, realm, userId, isLocalEcho)
                     }
-
-                }
-                EventType.REDACTION -> {
-                    val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
-                            ?: return
-                    when (eventToPrune.type) {
-                        EventType.MESSAGE  -> {
-                            Timber.d("REDACTION for message ${eventToPrune.eventId}")
-                            val unsignedData = EventMapper.map(eventToPrune).unsignedData
-                                    ?: UnsignedData(null, null)
-
-                            //was this event a m.replace
-                            val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
-                            if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
-                                handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
+                    EventType.MESSAGE   -> {
+                        if (event.unsignedData?.relations?.annotations != null) {
+                            Timber.v("###REACTION Agreggation in room $roomId for event ${event.eventId}")
+                            handleInitialAggregatedRelations(event, roomId, event.unsignedData.relations.annotations, realm)
+                        } else {
+                            val content: MessageContent? = event.content.toModel()
+                            if (content?.relatesTo?.type == RelationType.REPLACE) {
+                                Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
+                                //A replace!
+                                handleReplace(realm, event, content, roomId, isLocalEcho)
                             }
-
                         }
-                        EventType.REACTION -> {
-                            handleReactionRedact(eventToPrune, realm, userId)
+
+                    }
+                    EventType.REDACTION -> {
+                        val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
+                                ?: return@forEach
+                        when (eventToPrune.type) {
+                            EventType.MESSAGE  -> {
+                                Timber.d("REDACTION for message ${eventToPrune.eventId}")
+                                val unsignedData = EventMapper.map(eventToPrune).unsignedData
+                                        ?: UnsignedData(null, null)
+
+                                //was this event a m.replace
+                                val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
+                                if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
+                                    handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
+                                }
+
+                            }
+                            EventType.REACTION -> {
+                                handleReactionRedact(eventToPrune, realm, userId)
+                            }
                         }
                     }
+                    else                -> Timber.v("UnHandled event ${event.eventId}")
                 }
+
+            } catch (t: Throwable) {
+                Timber.e(t, "## Should not happen ")
             }
         }
+
     }
 
     private fun handleReplace(realm: Realm, event: Event, content: MessageContent, roomId: String, isLocalEcho: Boolean) {
@@ -112,7 +126,7 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
         //ok, this is a replace
         var existing = EventAnnotationsSummaryEntity.where(realm, targetEventId).findFirst()
         if (existing == null) {
-            Timber.v("###REPLACE creating no relation summary for ${targetEventId}")
+            Timber.v("###REPLACE creating new relation summary for ${targetEventId}")
             existing = EventAnnotationsSummaryEntity.create(realm, targetEventId)
             existing.roomId = roomId
         }
@@ -120,7 +134,7 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
         //we have it
         val existingSummary = existing.editSummary
         if (existingSummary == null) {
-            Timber.v("###REPLACE no edit summary for ${targetEventId}, creating one (localEcho:$isLocalEcho)")
+            Timber.v("###REPLACE new edit summary for ${targetEventId}, creating one (localEcho:$isLocalEcho)")
             //create the edit summary
             val editSummary = realm.createObject(EditAggregatedSummaryEntity::class.java)
             editSummary.lastEditTs = event.originServerTs ?: System.currentTimeMillis()
@@ -181,62 +195,70 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
     }
 
     private fun handleReaction(event: Event, roomId: String, realm: Realm, userId: String, isLocalEcho: Boolean) {
-        event.content.toModel<ReactionContent>()?.let { content ->
-            //rel_type must be m.annotation
-            if (RelationType.ANNOTATION == content.relatesTo?.type) {
-                val reaction = content.relatesTo.key
-                val eventId = content.relatesTo.eventId
-                val eventSummary = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
-                        ?: EventAnnotationsSummaryEntity.create(realm, eventId).apply { this.roomId = roomId }
+        val content = event.content.toModel<ReactionContent>()
+        if (content == null) {
+            Timber.e("Malformed reaction content ${event.content}")
+            return
+        }
+        //rel_type must be m.annotation
+        if (RelationType.ANNOTATION == content.relatesTo?.type) {
+            val reaction = content.relatesTo.key
+            val relatedEventID = content.relatesTo.eventId
+            val reactionEventId = event.eventId
+            Timber.v("Reaction $reactionEventId relates to $relatedEventID")
+            val eventSummary = EventAnnotationsSummaryEntity.where(realm, relatedEventID).findFirst()
+                    ?: EventAnnotationsSummaryEntity.create(realm, relatedEventID).apply { this.roomId = roomId }
 
-                var sum = eventSummary.reactionsSummary.find { it.key == reaction }
-                val txId = event.unsignedData?.transactionId
-                if (isLocalEcho && txId.isNullOrBlank()) {
-                    Timber.w("Received a local echo with no transaction ID")
-                }
-                if (sum == null) {
-                    sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
-                    sum.key = reaction
-                    sum.firstTimestamp = event.originServerTs ?: 0
-                    if (isLocalEcho) {
-                        Timber.v("Adding local echo reaction $reaction")
-                        sum.sourceLocalEcho.add(txId)
-                        sum.count = 1
-                    } else {
-                        Timber.v("Adding synced reaction $reaction")
-                        sum.count = 1
-                        sum.sourceEvents.add(event.eventId)
-                    }
-                    sum.addedByMe = sum.addedByMe || (userId == event.sender)
-                    eventSummary.reactionsSummary.add(sum)
+            var sum = eventSummary.reactionsSummary.find { it.key == reaction }
+            val txId = event.unsignedData?.transactionId
+            if (isLocalEcho && txId.isNullOrBlank()) {
+                Timber.w("Received a local echo with no transaction ID")
+            }
+            if (sum == null) {
+                sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
+                sum.key = reaction
+                sum.firstTimestamp = event.originServerTs ?: 0
+                if (isLocalEcho) {
+                    Timber.v("Adding local echo reaction $reaction")
+                    sum.sourceLocalEcho.add(txId)
+                    sum.count = 1
                 } else {
-                    //is this a known event (is possible? pagination?)
-                    if (!sum.sourceEvents.contains(eventId)) {
+                    Timber.v("Adding synced reaction $reaction")
+                    sum.count = 1
+                    sum.sourceEvents.add(reactionEventId)
+                }
+                sum.addedByMe = sum.addedByMe || (userId == event.sender)
+                eventSummary.reactionsSummary.add(sum)
+            } else {
+                //is this a known event (is possible? pagination?)
+                if (!sum.sourceEvents.contains(reactionEventId)) {
 
-                        //check if it's not the sync of a local echo
-                        if (!isLocalEcho && sum.sourceLocalEcho.contains(txId)) {
-                            //ok it has already been counted, just sync the list, do not touch count
-                            Timber.v("Ignoring synced of local echo for reaction $reaction")
-                            sum.sourceLocalEcho.remove(txId)
-                            sum.sourceEvents.add(event.eventId)
+                    //check if it's not the sync of a local echo
+                    if (!isLocalEcho && sum.sourceLocalEcho.contains(txId)) {
+                        //ok it has already been counted, just sync the list, do not touch count
+                        Timber.v("Ignoring synced of local echo for reaction $reaction")
+                        sum.sourceLocalEcho.remove(txId)
+                        sum.sourceEvents.add(reactionEventId)
+                    } else {
+                        sum.count += 1
+                        if (isLocalEcho) {
+                            Timber.v("Adding local echo reaction $reaction")
+                            sum.sourceLocalEcho.add(txId)
                         } else {
-                            sum.count += 1
-                            if (isLocalEcho) {
-                                Timber.v("Adding local echo reaction $reaction")
-                                sum.sourceLocalEcho.add(txId)
-                            } else {
-                                Timber.v("Adding synced reaction $reaction")
-                                sum.sourceEvents.add(event.eventId)
-                            }
-
-                            sum.addedByMe = sum.addedByMe || (userId == event.sender)
+                            Timber.v("Adding synced reaction $reaction")
+                            sum.sourceEvents.add(reactionEventId)
                         }
 
+                        sum.addedByMe = sum.addedByMe || (userId == event.sender)
                     }
-                }
 
+                }
             }
+
+        } else {
+            Timber.e("Unknwon relation type ${content.relatesTo?.type} for event ${event.eventId}")
         }
+
     }
 
     /**

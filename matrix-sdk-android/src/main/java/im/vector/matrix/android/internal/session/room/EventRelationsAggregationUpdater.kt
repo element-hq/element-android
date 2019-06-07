@@ -46,11 +46,11 @@ internal class EventRelationsAggregationUpdater(monarchy: Monarchy,
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
         Timber.v("EventRelationsAggregationUpdater called with ${inserted.size} insertions")
-        val inserted = inserted
-                .mapNotNull { it.asDomain() to it.sendState }
+        val domainInserted = inserted
+                .map { it.asDomain() to it.sendState }
 
         val params = EventRelationsAggregationTask.Params(
-                inserted,
+                domainInserted,
                 credentials.userId
         )
 

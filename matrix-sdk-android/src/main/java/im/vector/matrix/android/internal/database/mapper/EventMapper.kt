@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
+import com.squareup.moshi.JsonDataException
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -46,8 +47,16 @@ internal object EventMapper {
 
     fun map(eventEntity: EventEntity): Event {
         //TODO proxy the event to only parse unsigned data when accessed?
-        var ud = if (eventEntity.unsignedData.isNullOrBlank()) null
-        else MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(eventEntity.unsignedData)
+        val ud = if (eventEntity.unsignedData.isNullOrBlank()) {
+            null
+        } else {
+            try {
+                MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(eventEntity.unsignedData)
+            } catch (t: JsonDataException) {
+                null
+            }
+
+        }
         return Event(
                 type = eventEntity.type,
                 eventId = eventEntity.eventId,

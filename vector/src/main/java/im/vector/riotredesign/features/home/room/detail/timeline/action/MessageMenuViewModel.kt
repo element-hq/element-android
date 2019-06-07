@@ -34,7 +34,7 @@ import org.koin.android.ext.android.get
 
 data class SimpleAction(val uid: String, val titleRes: Int, val iconResId: Int?, val data: Any? = null)
 
-data class MessageMenuState(val actions: List<SimpleAction>) : MvRxState
+data class MessageMenuState(val actions: List<SimpleAction> = emptyList()) : MvRxState
 
 /**
  * Manages list actions for a given message (copy / paste / forward...)
@@ -50,9 +50,9 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
                     ?: return null
 
-            val messageContent: MessageContent = event.annotations?.editSummary?.aggregatedContent?.toModel()
-                    ?: event.root.content.toModel() ?: return null
-            val type = messageContent.type
+            val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
+                    ?: event.root.content.toModel()
+            val type = messageContent?.type
 
             if (event.sendState == SendState.UNSENT) {
                 //Resend and Delete
@@ -76,7 +76,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, event.root.eventId))
                 if (canCopy(type)) {
                     //TODO copy images? html? see ClipBoard
-                    this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent.body))
+                    this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent!!.body))
                 }
 
                 if (canReply(event, messageContent)) {
@@ -134,10 +134,10 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             return MessageMenuState(actions)
         }
 
-        private fun canReply(event: TimelineEvent, messageContent: MessageContent): Boolean {
+        private fun canReply(event: TimelineEvent, messageContent: MessageContent?): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
             if (event.root.type != EventType.MESSAGE) return false
-            return when (messageContent.type) {
+            return when (messageContent?.type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
                 MessageType.MSGTYPE_EMOTE,
@@ -149,10 +149,10 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             }
         }
 
-        private fun canQuote(event: TimelineEvent, messageContent: MessageContent): Boolean {
+        private fun canQuote(event: TimelineEvent, messageContent: MessageContent?): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
             if (event.root.type != EventType.MESSAGE) return false
-            return when (messageContent.type) {
+            return when (messageContent?.type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
                 MessageType.MSGTYPE_EMOTE,
@@ -190,7 +190,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         }
 
 
-        private fun canCopy(type: String): Boolean {
+        private fun canCopy(type: String?): Boolean {
             return when (type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
@@ -204,7 +204,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         }
 
 
-        private fun canShare(type: String): Boolean {
+        private fun canShare(type: String?): Boolean {
             return when (type) {
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_AUDIO,

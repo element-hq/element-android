@@ -48,7 +48,7 @@ android {
             buildConfigField "boolean", "LOG_PRIVATE_DATA", "false"
 
             // Set to BODY instead of NONE to enable logging
-            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BASIC"
+            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.NONE"
         }
 
         release {
@@ -91,7 +91,7 @@ dependencies {
     def moshi_version = '1.8.0'
     def lifecycle_version = '2.0.0'
     def coroutines_version = "1.0.1"
-    def markwon_version = '3.0.0-SNAPSHOT'
+    def markwon_version = '3.0.0'
 
     implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

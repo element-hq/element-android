@@ -55,7 +55,8 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
     private val displayedEventsObservable = BehaviorRelay.create<RoomDetailActions.EventDisplayed>()
-    private val timeline = room.createTimeline(eventId, TimelineDisplayableEvents.DISPLAYABLE_TYPES)
+    private val timeline = room.createTimeline(eventId,
+            if (TimelineDisplayableEvents.DEBUG_HIDDEN_EVENT) TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES else TimelineDisplayableEvents.DISPLAYABLE_TYPES)
 
     companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 

@@ -23,27 +23,37 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
 abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
 
     @EpoxyAttribute
     var noticeText: CharSequence? = null
-    @EpoxyAttribute
-    var avatarUrl: String? = null
-    @EpoxyAttribute
-    var userId: String = ""
-    @EpoxyAttribute
-    var memberName: CharSequence? = null
-
 
     @EpoxyAttribute
-    var longClickListener: View.OnLongClickListener? = null
+    lateinit var informationData: MessageInformationData
+
+    @EpoxyAttribute
+    var baseCallback: TimelineEventController.BaseCallback? = null
+
+
+    private var longClickListener = View.OnLongClickListener {
+        baseCallback?.onEventLongClicked(informationData, null, it)
+        baseCallback != null
+    }
+
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.noticeTextView.text = noticeText
-        AvatarRenderer.render(avatarUrl, userId, memberName?.toString(), holder.avatarImageView)
+        AvatarRenderer.render(
+                informationData.avatarUrl,
+                informationData.senderId,
+                informationData.memberName?.toString()
+                        ?: informationData.senderId,
+                holder.avatarImageView
+        )
         holder.view.setOnLongClickListener(longClickListener)
     }
 
@@ -51,7 +61,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
 
     class Holder : BaseHolder() {
         override fun getStubId(): Int = STUB_ID
-
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
     }

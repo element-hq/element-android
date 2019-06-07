@@ -563,11 +563,11 @@ class RoomDetailFragment :
         vectorBaseActivity.notImplemented()
     }
 
-    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View) {
+    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
 
     }
 
-    override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean {
+    override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         val roomId = roomDetailArgs.roomId
 

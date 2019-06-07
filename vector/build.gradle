@@ -84,13 +84,15 @@ android {
         debug {
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-
+            buildConfigField "boolean", "SHOW_HIDDEN_TIMELINE_EVENTS", "false"
+            
             signingConfig signingConfigs.debug
         }
 
         release {
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
+            buildConfigField "boolean", "SHOW_HIDDEN_TIMELINE_EVENTS", "false"
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -132,7 +134,7 @@ dependencies {
     def epoxy_version = "3.3.0"
     def arrow_version = "0.8.2"
     def coroutines_version = "1.0.1"
-    def markwon_version = '3.0.0-SNAPSHOT'
+    def markwon_version = '3.0.0'
     def big_image_viewer_version = '1.5.6'
     def glide_version = '4.9.0'
     def moshi_version = '1.8.0'

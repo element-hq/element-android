@@ -22,9 +22,13 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.core.extensions.localDateTime
 
 object TimelineDisplayableEvents {
+
+    //Debug helper, to show invisible items in time line (reaction, redacts)
+    val DEBUG_HIDDEN_EVENT = BuildConfig.SHOW_HIDDEN_TIMELINE_EVENTS
 
     val DISPLAYABLE_TYPES = listOf(
             EventType.MESSAGE,
@@ -40,6 +44,11 @@ object TimelineDisplayableEvents {
             EventType.STATE_ROOM_THIRD_PARTY_INVITE,
             EventType.STICKER,
             EventType.STATE_ROOM_CREATE
+    )
+
+    val DEBUG_DISPLAYABLE_TYPES = DISPLAYABLE_TYPES + listOf(
+            EventType.REDACTION,
+            EventType.REACTION
     )
 }
 
