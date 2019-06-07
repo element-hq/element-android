@@ -55,7 +55,12 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
     private val displayedEventsObservable = BehaviorRelay.create<RoomDetailActions.EventDisplayed>()
-    private val timeline = room.createTimeline(eventId, TimelineDisplayableEvents.DISPLAYABLE_TYPES)
+    private val allowedTypes = if (TimelineDisplayableEvents.DEBUG_HIDDEN_EVENT) {
+        TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES
+    } else {
+        TimelineDisplayableEvents.DISPLAYABLE_TYPES
+    }
+    private val timeline = room.createTimeline(eventId, allowedTypes)
 
     companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 
@@ -195,7 +200,8 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
                     }
                 }
                 SendMode.EDIT    -> {
-                    room.editTextMessage(state.selectedEvent?.root?.eventId ?: "", action.text, action.autoMarkdown)
+                    room.editTextMessage(state.selectedEvent?.root?.eventId
+                            ?: "", action.text, action.autoMarkdown)
                     setState {
                         copy(
                                 sendMode = SendMode.REGULAR,
@@ -330,7 +336,6 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         room.updateQuickReaction(action.selectedReaction, action.opposite, action.targetEventId, session.sessionParams.credentials.userId)
     }
 
-
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
         val attachments = action.mediaFiles.map {
             ContentAttachmentData(
@@ -350,6 +355,12 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
         displayedEventsObservable.accept(action)
+        //We need to update this with the related m.replace also (to move read receipt)
+        action.event.annotations?.editSummary?.sourceEvents?.forEach {
+            room.getTimeLineEvent(it)?.let { event ->
+                displayedEventsObservable.accept(RoomDetailActions.EventDisplayed(event))
+            }
+        }
     }
 
     private fun handleLoadMore(action: RoomDetailActions.LoadMore) {

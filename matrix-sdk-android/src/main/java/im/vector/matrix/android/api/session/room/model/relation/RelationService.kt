@@ -15,7 +15,9 @@
  */
 package im.vector.matrix.android.api.session.room.model.relation
 
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.util.Cancelable
 
 /**
@@ -91,4 +93,5 @@ interface RelationService {
      */
     fun replyToMessage(eventReplied: Event, replyText: String): Cancelable?
 
+    fun getEventSummaryLive(eventId: String): LiveData<List<EventAnnotationsSummary>>
 }

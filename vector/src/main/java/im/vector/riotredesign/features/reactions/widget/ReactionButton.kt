@@ -21,10 +21,10 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -36,13 +36,15 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.utils.TextUtils
 
 /**
  * An animated reaction button.
  * Displays a String reaction (emoji), with a count, and that can be selected or not (toggle)
  */
 class ReactionButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                               defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener {
+                                               defStyleAttr: Int = 0)
+    : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
 
     companion object {
         private val DECCELERATE_INTERPOLATOR = DecelerateInterpolator()
@@ -56,6 +58,11 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
 
     private var reactionSelector: View? = null
 
+    var emojiTypeFace: Typeface? = null
+        set(value) {
+            field = value
+            emojiView?.typeface = value ?: Typeface.DEFAULT
+        }
 
     private var dotsView: DotsView
     private var circleView: CircleView
@@ -68,7 +75,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
     var reactionCount = 11
         set(value) {
             field = value
-            countTextView?.text = value.toString()
+            countTextView?.text = TextUtils.formatCountToShortDecimal(value)
         }
 
 
@@ -95,7 +102,9 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
         reactionSelector = findViewById(R.id.reactionSelector)
         countTextView = findViewById(R.id.reactionCount)
 
-        countTextView?.text = reactionCount.toString()
+        countTextView?.text = TextUtils.formatCountToShortDecimal(reactionCount)
+
+        emojiView?.typeface = this.emojiTypeFace ?: Typeface.DEFAULT
 
         val array = context.obtainStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr, 0)
 
@@ -128,6 +137,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
         val status = array.getBoolean(R.styleable.ReactionButton_toggled, false)
         setChecked(status)
         setOnClickListener(this)
+        setOnLongClickListener(this)
         array.recycle()
     }
 
@@ -234,40 +244,45 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
      * @param event
      * @return
      */
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (!isEnabled)
-            return true
+//    override fun onTouchEvent(event: MotionEvent): Boolean {
+//        if (!isEnabled)
+//            return true
+//
+//        when (event.action) {
+//            MotionEvent.ACTION_DOWN   ->
+//                /*
+//                Commented out this line and moved the animation effect to the action up event due to
+//                conflicts that were occurring when library is used in sliding type views.
+//
+//                icon.animate().scaleX(0.7f).scaleY(0.7f).setDuration(150).setInterpolator(DECCELERATE_INTERPOLATOR);
+//                */
+//                isPressed = true
+//
+//            MotionEvent.ACTION_MOVE   -> {
+//                val x = event.x
+//                val y = event.y
+//                val isInside = x > 0 && x < width && y > 0 && y < height
+//                if (isPressed != isInside) {
+//                    isPressed = isInside
+//                }
+//            }
+//
+//            MotionEvent.ACTION_UP     -> {
+//                emojiView!!.animate().scaleX(0.7f).scaleY(0.7f).setDuration(150).interpolator = DECCELERATE_INTERPOLATOR
+//                emojiView!!.animate().scaleX(1f).scaleY(1f).interpolator = DECCELERATE_INTERPOLATOR
+//                if (isPressed) {
+//                    performClick()
+//                    isPressed = false
+//                }
+//            }
+//            MotionEvent.ACTION_CANCEL -> isPressed = false
+//        }
+//        return true
+//    }
 
-        when (event.action) {
-            MotionEvent.ACTION_DOWN ->
-                /*
-                Commented out this line and moved the animation effect to the action up event due to
-                conflicts that were occurring when library is used in sliding type views.
-
-                icon.animate().scaleX(0.7f).scaleY(0.7f).setDuration(150).setInterpolator(DECCELERATE_INTERPOLATOR);
-                */
-                isPressed = true
-
-            MotionEvent.ACTION_MOVE -> {
-                val x = event.x
-                val y = event.y
-                val isInside = x > 0 && x < width && y > 0 && y < height
-                if (isPressed != isInside) {
-                    isPressed = isInside
-                }
-            }
-
-            MotionEvent.ACTION_UP -> {
-                emojiView!!.animate().scaleX(0.7f).scaleY(0.7f).setDuration(150).interpolator = DECCELERATE_INTERPOLATOR
-                emojiView!!.animate().scaleX(1f).scaleY(1f).interpolator = DECCELERATE_INTERPOLATOR
-                if (isPressed) {
-                    performClick()
-                    isPressed = false
-                }
-            }
-            MotionEvent.ACTION_CANCEL -> isPressed = false
-        }
-        return true
+    override fun onLongClick(v: View?): Boolean {
+        reactedListener?.onLongClick(this)
+        return reactedListener != null
     }
 
     /**
@@ -327,5 +342,6 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
     interface ReactedListener {
         fun onReacted(reactionButton: ReactionButton)
         fun onUnReacted(reactionButton: ReactionButton)
+        fun onLongClick(reactionButton: ReactionButton)
     }
 }

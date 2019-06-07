@@ -32,15 +32,14 @@ enum class TriggleState {
 }
 
 data class QuickReactionState(
-        val agreeTrigleState: TriggleState,
-        val likeTriggleState: TriggleState,
+        val agreeTrigleState: TriggleState = TriggleState.NONE,
+        val likeTriggleState: TriggleState = TriggleState.NONE,
         /** Pair of 'clickedOn' and current toggles state*/
         val selectionResult: Pair<String, List<String>>? = null,
-        val eventId: String) : MvRxState
+        val eventId: String = "") : MvRxState
 
 /**
  * Quick reaction view model
- * TODO: configure initial state from event
  */
 class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel<QuickReactionState>(initialState) {
 
@@ -88,15 +87,15 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
     private fun getReactions(state: QuickReactionState, newState1: TriggleState?, newState2: TriggleState?): List<String> {
         return ArrayList<String>(4).apply {
             when (newState2 ?: state.likeTriggleState) {
-                TriggleState.FIRST -> add(likePositive)
+                TriggleState.FIRST  -> add(likePositive)
                 TriggleState.SECOND -> add(likeNegative)
-                else -> {
+                else                -> {
                 }
             }
             when (newState1 ?: state.agreeTrigleState) {
-                TriggleState.FIRST -> add(agreePositive)
+                TriggleState.FIRST  -> add(agreePositive)
                 TriggleState.SECOND -> add(agreeNegative)
-                else -> {
+                else                -> {
                 }
             }
         }
@@ -114,9 +113,9 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
             return when (reaction) {
                 agreePositive -> agreeNegative
                 agreeNegative -> agreePositive
-                likePositive -> likeNegative
-                likeNegative -> likePositive
-                else -> null
+                likePositive  -> likeNegative
+                likeNegative  -> likePositive
+                else          -> null
             }
         }
 
@@ -124,7 +123,7 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
             // Args are accessible from the context.
             // val foo = vieWModelContext.args<MyArgs>.foo
             val currentSession = viewModelContext.activity.get<Session>()
-            val parcel = viewModelContext.args as MessageActionsBottomSheet.ParcelableArgs
+            val parcel = viewModelContext.args as TimelineEventFragmentArgs
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
                     ?: return null
             var agreeTriggle: TriggleState = TriggleState.NONE

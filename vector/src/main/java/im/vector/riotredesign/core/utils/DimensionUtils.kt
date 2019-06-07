@@ -28,4 +28,12 @@ object DimensionUtils {
                 context.resources.displayMetrics
         ).toInt()
     }
+
+    fun spToPx(sp: Int, context: Context): Int {
+        return TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP,
+                sp.toFloat(),
+                context.resources.displayMetrics
+        ).toInt()
+    }
 }

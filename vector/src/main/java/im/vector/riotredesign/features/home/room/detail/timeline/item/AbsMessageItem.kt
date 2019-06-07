@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.item
 
+import android.graphics.Typeface
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.utils.DebouncedClickListener
 import im.vector.riotredesign.core.utils.DimensionUtils.dpToPx
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
@@ -45,13 +47,24 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     var cellClickListener: View.OnClickListener? = null
 
     @EpoxyAttribute
-    var avatarClickListener: View.OnClickListener? = null
-
-    @EpoxyAttribute
     var memberClickListener: View.OnClickListener? = null
 
     @EpoxyAttribute
+    var emojiTypeFace: Typeface? = null
+
+    @EpoxyAttribute
     var reactionPillCallback: TimelineEventController.ReactionPillCallback? = null
+
+    @EpoxyAttribute
+    var avatarCallback: TimelineEventController.AvatarCallback?= null
+
+    private val _avatarClickListener =  DebouncedClickListener(View.OnClickListener {
+        avatarCallback?.onAvatarClicked(informationData)
+    })
+    private val _memberNameClickListener =  DebouncedClickListener(View.OnClickListener {
+        avatarCallback?.onMemberNameClicked(informationData)
+    })
+
 
     var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
@@ -60,6 +73,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
         override fun onUnReacted(reactionButton: ReactionButton) {
             reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString, false)
+        }
+
+        override fun onLongClick(reactionButton: ReactionButton) {
+            reactionPillCallback?.onLongClickOnReactionPill(informationData, reactionButton.reactionString)
         }
     }
 
@@ -73,9 +90,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                 width = size
             }
             holder.avatarImageView.visibility = View.VISIBLE
-            holder.avatarImageView.setOnClickListener(avatarClickListener)
+            holder.avatarImageView.setOnClickListener(_avatarClickListener)
             holder.memberNameView.visibility = View.VISIBLE
-            holder.memberNameView.setOnClickListener(memberClickListener)
+            holder.memberNameView.setOnClickListener(_memberNameClickListener)
             holder.timeView.visibility = View.VISIBLE
             holder.timeView.text = informationData.time
             holder.memberNameView.text = informationData.memberName
@@ -108,7 +125,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             //clear all reaction buttons (but not the Flow helper!)
             holder.reactionWrapper?.children?.forEach { (it as? ReactionButton)?.isGone = true }
             val idToRefInFlow = ArrayList<Int>()
-            informationData.orderedReactionList?.chunked(7)?.firstOrNull()?.forEachIndexed { index, reaction ->
+            informationData.orderedReactionList?.chunked(8)?.firstOrNull()?.forEachIndexed { index, reaction ->
                 (holder.reactionWrapper?.children?.elementAtOrNull(index) as? ReactionButton)?.let { reactionButton ->
                     reactionButton.isVisible = true
                     reactionButton.reactedListener = reactionClickListener
@@ -116,6 +133,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                     idToRefInFlow.add(reactionButton.id)
                     reactionButton.reactionString = reaction.key
                     reactionButton.reactionCount = reaction.count
+                    reactionButton.emojiTypeFace = emojiTypeFace
                     reactionButton.setChecked(reaction.addedByMe)
                     reactionButton.isEnabled = reaction.synced
                 }

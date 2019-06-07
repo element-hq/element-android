@@ -20,6 +20,8 @@
     <string name="reactions_agree">Agree</string>
     <string name="reactions_like">Like</string>
     <string name="message_add_reaction">Add Reaction</string>
+    <string name="message_view_reaction">View Reactions</string>
+    <string name="reactions">Reactions</string>
 
     <string name="event_redacted_by_user_reason">Event deleted by user</string>
     <string name="event_redacted_by_admin_reason">Event moderated by room admin</string>

@@ -84,6 +84,7 @@ android {
         debug {
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
+            buildConfigField "boolean", "SHOW_HIDDEN_TIMELINE_EVENTS", "false"
 
             signingConfig signingConfigs.debug
         }
@@ -91,6 +92,7 @@ android {
         release {
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
+            buildConfigField "boolean", "SHOW_HIDDEN_TIMELINE_EVENTS", "false"
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

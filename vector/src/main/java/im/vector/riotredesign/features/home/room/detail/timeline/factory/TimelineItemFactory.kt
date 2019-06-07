@@ -17,10 +17,16 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageDefaultContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.EmptyItem_
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
 import timber.log.Timber
 
 class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
@@ -43,7 +49,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 EventType.STATE_HISTORY_VISIBILITY,
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER       -> noticeItemFactory.create(event)
+                EventType.CALL_ANSWER       -> noticeItemFactory.create(event, callback)
 
                 // Unhandled event types (yet)
                 EventType.ENCRYPTED,
@@ -51,9 +57,32 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STICKER,
                 EventType.STATE_ROOM_CREATE -> defaultItemFactory.create(event)
+
                 else                        -> {
-                    Timber.w("Ignored event (type: ${event.root.type}")
-                    null
+                    //These are just for debug to display hidden event, they should be filtered out in normal mode
+                    if (TimelineDisplayableEvents.DEBUG_HIDDEN_EVENT) {
+                        val informationData = MessageInformationData(eventId = event.root.eventId
+                                ?: "?",
+                                senderId = event.root.sender ?: "",
+                                sendState = event.sendState,
+                                time = "",
+                                avatarUrl = null,
+                                memberName = "",
+                                showInformation = false
+                        )
+                        val messageContent = event.root.content.toModel<MessageContent>()
+                                ?: MessageDefaultContent("", "", null, null)
+                        MessageTextItem_()
+                                .informationData(informationData)
+                                .message("{ \"type\": ${event.root.type} }")
+                                .longClickListener { view ->
+                                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                                            ?: false
+                                }
+                    } else {
+                        Timber.w("Ignored event (type: ${event.root.type}")
+                        null
+                    }
                 }
             }
         } catch (e: Exception) {

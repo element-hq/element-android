@@ -23,6 +23,7 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.utils.containsOnlyEmojis
 import im.vector.riotredesign.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -51,12 +52,20 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-
         holder.messageView.movementMethod = mvmtMethod
+
+
+        val msg = message ?: ""
+        if (msg.length <= 4 && containsOnlyEmojis(msg.toString())) {
+            holder.messageView.textSize = 44F
+        } else {
+            holder.messageView.textSize = 14F
+        }
 
         val textFuture = PrecomputedTextCompat.getTextFuture(message ?: "",
                 TextViewCompat.getTextMetricsParams(holder.messageView),
                 null)
+
         holder.messageView.setTextFuture(textFuture)
         holder.messageView.renderSendState()
         holder.messageView.setOnClickListener(cellClickListener)

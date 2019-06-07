@@ -19,23 +19,20 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import android.os.Handler
-import android.os.HandlerThread
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.provider.FontRequest
-import androidx.core.provider.FontsContractCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
+import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
-import timber.log.Timber
+import org.koin.android.ext.android.inject
 
 /**
  *
@@ -44,19 +41,20 @@ import timber.log.Timber
  * TODO: Finish Refactor to vector base activity
  * TODO: Move font request to app
  */
-class EmojiReactionPickerActivity : VectorBaseActivity() {
+class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvider.FontProviderListener {
+
 
     private lateinit var tabLayout: TabLayout
 
     lateinit var viewModel: EmojiChooserViewModel
-
-    private var mHandler: Handler? = null
 
     override fun getMenuRes(): Int = R.menu.menu_emoji_reaction_picker
 
     override fun getLayoutRes(): Int = R.layout.activity_emoji_reaction_picker
 
     override fun getTitleRes(): Int = R.string.title_activity_emoji_reaction_picker
+
+    val emojiCompatFontProvider by inject<EmojiCompatFontProvider>()
 
     private var tabLayoutSelectionListener = object : TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
         override fun onTabReselected(p0: TabLayout.Tab) {
@@ -71,19 +69,13 @@ class EmojiReactionPickerActivity : VectorBaseActivity() {
 
     }
 
-    private fun getFontThreadHandler(): Handler {
-        if (mHandler == null) {
-            val handlerThread = HandlerThread("fonts")
-            handlerThread.start()
-            mHandler = Handler(handlerThread.looper)
-        }
-        return mHandler!!
-    }
-
     override fun initUiAndData() {
         configureToolbar(emojiPickerToolbar)
 
-        requestEmojivUnicode10CompatibleFont()
+        emojiCompatFontProvider.let {
+            EmojiDrawView.configureTextPaint(this, it.typeface)
+            it.addListener(this)
+        }
 
         tabLayout = findViewById(R.id.tabs)
 
@@ -124,27 +116,13 @@ class EmojiReactionPickerActivity : VectorBaseActivity() {
         })
     }
 
-    private fun requestEmojivUnicode10CompatibleFont() {
-        val fontRequest = FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                "Noto Color Emoji Compat",
-                R.array.com_google_android_gms_fonts_certs
-        )
+    override fun compatibilityFontUpdate(typeface: Typeface?) {
+        EmojiDrawView.configureTextPaint(this, typeface)
+    }
 
-        EmojiDrawView.configureTextPaint(this, null)
-        val callback = object : FontsContractCompat.FontRequestCallback() {
-
-            override fun onTypefaceRetrieved(typeface: Typeface) {
-                EmojiDrawView.configureTextPaint(this@EmojiReactionPickerActivity, typeface)
-            }
-
-            override fun onTypefaceRequestFailed(reason: Int) {
-                Timber.e("Failed to load Emoji Compatible font, reason:$reason")
-            }
-        }
-
-        FontsContractCompat.requestFont(this, fontRequest, callback, getFontThreadHandler())
+    override fun onDestroy() {
+        emojiCompatFontProvider.removeListener(this)
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

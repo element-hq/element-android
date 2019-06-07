@@ -72,7 +72,8 @@ class HomeModule {
             val timelineMediaSizeProvider = TimelineMediaSizeProvider()
             val colorProvider = ColorProvider(fragment.requireContext())
             val timelineDateFormatter = get<TimelineDateFormatter>()
-            val messageItemFactory = MessageItemFactory(colorProvider, timelineMediaSizeProvider, timelineDateFormatter, eventHtmlRenderer, get())
+            val messageItemFactory = MessageItemFactory(colorProvider, timelineMediaSizeProvider,
+                    timelineDateFormatter, eventHtmlRenderer, get(), get())
 
             val timelineItemFactory = TimelineItemFactory(
                     messageItemFactory = messageItemFactory,

@@ -72,7 +72,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.openRoomLiveData.observeEvent(this) {
-            navigator.openRoom(it)
+            navigator.openRoom(it, requireActivity())
         }
 
         createChatFabMenu.listener = this
@@ -116,7 +116,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
 
 
     override fun openRoomDirectory() {
-        navigator.openRoomDirectory()
+        navigator.openRoomDirectory(requireActivity())
     }
 
     override fun createDirectChat() {
