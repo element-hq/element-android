@@ -95,7 +95,7 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
                         messageBody = body,
                         ts = dateFormat.format(Date(originTs ?: 0)),
                         showPreview = body != null,
-                        canReact = event.root.type == EventType.MESSAGE,
+                        canReact = event.root.type == EventType.MESSAGE && event.sendState.isSent(),
                         senderAvatarPath = parcel.informationData.avatarUrl
                 )
             } else {

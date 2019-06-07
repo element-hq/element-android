@@ -54,13 +54,14 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     ?: event.root.content.toModel()
             val type = messageContent?.type
 
-            if (event.sendState == SendState.UNSENT) {
+            if (!event.sendState.isSent()) {
                 //Resend and Delete
                 return MessageMenuState(
+                        //TODO
                         listOf(
-                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_send, event.root.eventId),
-                                //TODO delete icon
-                                SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId)
+//                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_send, event.root.eventId),
+//                                //TODO delete icon
+//                                SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId)
                         )
                 )
             }
