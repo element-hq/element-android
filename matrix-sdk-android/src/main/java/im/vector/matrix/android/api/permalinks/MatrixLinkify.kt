@@ -17,9 +17,6 @@
 package im.vector.matrix.android.api.permalinks
 
 import android.text.Spannable
-import android.text.SpannableString
-import android.text.method.LinkMovementMethod
-import android.widget.TextView
 import im.vector.matrix.android.api.MatrixPatterns
 
 /**
@@ -56,37 +53,5 @@ object MatrixLinkify {
         }
         return hasMatch
     }
-
-//    fun addLinks(textView: TextView, callback: MatrixPermalinkSpan.Callback?): Boolean {
-//        val text = textView.text
-//        if (text is Spannable) {
-//            if (addLinks(text, callback)) {
-//                addLinkMovementMethod(textView)
-//                return true
-//            }
-//
-//            return false
-//        } else {
-//            val spannableString = SpannableString.valueOf(text)
-//            if (addLinks(spannableString, callback)) {
-//                addLinkMovementMethod(textView)
-//                textView.text = spannableString
-//                return true
-//            }
-//            return false
-//        }
-//    }
-
-    /**
-     * Add linkMovementMethod on textview if not already set
-     * @param textView the textView on which the movementMethod is set
-     */
-    fun addLinkMovementMethod(textView: TextView) {
-        val movementMethod = textView.movementMethod
-        if (movementMethod == null || movementMethod !is LinkMovementMethod) {
-            if (textView.linksClickable) {
-                textView.movementMethod = LinkMovementMethod.getInstance()
-            }
-        }
-    }
+    
 }

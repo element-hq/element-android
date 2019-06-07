@@ -44,7 +44,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             false
         }
         it.setOnLinkLongClickListener { textView, url ->
-            //Long clicks are handled by parent, return false to block android to do something with url
+            //Long clicks are handled by parent, return true to block android to do something with url
             true
         }
     }
