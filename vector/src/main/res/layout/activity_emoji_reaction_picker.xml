@@ -25,8 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:minHeight="0dp"
-            tools:title="@string/reactions"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways" />
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways"
+            tools:title="@string/reactions" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
