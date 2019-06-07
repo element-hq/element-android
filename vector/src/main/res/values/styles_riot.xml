@@ -8,6 +8,7 @@
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextAppearance">@style/Vector.Toolbar.SubTitle</item>
+        <item name="android:background">?riotx_background</item>
     </style>
 
     <style name="VectorToolbarStyle.Group">
