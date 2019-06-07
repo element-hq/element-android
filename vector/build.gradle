@@ -85,7 +85,7 @@ android {
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "SHOW_HIDDEN_TIMELINE_EVENTS", "false"
-            
+
             signingConfig signingConfigs.debug
         }
 

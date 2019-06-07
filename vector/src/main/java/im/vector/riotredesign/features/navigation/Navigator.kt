@@ -29,6 +29,6 @@ interface Navigator {
 
     fun openSettings(context: Context)
 
-    fun openDebug()
+    fun openDebug(context: Context)
 
 }

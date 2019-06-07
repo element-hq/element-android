@@ -52,7 +52,7 @@ class DefaultNavigator : Navigator {
         context.startActivity(intent)
     }
 
-    override fun openDebug() {
-        activity.startActivity(Intent(activity, DebugMenuActivity::class.java))
+    override fun openDebug(context: Context) {
+        context.startActivity(Intent(context, DebugMenuActivity::class.java))
     }
 }

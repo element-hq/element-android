@@ -15,6 +15,7 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -25,8 +26,10 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.riotredesign.core.platform.VectorViewModel
+import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import org.commonmark.parser.Parser
 import org.koin.android.ext.android.get
+import org.koin.core.parameter.parametersOf
 import ru.noties.markwon.Markwon
 import ru.noties.markwon.html.HtmlPlugin
 import timber.log.Timber
@@ -53,28 +56,45 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
 
         override fun initialState(viewModelContext: ViewModelContext): MessageActionState? {
             val currentSession = viewModelContext.activity.get<Session>()
+            val fragment = (viewModelContext as? FragmentViewModelContext)?.fragment
+            val noticeFormatter = fragment?.get<NoticeEventFormatter>(parameters = { parametersOf(fragment) })
             val parcel = viewModelContext.args as TimelineEventFragmentArgs
 
             val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
 
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
+            var body: CharSequence? = null
+            val originTs = event?.root?.originServerTs
             return if (event != null) {
-                val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
-                        ?: event.root.content.toModel()
-                val originTs = event.root.originServerTs
-                var body: CharSequence? = messageContent?.body
-                if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
-                    val parser = Parser.builder().build()
-                    val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
-                    body = Markwon.builder(viewModelContext.activity)
-                            .usePlugin(HtmlPlugin.create()).build().render(document)
+                when (event.root.type) {
+                    EventType.MESSAGE     -> {
+                        val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
+                                ?: event.root.content.toModel()
+                        body = messageContent?.body
+                        if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
+                            val parser = Parser.builder().build()
+                            val document = parser.parse(messageContent.formattedBody
+                                    ?: messageContent.body)
+                            body = Markwon.builder(viewModelContext.activity)
+                                    .usePlugin(HtmlPlugin.create()).build().render(document)
+                        }
+                    }
+                    EventType.STATE_ROOM_NAME,
+                    EventType.STATE_ROOM_TOPIC,
+                    EventType.STATE_ROOM_MEMBER,
+                    EventType.STATE_HISTORY_VISIBILITY,
+                    EventType.CALL_INVITE,
+                    EventType.CALL_HANGUP,
+                    EventType.CALL_ANSWER -> {
+                        body = noticeFormatter?.format(event)
+                    }
                 }
                 MessageActionState(
                         userId = event.root.sender ?: "",
-                        senderName = parcel.informationData.memberName.toString(),
+                        senderName = parcel.informationData.memberName?.toString() ?: "",
                         messageBody = body,
                         ts = dateFormat.format(Date(originTs ?: 0)),
-                        showPreview = event.root.type == EventType.MESSAGE,
+                        showPreview = body != null,
                         canReact = event.root.type == EventType.MESSAGE,
                         senderAvatarPath = currentSession.contentUrlResolver().resolveFullSize(parcel.informationData.avatarUrl)
                 )
