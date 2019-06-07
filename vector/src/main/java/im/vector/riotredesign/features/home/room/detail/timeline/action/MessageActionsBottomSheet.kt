@@ -17,13 +17,13 @@ package im.vector.riotredesign.features.home.room.detail.timeline.action
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -33,10 +33,9 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
-import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.bottom_sheet_message_actions.*
 
 /**
  * Bottom sheet fragment that shows a message preview with list of contextual actions
@@ -74,7 +73,7 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
         val cfm = childFragmentManager
         var menuActionFragment = cfm.findFragmentByTag("MenuActionFragment") as? MessageMenuFragment
         if (menuActionFragment == null) {
-            menuActionFragment = MessageMenuFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as ParcelableArgs)
+            menuActionFragment = MessageMenuFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as TimelineEventFragmentArgs)
             cfm.beginTransaction()
                     .replace(R.id.bottom_sheet_menu_container, menuActionFragment, "MenuActionFragment")
                     .commit()
@@ -89,7 +88,7 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
 
         var quickReactionFragment = cfm.findFragmentByTag("QuickReaction") as? QuickReactionFragment
         if (quickReactionFragment == null) {
-            quickReactionFragment = QuickReactionFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as ParcelableArgs)
+            quickReactionFragment = QuickReactionFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as TimelineEventFragmentArgs)
             cfm.beginTransaction()
                     .replace(R.id.bottom_sheet_quick_reaction_container, quickReactionFragment, "QuickReaction")
                     .commit()
@@ -117,36 +116,26 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
     }
 
     override fun invalidate() = withState(viewModel) {
-        senderNameTextView.text = it.senderName
-        messageBodyTextView.text = it.messageBody
-        messageTimestampText.text = it.ts
-
-        GlideApp.with(this).clear(senderAvatarImageView)
-        if (it.senderAvatarPath != null) {
-            GlideApp.with(this)
-                    .load(it.senderAvatarPath)
-                    .circleCrop()
-                    .placeholder(AvatarRenderer.getPlaceholderDrawable(requireContext(), it.userId, it.senderName))
-                    .into(senderAvatarImageView)
+        if (it.showPreview) {
+            bottom_sheet_message_preview.isVisible = true
+            senderNameTextView.text = it.senderName
+            messageBodyTextView.text = it.messageBody
+            messageTimestampText.text = it.ts
+            AvatarRenderer.render(it.senderAvatarPath, it.userId, it.senderName, senderAvatarImageView)
         } else {
-            senderAvatarImageView.setImageDrawable(AvatarRenderer.getPlaceholderDrawable(requireContext(), it.userId, it.senderName))
+            bottom_sheet_message_preview.isVisible = false
         }
+        quickReactBottomDivider.isVisible = it.canReact
+        bottom_sheet_quick_reaction_container.isVisible = it.canReact
         return@withState
     }
 
-
-    @Parcelize
-    data class ParcelableArgs(
-            val eventId: String,
-            val roomId: String,
-            val informationData: MessageInformationData
-    ) : Parcelable
 
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): MessageActionsBottomSheet {
             return MessageActionsBottomSheet().apply {
                 setArguments(
-                        ParcelableArgs(
+                        TimelineEventFragmentArgs(
                                 informationData.eventId,
                                 roomId,
                                 informationData

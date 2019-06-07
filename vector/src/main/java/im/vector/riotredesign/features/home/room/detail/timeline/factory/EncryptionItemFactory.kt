@@ -23,6 +23,9 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAvatar
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 
@@ -30,10 +33,17 @@ class EncryptionItemFactory(private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent): NoticeItem? {
         val text = buildNoticeText(event.root, event.senderName) ?: return null
+        val informationData = MessageInformationData(
+                eventId = event.root.eventId ?: "?",
+                senderId = event.root.sender ?: "",
+                sendState = event.sendState,
+                avatarUrl = event.senderAvatar(),
+                memberName = event.senderName(),
+                showInformation = false
+        )
         return NoticeItem_()
                 .noticeText(text)
-                .avatarUrl(event.senderAvatar)
-                .memberName(event.senderName)
+                .informationData(informationData)
     }
 
     private fun buildNoticeText(event: Event, senderName: String?): CharSequence? {

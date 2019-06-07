@@ -38,7 +38,12 @@ internal class TaskExecutor(private val coroutineDispatchers: MatrixCoroutineDis
                     task.execute(task.params)
                 }
             }
-            resultOrFailure.fold({ task.callback.onFailure(it) }, { task.callback.onSuccess(it) })
+            resultOrFailure.fold({
+                Timber.d(it, "Task failed")
+                task.callback.onFailure(it)
+            }, {
+                task.callback.onSuccess(it)
+            })
         }
         return CancelableCoroutine(job)
     }

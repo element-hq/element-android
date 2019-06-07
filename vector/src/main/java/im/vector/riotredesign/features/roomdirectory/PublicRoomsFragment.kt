@@ -124,12 +124,12 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
         when (joinState) {
             JoinState.JOINED        -> {
-                navigator.openRoom(publicRoom.roomId)
+                navigator.openRoom(publicRoom.roomId, requireActivity())
             }
             JoinState.NOT_JOINED,
             JoinState.JOINING_ERROR -> {
                 // ROOM PREVIEW
-                navigator.openRoomPreview(publicRoom)
+                navigator.openRoomPreview(publicRoom, requireActivity())
             }
             else                    -> {
                 Snackbar.make(publicRoomsCoordinator, getString(R.string.please_wait), Snackbar.LENGTH_SHORT)

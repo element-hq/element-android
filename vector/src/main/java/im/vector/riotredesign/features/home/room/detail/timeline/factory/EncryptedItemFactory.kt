@@ -26,6 +26,9 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAvatar
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 
 // This class handles timeline event who haven't been successfully decrypted
@@ -34,24 +37,31 @@ class EncryptedItemFactory(private val stringProvider: StringProvider) {
     fun create(timelineEvent: TimelineEvent): VectorEpoxyModel<*>? {
         return when {
             EventType.ENCRYPTED == timelineEvent.root.getClearType() -> {
-                    val cryptoError = timelineEvent.root.mCryptoError
-                    val errorDescription =
-                            if (cryptoError?.code == MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
-                                stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
-                            } else {
-                                cryptoError?.message
-                            }
+                val cryptoError = timelineEvent.root.mCryptoError
+                val errorDescription =
+                        if (cryptoError?.code == MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
+                            stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
+                        } else {
+                            cryptoError?.message
+                        }
 
-                    val message = stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
-                    val spannableStr = SpannableString(message)
-                    spannableStr.setSpan(StyleSpan(Typeface.ITALIC), 0, message.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    // TODO This is not correct format for error, change it
-                    return NoticeItem_()
-                            .noticeText(spannableStr)
-                            .avatarUrl(timelineEvent.senderAvatar)
-                            .memberName(timelineEvent.senderName)
+                val message = stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                val spannableStr = SpannableString(message)
+                spannableStr.setSpan(StyleSpan(Typeface.ITALIC), 0, message.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                // TODO This is not correct format for error, change it
+                val informationData = MessageInformationData(
+                        eventId = timelineEvent.root.eventId ?: "?",
+                        senderId = timelineEvent.root.sender ?: "",
+                        sendState = timelineEvent.sendState,
+                        avatarUrl = timelineEvent.senderAvatar(),
+                        memberName = timelineEvent.senderName(),
+                        showInformation = false
+                )
+                return NoticeItem_()
+                        .noticeText(spannableStr)
+                        .informationData(informationData)
             }
-            else                                           -> null
+            else                                                     -> null
         }
     }
 }

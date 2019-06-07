@@ -18,6 +18,10 @@ package im.vector.riotredesign
 
 import android.app.Application
 import android.content.Context
+import android.os.Handler
+import android.os.HandlerThread
+import androidx.core.provider.FontRequest
+import androidx.core.provider.FontsContractCompat
 import android.content.res.Configuration
 import androidx.multidex.MultiDex
 import com.airbnb.epoxy.EpoxyAsyncUtil
@@ -43,6 +47,9 @@ import timber.log.Timber
 class VectorApplication : Application() {
 
     lateinit var appContext: Context
+    //font thread handler
+    private var mFontThreadHandler: Handler? = null
+
     val vectorConfiguration: VectorConfiguration by inject()
 
     override fun onCreate() {
@@ -66,9 +73,20 @@ class VectorApplication : Application() {
         val appModule = AppModule(applicationContext).definition
         val homeModule = HomeModule().definition
         val roomDirectoryModule = RoomDirectoryModule().definition
-        startKoin(listOf(appModule, homeModule, roomDirectoryModule), logger = EmptyLogger())
+        val koin = startKoin(listOf(appModule, homeModule, roomDirectoryModule), logger = EmptyLogger())
         Matrix.getInstance().setApplicationFlavor(BuildConfig.FLAVOR_DESCRIPTION)
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks())
+
+        val fontRequest = FontRequest(
+                "com.google.android.gms.fonts",
+                "com.google.android.gms",
+                "Noto Color Emoji Compat",
+                R.array.com_google_android_gms_fonts_certs
+        )
+
+//        val efp = koin.koinContext.get<EmojiCompatFontProvider>()
+        FontsContractCompat.requestFont(this, fontRequest, koin.koinContext.get<EmojiCompatFontProvider>(), getFontThreadHandler())
+
         vectorConfiguration.initConfiguration()
     }
 
@@ -80,6 +98,15 @@ class VectorApplication : Application() {
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
         vectorConfiguration.onConfigurationChanged(newConfig)
+    }
+
+    private fun getFontThreadHandler(): Handler {
+        if (mFontThreadHandler == null) {
+            val handlerThread = HandlerThread("fonts")
+            handlerThread.start()
+            mFontThreadHandler = Handler(handlerThread.looper)
+        }
+        return mFontThreadHandler!!
     }
 
 }

@@ -17,6 +17,7 @@
 package im.vector.riotredesign.features.navigation
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
@@ -27,32 +28,31 @@ import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewActivity
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
 
-class DefaultNavigator(private val fraqment: Fragment) : Navigator {
+class DefaultNavigator : Navigator {
 
-    val activity: Activity = fraqment.requireActivity()
 
-    override fun openRoom(roomId: String) {
+    override fun openRoom(roomId: String, context: Context) {
         val args = RoomDetailArgs(roomId)
-        val intent = RoomDetailActivity.newIntent(activity, args)
-        activity.startActivity(intent)
+        val intent = RoomDetailActivity.newIntent(context, args)
+        context.startActivity(intent)
     }
 
-    override fun openRoomPreview(publicRoom: PublicRoom) {
-        val intent = RoomPreviewActivity.getIntent(activity, publicRoom)
-        activity.startActivity(intent)
+    override fun openRoomPreview(publicRoom: PublicRoom, context: Context) {
+        val intent = RoomPreviewActivity.getIntent(context, publicRoom)
+        context.startActivity(intent)
     }
 
-    override fun openRoomDirectory() {
-        val intent = Intent(activity, RoomDirectoryActivity::class.java)
-        activity.startActivity(intent)
+    override fun openRoomDirectory(context: Context) {
+        val intent = Intent(context, RoomDirectoryActivity::class.java)
+        context.startActivity(intent)
     }
 
-    override fun openSettings() {
-        val intent = VectorSettingsActivity.getIntent(activity, "TODO")
-        activity.startActivity(intent)
+    override fun openSettings(context: Context) {
+        val intent = VectorSettingsActivity.getIntent(context, "TODO")
+        context.startActivity(intent)
     }
 
-    override fun openDebug() {
-        activity.startActivity(Intent(activity, DebugMenuActivity::class.java))
+    override fun openDebug(context: Context) {
+        context.startActivity(Intent(context, DebugMenuActivity::class.java))
     }
 }

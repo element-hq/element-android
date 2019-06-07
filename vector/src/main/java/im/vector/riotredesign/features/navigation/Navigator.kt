@@ -16,18 +16,19 @@
 
 package im.vector.riotredesign.features.navigation
 
+import android.content.Context
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 
 interface Navigator {
 
-    fun openRoom(roomId: String)
+    fun openRoom(roomId: String, context: Context)
 
-    fun openRoomPreview(publicRoom: PublicRoom)
+    fun openRoomPreview(publicRoom: PublicRoom, context: Context)
 
-    fun openRoomDirectory()
+    fun openRoomDirectory(context: Context)
 
-    fun openSettings()
+    fun openSettings(context: Context)
 
-    fun openDebug()
+    fun openDebug(context: Context)
 
 }

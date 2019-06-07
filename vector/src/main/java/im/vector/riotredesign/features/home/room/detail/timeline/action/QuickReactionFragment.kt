@@ -15,6 +15,7 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +29,9 @@ import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.R
+import org.koin.android.ext.android.inject
 
 /**
  * Quick Reaction Fragment (agree / like reactions)
@@ -54,6 +57,8 @@ class QuickReactionFragment : BaseMvRxFragment() {
 
     var interactionListener: InteractionListener? = null
 
+    val fontProvider by inject<EmojiCompatFontProvider>()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.adapter_item_action_quick_reaction, container, false)
         ButterKnife.bind(this, view)
@@ -67,6 +72,10 @@ class QuickReactionFragment : BaseMvRxFragment() {
         quickReact2Text.text = QuickReactionViewModel.agreeNegative
         quickReact3Text.text = QuickReactionViewModel.likePositive
         quickReact4Text.text = QuickReactionViewModel.likeNegative
+
+        listOf(quickReact1Text, quickReact2Text, quickReact3Text, quickReact4Text).forEach {
+            it.typeface = fontProvider.typeface ?: Typeface.DEFAULT
+        }
 
         //configure click listeners
         quickReact1Text.setOnClickListener {
@@ -88,11 +97,11 @@ class QuickReactionFragment : BaseMvRxFragment() {
 
         TransitionManager.beginDelayedTransition(rootLayout)
         when (it.agreeTrigleState) {
-            TriggleState.NONE -> {
+            TriggleState.NONE   -> {
                 quickReact1Text.alpha = 1f
                 quickReact2Text.alpha = 1f
             }
-            TriggleState.FIRST -> {
+            TriggleState.FIRST  -> {
                 quickReact1Text.alpha = 1f
                 quickReact2Text.alpha = 0.2f
 
@@ -103,11 +112,11 @@ class QuickReactionFragment : BaseMvRxFragment() {
             }
         }
         when (it.likeTriggleState) {
-            TriggleState.NONE -> {
+            TriggleState.NONE   -> {
                 quickReact3Text.alpha = 1f
                 quickReact4Text.alpha = 1f
             }
-            TriggleState.FIRST -> {
+            TriggleState.FIRST  -> {
                 quickReact3Text.alpha = 1f
                 quickReact4Text.alpha = 0.2f
 
@@ -130,7 +139,7 @@ class QuickReactionFragment : BaseMvRxFragment() {
     }
 
     companion object {
-        fun newInstance(pa: MessageActionsBottomSheet.ParcelableArgs): QuickReactionFragment {
+        fun newInstance(pa: TimelineEventFragmentArgs): QuickReactionFragment {
             val args = Bundle()
             args.putParcelable(MvRx.KEY_ARG, pa)
             val fragment = QuickReactionFragment()

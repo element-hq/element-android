@@ -69,7 +69,9 @@ class HomeModule {
             val eventHtmlRenderer = EventHtmlRenderer(GlideApp.with(fragment), fragment.requireContext(), get())
             val noticeEventFormatter = get<NoticeEventFormatter>(parameters = { parametersOf(fragment) })
             val timelineMediaSizeProvider = TimelineMediaSizeProvider()
-            val messageItemFactory = MessageItemFactory(colorProvider, timelineMediaSizeProvider, timelineDateFormatter, eventHtmlRenderer, get())
+            val messageItemFactory = MessageItemFactory(colorProvider, timelineMediaSizeProvider,
+                    timelineDateFormatter, eventHtmlRenderer, get(), get())
+
             val timelineItemFactory = TimelineItemFactory(
                     messageItemFactory = messageItemFactory,
                     noticeItemFactory = NoticeItemFactory(noticeEventFormatter),

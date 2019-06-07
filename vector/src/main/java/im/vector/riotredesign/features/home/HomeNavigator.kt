@@ -48,7 +48,7 @@ class HomeNavigator {
         activity?.let {
             //TODO enable eventId permalink. It doesn't work enough at the moment.
             it.drawerLayout?.closeDrawer(GravityCompat.START)
-            navigator.openRoom(roomId)
+            navigator.openRoom(roomId, it)
         }
     }
 

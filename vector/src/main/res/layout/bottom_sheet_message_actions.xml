@@ -86,7 +86,8 @@
                 tools:text="Friday 8pm" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <View
+            android:id="@+id/quickReactTopDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?attr/vctr_list_divider_color" />
@@ -94,18 +95,22 @@
         <FrameLayout
             android:id="@+id/bottom_sheet_quick_reaction_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:background="@android:color/holo_green_light"
+            tools:layout_height="180dp" />
 
-        <LinearLayout
+        <View
+            android:id="@+id/quickReactBottomDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?attr/vctr_list_divider_color" />
 
-
         <FrameLayout
             android:id="@+id/bottom_sheet_menu_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:background="@android:color/holo_blue_dark"
+            tools:layout_height="250dp" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

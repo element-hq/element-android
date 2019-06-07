@@ -53,6 +53,7 @@ import com.jaiselrahman.filepicker.model.MediaFile
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
+import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
@@ -84,6 +85,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventCo
 import im.vector.riotredesign.features.home.room.detail.timeline.action.ActionsHandler
 import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageMenuViewModel
+import im.vector.riotredesign.features.home.room.detail.timeline.action.ViewReactionBottomSheet
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.html.PillImageSpan
@@ -235,11 +237,13 @@ class RoomDetailFragment :
                     var formattedBody: CharSequence? = null
                     if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                         val parser = Parser.builder().build()
-                        val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
+                        val document = parser.parse(messageContent.formattedBody
+                                ?: messageContent.body)
                         formattedBody = Markwon.builder(requireContext())
                                 .usePlugin(HtmlPlugin.create()).build().render(document)
                     }
-                    composerLayout.composerRelatedMessageContent.text = formattedBody ?: nonFormattedBody
+                    composerLayout.composerRelatedMessageContent.text = formattedBody
+                            ?: nonFormattedBody
 
 
                     if (mode == SendMode.EDIT) {
@@ -559,11 +563,11 @@ class RoomDetailFragment :
         vectorBaseActivity.notImplemented()
     }
 
-    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View) {
+    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
 
     }
 
-    override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent, view: View): Boolean {
+    override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         val roomId = roomDetailArgs.roomId
 
@@ -593,6 +597,11 @@ class RoomDetailFragment :
         }
     }
 
+    override fun onLongClickOnReactionPill(informationData: MessageInformationData, reaction: String) {
+        ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+                .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
+    }
+
     override fun onEditedDecorationClicked(informationData: MessageInformationData, editAggregatedSummary: EditAggregatedSummary?) {
         editAggregatedSummary?.also {
             roomDetailViewModel.process(RoomDetailActions.ShowEditHistoryAction(informationData.eventId, it))
@@ -613,12 +622,17 @@ class RoomDetailFragment :
                     val eventId = actionData.data?.toString() ?: return
                     startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), eventId), REACTION_SELECT_REQUEST_CODE)
                 }
+                MessageMenuViewModel.ACTION_VIEW_REACTIONS -> {
+                    val messageInformationData = actionData.data as? MessageInformationData
+                            ?: return
+                    ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, messageInformationData)
+                            .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
+                }
                 MessageMenuViewModel.ACTION_COPY           -> {
                     //I need info about the current selected message :/
                     copyToClipboard(requireContext(), actionData.data?.toString() ?: "", false)
-                    val snack = Snackbar.make(view!!, requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
-                    snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
-                    snack.show()
+                    val msg = requireContext().getString(R.string.copied_to_clipboard)
+                    showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
                 }
                 MessageMenuViewModel.ACTION_DELETE         -> {
                     val eventId = actionData.data?.toString() ?: return
@@ -684,6 +698,13 @@ class RoomDetailFragment :
                 MessageMenuViewModel.ACTION_REPLY          -> {
                     val eventId = actionData.data.toString()
                     roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                }
+                MessageMenuViewModel.ACTION_COPY_PERMALINK -> {
+                    val eventId = actionData.data.toString()
+                    val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, eventId)
+                    copyToClipboard(requireContext(), permalink, false)
+                    showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+
                 }
                 else                                       -> {
                     Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:addStatesFromChildren="true"
+    android:background="?attr/selectableItemBackground"
     android:paddingLeft="8dp"
     android:paddingRight="8dp">
 
@@ -31,9 +32,9 @@
     <ViewStub
         android:id="@+id/messageContentBlankStub"
         style="@style/TimelineContentStubNoInfoLayoutParams"
-        android:layout="@layout/item_timeline_event_blank_stub"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout="@layout/item_timeline_event_blank_stub"
         tools:ignore="MissingConstraints" />
 
     <ViewStub

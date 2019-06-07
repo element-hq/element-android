@@ -34,7 +34,7 @@ import org.koin.android.ext.android.get
 
 data class SimpleAction(val uid: String, val titleRes: Int, val iconResId: Int?, val data: Any? = null)
 
-data class MessageMenuState(val actions: List<SimpleAction>) : MvRxState
+data class MessageMenuState(val actions: List<SimpleAction> = emptyList()) : MvRxState
 
 /**
  * Manages list actions for a given message (copy / paste / forward...)
@@ -46,27 +46,26 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         override fun initialState(viewModelContext: ViewModelContext): MessageMenuState? {
             // Args are accessible from the context.
             val currentSession = viewModelContext.activity.get<Session>()
-            val parcel = viewModelContext.args as MessageActionsBottomSheet.ParcelableArgs
+            val parcel = viewModelContext.args as TimelineEventFragmentArgs
             val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
                     ?: return null
 
-            val messageContent: MessageContent =  event.annotations?.editSummary?.aggregatedContent?.toModel()
-                    ?: event.root.content.toModel() ?: return null
-            val type = messageContent.type
+            val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
+                    ?: event.root.content.toModel()
+            val type = messageContent?.type
 
-            if (event.sendState == SendState.UNSENT) {
+            if (!event.sendState.isSent()) {
                 //Resend and Delete
                 return MessageMenuState(
+                        //TODO
                         listOf(
-                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_send, event.root.eventId),
-                                //TODO delete icon
-                                SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId)
+//                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_send, event.root.eventId),
+//                                //TODO delete icon
+//                                SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId)
                         )
                 )
             }
 
-
-            //TODO determine if can copy, forward, reply, quote, report?
             val actions = ArrayList<SimpleAction>().apply {
 
                 if (event.sendState == SendState.SENDING) {
@@ -75,10 +74,12 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 }
                 //TODO is downloading attachement?
 
-                this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, event.root.eventId))
+                if (canReact(event, messageContent)) {
+                    this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, event.root.eventId))
+                }
                 if (canCopy(type)) {
                     //TODO copy images? html? see ClipBoard
-                    this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent.body))
+                    this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent!!.body))
                 }
 
                 if (canReply(event, messageContent)) {
@@ -94,8 +95,11 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 }
 
                 if (canQuote(event, messageContent)) {
-                    //TODO quote icon
                     this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, parcel.eventId))
+                }
+
+                if (canViewReactions(event)) {
+                    this.add(SimpleAction(ACTION_VIEW_REACTIONS, R.string.message_view_reaction, R.drawable.ic_view_reactions, parcel.informationData))
                 }
 
                 if (canShare(type)) {
@@ -117,14 +121,13 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     //TODO sent by me or sufficient power level
                 }
 
-
                 this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, JSONObject(event.root.toContent()).toString(4)))
                 if (event.isEncrypted()) {
                     this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, parcel.eventId))
                 }
-                this.add(SimpleAction(PERMALINK, R.string.permalink, R.drawable.ic_permalink, parcel.eventId))
+                this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, parcel.eventId))
 
-                if (currentSession.sessionParams.credentials.userId != event.root.sender) {
+                if (currentSession.sessionParams.credentials.userId != event.root.sender && event.root.getClearType() == EventType.MESSAGE) {
                     //not sent by me
                     this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, parcel.eventId))
                 }
@@ -133,10 +136,10 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             return MessageMenuState(actions)
         }
 
-        private fun canReply(event: TimelineEvent, messageContent: MessageContent): Boolean {
+        private fun canReply(event: TimelineEvent, messageContent: MessageContent?): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
             if (event.root.getClearType() != EventType.MESSAGE) return false
-            return when (messageContent.type) {
+            return when (messageContent?.type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
                 MessageType.MSGTYPE_EMOTE,
@@ -148,10 +151,15 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             }
         }
 
-        private fun canQuote(event: TimelineEvent, messageContent: MessageContent): Boolean {
+        private fun canReact(event: TimelineEvent, messageContent: MessageContent?): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            return event.root.getClearType() == EventType.MESSAGE
+        }
+
+        private fun canQuote(event: TimelineEvent, messageContent: MessageContent?): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
             if (event.root.getClearType() != EventType.MESSAGE) return false
-            return when (messageContent.type) {
+            return when (messageContent?.type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
                 MessageType.MSGTYPE_EMOTE,
@@ -165,14 +173,21 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
         private fun canRedact(event: TimelineEvent, myUserId: String): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.type != EventType.MESSAGE) return false
+            if (event.root.getClearType() != EventType.MESSAGE) return false
             //TODO if user is admin or moderator
             return event.root.sender == myUserId
         }
 
+        private fun canViewReactions(event: TimelineEvent): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            if (event.root.getClearType() != EventType.MESSAGE) return false
+            //TODO if user is admin or moderator
+            return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
+        }
+
         private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.type != EventType.MESSAGE) return false
+            if (event.root.getClearType() != EventType.MESSAGE) return false
             //TODO if user is admin or moderator
             val messageContent = event.root.content.toModel<MessageContent>()
             return event.root.sender == myUserId && (
@@ -182,7 +197,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         }
 
 
-        private fun canCopy(type: String): Boolean {
+        private fun canCopy(type: String?): Boolean {
             return when (type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
@@ -196,7 +211,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         }
 
 
-        private fun canShare(type: String): Boolean {
+        private fun canShare(type: String?): Boolean {
             return when (type) {
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_AUDIO,
@@ -217,9 +232,10 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
         const val ACTION_DELETE = "delete"
         const val VIEW_SOURCE = "VIEW_SOURCE"
         const val VIEW_DECRYPTED_SOURCE = "VIEW_DECRYPTED_SOURCE"
-        const val PERMALINK = "PERMALINK"
+        const val ACTION_COPY_PERMALINK = "ACTION_COPY_PERMALINK"
         const val ACTION_FLAG = "ACTION_FLAG"
         const val ACTION_QUICK_REACT = "ACTION_QUICK_REACT"
+        const val ACTION_VIEW_REACTIONS = "ACTION_VIEW_REACTIONS"
 
 
     }

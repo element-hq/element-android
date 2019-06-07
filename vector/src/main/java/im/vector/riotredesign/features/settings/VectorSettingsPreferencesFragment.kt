@@ -2322,7 +2322,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 }
 
                 // add the edit text preference
-                preference = VectorPreference(activity!!).apply {
+                preference = VectorPreference(requireActivity()).apply {
                     mTypeface = typeFaceHighlight
                 }
 

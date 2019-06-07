@@ -15,15 +15,19 @@
  */
 package im.vector.matrix.android.internal.session.room.relation
 
+import androidx.lifecycle.LiveData
 import androidx.work.OneTimeWorkRequest
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
+import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
@@ -167,6 +171,18 @@ internal class DefaultRelationService(private val roomId: String,
         val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
         TimelineSendEventWorkCommon.postWork(roomId, workRequest)
         return CancelableWork(workRequest.id)
+    }
+
+
+    override fun getEventSummaryLive(eventId: String): LiveData<List<EventAnnotationsSummary>> {
+        return monarchy.findAllMappedWithChanges(
+                { realm ->
+                    EventAnnotationsSummaryEntity.where(realm, eventId)
+                },
+                {
+                    it.asDomain()
+                }
+        )
     }
 
     /**

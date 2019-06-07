@@ -17,23 +17,32 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAvatar
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 
 class NoticeItemFactory(private val eventFormatter: NoticeEventFormatter) {
 
-    fun create(event: TimelineEvent): NoticeItem? {
+    fun create(event: TimelineEvent,
+               callback: TimelineEventController.Callback?): NoticeItem? {
         val formattedText = eventFormatter.format(event) ?: return null
-        val senderName = event.senderName()
-        val senderAvatar = event.senderAvatar()
+        val informationData = MessageInformationData(
+                eventId = event.root.eventId ?: "?",
+                senderId = event.root.sender ?: "",
+                sendState = event.sendState,
+                avatarUrl = event.senderAvatar(),
+                memberName = event.senderName(),
+                showInformation = false
+        )
 
         return NoticeItem_()
                 .noticeText(formattedText)
-                .avatarUrl(senderAvatar)
-                .memberName(senderName)
+                .informationData(informationData)
+                .baseCallback(callback)
     }
 
 
