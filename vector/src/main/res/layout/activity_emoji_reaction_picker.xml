@@ -15,25 +15,23 @@
         tools:layout="@layout/emoji_chooser_fragment" />
 
     <com.google.android.material.appbar.AppBarLayout
+        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="4dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/emojiPickerToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
             android:minHeight="0dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            tools:title="@string/reactions"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp" />
+            android:layout_height="40dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
