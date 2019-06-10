@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuic
 import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
 import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
+import im.vector.matrix.android.internal.session.room.send.LocalEchoUpdater
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.*
@@ -74,6 +75,10 @@ class RoomModule {
 
         scope(DefaultSession.SCOPE) {
             LocalEchoEventFactory(get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            LocalEchoUpdater(get())
         }
 
         scope(DefaultSession.SCOPE) {

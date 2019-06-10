@@ -22,6 +22,7 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -39,6 +40,7 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
     )
 
     private val roomAPI by inject<RoomAPI>()
+    private val localEchoUpdater by inject<LocalEchoUpdater>()
 
     override fun doWork(): Result {
 
@@ -50,6 +52,7 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
             return Result.success()
         }
 
+        localEchoUpdater.updateSendState(event.eventId, SendState.SENDING)
         val result = executeRequest<SendResponse> {
             apiCall = roomAPI.send(
                     event.eventId,
@@ -62,7 +65,7 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
             when (it) {
                 is Failure.NetworkConnection -> Result.retry()
                 else                         -> {
-                    //TODO mark as failed to send?
+                    localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
                     //always return success, or the chain will be stuck for ever!
                     Result.success()
                 }

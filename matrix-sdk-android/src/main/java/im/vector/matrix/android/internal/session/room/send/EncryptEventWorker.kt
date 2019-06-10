@@ -21,8 +21,10 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
@@ -40,16 +42,18 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     )
 
     private val crypto by inject<CryptoService>()
+    private val localEchoUpdater by inject<LocalEchoUpdater>()
 
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.success()
+                ?: return Result.success()
 
         val localEvent = params.event
         if (localEvent.eventId == null) {
             return Result.success()
         }
+        localEchoUpdater.updateSendState(localEvent.eventId, SendState.ENCRYPTING)
 
         // TODO Better async handling
         val latch = CountDownLatch(1)
@@ -76,19 +80,21 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         latch.await()
 
         val safeResult = result
-        // TODO Update local echo
-        return if (error != null) {
-            Result.success() // TODO Pass error!!)
-        } else if (safeResult != null) {
+        if (safeResult != null) {
             val encryptedEvent = localEvent.copy(
                     type = safeResult.mEventType,
                     content = safeResult.mEventContent
             )
             val nextWorkerParams = SendEventWorker.Params(params.roomId, encryptedEvent)
-            Result.success(WorkerParamsFactory.toData(nextWorkerParams))
-
-        } else {
-            Result.success()
+            return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         }
+        val safeError = error
+        val sendState = when (safeError) {
+            is Failure.CryptoError -> SendState.FAILED_UNKNOWN_DEVICES
+            else                   -> SendState.UNDELIVERED
+        }
+        localEchoUpdater.updateSendState(localEvent.eventId, sendState)
+        //always return success, or the chain will be stuck for ever!
+        return Result.success()
     }
 }

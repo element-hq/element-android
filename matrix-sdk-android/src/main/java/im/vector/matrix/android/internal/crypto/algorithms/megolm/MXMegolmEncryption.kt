@@ -21,6 +21,8 @@ package im.vector.matrix.android.internal.crypto.algorithms.megolm
 import android.text.TextUtils
 import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.DeviceListManager
@@ -88,7 +90,7 @@ internal class MXMegolmEncryption(
         keysClaimedMap["ed25519"] = olmDevice.deviceEd25519Key!!
 
         olmDevice.addInboundGroupSession(sessionId!!, olmDevice.getSessionKey(sessionId)!!, roomId, olmDevice.deviceCurve25519Key!!,
-                                         ArrayList(), keysClaimedMap, false)
+                ArrayList(), keysClaimedMap, false)
 
         keysBackup.maybeBackupKeys()
 
@@ -103,10 +105,10 @@ internal class MXMegolmEncryption(
     private suspend fun ensureOutboundSession(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>): Try<MXOutboundSessionInfo> {
         var session = outboundSession
         if (session == null
-            // Need to make a brand new session?
-            || session.needsRotation(sessionRotationPeriodMsgs, sessionRotationPeriodMs)
-            // Determine if we have shared with anyone we shouldn't have
-            || session.sharedWithTooManyDevices(devicesInRoom)) {
+                // Need to make a brand new session?
+                || session.needsRotation(sessionRotationPeriodMsgs, sessionRotationPeriodMs)
+                // Determine if we have shared with anyone we shouldn't have
+                || session.sharedWithTooManyDevices(devicesInRoom)) {
             session = prepareNewSessionInRoom()
             outboundSession = session
         }
@@ -192,7 +194,7 @@ internal class MXMegolmEncryption(
         return ensureOlmSessionsForDevicesAction.handle(devicesByUser)
                 .flatMap {
                     Timber.v("## shareUserDevicesKey() : ensureOlmSessionsForDevices succeeds after "
-                             + (System.currentTimeMillis() - t0) + " ms")
+                            + (System.currentTimeMillis() - t0) + " ms")
                     val contentMap = MXUsersDevicesMap<Any>()
                     var haveTargets = false
                     val userIds = it.userIds
@@ -227,7 +229,7 @@ internal class MXMegolmEncryption(
                         sendToDeviceTask.execute(sendToDeviceParams)
                                 .map {
                                     Timber.v("## shareUserDevicesKey() : sendToDevice succeeds after "
-                                             + (System.currentTimeMillis() - t0) + " ms")
+                                            + (System.currentTimeMillis() - t0) + " ms")
 
                                     // Add the devices we have shared with to session.sharedWithDevices.
                                     // we deliberately iterate over devicesByUser (ie, the devices we
@@ -291,24 +293,23 @@ internal class MXMegolmEncryption(
         // an m.new_device.
         return deviceListManager
                 .downloadKeys(userIds, false)
-                .map {
+                .flatMap {
                     val encryptToVerifiedDevicesOnly = cryptoStore.getGlobalBlacklistUnverifiedDevices()
-                                                       || cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
+                            || cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
 
                     val devicesInRoom = MXUsersDevicesMap<MXDeviceInfo>()
                     val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
 
                     for (userId in it.userIds) {
-                        val deviceIds = it.getUserDeviceIds(userId)
-
-                        for (deviceId in deviceIds!!) {
-                            val deviceInfo = it.getObject(deviceId, userId)
-                            if (warnOnUnknownDevicesRepository.warnOnUnknownDevices() && deviceInfo!!.isUnknown) {
+                        val deviceIds = it.getUserDeviceIds(userId) ?: continue
+                        for (deviceId in deviceIds) {
+                            val deviceInfo = it.getObject(deviceId, userId) ?: continue
+                            if (warnOnUnknownDevicesRepository.warnOnUnknownDevices() && deviceInfo.isUnknown) {
                                 // The device is not yet known by the user
                                 unknownDevices.setObject(deviceInfo, userId, deviceId)
                                 continue
                             }
-                            if (deviceInfo!!.isBlocked) {
+                            if (deviceInfo.isBlocked) {
                                 // Remove any blocked devices
                                 continue
                             }
@@ -324,7 +325,13 @@ internal class MXMegolmEncryption(
                             devicesInRoom.setObject(deviceInfo, userId, deviceId)
                         }
                     }
-                    devicesInRoom
+                    if (unknownDevices.isEmpty) {
+                        Try.just(devicesInRoom)
+                    } else {
+                        val cryptoError = MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
+                                MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)
+                        Try.Failure(Failure.CryptoError(cryptoError))
+                    }
                 }
     }
 }

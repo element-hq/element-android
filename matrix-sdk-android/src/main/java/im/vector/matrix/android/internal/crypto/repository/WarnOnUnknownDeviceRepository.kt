@@ -20,14 +20,14 @@ internal class WarnOnUnknownDeviceRepository {
 
     // TODO: set it back to true by default. Need UI
     // Warn the user if some new devices are detected while encrypting a message.
-    private var mWarnOnUnknownDevices = false
+    private var warnOnUnknownDevices = false
 
     /**
      * Tells if the encryption must fail if some unknown devices are detected.
      *
      * @return true to warn when some unknown devices are detected.
      */
-    fun warnOnUnknownDevices() = mWarnOnUnknownDevices
+    fun warnOnUnknownDevices() = warnOnUnknownDevices
 
     /**
      * Update the warn status when some unknown devices are detected.
@@ -35,7 +35,7 @@ internal class WarnOnUnknownDeviceRepository {
      * @param warn true to warn when some unknown devices are detected.
      */
     fun setWarnOnUnknownDevices(warn: Boolean) {
-        mWarnOnUnknownDevices = warn
+        warnOnUnknownDevices = warn
     }
 
 }

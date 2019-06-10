@@ -56,7 +56,6 @@ internal object TimelineSendEventWorkCommon {
         WorkManager.getInstance()
                 .beginUniqueWork(buildWorkIdentifier(roomId), ExistingWorkPolicy.APPEND, workRequest)
                 .enqueue()
-
     }
 
     inline fun <reified W : ListenableWorker> createWork(data: Data): OneTimeWorkRequest {

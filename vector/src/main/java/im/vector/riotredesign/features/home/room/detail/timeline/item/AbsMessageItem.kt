@@ -56,12 +56,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     var reactionPillCallback: TimelineEventController.ReactionPillCallback? = null
 
     @EpoxyAttribute
-    var avatarCallback: TimelineEventController.AvatarCallback?= null
+    var avatarCallback: TimelineEventController.AvatarCallback? = null
 
-    private val _avatarClickListener =  DebouncedClickListener(View.OnClickListener {
+    private val _avatarClickListener = DebouncedClickListener(View.OnClickListener {
         avatarCallback?.onAvatarClicked(informationData)
     })
-    private val _memberNameClickListener =  DebouncedClickListener(View.OnClickListener {
+    private val _memberNameClickListener = DebouncedClickListener(View.OnClickListener {
         avatarCallback?.onMemberNameClicked(informationData)
     })
 

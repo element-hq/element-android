@@ -175,6 +175,10 @@ public class MXUsersDevicesMap<E> implements Serializable {
         }
     }
 
+    public boolean isEmpty(){
+        return mMap.isEmpty();
+    }
+
     @Override
     public String toString() {
         if (null != mMap) {

@@ -47,7 +47,7 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
             val status = deviceTrackingStatuses[userId]!!
             if (TRACKING_STATUS_DOWNLOAD_IN_PROGRESS == status || TRACKING_STATUS_UNREACHABLE_SERVER == status) {
                 // if a download was in progress when we got shut down, it isn't any more.
-                deviceTrackingStatuses.put(userId, TRACKING_STATUS_PENDING_DOWNLOAD)
+                deviceTrackingStatuses[userId] = TRACKING_STATUS_PENDING_DOWNLOAD
                 isUpdated = true
             }
         }
