@@ -18,12 +18,7 @@ package im.vector.matrix.android.internal.database
 
 import android.os.Handler
 import android.os.HandlerThread
-import io.realm.Realm
-import io.realm.RealmChangeListener
-import io.realm.RealmConfiguration
-import io.realm.RealmObject
-import io.realm.RealmQuery
-import io.realm.RealmResults
+import io.realm.*
 import java.util.concurrent.CountDownLatch
 
 private const val THREAD_NAME = "REALM_QUERY_LATCH"
@@ -39,15 +34,21 @@ class RealmQueryLatch<E : RealmObject>(private val realmConfiguration: RealmConf
         val runnable = Runnable {
             val realm = Realm.getInstance(realmConfiguration)
             val result = realmQueryBuilder(realm).findAllAsync()
-            result.addChangeListener(object : RealmChangeListener<RealmResults<E>> {
-                override fun onChange(t: RealmResults<E>) {
-                    if (t.isNotEmpty()) {
-                        result.removeChangeListener(this)
-                        realm.close()
-                        latch.countDown()
+
+            if (result.isEmpty()) {
+                result.addChangeListener(object : RealmChangeListener<RealmResults<E>> {
+                    override fun onChange(t: RealmResults<E>) {
+                        if (t.isNotEmpty()) {
+                            result.removeChangeListener(this)
+                            realm.close()
+                            latch.countDown()
+                        }
                     }
-                }
-            })
+                })
+            } else {
+                realm.close()
+                latch.countDown()
+            }
         }
         handler.post(runnable)
         latch.await()

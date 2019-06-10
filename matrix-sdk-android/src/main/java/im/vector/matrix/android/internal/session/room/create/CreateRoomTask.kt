@@ -16,23 +16,16 @@
 
 package im.vector.matrix.android.internal.session.room.create
 
-import android.os.Handler
-import android.os.HandlerThread
 import arrow.core.Try
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
+import im.vector.matrix.android.internal.database.RealmQueryLatch
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
-import io.realm.Realm
-import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
-import io.realm.RealmResults
-import java.util.concurrent.CountDownLatch
-
-private const val THREAD_NAME = "CREATE_ROOM_"
 
 internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
@@ -47,42 +40,15 @@ internal class DefaultCreateRoomTask(private val roomAPI: RoomAPI,
         }.flatMap { createRoomResponse ->
             val roomId = createRoomResponse.roomId!!
 
-            val latch = CountDownLatch(1)
-
-            // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
-            val handlerThread = HandlerThread(THREAD_NAME + hashCode())
-            handlerThread.start()
-            val handler = Handler(handlerThread.looper)
-
             // TODO Maybe do the same code for join room request ?
-            handler.post {
-                val realm = Realm.getInstance(realmConfiguration)
-
-                if (realm.where(RoomEntity::class.java)
-                                .equalTo(RoomEntityFields.ROOM_ID, roomId)
-                                .findAll()
-                                .isEmpty()) {
-                    val result = realm.where(RoomEntity::class.java)
-                            .equalTo(RoomEntityFields.ROOM_ID, roomId)
-                            .findAllAsync()
-
-                    result.addChangeListener(object : RealmChangeListener<RealmResults<RoomEntity>> {
-                        override fun onChange(t: RealmResults<RoomEntity>) {
-                            if (t.isNotEmpty()) {
-                                result.removeChangeListener(this)
-                                realm.close()
-                                latch.countDown()
-                            }
-                        }
-                    })
-                } else {
-                    realm.close()
-                    latch.countDown()
-                }
+            // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
+            val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
+                realm.where(RoomEntity::class.java)
+                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
             }
 
-            latch.await()
-            handlerThread.quit()
+            rql.await()
+
             return Try.just(roomId)
         }
     }
