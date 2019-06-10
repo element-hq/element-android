@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Create several FABs to manage different icon size. maxImageSize cannot be set programmatically -->
+<?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/createRoomContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:constraintSet="@layout/constraint_set_fab_menu_open"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+    app:layoutDescription="@xml/motion_scene_fab_menu"
+    tools:motionProgress="0.5"
+    tools:parentTag="androidx.constraintlayout.motion.widget.MotionLayout"
+    tools:showPaths="true">
 
     <View
         android:id="@+id/createRoomTouchGuard"
@@ -21,17 +22,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_fab_add_room"
-        android:visibility="gone"
-        app:backgroundTint="?riotx_fab_secondary_bg"
+        app:backgroundTint="#FFFFFF"
         app:fabCustomSize="48dp"
         app:maxImageSize="26dp"
-        app:tint="?riotx_fab_secondary_color"
-        tools:ignore="MissingConstraints"
-        tools:visibility="visible" />
+        app:tint="@color/black" />
 
     <TextView
         android:id="@+id/createRoomItemGroupLabel"
         style="@style/VectorLabel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/fab_menu_create_room" />
@@ -43,17 +43,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_fab_add_chat"
-        android:visibility="gone"
-        app:backgroundTint="?riotx_fab_secondary_bg"
+        app:backgroundTint="#FFFFFF"
         app:fabCustomSize="48dp"
         app:maxImageSize="29dp"
-        app:tint="?riotx_fab_secondary_color"
-        tools:ignore="MissingConstraints"
-        tools:visibility="visible" />
+        app:tint="@color/black" />
 
     <TextView
         android:id="@+id/createRoomItemChatLabel"
         style="@style/VectorLabel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/fab_menu_create_chat" />
@@ -63,11 +62,7 @@
         android:id="@+id/createRoomButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:src="@drawable/ic_fab_add"
-        android:visibility="gone"
-        app:maxImageSize="14dp"
-        tools:ignore="MissingConstraints"
-        tools:visibility="visible" />
+        app:maxImageSize="14dp" />
 
 </merge>
