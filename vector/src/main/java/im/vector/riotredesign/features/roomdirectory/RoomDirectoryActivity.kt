@@ -33,6 +33,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
     sealed class Navigation {
         object Back : Navigation()
         object CreateRoom : Navigation()
+        object Close : Navigation()
     }
 
 
@@ -49,6 +50,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
             when (liveEvent.getContentIfNotHandled() ?: return@Observer) {
                 is Navigation.Back       -> onBackPressed()
                 is Navigation.CreateRoom -> gotoCreateRoom()
+                is Navigation.Close      -> finish()
             }
         })
     }

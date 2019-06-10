@@ -95,8 +95,12 @@ class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        if (state.asyncCreateRoomRequest is Success) {
-            vectorBaseActivity.notImplemented("navigate to freshly created room")
+        val async = state.asyncCreateRoomRequest
+        if (async is Success) {
+            // Navigate to freshly created room
+            navigator.openRoom(async())
+
+            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Close)
         } else {
             // Populate list with Epoxy
             createRoomController.setData(state)
