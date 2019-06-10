@@ -52,7 +52,7 @@ class HomeDetailViewModel(initialState: HomeDetailViewState,
                                 .filter { it.isDirect }
                                 .map { it.notificationCount }
                                 .takeIf { it.isNotEmpty() }
-                                ?.reduce { acc, i -> acc + i }
+                                ?.sumBy { i -> i }
                                 ?: 0
                         val peopleHasHighlight = summaries
                                 .filter { it.isDirect }
@@ -62,7 +62,7 @@ class HomeDetailViewModel(initialState: HomeDetailViewState,
                                 .filter { !it.isDirect }
                                 .map { it.notificationCount }
                                 .takeIf { it.isNotEmpty() }
-                                ?.reduce { acc, i -> acc + i }
+                                ?.sumBy { i -> i }
                                 ?: 0
                         val roomsHasHighlight = summaries
                                 .filter { !it.isDirect }

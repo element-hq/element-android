@@ -64,7 +64,7 @@ class RoomSummaryController(private val stringProvider: StringProvider,
         val unreadCount = if (summaries.isEmpty()) {
             0
         } else {
-            summaries.map { it.notificationCount }.reduce { acc, i -> acc + i }
+            summaries.map { it.notificationCount }.sumBy { i -> i }
         }
         val showHighlighted = summaries.any { it.highlightCount > 0 }
         roomCategoryItem {
