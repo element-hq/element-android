@@ -17,11 +17,11 @@
 package im.vector.riotredesign.features.roomdirectory
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import com.airbnb.mvrx.viewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragment
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
@@ -48,14 +48,14 @@ class RoomDirectoryActivity : VectorBaseActivity() {
 
         bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
 
-        navigationViewModel.navigateTo.observe(this, Observer { liveEvent ->
-            when (liveEvent.getContentIfNotHandled() ?: return@Observer) {
+        navigationViewModel.navigateTo.observeEvent(this) { navigation ->
+            when (navigation) {
                 is Navigation.Back           -> onBackPressed()
                 is Navigation.CreateRoom     -> addFragmentToBackstack(CreateRoomFragment(), R.id.simpleFragmentContainer)
                 is Navigation.ChangeProtocol -> addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
                 is Navigation.Close          -> finish()
             }
-        })
+        }
     }
 
     override fun initUiAndData() {
