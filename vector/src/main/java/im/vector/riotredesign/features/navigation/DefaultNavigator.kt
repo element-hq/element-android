@@ -16,10 +16,8 @@
 
 package im.vector.riotredesign.features.navigation
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotredesign.features.debug.DebugMenuActivity
 import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity

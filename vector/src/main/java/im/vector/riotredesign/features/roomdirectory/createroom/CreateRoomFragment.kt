@@ -98,7 +98,7 @@ class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
         val async = state.asyncCreateRoomRequest
         if (async is Success) {
             // Navigate to freshly created room
-            navigator.openRoom(async())
+            navigator.openRoom(async(), requireActivity())
 
             navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Close)
         } else {
