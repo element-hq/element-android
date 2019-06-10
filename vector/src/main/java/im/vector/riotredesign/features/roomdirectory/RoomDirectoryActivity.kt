@@ -17,7 +17,7 @@
 package im.vector.riotredesign.features.roomdirectory
 
 import android.os.Bundle
-import com.airbnb.mvrx.viewModel
+import androidx.lifecycle.ViewModelProviders
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragment
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
@@ -39,7 +39,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
     }
 
 
-    private val navigationViewModel: RoomDirectoryNavigationViewModel by viewModel()
+    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
 
@@ -47,6 +47,8 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
 
         bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
+
+        navigationViewModel = ViewModelProviders.of(this).get(RoomDirectoryNavigationViewModel::class.java)
 
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
             when (navigation) {

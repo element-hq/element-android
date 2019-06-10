@@ -19,6 +19,7 @@ package im.vector.riotredesign.features.roomdirectory.picker
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -41,7 +42,7 @@ import timber.log.Timber
 class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-    private val navigationViewModel: RoomDirectoryNavigationViewModel by activityViewModel()
+    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
     private val roomDirectoryPickerController: RoomDirectoryPickerController by inject()
 
@@ -73,6 +74,8 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
+
+        navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
 
         setupRecyclerView()
     }

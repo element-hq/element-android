@@ -18,14 +18,10 @@ package im.vector.riotredesign.core.mvrx
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.MvRxState
-import im.vector.riotredesign.core.platform.VectorViewModel
+import androidx.lifecycle.ViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 
-// MvRx require a state with at least one attribute
-data class NavigationState(val dummy: Boolean = false) : MvRxState
-
-abstract class NavigationViewModel<NavigationClass>(initialState: NavigationState) : VectorViewModel<NavigationState>(initialState) {
+abstract class NavigationViewModel<NavigationClass> : ViewModel() {
 
     private val _navigateTo = MutableLiveData<LiveEvent<NavigationClass>>()
     val navigateTo: LiveData<LiveEvent<NavigationClass>>

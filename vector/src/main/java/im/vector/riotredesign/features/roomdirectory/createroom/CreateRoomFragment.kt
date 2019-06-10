@@ -18,9 +18,9 @@ package im.vector.riotredesign.features.roomdirectory.createroom
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
@@ -36,7 +36,7 @@ import timber.log.Timber
 
 class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
 
-    private val navigationViewModel: RoomDirectoryNavigationViewModel by activityViewModel()
+    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
     private val viewModel: CreateRoomViewModel by fragmentViewModel()
     private val createRoomController: CreateRoomController by inject()
 
@@ -49,6 +49,8 @@ class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
         bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
 
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
+
+        navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
 
         setupRecyclerView()
 

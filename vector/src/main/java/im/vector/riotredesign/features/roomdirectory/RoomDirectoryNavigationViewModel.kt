@@ -16,8 +16,6 @@
 
 package im.vector.riotredesign.features.roomdirectory
 
-import im.vector.riotredesign.core.mvrx.NavigationState
 import im.vector.riotredesign.core.mvrx.NavigationViewModel
 
-class RoomDirectoryNavigationViewModel(initialState: NavigationState)
-    : NavigationViewModel<RoomDirectoryActivity.Navigation>(initialState)
+class RoomDirectoryNavigationViewModel : NavigationViewModel<RoomDirectoryActivity.Navigation>()

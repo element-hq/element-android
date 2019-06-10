@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
@@ -29,9 +30,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.error.ErrorFormatter
-import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotredesign.features.themes.ThemeUtils
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
@@ -49,7 +48,7 @@ import java.util.concurrent.TimeUnit
 class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-    private val navigationViewModel: RoomDirectoryNavigationViewModel by activityViewModel()
+    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
     private val publicRoomsController: PublicRoomsController by inject()
     private val errorFormatter: ErrorFormatter by inject()
 
@@ -102,6 +101,8 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
+
+        navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
 
         setupRecyclerView()
     }
