@@ -40,7 +40,7 @@ class CreateRoomViewModel(initialState: CreateRoomViewState,
 
     fun setName(newName: String) = setState { copy(roomName = newName) }
 
-    fun setIsPublic(value: Boolean) = setState { copy(isPublic = value) }
+    fun setIsPublic(isPublic: Boolean) = setState { copy(isPublic = isPublic) }
 
     fun setIsInRoomDirectory(isInRoomDirectory: Boolean) = setState { copy(isInRoomDirectory = isInRoomDirectory) }
 
@@ -59,6 +59,7 @@ class CreateRoomViewModel(initialState: CreateRoomViewState,
             // Directory visibility
             visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE
 
+            // Public room
             preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
         }
 

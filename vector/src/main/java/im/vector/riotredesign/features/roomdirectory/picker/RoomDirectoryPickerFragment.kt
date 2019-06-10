@@ -26,7 +26,9 @@ import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseFragment
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryNavigationViewModel
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryViewModel
 import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
 import org.koin.android.ext.android.inject
@@ -39,6 +41,7 @@ import timber.log.Timber
 class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
+    private val navigationViewModel: RoomDirectoryNavigationViewModel by activityViewModel()
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
     private val roomDirectoryPickerController: RoomDirectoryPickerController by inject()
 
@@ -88,8 +91,7 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
         viewModel.setRoomDirectoryData(roomDirectoryData)
 
-        // TODO Not the best way to manage Fragment Backstack...
-        vectorBaseActivity.onBackPressed()
+        navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Back)
     }
 
     override fun retry() {

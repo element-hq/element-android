@@ -49,6 +49,7 @@ import java.util.concurrent.TimeUnit
 class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
+    private val navigationViewModel: RoomDirectoryNavigationViewModel by activityViewModel()
     private val publicRoomsController: PublicRoomsController by inject()
     private val errorFormatter: ErrorFormatter by inject()
 
@@ -76,8 +77,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
                 .disposeOnDestroy()
 
         publicRoomsCreateNewRoom.setOnClickListener {
-            // TODO Not the best navigation pattern
-            (vectorBaseActivity as? RoomDirectoryActivity)?.gotoCreateRoom()
+            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.CreateRoom)
         }
 
         viewModel.joinRoomErrorLiveData.observe(this, Observer {

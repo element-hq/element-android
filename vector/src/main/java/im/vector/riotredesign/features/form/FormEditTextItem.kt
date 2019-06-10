@@ -40,6 +40,11 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute
     var onTextChange: ((String) -> Unit)? = null
 
+    private val onTextChangeListener = object : SimpleTextWatcher() {
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            onTextChange?.invoke(s.toString())
+        }
+    }
 
     override fun bind(holder: Holder) {
         holder.textInputLayout.isEnabled = enabled
@@ -51,11 +56,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         }
         holder.textInputEditText.isEnabled = enabled
 
-        holder.textInputEditText.addTextChangedListener(object : SimpleTextWatcher() {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                onTextChange?.invoke(s.toString())
-            }
-        })
+        holder.textInputEditText.addTextChangedListener(onTextChangeListener)
     }
 
     override fun shouldSaveViewState(): Boolean {
@@ -64,9 +65,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
-
-        // TODO Remove onTextChanged?
-
+        holder.textInputEditText.removeTextChangedListener(onTextChangeListener)
     }
 
     class Holder : VectorEpoxyHolder() {

@@ -17,6 +17,8 @@
 package im.vector.riotredesign.features.roomdirectory
 
 import android.os.Bundle
+import androidx.lifecycle.Observer
+import com.airbnb.mvrx.viewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragment
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
@@ -27,6 +29,14 @@ import org.koin.android.scope.ext.android.getOrCreateScope
 
 class RoomDirectoryActivity : VectorBaseActivity() {
 
+    // Supported navigation actions for this Activity
+    sealed class Navigation {
+        object Back : Navigation()
+        object CreateRoom : Navigation()
+    }
+
+
+    private val navigationViewModel: RoomDirectoryNavigationViewModel by viewModel()
 
     override fun getLayoutRes() = R.layout.activity_simple
 
@@ -34,6 +44,13 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
 
         bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
+
+        navigationViewModel.navigateTo.observe(this, Observer { liveEvent ->
+            when (liveEvent.getContentIfNotHandled() ?: return@Observer) {
+                is Navigation.Back       -> onBackPressed()
+                is Navigation.CreateRoom -> gotoCreateRoom()
+            }
+        })
     }
 
     override fun initUiAndData() {
@@ -42,8 +59,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         }
     }
 
-
-    fun gotoCreateRoom() {
+    private fun gotoCreateRoom() {
         addFragmentToBackstack(CreateRoomFragment(), R.id.simpleFragmentContainer)
     }
 }

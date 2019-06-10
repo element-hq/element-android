@@ -20,11 +20,14 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseFragment
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryNavigationViewModel
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
@@ -33,6 +36,7 @@ import timber.log.Timber
 
 class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
 
+    private val navigationViewModel: RoomDirectoryNavigationViewModel by activityViewModel()
     private val viewModel: CreateRoomViewModel by fragmentViewModel()
     private val createRoomController: CreateRoomController by inject()
 
@@ -49,8 +53,7 @@ class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
         setupRecyclerView()
 
         createRoomClose.setOnClickListener {
-            // TODO Not the best way to manage Fragment Backstack...
-            vectorBaseActivity.onBackPressed()
+            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Back)
         }
     }
 
