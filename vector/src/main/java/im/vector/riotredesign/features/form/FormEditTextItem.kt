@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.form
 
+import android.text.Editable
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
@@ -41,7 +42,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     var onTextChange: ((String) -> Unit)? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        override fun afterTextChanged(s: Editable) {
             onTextChange?.invoke(s.toString())
         }
     }
@@ -60,7 +61,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     }
 
     override fun shouldSaveViewState(): Boolean {
-        return true
+        return false
     }
 
     override fun unbind(holder: Holder) {

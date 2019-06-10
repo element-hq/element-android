@@ -57,7 +57,7 @@ abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
     }
 
     override fun shouldSaveViewState(): Boolean {
-        return true
+        return false
     }
 
     override fun unbind(holder: Holder) {
