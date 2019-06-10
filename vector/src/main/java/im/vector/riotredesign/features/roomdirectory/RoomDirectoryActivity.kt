@@ -24,6 +24,7 @@ import im.vector.riotredesign.core.extensions.addFragment
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.roomdirectory.createroom.CreateRoomFragment
+import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
 
@@ -34,6 +35,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         object Back : Navigation()
         object CreateRoom : Navigation()
         object Close : Navigation()
+        object ChangeProtocol : Navigation()
     }
 
 
@@ -48,9 +50,10 @@ class RoomDirectoryActivity : VectorBaseActivity() {
 
         navigationViewModel.navigateTo.observe(this, Observer { liveEvent ->
             when (liveEvent.getContentIfNotHandled() ?: return@Observer) {
-                is Navigation.Back       -> onBackPressed()
-                is Navigation.CreateRoom -> gotoCreateRoom()
-                is Navigation.Close      -> finish()
+                is Navigation.Back           -> onBackPressed()
+                is Navigation.CreateRoom     -> addFragmentToBackstack(CreateRoomFragment(), R.id.simpleFragmentContainer)
+                is Navigation.ChangeProtocol -> addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
+                is Navigation.Close          -> finish()
             }
         })
     }
@@ -61,7 +64,4 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         }
     }
 
-    private fun gotoCreateRoom() {
-        addFragmentToBackstack(CreateRoomFragment(), R.id.simpleFragmentContainer)
-    }
 }

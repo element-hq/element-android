@@ -91,7 +91,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
-                vectorBaseActivity.addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
+                navigationViewModel.goTo(RoomDirectoryActivity.Navigation.ChangeProtocol)
                 true
             }
             else                                     ->
