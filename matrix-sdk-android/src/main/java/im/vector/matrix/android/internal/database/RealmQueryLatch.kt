@@ -35,20 +35,15 @@ class RealmQueryLatch<E : RealmObject>(private val realmConfiguration: RealmConf
             val realm = Realm.getInstance(realmConfiguration)
             val result = realmQueryBuilder(realm).findAllAsync()
 
-            if (result.isEmpty()) {
-                result.addChangeListener(object : RealmChangeListener<RealmResults<E>> {
-                    override fun onChange(t: RealmResults<E>) {
-                        if (t.isNotEmpty()) {
-                            result.removeChangeListener(this)
-                            realm.close()
-                            latch.countDown()
-                        }
+            result.addChangeListener(object : RealmChangeListener<RealmResults<E>> {
+                override fun onChange(t: RealmResults<E>) {
+                    if (t.isNotEmpty()) {
+                        result.removeChangeListener(this)
+                        realm.close()
+                        latch.countDown()
                     }
-                })
-            } else {
-                realm.close()
-                latch.countDown()
-            }
+                }
+            })
         }
         handler.post(runnable)
         latch.await()
