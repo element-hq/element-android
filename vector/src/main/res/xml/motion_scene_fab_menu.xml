@@ -6,58 +6,22 @@
     <Transition
         motion:constraintSetEnd="@+id/constraint_set_fab_menu_open"
         motion:constraintSetStart="@+id/constraint_set_fab_menu_close"
-        motion:duration="1000">
+        motion:duration="200">
 
         <OnClick
             motion:clickAction="toggle"
             motion:targetId="@+id/createRoomButton" />
 
-        <KeyFrameSet>
-
-            <!-- Show elements directly at the beginning of the transition: FIXME It does not work as expected -->
-            <KeyAttribute
-                android:visibility="gone"
-                motion:framePosition="0"
-                motion:motionTarget="@id/createRoomItemGroup" />
-
-            <KeyAttribute
-                android:scaleX="1"
-                android:scaleY="1"
-                android:visibility="visible"
-                motion:framePosition="1"
-                motion:motionTarget="@id/createRoomItemGroup" />
-
-            <KeyAttribute
-                android:visibility="visible"
-                motion:framePosition="1"
-                motion:motionTarget="@id/createRoomItemGroupLabel" />
-
-            <KeyAttribute
-                android:visibility="visible"
-                motion:framePosition="1"
-                motion:motionTarget="@id/createRoomItemChat" />
-
-            <KeyAttribute
-                android:visibility="visible"
-                motion:framePosition="1"
-                motion:motionTarget="@id/createRoomItemChatLabel" />
-
-        </KeyFrameSet>
-
     </Transition>
 
-    <ConstraintSet android:id="@+id/constraint_set_fab_menu_close">
+    <ConstraintSet android:id="@+id/constraint_set_fab_menu_close" >
 
         <Constraint
             android:id="@+id/createRoomTouchGuard"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="?riotx_touch_guard_bg"
-            android:visibility="gone"
-            motion:layout_constraintBottom_toBottomOf="@id/createRoomButton"
-            motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
-            motion:layout_constraintStart_toStartOf="@id/createRoomButton"
-            motion:layout_constraintTop_toTopOf="@+id/createRoomButton" />
+            android:visibility="invisible" />
 
         <!-- Sub menu item 2 -->
         <Constraint
@@ -66,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:src="@drawable/ic_fab_add_room"
-            android:visibility="gone"
+            android:visibility="invisible"
             motion:backgroundTint="#FFFFFF"
             motion:fabCustomSize="48dp"
             motion:layout_constraintBottom_toBottomOf="@+id/createRoomButton"
@@ -78,16 +42,15 @@
 
         <Constraint
             android:id="@+id/createRoomItemGroupLabel"
-            style="@style/VectorLabel"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/fab_menu_create_room"
-            android:visibility="gone"
-            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemChat"
-            motion:layout_constraintEnd_toEndOf="@+id/createRoomItemChat"
-            motion:layout_constraintTop_toTopOf="@+id/createRoomItemChat" />
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemGroup"
+            motion:layout_constraintEnd_toEndOf="@+id/createRoomItemGroup"
+            motion:layout_constraintTop_toTopOf="@+id/createRoomItemGroup" />
 
         <!-- Sub menu item 1 -->
         <Constraint
@@ -96,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:src="@drawable/ic_fab_add_chat"
-            android:visibility="gone"
+            android:visibility="invisible"
             motion:backgroundTint="#FFFFFF"
             motion:fabCustomSize="48dp"
             motion:layout_constraintBottom_toBottomOf="@+id/createRoomButton"
@@ -108,13 +71,12 @@
 
         <Constraint
             android:id="@+id/createRoomItemChatLabel"
-            style="@style/VectorLabel"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/fab_menu_create_chat"
-            android:visibility="gone"
+            android:visibility="invisible"
             motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemChat"
             motion:layout_constraintEnd_toEndOf="@+id/createRoomItemChat"
             motion:layout_constraintTop_toTopOf="@+id/createRoomItemChat" />
@@ -160,7 +122,8 @@
 
         <Constraint
             android:id="@+id/createRoomItemGroupLabel"
-            style="@style/VectorLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/fab_menu_create_room"
@@ -186,7 +149,8 @@
 
         <Constraint
             android:id="@+id/createRoomItemChatLabel"
-            style="@style/VectorLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/fab_menu_create_chat"
