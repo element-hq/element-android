@@ -19,6 +19,7 @@ package im.vector.riotredesign.features.roomdirectory.picker
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -26,7 +27,9 @@ import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseFragment
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryNavigationViewModel
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryViewModel
 import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
 import org.koin.android.ext.android.inject
@@ -39,6 +42,7 @@ import timber.log.Timber
 class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
+    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
     private val roomDirectoryPickerController: RoomDirectoryPickerController by inject()
 
@@ -71,6 +75,8 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
         super.onActivityCreated(savedInstanceState)
         bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
 
+        navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
+
         setupRecyclerView()
     }
 
@@ -88,8 +94,7 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
         viewModel.setRoomDirectoryData(roomDirectoryData)
 
-        // TODO Not the best way to manage Fragment Backstack...
-        vectorBaseActivity.onBackPressed()
+        navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Back)
     }
 
     override fun retry() {

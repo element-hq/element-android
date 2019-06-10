@@ -42,4 +42,13 @@
     <string name="fab_menu_create_room">"Rooms"</string>
     <string name="fab_menu_create_chat">"Direct Messages"</string>
 
+    <!-- Create room screen -->
+    <string name="create_room_title">"New Room"</string>
+    <string name="create_room_action_create">"CREATE"</string>
+    <string name="create_room_name_hint">"Room name"</string>
+    <string name="create_room_public_title">"Public"</string>
+    <string name="create_room_public_description">"Anyone will be able to join this room"</string>
+    <string name="create_room_directory_title">"Room Directory"</string>
+    <string name="create_room_directory_description">"Publish this room in the room directory"</string>
+
 </resources>

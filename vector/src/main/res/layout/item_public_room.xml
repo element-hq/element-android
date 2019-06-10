@@ -9,6 +9,7 @@
     android:background="?riotx_background"
     android:clickable="true"
     android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:minHeight="97dp">
 
     <ImageView

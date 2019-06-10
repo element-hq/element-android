@@ -100,7 +100,7 @@ class CreateRoomParams {
      * private_chat => join_rules is set to invite. history_visibility is set to shared.
      * trusted_private_chat => join_rules is set to invite. history_visibility is set to shared. All invitees are given the same power level as the
      * room creator.
-     * public_chat: => join_rules is set to public. history_visibility is set to shared. One of: ["private_chat", "public_chat", "trusted_private_chat"]
+     * public_chat: => join_rules is set to public. history_visibility is set to shared.
      */
     var preset: CreateRoomPreset? = null
 
