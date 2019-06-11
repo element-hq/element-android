@@ -137,7 +137,6 @@ data class Event(
     /**
      * Update the clear data on this event.
      * This is used after decrypting an event; it should not be used by applications.
-     * It fires kMXEventDidDecryptNotification.
      *
      * @param decryptionResult the decryption result, including the plaintext and some key info.
      */
