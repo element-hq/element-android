@@ -19,6 +19,7 @@ package im.vector.matrix.rx
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.sync.SyncState
 import io.reactivex.Observable
 
 class RxSession(private val session: Session) {
@@ -29,6 +30,10 @@ class RxSession(private val session: Session) {
 
     fun liveGroupSummaries(): Observable<List<GroupSummary>> {
         return session.liveGroupSummaries().asObservable()
+    }
+
+    fun liveSyncState(): Observable<SyncState> {
+        return session.syncState().asObservable()
     }
 
 }

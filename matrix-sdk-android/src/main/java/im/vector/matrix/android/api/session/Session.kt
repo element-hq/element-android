@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session
 
 import androidx.annotation.MainThread
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
@@ -27,6 +28,7 @@ import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
+import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
 
 /**
@@ -67,6 +69,12 @@ interface Session :
     fun stopSync()
 
     /**
+     * This method allows to listen the sync state.
+     * @return a [LiveData] of [SyncState].
+     */
+    fun syncState(): LiveData<SyncState>
+
+    /**
      * This method allow to close a session. It does stop some services.
      */
     @MainThread
@@ -102,6 +110,7 @@ interface Session :
          * The access token is not valid anymore
          */
         fun onInvalidToken()
+
     }
 
 }

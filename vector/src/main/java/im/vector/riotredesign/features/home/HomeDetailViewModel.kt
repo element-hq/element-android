@@ -18,6 +18,8 @@ package im.vector.riotredesign.features.home
 
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
 import org.koin.android.ext.android.get
 
@@ -25,6 +27,7 @@ import org.koin.android.ext.android.get
  * View model used to update the home bottom bar notification counts
  */
 class HomeDetailViewModel(initialState: HomeDetailViewState,
+                          private val session: Session,
                           private val homeRoomListStore: HomeRoomListObservableStore)
     : VectorViewModel<HomeDetailViewState>(initialState) {
 
@@ -33,15 +36,28 @@ class HomeDetailViewModel(initialState: HomeDetailViewState,
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeDetailViewState): HomeDetailViewModel? {
             val homeRoomListStore = viewModelContext.activity.get<HomeRoomListObservableStore>()
-            return HomeDetailViewModel(state, homeRoomListStore)
+            val session = viewModelContext.activity.get<Session>()
+            return HomeDetailViewModel(state, session, homeRoomListStore)
         }
     }
 
     init {
+        observeSyncState()
         observeRoomSummaries()
     }
 
     // PRIVATE METHODS *****************************************************************************
+
+    private fun observeSyncState() {
+        session.rx()
+                .liveSyncState()
+                .subscribe { syncState ->
+                    setState {
+                        copy(syncState = syncState)
+                    }
+                }
+                .disposeOnClear()
+    }
 
     private fun observeRoomSummaries() {
         homeRoomListStore

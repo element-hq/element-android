@@ -44,13 +44,26 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <ProgressBar
+        android:id="@+id/syncProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:background="?riotx_header_panel_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/groupToolbar"
+        tools:visibility="visible" />
+
     <FrameLayout
         android:id="@+id/roomListContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="?riotx_header_panel_background"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintTop_toBottomOf="@+id/groupToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/syncProgressBar" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

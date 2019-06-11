@@ -17,6 +17,7 @@
 package im.vector.riotredesign.features.home
 
 import com.airbnb.mvrx.MvRxState
+import im.vector.matrix.android.api.session.sync.SyncState
 
 data class HomeDetailViewState(
         val notificationCountCatchup: Int = 0,
@@ -24,5 +25,6 @@ data class HomeDetailViewState(
         val notificationCountPeople: Int = 0,
         val notificationHighlightPeople: Boolean = false,
         val notificationCountRooms: Int = 0,
-        val notificationHighlightRooms: Boolean = false
+        val notificationHighlightRooms: Boolean = false,
+        val syncState: SyncState = SyncState.IDLE
 ) : MvRxState
