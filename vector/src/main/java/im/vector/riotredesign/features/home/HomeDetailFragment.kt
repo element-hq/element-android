@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import androidx.core.view.forEachIndexed
+import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -56,6 +57,7 @@ class HomeDetailFragment : VectorBaseFragment() {
     private lateinit var currentDisplayMode: RoomListFragment.DisplayMode
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
+    private lateinit var navigationViewModel: HomeNavigationViewModel
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
@@ -65,6 +67,9 @@ class HomeDetailFragment : VectorBaseFragment() {
         super.onActivityCreated(savedInstanceState)
         currentDisplayMode = savedInstanceState?.getSerializable(CURRENT_DISPLAY_MODE) as? RoomListFragment.DisplayMode
                 ?: RoomListFragment.DisplayMode.HOME
+
+        navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
+
         switchDisplayMode(currentDisplayMode)
         setupBottomNavigationView()
         setupToolbar()
@@ -89,7 +94,7 @@ class HomeDetailFragment : VectorBaseFragment() {
                 groupToolbarAvatarImageView
         )
         groupToolbarAvatarImageView.setOnClickListener {
-            vectorBaseActivity.notImplemented("Group click in toolbar")
+            navigationViewModel.goTo(HomeActivity.Navigation.OpenDrawer)
         }
     }
 

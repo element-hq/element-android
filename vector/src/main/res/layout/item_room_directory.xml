@@ -6,6 +6,7 @@
     android:id="@+id/itemRoomDirectoryLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?riotx_background"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">

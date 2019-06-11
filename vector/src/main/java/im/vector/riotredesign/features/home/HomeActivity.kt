@@ -27,10 +27,12 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.hideKeyboard
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
@@ -47,7 +49,13 @@ import org.koin.android.scope.ext.android.getOrCreateScope
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
+    // Supported navigation actions for this Activity
+    sealed class Navigation {
+        object OpenDrawer : Navigation()
+    }
+
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
+    private lateinit var navigationViewModel: HomeNavigationViewModel
     private val homeNavigator by inject<HomeNavigator>()
 
     // TODO Move this elsewhere
@@ -67,6 +75,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         super.onCreate(savedInstanceState)
         bindScope(getOrCreateScope(HomeModule.HOME_SCOPE))
         homeNavigator.activity = this
+
+        navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
+
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             val homeDrawerFragment = HomeDrawerFragment.newInstance()
@@ -86,6 +97,12 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 progress?.dismiss()
             }
         })
+
+        navigationViewModel.navigateTo.observeEvent(this) { navigation ->
+            when (navigation) {
+                is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
 
         incomingVerificationRequestHandler.ensureStarted()
     }
@@ -119,10 +136,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home          -> {
-                drawerLayout.openDrawer(GravityCompat.START)
-                return true
-            }
             R.id.sliding_menu_sign_out -> {
                 SignOutUiWorker(this).perform(Matrix.getInstance().currentSession!!)
                 return true

@@ -3,6 +3,7 @@
     android:id="@+id/itemNoResultText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?riotx_background"
     android:gravity="center"
     android:padding="16dp"
     android:text="@string/no_result_placeholder" />

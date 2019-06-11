@@ -66,7 +66,7 @@ class NetworkModule {
 
         single {
             OkHttpClient.Builder()
-                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .connectTimeout(1, TimeUnit.MINUTES)
                     .readTimeout(30, TimeUnit.SECONDS)
                     .writeTimeout(30, TimeUnit.SECONDS)
                     .addNetworkInterceptor(get<StethoInterceptor>())

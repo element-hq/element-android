@@ -5,6 +5,7 @@
     android:id="@+id/progressBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?riotx_background"
     android:padding="16dp">
 
     <TextView

@@ -13,6 +13,7 @@
     android:paddingLeft="@dimen/layout_horizontal_margin"
     android:paddingTop="@dimen/layout_vertical_margin"
     android:paddingEnd="@dimen/layout_horizontal_margin"
+    android:foreground="?attr/selectableItemBackground"
     android:paddingRight="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp">
 
