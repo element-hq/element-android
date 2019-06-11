@@ -63,7 +63,7 @@ class GenericItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         titleText.text = item.title
 
         when (item.style) {
-            GenericRecyclerViewItem.STYLE.BIG_TEXT -> titleText.textSize = 18f
+            GenericRecyclerViewItem.STYLE.BIG_TEXT    -> titleText.textSize = 18f
             GenericRecyclerViewItem.STYLE.NORMAL_TEXT -> titleText.textSize = 14f
         }
 

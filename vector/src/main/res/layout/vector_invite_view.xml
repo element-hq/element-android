@@ -57,7 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inviteIdentifierView" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/inviteRejectView"
         style="@style/VectorButtonStyleFlat"
         android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inviteLabelView" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/inviteAcceptView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

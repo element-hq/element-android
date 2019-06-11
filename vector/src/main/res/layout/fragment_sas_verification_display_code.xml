@@ -17,6 +17,7 @@
             android:layout_margin="@dimen/layout_horizontal_margin"
             android:layout_marginTop="@dimen/layout_vertical_margin"
             android:gravity="center"
+            android:textColor="?riotx_text_primary"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +32,7 @@
             android:layout_margin="@dimen/layout_vertical_margin"
             android:gravity="center"
             android:text="@string/sas_security_advise"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textColor="?riotx_text_primary"
             android:textSize="28sp"
             android:textStyle="bold"
             android:visibility="invisible"
@@ -96,7 +98,7 @@
 
         </GridLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sas_request_continue_button"
             style="@style/VectorButtonStyle"
             android:layout_margin="@dimen/layout_vertical_margin"
@@ -106,7 +108,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sas_emoji_grid" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sas_request_cancel_button"
             style="@style/VectorButtonStyleFlat"
             android:layout_margin="@dimen/layout_vertical_margin"

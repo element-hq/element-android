@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
         android:src="@drawable/backup_keys"
-        android:tint="?android:attr/textColorTertiary"
+        android:tint="?riotx_text_primary"
         app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +27,7 @@
         android:layout_margin="16dp"
         android:text="@string/keys_backup_setup_step1_title"
         android:textAlignment="center"
+        android:textColor="?riotx_text_primary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_description"
@@ -40,24 +41,27 @@
         android:layout_margin="16dp"
         android:text="@string/keys_backup_setup_step1_description"
         android:textAlignment="center"
+        android:textColor="?riotx_text_secondary"
         app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_button"
         app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_title" />
 
     <!-- Centered button -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/keys_backup_setup_step1_button"
         style="@style/VectorButtonStyle"
+        android:layout_width="wrap_content"
         android:layout_margin="16dp"
         android:minWidth="200dp"
         android:padding="8dp"
         android:text="@string/keys_backup_setup"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_description" />
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_advanced"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginLeft="16dp"
@@ -65,14 +69,19 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:text="@string/keys_backup_setup_step1_advanced"
         android:textAlignment="center"
+        android:textColor="?riotx_text_secondary"
         android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_button"
         tools:visibility="visible" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/keys_backup_setup_step1_manualExport"
         style="@style/VectorButtonStyleFlat"
         android:layout_margin="16dp"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:minWidth="200dp"
         android:padding="8dp"
         android:text="@string/keys_backup_setup_step1_manual_export"

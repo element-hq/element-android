@@ -28,6 +28,7 @@
         android:layout_marginRight="16dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
+        android:textColor="?riotx_text_primary"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/troubleshootTestDescription"
@@ -59,8 +60,9 @@
         tools:text="@string/settings_troubleshoot_test_device_settings_failed"
         tools:visibility="visible" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/troubleshootTestButton"
+        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

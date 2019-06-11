@@ -16,9 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/encryption_export_notice"
+        android:textColor="?riotx_text_primary"
         android:textSize="16sp" />
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/VectorTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -37,6 +39,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialog_e2e_keys_confirm_passphrase_til"
+        style="@style/VectorTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -53,10 +56,11 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/dialog_e2e_keys_export_button"
         style="@style/VectorButtonStyle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="end"
         android:enabled="false"
         android:text="@string/encryption_export_export" />
 </LinearLayout>

@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/sas_verify_title"
+            android:textColor="?riotx_text_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -25,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/sas_security_advise"
-            android:textColor="?android:attr/textColorSecondary" />
+            android:textColor="?riotx_text_secondary" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -33,7 +34,7 @@
             android:layout_gravity="end"
             android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/sas_cancel_button"
                 style="@style/VectorButtonStyleFlat"
                 android:layout_marginEnd="8dp"
@@ -46,7 +47,7 @@
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin">
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/sas_start_button"
                     style="@style/VectorButtonStyle"
                     android:minWidth="160dp"
@@ -63,11 +64,9 @@
 
             </FrameLayout>
 
-
         </LinearLayout>
 
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sas_legacy_verification"
             style="@style/VectorButtonStyleFlat"
             android:layout_gravity="end"
@@ -81,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/sas_verifying_keys"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="?riotx_text_secondary"
             android:visibility="gone"
             tools:visibility="visible" />
 

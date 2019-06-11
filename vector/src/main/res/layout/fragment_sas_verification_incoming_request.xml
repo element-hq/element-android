@@ -22,6 +22,7 @@
             android:gravity="center"
             android:text="@string/sas_incoming_request_title"
             android:textAlignment="center"
+            android:textColor="?riotx_text_primary"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textAlignment="center"
+            android:textColor="?riotx_text_primary"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,6 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:textColor="?riotx_text_secondary"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textAlignment="center"
+            android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -81,6 +85,7 @@
             android:layout_margin="@dimen/layout_vertical_margin"
             android:text="@string/sas_incoming_request_description"
             android:textAlignment="center"
+            android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -93,12 +98,13 @@
             android:layout_margin="@dimen/layout_vertical_margin"
             android:text="@string/sas_incoming_request_description_2"
             android:textAlignment="center"
+            android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sas_incoming_request_description" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sas_request_continue_button"
             style="@style/VectorButtonStyle"
             android:layout_marginTop="@dimen/layout_vertical_margin_big"
@@ -111,7 +117,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sas_incoming_request_description_2" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sas_request_cancel_button"
             style="@style/VectorButtonStyleFlat"
             android:layout_gravity="end"

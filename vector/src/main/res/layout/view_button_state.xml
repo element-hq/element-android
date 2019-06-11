@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     tools:parentTag="android.widget.FrameLayout">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonStateButtonFlat"
         style="@style/VectorButtonStyleFlat"
         android:layout_width="wrap_content"

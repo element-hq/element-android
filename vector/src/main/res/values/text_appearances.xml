@@ -27,14 +27,14 @@
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:textColor">?riotx_text_secondary</item>
     </style>
 
     <style name="TextAppearance.Vector.Subtitle2" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:textColor">?riotx_text_secondary</item>
     </style>
 
 </resources>

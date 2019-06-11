@@ -7,7 +7,7 @@
     android:gravity="end"
     android:orientation="vertical">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/keys_backup_settings_footer_button1"
         style="@style/VectorButtonStyle"
         android:layout_marginTop="16dp"
@@ -18,7 +18,7 @@
         tools:text="@string/keys_backup_settings_restore_backup_button"
         tools:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/keys_backup_settings_footer_button2"
         style="@style/VectorButtonStyle"
         android:layout_marginTop="16dp"

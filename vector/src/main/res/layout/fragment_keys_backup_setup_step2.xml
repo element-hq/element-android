@@ -22,6 +22,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/keys_backup_setup_step2_text_title"
             android:textAlignment="center"
+            android:textColor="?riotx_text_primary"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +39,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/keys_backup_setup_step2_text_description"
             android:textAlignment="center"
+            android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +47,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/keys_backup_passphrase_enter_til"
+            style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -88,6 +91,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/keys_backup_passphrase_confirm_til"
+            style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -109,7 +113,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/keys_backup_setup_step2_button"
             style="@style/VectorButtonStyle"
             android:layout_marginTop="16dp"
@@ -132,14 +136,15 @@
             android:layout_marginRight="16dp"
             android:text="@string/keys_backup_setup_step1_recovery_key_alternative"
             android:textAlignment="center"
+            android:textColor="?riotx_text_primary"
             app:layout_constraintTop_toBottomOf="@+id/keys_backup_setup_step2_button" />
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/keys_backup_setup_step2_skip_button"
             style="@style/VectorButtonStyleFlat"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:text="@string/keys_backup_setup_step2_skip_button_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

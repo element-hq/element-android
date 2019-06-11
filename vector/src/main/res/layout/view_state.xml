@@ -33,12 +33,13 @@
             tools:text="Une erreur est survenue" />
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/errorRetryView"
-            android:layout_width="190dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
+            android:minWidth="190dp"
             android:text="@string/global_retry" />
 
     </LinearLayout>

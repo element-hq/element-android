@@ -10,6 +10,7 @@
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
@@ -61,6 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:textColor="?riotx_text_secondary"
                     android:visibility="gone"
                     tools:text="Waiting status..."
                     tools:visibility="visible" />

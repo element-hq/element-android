@@ -15,7 +15,7 @@
         android:layout_marginStart="19dp"
         android:layout_marginLeft="19dp"
         android:src="@drawable/key_small"
-        android:tint="?android:textColorTertiary"
+        android:tint="?riotx_text_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +27,7 @@
         android:layout_marginStart="27dp"
         android:layout_marginLeft="27dp"
         android:text="@string/keys_backup_banner_setup_line1"
+        android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@id/view_keys_backup_banner_text_2"
         app:layout_constraintEnd_toStartOf="@id/view_keys_backup_banner_barrier"
