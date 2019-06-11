@@ -2646,7 +2646,7 @@ if (sharedDataItems.isNotEmpty() && thisActivity != null) {
         val password = passPhraseEditText.text.toString()
         val resource = openResource(appContext, sharedDataItem.uri, sharedDataItem.getMimeType(appContext))
 
-        if(resource?.mContentStream == null) {
+        if (resource?.mContentStream == null) {
             appContext.toast("Error")
 
             return@OnClickListener

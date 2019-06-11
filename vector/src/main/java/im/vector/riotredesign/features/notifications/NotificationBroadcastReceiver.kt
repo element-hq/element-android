@@ -120,7 +120,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
             }
 
             override fun onNetworkError(e: Exception) {
-                Timber.v("Send message : onNetworkError " + e.message, e)
+                Timber.e(e, "Send message : onNetworkError")
                 onSmartReplyFailed(e.localizedMessage)
             }
 

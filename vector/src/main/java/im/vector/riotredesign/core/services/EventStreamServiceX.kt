@@ -494,7 +494,7 @@ class EventStreamServiceX : VectorService() {
 
             isVideo = sdpValue?.contains("m=video") == true
         } catch (e: Exception) {
-            Timber.e("prepareNotification : getContentAsJsonObject " + e.message, e)
+            Timber.e(e, "prepareNotification : getContentAsJsonObject")
         }
 
         if (!TextUtils.isEmpty(callId)) {

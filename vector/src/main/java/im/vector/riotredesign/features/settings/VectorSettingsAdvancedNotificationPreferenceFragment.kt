@@ -231,7 +231,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
                                 try {
                                     isEnabled = !TextUtils.equals(actions[0] as String, BingRule.ACTION_DONT_NOTIFY)
                                 } catch (e: Exception) {
-                                    Timber.e("## refreshPreferences failed " + e.message, e)
+                                    Timber.e(e, "## refreshPreferences failed")
                                 }
 
                             }
