@@ -93,25 +93,26 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         }
 
         // Hide FAB when list is scrolling
-        epoxyRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                createChatFabMenu.removeCallbacks(showFabRunnable)
+        epoxyRecyclerView.addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        createChatFabMenu.removeCallbacks(showFabRunnable)
 
-                when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE     -> {
-                        createChatFabMenu.postDelayed(showFabRunnable, 1000)
-                    }
-                    RecyclerView.SCROLL_STATE_DRAGGING,
-                    RecyclerView.SCROLL_STATE_SETTLING -> {
-                        when (roomListParams.displayMode) {
-                            DisplayMode.HOME   -> createChatFabMenu.hide()
-                            DisplayMode.PEOPLE -> createChatRoomButton.hide()
-                            else               -> createGroupRoomButton.hide()
+                        when (newState) {
+                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                                createChatFabMenu.postDelayed(showFabRunnable, 1000)
+                            }
+                            RecyclerView.SCROLL_STATE_DRAGGING,
+                            RecyclerView.SCROLL_STATE_SETTLING -> {
+                                when (roomListParams.displayMode) {
+                                    DisplayMode.HOME   -> createChatFabMenu.hide()
+                                    DisplayMode.PEOPLE -> createChatRoomButton.hide()
+                                    else               -> createGroupRoomButton.hide()
+                                }
+                            }
                         }
                     }
-                }
-            }
-        })
+                })
     }
 
 
@@ -220,7 +221,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         return super.onBackPressed()
     }
 
-    // RoomSummaryController.Callback **************************************************************
+// RoomSummaryController.Callback **************************************************************
 
     override fun onRoomSelected(room: RoomSummary) {
         roomListViewModel.accept(RoomListActions.SelectRoom(room))

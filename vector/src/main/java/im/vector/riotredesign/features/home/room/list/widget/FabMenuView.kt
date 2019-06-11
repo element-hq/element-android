@@ -19,6 +19,8 @@ package im.vector.riotredesign.features.home.room.list.widget
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.view.isVisible
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.themes.ThemeUtils
 import kotlinx.android.synthetic.main.motion_fab_menu_merge.view.*
@@ -62,14 +64,17 @@ class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     }
 
     fun show() {
-        // Ensure visibility is well restored
-        // FIXME It does not work, FAB is not visible, alpha is 0... And cannot set it to 1
-
+        isVisible = true
         createRoomButton.show()
     }
 
     fun hide() {
-        createRoomButton.hide()
+        createRoomButton.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
+            override fun onHidden(fab: FloatingActionButton?) {
+                super.onHidden(fab)
+                isVisible = false
+            }
+        })
     }
 
     private fun closeFabMenu() {

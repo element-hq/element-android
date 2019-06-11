@@ -6,12 +6,44 @@
     <Transition
         motion:constraintSetEnd="@+id/constraint_set_fab_menu_open"
         motion:constraintSetStart="@+id/constraint_set_fab_menu_close"
-        motion:duration="200">
+        motion:motionInterpolator="easeInOut"
+        motion:duration="300">
 
         <OnClick
             motion:clickAction="toggle"
             motion:targetId="@+id/createRoomButton" />
 
+        <KeyFrameSet>
+
+            <!-- First icon goes up quickly to let room for other-->
+            <KeyPosition
+                motion:motionTarget="@id/createRoomItemGroup"
+                motion:framePosition="50"
+                motion:percentX="0.8"
+                motion:percentY="0.8"
+                motion:keyPositionType="deltaRelative"
+                />
+            <KeyPosition
+                motion:motionTarget="@id/createRoomItemGroupLabel"
+                motion:framePosition="50"
+                motion:percentX="0.9"
+                motion:percentY="0.8"
+                motion:keyPositionType="deltaRelative"
+                />
+
+            <!-- Delay apparition of labels-->
+            <KeyAttribute
+                motion:motionTarget="@id/createRoomItemChatLabel"
+                android:alpha="0.4"
+                motion:framePosition="80"
+                />
+            <KeyAttribute
+                motion:motionTarget="@id/createRoomItemGroupLabel"
+                android:alpha="0.4"
+                motion:framePosition="80"
+                />
+
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/constraint_set_fab_menu_close" >
@@ -96,7 +128,7 @@
 
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/constraint_set_fab_menu_open">
+    <ConstraintSet android:id="@+id/constraint_set_fab_menu_open" >
 
         <Constraint
             android:id="@+id/createRoomTouchGuard"
