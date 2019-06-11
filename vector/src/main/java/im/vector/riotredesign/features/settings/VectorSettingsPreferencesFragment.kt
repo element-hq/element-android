@@ -2379,19 +2379,21 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
             // last seen info
             textView = layout.findViewById(R.id.device_last_seen)
-            if (!TextUtils.isEmpty(aDeviceInfo.lastSeenIp)) {
-                val lastSeenIp = aDeviceInfo.lastSeenIp
+
+            val lastSeenIp = aDeviceInfo.lastSeenIp?.takeIf { ip -> ip.isNotBlank() } ?: "-"
+
+            val lastSeenTime = aDeviceInfo.lastSeenTs?.let { ts ->
                 val dateFormatTime = SimpleDateFormat("HH:mm:ss")
-                val time = dateFormatTime.format(Date(aDeviceInfo.lastSeenTs))
+                val date = Date(ts)
+
+                val time = dateFormatTime.format(date)
                 val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
-                val lastSeenTime = dateFormat.format(Date(aDeviceInfo.lastSeenTs)) + ", " + time
-                val lastSeenInfo = getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
-                textView.text = lastSeenInfo
-            } else {
-                // hide last time seen section
-                layout.findViewById<View>(R.id.device_last_seen_title).visibility = View.GONE
-                textView.visibility = View.GONE
-            }
+
+                dateFormat.format(date) + ", " + time
+            } ?: "-"
+
+            val lastSeenInfo = getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
+            textView.text = lastSeenInfo
 
             // title & icon
             builder.setTitle(R.string.devices_details_dialog_title)

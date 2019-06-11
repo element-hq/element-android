@@ -48,7 +48,7 @@ data class DeviceInfo(
          * The last time this device has been seen.
          */
         @Json(name = "last_seen_ts")
-        var lastSeenTs: Long = 0,
+        var lastSeenTs: Long? = null,
 
         /**
          * The last ip address
@@ -58,6 +58,6 @@ data class DeviceInfo(
 ) : DatedObject {
 
     override val date: Long
-        get() = lastSeenTs
+        get() = lastSeenTs ?: 0
 
 }
