@@ -20,20 +20,26 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import androidx.core.view.forEachIndexed
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
+import im.vector.riotredesign.core.ui.views.KeysBackupBanner
 import im.vector.riotredesign.features.home.room.list.RoomListFragment
 import im.vector.riotredesign.features.home.room.list.RoomListParams
 import im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
+import im.vector.riotredesign.features.workers.signout.SignOutViewModel
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_home_detail.*
+import org.koin.android.ext.android.inject
 
 
 @Parcelize
@@ -50,7 +56,7 @@ private const val INDEX_CATCHUP = 0
 private const val INDEX_PEOPLE = 1
 private const val INDEX_ROOMS = 2
 
-class HomeDetailFragment : VectorBaseFragment() {
+class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     private val params: HomeDetailParams by args()
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
@@ -58,6 +64,8 @@ class HomeDetailFragment : VectorBaseFragment() {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
+
+    private val session by inject<Session>()
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
@@ -73,6 +81,41 @@ class HomeDetailFragment : VectorBaseFragment() {
         switchDisplayMode(currentDisplayMode)
         setupBottomNavigationView()
         setupToolbar()
+        setupKeysBackupBanner()
+    }
+
+    private fun setupKeysBackupBanner() {
+        // Keys backup banner
+        // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
+        val model = ViewModelProviders.of(this).get(SignOutViewModel::class.java)
+
+        model.init(session)
+
+        model.keysBackupState.observe(this, Observer { keysBackupState ->
+            when (keysBackupState) {
+                null                               ->
+                    homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                KeysBackupState.Disabled           ->
+                    homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(model.getNumberOfKeysToBackup()), false)
+                KeysBackupState.NotTrusted,
+                KeysBackupState.WrongBackUpVersion ->
+                    // In this case, getCurrentBackupVersion() should not return ""
+                    homeKeysBackupBanner.render(KeysBackupBanner.State.Recover(model.getCurrentBackupVersion()), false)
+                KeysBackupState.WillBackUp,
+                KeysBackupState.BackingUp          ->
+                    homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
+                KeysBackupState.ReadyToBackUp      ->
+                    if (model.canRestoreKeys()) {
+                        homeKeysBackupBanner.render(KeysBackupBanner.State.Update(model.getCurrentBackupVersion()), false)
+                    } else {
+                        homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                    }
+                else                               ->
+                    homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+            }
+        })
+
+        homeKeysBackupBanner.delegate = this
     }
 
 
@@ -140,6 +183,17 @@ class HomeDetailFragment : VectorBaseFragment() {
                 .commit()
     }
 
+    /* ==========================================================================================
+     * KeysBackupBanner Listener
+     * ========================================================================================== */
+
+    override fun setupKeysBackup() {
+        navigator.openKeysBackupSetup(requireActivity(), false)
+    }
+
+    override fun recoverKeysBackup() {
+        navigator.openKeysBackupManager(requireActivity())
+    }
 
     override fun invalidate() = withState(viewModel) {
         unreadCounterBadgeViews[INDEX_CATCHUP].render(UnreadCounterBadgeView.State(it.notificationCountCatchup, it.notificationHighlightCatchup))

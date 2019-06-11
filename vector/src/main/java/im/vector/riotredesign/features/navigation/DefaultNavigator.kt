@@ -19,6 +19,8 @@ package im.vector.riotredesign.features.navigation
 import android.content.Context
 import android.content.Intent
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
+import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.riotredesign.features.debug.DebugMenuActivity
 import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity
 import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
@@ -52,5 +54,13 @@ class DefaultNavigator : Navigator {
 
     override fun openDebug(context: Context) {
         context.startActivity(Intent(context, DebugMenuActivity::class.java))
+    }
+
+    override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {
+        context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
+    }
+
+    override fun openKeysBackupManager(context: Context) {
+        context.startActivity(KeysBackupManageActivity.intent(context))
     }
 }
