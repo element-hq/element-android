@@ -41,8 +41,8 @@ object MXEncryptedAttachments {
      * Define the result of an encryption file
      */
     data class EncryptionResult(
-            var mEncryptedFileInfo: EncryptedFileInfo,
-            var mEncryptedStream: InputStream
+            var encryptedFileInfo: EncryptedFileInfo,
+            var encryptedStream: InputStream
     )
 
     /***
@@ -98,7 +98,7 @@ object MXEncryptedAttachments {
             outStream.write(encodedBytes)
 
             val result = EncryptionResult(
-                    mEncryptedFileInfo = EncryptedFileInfo(
+                    encryptedFileInfo = EncryptedFileInfo(
                             url = null,
                             mimetype = mimetype,
                             key = EncryptedFileKey(
@@ -112,7 +112,7 @@ object MXEncryptedAttachments {
                             hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))!!),
                             v = "v2"
                     ),
-                    mEncryptedStream = ByteArrayInputStream(outStream.toByteArray())
+                    encryptedStream = ByteArrayInputStream(outStream.toByteArray())
             )
 
             outStream.close()

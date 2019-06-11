@@ -82,8 +82,8 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         val safeResult = result
         if (safeResult != null) {
             val encryptedEvent = localEvent.copy(
-                    type = safeResult.mEventType,
-                    content = safeResult.mEventContent
+                    type = safeResult.eventType,
+                    content = safeResult.eventContent
             )
             val nextWorkerParams = SendEventWorker.Params(params.roomId, encryptedEvent)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))

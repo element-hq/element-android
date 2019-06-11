@@ -24,19 +24,19 @@ import java.util.*
 
 internal class KeysBackupStateManager(private val uiHandler: Handler) {
 
-    private val mListeners = ArrayList<KeysBackupService.KeysBackupStateListener>()
+    private val listeners = ArrayList<KeysBackupService.KeysBackupStateListener>()
 
     // Backup state
     var state = KeysBackupState.Unknown
         set(newState) {
-            Timber.v("KeysBackup", "setState: $field -> $newState")
+            Timber.v("KeysBackup: setState: $field -> $newState")
 
             field = newState
 
             // Notify listeners about the state change, on the ui thread
             uiHandler.post {
-                synchronized(mListeners) {
-                    mListeners.forEach {
+                synchronized(listeners) {
+                    listeners.forEach {
                         // Use newState because state may have already changed again
                         it.onStateChange(newState)
                     }
@@ -57,14 +57,14 @@ internal class KeysBackupStateManager(private val uiHandler: Handler) {
                 || state == KeysBackupState.NotTrusted
 
     fun addListener(listener: KeysBackupService.KeysBackupStateListener) {
-        synchronized(mListeners) {
-            mListeners.add(listener)
+        synchronized(listeners) {
+            listeners.add(listener)
         }
     }
 
     fun removeListener(listener: KeysBackupService.KeysBackupStateListener) {
-        synchronized(mListeners) {
-            mListeners.remove(listener)
+        synchronized(listeners) {
+            listeners.remove(listener)
         }
     }
 }

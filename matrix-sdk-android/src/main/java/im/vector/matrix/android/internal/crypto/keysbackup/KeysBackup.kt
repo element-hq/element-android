@@ -42,7 +42,7 @@ import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryK
 import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
@@ -94,17 +94,17 @@ internal class KeysBackup(
     private val keysBackupStateManager = KeysBackupStateManager(uiHandler)
 
     // The backup version
-    override var mKeysBackupVersion: KeysVersionResult? = null
+    override var keysBackupVersion: KeysVersionResult? = null
         private set
 
     // The backup key being used.
-    private var mBackupKey: OlmPkEncryption? = null
+    private var backupOlmPkEncryption: OlmPkEncryption? = null
 
-    private val mRandom = Random()
+    private val random = Random()
 
     private var backupAllGroupSessionsCallback: MatrixCallback<Unit>? = null
 
-    private var mKeysBackupStateListener: KeysBackupService.KeysBackupStateListener? = null
+    private var keysBackupStateListener: KeysBackupService.KeysBackupStateListener? = null
 
     override val isEnabled: Boolean
         get() = keysBackupStateManager.isEnabled
@@ -116,7 +116,7 @@ internal class KeysBackup(
         get() = keysBackupStateManager.state
 
     override val currentBackupVersion: String?
-        get() = mKeysBackupVersion?.version
+        get() = keysBackupVersion?.version
 
     override fun addListener(listener: KeysBackupService.KeysBackupStateListener) {
         keysBackupStateManager.addListener(listener)
@@ -248,9 +248,9 @@ internal class KeysBackup(
         CryptoAsyncHelper.getDecryptBackgroundHandler().post {
             // If we're currently backing up to this backup... stop.
             // (We start using it automatically in createKeysBackupVersion so this is symmetrical).
-            if (mKeysBackupVersion != null && version == mKeysBackupVersion!!.version) {
+            if (keysBackupVersion != null && version == keysBackupVersion!!.version) {
                 resetKeysBackupData()
-                mKeysBackupVersion = null
+                keysBackupVersion = null
                 keysBackupStateManager.state = KeysBackupState.Unknown
             }
 
@@ -350,7 +350,7 @@ internal class KeysBackup(
                 backupAllGroupSessionsCallback = callback
 
                 // Listen to `state` change to determine when to call onBackupProgress and onComplete
-                mKeysBackupStateListener = object : KeysBackupService.KeysBackupStateListener {
+                keysBackupStateListener = object : KeysBackupService.KeysBackupStateListener {
                     override fun onStateChange(newState: KeysBackupState) {
                         getBackupProgress(object : ProgressListener {
                             override fun onProgress(progress: Int, total: Int) {
@@ -370,7 +370,7 @@ internal class KeysBackup(
                     }
                 }
 
-                keysBackupStateManager.addListener(mKeysBackupStateListener!!)
+                keysBackupStateManager.addListener(keysBackupStateListener!!)
 
                 backupKeys()
             }
@@ -651,11 +651,11 @@ internal class KeysBackup(
     private fun resetBackupAllGroupSessionsListeners() {
         backupAllGroupSessionsCallback = null
 
-        mKeysBackupStateListener?.let {
+        keysBackupStateListener?.let {
             keysBackupStateManager.removeListener(it)
         }
 
-        mKeysBackupStateListener = null
+        keysBackupStateListener = null
     }
 
     /**
@@ -732,9 +732,9 @@ internal class KeysBackup(
                             + sessionsFromHsCount + " from the backup store on the homeserver")
 
                     // Do not trigger a backup for them if they come from the backup version we are using
-                    val backUp = keysVersionResult.version != mKeysBackupVersion?.version
+                    val backUp = keysVersionResult.version != keysBackupVersion?.version
                     if (backUp) {
-                        Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up to backup version: " + mKeysBackupVersion?.version)
+                        Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up to backup version: " + keysBackupVersion?.version)
                     }
 
                     // Import them into the crypto store
@@ -913,7 +913,7 @@ internal class KeysBackup(
                 // Wait between 0 and 10 seconds, to avoid backup requests from
                 // different clients hitting the server all at the same time when a
                 // new key is sent
-                val delayInMs = mRandom.nextInt(KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS).toLong()
+                val delayInMs = random.nextInt(KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS).toLong()
 
                 uiHandler.postDelayed({ backupKeys() }, delayInMs)
             }
@@ -926,7 +926,7 @@ internal class KeysBackup(
     /**
      * Get information about a backup version defined on the homeserver.
      *
-     * It can be different than mKeysBackupVersion.
+     * It can be different than keysBackupVersion.
      * @param version the backup version
      * @param callback
      */
@@ -956,7 +956,7 @@ internal class KeysBackup(
     /**
      * Retrieve the current version of the backup from the home server
      *
-     * It can be different than mKeysBackupVersion.
+     * It can be different than keysBackupVersion.
      * @param callback onSuccess(null) will be called if there is no backup on the server
      */
     override fun getCurrentVersion(callback: MatrixCallback<KeysVersionResult?>) {
@@ -990,7 +990,7 @@ internal class KeysBackup(
     override fun forceUsingLastVersion(callback: MatrixCallback<Boolean>) {
         getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
             override fun onSuccess(data: KeysVersionResult?) {
-                val localBackupVersion = mKeysBackupVersion?.version
+                val localBackupVersion = keysBackupVersion?.version
                 val serverBackupVersion = data?.version
 
                 if (serverBackupVersion == null) {
@@ -1001,7 +1001,7 @@ internal class KeysBackup(
                         // No backup on the server, and we are currently backing up, so stop backing up
                         callback.onSuccess(false)
                         resetKeysBackupData()
-                        mKeysBackupVersion = null
+                        keysBackupVersion = null
                         keysBackupStateManager.state = KeysBackupState.Disabled
                     }
                 } else {
@@ -1046,7 +1046,7 @@ internal class KeysBackup(
             return
         }
 
-        mKeysBackupVersion = null
+        keysBackupVersion = null
         keysBackupStateManager.state = KeysBackupState.CheckingBackUpOnHomeserver
 
         getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
@@ -1064,7 +1064,7 @@ internal class KeysBackup(
     private fun checkAndStartWithKeysBackupVersion(keyBackupVersion: KeysVersionResult?) {
         Timber.v("checkAndStartWithKeyBackupVersion: ${keyBackupVersion?.version}")
 
-        mKeysBackupVersion = keyBackupVersion
+        keysBackupVersion = keyBackupVersion
 
         if (keyBackupVersion == null) {
             Timber.v("checkAndStartWithKeysBackupVersion: Found no key backup version on the homeserver")
@@ -1212,13 +1212,13 @@ internal class KeysBackup(
             val retrievedMegolmBackupAuthData = keysVersionResult.getAuthDataAsMegolmBackupAuthData()
 
             if (retrievedMegolmBackupAuthData != null) {
-                mKeysBackupVersion = keysVersionResult
+                keysBackupVersion = keysVersionResult
                 cryptoStore.setKeyBackupVersion(keysVersionResult.version)
 
                 onServerDataRetrieved(keysVersionResult.count, keysVersionResult.hash)
 
                 try {
-                    mBackupKey = OlmPkEncryption().apply {
+                    backupOlmPkEncryption = OlmPkEncryption().apply {
                         setRecipientKey(retrievedMegolmBackupAuthData.publicKey)
                     }
                 } catch (e: OlmException) {
@@ -1262,7 +1262,7 @@ internal class KeysBackup(
 
         cryptoStore.setKeyBackupVersion(null)
         cryptoStore.setKeysBackupData(null)
-        mBackupKey = null
+        backupOlmPkEncryption = null
 
         // Reset backup markers
         cryptoStore.resetBackupMarkers()
@@ -1276,7 +1276,7 @@ internal class KeysBackup(
         Timber.v("backupKeys")
 
         // Sanity check, as this method can be called after a delay, the state may have change during the delay
-        if (!isEnabled || mBackupKey == null || mKeysBackupVersion == null) {
+        if (!isEnabled || backupOlmPkEncryption == null || keysBackupVersion == null) {
             Timber.v("backupKeys: Invalid configuration")
             backupAllGroupSessionsCallback?.onFailure(IllegalStateException("Invalid configuration"))
             resetBackupAllGroupSessionsListeners()
@@ -1291,11 +1291,11 @@ internal class KeysBackup(
         }
 
         // Get a chunk of keys to backup
-        val sessions = cryptoStore.inboundGroupSessionsToBackup(KEY_BACKUP_SEND_KEYS_MAX_COUNT)
+        val olmInboundGroupSessionWrappers = cryptoStore.inboundGroupSessionsToBackup(KEY_BACKUP_SEND_KEYS_MAX_COUNT)
 
-        Timber.v("backupKeys: 1 - " + sessions.size + " sessions to back up")
+        Timber.v("backupKeys: 1 - " + olmInboundGroupSessionWrappers.size + " sessions to back up")
 
-        if (sessions.isEmpty()) {
+        if (olmInboundGroupSessionWrappers.isEmpty()) {
             // Backup is up to date
             keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
 
@@ -1314,16 +1314,16 @@ internal class KeysBackup(
             val keysBackupData = KeysBackupData()
             keysBackupData.roomIdToRoomKeysBackupData = HashMap()
 
-            for (session in sessions) {
-                val keyBackupData = encryptGroupSession(session)
-                if (keysBackupData.roomIdToRoomKeysBackupData[session.mRoomId] == null) {
+            for (olmInboundGroupSessionWrapper in olmInboundGroupSessionWrappers) {
+                val keyBackupData = encryptGroupSession(olmInboundGroupSessionWrapper)
+                if (keysBackupData.roomIdToRoomKeysBackupData[olmInboundGroupSessionWrapper.roomId] == null) {
                     val roomKeysBackupData = RoomKeysBackupData()
                     roomKeysBackupData.sessionIdToKeyBackupData = HashMap()
-                    keysBackupData.roomIdToRoomKeysBackupData[session.mRoomId!!] = roomKeysBackupData
+                    keysBackupData.roomIdToRoomKeysBackupData[olmInboundGroupSessionWrapper.roomId!!] = roomKeysBackupData
                 }
 
                 try {
-                    keysBackupData.roomIdToRoomKeysBackupData[session.mRoomId]!!.sessionIdToKeyBackupData[session.mSession!!.sessionIdentifier()] = keyBackupData
+                    keysBackupData.roomIdToRoomKeysBackupData[olmInboundGroupSessionWrapper.roomId]!!.sessionIdToKeyBackupData[olmInboundGroupSessionWrapper.olmInboundGroupSession!!.sessionIdentifier()] = keyBackupData
                 } catch (e: OlmException) {
                     Timber.e(e, "OlmException")
                 }
@@ -1333,16 +1333,16 @@ internal class KeysBackup(
 
             // Make the request
             storeSessionDataTask
-                    .configureWith(StoreSessionsDataTask.Params(mKeysBackupVersion!!.version!!, keysBackupData))
+                    .configureWith(StoreSessionsDataTask.Params(keysBackupVersion!!.version!!, keysBackupData))
                     .dispatchTo(object : MatrixCallback<BackupKeysResult> {
                         override fun onSuccess(data: BackupKeysResult) {
                             uiHandler.post {
                                 Timber.v("backupKeys: 5a - Request complete")
 
                                 // Mark keys as backed up
-                                cryptoStore.markBackupDoneForInboundGroupSessions(sessions)
+                                cryptoStore.markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers)
 
-                                if (sessions.size < KEY_BACKUP_SEND_KEYS_MAX_COUNT) {
+                                if (olmInboundGroupSessionWrappers.size < KEY_BACKUP_SEND_KEYS_MAX_COUNT) {
                                     Timber.v("backupKeys: All keys have been backed up")
                                     onServerDataRetrieved(data.count, data.hash)
 
@@ -1370,7 +1370,7 @@ internal class KeysBackup(
                                             backupAllGroupSessionsCallback?.onFailure(failure)
                                             resetBackupAllGroupSessionsListeners()
                                             resetKeysBackupData()
-                                            mKeysBackupVersion = null
+                                            keysBackupVersion = null
 
                                             // Do not stay in KeysBackupState.WrongBackUpVersion but check what is available on the homeserver
                                             checkAndStartKeysBackup()
@@ -1399,13 +1399,13 @@ internal class KeysBackup(
 
     @VisibleForTesting
     @WorkerThread
-    fun encryptGroupSession(session: MXOlmInboundGroupSession2): KeyBackupData {
+    fun encryptGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper): KeyBackupData {
         // Gather information for each key
-        val device = cryptoStore.deviceWithIdentityKey(session.mSenderKey!!)
+        val device = cryptoStore.deviceWithIdentityKey(olmInboundGroupSessionWrapper.senderKey!!)
 
         // Build the m.megolm_backup.v1.curve25519-aes-sha2 data as defined at
         // https://github.com/uhoreg/matrix-doc/blob/e2e_backup/proposals/1219-storing-megolm-keys-serverside.md#mmegolm_backupv1curve25519-aes-sha2-key-format
-        val sessionData = session.exportKeys()
+        val sessionData = olmInboundGroupSessionWrapper.exportKeys()
         val sessionBackupData = mapOf(
                 "algorithm" to sessionData!!.algorithm,
                 "sender_key" to sessionData.senderKey,
@@ -1421,7 +1421,7 @@ internal class KeysBackup(
         try {
             val json = adapter.toJson(sessionBackupData)
 
-            encryptedSessionBackupData = mBackupKey?.encrypt(json)
+            encryptedSessionBackupData = backupOlmPkEncryption?.encrypt(json)
         } catch (e: OlmException) {
             Timber.e(e, "OlmException")
         }
@@ -1429,12 +1429,12 @@ internal class KeysBackup(
         // Build backup data for that key
         val keyBackupData = KeyBackupData()
         try {
-            keyBackupData.firstMessageIndex = session.mSession!!.firstKnownIndex
+            keyBackupData.firstMessageIndex = olmInboundGroupSessionWrapper.olmInboundGroupSession!!.firstKnownIndex
         } catch (e: OlmException) {
             Timber.e(e, "OlmException")
         }
 
-        keyBackupData.forwardedCount = session.mForwardingCurve25519KeyChain!!.size
+        keyBackupData.forwardedCount = olmInboundGroupSessionWrapper.forwardingCurve25519KeyChain!!.size
         keyBackupData.isVerified = device?.isVerified == true
 
         val data = mapOf(

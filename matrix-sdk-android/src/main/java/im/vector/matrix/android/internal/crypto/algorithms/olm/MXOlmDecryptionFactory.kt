@@ -19,12 +19,12 @@ package im.vector.matrix.android.internal.crypto.algorithms.olm
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 
-internal class MXOlmDecryptionFactory(private val mOlmDevice: MXOlmDevice,
-                                      private val mCredentials: Credentials) {
+internal class MXOlmDecryptionFactory(private val olmDevice: MXOlmDevice,
+                                      private val credentials: Credentials) {
 
     fun create(): MXOlmDecryption {
         return MXOlmDecryption(
-                mOlmDevice,
-                mCredentials)
+                olmDevice,
+                credentials)
     }
 }

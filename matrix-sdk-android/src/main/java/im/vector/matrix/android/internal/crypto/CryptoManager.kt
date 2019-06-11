@@ -151,9 +151,6 @@ internal class CryptoManager(
         }
     }
 
-    // initialization callbacks
-    private val mInitializationCallbacks = ArrayList<MatrixCallback<Unit>>()
-
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
                 .configureWith(SetDeviceNameTask.Params(deviceId, deviceName))
@@ -491,7 +488,7 @@ internal class CryptoManager(
     }
 
     fun isEncryptionEnabledForInvitedUser(): Boolean {
-        return cryptoConfig.mEnableEncryptionForInvitedMembers
+        return cryptoConfig.enableEncryptionForInvitedMembers
     }
 
     override fun getEncryptionAlgorithm(roomId: String): String? {
@@ -732,7 +729,7 @@ internal class CryptoManager(
                 deviceListManager.startTrackingDeviceList(Arrays.asList(userId))
             } else if (membership == Membership.INVITE
                     && shouldEncryptForInvitedMembers(roomId)
-                    && cryptoConfig.mEnableEncryptionForInvitedMembers) {
+                    && cryptoConfig.enableEncryptionForInvitedMembers) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
                 // know what other servers are in the room at the time they've been invited.

@@ -23,19 +23,19 @@ import java.security.cert.X509Certificate
 
 @JsonClass(generateAdapter = true)
 data class Fingerprint(
-        val mBytes: ByteArray,
-        val mHashType: HashType
+        val bytes: ByteArray,
+        val hashType: HashType
 ) {
 
     val displayableHexRepr: String by lazy {
-        CertUtil.fingerprintToHexString(mBytes)
+        CertUtil.fingerprintToHexString(bytes)
     }
 
     @Throws(CertificateException::class)
     fun matchesCert(cert: X509Certificate): Boolean {
-        var o: Fingerprint? = when (mHashType) {
-            Fingerprint.HashType.SHA256 -> Fingerprint.newSha256Fingerprint(cert)
-            Fingerprint.HashType.SHA1 -> Fingerprint.newSha1Fingerprint(cert)
+        var o: Fingerprint? = when (hashType) {
+            HashType.SHA256 -> newSha256Fingerprint(cert)
+            HashType.SHA1   -> newSha1Fingerprint(cert)
         }
         return equals(o)
     }
@@ -45,15 +45,15 @@ data class Fingerprint(
         if (javaClass != other?.javaClass) return false
 
         other as Fingerprint
-        if (!mBytes.contentEquals(other.mBytes)) return false
-        if (mHashType != other.mHashType) return false
+        if (!bytes.contentEquals(other.bytes)) return false
+        if (hashType != other.hashType) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = mBytes.contentHashCode()
-        result = 31 * result + mHashType.hashCode()
+        var result = bytes.contentHashCode()
+        result = 31 * result + hashType.hashCode()
         return result
     }
 

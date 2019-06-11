@@ -33,23 +33,23 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import timber.log.Timber
 
 internal class OutgoingSASVerificationRequest(
-        private val mSasVerificationService: DefaultSasVerificationService,
-        private val mSetDeviceVerificationAction: SetDeviceVerificationAction,
-        private val mCredentials: Credentials,
-        private val mCryptoStore: IMXCryptoStore,
-        private val mSendToDeviceTask: SendToDeviceTask,
-        private val mTaskExecutor: TaskExecutor,
+        private val sasVerificationService: DefaultSasVerificationService,
+        private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        private val credentials: Credentials,
+        private val cryptoStore: IMXCryptoStore,
+        private val sendToDeviceTask: SendToDeviceTask,
+        private val taskExecutor: TaskExecutor,
         deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
         otherDeviceId: String)
     : SASVerificationTransaction(
-        mSasVerificationService,
-        mSetDeviceVerificationAction,
-        mCredentials,
-        mCryptoStore,
-        mSendToDeviceTask,
-        mTaskExecutor,
+        sasVerificationService,
+        setDeviceVerificationAction,
+        credentials,
+        cryptoStore,
+        sendToDeviceTask,
+        taskExecutor,
         deviceFingerprint,
         transactionId,
         otherUserId,
@@ -94,7 +94,7 @@ internal class OutgoingSASVerificationRequest(
         }
 
         val startMessage = KeyVerificationStart()
-        startMessage.fromDevice = mCredentials.deviceId
+        startMessage.fromDevice = credentials.deviceId
         startMessage.method = KeyVerificationStart.VERIF_METHOD_SAS
         startMessage.transactionID = transactionId
         startMessage.keyAgreementProtocols = KNOWN_AGREEMENT_PROTOCOLS
@@ -182,7 +182,7 @@ internal class OutgoingSASVerificationRequest(
             // - he device ID of the device that sent the m.key.verification.accept message
             // - the transaction ID.
             val sasInfo = "MATRIX_KEY_VERIFICATION_SAS" +
-                    "${mCredentials.userId}${mCredentials.deviceId}" +
+                    "${credentials.userId}${credentials.deviceId}" +
                     "$otherUserId$otherDeviceId" +
                     transactionId
             //decimal: generate five bytes by using HKDF.

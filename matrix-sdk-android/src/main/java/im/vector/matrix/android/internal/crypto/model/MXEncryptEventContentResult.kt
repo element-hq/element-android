@@ -22,9 +22,9 @@ data class MXEncryptEventContentResult(
         /**
          * The event content
          */
-        val mEventContent: Content,
+        val eventContent: Content,
         /**
          * the event type
          */
-        val mEventType: String
+        val eventType: String
 )

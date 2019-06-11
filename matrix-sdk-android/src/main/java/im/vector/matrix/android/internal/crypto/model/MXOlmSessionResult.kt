@@ -18,14 +18,13 @@ package im.vector.matrix.android.internal.crypto.model
 
 import java.io.Serializable
 
-data class MXOlmSessionResult
-(
+data class MXOlmSessionResult(
         /**
          * the device
          */
-        val mDevice: MXDeviceInfo,
+        val deviceInfo: MXDeviceInfo,
         /**
          * Base64 olm session id.
          * null if no session could be established.
          */
-        var mSessionId: String?) : Serializable
+        var sessionId: String?) : Serializable

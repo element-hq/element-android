@@ -202,7 +202,7 @@ internal class MXMegolmEncryption(
                         val devicesToShareWith = devicesByUser[userId]
                         for ((deviceID) in devicesToShareWith!!) {
                             val sessionResult = it.getObject(deviceID, userId)
-                            if (sessionResult?.mSessionId == null) {
+                            if (sessionResult?.sessionId == null) {
                                 // no session with this device, probably because there
                                 // were no one-time keys.
                                 //
@@ -218,7 +218,7 @@ internal class MXMegolmEncryption(
                             }
                             Timber.v("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
                             //noinspection ArraysAsListWithZeroOrOneArgument,ArraysAsListWithZeroOrOneArgument
-                            contentMap.setObject(messageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.mDevice)), userId, deviceID)
+                            contentMap.setObject(messageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.deviceInfo)), userId, deviceID)
                             haveTargets = true
                         }
                     }

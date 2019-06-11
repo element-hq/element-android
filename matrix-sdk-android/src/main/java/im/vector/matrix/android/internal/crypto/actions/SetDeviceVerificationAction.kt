@@ -21,12 +21,12 @@ import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 
-internal class SetDeviceVerificationAction(private val mCryptoStore: IMXCryptoStore,
-                                           private val mCredentials: Credentials,
-                                           private val mKeysBackup: KeysBackup) {
+internal class SetDeviceVerificationAction(private val cryptoStore: IMXCryptoStore,
+                                           private val credentials: Credentials,
+                                           private val keysBackup: KeysBackup) {
 
     fun handle(verificationStatus: Int, deviceId: String, userId: String) {
-        val device = mCryptoStore.getUserDevice(deviceId, userId)
+        val device = cryptoStore.getUserDevice(deviceId, userId)
 
         // Sanity check
         if (null == device) {
@@ -36,13 +36,13 @@ internal class SetDeviceVerificationAction(private val mCryptoStore: IMXCryptoSt
 
         if (device.verified != verificationStatus) {
             device.verified = verificationStatus
-            mCryptoStore.storeUserDevice(userId, device)
+            cryptoStore.storeUserDevice(userId, device)
 
-            if (userId == mCredentials.userId) {
+            if (userId == credentials.userId) {
                 // If one of the user's own devices is being marked as verified / unverified,
                 // check the key backup status, since whether or not we use this depends on
                 // whether it has a signature from a verified device
-                mKeysBackup.checkAndStartKeysBackup()
+                keysBackup.checkAndStartKeysBackup()
             }
         }
     }

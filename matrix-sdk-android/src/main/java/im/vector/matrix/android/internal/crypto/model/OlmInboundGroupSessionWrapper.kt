@@ -26,34 +26,34 @@ import java.io.Serializable
 import java.util.*
 
 /**
- * This class adds more context to a OLMInboundGroupSession object.
+ * This class adds more context to a OlmInboundGroupSession object.
  * This allows additional checks. The class implements Serializable so that the context can be stored.
  */
-class MXOlmInboundGroupSession2 : Serializable {
+class OlmInboundGroupSessionWrapper : Serializable {
 
     // The associated olm inbound group session.
-    var mSession: OlmInboundGroupSession? = null
+    var olmInboundGroupSession: OlmInboundGroupSession? = null
 
     // The room in which this session is used.
-    var mRoomId: String? = null
+    var roomId: String? = null
 
     // The base64-encoded curve25519 key of the sender.
-    var mSenderKey: String? = null
+    var senderKey: String? = null
 
     // Other keys the sender claims.
-    var mKeysClaimed: Map<String, String>? = null
+    var keysClaimed: Map<String, String>? = null
 
     // Devices which forwarded this session to us (normally empty).
-    var mForwardingCurve25519KeyChain: List<String>? = ArrayList()
+    var forwardingCurve25519KeyChain: List<String>? = ArrayList()
 
     /**
      * @return the first known message index
      */
     val firstKnownIndex: Long?
         get() {
-            if (null != mSession) {
+            if (null != olmInboundGroupSession) {
                 try {
-                    return mSession!!.firstKnownIndex
+                    return olmInboundGroupSession!!.firstKnownIndex
                 } catch (e: Exception) {
                     Timber.e(e, "## getFirstKnownIndex() : getFirstKnownIndex failed")
                 }
@@ -66,27 +66,15 @@ class MXOlmInboundGroupSession2 : Serializable {
     /**
      * Constructor
      *
-     * @param prevFormatSession the previous session format
-     */
-    constructor(prevFormatSession: MXOlmInboundGroupSession) {
-        mSession = prevFormatSession.mSession
-        mRoomId = prevFormatSession.mRoomId
-        mSenderKey = prevFormatSession.mSenderKey
-        mKeysClaimed = prevFormatSession.mKeysClaimed
-    }
-
-    /**
-     * Constructor
-     *
      * @param sessionKey the session key
      * @param isImported true if it is an imported session key
      */
     constructor(sessionKey: String, isImported: Boolean) {
         try {
             if (!isImported) {
-                mSession = OlmInboundGroupSession(sessionKey)
+                olmInboundGroupSession = OlmInboundGroupSession(sessionKey)
             } else {
-                mSession = OlmInboundGroupSession.importSession(sessionKey)
+                olmInboundGroupSession = OlmInboundGroupSession.importSession(sessionKey)
             }
         } catch (e: Exception) {
             Timber.e(e, "Cannot create")
@@ -103,15 +91,15 @@ class MXOlmInboundGroupSession2 : Serializable {
     @Throws(Exception::class)
     constructor(megolmSessionData: MegolmSessionData) {
         try {
-            mSession = OlmInboundGroupSession.importSession(megolmSessionData.sessionKey!!)
+            olmInboundGroupSession = OlmInboundGroupSession.importSession(megolmSessionData.sessionKey!!)
 
-            if (!TextUtils.equals(mSession!!.sessionIdentifier(), megolmSessionData.sessionId)) {
+            if (!TextUtils.equals(olmInboundGroupSession!!.sessionIdentifier(), megolmSessionData.sessionId)) {
                 throw Exception("Mismatched group session Id")
             }
 
-            mSenderKey = megolmSessionData.senderKey
-            mKeysClaimed = megolmSessionData.senderClaimedKeys
-            mRoomId = megolmSessionData.roomId
+            senderKey = megolmSessionData.senderKey
+            keysClaimed = megolmSessionData.senderClaimedKeys
+            roomId = megolmSessionData.roomId
         } catch (e: Exception) {
             throw Exception(e.message)
         }
@@ -126,21 +114,21 @@ class MXOlmInboundGroupSession2 : Serializable {
         var megolmSessionData: MegolmSessionData? = MegolmSessionData()
 
         try {
-            if (null == mForwardingCurve25519KeyChain) {
-                mForwardingCurve25519KeyChain = ArrayList()
+            if (null == forwardingCurve25519KeyChain) {
+                forwardingCurve25519KeyChain = ArrayList()
             }
 
-            megolmSessionData!!.senderClaimedEd25519Key = mKeysClaimed!!["ed25519"]
-            megolmSessionData.forwardingCurve25519KeyChain = ArrayList(mForwardingCurve25519KeyChain!!)
-            megolmSessionData.senderKey = mSenderKey
-            megolmSessionData.senderClaimedKeys = mKeysClaimed
-            megolmSessionData.roomId = mRoomId
-            megolmSessionData.sessionId = mSession!!.sessionIdentifier()
-            megolmSessionData.sessionKey = mSession!!.export(mSession!!.firstKnownIndex)
+            megolmSessionData!!.senderClaimedEd25519Key = keysClaimed!!["ed25519"]
+            megolmSessionData.forwardingCurve25519KeyChain = ArrayList(forwardingCurve25519KeyChain!!)
+            megolmSessionData.senderKey = senderKey
+            megolmSessionData.senderClaimedKeys = keysClaimed
+            megolmSessionData.roomId = roomId
+            megolmSessionData.sessionId = olmInboundGroupSession!!.sessionIdentifier()
+            megolmSessionData.sessionKey = olmInboundGroupSession!!.export(olmInboundGroupSession!!.firstKnownIndex)
             megolmSessionData.algorithm = MXCRYPTO_ALGORITHM_MEGOLM
         } catch (e: Exception) {
             megolmSessionData = null
-            Timber.e(e, "## export() : senderKey " + mSenderKey + " failed")
+            Timber.e(e, "## export() : senderKey " + senderKey + " failed")
         }
 
         return megolmSessionData
@@ -153,9 +141,9 @@ class MXOlmInboundGroupSession2 : Serializable {
      * @return the exported data
      */
     fun exportSession(messageIndex: Long): String? {
-        if (null != mSession) {
+        if (null != olmInboundGroupSession) {
             try {
-                return mSession!!.export(messageIndex)
+                return olmInboundGroupSession!!.export(messageIndex)
             } catch (e: Exception) {
                 Timber.e(e, "## exportSession() : export failed")
             }

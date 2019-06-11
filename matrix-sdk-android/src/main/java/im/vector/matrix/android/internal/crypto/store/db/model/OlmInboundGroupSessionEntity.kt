@@ -20,7 +20,7 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
 import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
-import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 
 internal fun OlmInboundGroupSessionEntity.Companion.createPrimaryKey(sessionId: String?, senderKey: String?) = "$sessionId|$senderKey"
 
@@ -35,12 +35,12 @@ internal open class OlmInboundGroupSessionEntity(
         var backedUp: Boolean = false)
     : RealmObject() {
 
-    fun getInboundGroupSession(): MXOlmInboundGroupSession2? {
+    fun getInboundGroupSession(): OlmInboundGroupSessionWrapper? {
         return deserializeFromRealm(olmInboundGroupSessionData)
     }
 
-    fun putInboundGroupSession(mxOlmInboundGroupSession2: MXOlmInboundGroupSession2?) {
-        olmInboundGroupSessionData = serializeForRealm(mxOlmInboundGroupSession2)
+    fun putInboundGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper?) {
+        olmInboundGroupSessionData = serializeForRealm(olmInboundGroupSessionWrapper)
     }
 
     companion object

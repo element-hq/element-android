@@ -49,7 +49,7 @@ interface KeysBackupService {
     fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult, recoveryKey: String, roomId: String?, sessionId: String?, stepProgressListener: StepProgressListener?, callback: MatrixCallback<ImportRoomKeysResult>)
     fun restoreKeyBackupWithPassword(keysBackupVersion: KeysVersionResult, password: String, roomId: String?, sessionId: String?, stepProgressListener: StepProgressListener?, callback: MatrixCallback<ImportRoomKeysResult>)
 
-    val mKeysBackupVersion: KeysVersionResult?
+    val keysBackupVersion: KeysVersionResult?
     val currentBackupVersion: String?
     val isEnabled: Boolean
     val isStucked: Boolean

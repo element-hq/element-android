@@ -35,22 +35,22 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import timber.log.Timber
 
 internal class IncomingSASVerificationTransaction(
-        private val mSasVerificationService: DefaultSasVerificationService,
-        private val mSetDeviceVerificationAction: SetDeviceVerificationAction,
-        private val mCredentials: Credentials,
-        private val mCryptoStore: IMXCryptoStore,
-        private val mSendToDeviceTask: SendToDeviceTask,
-        private val mTaskExecutor: TaskExecutor,
+        private val sasVerificationService: DefaultSasVerificationService,
+        private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        private val credentials: Credentials,
+        private val cryptoStore: IMXCryptoStore,
+        private val sendToDeviceTask: SendToDeviceTask,
+        private val taskExecutor: TaskExecutor,
         deviceFingerprint: String,
         transactionId: String,
         otherUserID: String)
     : SASVerificationTransaction(
-        mSasVerificationService,
-        mSetDeviceVerificationAction,
-        mCredentials,
-        mCryptoStore,
-        mSendToDeviceTask,
-        mTaskExecutor,
+        sasVerificationService,
+        setDeviceVerificationAction,
+        credentials,
+        cryptoStore,
+        sendToDeviceTask,
+        taskExecutor,
         deviceFingerprint,
         transactionId,
         otherUserID,
@@ -118,7 +118,7 @@ internal class IncomingSASVerificationTransaction(
         }
 
         //Bob’s device ensures that it has a copy of Alice’s device key.
-        val mxDeviceInfo = mCryptoStore.getUserDevice(deviceId = otherDeviceId!!, userId = otherUserId)
+        val mxDeviceInfo = cryptoStore.getUserDevice(deviceId = otherDeviceId!!, userId = otherUserId)
 
         if (mxDeviceInfo?.fingerprint() == null) {
             Timber.e("## Failed to find device key ")
@@ -209,7 +209,7 @@ internal class IncomingSASVerificationTransaction(
         // - the transaction ID.
         val sasInfo = "MATRIX_KEY_VERIFICATION_SAS" +
                 "$otherUserId$otherDeviceId" +
-                "${mCredentials.userId}${mCredentials.deviceId}" +
+                "${credentials.userId}${credentials.deviceId}" +
                 transactionId
         //decimal: generate five bytes by using HKDF.
         //emoji: generate six bytes by using HKDF.

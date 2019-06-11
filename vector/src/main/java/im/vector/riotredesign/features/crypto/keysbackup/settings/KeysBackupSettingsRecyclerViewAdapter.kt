@@ -91,7 +91,7 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
 
     fun updateWithTrust(session: Session, keyBackupVersionTrust: KeysBackupVersionTrust?) {
         val keyBackupState = session.getKeysBackupService().state
-        val keyVersionResult = session.getKeysBackupService().mKeysBackupVersion
+        val keyVersionResult = session.getKeysBackupService().keysBackupVersion
 
         val infos = ArrayList<GenericRecyclerViewItem>()
         var itemSummary: GenericRecyclerViewItem? = null

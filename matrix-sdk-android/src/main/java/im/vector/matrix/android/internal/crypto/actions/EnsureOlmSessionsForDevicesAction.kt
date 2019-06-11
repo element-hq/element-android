@@ -18,16 +18,12 @@ package im.vector.matrix.android.internal.crypto.actions
 
 import android.text.TextUtils
 import arrow.core.Try
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import timber.log.Timber
 import java.util.*
 
@@ -94,7 +90,7 @@ internal class EnsureOlmSessionsForDevicesAction(private val olmDevice: MXOlmDev
                             if (null != deviceIds) {
                                 for (deviceId in deviceIds) {
                                     val olmSessionResult = results.getObject(deviceId, userId)
-                                    if (olmSessionResult!!.mSessionId != null) {
+                                    if (olmSessionResult!!.sessionId != null) {
                                         // We already have a result for this device
                                         continue
                                     }
@@ -108,7 +104,7 @@ internal class EnsureOlmSessionsForDevicesAction(private val olmDevice: MXOlmDev
                                         continue
                                     }
                                     // Update the result for this device in results
-                                    olmSessionResult.mSessionId = verifyKeyAndStartSession(oneTimeKey, userId, deviceInfo)
+                                    olmSessionResult.sessionId = verifyKeyAndStartSession(oneTimeKey, userId, deviceInfo)
                                 }
                             }
                         }

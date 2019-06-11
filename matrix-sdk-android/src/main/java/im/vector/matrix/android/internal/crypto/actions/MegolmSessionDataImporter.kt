@@ -28,10 +28,10 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 
-internal class MegolmSessionDataImporter(private val mOlmDevice: MXOlmDevice,
+internal class MegolmSessionDataImporter(private val olmDevice: MXOlmDevice,
                                          private val roomDecryptorProvider: RoomDecryptorProvider,
-                                         private val mOutgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
-                                         private val mCryptoStore: IMXCryptoStore) {
+                                         private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+                                         private val cryptoStore: IMXCryptoStore) {
 
     /**
      * Import a list of megolm session keys.
@@ -57,7 +57,7 @@ internal class MegolmSessionDataImporter(private val mOlmDevice: MXOlmDevice,
                 progressListener.onProgress(0, 100)
             }
         }
-        val sessions = mOlmDevice.importInboundGroupSessions(megolmSessionsData)
+        val olmInboundGroupSessionWrappers = olmDevice.importInboundGroupSessions(megolmSessionsData)
 
         for (megolmSessionData in megolmSessionsData) {
             cpt++
@@ -80,7 +80,7 @@ internal class MegolmSessionDataImporter(private val mOlmDevice: MXOlmDevice,
                     roomKeyRequestBody.senderKey = megolmSessionData.senderKey
                     roomKeyRequestBody.sessionId = megolmSessionData.sessionId
 
-                    mOutgoingRoomKeyRequestManager.cancelRoomKeyRequest(roomKeyRequestBody)
+                    outgoingRoomKeyRequestManager.cancelRoomKeyRequest(roomKeyRequestBody)
 
                     // Have another go at decrypting events sent with this session
                     decrypting.onNewSession(megolmSessionData.senderKey!!, sessionId!!)
@@ -104,7 +104,7 @@ internal class MegolmSessionDataImporter(private val mOlmDevice: MXOlmDevice,
 
         // Do not back up the key if it comes from a backup recovery
         if (fromBackup) {
-            mCryptoStore.markBackupDoneForInboundGroupSessions(sessions)
+            cryptoStore.markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers)
         }
 
         val t1 = System.currentTimeMillis()

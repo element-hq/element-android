@@ -77,7 +77,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                     else -> {
                         viewModel.loadingEvent.value = null
                         //All this cases will be manage by looking at the backup trust object
-                        viewModel.session?.getKeysBackupService()?.mKeysBackupVersion?.let {
+                        viewModel.session?.getKeysBackupService()?.keysBackupVersion?.let {
                             viewModel.getKeysBackupTrust(it)
                         } ?: run {
                             viewModel.keyVersionTrust.value = null

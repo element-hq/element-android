@@ -37,10 +37,9 @@ import java.util.*
 
 internal class MXOlmDecryption(
         // The olm device interface
-        private val mOlmDevice: MXOlmDevice,
-
+        private val olmDevice: MXOlmDevice,
         // the matrix credentials
-        private val mCredentials: Credentials)
+        private val credentials: Credentials)
     : IMXDecrypting {
 
     @Throws(MXDecryptionException::class)
@@ -53,15 +52,15 @@ internal class MXOlmDecryption(
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_CIPHER_TEXT_REASON))
         }
 
-        if (!olmEventContent.ciphertext!!.containsKey(mOlmDevice.deviceCurve25519Key)) {
-            Timber.e("## decryptEvent() : our device " + mOlmDevice.deviceCurve25519Key
+        if (!olmEventContent.ciphertext!!.containsKey(olmDevice.deviceCurve25519Key)) {
+            Timber.e("## decryptEvent() : our device " + olmDevice.deviceCurve25519Key
                     + " is not included in recipients. Event")
             throw MXDecryptionException(MXCryptoError(MXCryptoError.NOT_INCLUDE_IN_RECIPIENTS_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.NOT_INCLUDED_IN_RECIPIENT_REASON))
         }
 
         // The message for myUser
-        val message = olmEventContent.ciphertext!![mOlmDevice.deviceCurve25519Key] as JsonDict
+        val message = olmEventContent.ciphertext!![olmDevice.deviceCurve25519Key] as JsonDict
         val decryptedPayload = decryptMessage(message, olmEventContent.senderKey!!)
 
         if (decryptedPayload == null) {
@@ -93,9 +92,9 @@ internal class MXOlmDecryption(
                     MXCryptoError.UNABLE_TO_DECRYPT, reason))
         }
 
-        if (!TextUtils.equals(olmPayloadContent.recipient, mCredentials.userId)) {
+        if (!TextUtils.equals(olmPayloadContent.recipient, credentials.userId)) {
             Timber.e("## decryptEvent() : Event " + event.eventId + ": Intended recipient " + olmPayloadContent.recipient
-                    + " does not match our id " + mCredentials.userId)
+                    + " does not match our id " + credentials.userId)
             throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_RECIPIENT_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, String.format(MXCryptoError.BAD_RECIPIENT_REASON, olmPayloadContent.recipient)))
         }
@@ -109,7 +108,7 @@ internal class MXOlmDecryption(
 
         val ed25519 = olmPayloadContent.recipient_keys!!.get("ed25519")
 
-        if (!TextUtils.equals(ed25519, mOlmDevice.deviceEd25519Key)) {
+        if (!TextUtils.equals(ed25519, olmDevice.deviceEd25519Key)) {
             Timber.e("## decryptEvent() : Event " + event.eventId + ": Intended recipient ed25519 key " + ed25519 + " did not match ours")
             throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_RECIPIENT_KEY_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.BAD_RECIPIENT_KEY_REASON))
@@ -158,7 +157,7 @@ internal class MXOlmDecryption(
      * @return payload, if decrypted successfully.
      */
     private fun decryptMessage(message: JsonDict, theirDeviceIdentityKey: String): String? {
-        val sessionIdsSet = mOlmDevice.getSessionIds(theirDeviceIdentityKey)
+        val sessionIdsSet = olmDevice.getSessionIds(theirDeviceIdentityKey)
 
         val sessionIds: List<String>
 
@@ -190,13 +189,13 @@ internal class MXOlmDecryption(
         // Try each session in turn
         // decryptionErrors = {};
         for (sessionId in sessionIds) {
-            val payload = mOlmDevice.decryptMessage(messageBody, messageType, sessionId, theirDeviceIdentityKey)
+            val payload = olmDevice.decryptMessage(messageBody, messageType, sessionId, theirDeviceIdentityKey)
 
             if (null != payload) {
                 Timber.v("## decryptMessage() : Decrypted Olm message from $theirDeviceIdentityKey with session $sessionId")
                 return payload
             } else {
-                val foundSession = mOlmDevice.matchesSession(theirDeviceIdentityKey, sessionId, messageType, messageBody)
+                val foundSession = olmDevice.matchesSession(theirDeviceIdentityKey, sessionId, messageType, messageBody)
 
                 if (foundSession) {
                     // Decryption failed, but it was a prekey message matching this
@@ -222,7 +221,7 @@ internal class MXOlmDecryption(
 
         // prekey message which doesn't match any existing sessions: make a new
         // session.
-        val res = mOlmDevice.createInboundSession(theirDeviceIdentityKey, messageType, messageBody)
+        val res = olmDevice.createInboundSession(theirDeviceIdentityKey, messageType, messageBody)
 
         if (null == res) {
             Timber.e("## decryptMessage() :  Error decrypting non-prekey message with existing sessions")

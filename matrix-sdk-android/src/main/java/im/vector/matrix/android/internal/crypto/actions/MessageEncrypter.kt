@@ -27,8 +27,8 @@ import im.vector.matrix.android.internal.util.convertToUTF8
 import timber.log.Timber
 import java.util.*
 
-internal class MessageEncrypter(private val mCredentials: Credentials,
-                                private val mOlmDevice: MXOlmDevice) {
+internal class MessageEncrypter(private val credentials: Credentials,
+                                private val olmDevice: MXOlmDevice) {
 
     /**
      * Encrypt an event payload for a list of devices.
@@ -49,8 +49,8 @@ internal class MessageEncrypter(private val mCredentials: Credentials,
 
         val payloadJson = HashMap(payloadFields)
 
-        payloadJson["sender"] = mCredentials.userId
-        payloadJson["sender_device"] = mCredentials.deviceId
+        payloadJson["sender"] = credentials.userId
+        payloadJson["sender_device"] = credentials.deviceId
 
         // Include the Ed25519 key so that the recipient knows what
         // device this message came from.
@@ -61,13 +61,13 @@ internal class MessageEncrypter(private val mCredentials: Credentials,
         // the curve25519 key and the ed25519 key are owned by
         // the same device.
         val keysMap = HashMap<String, String>()
-        keysMap["ed25519"] = mOlmDevice.deviceEd25519Key!!
+        keysMap["ed25519"] = olmDevice.deviceEd25519Key!!
         payloadJson["keys"] = keysMap
 
         val ciphertext = HashMap<String, Any>()
 
         for (deviceKey in participantKeys) {
-            val sessionId = mOlmDevice.getSessionId(deviceKey)
+            val sessionId = olmDevice.getSessionId(deviceKey)
 
             if (!TextUtils.isEmpty(sessionId)) {
                 Timber.v("Using sessionid $sessionId for device $deviceKey")
@@ -83,14 +83,14 @@ internal class MessageEncrypter(private val mCredentials: Credentials,
                 //JsonUtility.canonicalize(JsonUtility.getGson(false).toJsonTree(payloadJson)).toString()
 
                 val payloadString = convertToUTF8(MoshiProvider.getCanonicalJson(Map::class.java, payloadJson))
-                ciphertext[deviceKey] = mOlmDevice.encryptMessage(deviceKey, sessionId!!, payloadString!!)!!
+                ciphertext[deviceKey] = olmDevice.encryptMessage(deviceKey, sessionId!!, payloadString!!)!!
             }
         }
 
         val res = EncryptedMessage()
 
         res.algorithm = MXCRYPTO_ALGORITHM_OLM
-        res.senderKey = mOlmDevice.deviceCurve25519Key
+        res.senderKey = olmDevice.deviceCurve25519Key
         res.cipherText = ciphertext
 
         return res

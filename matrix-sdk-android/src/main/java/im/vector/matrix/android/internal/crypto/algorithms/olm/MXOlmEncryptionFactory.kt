@@ -23,20 +23,20 @@ import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 
-internal class MXOlmEncryptionFactory(private val mOlmDevice: MXOlmDevice,
-                                      private val mCryptoStore: IMXCryptoStore,
-                                      private val mMessageEncrypter: MessageEncrypter,
-                                      private val mDeviceListManager: DeviceListManager,
+internal class MXOlmEncryptionFactory(private val olmDevice: MXOlmDevice,
+                                      private val cryptoStore: IMXCryptoStore,
+                                      private val messageEncrypter: MessageEncrypter,
+                                      private val deviceListManager: DeviceListManager,
                                       private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                      private val mEnsureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction) {
+                                      private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction) {
 
     fun create(roomId: String): MXOlmEncryption {
         return MXOlmEncryption(
                 roomId,
-                mOlmDevice,
-                mCryptoStore,
-                mMessageEncrypter,
-                mDeviceListManager,
-                mEnsureOlmSessionsForUsersAction)
+                olmDevice,
+                cryptoStore,
+                messageEncrypter,
+                deviceListManager,
+                ensureOlmSessionsForUsersAction)
     }
 }

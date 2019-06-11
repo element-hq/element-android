@@ -23,5 +23,5 @@ data class MXCryptoConfig(
         // Tell whether the encryption of the event content is enabled for the invited members.
         // By default, we encrypt messages only for the joined members.
         // The encryption for the invited members will be blocked if the history visibility is "joined".
-        var mEnableEncryptionForInvitedMembers: Boolean = false
+        var enableEncryptionForInvitedMembers: Boolean = false
 )

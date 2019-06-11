@@ -42,12 +42,12 @@ import kotlin.properties.Delegates
  * Represents an ongoing short code interactive key verification between two devices.
  */
 internal abstract class SASVerificationTransaction(
-        private val mSasVerificationService: DefaultSasVerificationService,
-        private val mSetDeviceVerificationAction: SetDeviceVerificationAction,
-        private val mCredentials: Credentials,
-        private val mCryptoStore: IMXCryptoStore,
-        private val mSendToDeviceTask: SendToDeviceTask,
-        private val mTaskExecutor: TaskExecutor,
+        private val sasVerificationService: DefaultSasVerificationService,
+        private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        private val credentials: Credentials,
+        private val cryptoStore: IMXCryptoStore,
+        private val sendToDeviceTask: SendToDeviceTask,
+        private val taskExecutor: TaskExecutor,
         private val deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
@@ -146,11 +146,11 @@ internal abstract class SASVerificationTransaction(
         // - the key ID of the key being MAC-ed, or the string “KEY_IDS” if the item being MAC-ed is the list of key IDs.
 
         val baseInfo = "MATRIX_KEY_VERIFICATION_MAC" +
-                mCredentials.userId + mCredentials.deviceId +
+                credentials.userId + credentials.deviceId +
                 otherUserId + otherDeviceId +
                 transactionId
 
-        val keyId = "ed25519:${mCredentials.deviceId}"
+        val keyId = "ed25519:${credentials.deviceId}"
         val macString = macUsingAgreedMethod(deviceFingerprint, baseInfo + keyId)
         val keyStrings = macUsingAgreedMethod(keyId, baseInfo + "KEY_IDS")
 
@@ -203,7 +203,7 @@ internal abstract class SASVerificationTransaction(
         state = SasVerificationTxState.Verifying
 
         //Keys have been downloaded earlier in process
-        val otherUserKnownDevices = mCryptoStore.getUserDevices(otherUserId)
+        val otherUserKnownDevices = cryptoStore.getUserDevices(otherUserId)
 
         // Bob’s device calculates the HMAC (as above) of its copies of Alice’s keys given in the message (as identified by their key ID),
         // as well as the HMAC of the comma-separated, sorted list of the key IDs given in the message.
@@ -212,7 +212,7 @@ internal abstract class SASVerificationTransaction(
 
         val baseInfo = "MATRIX_KEY_VERIFICATION_MAC" +
                 otherUserId + otherDeviceId +
-                mCredentials.userId + mCredentials.deviceId +
+                credentials.userId + credentials.deviceId +
                 transactionId
 
         val commaSeparatedListOfKeyIds = theirMac!!.mac!!.keys.sorted().joinToString(",")
@@ -247,7 +247,7 @@ internal abstract class SASVerificationTransaction(
     }
 
     private fun setDeviceVerified(deviceId: String, userId: String) {
-        mSetDeviceVerificationAction.handle(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
+        setDeviceVerificationAction.handle(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
                 deviceId,
                 userId)
     }
@@ -259,7 +259,7 @@ internal abstract class SASVerificationTransaction(
     override fun cancel(code: CancelCode) {
         cancelledReason = code
         state = SasVerificationTxState.Cancelled
-        mSasVerificationService.cancelTransaction(
+        sasVerificationService.cancelTransaction(
                 transactionId,
                 otherUserId,
                 otherDeviceId ?: "",
@@ -274,7 +274,7 @@ internal abstract class SASVerificationTransaction(
         val contentMap = MXUsersDevicesMap<Any>()
         contentMap.setObject(keyToDevice, otherUserId, otherDeviceId)
 
-        mSendToDeviceTask.configureWith(SendToDeviceTask.Params(type, contentMap, transactionId))
+        sendToDeviceTask.configureWith(SendToDeviceTask.Params(type, contentMap, transactionId))
                 .dispatchTo(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         Timber.v("## SAS verification [$transactionId] toDevice type '$type' success.")
@@ -295,7 +295,7 @@ internal abstract class SASVerificationTransaction(
                         }
                     }
                 })
-                .executeBy(mTaskExecutor)
+                .executeBy(taskExecutor)
     }
 
     fun getShortCodeRepresentation(shortAuthenticationStringMode: String): String? {

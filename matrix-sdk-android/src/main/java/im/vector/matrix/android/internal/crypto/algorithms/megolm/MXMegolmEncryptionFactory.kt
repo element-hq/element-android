@@ -29,28 +29,28 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 
 internal class MXMegolmEncryptionFactory(
         private val olmDevice: MXOlmDevice,
-        private val mKeysBackup: KeysBackup,
-        private val mCryptoStore: IMXCryptoStore,
-        private val mDeviceListManager: DeviceListManager,
-        private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-
-        private val mCredentials: Credentials,
-        private val mSendToDeviceTask: SendToDeviceTask,
-        private val mTaskExecutor: TaskExecutor,
-        private val mMessageEncrypter: MessageEncrypter,
-        private val mWarnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository) {
+        private val keysBackup: KeysBackup,
+        private val cryptoStore: IMXCryptoStore,
+        private val deviceListManager: DeviceListManager,
+        private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+        private val credentials: Credentials,
+        private val sendToDeviceTask: SendToDeviceTask,
+        // FIXME Why taskExecutor is not used?
+        private val taskExecutor: TaskExecutor,
+        private val messageEncrypter: MessageEncrypter,
+        private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository) {
 
     fun create(roomId: String): MXMegolmEncryption {
         return MXMegolmEncryption(
                 roomId,
                 olmDevice,
-                mKeysBackup,
-                mCryptoStore,
-                mDeviceListManager,
-                mEnsureOlmSessionsForDevicesAction,
-                mCredentials,
-                mSendToDeviceTask,
-                mMessageEncrypter,
-                mWarnOnUnknownDevicesRepository)
+                keysBackup,
+                cryptoStore,
+                deviceListManager,
+                ensureOlmSessionsForDevicesAction,
+                credentials,
+                sendToDeviceTask,
+                messageEncrypter,
+                warnOnUnknownDevicesRepository)
     }
 }

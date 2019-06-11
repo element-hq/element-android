@@ -20,8 +20,8 @@ package im.vector.matrix.android.internal.crypto.store
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
-import im.vector.matrix.android.internal.crypto.model.MXOlmSession
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
@@ -46,7 +46,7 @@ internal interface IMXCryptoStore {
      *
      * @return the list of all known group sessions, to export them.
      */
-    fun getInboundGroupSessions(): List<MXOlmInboundGroupSession2>
+    fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper>
 
     /**
      * @return true to unilaterally blacklist all unverified devices.
@@ -153,7 +153,7 @@ internal interface IMXCryptoStore {
      * @param userId the user's id.
      * @param device the device to store.
      */
-    fun storeUserDevice(userId: String?, device: MXDeviceInfo?)
+    fun storeUserDevice(userId: String?, deviceInfo: MXDeviceInfo?)
 
     /**
      * Retrieve a device for a user.
@@ -211,10 +211,10 @@ internal interface IMXCryptoStore {
     /**
      * Store a session between the logged-in user and another device.
      *
-     * @param session   the end-to-end session.
+     * @param olmSessionWrapper   the end-to-end session.
      * @param deviceKey the public key of the other device.
      */
-    fun storeSession(session: MXOlmSession, deviceKey: String)
+    fun storeSession(olmSessionWrapper: OlmSessionWrapper, deviceKey: String)
 
     /**
      * Retrieve the end-to-end session ids between the logged-in user and another
@@ -233,7 +233,7 @@ internal interface IMXCryptoStore {
      * @param deviceKey the public key of the other device.
      * @return The Base64 end-to-end session, or null if not found
      */
-    fun getDeviceSession(sessionId: String?, deviceKey: String?): MXOlmSession?
+    fun getDeviceSession(sessionId: String?, deviceKey: String?): OlmSessionWrapper?
 
     /**
      * Retrieve the last used sessionId, regarding `lastReceivedMessageTs`, or null if no session exist
@@ -248,7 +248,7 @@ internal interface IMXCryptoStore {
      *
      * @param sessions the inbound group sessions to store.
      */
-    fun storeInboundGroupSessions(sessions: List<MXOlmInboundGroupSession2>)
+    fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper>)
 
     /**
      * Retrieve an inbound group session.
@@ -257,7 +257,7 @@ internal interface IMXCryptoStore {
      * @param senderKey the base64-encoded curve25519 key of the sender.
      * @return an inbound group session.
      */
-    fun getInboundGroupSession(sessionId: String, senderKey: String): MXOlmInboundGroupSession2?
+    fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper?
 
     /**
      * Remove an inbound group session
@@ -281,7 +281,7 @@ internal interface IMXCryptoStore {
      *
      * @param sessions the sessions
      */
-    fun markBackupDoneForInboundGroupSessions(sessions: List<MXOlmInboundGroupSession2>)
+    fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper>)
 
     /**
      * Retrieve inbound group sessions that are not yet backed up.
@@ -289,7 +289,7 @@ internal interface IMXCryptoStore {
      * @param limit the maximum number of sessions to return.
      * @return an array of non backed up inbound group sessions.
      */
-    fun inboundGroupSessionsToBackup(limit: Int): List<MXOlmInboundGroupSession2>
+    fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper>
 
     /**
      * Number of stored inbound group sessions.

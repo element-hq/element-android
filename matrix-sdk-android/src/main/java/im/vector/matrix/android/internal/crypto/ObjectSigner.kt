@@ -19,8 +19,8 @@ package im.vector.matrix.android.internal.crypto
 import im.vector.matrix.android.api.auth.data.Credentials
 import java.util.*
 
-internal class ObjectSigner(private val mCredentials: Credentials,
-                            private val mOlmDevice: MXOlmDevice) {
+internal class ObjectSigner(private val credentials: Credentials,
+                            private val olmDevice: MXOlmDevice) {
 
     /**
      * Sign Object
@@ -42,9 +42,9 @@ internal class ObjectSigner(private val mCredentials: Credentials,
 
         val content = HashMap<String, String>()
 
-        content["ed25519:" + mCredentials.deviceId] = mOlmDevice.signMessage(strToSign)!!
+        content["ed25519:" + credentials.deviceId] = olmDevice.signMessage(strToSign)!!
 
-        result[mCredentials.userId] = content
+        result[credentials.userId] = content
 
         return result
     }

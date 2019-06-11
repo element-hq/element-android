@@ -21,8 +21,8 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXOlmInboundGroupSession2
-import im.vector.matrix.android.internal.crypto.model.MXOlmSession
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.model.*
@@ -50,10 +50,10 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
     private var olmAccount: OlmAccount? = null
 
     // Cache for OlmSession, to release them properly
-    private val olmSessionsToRelease = HashMap<String, MXOlmSession>()
+    private val olmSessionsToRelease = HashMap<String, OlmSessionWrapper>()
 
     // Cache for InboundGroupSession, to release them properly
-    private val inboundGroupSessionToRelease = HashMap<String, MXOlmInboundGroupSession2>()
+    private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper>()
 
     /* ==========================================================================================
      * Other data
@@ -114,7 +114,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
         olmSessionsToRelease.clear()
 
         inboundGroupSessionToRelease.forEach {
-            it.value.mSession?.releaseSession()
+            it.value.olmInboundGroupSession?.releaseSession()
         }
         inboundGroupSessionToRelease.clear()
 
@@ -254,11 +254,11 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
         }
     }
 
-    override fun storeSession(session: MXOlmSession, deviceKey: String) {
+    override fun storeSession(olmSessionWrapper: OlmSessionWrapper, deviceKey: String) {
         var sessionIdentifier: String? = null
 
         try {
-            sessionIdentifier = session.olmSession.sessionIdentifier()
+            sessionIdentifier = olmSessionWrapper.olmSession.sessionIdentifier()
         } catch (e: OlmException) {
             Timber.e(e, "## storeSession() : sessionIdentifier failed " + e.message)
         }
@@ -267,19 +267,19 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
             val key = OlmSessionEntity.createPrimaryKey(sessionIdentifier, deviceKey)
 
             // Release memory of previously known session, if it is not the same one
-            if (olmSessionsToRelease[key]?.olmSession != session.olmSession) {
+            if (olmSessionsToRelease[key]?.olmSession != olmSessionWrapper.olmSession) {
                 olmSessionsToRelease[key]?.olmSession?.releaseSession()
             }
 
-            olmSessionsToRelease[key] = session
+            olmSessionsToRelease[key] = olmSessionWrapper
 
             doRealmTransaction(realmConfiguration) {
                 val realmOlmSession = OlmSessionEntity().apply {
                     primaryKey = key
                     sessionId = sessionIdentifier
                     this.deviceKey = deviceKey
-                    putOlmSession(session.olmSession)
-                    lastReceivedMessageTs = session.lastReceivedMessageTs
+                    putOlmSession(olmSessionWrapper.olmSession)
+                    lastReceivedMessageTs = olmSessionWrapper.lastReceivedMessageTs
                 }
 
                 it.insertOrUpdate(realmOlmSession)
@@ -287,7 +287,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
         }
     }
 
-    override fun getDeviceSession(sessionId: String?, deviceKey: String?): MXOlmSession? {
+    override fun getDeviceSession(sessionId: String?, deviceKey: String?): OlmSessionWrapper? {
         if (sessionId == null || deviceKey == null) {
             return null
         }
@@ -304,7 +304,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
                     ?.let {
                         val olmSession = it.getOlmSession()
                         if (olmSession != null && it.sessionId != null) {
-                            olmSessionsToRelease[key] = MXOlmSession(olmSession, it.lastReceivedMessageTs)
+                            olmSessionsToRelease[key] = OlmSessionWrapper(olmSession, it.lastReceivedMessageTs)
                         }
                     }
         }
@@ -334,7 +334,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
                 .toMutableSet()
     }
 
-    override fun storeInboundGroupSessions(sessions: List<MXOlmInboundGroupSession2>) {
+    override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper>) {
         if (sessions.isEmpty()) {
             return
         }
@@ -344,17 +344,17 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
                 var sessionIdentifier: String? = null
 
                 try {
-                    sessionIdentifier = session.mSession?.sessionIdentifier()
+                    sessionIdentifier = session.olmInboundGroupSession?.sessionIdentifier()
                 } catch (e: OlmException) {
                     Timber.e(e, "## storeInboundGroupSession() : sessionIdentifier failed " + e.message)
                 }
 
                 if (sessionIdentifier != null) {
-                    val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.mSenderKey)
+                    val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.senderKey)
 
                     // Release memory of previously known session, if it is not the same one
                     if (inboundGroupSessionToRelease[key] != session) {
-                        inboundGroupSessionToRelease[key]?.mSession?.releaseSession()
+                        inboundGroupSessionToRelease[key]?.olmInboundGroupSession?.releaseSession()
                     }
 
                     inboundGroupSessionToRelease[key] = session
@@ -362,7 +362,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
                     val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
                         primaryKey = key
                         sessionId = sessionIdentifier
-                        senderKey = session.mSenderKey
+                        senderKey = session.senderKey
                         putInboundGroupSession(session)
                     }
 
@@ -372,7 +372,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
         }
     }
 
-    override fun getInboundGroupSession(sessionId: String, senderKey: String): MXOlmInboundGroupSession2? {
+    override fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper? {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
 
         // If not in cache (or not found), try to read it from realm
@@ -392,10 +392,10 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
     }
 
     /**
-     * Note: the result will be only use to export all the keys and not to use the MXOlmInboundGroupSession2,
+     * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper,
      * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management
      */
-    override fun getInboundGroupSessions(): MutableList<MXOlmInboundGroupSession2> {
+    override fun getInboundGroupSessions(): MutableList<OlmInboundGroupSessionWrapper> {
         return doRealmQueryAndCopyList(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .findAll()
@@ -410,7 +410,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
 
         // Release memory of previously known session
-        inboundGroupSessionToRelease[key]?.mSession?.releaseSession()
+        inboundGroupSessionToRelease[key]?.olmInboundGroupSession?.releaseSession()
         inboundGroupSessionToRelease.remove(key)
 
         doRealmTransaction(realmConfiguration) {
@@ -467,15 +467,17 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
         }
     }
 
-    override fun markBackupDoneForInboundGroupSessions(sessions: List<MXOlmInboundGroupSession2>) {
-        if (sessions.isEmpty()) {
+    override fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper>) {
+        if (olmInboundGroupSessionWrappers.isEmpty()) {
             return
         }
 
         doRealmTransaction(realmConfiguration) {
-            sessions.forEach { session ->
+            olmInboundGroupSessionWrappers.forEach { olmInboundGroupSessionWrapper ->
                 try {
-                    val key = OlmInboundGroupSessionEntity.createPrimaryKey(session.mSession?.sessionIdentifier(), session.mSenderKey)
+                    val key = OlmInboundGroupSessionEntity.createPrimaryKey(
+                            olmInboundGroupSessionWrapper.olmInboundGroupSession?.sessionIdentifier(),
+                            olmInboundGroupSessionWrapper.senderKey)
 
                     it.where<OlmInboundGroupSessionEntity>()
                             .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
@@ -488,7 +490,7 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
         }
     }
 
-    override fun inboundGroupSessionsToBackup(limit: Int): List<MXOlmInboundGroupSession2> {
+    override fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper> {
         return doRealmQueryAndCopyList(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .equalTo(OlmInboundGroupSessionEntityFields.BACKED_UP, false)

@@ -327,7 +327,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                         .flatMap {
                                             val body = request.requestBody
                                             val olmSessionResult = it.getObject(deviceId, userId)
-                                            if (olmSessionResult?.mSessionId == null) {
+                                            if (olmSessionResult?.sessionId == null) {
                                                 // no session with this device, probably because there
                                                 // were no one-time keys.
                                                 Try.just(Unit)

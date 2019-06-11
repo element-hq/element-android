@@ -26,26 +26,26 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 
-internal class MXMegolmDecryptionFactory(private val mCredentials: Credentials,
-                                         private val mOlmDevice: MXOlmDevice,
-                                         private val mDeviceListManager: DeviceListManager,
-                                         private val mOutgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
-                                         private val mMessageEncrypter: MessageEncrypter,
-                                         private val mEnsureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-                                         private val mCryptoStore: IMXCryptoStore,
-                                         private val mSendToDeviceTask: SendToDeviceTask,
+internal class MXMegolmDecryptionFactory(private val credentials: Credentials,
+                                         private val olmDevice: MXOlmDevice,
+                                         private val deviceListManager: DeviceListManager,
+                                         private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+                                         private val messageEncrypter: MessageEncrypter,
+                                         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+                                         private val cryptoStore: IMXCryptoStore,
+                                         private val sendToDeviceTask: SendToDeviceTask,
                                          private val coroutineDispatchers: MatrixCoroutineDispatchers) {
 
     fun create(): MXMegolmDecryption {
         return MXMegolmDecryption(
-                mCredentials,
-                mOlmDevice,
-                mDeviceListManager,
-                mOutgoingRoomKeyRequestManager,
-                mMessageEncrypter,
-                mEnsureOlmSessionsForDevicesAction,
-                mCryptoStore,
-                mSendToDeviceTask,
+                credentials,
+                olmDevice,
+                deviceListManager,
+                outgoingRoomKeyRequestManager,
+                messageEncrypter,
+                ensureOlmSessionsForDevicesAction,
+                cryptoStore,
+                sendToDeviceTask,
                 coroutineDispatchers)
     }
 }

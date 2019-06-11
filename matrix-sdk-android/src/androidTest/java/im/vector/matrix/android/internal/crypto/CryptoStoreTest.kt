@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import im.vector.matrix.android.internal.crypto.model.MXOlmSession
+import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import org.junit.Assert.*
 import org.junit.Test
@@ -67,9 +67,9 @@ class CryptoStoreTest {
         }
 
         val sessionId1 = olmSession1.sessionIdentifier()
-        val mxOlmSession1 = MXOlmSession(olmSession1)
+        val olmSessionWrapper1 = OlmSessionWrapper(olmSession1)
 
-        cryptoStore.storeSession(mxOlmSession1, DUMMY_DEVICE_KEY)
+        cryptoStore.storeSession(olmSessionWrapper1, DUMMY_DEVICE_KEY)
 
         assertEquals(sessionId1, cryptoStore.getLastUsedSessionId(DUMMY_DEVICE_KEY))
 
@@ -84,25 +84,25 @@ class CryptoStoreTest {
         }
 
         val sessionId2 = olmSession2.sessionIdentifier()
-        val mxOlmSession2 = MXOlmSession(olmSession2)
+        val olmSessionWrapper2 = OlmSessionWrapper(olmSession2)
 
-        cryptoStore.storeSession(mxOlmSession2, DUMMY_DEVICE_KEY)
+        cryptoStore.storeSession(olmSessionWrapper2, DUMMY_DEVICE_KEY)
 
         // Ensure sessionIds are distinct
         assertNotEquals(sessionId1, sessionId2)
 
         // Note: we cannot be sure what will be the result of getLastUsedSessionId() here
 
-        mxOlmSession2.onMessageReceived()
-        cryptoStore.storeSession(mxOlmSession2, DUMMY_DEVICE_KEY)
+        olmSessionWrapper2.onMessageReceived()
+        cryptoStore.storeSession(olmSessionWrapper2, DUMMY_DEVICE_KEY)
 
         // sessionId2 is returned now
         assertEquals(sessionId2, cryptoStore.getLastUsedSessionId(DUMMY_DEVICE_KEY))
 
         Thread.sleep(2)
 
-        mxOlmSession1.onMessageReceived()
-        cryptoStore.storeSession(mxOlmSession1, DUMMY_DEVICE_KEY)
+        olmSessionWrapper1.onMessageReceived()
+        cryptoStore.storeSession(olmSessionWrapper1, DUMMY_DEVICE_KEY)
 
         // sessionId1 is returned now
         assertEquals(sessionId1, cryptoStore.getLastUsedSessionId(DUMMY_DEVICE_KEY))

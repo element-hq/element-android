@@ -43,7 +43,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                private val readReceiptHandler: ReadReceiptHandler,
                                private val roomSummaryUpdater: RoomSummaryUpdater,
                                private val roomTagHandler: RoomTagHandler,
-                               private val mCrypto: CryptoManager) {
+                               private val cryptoManager: CryptoManager) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -53,9 +53,9 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
     fun handle(roomsSyncResponse: RoomsSyncResponse) {
         monarchy.runTransactionSync { realm ->
-            handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.JOINED(roomsSyncResponse.join))
-            handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.INVITED(roomsSyncResponse.invite))
-            handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.LEFT(roomsSyncResponse.leave))
+            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join))
+            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite))
+            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave))
         }
     }
 
@@ -97,7 +97,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
             // Give info to crypto module
             roomSync.state.events.forEach {
-                mCrypto.onStateEvent(roomId, it)
+                cryptoManager.onStateEvent(roomId, it)
             }
         }
 
@@ -115,7 +115,7 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
             // Give info to crypto module
             roomSync.timeline.events.forEach {
-                mCrypto.onLiveEvent(roomId, it)
+                cryptoManager.onLiveEvent(roomId, it)
             }
 
             // Try to remove local echo
