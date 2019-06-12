@@ -56,6 +56,7 @@ import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.database.LiveEntityObserver
@@ -388,6 +389,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     override fun shouldEncryptForInvitedMembers(roomId: String): Boolean {
         return cryptoService.shouldEncryptForInvitedMembers(roomId)
+    }
+
+    override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>) {
+        cryptoService.downloadKeys(userIds, forceDownload, callback)
     }
 
     // Private methods *****************************************************************************

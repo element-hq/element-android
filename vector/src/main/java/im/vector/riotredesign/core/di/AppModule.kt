@@ -25,6 +25,7 @@ import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.configuration.VectorConfiguration
+import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
@@ -85,6 +86,10 @@ class AppModule(private val context: Context) {
 
         factory {
             Matrix.getInstance().currentSession!!
+        }
+
+        single {
+            KeyRequestHandler(context, get())
         }
 
         single {

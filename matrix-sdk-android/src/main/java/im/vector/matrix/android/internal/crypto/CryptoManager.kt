@@ -1050,12 +1050,22 @@ internal class CryptoManager(
         return unknownDevices
     }
 
-/* ==========================================================================================
- * DEBUG INFO
- * ========================================================================================== */
+    override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>) {
+        CoroutineScope(coroutineDispatchers.crypto).launch {
+            deviceListManager
+                    .downloadKeys(userIds, forceDownload)
+                    .fold(
+                            { callback.onFailure(it) },
+                            { callback.onSuccess(it) }
+                    )
+        }
+    }
+
+    /* ==========================================================================================
+     * DEBUG INFO
+     * ========================================================================================== */
 
     override fun toString(): String {
         return "CryptoManager of " + credentials.userId + " (" + credentials.deviceId + ")"
-
     }
 }

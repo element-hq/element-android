@@ -131,6 +131,6 @@
 
     <!-- Notification (do not depends on theme -->
     <color name="notification_accent_color">#368BD6</color>
-
+    <color name="key_share_req_accent_color">#ff812d</color>
 
 </resources>

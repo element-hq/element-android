@@ -24,6 +24,7 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class RoomKeyRequestBody(
+        @Json(name = "algorithm")
         var algorithm: String? = null,
 
         @Json(name = "room_id")

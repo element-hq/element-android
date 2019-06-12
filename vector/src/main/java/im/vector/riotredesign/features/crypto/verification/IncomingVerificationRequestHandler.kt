@@ -30,9 +30,11 @@ import im.vector.riotredesign.features.popup.PopupAlertManager
 class IncomingVerificationRequestHandler(val context: Context,
                                          private val session: Session) : SasVerificationService.SasVerificationListener {
 
-    fun ensureStarted() {
+    init {
         session.getSasVerificationService().addListener(this)
     }
+
+    fun ensureStarted() = Unit
 
     override fun transactionCreated(tx: SasVerificationTransaction) {}
 
