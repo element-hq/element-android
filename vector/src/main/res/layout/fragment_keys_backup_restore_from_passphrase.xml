@@ -66,6 +66,7 @@
             android:layout_height="@dimen/layout_touch_size"
             android:background="?attr/selectableItemBackground"
             android:scaleType="center"
+            android:layout_marginTop="8dp"
             android:src="@drawable/ic_eye_black"
             android:tint="?colorAccent"
             app:layout_constraintEnd_toEndOf="parent"

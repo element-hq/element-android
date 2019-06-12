@@ -117,6 +117,10 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
                                     .chunked(4)
                                     .joinToString(" ")
                         }
+
+                it.setOnClickListener {
+                    copyToClipboard(activity!!, recoveryKey)
+                }
             }
         }
 
@@ -151,7 +155,7 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
     fun exportRecoveryKeyToFile(it: String) {
         val stream = ByteArrayInputStream(it.toByteArray())
 
-        TODO()
+        vectorBaseActivity.notImplemented("export recovery key to file")
         /*
         val url = viewModel.session.mediaCache.saveMedia(stream, "recovery-key" + System.currentTimeMillis() + ".txt", "text/plain")
         stream.close()

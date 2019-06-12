@@ -16,76 +16,125 @@
 package im.vector.riotredesign.features.crypto.keysbackup.settings
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
-import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
-import im.vector.riotredesign.R
-import im.vector.riotredesign.core.platform.WaitingViewData
-import im.vector.riotredesign.core.utils.LiveEvent
+import im.vector.riotredesign.core.platform.VectorViewModel
+import org.koin.android.ext.android.get
 
 
-class KeysBackupSettingsViewModel : ViewModel(),
+class KeysBackupSettingsViewModel(initialState: KeysBackupSettingViewState,
+                                  session: Session) : VectorViewModel<KeysBackupSettingViewState>(initialState),
         KeysBackupService.KeysBackupStateListener {
 
-    var session: Session? = null
+    companion object : MvRxViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
 
-    var keyVersionTrust: MutableLiveData<KeysBackupVersionTrust> = MutableLiveData()
-    var keyBackupState: MutableLiveData<KeysBackupState> = MutableLiveData()
+        @JvmStatic
+        override fun create(viewModelContext: ViewModelContext, state: KeysBackupSettingViewState): KeysBackupSettingsViewModel? {
+            val session = viewModelContext.activity.get<Session>()
 
-    private var _apiResultError: MutableLiveData<LiveEvent<String>> = MutableLiveData()
-    val apiResultError: LiveData<LiveEvent<String>>
-        get() = _apiResultError
+            val firstState = state.copy(
+                    keysBackupState = session.getKeysBackupService().state,
+                    keysBackupVersion = session.getKeysBackupService().keysBackupVersion
+            )
 
-    var loadingEvent: MutableLiveData<WaitingViewData> = MutableLiveData()
-
-    fun initSession(session: Session) {
-        keyBackupState.value = session.getKeysBackupService().state
-        if (this.session == null) {
-            this.session = session
-            session.getKeysBackupService().addListener(this)
+            return KeysBackupSettingsViewModel(firstState, session)
         }
     }
 
-    fun getKeysBackupTrust(versionResult: KeysVersionResult) {
-        val keysBackup = session?.getKeysBackupService()
-        keysBackup?.getKeysBackupTrust(versionResult, object : MatrixCallback<KeysBackupVersionTrust> {
-            override fun onSuccess(data: KeysBackupVersionTrust) {
-                keyVersionTrust.value = data
+    private var keysBackupService: KeysBackupService = session.getKeysBackupService()
+
+    init {
+        keysBackupService.addListener(this)
+
+        getKeysBackupTrust()
+    }
+
+    fun init() {
+        keysBackupService.forceUsingLastVersion(object : MatrixCallback<Boolean> {})
+    }
+
+    fun getKeysBackupTrust() = withState { state ->
+        val versionResult = keysBackupService.keysBackupVersion
+
+        if (state.keysBackupVersionTrust is Uninitialized && versionResult != null) {
+            setState {
+                copy(
+                        keysBackupVersionTrust = Loading(),
+                        deleteBackupRequest = Uninitialized
+                )
             }
-        })
+
+            keysBackupService
+                    .getKeysBackupTrust(versionResult, object : MatrixCallback<KeysBackupVersionTrust> {
+                        override fun onSuccess(data: KeysBackupVersionTrust) {
+                            setState {
+                                copy(
+                                        keysBackupVersionTrust = Success(data)
+                                )
+                            }
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            setState {
+                                copy(
+                                        keysBackupVersionTrust = Fail(failure)
+                                )
+                            }
+                        }
+                    })
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
-        session?.getKeysBackupService()?.removeListener(this)
+        keysBackupService.removeListener(this)
     }
 
     override fun onStateChange(newState: KeysBackupState) {
-        keyBackupState.value = newState
+        setState {
+            copy(
+                    keysBackupState = newState,
+                    keysBackupVersion = keysBackupService.keysBackupVersion
+            )
+        }
+
+        getKeysBackupTrust()
     }
 
     fun deleteCurrentBackup(context: Context) {
-        session?.getKeysBackupService()?.run {
-            loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_settings_deleting_backup))
-            if (currentBackupVersion != null) {
-                deleteBackup(currentBackupVersion!!, object : MatrixCallback<Unit> {
-                    override fun onSuccess(info: Unit) {
-                        //mmmm if state is stil unknown/checking..
-                        loadingEvent.value = null
-                    }
+        val keysBackupService = keysBackupService
 
-                    override fun onFailure(failure: Throwable) {
-                        loadingEvent.value = null
-                        _apiResultError.value = LiveEvent(context.getString(R.string.keys_backup_get_version_error, failure.localizedMessage))
-                    }
-                })
+        if (keysBackupService.currentBackupVersion != null) {
+            setState {
+                copy(
+                        deleteBackupRequest = Loading()
+                )
             }
+
+            keysBackupService.deleteBackup(keysBackupService.currentBackupVersion!!, object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    setState {
+                        copy(
+                                keysBackupVersion = null,
+                                keysBackupVersionTrust = Uninitialized,
+                                // We do not care about the success data
+                                deleteBackupRequest = Uninitialized
+                        )
+                    }
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    setState {
+                        copy(
+                                deleteBackupRequest = Fail(failure)
+                        )
+                    }
+                }
+            })
         }
     }
 }

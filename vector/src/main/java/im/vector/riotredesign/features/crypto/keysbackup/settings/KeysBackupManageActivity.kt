@@ -18,12 +18,15 @@ package im.vector.riotredesign.features.crypto.keysbackup.settings
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import im.vector.fragments.keysbackup.settings.KeysBackupSettingsFragment
-import im.vector.matrix.android.api.MatrixCallback
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.viewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.SimpleFragmentActivity
+import im.vector.riotredesign.core.platform.WaitingViewData
+import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
 
 
 class KeysBackupManageActivity : SimpleFragmentActivity() {
@@ -31,46 +34,47 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
     companion object {
 
         fun intent(context: Context): Intent {
-            val intent = Intent(context, KeysBackupManageActivity::class.java)
-            return intent
+            return Intent(context, KeysBackupManageActivity::class.java)
         }
     }
 
     override fun getTitleRes() = R.string.encryption_message_recovery
 
-
-    private lateinit var viewModel: KeysBackupSettingsViewModel
+    private val viewModel: KeysBackupSettingsViewModel by viewModel()
 
     override fun initUiAndData() {
         super.initUiAndData()
-        viewModel = ViewModelProviders.of(this).get(KeysBackupSettingsViewModel::class.java)
-        viewModel.initSession(session)
 
+        bindScope(getOrCreateScope(KeysBackupModule.KEYS_BACKUP_SCOPE))
 
         if (supportFragmentManager.fragments.isEmpty()) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, KeysBackupSettingsFragment.newInstance())
                     .commitNow()
 
-            session.getKeysBackupService()
-                    .forceUsingLastVersion(object : MatrixCallback<Boolean> {})
+            viewModel.init()
         }
 
-        viewModel.loadingEvent.observe(this, Observer {
-            updateWaitingView(it)
-        })
+        // Observe the deletion of keys backup
+        viewModel.selectSubscribe(this, KeysBackupSettingViewState::deleteBackupRequest) { asyncDelete ->
+            when (asyncDelete) {
+                is Fail    -> {
+                    updateWaitingView(null)
 
-
-        viewModel.apiResultError.observe(this, Observer { uxStateEvent ->
-            uxStateEvent?.getContentIfNotHandled()?.let {
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.unknown_error)
-                        .setMessage(it)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.unknown_error)
+                            .setMessage(getString(R.string.keys_backup_get_version_error, asyncDelete.error.localizedMessage))
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                }
+                is Loading -> {
+                    updateWaitingView(WaitingViewData(getString(R.string.keys_backup_settings_deleting_backup)))
+                }
+                else       -> {
+                    updateWaitingView(null)
+                }
             }
-        })
-
+        }
     }
 }

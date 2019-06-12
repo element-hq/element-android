@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.keysbackup.settings
+package im.vector.riotredesign.features.crypto.keysbackup.settings
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.core.platform.WaitingViewData
+import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
-import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity
+import kotlinx.android.synthetic.main.fragment_keys_backup_settings.*
+import org.koin.android.ext.android.inject
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
 
 class KeysBackupSettingsFragment : VectorBaseFragment(),
-        KeysBackupSettingsRecyclerViewAdapter.AdapterListener {
-
+        KeysBackupSettingsRecyclerViewController.Listener {
 
     companion object {
         fun newInstance() = KeysBackupSettingsFragment()
@@ -41,63 +39,26 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_settings
 
-    private lateinit var viewModel: KeysBackupSettingsViewModel
+    private val keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController by inject()
 
-    @BindView(R.id.keys_backup_settings_recycler_view)
-    lateinit var recyclerView: RecyclerView
+    private val viewModel: KeysBackupSettingsViewModel by activityViewModel()
 
-    private var recyclerViewAdapter: KeysBackupSettingsRecyclerViewAdapter? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        bindScope(getOrCreateScope(KeysBackupModule.KEYS_BACKUP_SCOPE))
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
+        keysBackupSettingsRecyclerView.setController(keysBackupSettingsRecyclerViewController)
 
-        recyclerViewAdapter = KeysBackupSettingsRecyclerViewAdapter(activity!!)
-        recyclerView.adapter = recyclerViewAdapter
-        recyclerViewAdapter?.adapterListener = this
+        keysBackupSettingsRecyclerViewController.listener = this
+    }
 
-
-        viewModel = activity?.run {
-            ViewModelProviders.of(this).get(KeysBackupSettingsViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
-
-
-        viewModel.keyBackupState.observe(this, Observer { keysBackupState ->
-            if (keysBackupState == null) {
-                //Cannot happen?
-                viewModel.keyVersionTrust.value = null
-            } else {
-                when (keysBackupState) {
-                    KeysBackupState.Unknown,
-                    KeysBackupState.CheckingBackUpOnHomeserver -> {
-                        viewModel.loadingEvent.value = WaitingViewData("")
-                    }
-                    else -> {
-                        viewModel.loadingEvent.value = null
-                        //All this cases will be manage by looking at the backup trust object
-                        viewModel.session?.getKeysBackupService()?.keysBackupVersion?.let {
-                            viewModel.getKeysBackupTrust(it)
-                        } ?: run {
-                            viewModel.keyVersionTrust.value = null
-                        }
-                    }
-                }
-            }
-
-            // Update the adapter for each state change
-            viewModel.session?.let { session ->
-                recyclerViewAdapter?.updateWithTrust(session, viewModel.keyVersionTrust.value)
-            }
-        })
-
-        viewModel.keyVersionTrust.observe(this, Observer {
-            viewModel.session?.let { session ->
-                recyclerViewAdapter?.updateWithTrust(session, it)
-            }
-        })
-
+    override fun invalidate() = withState(viewModel) { state ->
+        keysBackupSettingsRecyclerViewController.setData(state)
     }
 
     override fun didSelectSetupMessageRecovery() {
@@ -127,4 +88,11 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
         }
     }
 
+    override fun loadTrustData() {
+        viewModel.getKeysBackupTrust()
+    }
+
+    override fun loadKeysBackupState() {
+        viewModel.init()
+    }
 }

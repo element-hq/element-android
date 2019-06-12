@@ -18,6 +18,7 @@ package im.vector.riotredesign.core.resources
 
 import android.content.res.Resources
 import androidx.annotation.NonNull
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 
 class StringProvider(private val resources: Resources) {
@@ -51,5 +52,9 @@ class StringProvider(private val resources: Resources) {
         return resources.getString(resId, *formatArgs)
     }
 
+    @NonNull
+    fun getQuantityString(@PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any?): String {
+        return resources.getQuantityString(resId, quantity, *formatArgs)
+    }
 
 }

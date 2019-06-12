@@ -46,7 +46,7 @@
             android:layout_marginRight="@dimen/layout_horizontal_margin"
             android:text="@string/keys_backup_setup_step3_text_line1"
             android:textAlignment="center"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?riotx_text_primary"
             android:textSize="15sp" />
 
         <TextView
@@ -80,6 +80,7 @@
             android:id="@+id/keys_backup_setup_step3_copy_button"
             style="@style/VectorButtonStyleFlat"
             android:layout_gravity="center"
+            android:maxWidth="@dimen/button_max_width"
             android:text="@string/keys_backup_setup_step3_copy_button_title" />
 
         <com.google.android.material.button.MaterialButton

@@ -51,6 +51,7 @@
         style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_margin="16dp"
+        android:maxWidth="@dimen/button_max_width"
         android:minWidth="200dp"
         android:padding="8dp"
         android:text="@string/keys_backup_setup"

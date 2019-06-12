@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.core.extensions
+package im.vector.riotredesign.features.crypto.keysbackup
 
-import android.widget.TextView
-import androidx.core.view.isVisible
+import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupSettingsRecyclerViewController
+import org.koin.dsl.module.module
 
-/**
- * Set a text in the TextView, or set visibility to GONE if the text is null
- */
-fun TextView.setTextOrHide(newText: String?, hideWhenBlank: Boolean = true) {
-    if (newText == null
-            || (newText.isBlank() && hideWhenBlank)) {
-        isVisible = false
-    } else {
-        this.text = newText
-        isVisible = true
+class KeysBackupModule {
+
+    companion object {
+        const val KEYS_BACKUP_SCOPE = "KEYS_BACKUP_SCOPE"
+    }
+
+    val definition = module(override = true) {
+
+        scope(KEYS_BACKUP_SCOPE) {
+            KeysBackupSettingsRecyclerViewController(get(), get())
+        }
+
     }
 }

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_generic_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/colorBackground"
@@ -9,22 +10,26 @@
 
     <TextView
         android:id="@+id/item_generic_title_text"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:layout_marginBottom="4dp"
         android:textColor="?riotx_text_primary"
         android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/item_generic_description_text"
         app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Item Title"
-        tools:textSize="14sp" />
+        tools:textSize="14sp"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/item_generic_description_text"
@@ -32,10 +37,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:layout_marginBottom="4dp"
         android:textColor="?riotx_text_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/item_generic_action_button"
@@ -49,6 +54,7 @@
         android:id="@+id/item_generic_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:barrierDirection="start"
         app:constraint_referenced_ids="item_generic_accessory_image,item_generic_progress_bar"
         tools:ignore="MissingConstraints" />
 
@@ -76,17 +82,20 @@
         app:layout_constraintTop_toTopOf="@+id/item_generic_title_text"
         tools:visibility="visible" />
 
+    <!-- Set a maw width because the text can be long -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/item_generic_action_button"
         style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:padding="8dp"
+        android:maxWidth="@dimen/button_max_width"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/item_generic_description_text"
+        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
         app:layout_constraintTop_toBottomOf="@+id/item_generic_description_text"
         tools:text="@string/settings_troubleshoot_test_device_settings_quickfix"
         tools:visibility="visible" />
