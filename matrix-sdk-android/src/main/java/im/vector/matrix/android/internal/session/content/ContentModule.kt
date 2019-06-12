@@ -27,7 +27,11 @@ internal class ContentModule {
     val definition = module(override = true) {
 
         scope(DefaultSession.SCOPE) {
-            DefaultContentUploadStateTracker() as ContentUploadStateTracker
+            DefaultContentUploadStateTracker()
+        }
+
+        scope(DefaultSession.SCOPE) {
+            get<DefaultContentUploadStateTracker>() as ContentUploadStateTracker
         }
 
         scope(DefaultSession.SCOPE) {

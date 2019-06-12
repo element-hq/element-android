@@ -21,15 +21,10 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
@@ -43,7 +38,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params), MatrixKoinComponent {
 
     private val fileUploader by inject<FileUploader>()
-    private val contentUploadProgressTracker by inject<ContentUploadStateTracker>()
+    private val contentUploadProgressTracker by inject<DefaultContentUploadStateTracker>()
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -54,7 +49,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters)
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.failure()
+                ?: return Result.failure()
 
         val eventId = params.event.eventId ?: return Result.failure()
         val attachment = params.attachment

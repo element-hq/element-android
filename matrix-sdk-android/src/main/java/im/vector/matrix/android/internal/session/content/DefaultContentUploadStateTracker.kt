@@ -40,17 +40,17 @@ internal class DefaultContentUploadStateTracker : ContentUploadStateTracker {
         }
     }
 
-    override fun setFailure(key: String) {
+    internal fun setFailure(key: String) {
         val failure = ContentUploadStateTracker.State.Failure
         updateState(key, failure)
     }
 
-    override fun setSuccess(key: String) {
+    internal fun setSuccess(key: String) {
         val success = ContentUploadStateTracker.State.Success
         updateState(key, success)
     }
 
-    override fun setProgress(key: String, current: Long, total: Long) {
+    internal fun setProgress(key: String, current: Long, total: Long) {
         val progressData = ContentUploadStateTracker.State.ProgressData(current, total)
         updateState(key, progressData)
     }

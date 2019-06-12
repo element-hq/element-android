@@ -22,12 +22,6 @@ interface ContentUploadStateTracker {
 
     fun untrack(key: String, updateListener: UpdateListener)
 
-    fun setFailure(key: String)
-
-    fun setSuccess(key: String)
-
-    fun setProgress(key: String, current: Long, total: Long)
-
     interface UpdateListener {
         fun onUpdate(state: State)
     }
