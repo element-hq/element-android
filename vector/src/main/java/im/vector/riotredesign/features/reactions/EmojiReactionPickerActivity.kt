@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
 import org.koin.android.ext.android.inject
@@ -102,18 +103,16 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
             }
         })
 
-        viewModel.navigateEvent.observe(this, Observer {
-            it.getContentIfNotHandled()?.let {
-                if (it == EmojiChooserViewModel.NAVIGATE_FINISH) {
-                    //finish with result
-                    val dataResult = Intent()
-                    dataResult.putExtra(EXTRA_REACTION_RESULT, viewModel.selectedReaction)
-                    dataResult.putExtra(EXTRA_EVENT_ID, viewModel.eventId)
-                    setResult(Activity.RESULT_OK, dataResult)
-                    finish()
-                }
+        viewModel.navigateEvent.observeEvent(this) {
+            if (it == EmojiChooserViewModel.NAVIGATE_FINISH) {
+                //finish with result
+                val dataResult = Intent()
+                dataResult.putExtra(EXTRA_REACTION_RESULT, viewModel.selectedReaction)
+                dataResult.putExtra(EXTRA_EVENT_ID, viewModel.eventId)
+                setResult(Activity.RESULT_OK, dataResult)
+                finish()
             }
-        })
+        }
     }
 
     override fun compatibilityFontUpdate(typeface: Typeface?) {

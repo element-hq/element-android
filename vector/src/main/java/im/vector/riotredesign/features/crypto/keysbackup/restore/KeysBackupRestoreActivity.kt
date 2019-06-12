@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProviders
 import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
 import im.vector.fragments.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.SimpleFragmentActivity
 
 class KeysBackupRestoreActivity : SimpleFragmentActivity() {
@@ -61,53 +62,48 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
             }
         })
 
-        viewModel.keyVersionResultError.observe(this, Observer { uxStateEvent ->
-            uxStateEvent?.getContentIfNotHandled()?.let {
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.unknown_error)
-                        .setMessage(it)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.ok) { _, _ ->
-                            //nop
-                            finish()
-                        }
-                        .show()
-            }
-        })
+        viewModel.keyVersionResultError.observeEvent(this) { message ->
+            AlertDialog.Builder(this)
+                    .setTitle(R.string.unknown_error)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        //nop
+                        finish()
+                    }
+                    .show()
+        }
 
         if (viewModel.keyVersionResult.value == null) {
             //We need to fetch from API
             viewModel.getLatestVersion(this)
         }
 
-        viewModel.navigateEvent.observe(this, Observer { uxStateEvent ->
-            when (uxStateEvent?.getContentIfNotHandled()) {
+        viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
+            when (uxStateEvent) {
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_RECOVER_WITH_KEY -> {
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupRestoreFromKeyFragment.newInstance())
                             .addToBackStack(null)
                             .commit()
                 }
-                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS -> {
+                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS          -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupRestoreSuccessFragment.newInstance())
                             .commit()
                 }
             }
-        })
+        }
 
         viewModel.loadingEvent.observe(this, Observer {
             updateWaitingView(it)
         })
 
-        viewModel.importRoomKeysFinishWithResult.observe(this, Observer {
-            it?.getContentIfNotHandled()?.let {
-                //set data?
-                setResult(Activity.RESULT_OK)
-                finish()
-            }
-        })
+        viewModel.importRoomKeysFinishWithResult.observeEvent(this) {
+            //set data?
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
     }
-
 }

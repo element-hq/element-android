@@ -19,7 +19,6 @@ package im.vector.riotredesign.features.roomdirectory
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
@@ -30,6 +29,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.error.ErrorFormatter
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.themes.ThemeUtils
 import io.reactivex.rxkotlin.subscribeBy
@@ -79,12 +79,10 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
             navigationViewModel.goTo(RoomDirectoryActivity.Navigation.CreateRoom)
         }
 
-        viewModel.joinRoomErrorLiveData.observe(this, Observer {
-            it.getContentIfNotHandled()?.let { throwable ->
-                Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
-                        .show()
-            }
-        })
+        viewModel.joinRoomErrorLiveData.observeEvent(this) { throwable ->
+            Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
+                    .show()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

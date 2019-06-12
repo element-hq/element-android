@@ -22,11 +22,12 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest
-import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.SimpleFragmentActivity
 import im.vector.riotredesign.core.platform.WaitingViewData
 
@@ -108,20 +109,20 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                                 .commitNow()
                     }
                     IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION,
-                    IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
+                    IncomingSasVerificationTransaction.UxState.SHOW_SAS               -> {
                         supportFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationShortCodeFragment.newInstance())
                                 .commitNow()
                     }
-                    IncomingSasVerificationTransaction.UxState.VERIFIED -> {
+                    IncomingSasVerificationTransaction.UxState.VERIFIED               -> {
                         supportFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
                                 .commitNow()
                     }
                     IncomingSasVerificationTransaction.UxState.CANCELLED_BY_ME,
-                    IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER -> {
+                    IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER     -> {
                         viewModel.navigateCancel()
                     }
                 }
@@ -139,29 +140,29 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                                 .commitNow()
                     }
                     OutgoingSasVerificationRequest.UxState.SHOW_SAS,
-                    OutgoingSasVerificationRequest.UxState.WAIT_FOR_VERIFICATION -> {
+                    OutgoingSasVerificationRequest.UxState.WAIT_FOR_VERIFICATION  -> {
                         supportFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationShortCodeFragment.newInstance())
                                 .commitNow()
                     }
-                    OutgoingSasVerificationRequest.UxState.VERIFIED -> {
+                    OutgoingSasVerificationRequest.UxState.VERIFIED               -> {
                         supportFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
                                 .commitNow()
                     }
                     OutgoingSasVerificationRequest.UxState.CANCELLED_BY_ME,
-                    OutgoingSasVerificationRequest.UxState.CANCELLED_BY_OTHER -> {
+                    OutgoingSasVerificationRequest.UxState.CANCELLED_BY_OTHER     -> {
                         viewModel.navigateCancel()
                     }
                 }
             }
         }
 
-        viewModel.navigateEvent.observe(this, Observer { uxStateEvent ->
-            when (uxStateEvent?.getContentIfNotHandled()) {
-                SasVerificationViewModel.NAVIGATE_FINISH -> {
+        viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
+            when (uxStateEvent) {
+                SasVerificationViewModel.NAVIGATE_FINISH         -> {
                     finish()
                 }
                 SasVerificationViewModel.NAVIGATE_FINISH_SUCCESS -> {
@@ -171,33 +172,33 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                     setResult(Activity.RESULT_OK, dataResult)
                     finish()
                 }
-                SasVerificationViewModel.NAVIGATE_SAS_DISPLAY -> {
+                SasVerificationViewModel.NAVIGATE_SAS_DISPLAY    -> {
                     supportFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_fade_out)
                             .replace(R.id.container, SASVerificationShortCodeFragment.newInstance())
                             .commitNow()
                 }
-                SasVerificationViewModel.NAVIGATE_SUCCESS -> {
+                SasVerificationViewModel.NAVIGATE_SUCCESS        -> {
                     supportFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_fade_out)
                             .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
                             .commitNow()
                 }
-                SasVerificationViewModel.NAVIGATE_CANCELLED -> {
+                SasVerificationViewModel.NAVIGATE_CANCELLED      -> {
                     val isCancelledByMe = viewModel.transaction?.state == SasVerificationTxState.Cancelled
                     val humanReadableReason = when (viewModel.transaction?.cancelledReason) {
-                        CancelCode.User -> getString(R.string.sas_error_m_user)
-                        CancelCode.Timeout -> getString(R.string.sas_error_m_timeout)
-                        CancelCode.UnknownTransaction -> getString(R.string.sas_error_m_unknown_transaction)
-                        CancelCode.UnknownMethod -> getString(R.string.sas_error_m_unknown_method)
+                        CancelCode.User                 -> getString(R.string.sas_error_m_user)
+                        CancelCode.Timeout              -> getString(R.string.sas_error_m_timeout)
+                        CancelCode.UnknownTransaction   -> getString(R.string.sas_error_m_unknown_transaction)
+                        CancelCode.UnknownMethod        -> getString(R.string.sas_error_m_unknown_method)
                         CancelCode.MismatchedCommitment -> getString(R.string.sas_error_m_mismatched_commitment)
-                        CancelCode.MismatchedSas -> getString(R.string.sas_error_m_mismatched_sas)
-                        CancelCode.UnexpectedMessage -> getString(R.string.sas_error_m_unexpected_message)
-                        CancelCode.InvalidMessage -> getString(R.string.sas_error_m_invalid_message)
-                        CancelCode.MismatchedKeys -> getString(R.string.sas_error_m_key_mismatch)
+                        CancelCode.MismatchedSas        -> getString(R.string.sas_error_m_mismatched_sas)
+                        CancelCode.UnexpectedMessage    -> getString(R.string.sas_error_m_unexpected_message)
+                        CancelCode.InvalidMessage       -> getString(R.string.sas_error_m_invalid_message)
+                        CancelCode.MismatchedKeys       -> getString(R.string.sas_error_m_key_mismatch)
                         // Use user error
-                        CancelCode.UserMismatchError -> getString(R.string.sas_error_m_user_error)
-                        null -> getString(R.string.sas_error_unknown)
+                        CancelCode.UserMismatchError    -> getString(R.string.sas_error_m_user_error)
+                        null                            -> getString(R.string.sas_error_unknown)
                     }
                     val message =
                             if (isCancelledByMe) getString(R.string.sas_cancelled_by_me, humanReadableReason)
@@ -216,7 +217,7 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                     }
                 }
             }
-        })
+        }
 
         viewModel.loadingLiveEvent.observe(this, Observer {
             if (it == null) {
