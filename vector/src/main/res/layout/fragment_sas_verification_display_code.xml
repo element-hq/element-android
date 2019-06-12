@@ -54,15 +54,13 @@
             tools:text="1234-4320-3905"
             tools:visibility="visible" />
 
-        <GridLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/sas_emoji_grid"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/layout_vertical_margin"
-            android:columnCount="@integer/number_of_emoji_per_line"
-            android:padding="@dimen/layout_vertical_margin"
-            android:useDefaultMargins="true"
             android:visibility="invisible"
+            app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sas_emoji_description_2"
@@ -96,7 +94,20 @@
                 android:id="@+id/emoji6"
                 layout="@layout/item_emoji_verif" />
 
-        </GridLayout>
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/sas_emoji_grid_flow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="emoji0,emoji1,emoji2,emoji3,emoji4,emoji5,emoji6"
+                app:flow_horizontalBias="0.5"
+                app:flow_horizontalGap="16dp"
+                app:flow_horizontalStyle="packed"
+                app:flow_verticalBias="0"
+                app:flow_verticalGap="8dp"
+                app:flow_wrapMode="chain"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/sas_request_continue_button"

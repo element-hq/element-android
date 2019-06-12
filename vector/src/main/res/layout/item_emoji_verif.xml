@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textColor="@color/black"
         android:textSize="40dp"
         tools:ignore="SpUsage"
         tools:text="🌵" />
@@ -23,6 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:minWidth="60sp"
+        android:textColor="?riotx_text_primary"
         tools:text="@string/verification_emoji_cactus" />
 
 </LinearLayout>

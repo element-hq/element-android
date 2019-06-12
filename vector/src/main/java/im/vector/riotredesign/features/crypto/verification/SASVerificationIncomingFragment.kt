@@ -62,26 +62,29 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
 
         viewModel.otherUser?.let {
             AvatarRenderer.render(it, avatarImageView)
+        } ?: run {
+            // Fallback to what we know
+            AvatarRenderer.render(null, viewModel.otherUserId ?: "", viewModel.otherUserId, avatarImageView)
         }
 
         viewModel.transactionState.observe(this, Observer {
             val uxState = (viewModel.transaction as? IncomingSasVerificationTransaction)?.uxState
             when (uxState) {
-                IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
+                IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT            -> {
                     viewModel.loadingLiveEvent.value = null
                 }
                 IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT -> {
                     viewModel.loadingLiveEvent.value = R.string.sas_waiting_for_partner
                 }
-                IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
+                IncomingSasVerificationTransaction.UxState.SHOW_SAS               -> {
                     viewModel.shortCodeReady()
                 }
                 IncomingSasVerificationTransaction.UxState.CANCELLED_BY_ME,
-                IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER -> {
+                IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER     -> {
                     viewModel.loadingLiveEvent.value = null
                     viewModel.navigateCancel()
                 }
-                else -> Unit
+                else                                                              -> Unit
             }
         })
 

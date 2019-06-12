@@ -2267,6 +2267,10 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
             mSession.getDevicesList(object : MatrixCallback<DevicesListResponse> {
                 override fun onSuccess(data: DevicesListResponse) {
+                    if (!isAdded) {
+                        return
+                    }
+
                     if (data.devices?.isEmpty() == true) {
                         removeDevicesPreference()
                     } else {
@@ -2275,6 +2279,10 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 }
 
                 override fun onFailure(failure: Throwable) {
+                    if (!isAdded) {
+                        return
+                    }
+
                     removeDevicesPreference()
                     onCommonDone(failure.message)
                 }
