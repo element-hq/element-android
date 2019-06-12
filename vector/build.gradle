@@ -192,7 +192,7 @@ dependencies {
     implementation 'com.nulab-inc:zxcvbn:1.2.5'
 
     //Alerter
-    implementation 'com.tapadoo.android:alerter:3.0.2'
+    implementation 'com.tapadoo.android:alerter:4.0.3'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 

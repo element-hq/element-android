@@ -16,6 +16,7 @@
 package im.vector.riotredesign.features.popup
 
 import android.app.Activity
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -27,6 +28,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.features.crypto.verification.SASVerificationActivity
 import timber.log.Timber
 import java.lang.ref.WeakReference
+
 
 /**
  * Responsible of displaying important popup alerts on top of the screen.
@@ -71,6 +73,7 @@ object PopupAlertManager {
         if (currentAlerter != null) {
             weakCurrentActivity?.get()?.let {
                 Alerter.clearCurrent(it)
+                setLightStatusBar()
             }
         }
 
@@ -134,7 +137,29 @@ object PopupAlertManager {
         }
     }
 
+    private fun clearLightStatusBar() {
+        val view = weakCurrentActivity?.get()?.window?.decorView
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && view != null) {
+            var flags = view.systemUiVisibility
+            flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+            view.systemUiVisibility = flags
+        }
+    }
+
+    private fun setLightStatusBar() {
+        val view = weakCurrentActivity?.get()?.window?.decorView
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && view != null) {
+            var flags = view.systemUiVisibility
+            flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            view.systemUiVisibility = flags
+        }
+    }
+
     private fun showAlert(alert: VectorAlert, activity: Activity, animate: Boolean = true) {
+        clearLightStatusBar()
+
         alert.weakCurrentActivity = WeakReference(activity)
         Alerter.create(activity)
                 .setTitle(alert.title)
@@ -192,6 +217,8 @@ object PopupAlertManager {
 
     private fun currentIsDismissed() {
         //current alert has been hidden
+        setLightStatusBar()
+
         currentAlerter = null
         Handler(Looper.getMainLooper()).postDelayed({
             displayNextIfPossible()

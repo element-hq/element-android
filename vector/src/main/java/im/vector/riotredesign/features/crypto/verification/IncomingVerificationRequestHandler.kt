@@ -48,38 +48,38 @@ class IncomingVerificationRequestHandler(val context: Context,
                         "kvr_${tx.transactionId}",
                         context.getString(R.string.sas_incoming_request_notif_title),
                         context.getString(R.string.sas_incoming_request_notif_content, name),
-                        R.drawable.shield
-                ).apply {
-                    contentAction = Runnable {
-                        val intent = SASVerificationActivity.incomingIntent(context,
-                                session.sessionParams.credentials.userId,
-                                tx.otherUserId,
-                                tx.transactionId)
-                        weakCurrentActivity?.get()?.startActivity(intent)
-                    }
-                    dismissedAction = Runnable {
-                        tx.cancel()
-                    }
-                    addButton(
-                            context.getString(R.string.ignore),
-                            Runnable {
-                                tx.cancel()
-                            }
-                    )
-                    addButton(
-                            context.getString(R.string.action_open),
-                            Runnable {
+                        R.drawable.shield)
+                        .apply {
+                            contentAction = Runnable {
                                 val intent = SASVerificationActivity.incomingIntent(context,
                                         session.sessionParams.credentials.userId,
                                         tx.otherUserId,
                                         tx.transactionId)
                                 weakCurrentActivity?.get()?.startActivity(intent)
                             }
-                    )
-                    //10mn expiration
-                    expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
+                            dismissedAction = Runnable {
+                                tx.cancel()
+                            }
+                            addButton(
+                                    context.getString(R.string.ignore),
+                                    Runnable {
+                                        tx.cancel()
+                                    }
+                            )
+                            addButton(
+                                    context.getString(R.string.action_open),
+                                    Runnable {
+                                        val intent = SASVerificationActivity.incomingIntent(context,
+                                                session.sessionParams.credentials.userId,
+                                                tx.otherUserId,
+                                                tx.transactionId)
+                                        weakCurrentActivity?.get()?.startActivity(intent)
+                                    }
+                            )
+                            //10mn expiration
+                            expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
 
-                }
+                        }
                 PopupAlertManager.postVectorAlert(alert)
             }
             SasVerificationTxState.Cancelled,
