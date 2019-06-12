@@ -632,32 +632,28 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         // copyright
         findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            notImplemented()
-            // TODO VectorUtils.displayAppCopyright()
+            activity?.displayInWebView(VectorSettingsUrls.COPYRIGHT)
             false
         }
 
         // terms & conditions
         findPreference(PreferencesManager.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            notImplemented()
-            // TODO VectorUtils.displayAppTac()
+            activity?.displayInWebView(VectorSettingsUrls.TAC)
             false
         }
 
         // privacy policy
         findPreference(PreferencesManager.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            notImplemented()
-            // TODO VectorUtils.displayAppPrivacyPolicy()
+            activity?.displayInWebView(VectorSettingsUrls.PRIVACY_POLICY)
             false
         }
 
         // third party notice
         findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            notImplemented()
-            // TODO VectorUtils.displayThirdPartyLicenses()
+            activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
             false
         }
 
