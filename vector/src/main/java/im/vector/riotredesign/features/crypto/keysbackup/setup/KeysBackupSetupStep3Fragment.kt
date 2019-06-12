@@ -16,10 +16,12 @@
 package im.vector.riotredesign.features.crypto.keysbackup.setup
 
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -28,9 +30,11 @@ import butterknife.OnClick
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.files.addEntryToDownloadManager
+import im.vector.riotredesign.core.files.saveStringToFile
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.*
-import java.io.ByteArrayInputStream
+import java.io.File
 
 class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
@@ -152,28 +156,32 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
         }
     }
 
-    fun exportRecoveryKeyToFile(it: String) {
-        val stream = ByteArrayInputStream(it.toByteArray())
+    private fun exportRecoveryKeyToFile(data: String) {
+        val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(parentDir, "recovery-key-" + System.currentTimeMillis() + ".txt")
 
-        vectorBaseActivity.notImplemented("export recovery key to file")
-        /*
-        val url = viewModel.session.mediaCache.saveMedia(stream, "recovery-key" + System.currentTimeMillis() + ".txt", "text/plain")
-        stream.close()
-        CommonActivityUtils.saveMediaIntoDownloads(context,
-                File(Uri.parse(url).path!!), "recovery-key.txt", "text/plain", object : SimpleApiCallback<String>() {
-            override fun onSuccess(path: String) {
-                context?.let {
-                    AlertDialog.Builder(it)
-                            .setMessage(getString(R.string.recovery_key_export_saved_as_warning, path))
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.ok, null)
-                            .show()
-                }
+        if (saveStringToFile(data, file)) {
+            addEntryToDownloadManager(requireContext(), file, "text/plain")
 
-                viewModel.copyHasBeenMade = true
+            context?.let {
+                AlertDialog.Builder(it)
+                        .setMessage(getString(R.string.recovery_key_export_saved_as_warning, file.absolutePath))
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
             }
-        })
-        */
+
+            viewModel.copyHasBeenMade = true
+        } else {
+            context?.let {
+                AlertDialog.Builder(it)
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(getString(R.string.unknown_error))
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
