@@ -19,14 +19,18 @@ package im.vector.riotredesign.core.dialogs
 import android.app.Activity
 import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.showPassword
+import im.vector.riotredesign.core.platform.SimpleTextWatcher
 
 class ExportKeysDialog {
+
+    var passwordVisible = false
 
     fun show(activity: Activity, exportKeyDialogListener: ExportKeyDialogListener) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
@@ -34,19 +38,11 @@ class ExportKeysDialog {
                 .setTitle(R.string.encryption_export_room_keys)
                 .setView(dialogLayout)
 
-        val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
-        val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_confirm_passphrase_edit_text)
-        val passPhrase2Til = dialogLayout.findViewById<TextInputLayout>(R.id.dialog_e2e_keys_confirm_passphrase_til)
-        val exportButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_export_button)
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-            }
-
+        val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.exportDialogEt)
+        val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.exportDialogEtConfirm)
+        val passPhrase2Til = dialogLayout.findViewById<TextInputLayout>(R.id.exportDialogTilConfirm)
+        val exportButton = dialogLayout.findViewById<Button>(R.id.exportDialogSubmit)
+        val textWatcher = object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
                 when {
                     TextUtils.isEmpty(passPhrase1EditText.text)                          -> {
@@ -67,6 +63,14 @@ class ExportKeysDialog {
 
         passPhrase1EditText.addTextChangedListener(textWatcher)
         passPhrase2EditText.addTextChangedListener(textWatcher)
+
+        val showPassword = dialogLayout.findViewById<ImageView>(R.id.exportDialogShowPassword)
+        showPassword.setOnClickListener {
+            passwordVisible = !passwordVisible
+            passPhrase1EditText.showPassword(passwordVisible)
+            passPhrase2EditText.showPassword(passwordVisible)
+            showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+        }
 
         val exportDialog = builder.show()
 

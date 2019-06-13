@@ -56,6 +56,7 @@ import im.vector.riotredesign.core.dialogs.ExportKeysDialog
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.extensions.withArgs
 import im.vector.riotredesign.core.platform.SimpleTextWatcher
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.ProgressBarPreference
@@ -64,6 +65,7 @@ import im.vector.riotredesign.core.preference.VectorPreference
 import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.configuration.VectorConfiguration
+import im.vector.riotredesign.features.crypto.keys.KeysExporter
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
 import org.koin.android.ext.android.inject
@@ -885,9 +887,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         PreferenceManager.getDefaultSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(this)
     }
 
-    // TODO Test
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        /* TODO
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
                 changeAvatar()
@@ -895,7 +895,6 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 exportKeys()
             }
         }
-        */
     }
 
     //==============================================================================================================
@@ -2594,38 +2593,27 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             activity?.let { activity ->
                 ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
                     override fun onPassphrase(passphrase: String) {
-                        notImplemented()
-                        /*
-
                         displayLoadingView()
 
-                        CommonActivityUtils.exportKeys(session, passphrase, object : SimpleApiCallback<String>(activity) {
-                            override fun onSuccess(filename: String) {
-                                hideLoadingView()
+                        KeysExporter(mSession)
+                                .export(requireContext(),
+                                        passphrase,
+                                        object : MatrixCallback<String> {
+                                            override fun onSuccess(data: String) {
+                                                hideLoadingView()
 
-                                AlertDialog.Builder(activity)
-                                        .setMessage(getString(R.string.encryption_export_saved_as, filename))
-                                        .setCancelable(false)
-                                        .setPositiveButton(R.string.ok, null)
-                                        .show()
-                            }
+                                                AlertDialog.Builder(activity)
+                                                        .setMessage(getString(R.string.encryption_export_saved_as, data))
+                                                        .setCancelable(false)
+                                                        .setPositiveButton(R.string.ok, null)
+                                                        .show()
+                                            }
 
-                            override fun onNetworkError(e: Exception) {
-                                super.onNetworkError(e)
-                                hideLoadingView()
-                            }
+                                            override fun onFailure(failure: Throwable) {
+                                                onCommonDone(failure.localizedMessage)
+                                            }
 
-                            override fun onMatrixError(e: MatrixError) {
-                                super.onMatrixError(e)
-                                hideLoadingView()
-                            }
-
-                            override fun onUnexpectedError(e: Exception) {
-                                super.onUnexpectedError(e)
-                                hideLoadingView()
-                            }
-                        })
-                        */
+                                        })
                     }
                 })
             }
