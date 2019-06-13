@@ -60,6 +60,8 @@ import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
 import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
@@ -68,6 +70,7 @@ import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.fetchCopied
 import kotlinx.coroutines.*
 import org.matrix.olm.OlmManager
 import timber.log.Timber
@@ -468,17 +471,10 @@ internal class CryptoManager(
      * @return true if the room is encrypted
      */
     override fun isRoomEncrypted(roomId: String): Boolean {
-        var res: Boolean
-
-        synchronized(roomEncryptors) {
-            res = roomEncryptors.containsKey(roomId)
+        val encryptionEvent = monarchy.fetchCopied {
+            EventEntity.where(it, roomId = roomId, type = EventType.ENCRYPTION).findFirst()
         }
-
-        if (!res) {
-            res = !cryptoStore.getRoomAlgorithm(roomId).isNullOrBlank()
-        }
-
-        return res
+        return encryptionEvent != null
     }
 
     /**
@@ -555,10 +551,10 @@ internal class CryptoManager(
             } else {
                 val algorithm = getEncryptionAlgorithm(roomId)
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
-                        algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                                           algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
                 Timber.e("## encryptEventContent() : $reason")
                 callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNABLE_TO_ENCRYPT_ERROR_CODE,
-                        MXCryptoError.UNABLE_TO_ENCRYPT, reason)))
+                                                                     MXCryptoError.UNABLE_TO_ENCRYPT, reason)))
             }
         }
     }
@@ -695,7 +691,7 @@ internal class CryptoManager(
         monarchy.doWithRealm { realm ->
             // Check whether the event content must be encrypted for the invited members.
             val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser()
-                    && shouldEncryptForInvitedMembers(roomId)
+                                           && shouldEncryptForInvitedMembers(roomId)
 
             userIds = if (encryptForInvitedMembers) {
                 RoomMembers(realm, roomId).getActiveRoomMemberIds()
@@ -893,7 +889,7 @@ internal class CryptoManager(
                                     // trigger an an unknown devices exception
                                     callback.onFailure(
                                             Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
-                                                    MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
+                                                                              MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
                                 }
                             }
                     )
