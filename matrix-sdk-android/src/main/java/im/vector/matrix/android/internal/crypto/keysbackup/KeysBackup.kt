@@ -126,18 +126,6 @@ internal class KeysBackup(
         keysBackupStateManager.removeListener(listener)
     }
 
-    /**
-     * Set up the data required to create a new backup version.
-     * The backup version will not be created and enabled until [createKeysBackupVersion]
-     * is called.
-     * The returned [MegolmBackupCreationInfo] object has a `recoveryKey` member with
-     * the user-facing recovery key string.
-     *
-     * @param password an optional passphrase string that can be entered by the user
-     * when restoring the backup as an alternative to entering the recovery key.
-     * @param progressListener a progress listener, as generating private key from password may take a while
-     * @param callback Asynchronous callback
-     */
     override fun prepareKeysBackupVersion(password: String?,
                                           progressListener: ProgressListener?,
                                           callback: MatrixCallback<MegolmBackupCreationInfo>) {
@@ -193,12 +181,6 @@ internal class KeysBackup(
         }
     }
 
-    /**
-     * Create a new keys backup version and enable it, using the information return from [prepareKeysBackupVersion].
-     *
-     * @param keysBackupCreationInfo the info object from [prepareKeysBackupVersion].
-     * @param callback               Asynchronous callback
-     */
     override fun createKeysBackupVersion(keysBackupCreationInfo: MegolmBackupCreationInfo,
                                          callback: MatrixCallback<KeysVersion>) {
         val createKeysBackupVersionBody = CreateKeysBackupVersionBody()
@@ -237,13 +219,6 @@ internal class KeysBackup(
                 .executeBy(taskExecutor)
     }
 
-    /**
-     * Delete a keys backup version. It will delete all backed up keys on the server, and the backup itself.
-     * If we are backing up to this version. Backup will be stopped.
-     *
-     * @param version  the backup version to delete.
-     * @param callback Asynchronous callback
-     */
     override fun deleteBackup(version: String, callback: MatrixCallback<Unit>?) {
         CryptoAsyncHelper.getDecryptBackgroundHandler().post {
             // If we're currently backing up to this backup... stop.
@@ -279,10 +254,6 @@ internal class KeysBackup(
         }
     }
 
-    /**
-     * Ask if the backup on the server contains keys that we may do not have locally.
-     * This should be called when entering in the state READY_TO_BACKUP
-     */
     override fun canRestoreKeys(): Boolean {
         // Server contains more keys than locally
         val totalNumberOfKeysLocally = getTotalNumbersOfKeys()
@@ -306,27 +277,15 @@ internal class KeysBackup(
         }
     }
 
-    /**
-     * Facility method to get the total number of locally stored keys
-     */
     override fun getTotalNumbersOfKeys(): Int {
         return cryptoStore.inboundGroupSessionsCount(false)
 
     }
 
-    /**
-     * Facility method to get the number of backed up keys
-     */
     override fun getTotalNumbersOfBackedUpKeys(): Int {
         return cryptoStore.inboundGroupSessionsCount(true)
     }
 
-    /**
-     * Start to back up keys immediately.
-     *
-     * @param progressListener the callback to follow the progress
-     * @param callback the main callback
-     */
     override fun backupAllGroupSessions(progressListener: ProgressListener?,
                                         callback: MatrixCallback<Unit>?) {
         // Get a status right now
@@ -377,12 +336,6 @@ internal class KeysBackup(
         })
     }
 
-    /**
-     * Check trust on a key backup version.
-     *
-     * @param keysBackupVersion the backup version to check.
-     * @param callback block called when the operations completes.
-     */
     override fun getKeysBackupTrust(keysBackupVersion: KeysVersionResult,
                                     callback: MatrixCallback<KeysBackupVersionTrust>) {
         // TODO Validate with François that this is correct
@@ -467,14 +420,6 @@ internal class KeysBackup(
         return keysBackupVersionTrust
     }
 
-    /**
-     * Set trust on a keys backup version.
-     * It adds (or removes) the signature of the current device to the authentication part of the keys backup version.
-     *
-     * @param keysBackupVersion the backup version to check.
-     * @param trust the trust to set to the keys backup.
-     * @param callback block called when the operations completes.
-     */
     override fun trustKeysBackupVersion(keysBackupVersion: KeysVersionResult,
                                         trust: Boolean,
                                         callback: MatrixCallback<Unit>) {
@@ -562,13 +507,6 @@ internal class KeysBackup(
         }
     }
 
-    /**
-     * Set trust on a keys backup version.
-     *
-     * @param keysBackupVersion the backup version to check.
-     * @param recoveryKey the recovery key to challenge with the key backup public key.
-     * @param callback block called when the operations completes.
-     */
     override fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult,
                                                        recoveryKey: String,
                                                        callback: MatrixCallback<Unit>) {
@@ -588,13 +526,6 @@ internal class KeysBackup(
         }
     }
 
-    /**
-     * Set trust on a keys backup version.
-     *
-     * @param keysBackupVersion the backup version to check.
-     * @param password the pass phrase to challenge with the keyBackupVersion public key.
-     * @param callback block called when the operations completes.
-     */
     override fun trustKeysBackupVersionWithPassphrase(keysBackupVersion: KeysVersionResult,
                                                       password: String,
                                                       callback: MatrixCallback<Unit>) {
@@ -658,9 +589,6 @@ internal class KeysBackup(
         keysBackupStateListener = null
     }
 
-    /**
-     * Return the current progress of the backup
-     */
     override fun getBackupProgress(progressListener: ProgressListener) {
         CryptoAsyncHelper.getDecryptBackgroundHandler().post {
             val backedUpKeys = cryptoStore.inboundGroupSessionsCount(true)
@@ -670,16 +598,6 @@ internal class KeysBackup(
         }
     }
 
-    /**
-     * Restore a backup with a recovery key from a given backup version stored on the homeserver.
-     *
-     * @param keysVersionResult    the backup version to restore from.
-     * @param recoveryKey          the recovery key to decrypt the retrieved backup.
-     * @param roomId               the id of the room to get backup data from.
-     * @param sessionId            the id of the session to restore.
-     * @param stepProgressListener the step progress listener
-     * @param callback             Callback. It provides the number of found keys and the number of successfully imported keys.
-     */
     override fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult,
                                             recoveryKey: String,
                                             roomId: String?,
@@ -772,16 +690,6 @@ internal class KeysBackup(
         })
     }
 
-    /**
-     * Restore a backup with a password from a given backup version stored on the homeserver.
-     *
-     * @param keysBackupVersion the backup version to restore from.
-     * @param password the password to decrypt the retrieved backup.
-     * @param roomId the id of the room to get backup data from.
-     * @param sessionId the id of the session to restore.
-     * @param stepProgressListener the step progress listener
-     * @param callback Callback. It provides the number of found keys and the number of successfully imported keys.
-     */
     override fun restoreKeyBackupWithPassword(keysBackupVersion: KeysVersionResult,
                                               password: String,
                                               roomId: String?,
@@ -923,13 +831,6 @@ internal class KeysBackup(
         }
     }
 
-    /**
-     * Get information about a backup version defined on the homeserver.
-     *
-     * It can be different than keysBackupVersion.
-     * @param version the backup version
-     * @param callback
-     */
     override fun getVersion(version: String,
                             callback: MatrixCallback<KeysVersionResult?>) {
         getKeysBackupVersionTask
@@ -953,12 +854,6 @@ internal class KeysBackup(
                 .executeBy(taskExecutor)
     }
 
-    /**
-     * Retrieve the current version of the backup from the home server
-     *
-     * It can be different than keysBackupVersion.
-     * @param callback onSuccess(null) will be called if there is no backup on the server
-     */
     override fun getCurrentVersion(callback: MatrixCallback<KeysVersionResult?>) {
         getKeysBackupLastVersionTask
                 .configureWith(Unit)
@@ -981,12 +876,6 @@ internal class KeysBackup(
                 .executeBy(taskExecutor)
     }
 
-    /**
-     * This method fetches the last backup version on the server, then compare to the currently backup version use.
-     * If versions are not the same, the current backup is deleted (on server or locally), then the backup may be started again, using the last version.
-     *
-     * @param callback true if backup is already using the last version, and false if it is not the case
-     */
     override fun forceUsingLastVersion(callback: MatrixCallback<Boolean>) {
         getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
             override fun onSuccess(data: KeysVersionResult?) {
@@ -1032,12 +921,6 @@ internal class KeysBackup(
         })
     }
 
-    /**
-     * Check the server for an active key backup.
-     *
-     * If one is present and has a valid signature from one of the user's verified
-     * devices, start backing up to it.
-     */
     override fun checkAndStartKeysBackup() {
         if (!isStucked) {
             // Try to start or restart the backup only if it is in unknown or bad state
