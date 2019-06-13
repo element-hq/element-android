@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
@@ -22,5 +23,6 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class DeleteDeviceParams(
-        var auth: DeleteDeviceAuth? = null
+        @Json(name = "auth")
+        var deleteDeviceAuth: DeleteDeviceAuth? = null
 )

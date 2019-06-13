@@ -2493,15 +2493,12 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
      * @param deviceId the device id
      */
     private fun deleteDevice(deviceId: String) {
-        notImplemented()
-
-        // We have to manage registration flow first, to handle what is necessary to delete a devive
-        /*
         displayLoadingView()
-        session.deleteDevice(deviceId, mAccountPassword, object : MatrixCallback<Unit> {
+        mSession.deleteDevice(deviceId, mAccountPassword, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 hideLoadingView()
-                refreshDevicesList() // force settings update
+                // force settings update
+                refreshDevicesList()
             }
 
             override fun onFailure(failure: Throwable) {
@@ -2509,7 +2506,6 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 onCommonDone(failure.localizedMessage)
             }
         })
-        */
     }
 
     /**
