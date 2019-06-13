@@ -48,7 +48,7 @@
         android:id="@+id/homeKeysBackupBanner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?vctr_list_header_background_color"
+        android:background="?riotx_keys_backup_banner_accent_color"
         android:minHeight="67dp"
         app:layout_constraintBottom_toTopOf="@+id/roomListContainer"
         app:layout_constraintEnd_toEndOf="parent"

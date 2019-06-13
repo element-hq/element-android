@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?vctr_list_header_background_color"
+    android:background="?riotx_keys_backup_banner_accent_color"
     android:minHeight="67dp"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginLeft="27dp"
+        android:layout_marginTop="8dp"
         android:text="@string/keys_backup_banner_setup_line1"
         android:textColor="?riotx_text_primary"
         android:textSize="15sp"
@@ -41,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginLeft="27dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/keys_backup_banner_setup_line2"
         android:textColor="?colorAccent"
         android:textSize="15sp"
