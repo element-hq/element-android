@@ -19,11 +19,7 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
-import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForUsersAction
-import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
-import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
-import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
+import im.vector.matrix.android.internal.crypto.actions.*
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmDecryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
@@ -31,58 +27,18 @@ import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFa
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultCreateKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteBackupTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetKeysBackupLastVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultStoreRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultStoreRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultStoreSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultUpdateKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteBackupTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetKeysBackupLastVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.*
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
 import im.vector.matrix.android.internal.crypto.store.db.hash
-import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultClaimOneTimeKeysForUsersDevice
-import im.vector.matrix.android.internal.crypto.tasks.DefaultDeleteDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultDownloadKeysForUsers
-import im.vector.matrix.android.internal.crypto.tasks.DefaultGetDevicesTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultGetKeyChangesTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultSendToDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultSetDeviceNameTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultUploadKeysTask
-import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
-import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
-import im.vector.matrix.android.internal.crypto.tasks.GetKeyChangesTask
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
-import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
+import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.session.DefaultSession
+import im.vector.matrix.android.internal.session.cache.ClearCacheTask
+import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
 import io.realm.RealmConfiguration
 import org.koin.dsl.module.module
 import org.matrix.olm.OlmManager
@@ -115,8 +71,8 @@ internal class CryptoModule {
         // CryptoStore
         scope(DefaultSession.SCOPE) {
             RealmCryptoStore(false /* TODO*/,
-                             get("CryptoRealmConfiguration"),
-                             get()) as IMXCryptoStore
+                    get("CryptoRealmConfiguration"),
+                    get()) as IMXCryptoStore
         }
 
         scope(DefaultSession.SCOPE) {
@@ -242,6 +198,7 @@ internal class CryptoModule {
                     setDeviceNameTask = get(),
                     uploadKeysTask = get(),
                     loadRoomMembersTask = get(),
+                    clearCryptoDataTask = get("ClearTaskCryptoCache"),
                     monarchy = get(),
                     coroutineDispatchers = get(),
                     taskExecutor = get()
@@ -289,6 +246,10 @@ internal class CryptoModule {
         }
         scope(DefaultSession.SCOPE) {
             DefaultUploadKeysTask(get()) as UploadKeysTask
+        }
+
+        scope(DefaultSession.SCOPE, name = "ClearTaskCryptoCache") {
+            RealmClearCacheTask(get("CryptoRealmConfiguration")) as ClearCacheTask
         }
 
         /* ==========================================================================================

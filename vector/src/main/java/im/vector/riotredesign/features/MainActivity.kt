@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
 import im.vector.riotredesign.features.login.LoginActivity
+import timber.log.Timber
 
 
 class MainActivity : VectorBaseActivity() {
@@ -60,15 +61,16 @@ class MainActivity : VectorBaseActivity() {
             when {
                 clearCredentials -> session.signOut(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
+                        Timber.w("SIGN_OUT: success, start app")
                         start()
                     }
                 })
-                clearCache -> session.clearCache(object : MatrixCallback<Unit> {
+                clearCache       -> session.clearCache(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         start()
                     }
                 })
-                else -> start()
+                else             -> start()
             }
         }
     }

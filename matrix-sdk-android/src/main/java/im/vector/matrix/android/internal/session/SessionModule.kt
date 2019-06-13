@@ -130,10 +130,11 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            RealmCacheService(get(), get()) as CacheService
+            RealmCacheService(get("ClearTaskMainCache"), get()) as CacheService
         }
 
-        scope(DefaultSession.SCOPE) {
+        // Give a name, because we have a clear task for crypto store as well
+        scope(DefaultSession.SCOPE, name = "ClearTaskMainCache") {
             RealmClearCacheTask(get("SessionRealmConfiguration")) as ClearCacheTask
         }
 
@@ -157,7 +158,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
             DefaultFilterService(get(), get(), get()) as FilterService
         }
 
-        scope<FilterApi>(DefaultSession.SCOPE) {
+        scope(DefaultSession.SCOPE) {
             val retrofit: Retrofit = get()
             retrofit.create(FilterApi::class.java)
         }

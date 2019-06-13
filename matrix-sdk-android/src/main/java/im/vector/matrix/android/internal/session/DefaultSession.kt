@@ -71,6 +71,7 @@ import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.user.UserModule
 import org.koin.core.scope.Scope
 import org.koin.standalone.inject
+import timber.log.Timber
 
 
 internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent {
@@ -151,19 +152,36 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     @MainThread
     override fun signOut(callback: MatrixCallback<Unit>) {
+        Timber.w("SIGN_OUT: start")
+
         assert(isOpen)
+        Timber.w("SIGN_OUT: kill sync thread")
         syncThread.kill()
 
+        Timber.w("SIGN_OUT: call webservice")
         return signOutService.signOut(object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
+                Timber.w("SIGN_OUT: call webservice -> SUCCESS: clear cache")
+
                 // Clear the cache
-                cacheService.clearCache(object : MatrixCallbackDelegate<Unit>(callback) {})
+                cacheService.clearCache(object : MatrixCallback<Unit> {
+                    override fun onSuccess(data: Unit) {
+                        Timber.w("SIGN_OUT: clear cache -> SUCCESS: clear crypto cache")
+                        cryptoService.clearCryptoCache(MatrixCallbackDelegate(callback))
+                    }
+
+                    override fun onFailure(failure: Throwable) {
+                        // ignore error
+                        Timber.e("SIGN_OUT: clear cache -> ERROR: ignoring")
+                        onSuccess(Unit)
+                    }
+                })
             }
 
             override fun onFailure(failure: Throwable) {
                 // Ignore failure
+                Timber.e("SIGN_OUT: call webservice -> ERROR: ignoring")
                 onSuccess(Unit)
-                // callback.onFailure(failure)
             }
         })
     }
@@ -393,6 +411,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>) {
         cryptoService.downloadKeys(userIds, forceDownload, callback)
+    }
+
+    override fun clearCryptoCache(callback: MatrixCallback<Unit>) {
+        cryptoService.clearCryptoCache(callback)
     }
 
     // Private methods *****************************************************************************

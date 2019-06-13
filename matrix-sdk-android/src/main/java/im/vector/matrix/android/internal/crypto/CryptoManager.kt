@@ -61,6 +61,7 @@ import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
@@ -125,6 +126,7 @@ internal class CryptoManager(
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val clearCryptoDataTask: ClearCacheTask,
         private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor
@@ -1059,6 +1061,12 @@ internal class CryptoManager(
                             { callback.onSuccess(it) }
                     )
         }
+    }
+
+    override fun clearCryptoCache(callback: MatrixCallback<Unit>) {
+        clearCryptoDataTask.configureWith(Unit)
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
     }
 
     /* ==========================================================================================
