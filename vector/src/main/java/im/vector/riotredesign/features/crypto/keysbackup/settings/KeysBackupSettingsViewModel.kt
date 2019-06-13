@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.riotredesign.core.platform.VectorViewModel
 import org.koin.android.ext.android.get
@@ -27,7 +28,7 @@ import org.koin.android.ext.android.get
 
 class KeysBackupSettingsViewModel(initialState: KeysBackupSettingViewState,
                                   session: Session) : VectorViewModel<KeysBackupSettingViewState>(initialState),
-        KeysBackupService.KeysBackupStateListener {
+        KeysBackupStateListener {
 
     companion object : MvRxViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
 

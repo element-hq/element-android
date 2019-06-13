@@ -17,14 +17,14 @@
 package im.vector.matrix.android.internal.crypto.keysbackup
 
 import android.os.Handler
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 import timber.log.Timber
 import java.util.*
 
 internal class KeysBackupStateManager(private val uiHandler: Handler) {
 
-    private val listeners = ArrayList<KeysBackupService.KeysBackupStateListener>()
+    private val listeners = ArrayList<KeysBackupStateListener>()
 
     // Backup state
     var state = KeysBackupState.Unknown
@@ -56,13 +56,13 @@ internal class KeysBackupStateManager(private val uiHandler: Handler) {
                 || state == KeysBackupState.WrongBackUpVersion
                 || state == KeysBackupState.NotTrusted
 
-    fun addListener(listener: KeysBackupService.KeysBackupStateListener) {
+    fun addListener(listener: KeysBackupStateListener) {
         synchronized(listeners) {
             listeners.add(listener)
         }
     }
 
-    fun removeListener(listener: KeysBackupService.KeysBackupStateListener) {
+    fun removeListener(listener: KeysBackupStateListener) {
         synchronized(listeners) {
             listeners.remove(listener)
         }

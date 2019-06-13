@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.listeners.StepProgressListener
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 import im.vector.matrix.android.internal.crypto.*
 import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
@@ -104,7 +105,7 @@ internal class KeysBackup(
 
     private var backupAllGroupSessionsCallback: MatrixCallback<Unit>? = null
 
-    private var keysBackupStateListener: KeysBackupService.KeysBackupStateListener? = null
+    private var keysBackupStateListener: KeysBackupStateListener? = null
 
     override val isEnabled: Boolean
         get() = keysBackupStateManager.isEnabled
@@ -118,11 +119,11 @@ internal class KeysBackup(
     override val currentBackupVersion: String?
         get() = keysBackupVersion?.version
 
-    override fun addListener(listener: KeysBackupService.KeysBackupStateListener) {
+    override fun addListener(listener: KeysBackupStateListener) {
         keysBackupStateManager.addListener(listener)
     }
 
-    override fun removeListener(listener: KeysBackupService.KeysBackupStateListener) {
+    override fun removeListener(listener: KeysBackupStateListener) {
         keysBackupStateManager.removeListener(listener)
     }
 
@@ -309,7 +310,7 @@ internal class KeysBackup(
                 backupAllGroupSessionsCallback = callback
 
                 // Listen to `state` change to determine when to call onBackupProgress and onComplete
-                keysBackupStateListener = object : KeysBackupService.KeysBackupStateListener {
+                keysBackupStateListener = object : KeysBackupStateListener {
                     override fun onStateChange(newState: KeysBackupState) {
                         getBackupProgress(object : ProgressListener {
                             override fun onProgress(progress: Int, total: Int) {

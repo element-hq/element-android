@@ -19,10 +19,10 @@ package im.vector.riotredesign.features.workers.signout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 
-class SignOutViewModel : ViewModel(), KeysBackupService.KeysBackupStateListener {
+class SignOutViewModel : ViewModel(), KeysBackupStateListener {
     // Keys exported manually
     var keysExportedToFile = MutableLiveData<Boolean>()
 

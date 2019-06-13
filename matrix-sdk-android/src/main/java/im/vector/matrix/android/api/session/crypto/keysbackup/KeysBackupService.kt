@@ -189,8 +189,4 @@ interface KeysBackupService {
     val isStucked: Boolean
     val state: KeysBackupState
 
-    interface KeysBackupStateListener {
-        fun onStateChange(newState: KeysBackupState)
-    }
-
 }
