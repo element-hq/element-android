@@ -18,17 +18,16 @@ package im.vector.riotredesign.features.crypto.keys
 
 import android.content.Context
 import android.os.Environment
-import androidx.annotation.WorkerThread
 import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.riotredesign.core.files.addEntryToDownloadManager
+import im.vector.riotredesign.core.files.writeToFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okio.Okio
 import java.io.File
 
 class KeysExporter(private val session: Session) {
@@ -42,7 +41,16 @@ class KeysExporter(private val session: Session) {
             override fun onSuccess(data: ByteArray) {
                 GlobalScope.launch(Dispatchers.Main) {
                     withContext(Dispatchers.IO) {
-                        copyToFile(context, data)
+                        Try {
+                            val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                            val file = File(parentDir, "riotx-keys-" + System.currentTimeMillis() + ".txt")
+
+                            writeToFile(data, file)
+
+                            addEntryToDownloadManager(context, file, "text/plain")
+
+                            file.absolutePath
+                        }
                     }
                             .foldToCallback(callback)
                 }
@@ -52,26 +60,5 @@ class KeysExporter(private val session: Session) {
                 callback.onFailure(failure)
             }
         })
-    }
-
-    @WorkerThread
-    private fun copyToFile(context: Context, data: ByteArray): Try<String> {
-        return Try {
-            val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val file = File(parentDir, "riotx-keys-" + System.currentTimeMillis() + ".txt")
-
-            val sink = Okio.sink(file)
-
-            val bufferedSink = Okio.buffer(sink)
-
-            bufferedSink.write(data)
-
-            bufferedSink.close()
-            sink.close()
-
-            addEntryToDownloadManager(context, file, "text/plain")
-
-            file.absolutePath
-        }
     }
 }
