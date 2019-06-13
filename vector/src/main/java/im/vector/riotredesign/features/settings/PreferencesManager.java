@@ -410,7 +410,7 @@ public class PreferencesManager {
             uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
 
-        Timber.d("## getNotificationRingTone() returns " + uri);
+        Timber.v("## getNotificationRingTone() returns " + uri);
         return uri;
     }
 

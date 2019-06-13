@@ -30,6 +30,7 @@
     <string name="title_activity_choose_sticker">Send a sticker</string>
     <string name="title_activity_keys_backup_setup">Key Backup</string>
     <string name="title_activity_keys_backup_restore">Use Key Backup</string>
+    <string name="title_activity_verify_device">Verify device</string>
 
     <!-- Signing out screen -->
 
@@ -993,6 +994,7 @@
     <string name="encryption_information_blocked">Blacklisted</string>
 
     <string name="encryption_information_unknown_device">unknown device</string>
+    <string name="encryption_information_unknown_ip">unknown ip</string>
     <string name="encryption_information_none">none</string>
 
     <string name="encryption_information_verify">Verify</string>
@@ -1100,10 +1102,20 @@
 
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
+    <string name="you_added_a_new_device_with_info">A new device is requesting encryption keys.\nDevice name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another device, ignore this request.</string>
     <string name="your_unverified_device_requesting">Your unverified device  \'%s\' is requesting encryption keys.</string>
+    <string name="your_unverified_device_requesting_with_info">An unverified device is requesting encryption keys.\nDevice name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another device, ignore this request.</string>
+
     <string name="start_verification">Start verification</string>
+    <!-- Keep the label as small as possible-->
+    <string name="start_verification_short_label">Verify</string>
     <string name="share_without_verifying">Share without verifying</string>
+    <!-- Keep the label as small as possible-->
+    <string name="share_without_verifying_short_label">Share</string>
+    <string name="key_share_request">Key Share Request</string>
     <string name="ignore_request">Ignore request</string>
+    <!-- Keep the label as small as possible-->
+    <string name="ignore_request_short_label">Ignore</string>
 
     <!-- conference call -->
     <string name="conference_call_warning_title">Warning!</string>
@@ -1367,6 +1379,7 @@ Why choose Riot.im?
     <string name="keys_backup_settings_untrusted_backup">To use Key Backup on this device, restore with your passphrase or recovery key now.</string>
     <string name="keys_backup_settings_deleting_backup">Deleting backup…</string>
     <string name="keys_backup_settings_delete_backup_error">Failed to delete backup (%s)</string>
+    <string name="keys_backup_settings_checking_backup_state">Checking backup state</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Delete Backup</string>
     <string name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>
@@ -1399,7 +1412,51 @@ Why choose Riot.im?
 
     <string name="autodiscover_invalid_response">Invalid homeserver discovery response</string>
     <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%1$s\":\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
+
+    <string name="sas_verify_title">Verify by comparing a short text string.</string>
+    <string name="sas_security_advise">For maximum security, we recommend you do this in person or use another trusted means of communication.</string>
+    <string name="sas_verify_start_button_title">Begin Verifying</string>
+    <string name="sas_incoming_request_title">Incoming Verification Request</string>
+    <string name="sas_incoming_request_description">Verify this device to mark it as trusted. Trusting devices of partners gives you extra peace of mind when using end-to-end encrypted messages."</string>
+    <string name="sas_incoming_request_description_2">Verifying this device will mark it as trusted, and also mark your device as trusted to the partner."</string>
+
+    <string name="sas_emoji_description">Verify this device by confirming the following emoji appear on the screen of the partner"</string>
+    <string name="sas_decimal_description">Verify this device by confirming the following numbers appear on the screen of the partner"</string>
+
+    <string name="sas_incoming_verification_request_dialog">You received an incoming verification request.</string>
+    <string name="sas_view_request_action">View request</string>
+    <string name="sas_waiting_for_partner">Waiting for partner to confirm…</string>
+
+    <string name="sas_verified">Verified!</string>
+    <string name="sas_verified_successful">You\'ve successfully verified this device.</string>
+    <string name="sas_verified_successful_description">Secure messages with this user are end-to-end encrypted and not able to be read by third parties.</string>
+    <string name="sas_got_it">Got it</string>
+
+    <string name="sas_verifying_keys">Nothing appearing? Not all clients supports interactive verification yet. Use legacy verification.</string>
+    <string name="sas_legacy_verification_button_title">Use legacy verification.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Key Verification</string>
+    <string name="sas_cancelled_dialog_title">Request Cancelled</string>
+    <string name="sas_cancelled_by_other">The other party cancelled the verification.\n%s</string>
+    <string name="sas_cancelled_by_me">The verification is canceled.\nReason: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Interactive Device Verification</string>
+    <string name="sas_incoming_request_notif_title">Verification Request</string>
+    <string name="sas_incoming_request_notif_content">%s wants to verify your device</string>
+
+    <!-- SAS Errors -->
+    <string name="sas_error_m_user">The user cancelled the verification</string>
+    <string name="sas_error_m_timeout">The verification process timed out</string>
+    <string name="sas_error_m_unknown_transaction">The device does not know about that transaction</string>
+    <string name="sas_error_m_unknown_method">The device can’t agree on a key agreement, hash, MAC, or SAS method</string>
+    <string name="sas_error_m_mismatched_commitment">The hash commitment did not match</string>
+    <string name="sas_error_m_mismatched_sas">The SAS did not match</string>
+    <string name="sas_error_m_unexpected_message">The device received an unexpected message</string>
+    <string name="sas_error_m_invalid_message">An invalid message was received</string>
+    <string name="sas_error_m_key_mismatch">Key mismatch</string>
+    <string name="sas_error_m_user_error">User mismatch</string>
+    <string name="sas_error_unknown">Unknown Error</string>
 
 </resources>

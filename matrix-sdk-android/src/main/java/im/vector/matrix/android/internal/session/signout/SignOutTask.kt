@@ -27,7 +27,7 @@ internal interface SignOutTask : Task<Unit, Unit>
 internal class DefaultSignOutTask(private val signOutAPI: SignOutAPI,
                                   private val sessionParamsStore: SessionParamsStore) : SignOutTask {
 
-    override fun execute(params: Unit): Try<Unit> {
+    override suspend fun execute(params: Unit): Try<Unit> {
         return executeRequest<Unit> {
             apiCall = signOutAPI.signOut()
         }.flatMap {

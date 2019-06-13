@@ -74,7 +74,6 @@ class VectorConfiguration(private val context: Context) {
      */
     fun initConfiguration() {
         VectorLocale.init(context)
-
         val locale = VectorLocale.applicationLocale
         val fontScale = FontScale.getFontScale(context)
         val theme = ThemeUtils.getApplicationTheme(context)

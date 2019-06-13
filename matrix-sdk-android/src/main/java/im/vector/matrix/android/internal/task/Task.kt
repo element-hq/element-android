@@ -20,7 +20,7 @@ import arrow.core.Try
 
 internal interface Task<PARAMS, RESULT> {
 
-    fun execute(params: PARAMS): Try<RESULT>
+    suspend fun execute(params: PARAMS): Try<RESULT>
 
 }
 

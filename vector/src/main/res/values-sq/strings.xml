@@ -1331,8 +1331,8 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="new_recovery_method_popup_was_me">Unë qeshë</string>
     <string name="autodiscover_invalid_response">Përgjigje e pavlefshme zbulimi shërbyesi Home</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Mundësi Vetëplotësimi Shërbyesi</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot-i pikasi një formësim shërbyesi të përshtatur për përkatësinë tuaj userId \"%s\":
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot-i pikasi një formësim shërbyesi të përshtatur për përkatësinë tuaj userId \"%1$s\":
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Përdor Formësim</string>
 
     <string name="notification_sync_init">Po gatitet shërbimi</string>

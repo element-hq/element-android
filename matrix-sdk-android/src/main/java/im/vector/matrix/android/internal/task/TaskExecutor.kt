@@ -73,6 +73,7 @@ internal class TaskExecutor(private val coroutineDispatchers: MatrixCoroutineDis
         TaskThread.COMPUTATION -> coroutineDispatchers.computation
         TaskThread.IO          -> coroutineDispatchers.io
         TaskThread.CALLER      -> EmptyCoroutineContext
+        TaskThread.CRYPTO      -> coroutineDispatchers.crypto
     }
 
 

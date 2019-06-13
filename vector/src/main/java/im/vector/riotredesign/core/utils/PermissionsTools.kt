@@ -78,10 +78,10 @@ fun logPermissionStatuses(context: Context) {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_CONTACTS)
 
-        Timber.d("## logPermissionStatuses() : log the permissions status used by the app")
+        Timber.v("## logPermissionStatuses() : log the permissions status used by the app")
 
         for (permission in permissions) {
-            Timber.d(("Status of [$permission] : " +
+            Timber.v(("Status of [$permission] : " +
                       if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, permission))
                           "PERMISSION_GRANTED"
                       else
@@ -244,7 +244,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                             }
                             explanationMessage += activity.getString(R.string.permissions_rationale_msg_contacts)
                         }
-                        else                                       -> Timber.d("## checkPermissions(): already denied permission not supported")
+                        else                                       -> Timber.v("## checkPermissions(): already denied permission not supported")
                     }
                 }
             }
@@ -269,9 +269,10 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                 val permissionsArrayToBeGranted = permissionsListToBeGranted.toTypedArray()
 
                 // for android < M, we use a custom dialog to request the contacts book access.
-                /*
                 if (permissionsListToBeGranted.contains(Manifest.permission.READ_CONTACTS)
                         && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    TODO()
+                    /*
                     AlertDialog.Builder(activity)
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .setTitle(R.string.permissions_rationale_popup_title)
@@ -293,13 +294,13 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                                         }
                             }
                             .show()
+                    */
                 } else {
                     fragment?.requestPermissions(permissionsArrayToBeGranted, requestCode)
                             ?: run {
                                 ActivityCompat.requestPermissions(activity, permissionsArrayToBeGranted, requestCode)
                             }
                 }
-                */
             } else {
                 // permissions were granted, start now.
                 isPermissionGranted = true

@@ -164,9 +164,9 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
 
     if (dummyUri != null) {
         captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, dummyUri)
-        Timber.d("trying to take a photo on " + dummyUri.toString())
+        Timber.v("trying to take a photo on " + dummyUri.toString())
     } else {
-        Timber.d("trying to take a photo with no predefined uri")
+        Timber.v("trying to take a photo with no predefined uri")
     }
 
     // Store the dummy URI which will be set to a placeholder location. When all is lost on Samsung devices,

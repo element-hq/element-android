@@ -25,6 +25,8 @@ import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.configuration.VectorConfiguration
+import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
+import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.home.room.list.AlphabeticalRoomComparator
@@ -86,6 +88,14 @@ class AppModule(private val context: Context) {
             Matrix.getInstance().currentSession!!
         }
 
+        single {
+            KeyRequestHandler(context, get())
+        }
+
+        single {
+            IncomingVerificationRequestHandler(context, get())
+        }
+
         factory {
             DefaultNavigator() as Navigator
         }
@@ -93,6 +103,5 @@ class AppModule(private val context: Context) {
         single {
             EmojiCompatFontProvider()
         }
-
     }
 }

@@ -94,7 +94,7 @@ fun TimelineEvent.senderName(): String? {
 }
 
 fun TimelineEvent.canBeMerged(): Boolean {
-    return root.type == EventType.STATE_ROOM_MEMBER
+    return root.getClearType() == EventType.STATE_ROOM_MEMBER
 }
 
 fun List<TimelineEvent>.nextSameTypeEvents(index: Int, minSize: Int): List<TimelineEvent> {
@@ -113,7 +113,7 @@ fun List<TimelineEvent>.nextSameTypeEvents(index: Int, minSize: Int): List<Timel
     } else {
         nextSubList.subList(0, indexOfNextDay)
     }
-    val indexOfFirstDifferentEventType = nextSameDayEvents.indexOfFirst { it.root.type != timelineEvent.root.type }
+    val indexOfFirstDifferentEventType = nextSameDayEvents.indexOfFirst { it.root.getClearType() != timelineEvent.root.getClearType() }
     val sameTypeEvents = if (indexOfFirstDifferentEventType == -1) {
         nextSameDayEvents
     } else {

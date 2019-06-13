@@ -99,7 +99,7 @@ class VectorGroupPreference : SwitchPreference {
     private fun refreshAvatar() {
         if (null != mAvatarView && null != mSession && null != mGroup) {
             // TODO
-            // VectorUtils.loadGroupAvatar(context, mSession, mAvatarView, mGroup)
+            // VectorUtils.loadGroupAvatar(context, session, mAvatarView, mGroup)
         }
     }
 }

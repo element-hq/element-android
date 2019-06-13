@@ -20,5 +20,6 @@ internal enum class TaskThread {
     MAIN,
     COMPUTATION,
     IO,
-    CALLER
+    CALLER,
+    CRYPTO
 }

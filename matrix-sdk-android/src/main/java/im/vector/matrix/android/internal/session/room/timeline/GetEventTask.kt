@@ -30,7 +30,7 @@ internal class GetEventTask(private val roomAPI: RoomAPI
             val eventId: String
     )
 
-    override fun execute(params: Params): Try<Event> {
+    override suspend fun execute(params: Params): Try<Event> {
         return executeRequest {
             apiCall = roomAPI.getEvent(params.roomId, params.eventId)
         }

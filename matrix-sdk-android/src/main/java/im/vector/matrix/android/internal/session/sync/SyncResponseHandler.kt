@@ -17,27 +17,46 @@
 package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
+import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
 
 internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
                                    private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-                                   private val groupSyncHandler: GroupSyncHandler) {
+                                   private val groupSyncHandler: GroupSyncHandler,
+                                   private val cryptoSyncHandler: CryptoSyncHandler,
+                                   private val cryptoManager: CryptoManager) {
 
     fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
         return Try {
             Timber.v("Start handling sync")
             val measure = measureTimeMillis {
+                // Handle the to device events before the room ones
+                // to ensure to decrypt them properly
+                Timber.v("Handle toDevice")
+                if (syncResponse.toDevice != null) {
+                    cryptoSyncHandler.handleToDevice(syncResponse.toDevice)
+                }
+                Timber.v("Handle rooms")
                 if (syncResponse.rooms != null) {
                     roomSyncHandler.handle(syncResponse.rooms)
                 }
+                Timber.v("Handle groups")
                 if (syncResponse.groups != null) {
                     groupSyncHandler.handle(syncResponse.groups)
                 }
+                Timber.v("Handle accoundData")
                 if (syncResponse.accountData != null) {
                     userAccountDataSyncHandler.handle(syncResponse.accountData)
                 }
+                Timber.v("On sync completed")
+                cryptoSyncHandler.onSyncCompleted(syncResponse)
+            }
+            val isInitialSync = fromToken == null
+            if (!cryptoManager.isStarted()) {
+                Timber.v("Should start cryptoManager")
+                cryptoManager.start(isInitialSync)
             }
             Timber.v("Finish handling sync in $measure ms")
             syncResponse

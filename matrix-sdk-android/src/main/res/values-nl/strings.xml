@@ -90,4 +90,8 @@
     </plurals>
 
 
+    <string name="notice_event_redacted">Bericht verwijderd</string>
+    <string name="notice_event_redacted_by">Bericht verwijderd door %1$s</string>
+    <string name="notice_event_redacted_with_reason">Bericht verwijderd [reden: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Bericht verwijderd door %1$s [reden: %2$s]</string>
 </resources>

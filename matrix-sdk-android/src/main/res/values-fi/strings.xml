@@ -3,7 +3,7 @@
     <string name="summary_user_sent_image">%1$s lähetti kuvan.</string>
 
     <string name="notice_room_invite_no_invitee">%s:n kutsu</string>
-    <string name="notice_room_invite">%1$s kutsui %2$s</string>
+    <string name="notice_room_invite">%1$s kutsui käyttäjän %2$s</string>
     <string name="notice_room_invite_you">%1$s kutsui sinut</string>
     <string name="notice_room_join">%1$s liittyi</string>
     <string name="notice_room_leave">%1$s poistui</string>
@@ -14,25 +14,25 @@
     <string name="notice_room_withdraw">%1$s veti takaisin kutsun käyttäjälle %2$s</string>
     <string name="notice_avatar_url_changed">%1$s vaihtoi profiilikuvaa</string>
     <string name="notice_display_name_set">%1$s asetti näyttönimekseen %2$s</string>
-    <string name="notice_display_name_changed_from">%1$s muutti näyttönimensä %2$s -&gt; %3$s</string>
+    <string name="notice_display_name_changed_from">%1$s muutti näyttönimensä nimestä %2$s nimeen %3$s</string>
     <string name="notice_display_name_removed">%1$s poisti näyttönimensä (%2$s)</string>
     <string name="notice_room_topic_changed">%1$s muutti aiheeksi %2$s</string>
     <string name="notice_room_name_changed">%1$s muutti huoneen nimeksi %2$s</string>
     <string name="notice_placed_video_call">%s soitti videopuhelun.</string>
-    <string name="notice_placed_voice_call">%s soitti puhelun.</string>
+    <string name="notice_placed_voice_call">%s soitti äänipuhelun.</string>
     <string name="notice_answered_call">%s vastasi puheluun.</string>
     <string name="notice_ended_call">%s lopetti puhelun.</string>
     <string name="notice_made_future_room_visibility">%1$s muutti tulevan huonehistorian näkyväksi käyttäjälle %2$s</string>
-    <string name="notice_room_visibility_invited">kaikki jäsenet, heidän kutsuistaan asti.</string>
-    <string name="notice_room_visibility_joined">kaikki jäsenet, heidän liittymisestään asti.</string>
+    <string name="notice_room_visibility_invited">kaikki huoneen jäsenet, heidän kutsumisestaan asti.</string>
+    <string name="notice_room_visibility_joined">kaikki huoneen jäsenet, heidän liittymisestään asti.</string>
     <string name="notice_room_visibility_shared">kaikki huoneen jäsenet.</string>
     <string name="notice_room_visibility_world_readable">kaikki.</string>
     <string name="notice_room_visibility_unknown">tuntematon (%s).</string>
     <string name="notice_end_to_end">%1$s otti käyttöön osapuolten välisen salauksen (%2$s)</string>
 
-    <string name="notice_requested_voip_conference">%1$s lähetti VoIP konferenssi-pyynnön</string>
-    <string name="notice_voip_started">VoIP konferenssi alkoi</string>
-    <string name="notice_voip_finished">VoIP konferenssi loppui</string>
+    <string name="notice_requested_voip_conference">%1$s lähetti VoIP-konferenssipyynnön</string>
+    <string name="notice_voip_started">VoIP-konferenssi alkoi</string>
+    <string name="notice_voip_finished">VoIP-konferenssi päättyi</string>
 
     <string name="notice_avatar_changed_too">(profiilikuva muuttui myös)</string>
     <string name="notice_room_name_removed">%1$s poisti huoneen nimen</string>
@@ -48,7 +48,7 @@
     <string name="message_failed_to_upload">Kuvan lataaminen epäonnistui</string>
 
     <string name="network_error">Verkkovirhe</string>
-    <string name="matrix_error">Matrix virhe</string>
+    <string name="matrix_error">Matrix-virhe</string>
 
     <string name="room_error_join_failed_empty_room">Tällä hetkellä ei ole mahdollista liittyä uudelleen tyhjään huoneeseen.</string>
 
@@ -68,7 +68,7 @@
     <string name="room_displayname_empty_room">Tyhjä huone</string>
 
 
-<string name="summary_user_sent_sticker">%1$s lähetti tarran.</string>
+    <string name="summary_user_sent_sticker">%1$s lähetti tarran.</string>
 
     <string name="message_reply_to_prefix">Vastauksena käyttäjälle</string>
 
@@ -78,8 +78,12 @@
     <string name="reply_to_a_file">lähetti tiedoston.</string>
 
     <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s ja yksi muu</item>
-	<item quantity="other">%1$s ja %2$d muuta</item>
-</plurals>
+        <item quantity="one">%1$s ja yksi muu</item>
+        <item quantity="other">%1$s ja %2$d muuta</item>
+    </plurals>
 
-    </resources>
+    <string name="notice_event_redacted">Viesti poistettu</string>
+    <string name="notice_event_redacted_by">%1$s poisti viestin</string>
+    <string name="notice_event_redacted_with_reason">Viesti poistettu [syy: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">%1$s poisti viestin [syy: %2$s]</string>
+</resources>

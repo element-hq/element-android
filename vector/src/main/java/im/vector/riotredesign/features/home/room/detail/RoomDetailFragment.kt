@@ -36,7 +36,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -192,15 +191,13 @@ class RoomDetailFragment :
         textComposerViewModel.subscribe { renderTextComposerState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
 
-        roomDetailViewModel.nonBlockingPopAlert.observe(this, Observer { liveEvent ->
-            liveEvent.getContentIfNotHandled()?.let {
-                val message = requireContext().getString(it.first, *it.second.toTypedArray())
-                showSnackWithMessage(message, Snackbar.LENGTH_LONG)
-            }
-        })
-        actionViewModel.actionCommandEvent.observe(this, Observer {
+        roomDetailViewModel.nonBlockingPopAlert.observeEvent(this) { pair ->
+            val message = requireContext().getString(pair.first, *pair.second.toTypedArray())
+            showSnackWithMessage(message, Snackbar.LENGTH_LONG)
+        }
+        actionViewModel.actionCommandEvent.observeEvent(this) {
             handleActions(it)
-        })
+        }
 
         roomDetailViewModel.selectSubscribe(
                 RoomDetailViewState::sendMode,
@@ -614,101 +611,98 @@ class RoomDetailFragment :
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
     }
 
-    private fun handleActions(it: LiveEvent<ActionsHandler.ActionData>?) {
-        it?.getContentIfNotHandled()?.let { actionData ->
+    private fun handleActions(actionData: ActionsHandler.ActionData) {
+        when (actionData.actionId) {
+            MessageMenuViewModel.ACTION_ADD_REACTION   -> {
+                val eventId = actionData.data?.toString() ?: return
+                startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), eventId), REACTION_SELECT_REQUEST_CODE)
+            }
+            MessageMenuViewModel.ACTION_VIEW_REACTIONS -> {
+                val messageInformationData = actionData.data as? MessageInformationData
+                        ?: return
+                ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, messageInformationData)
+                        .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
+            }
+            MessageMenuViewModel.ACTION_COPY           -> {
+                //I need info about the current selected message :/
+                copyToClipboard(requireContext(), actionData.data?.toString() ?: "", false)
+                val msg = requireContext().getString(R.string.copied_to_clipboard)
+                showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
+            }
+            MessageMenuViewModel.ACTION_DELETE         -> {
+                val eventId = actionData.data?.toString() ?: return
+                roomDetailViewModel.process(RoomDetailActions.RedactAction(eventId, context?.getString(R.string.event_redacted_by_user_reason)))
+            }
+            MessageMenuViewModel.ACTION_SHARE          -> {
+                //TODO current data communication is too limited
+                //Need to now the media type
+                actionData.data?.toString()?.let {
+                    //TODO bad, just POC
+                    BigImageViewer.imageLoader().loadImage(
+                            actionData.hashCode(),
+                            Uri.parse(it),
+                            object : ImageLoader.Callback {
+                                override fun onFinish() {}
 
-            when (actionData.actionId) {
-                MessageMenuViewModel.ACTION_ADD_REACTION   -> {
-                    val eventId = actionData.data?.toString() ?: return
-                    startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), eventId), REACTION_SELECT_REQUEST_CODE)
-                }
-                MessageMenuViewModel.ACTION_VIEW_REACTIONS -> {
-                    val messageInformationData = actionData.data as? MessageInformationData
-                            ?: return
-                    ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, messageInformationData)
-                            .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
-                }
-                MessageMenuViewModel.ACTION_COPY           -> {
-                    //I need info about the current selected message :/
-                    copyToClipboard(requireContext(), actionData.data?.toString() ?: "", false)
-                    val msg = requireContext().getString(R.string.copied_to_clipboard)
-                    showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
-                }
-                MessageMenuViewModel.ACTION_DELETE         -> {
-                    val eventId = actionData.data?.toString() ?: return
-                    roomDetailViewModel.process(RoomDetailActions.RedactAction(eventId, context?.getString(R.string.event_redacted_by_user_reason)))
-                }
-                MessageMenuViewModel.ACTION_SHARE          -> {
-                    //TODO current data communication is too limited
-                    //Need to now the media type
-                    actionData.data?.toString()?.let {
-                        //TODO bad, just POC
-                        BigImageViewer.imageLoader().loadImage(
-                                actionData.hashCode(),
-                                Uri.parse(it),
-                                object : ImageLoader.Callback {
-                                    override fun onFinish() {}
-
-                                    override fun onSuccess(image: File?) {
-                                        if (image != null)
-                                            shareMedia(requireContext(), image, "image/*")
-                                    }
-
-                                    override fun onFail(error: Exception?) {}
-
-                                    override fun onCacheHit(imageType: Int, image: File?) {}
-
-                                    override fun onCacheMiss(imageType: Int, image: File?) {}
-
-                                    override fun onProgress(progress: Int) {}
-
-                                    override fun onStart() {}
-
+                                override fun onSuccess(image: File?) {
+                                    if (image != null)
+                                        shareMedia(requireContext(), image, "image/*")
                                 }
 
-                        )
-                    }
-                }
-                MessageMenuViewModel.VIEW_SOURCE,
-                MessageMenuViewModel.VIEW_DECRYPTED_SOURCE -> {
-                    val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
-                    view.findViewById<TextView>(R.id.event_content_text_view)?.let {
-                        it.text = actionData.data?.toString() ?: ""
-                    }
+                                override fun onFail(error: Exception?) {}
 
-                    AlertDialog.Builder(requireActivity())
-                            .setView(view)
-                            .setPositiveButton(R.string.ok) { dialog, id -> dialog.cancel() }
-                            .show()
-                }
-                MessageMenuViewModel.ACTION_QUICK_REACT    -> {
-                    //eventId,ClickedOn,Opposite
-                    (actionData.data as? Triple<String, String, String>)?.let { (eventId, clickedOn, opposite) ->
-                        roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, opposite))
-                    }
-                }
-                MessageMenuViewModel.ACTION_EDIT           -> {
-                    val eventId = actionData.data.toString()
-                    roomDetailViewModel.process(RoomDetailActions.EnterEditMode(eventId))
-                }
-                MessageMenuViewModel.ACTION_QUOTE          -> {
-                    val eventId = actionData.data.toString()
-                    roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(eventId))
-                }
-                MessageMenuViewModel.ACTION_REPLY          -> {
-                    val eventId = actionData.data.toString()
-                    roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
-                }
-                MessageMenuViewModel.ACTION_COPY_PERMALINK -> {
-                    val eventId = actionData.data.toString()
-                    val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, eventId)
-                    copyToClipboard(requireContext(), permalink, false)
-                    showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+                                override fun onCacheHit(imageType: Int, image: File?) {}
 
+                                override fun onCacheMiss(imageType: Int, image: File?) {}
+
+                                override fun onProgress(progress: Int) {}
+
+                                override fun onStart() {}
+
+                            }
+
+                    )
                 }
-                else                                       -> {
-                    Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()
+            }
+            MessageMenuViewModel.VIEW_SOURCE,
+            MessageMenuViewModel.VIEW_DECRYPTED_SOURCE -> {
+                val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
+                view.findViewById<TextView>(R.id.event_content_text_view)?.let {
+                    it.text = actionData.data?.toString() ?: ""
                 }
+
+                AlertDialog.Builder(requireActivity())
+                        .setView(view)
+                        .setPositiveButton(R.string.ok) { dialog, id -> dialog.cancel() }
+                        .show()
+            }
+            MessageMenuViewModel.ACTION_QUICK_REACT    -> {
+                //eventId,ClickedOn,Opposite
+                (actionData.data as? Triple<String, String, String>)?.let { (eventId, clickedOn, opposite) ->
+                    roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, opposite))
+                }
+            }
+            MessageMenuViewModel.ACTION_EDIT           -> {
+                val eventId = actionData.data.toString()
+                roomDetailViewModel.process(RoomDetailActions.EnterEditMode(eventId))
+            }
+            MessageMenuViewModel.ACTION_QUOTE          -> {
+                val eventId = actionData.data.toString()
+                roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(eventId))
+            }
+            MessageMenuViewModel.ACTION_REPLY          -> {
+                val eventId = actionData.data.toString()
+                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+            }
+            MessageMenuViewModel.ACTION_COPY_PERMALINK -> {
+                val eventId = actionData.data.toString()
+                val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, eventId)
+                copyToClipboard(requireContext(), permalink, false)
+                showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+
+            }
+            else                                       -> {
+                Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()
             }
         }
     }

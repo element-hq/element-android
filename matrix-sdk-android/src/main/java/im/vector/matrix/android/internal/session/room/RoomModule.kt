@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuic
 import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
 import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
+import im.vector.matrix.android.internal.session.room.send.LocalEchoUpdater
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.*
@@ -77,11 +78,15 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+            LocalEchoUpdater(get())
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultCreateRoomTask(get(), get()) as CreateRoomTask
+            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultCreateRoomTask(get(), get("SessionRealmConfiguration")) as CreateRoomTask
         }
 
         scope(DefaultSession.SCOPE) {

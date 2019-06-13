@@ -20,7 +20,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 
 /**
- * Set a text in the TextView, or set visibility to GONE it if the text is null
+ * Set a text in the TextView, or set visibility to GONE if the text is null
  */
 fun TextView.setTextOrHide(newText: String?, hideWhenBlank: Boolean = true) {
     if (newText == null

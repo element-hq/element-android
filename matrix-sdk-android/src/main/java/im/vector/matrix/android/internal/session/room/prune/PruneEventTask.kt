@@ -44,7 +44,7 @@ internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
 internal class DefaultPruneEventTask(
         private val monarchy: Monarchy) : PruneEventTask {
 
-    override fun execute(params: PruneEventTask.Params): Try<Unit> {
+    override suspend fun execute(params: PruneEventTask.Params): Try<Unit> {
         return monarchy.tryTransactionSync { realm ->
             params.redactionEvents.forEach { event ->
                 pruneEvent(realm, event, params.userId)

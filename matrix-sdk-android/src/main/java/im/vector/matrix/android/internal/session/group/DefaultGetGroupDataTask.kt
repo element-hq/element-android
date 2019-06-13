@@ -43,7 +43,7 @@ internal class DefaultGetGroupDataTask(
         private val monarchy: Monarchy
 ) : GetGroupDataTask {
 
-    override fun execute(params: GetGroupDataTask.Params): Try<Unit> {
+    override suspend fun execute(params: GetGroupDataTask.Params): Try<Unit> {
         val groupId = params.groupId
         return Try.monad().binding {
 

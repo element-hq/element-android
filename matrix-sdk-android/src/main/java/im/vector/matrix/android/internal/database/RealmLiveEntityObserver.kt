@@ -70,6 +70,9 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
         processChanges(inserted, updated, deleted)
     }
 
+    /**
+     * Do quick treatment or delegate on a task
+     */
     protected abstract fun processChanges(inserted: List<T>, updated: List<T>, deleted: List<T>)
 
 }

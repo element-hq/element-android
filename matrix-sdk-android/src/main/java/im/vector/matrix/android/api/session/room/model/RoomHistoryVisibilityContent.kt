@@ -23,5 +23,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RoomHistoryVisibilityContent(
-        @Json(name = "history_visibility") val historyVisibility: RoomHistoryVisibility
+        @Json(name = "history_visibility") val historyVisibility: RoomHistoryVisibility? = null
 )

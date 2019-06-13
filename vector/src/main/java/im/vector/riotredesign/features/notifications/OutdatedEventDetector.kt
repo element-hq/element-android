@@ -35,7 +35,7 @@ class OutdatedEventDetector(val context: Context) {
                 if (session.isAlive) {
                     session.dataHandler.getRoom(roomID)?.let { room ->
                         if (room.isEventRead(eventID)) {
-                            Timber.d("Notifiable Event $eventID is read, and should be removed")
+                            Timber.v("Notifiable Event $eventID is read, and should be removed")
                             return true
                         }
                     }

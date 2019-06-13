@@ -19,12 +19,14 @@ package im.vector.riotredesign.features.workers.signout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 
-class SignOutViewModel : ViewModel() { // TODO, KeysBackupStateManager.KeysBackupStateListener {
+class SignOutViewModel : ViewModel(), KeysBackupStateListener {
     // Keys exported manually
     var keysExportedToFile = MutableLiveData<Boolean>()
 
-    // var keysBackupState = MutableLiveData<KeysBackupStateManager.KeysBackupState>()
+    var keysBackupState = MutableLiveData<KeysBackupState>()
 
     private var mxSession: Session? = null
 
@@ -32,79 +34,64 @@ class SignOutViewModel : ViewModel() { // TODO, KeysBackupStateManager.KeysBacku
         if (mxSession == null) {
             mxSession = session
 
-            // TODO
-            //mxSession?.crypto
-            //        ?.keysBackup
-            //        ?.addListener(this)
+            mxSession?.getKeysBackupService()
+                    ?.addListener(this)
         }
 
-        //keysBackupState.value = mxSession?.crypto
-        //        ?.keysBackup
-        //        ?.state
+        keysBackupState.value = mxSession?.getKeysBackupService()
+                ?.state
     }
 
-//    /**
-//     * Safe way to get the current KeysBackup version
-//     */
-//    fun getCurrentBackupVersion(): String {
-//        return mxSession
-//                ?.crypto
-//                ?.keysBackup
-//                ?.currentBackupVersion
-//                ?: ""
-//    }
-//
-//    /**
-//     * Safe way to get the number of keys to backup
-//     */
-//    fun getNumberOfKeysToBackup(): Int {
-//        return mxSession
-//                ?.crypto
-//                ?.cryptoStore
-//                ?.inboundGroupSessionsCount(false)
-//                ?: 0
-//    }
-//
-//    /**
-//     * Safe way to tell if there are more keys on the server
-//     */
-//    fun canRestoreKeys(): Boolean {
-//        return mxSession
-//                ?.crypto
-//                ?.keysBackup
-//                ?.canRestoreKeys() == true
-//    }
-//
-//    override fun onCleared() {
-//        super.onCleared()
-//
-//        mxSession?.crypto
-//                ?.keysBackup
-//                ?.removeListener(this)
-//    }
-//
-//    override fun onStateChange(newState: KeysBackupStateManager.KeysBackupState) {
-//        keysBackupState.value = newState
-//    }
+    /**
+     * Safe way to get the current KeysBackup version
+     */
+    fun getCurrentBackupVersion(): String {
+        return mxSession
+                ?.getKeysBackupService()
+                ?.currentBackupVersion
+                ?: ""
+    }
+
+    /**
+     * Safe way to get the number of keys to backup
+     */
+    fun getNumberOfKeysToBackup(): Int {
+        return mxSession
+                ?.inboundGroupSessionsCount(false)
+                ?: 0
+    }
+
+    /**
+     * Safe way to tell if there are more keys on the server
+     */
+    fun canRestoreKeys(): Boolean {
+        return mxSession
+                ?.getKeysBackupService()
+                ?.canRestoreKeys() == true
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        mxSession?.getKeysBackupService()
+                ?.removeListener(this)
+    }
+
+    override fun onStateChange(newState: KeysBackupState) {
+        keysBackupState.value = newState
+    }
 
     companion object {
         /**
          * The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
          */
         fun doYouNeedToBeDisplayed(session: Session?): Boolean {
-            return false
-
-            /* TODO
             return session
-                    ?.crypto
-                    ?.cryptoStore
                     ?.inboundGroupSessionsCount(false)
                     ?: 0 > 0
                     && session
-                    ?.crypto
-                    ?.keysBackup
-                    ?.state != KeysBackupStateManager.KeysBackupState.ReadyToBackUp
-                    */
+                    ?.getKeysBackupService()
+                    ?.state != KeysBackupState.ReadyToBackUp
         }
     }
 }

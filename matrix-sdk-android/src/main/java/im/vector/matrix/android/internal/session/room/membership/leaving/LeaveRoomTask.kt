@@ -29,7 +29,7 @@ internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
 
 internal class DefaultLeaveRoomTask(private val roomAPI: RoomAPI) : LeaveRoomTask {
 
-    override fun execute(params: LeaveRoomTask.Params): Try<Unit> {
+    override suspend fun execute(params: LeaveRoomTask.Params): Try<Unit> {
         return executeRequest {
             apiCall = roomAPI.leave(params.roomId, HashMap())
         }

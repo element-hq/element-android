@@ -16,15 +16,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/encryption_export_notice"
+        android:textColor="?riotx_text_primary"
         android:textSize="16sp" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/VectorTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_e2e_keys_passphrase_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,18 +34,19 @@
             android:inputType="textPassword"
             android:textColor="?android:textColorPrimary" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialog_e2e_keys_confirm_passphrase_til"
+        style="@style/VectorTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textColorHint="?attr/vctr_default_text_hint_color"
         app:errorEnabled="true">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_e2e_keys_confirm_passphrase_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,12 +54,13 @@
             android:inputType="textPassword"
             android:textColor="?android:textColorPrimary" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/dialog_e2e_keys_export_button"
         style="@style/VectorButtonStyle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="end"
         android:enabled="false"
         android:text="@string/encryption_export_export" />
 </LinearLayout>

@@ -24,7 +24,7 @@ class DefaultItemFactory {
 
     fun create(event: TimelineEvent, exception: Exception? = null): DefaultItem? {
         val text = if (exception == null) {
-            "${event.root.type} events are not yet handled"
+            "${event.root.getClearType()} events are not yet handled"
         } else {
             "an exception occurred when rendering the event ${event.root.eventId}"
         }

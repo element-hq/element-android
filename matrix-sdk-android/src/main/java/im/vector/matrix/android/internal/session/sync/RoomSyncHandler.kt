@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
+import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addStateEvents
@@ -41,7 +42,8 @@ import timber.log.Timber
 internal class RoomSyncHandler(private val monarchy: Monarchy,
                                private val readReceiptHandler: ReadReceiptHandler,
                                private val roomSummaryUpdater: RoomSummaryUpdater,
-                               private val roomTagHandler: RoomTagHandler) {
+                               private val roomTagHandler: RoomTagHandler,
+                               private val cryptoManager: CryptoManager) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -51,9 +53,9 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
 
     fun handle(roomsSyncResponse: RoomsSyncResponse) {
         monarchy.runTransactionSync { realm ->
-            handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.JOINED(roomsSyncResponse.join))
-            handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.INVITED(roomsSyncResponse.invite))
-            handleRoomSync(realm, RoomSyncHandler.HandlingStrategy.LEFT(roomsSyncResponse.leave))
+            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join))
+            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite))
+            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave))
         }
     }
 
@@ -88,9 +90,15 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
         val numberOfStateEvents = roomSync.state?.events?.size ?: 0
         val stateIndexOffset = lastStateIndex + numberOfStateEvents
 
+        // State event
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             val untimelinedStateIndex = if (isInitialSync) Int.MIN_VALUE else stateIndexOffset
             roomEntity.addStateEvents(roomSync.state.events, filterDuplicates = true, stateIndex = untimelinedStateIndex)
+
+            // Give info to crypto module
+            roomSync.state.events.forEach {
+                cryptoManager.onStateEvent(roomId, it)
+            }
         }
 
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
@@ -104,6 +112,11 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                     timelineStateOffset
             )
             roomEntity.addOrUpdate(chunkEntity)
+
+            // Give info to crypto module
+            roomSync.timeline.events.forEach {
+                cryptoManager.onLiveEvent(roomId, it)
+            }
 
             // Try to remove local echo
             val transactionIds = roomSync.timeline.events.mapNotNull { it.unsignedData?.transactionId }
@@ -183,14 +196,14 @@ internal class RoomSyncHandler(private val monarchy: Monarchy,
                                 roomId: String,
                                 ephemeral: RoomSyncEphemeral) {
         ephemeral.events
-                .filter { it.type == EventType.RECEIPT }
+                .filter { it.getClearType() == EventType.RECEIPT }
                 .map { it.content.toModel<ReadReceiptContent>() }
                 .forEach { readReceiptHandler.handle(realm, roomId, it) }
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
         accountData.events
-                .filter { it.type == EventType.TAG }
+                .filter { it.getClearType() == EventType.TAG }
                 .map { it.content.toModel<RoomTagContent>() }
                 .forEach { roomTagHandler.handle(realm, roomId, it) }
     }

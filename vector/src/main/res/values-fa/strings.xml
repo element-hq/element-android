@@ -24,14 +24,14 @@
     <string name="resend">ارسال مجدد</string>
     <string name="quote">نقل قول</string>
     <string name="share">اشتراک گذاری</string>
-    <string name="later">بعدا</string>
+    <string name="later">بعداً</string>
     <string name="view_source">مشاهده منبع</string>
     <string name="delete">حذف</string>
     <string name="rename">تغییر نام</string>
     <string name="report_content">گزارش محتوا</string>
     <string name="active_call">تماس فعال</string>
-    <string name="ongoing_conference_call_voice">صدا</string>
-    <string name="ongoing_conference_call_video">ویدیو</string>
+    <string name="ongoing_conference_call_voice">صوتی</string>
+    <string name="ongoing_conference_call_video">تصویری</string>
     <string name="device_information">اطلاعات دستگاه</string>
     <string name="send_anyway">به هر حال ارسال کنید</string>
     <string name="or">یا</string>
@@ -56,7 +56,7 @@
     <string name="bottom_action_rooms">اتاق‌ها</string>
     <string name="low_priority_header">اولویت کم</string>
 
-    <string name="direct_chats_header">گفتگو</string>
+    <string name="direct_chats_header">گفتگوها</string>
     <string name="no_conversation_placeholder">مکالمه‌ای نیست</string>
     <string name="rooms_header">اتاق‌ها</string>
     <plurals name="public_room_nb_users">
@@ -70,11 +70,11 @@
     <string name="send_bug_report">گزارش اشکال</string>
     <string name="read_receipt">خواندن</string>
 
-    <string name="join_room">عضویت در اتاق</string>
+    <string name="join_room">پیوستن به اتاق</string>
     <string name="username">نام کاربری</string>
-    <string name="create_account">ثبت‌نام</string>
+    <string name="create_account">ساخت حساب</string>
     <string name="login">ورود</string>
-    <string name="logout">خروج</string>
+    <string name="logout">خروج از حساب</string>
     <string name="search">جستجو</string>
 
     <string name="start_new_chat">شروع گپ جدید</string>
@@ -82,17 +82,17 @@
     <string name="start_video_call">شروع تماس تصویری</string>
 
     <string name="option_take_photo_video">عکس یا فیلم بگیرید</string>
-    <string name="option_take_photo">عکس گرفتن</string>
+    <string name="option_take_photo">عکس بگیرید</string>
     <string name="option_take_video">فیلم بگیرید</string>
 
     <string name="auth_login">ورود</string>
-    <string name="auth_register">ثبت نام</string>
+    <string name="auth_register">ساخت حساب</string>
     <string name="auth_submit">ارسال</string>
-    <string name="auth_skip">رد کردن</string>
-    <string name="auth_send_reset_email">ارسال ایمیل مجدد</string>
+    <string name="auth_skip">رد شدن</string>
+    <string name="auth_send_reset_email">ارسال ایمیل بازیابی</string>
     <string name="auth_user_id_placeholder">ایمیل یا نام کاربری</string>
-    <string name="auth_password_placeholder">رمز عبور</string>
-    <string name="auth_new_password_placeholder">رمز عبور جدید</string>
+    <string name="auth_password_placeholder">گذرواژه</string>
+    <string name="auth_new_password_placeholder">گذرواژه جدید</string>
     <string name="auth_user_name_placeholder">نام کاربری</string>
     <string name="auth_email_placeholder">آدرس ایمیل</string>
     <string name="auth_opt_email_placeholder">آدرس ایمیل (اختیاری)</string>
@@ -102,9 +102,9 @@
     <string name="auth_repeat_new_password_placeholder">رمز عبور جدید خود را تأیید کنید</string>
     <string name="auth_invalid_login_param">نام کاربری و/یا رمز عبور نامعتبر می‌باشد</string>
     <string name="auth_invalid_password">رمز عبور خیلی کوتاه است (حداقل ۶)</string>
-    <string name="auth_invalid_email">آدرس ایمیل به نظر می‌رسد معتبر نباشد</string>
-    <string name="auth_invalid_phone">شماره تلفن به نظر می‌رسد معتبر نباشد</string>
-    <string name="auth_password_dont_match">رمز عبورها مطابقت ندارد</string>
+    <string name="auth_invalid_email">آدرس ایمیل نامعتبر به نظر می‌رسد</string>
+    <string name="auth_invalid_phone">شماره تلفن نامعتبر به نظر می‌رسد</string>
+    <string name="auth_password_dont_match">گذرواژه‌ها مطابقت ندارد</string>
     <string name="auth_forgot_password">رمز عبور را فراموش کردید؟</string>
     <string name="auth_use_server_options">از گزینه‌های سرور سفارشی استفاده کنید (پیشرفته)</string>
     <string name="auth_email_validation_message">لطفا ایمیل خود را برای ادامه ثبت نام بررسی کنید</string>
@@ -116,7 +116,7 @@
     <string name="login_error_user_in_use">این نام کاربری قبلا استفاده شده است</string>
     <string name="groups_list">فهرست گروه‌ها</string>
 
-    <string name="compression_options">"ارسال به عنوان "</string>
+    <string name="compression_options">ارسال به عنوان</string>
     <string name="compression_opt_list_original">اصلی</string>
     <string name="compression_opt_list_large">بزرگ</string>
     <string name="compression_opt_list_medium">متوسط</string>
@@ -129,8 +129,8 @@
     <string name="today">امروز</string>
 
     <string name="room_info_room_name">نام اتاق</string>
-    <string name="notification_sync_in_progress">همگام‌سازی</string>
-    <string name="call_anyway">به هر حال تماس بگیر</string>
+    <string name="notification_sync_in_progress">همگام‌سازی…</string>
+    <string name="call_anyway">به هر حال تماس بگیرید</string>
     <string name="missing_permissions_title_to_start_conf_call">نمی‌توان تماس را شروع کرد</string>
     <string name="cannot_start_call">نمی‌توان تماس را شروع کرد، لطفاً بعداً تلاش نمایید</string>
     <string name="accept">پذیرفتن</string>
@@ -144,7 +144,7 @@
     <string name="bottom_action_groups">جامعه‌ها</string>
 
     <string name="home_filter_placeholder_home">جستجوی اتاق‌ها</string>
-    <string name="home_filter_placeholder_favorites">جستجوی پسندیده‌ها</string>
+    <string name="home_filter_placeholder_favorites">جستجوی پسندها</string>
     <string name="home_filter_placeholder_people">جستجوی افراد</string>
     <string name="home_filter_placeholder_rooms">جستجوی اتاق‌ها</string>
     <string name="home_filter_placeholder_groups">جستجوی جامعه‌ها</string>
@@ -155,7 +155,7 @@
     <string name="local_address_book_header">مخاطبین من</string>
     <string name="user_directory_header">فهرست کاربران</string>
     <string name="matrix_only_filter">فقط نمایش مخاطبین ماتریکس</string>
-    <string name="no_contact_access_placeholder">شما اجازه‌ی دسترسی به مخاطبین را به Riot نداده‌اید</string>
+    <string name="no_contact_access_placeholder">شما اجازه‌ی دسترسی به مخاطبین را به برنامه نداده‌اید</string>
     <string name="no_result_placeholder">نتیجه‌ای نیست</string>
 
     <string name="rooms_directory_header">فهرست اتاق‌ها</string>
@@ -189,8 +189,7 @@
     <string name="option_send_files">ارسال فایل‌ها</string>
     <string name="option_send_sticker">ارسال استیکر</string>
     <string name="no_sticker_application_dialog_content">شما بسته‌ی استیکر فعالی ندارید.
-
-تمایل دارید بسته‌ی استیکر جدید اضافه کنید؟</string>
+\nتمایل دارید بسته‌ی استیکر جدیدی اضافه کنید؟</string>
 
     <string name="go_on_with">ادامه با…</string>
     <string name="error_no_external_application_found">متاسفانه برنامه‌ای روی گوشی شما برای انجام این کار پیدا نشد.</string>
@@ -223,4 +222,78 @@
     <string name="reject">رد کردن</string>
 
     <string name="list_members">اعضای لیست</string>
+    <string name="call_connected">تماس برقرار شد</string>
+    <string name="call_connecting">برقراری تماس…</string>
+    <string name="call_ended">تماس پایان یافت</string>
+    <string name="call_ring">شماره‌گیری…</string>
+    <string name="incoming_call">تماس ورودی</string>
+    <string name="incoming_video_call">تماس ویدئویی ورودی</string>
+    <string name="incoming_voice_call">تماس صوتی ورودی</string>
+    <string name="call_in_progress">تماس در جریان است…</string>
+    <string name="video_call_in_progress">تماس ویدئویی در جریان است…</string>
+
+    <string name="call_error_user_not_responding">طرف مقابل پاسخ نداد.</string>
+    <string name="call_error_ice_failed">برقراری ارتباط چندرسانه‌ای ممکن نشد</string>
+    <string name="call_error_camera_init_failed">راه‌اندازی دوربین ممکن نبود</string>
+    <string name="call_error_answered_elsewhere">پاسخ تماس از کاربری نامعتبر دریافت شد</string>
+
+    <plurals name="room_title_members">
+        <item quantity="one">%d عضو</item>
+        <item quantity="other">%d عضو</item>
+    </plurals>
+    <string name="room_title_one_member">۱ عضو</string>
+
+    <plurals name="format_time_s">
+        <item quantity="one">%d ثانیه</item>
+        <item quantity="other">%d ثانیه</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">%d دقیقه</item>
+        <item quantity="other">%d دقیقه</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">%d ساعت</item>
+        <item quantity="other">%d ساعت</item>
+    </plurals>
+    <plurals name="format_time_d">
+        <item quantity="one">%d روز</item>
+        <item quantity="other">%d روز</item>
+    </plurals>
+
+    <string name="room_participants_leave_prompt_title">ترک اتاق</string>
+    <string name="room_participants_leave_prompt_msg">آیا از ترک این اتاق اطمینان دارید؟</string>
+    <string name="room_participants_remove_prompt_msg">آیا می‌خواهید %s را از این گفتگو حذف کنید؟</string>
+    <string name="room_participants_create">ساخت</string>
+
+    <string name="room_participants_online">آنلاین</string>
+    <string name="room_participants_offline">آفلاین</string>
+    <string name="room_participants_idle">بیکار</string>
+    <string name="room_participants_now">در حال حاضر %1$s</string>
+    <string name="room_participants_ago">%1$s در %2$s پیش</string>
+
+    <string name="room_participants_header_admin_tools">ابزارهای مدیر</string>
+    <string name="room_participants_header_call">تماس</string>
+    <string name="room_participants_header_direct_chats">پیام‌های شخصی</string>
+    <string name="room_participants_header_devices">دستگاه‌ها</string>
+
+    <string name="room_participants_action_invite">دعوت</string>
+    <string name="room_participants_action_leave">ترک این اتاق</string>
+    <string name="room_participants_action_remove">حذف از این اتاق</string>
+    <string name="stay">ماندن</string>
+    <string name="redact">حذف</string>
+    <string name="download">دریافت</string>
+    <string name="ongoing_conference_call">کنفرانس در حال برگزاری است.
+\nبه صورت %1$s یا %2$s به آن بپیوندید</string>
+    <string name="missing_permissions_warning">به خاطر نداشتن مجوز دسترسی، برخی امکانات ممکن است در دسترس نباشند…</string>
+    <string name="missing_permissions_error">به خاطر نداشتن مجوز دسترسی، این اقدام ممکن نیست.</string>
+    <string name="missing_permissions_to_start_conf_call">برای آغاز کنفرانس نیاز به دسترسی دعوت اعضا دارید</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">تماس گروهی در گفتگوهای رمز شده ممکن نیست</string>
+    <string name="skip">رد شدن</string>
+    <string name="done">انجام شد</string>
+    <string name="abort">انصراف</string>
+    <string name="ignore">نادیده‌گیری</string>
+
+    <string name="action_sign_out_confirmation_simple">آیا می‌خواهید از حساب کاربری خود خارج شوید؟</string>
+    <string name="action_mark_room_read">علامت‌گذاری به عنوان خوانده شده</string>
+    <string name="auth_login_sso">ورود با سامانه‌های احراز هویت مرکزی</string>
 </resources>

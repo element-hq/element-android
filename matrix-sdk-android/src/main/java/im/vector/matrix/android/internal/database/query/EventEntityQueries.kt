@@ -30,6 +30,10 @@ internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQu
     return realm.where<EventEntity>().equalTo(EventEntityFields.EVENT_ID, eventId)
 }
 
+internal fun EventEntity.Companion.where(realm: Realm, eventIds: List<String>): RealmQuery<EventEntity> {
+    return realm.where<EventEntity>().`in`(EventEntityFields.EVENT_ID, eventIds.toTypedArray())
+}
+
 internal fun EventEntity.Companion.where(realm: Realm,
                                          roomId: String? = null,
                                          type: String? = null,

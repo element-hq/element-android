@@ -79,4 +79,8 @@
     </plurals>
 
 
+    <string name="notice_event_redacted">訊息已移除</string>
+    <string name="notice_event_redacted_by">訊息已被 %1$s 移除</string>
+    <string name="notice_event_redacted_with_reason">訊息已移除 [理由：%1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">訊息已被 %1$s 移除 [理由：%2$s]</string>
 </resources>

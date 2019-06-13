@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/keys_backup_settings_footer_button1"
+        style="@style/VectorButtonStyle"
+        android:layout_width="@dimen/button_max_width"
+        android:visibility="gone"
+        tools:text="@string/keys_backup_settings_restore_backup_button"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/keys_backup_settings_footer_button2"
+        style="@style/VectorButtonStyle"
+        android:layout_width="@dimen/button_max_width"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        app:backgroundTint="@color/vector_warning_color"
+        tools:text="@string/keys_backup_settings_delete_backup_button"
+        tools:visibility="visible" />
+
+</LinearLayout>

@@ -53,7 +53,7 @@
         <item quantity="one">%1$s i jeden inny</item>
         <item quantity="few">%1$s i kilku innych</item>
         <item quantity="many">%1$s i %2$d innych</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="notice_crypto_unable_to_decrypt">** Nie można odszyfrować: %s **</string>

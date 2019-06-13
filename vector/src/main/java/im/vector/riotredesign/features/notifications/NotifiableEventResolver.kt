@@ -47,7 +47,7 @@ class NotifiableEventResolver(val context: Context) {
             return null
         }
 
-        when (event.type) {
+        when (event.getClearType()) {
             EventType.MESSAGE -> {
                 return resolveMessageEvent(event, bingRule, session, store)
             }
@@ -71,7 +71,7 @@ class NotifiableEventResolver(val context: Context) {
                             description = body,
                             soundName = bingRule?.notificationSound,
                             title = context.getString(R.string.notification_unknown_new_event),
-                            type = event.type)
+                            type = event.getClearType())
                 }
 
                 //Unsupported event
@@ -172,7 +172,7 @@ class NotifiableEventResolver(val context: Context) {
                     title = context.getString(R.string.notification_new_invitation),
                     description = body,
                     soundName = bingRule?.notificationSound,
-                    type = event.type,
+                    type = event.getClearType(),
                     isPushGatewayEvent = false)
         } else {
             Timber.e("## unsupported notifiable event for eventId [${event.eventId}]")

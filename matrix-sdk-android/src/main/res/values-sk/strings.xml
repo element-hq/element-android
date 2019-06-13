@@ -78,7 +78,7 @@
         <item quantity="one">%1$s a 1 ďalší</item>
         <item quantity="few">%1$s a %2$d ďalší</item>
         <item quantity="many">%1$s a %2$d ďalších</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
 

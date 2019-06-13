@@ -29,7 +29,7 @@ internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
 
 internal class DefaultJoinRoomTask(private val roomAPI: RoomAPI) : JoinRoomTask {
 
-    override fun execute(params: JoinRoomTask.Params): Try<Unit> {
+    override suspend fun execute(params: JoinRoomTask.Params): Try<Unit> {
         return executeRequest {
             apiCall = roomAPI.join(params.roomId, HashMap())
         }

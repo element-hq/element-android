@@ -125,7 +125,7 @@ object BadgeProxy {
             }
 
             // update the badge counter
-            Timber.d("## updateBadgeCount(): badge update count=$unreadRoomsCount")
+            Timber.v("## updateBadgeCount(): badge update count=$unreadRoomsCount")
             updateBadgeCount(aContext, unreadRoomsCount)
         }
         */

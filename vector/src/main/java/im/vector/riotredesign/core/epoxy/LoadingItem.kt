@@ -16,11 +16,25 @@
 
 package im.vector.riotredesign.core.epoxy
 
+import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.setTextOrHide
 
 @EpoxyModelClass(layout = R.layout.item_loading)
 abstract class LoadingItem : VectorEpoxyModel<LoadingItem.Holder>() {
 
-    class Holder : VectorEpoxyHolder()
+    @EpoxyAttribute var loadingText: String? = null
+
+    override fun bind(holder: Holder) {
+        super.bind(holder)
+
+        holder.textView.setTextOrHide(loadingText)
+    }
+
+
+    class Holder : VectorEpoxyHolder() {
+        val textView by bind<TextView>(R.id.loadingText)
+    }
 }

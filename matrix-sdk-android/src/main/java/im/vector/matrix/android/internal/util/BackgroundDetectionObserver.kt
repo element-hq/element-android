@@ -42,14 +42,14 @@ internal class BackgroundDetectionObserver : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onMoveToForeground() {
-        Timber.d("App returning to foreground…")
+        Timber.v("App returning to foreground…")
         isIsBackground = false
         listeners.forEach { it.onMoveToForeground() }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onMoveToBackground() {
-        Timber.d("App going to background…")
+        Timber.v("App going to background…")
         isIsBackground = true
         listeners.forEach { it.onMoveToBackground() }
     }

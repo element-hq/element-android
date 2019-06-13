@@ -89,7 +89,7 @@ class NotificationDrawerManager(val context: Context) {
         //If we support multi session, event list should be per userId
         //Currently only manage single session
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.d("%%%%%%%% onNotifiableEventReceived $notifiableEvent")
+            Timber.v("%%%%%%%% onNotifiableEventReceived $notifiableEvent")
         }
         synchronized(eventList) {
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
@@ -128,7 +128,7 @@ class NotificationDrawerManager(val context: Context) {
 
     /** Clear all known message events for this room and refresh the notification drawer */
     fun clearMessageEventOfRoom(roomId: String?) {
-        Timber.d("clearMessageEventOfRoom $roomId")
+        Timber.v("clearMessageEventOfRoom $roomId")
 
         if (roomId != null) {
             eventList.removeAll { e ->
@@ -190,7 +190,7 @@ class NotificationDrawerManager(val context: Context) {
 
         synchronized(eventList) {
 
-            Timber.d("%%%%%%%% REFRESH NOTIFICATION DRAWER ")
+            Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")
             //TMP code
             var hasNewEvent = false
             var summaryIsNoisy = false
@@ -224,7 +224,7 @@ class NotificationDrawerManager(val context: Context) {
             }
 
 
-            Timber.d("%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
+            Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
 
             var globalLastMessageTimestamp = 0L
 
@@ -233,7 +233,7 @@ class NotificationDrawerManager(val context: Context) {
 
                 if (events.isEmpty()) {
                     //Just clear this notification
-                    Timber.d("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId has no more events")
+                    Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId has no more events")
                     NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
                     continue
                 }
@@ -292,13 +292,13 @@ class NotificationDrawerManager(val context: Context) {
                     summaryInboxStyle.addLine(summaryLine)
                 } catch (e: Throwable) {
                     //String not found or bad format
-                    Timber.d("%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
+                    Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
                     summaryInboxStyle.addLine(roomName)
                 }
 
                 if (firstTime || roomGroup.hasNewEvent) {
                     //Should update displayed notification
-                    Timber.d("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
+                    Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
                     val lastMessageTimestamp = events.last().timestamp
 
                     if (globalLastMessageTimestamp < lastMessageTimestamp) {
@@ -314,7 +314,7 @@ class NotificationDrawerManager(val context: Context) {
                     hasNewEvent = true
                     summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
                 } else {
-                    Timber.d("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId is up to date")
+                    Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId is up to date")
                 }
             }
 

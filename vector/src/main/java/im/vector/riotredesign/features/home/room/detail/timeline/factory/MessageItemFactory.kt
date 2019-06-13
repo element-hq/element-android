@@ -73,7 +73,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val showInformation = addDaySeparator
                 || event.senderAvatar != nextEvent?.senderAvatar
                 || event.senderName != nextEvent?.senderName
-                || nextEvent?.root?.type != EventType.MESSAGE
+                || nextEvent?.root?.getClearType() != EventType.MESSAGE
                 || isNextMessageReceivedMoreThanOneHourAgo
 
         val time = timelineDateFormatter.formatMessageHour(date)
@@ -104,7 +104,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
         val messageContent: MessageContent =
                 event.annotations?.editSummary?.aggregatedContent?.toModel()
-                        ?: event.root.content.toModel()
+                        ?: event.root.getClearContent().toModel()
                         ?: //Malformed content, we should echo something on screen
                         return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 

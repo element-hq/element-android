@@ -51,4 +51,7 @@
     <string name="create_room_directory_title">"Room Directory"</string>
     <string name="create_room_directory_description">"Publish this room in the room directory"</string>
 
+    <string name="keys_backup_unable_to_get_trust_info">"An error occurred getting trust info"</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
+
 </resources>

@@ -32,7 +32,7 @@ object CommandParser {
         if (!textMessage.startsWith("/")) {
             return ParsedCommand.ErrorNotACommand
         } else {
-            Timber.d("parseSplashCommand")
+            Timber.v("parseSplashCommand")
 
             // "/" only
             if (textMessage.length == 1) {

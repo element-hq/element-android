@@ -30,4 +30,7 @@
 
     <dimen name="item_form_min_height">76dp</dimen>
 
+    <!-- Max width for some buttons -->
+    <dimen name="button_max_width">280dp</dimen>
+
 </resources>

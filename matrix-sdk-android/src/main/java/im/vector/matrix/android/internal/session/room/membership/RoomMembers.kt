@@ -49,7 +49,7 @@ internal class RoomMembers(private val realm: Realm,
     }
 
     fun isUniqueDisplayName(displayName: String?): Boolean {
-        if(displayName.isNullOrEmpty()){
+        if (displayName.isNullOrEmpty()) {
             return true
         }
         return EventEntity
@@ -83,17 +83,50 @@ internal class RoomMembers(private val realm: Realm,
 
     fun getNumberOfJoinedMembers(): Int {
         return roomSummary?.joinedMembersCount
-               ?: getLoaded().filterValues { it.membership == Membership.JOIN }.size
+                ?: getLoaded().filterValues { it.membership == Membership.JOIN }.size
     }
 
     fun getNumberOfInvitedMembers(): Int {
         return roomSummary?.invitedMembersCount
-               ?: getLoaded().filterValues { it.membership == Membership.INVITE }.size
+                ?: getLoaded().filterValues { it.membership == Membership.INVITE }.size
     }
 
     fun getNumberOfMembers(): Int {
         return getNumberOfJoinedMembers() + getNumberOfInvitedMembers()
     }
 
+    /**
+     * Return all the roomMembers ids which are joined or invited to the room
+     *
+     * @return a roomMember id list of joined or invited members.
+     */
+    fun getActiveRoomMemberIds(): List<String> {
+        return getRoomMemberIdsFiltered { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
+    }
+
+    /**
+     * Return all the roomMembers ids which are joined to the room
+     *
+     * @return a roomMember id list of joined members.
+     */
+    fun getJoinedRoomMemberIds(): List<String> {
+        return getRoomMemberIdsFiltered { it.membership == Membership.JOIN }
+    }
+
+    /* ==========================================================================================
+     * Private
+     * ========================================================================================== */
+
+    private fun getRoomMemberIdsFiltered(predicate: (RoomMember) -> Boolean): List<String> {
+        return RoomMembers(realm, roomId)
+                .queryRoomMembersEvent()
+                .findAll()
+                .map { it.asDomain() }
+                .associateBy { it.stateKey!! }
+                .mapValues { it.value.content.toModel<RoomMember>()!! }
+                .filterValues { predicate(it) }
+                .keys
+                .toList()
+    }
 
 }

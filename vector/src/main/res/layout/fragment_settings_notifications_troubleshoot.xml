@@ -38,6 +38,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/settings_troubleshoot_diagnostic"
+            android:textColor="?riotx_text_primary"
             android:textStyle="bold" />
 
         <TextView
@@ -58,7 +59,7 @@
             android:gravity="center_vertical|end"
             android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/troubleshoot_run_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,7 +73,7 @@
                 tools:enabled="false"
                 tools:visibility="visible" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/troubleshoot_summ_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

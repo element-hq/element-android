@@ -26,7 +26,7 @@ internal interface GetThirdPartyProtocolsTask : Task<Unit, Map<String, ThirdPart
 
 internal class DefaultGetThirdPartyProtocolsTask(private val roomAPI: RoomAPI) : GetThirdPartyProtocolsTask {
 
-    override fun execute(params: Unit): Try<Map<String, ThirdPartyProtocol>> {
+    override suspend fun execute(params: Unit): Try<Map<String, ThirdPartyProtocol>> {
         return executeRequest {
             apiCall = roomAPI.thirdPartyProtocols()
         }

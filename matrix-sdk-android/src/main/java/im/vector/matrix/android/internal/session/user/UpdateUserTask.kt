@@ -35,7 +35,7 @@ internal interface UpdateUserTask : Task<UpdateUserTask.Params, Unit> {
 
 internal class DefaultUpdateUserTask(private val monarchy: Monarchy) : UpdateUserTask {
 
-    override fun execute(params: UpdateUserTask.Params): Try<Unit> {
+    override suspend fun execute(params: UpdateUserTask.Params): Try<Unit> {
         return monarchy.tryTransactionSync { realm ->
             params.eventIds.forEach { eventId ->
                 val event = EventEntity.where(realm, eventId).findFirst()?.asDomain()

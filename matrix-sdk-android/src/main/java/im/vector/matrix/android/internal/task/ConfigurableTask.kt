@@ -34,7 +34,7 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
 ) : Task<PARAMS, RESULT> {
 
 
-    override fun execute(params: PARAMS): Try<RESULT> {
+    override suspend fun execute(params: PARAMS): Try<RESULT> {
         return task.execute(params)
     }
 

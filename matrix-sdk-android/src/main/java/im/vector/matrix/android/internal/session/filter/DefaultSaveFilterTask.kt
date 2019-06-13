@@ -38,7 +38,7 @@ internal class DefaultSaveFilterTask(private val sessionParams: SessionParams,
                                      private val filterRepository: FilterRepository
 ) : SaveFilterTask {
 
-    override fun execute(params: SaveFilterTask.Params): Try<Unit> {
+    override suspend fun execute(params: SaveFilterTask.Params): Try<Unit> {
         return executeRequest<FilterResponse> {
             // TODO auto retry
             apiCall = filterAPI.uploadFilter(sessionParams.credentials.userId, params.filter)

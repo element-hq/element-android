@@ -30,7 +30,7 @@ internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
 }
 
 internal class DefaultSendStateTask(private val roomAPI: RoomAPI) : SendStateTask {
-    override fun execute(params: SendStateTask.Params): Try<Unit> {
+    override suspend fun execute(params: SendStateTask.Params): Try<Unit> {
         return executeRequest {
             apiCall = roomAPI.sendStateEvent(params.roomId, params.eventType, params.body)
         }

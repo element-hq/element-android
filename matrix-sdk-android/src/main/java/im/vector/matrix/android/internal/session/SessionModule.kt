@@ -63,7 +63,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
             sessionParams.credentials
         }
 
-        scope(DefaultSession.SCOPE) {
+        scope(DefaultSession.SCOPE, name = "SessionRealmConfiguration") {
             val context = get<Context>()
             val childPath = sessionParams.credentials.userId.md5()
             val directory = File(context.filesDir, childPath)
@@ -78,7 +78,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             Monarchy.Builder()
-                    .setRealmConfiguration(get())
+                    .setRealmConfiguration(get("SessionRealmConfiguration"))
                     .build()
         }
 
@@ -130,11 +130,12 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            RealmCacheService(get(), get()) as CacheService
+            RealmCacheService(get("ClearTaskMainCache"), get()) as CacheService
         }
 
-        scope(DefaultSession.SCOPE) {
-            RealmClearCacheTask(get()) as ClearCacheTask
+        // Give a name, because we have a clear task for crypto store as well
+        scope(DefaultSession.SCOPE, name = "ClearTaskMainCache") {
+            RealmClearCacheTask(get("SessionRealmConfiguration")) as ClearCacheTask
         }
 
         scope(DefaultSession.SCOPE) {
@@ -146,7 +147,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultFilterRepository(get()) as FilterRepository
+            DefaultFilterRepository(get("SessionRealmConfiguration")) as FilterRepository
         }
 
         scope(DefaultSession.SCOPE) {

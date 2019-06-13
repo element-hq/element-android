@@ -81,4 +81,8 @@
     </plurals>
 
 
+    <string name="notice_event_redacted">Message supprimé</string>
+    <string name="notice_event_redacted_by">Message supprimé par %1$s</string>
+    <string name="notice_event_redacted_with_reason">Message supprimé [motif : %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Message supprimé par %1$s [motif : %2$s]</string>
 </resources>

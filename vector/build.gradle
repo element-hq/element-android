@@ -188,6 +188,12 @@ dependencies {
     implementation "ru.noties.markwon:html:$markwon_version"
     implementation 'me.saket:better-link-movement-method:2.2.0'
 
+    // Passphrase strength helper
+    implementation 'com.nulab-inc:zxcvbn:1.2.5'
+
+    //Alerter
+    implementation 'com.tapadoo.android:alerter:4.0.3'
+
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
     // Butterknife

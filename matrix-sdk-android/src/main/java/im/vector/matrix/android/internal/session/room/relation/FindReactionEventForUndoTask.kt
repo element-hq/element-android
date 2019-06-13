@@ -42,7 +42,7 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
 
 internal class DefaultFindReactionEventForUndoTask(private val monarchy: Monarchy) : FindReactionEventForUndoTask {
 
-    override fun execute(params: FindReactionEventForUndoTask.Params): Try<FindReactionEventForUndoTask.Result> {
+    override suspend fun execute(params: FindReactionEventForUndoTask.Params): Try<FindReactionEventForUndoTask.Result> {
         return Try {
             var eventId: String? = null
             monarchy.doWithRealm { realm ->

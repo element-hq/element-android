@@ -348,7 +348,7 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="room_two_users_are_typing">%1$s ja %2$s kirjoittavat…</string>
     <string name="room_many_users_are_typing">%1$s, %2$s ja muut kirjoittavat…</string> <!-- ??? this ain't right -->
     <string name="room_message_placeholder_encrypted">Lähetä salattu viesti…</string>
-    <string name="room_message_placeholder_not_encrypted">Lähetä viesti (ei salattu)…</string>
+    <string name="room_message_placeholder_not_encrypted">Lähetä viesti (salaamaton)…</string>
     <string name="room_offline_notification">Yhteys palvelimeen katkesi.</string>
     <string name="room_unsent_messages_notification">Viesteja ei lähetetty. %1$s tai %2$s?</string>
     <string name="room_unknown_devices_messages_notification">Viestejä ei lähetetty koska huoneessa on tuntemattomia laitteita. %1$s tai %2$s?</string>
@@ -597,9 +597,9 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="room_settings_copy_room_address">Kopioi huoneen osoite</string>
 
     <string name="room_settings_addresses_e2e_enabled">Tämä huone on salattu.</string>
-    <string name="room_settings_addresses_e2e_disabled">Tämä huone ei ole salattu.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Käytä salausta
-(HUOM! Salausta ei voi poistaa käytöstä!)</string>
+    <string name="room_settings_addresses_e2e_disabled">Tämä huone ei käytä salausta.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Ota salaus käyttöön 
+\n(varoitus: salausta ei voi poistaa käytöstä!)</string>
 
     <!-- Directory -->
     <string name="directory_title">Luettelo</string>
@@ -1409,8 +1409,8 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \nJos et asettanut uutta palautustapaa, hyökkääjä saattaa yrittää päästä käsiksi tunnukseesi. Vaihda tunnuksesi salasana ja aseta uusi palautustapa asetuksissa välittömästi.</string>
     <string name="autodiscover_invalid_response">Epäkelpo kotipalvelimen löytövastaus</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automaattitäydennyksen palvelinasetukset</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot löysi mukautetun palvelinasetuksen userId:si domainille ”%s”:
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot löysi mukautetun palvelinasetuksen userId:si domainille ”%1$s”:
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Käytä asetuksia</string>
 
     <string name="notification_sync_init">Alustetaan palvelua</string>

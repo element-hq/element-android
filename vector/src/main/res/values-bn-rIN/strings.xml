@@ -8,7 +8,7 @@
     <string name="black_them">কালো থিম</string>
     <string name="status_theme">Status.im থিম</string>
 
-    <string name="notification_sync_in_progress">সিংক্রোনাইজ হচ্ছে</string>
+    <string name="notification_sync_in_progress">সিংক্রোনাইজ হচ্ছে…</string>
     <string name="notification_listening_for_events">ইভেন্টের জন্য শোনা হচ্ছে</string>
     <string name="notification_noisy_notifications">সশব্দ বিজ্ঞপ্তিগুলি</string>
     <string name="notification_silent_notifications">নীরব বিজ্ঞপ্তিগুলি</string>
@@ -411,7 +411,7 @@
     <string name="room_participants_create">সৃষ্টি</string>
 
     <string name="room_participants_online">অনলাইন</string>
-    <string name="room_participants_offline">অফলিনে</string>
+    <string name="room_participants_offline">অফলাইন</string>
     <string name="room_participants_idle">অলস</string>
     <string name="room_participants_now">এখুন %1$s</string>
     <string name="room_participants_ago">%1$s %2$s পূর্বে</string>
@@ -499,14 +499,14 @@
     <string name="room_details_title">ঘরের বিস্তারিত</string>
     <string name="room_details_people">লোকজন</string>
     <string name="room_details_files">নথিগুলি</string>
-    <string name="room_details_settings">নির্ধারণ</string>
+    <string name="room_details_settings">সেটিংস</string>
     <plurals name="room_details_selected">
         <item quantity="one">%d নির্বাচিত</item>
         <item quantity="other" />
     </plurals>
     <string name="malformed_id">বিকৃত পরিচয়।একটি ইমেইল ঠিকানা বা একটি মাধ্যমিক পরিচয় হতে হবে যেমন \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">আমন্ত্রিত</string>
-    <string name="room_details_people_present_group_name">যোগকরা</string>
+    <string name="room_details_people_present_group_name">যোগ করেছেন</string>
 
     <string name="room_event_action_report_prompt_reason">বিষয়বস্তুর বিবরণী দেয়ার জন কারণ</string>
     <string name="room_event_action_report_prompt_ignore_user">ব্যাবহারকারির কাছ থেকে আপনি কি সব বার্তা লোকাতে চান\?উল্লেখ্য এই প্রতিক্রিয়াটি চালু করবেন এবং এটি কিছু সময় নিতে পারে।</string>
@@ -556,7 +556,7 @@
     <string name="room_settings_add_homescreen_shortcut">ঘরের পর্দার ছোটোখাটো যোগ করুন</string>
 
     <string name="room_sliding_menu_messages">বার্তা</string>
-    <string name="room_sliding_menu_settings">নির্ধারণ</string>
+    <string name="room_sliding_menu_settings">সেটিংস</string>
     <string name="room_sliding_menu_version">সংস্করণ</string>
     <string name="room_sliding_menu_version_x">সংস্করণ %s</string>
     <string name="room_sliding_menu_term_and_conditions">শর্তাবলী</string>
@@ -583,20 +583,21 @@
     <string name="settings_troubleshoot_diagnostic">ডায়াগনস্টিকস এর সমস্যা সমাধান</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">পরীক্ষাগুলি চালাও</string>
     <string name="settings_troubleshoot_diagnostic_running_status">"(%1$d of %2$d) চলছে… "</string>
-    <string name="settings_troubleshoot_test_account_settings_failed">বিজ্ঞপ্তি আপনার অ্যাকাউন্টের জন্য নিষ্ক্রিয় করা হয়েছে।</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">বিজ্ঞপ্তি আপনার অ্যাকাউন্টের জন্য নিষ্ক্রিয় করা হয়েছে।
+\nঅনুগ্রহ করে একাউন্ট সেটিংস যাচাই করে নিন।</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">সক্ষম</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">যন্ত্র সেটিংস।</string>
     <string name="settings_troubleshoot_test_device_settings_success">বিজ্ঞপ্তি এই ডিভাইসের জন্য সক্রিয় করা হয়েছে।</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">বিজ্ঞপ্তি এই ডিভাইসের জন্য অনুমতি দেওয়া হয় নি।
-\nRiot এর সেটিংস চেক করুন।</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">বিজ্ঞপ্তি এই ডিভাইসের জন্য অনুমতি দেওয়া হয় নি। 
+\nRiot এর সেটিংস যাচাই করুন।</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">সক্ষম</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">কাস্টম সেটিংস।</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">লক্ষ্য করুন যে কিছু বার্তা টাইপ নীরব করা হয়েছে (কোন শব্দ ছাড়াই একটি বিজ্ঞপ্তি তৈরি করবে)।</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">কিছু বিজ্ঞপ্তি আপনার কাস্টম সেটিংস এ নিষ্ক্রিয় করা হয়েছে।</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">কাস্টম নিয়ম লোড করতে ব্যর্থ হয়েছে, আবার চেষ্টা করুন।</string>
-    <string name="settings_troubleshoot_test_bing_settings_quickfix">সেটিংস চেক করুন</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">সেটিংস যাচাই করুন</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Play Services পরীক্ষা</string>
     <string name="settings_troubleshoot_test_play_services_success">গুগল প্লে সার্ভিসেস APK পাওয়া গেছে এবং আপ টু ডেট রয়েছে।</string>
@@ -611,8 +612,8 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nএই ত্রুটিটি Riot এর নিয়ন্ত্রণের বাইরে এবং Google এর মতে, এই ত্রুটিটি ইঙ্গিত করে যে ডিভাইসটিতে FCM এর সাথে নিবন্ধিত অনেকগুলি অ্যাপ্লিকেশন রয়েছে। ত্রুটিগুলি কেবলমাত্র অ্যাপ্লিকেশনের চরম সংখ্যাগুলিতে ঘটে থাকে, তাই এটি গড় ব্যবহারকারীকে প্রভাবিত করবে না।</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nএই ত্রুটি Riot এর নিয়ন্ত্রণ বাইরে। এটা বিভিন্ন কারণে ঘটতে পারে। আপনি পরে পুনরায় চেষ্টা করলে হয়তো এটি কাজ করবে, আপনি এটিও পরীক্ষা করতে পারেন যে Google Play পরিষেবাটি সিস্টেম সেটিংসে ডেটা ব্যবহারের ক্ষেত্রে সীমাবদ্ধ নয়, অথবা আপনার ডিভাইসের ঘড়ি সঠিক, বা এটি কাস্টম রমতে ঘটতে পারে।</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s] 
+\nএই ত্রুটি Riot এর নিয়ন্ত্রণের বাইরে। এটা বিভিন্ন কারণে ঘটতে পারে। আপনি পরে পুনরায় চেষ্টা করলে হয়তো এটি কাজ করবে, আপনি এটিও পরীক্ষা করতে পারেন যে Google Play পরিষেবাটি সিস্টেম সেটিংসে ডেটা ব্যবহারের ক্ষেত্রে সীমাবদ্ধ নয়, অথবা আপনার ডিভাইসের ঘড়ি সঠিক, বা এটি কাস্টম রমতে ঘটতে পারে।</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nএই ত্রুটি Riot এর নিয়ন্ত্রণের বাইরে। ফোনে কোন গুগল একাউন্ট নেই। অ্যাকাউন্ট ম্যানেজার খুলুন এবং একটি গুগল একাউন্ট যোগ করুন।</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">একাউন্ট যোগ করুন</string>
@@ -657,13 +658,49 @@
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">এক অথবা অধিক পরীক্ষা বার্থ হয়েছে,প্রস্তাবিত ঠিক করে চেষ্টা করুন(es).</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">এক অথবা অধিক পরীক্ষা ব্যর্থ হয়েছে,দয়া করে জমা করুন একটা গুরুত্বপূর্ণ খসড়া যেটা সাহায্য করবে অনুসন্ধান করতে।</string>
 
-    <string name="settings_troubleshoot_test_system_settings_title">পদ্ধতি নির্ধারণ।</string>
-    <string name="settings_troubleshoot_test_system_settings_success">বিজ্ঞাপ্তিকে পদ্ধতি নির্ধারণ এর মাধ্যমে সক্রিয় করা হয়েছে।</string>
-    <string name="settings_troubleshoot_test_system_settings_failed">বিজ্ঞাপ্তিকে পদ্ধতি নির্ধারণ এর মাধ্যমে নিষ্ক্রিয় করা হয়েছে।
-\nদেয়া করে দেখে নিন পদ্ধতি নির্ধারণ।</string>
-    <string name="open_settings">খুলুন নির্ধারণটি</string>
+    <string name="settings_troubleshoot_test_system_settings_title">সিস্টেমের সেটিংস।</string>
+    <string name="settings_troubleshoot_test_system_settings_success">বিজ্ঞাপ্তিকে সিস্টেমের সেটিংস এর মাধ্যমে সক্রিয় করা হয়েছে।</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">বিজ্ঞাপ্তিকে সিস্টেমের সেটিংস এর মাধ্যমে নিষ্ক্রিয় করা হয়েছে। 
+\nদেয়া করে সিস্টেমের সেটিংসগুলি যাচাই করে নিন।</string>
+    <string name="open_settings">সেটিংস খুলুন</string>
 
-    <string name="settings_troubleshoot_test_account_settings_title">গণনা নির্ধারণ।</string>
+    <string name="settings_troubleshoot_test_account_settings_title">অক্কোউন্টের সেটিংস।</string>
     <string name="settings_troubleshoot_test_account_settings_success">বিজ্ঞাপ্তি আপনার একাউন্টএর জন্য সক্রিয় করা হোক.</string>
     <string name="action_mark_room_read">পঠিত হিসেবে চিহ্নিত</string>
+    <string name="settings_user_settings">ব্যবহারকারী সেটিংস</string>
+    <string name="settings_inline_url_preview">ইনলাইন URL পূর্বরূপ</string>
+    <string name="settings_inline_url_preview_summary">বার্তাগুলি মধ্যে থাকা লিংকগুলি প্রিভিউ করে যখন আপনার হোম সার্ভার এই বৈশিষ্ট্য টি সাপোর্ট করে।</string>
+    <string name="settings_send_typing_notifs">টাইপিং বিজ্ঞপ্তি পাঠান</string>
+    <string name="settings_preview_media_before_sending">পাঠানোর আগে মিডিয়া প্রিভিউ কর</string>
+    <string name="settings_interface_language">ভাষা</string>
+    <string name="settings_select_language">ভাষা বেছে নিন</string>
+
+    <string name="settings_theme">থিম</string>
+
+    <string name="encryption_information_verify_device_warning">এই ডিভাইসটি বিশ্বাসযোগ্য হতে পারে তা যাচাই করতে, অন্য কোন উপায়ে (যেমন ব্যক্তি বা ফোন কল) ব্যবহার করে তার মালিকের সাথে যোগাযোগ করুন এবং এই ডিভাইসটির জন্য তাদের ব্যবহারকারী সেটিংসে এ কুঞ্জি দেখছে তা তাদের জিজ্ঞাসা করুন নীচের কুঞ্জিটির সাথে মেলে কিনা:</string>
+    <string name="e2e_enabling_on_app_update">দাঙ্গা এখন শেষ-থেকে-শেষ এনক্রিপশন সমর্থন করে তবে এটি সক্ষম করতে আপনাকে আবার লগ ইন করতে হবে।
+\n
+\nআপনি এখন বা পরে এপ্লিকেশন সেটিংস থেকে এটি করতে পারেন।</string>
+
+    <string name="font_size">অক্ষর এর আকার</string>
+    <string name="you_added_a_new_device">আপনি একটি নতুন ডিভাইস \'%s\' যোগ করেছেন, যা এনক্রিপশন কীগুলির জন্য অনুরোধ করছে।</string>
+    <string name="command_description_clear_scalar_token">ম্যাট্রিক্স অ্যাপ্লিকেশন ব্যবস্থাপনা ঠিক করতে</string>
+
+    <string name="encrypted_message">এনক্রিপ্ট করা বার্তা</string>
+
+    <string name="joined">যোগ করেছেন</string>
+    <string name="has_been_kicked">আপনি %1$s থেকে %2$s দ্বারা লাথি খেয়েছেন</string>
+    <string name="merged_events_expand">সম্প্রসারিত</string>
+    <string name="merged_events_collapse">বন্ধ</string>
+
+    <string name="keys_backup_restore_with_key_helper">আপনার পুনরুদ্ধারের কুঞ্জি হারিয়ে গেছে\? আপনি সেটিংস একটি নতুন সেট আপ করতে পারেন।</string>
+    <string name="keys_backup_restore_success_description">"%1$d  সেশন কী পুনরুদ্ধার করা হয়েছে, এবং %2$d নতুন কী (গুলি) জোড়া হয়েছে যা এই ডিভাইসটি জানত না"</string>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>
+        <item quantity="other">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>
+    </plurals>
+
+    <string name="new_recovery_method_popup_description">একটি নতুন সুরক্ষিত বার্তা কুঞ্জি ব্যাকআপ সনাক্ত করা হয়েছে।
+\n
+\nআপনি যদি নতুন পুনরুদ্ধারের পদ্ধতি সেট না করে থাকেন তবে একজন আক্রমণকারী আপনার অ্যাকাউন্ট অ্যাক্সেস করার চেষ্টা করছেন। আপনার অ্যাকাউন্ট পাসওয়ার্ড পরিবর্তন করুন এবং সেটিংসে অবিলম্বে একটি নতুন পুনরুদ্ধার পদ্ধতি সেট করুন।</string>
 </resources>

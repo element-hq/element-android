@@ -687,7 +687,7 @@
     <string name="widget_integration_missing_user_id">请求中没有 user_id.</string>
     <string name="widget_integration_room_not_visible">聊天室 %s 不可见。</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
-    <string name="notification_sync_in_progress">正在同步</string>
+    <string name="notification_sync_in_progress">正在同步…</string>
     <string name="notification_listening_for_events">监听事件更新</string>
 
     <string name="call">通话</string>
@@ -1351,8 +1351,8 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
 
     <string name="autodiscover_invalid_response">无效的主服务器探测响应</string>
     <string name="autodiscover_well_known_autofill_dialog_title">自动完成服务器选项</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot 侦测到您的 userId 域名 \"%s\" 有自定义的服务器设置：
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot 侦测到您的 userId 域名 \"%1$s\" 有自定义的服务器设置：
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">使用设置</string>
 
     <string name="notification_sync_init">正在初始化服务</string>
@@ -1378,5 +1378,7 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="notification_new_invitation">新邀请</string>
     <string name="notification_sender_me">我</string>
     <string name="notification_inline_reply_failed">** 发送失败 - 请打开聊天室</string>
+
+    <string name="error_jitsi_not_supported_on_old_device">抱歉，旧设备 （安卓系统版本低于 5.0）不支持使用 Jitsi 创建电话会议</string>
 
 </resources>

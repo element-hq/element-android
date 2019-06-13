@@ -64,6 +64,6 @@ data class TimelineEvent(
     }
 
     fun isEncrypted() : Boolean {
-        return EventType.ENCRYPTED == root.type
+        return EventType.ENCRYPTED == root.getClearType()
     }
 }

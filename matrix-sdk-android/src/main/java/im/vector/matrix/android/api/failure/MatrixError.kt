@@ -54,5 +54,6 @@ data class MatrixError(
         const val TOO_LARGE = "M_TOO_LARGE"
         const val M_CONSENT_NOT_GIVEN = "M_CONSENT_NOT_GIVEN"
         const val RESOURCE_LIMIT_EXCEEDED = "M_RESOURCE_LIMIT_EXCEEDED"
+        const val WRONG_ROOM_KEYS_VERSION = "M_WRONG_ROOM_KEYS_VERSION"
     }
 }

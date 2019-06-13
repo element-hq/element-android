@@ -41,8 +41,8 @@
     <string name="room_no_conference_call_in_encrypted_rooms">مكالمات الاجتماعات ليست مدعومة في الغرفة المعمّاة</string>
     <string name="send_anyway">أرسِل بأي حال</string>
     <string name="action_sign_out">اخرج</string>
-    <string name="action_voice_call">مكالمة صورية</string>
-    <string name="action_video_call">مكالمة صوتية</string>
+    <string name="action_voice_call">مكالمة صوتية</string>
+    <string name="action_video_call">مكالمة صورية</string>
     <string name="action_global_search">بحث عمومي</string>
     <string name="action_mark_all_as_read">علّمها كلّها كمقروءة</string>
     <string name="action_open">افتح</string>

@@ -47,7 +47,7 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
     //OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
 
-    override fun execute(params: EventRelationsAggregationTask.Params): Try<Unit> {
+    override suspend fun execute(params: EventRelationsAggregationTask.Params): Try<Unit> {
         val events = params.events
         val userId = params.userId
         return monarchy.tryTransactionSync { realm ->

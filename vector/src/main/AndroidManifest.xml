@@ -38,6 +38,18 @@
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.media.VideoMediaViewerActivity" />
+        <activity
+            android:name=".features.crypto.verification.SASVerificationActivity"
+            android:label="@string/title_activity_verify_device" />
+        <activity
+            android:name="im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreActivity"
+            android:label="@string/title_activity_keys_backup_setup" />
+        <activity
+            android:name="im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity"
+            android:label="@string/title_activity_keys_backup_restore" />
+        <activity
+            android:name="im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity"
+            android:label="@string/encryption_message_recovery" />
 
         <activity
             android:name="im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity"

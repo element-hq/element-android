@@ -42,7 +42,7 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
 }
 
 internal class DefaultUpdateQuickReactionTask(private val monarchy: Monarchy) : UpdateQuickReactionTask {
-    override fun execute(params: UpdateQuickReactionTask.Params): Try<UpdateQuickReactionTask.Result> {
+    override suspend fun execute(params: UpdateQuickReactionTask.Params): Try<UpdateQuickReactionTask.Result> {
         return Try {
             var res: Pair<String?, List<String>?>? = null
             monarchy.doWithRealm { realm ->

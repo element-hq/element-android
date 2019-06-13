@@ -36,7 +36,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
 
-        Timber.d("ReplyNotificationBroadcastReceiver received : $intent")
+        Timber.v("ReplyNotificationBroadcastReceiver received : $intent")
 
         when (intent.action) {
             NotificationUtils.SMART_REPLY_ACTION ->
@@ -61,7 +61,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
         Matrix.getInstance(context)?.defaultSession?.let { session ->
             session.dataHandler
                     ?.getRoom(roomId)
-                    ?.markAllAsRead(object : SimpleApiCallback<Void>() {
+                    ?.markAllAsRead(object : SimpleApiCallback<Unit>() {
                         override fun onSuccess(void: Void?) {
                             // Ignore
                         }
@@ -100,9 +100,9 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
 
         val event = Event(mxMessage, session.credentials.userId, roomId)
         room.storeOutgoingEvent(event)
-        room.sendEvent(event, object : ApiCallback<Void?> {
+        room.sendEvent(event, object : MatrixCallback<Void?> {
             override fun onSuccess(info: Void?) {
-                Timber.d("Send message : onSuccess ")
+                Timber.v("Send message : onSuccess ")
                 val notifiableMessageEvent = NotifiableMessageEvent(
                         event.eventId,
                         false,
@@ -120,12 +120,12 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
             }
 
             override fun onNetworkError(e: Exception) {
-                Timber.d("Send message : onNetworkError " + e.message, e)
+                Timber.e(e, "Send message : onNetworkError")
                 onSmartReplyFailed(e.localizedMessage)
             }
 
             override fun onMatrixError(e: MatrixError) {
-                Timber.d("Send message : onMatrixError " + e.message)
+                Timber.v("Send message : onMatrixError " + e.message)
                 if (e is MXCryptoError) {
                     Toast.makeText(context, e.detailedErrorDescription, Toast.LENGTH_SHORT).show()
                     onSmartReplyFailed(e.detailedErrorDescription)

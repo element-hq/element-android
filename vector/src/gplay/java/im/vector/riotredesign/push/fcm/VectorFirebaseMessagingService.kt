@@ -94,7 +94,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onDeletedMessages() {
-        Timber.d("## onDeletedMessages()")
+        Timber.v("## onDeletedMessages()")
     }
 
     /**

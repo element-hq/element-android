@@ -25,6 +25,7 @@ import android.view.View
 import androidx.annotation.*
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
@@ -40,9 +41,9 @@ import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.rageshake.BugReportActivity
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.RageShake
+import im.vector.riotredesign.features.themes.ActivityOtherThemes
 import im.vector.riotredesign.features.themes.ThemeUtils
 import im.vector.riotredesign.receivers.DebugReceiver
-import im.vector.riotredesign.features.themes.ActivityOtherThemes
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import org.koin.android.ext.android.inject
@@ -157,7 +158,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
     override fun onResume() {
         super.onResume()
 
-        Timber.d("onResume Activity ${this.javaClass.simpleName}")
+        Timber.v("onResume Activity ${this.javaClass.simpleName}")
 
         configurationViewModel.onActivityResumed()
 
@@ -276,6 +277,39 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
                 it.setDisplayHomeAsUpEnabled(true)
             }
         }
+    }
+
+    //==============================================================================================
+    // Handle loading view (also called waiting view or spinner view)
+    //==============================================================================================
+
+    var waitingView: View? = null
+        set(value) {
+            field = value
+
+            // Ensure this view is clickable to catch UI events
+            value?.isClickable = true
+        }
+
+    /**
+     * Tells if the waiting view is currently displayed
+     *
+     * @return true if the waiting view is displayed
+     */
+    fun isWaitingViewVisible() = waitingView?.isVisible == true
+
+    /**
+     * Show the waiting view
+     */
+    open fun showWaitingView() {
+        waitingView?.isVisible = true
+    }
+
+    /**
+     * Hide the waiting view
+     */
+    open fun hideWaitingView() {
+        waitingView?.isVisible = false
     }
 
     /* ==========================================================================================

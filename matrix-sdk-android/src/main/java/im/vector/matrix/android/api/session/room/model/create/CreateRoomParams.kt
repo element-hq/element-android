@@ -149,7 +149,7 @@ class CreateRoomParams {
         if (initialStates != null && !initialStates!!.isEmpty()) {
             val newInitialStates = ArrayList<Event>()
             for (event in initialStates!!) {
-                if (event.type != EventType.STATE_HISTORY_VISIBILITY) {
+                if (event.getClearType() != EventType.STATE_HISTORY_VISIBILITY) {
                     newInitialStates.add(event)
                 }
             }

@@ -18,11 +18,11 @@ package im.vector.riotredesign
 
 import android.app.Application
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
-import android.content.res.Configuration
 import androidx.multidex.MultiDex
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
@@ -33,7 +33,9 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.di.AppModule
 import im.vector.riotredesign.features.configuration.VectorConfiguration
+import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
 import im.vector.riotredesign.features.home.HomeModule
+import im.vector.riotredesign.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
@@ -45,14 +47,15 @@ import timber.log.Timber
 
 class VectorApplication : Application() {
 
+    lateinit var appContext: Context
     //font thread handler
     private var mFontThreadHandler: Handler? = null
-
 
     val vectorConfiguration: VectorConfiguration by inject()
 
     override fun onCreate() {
         super.onCreate()
+        appContext = this
 
         VectorUncaughtExceptionHandler.activate(this)
 
@@ -71,9 +74,10 @@ class VectorApplication : Application() {
         val appModule = AppModule(applicationContext).definition
         val homeModule = HomeModule().definition
         val roomDirectoryModule = RoomDirectoryModule().definition
-        val koin = startKoin(listOf(appModule, homeModule, roomDirectoryModule), logger = EmptyLogger())
-
+        val keysBackupModule = KeysBackupModule().definition
+        val koin = startKoin(listOf(appModule, homeModule, roomDirectoryModule, keysBackupModule), logger = EmptyLogger())
         Matrix.getInstance().setApplicationFlavor(BuildConfig.FLAVOR_DESCRIPTION)
+        registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks())
 
         val fontRequest = FontRequest(
                 "com.google.android.gms.fonts",
@@ -95,7 +99,6 @@ class VectorApplication : Application() {
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
-
         vectorConfiguration.onConfigurationChanged(newConfig)
     }
 

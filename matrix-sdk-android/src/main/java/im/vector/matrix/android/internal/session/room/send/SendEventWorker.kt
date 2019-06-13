@@ -22,6 +22,7 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -39,30 +40,32 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
     )
 
     private val roomAPI by inject<RoomAPI>()
+    private val localEchoUpdater by inject<LocalEchoUpdater>()
 
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.failure()
+                ?: return Result.success()
 
-        val localEvent = params.event
-        if (localEvent.eventId == null) {
-            return Result.failure()
+        val event = params.event
+        if (event.eventId == null) {
+            return Result.success()
         }
 
+        localEchoUpdater.updateSendState(event.eventId, SendState.SENDING)
         val result = executeRequest<SendResponse> {
             apiCall = roomAPI.send(
-                    localEvent.eventId,
+                    event.eventId,
                     params.roomId,
-                    localEvent.type,
-                    localEvent.content
+                    event.type,
+                    event.content
             )
         }
         return result.fold({
             when (it) {
                 is Failure.NetworkConnection -> Result.retry()
-                else -> {
-                    //TODO mark as failed to send?
+                else                         -> {
+                    localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
                     //always return success, or the chain will be stuck for ever!
                     Result.success()
                 }

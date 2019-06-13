@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.glide.GlideRequest
@@ -53,6 +54,11 @@ object AvatarRenderer {
     @UiThread
     fun render(roomSummary: RoomSummary, imageView: ImageView) {
         render(roomSummary.avatarUrl, roomSummary.roomId, roomSummary.displayName, imageView)
+    }
+
+    @UiThread
+    fun render(user: User, imageView: ImageView) {
+        render(imageView.context, GlideApp.with(imageView), user.avatarUrl, user.userId, user.displayName, DrawableImageViewTarget(imageView))
     }
 
     @UiThread

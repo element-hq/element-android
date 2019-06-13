@@ -32,7 +32,7 @@ internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoom
 
 internal class DefaultGetPublicRoomTask(private val roomAPI: RoomAPI) : GetPublicRoomTask {
 
-    override fun execute(params: GetPublicRoomTask.Params): Try<PublicRoomsResponse> {
+    override suspend fun execute(params: GetPublicRoomTask.Params): Try<PublicRoomsResponse> {
         return executeRequest {
             apiCall = roomAPI.publicRooms(params.server, params.publicRoomsParams)
         }

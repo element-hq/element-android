@@ -31,4 +31,7 @@ interface Navigator {
 
     fun openDebug(context: Context)
 
+    fun openKeysBackupSetup(context: Context, showManualExport: Boolean)
+
+    fun openKeysBackupManager(context: Context)
 }

@@ -25,10 +25,7 @@ import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserControl
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotredesign.features.home.group.GroupSummaryController
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.DefaultItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.MessageItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.NoticeItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.factory.*
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
@@ -67,18 +64,20 @@ class HomeModule {
         }
 
         factory { (fragment: Fragment) ->
+            val colorProvider = ColorProvider(fragment.requireContext())
+            val timelineDateFormatter = get<TimelineDateFormatter>()
             val eventHtmlRenderer = EventHtmlRenderer(GlideApp.with(fragment), fragment.requireContext(), get())
             val noticeEventFormatter = get<NoticeEventFormatter>(parameters = { parametersOf(fragment) })
             val timelineMediaSizeProvider = TimelineMediaSizeProvider()
-            val colorProvider = ColorProvider(fragment.requireContext())
-            val timelineDateFormatter = get<TimelineDateFormatter>()
             val messageItemFactory = MessageItemFactory(colorProvider, timelineMediaSizeProvider,
                     timelineDateFormatter, eventHtmlRenderer, get(), get())
 
             val timelineItemFactory = TimelineItemFactory(
                     messageItemFactory = messageItemFactory,
                     noticeItemFactory = NoticeItemFactory(noticeEventFormatter),
-                    defaultItemFactory = DefaultItemFactory()
+                    defaultItemFactory = DefaultItemFactory(),
+                    encryptionItemFactory = EncryptionItemFactory(get()),
+                    encryptedItemFactory = EncryptedItemFactory(get())
             )
             TimelineEventController(timelineDateFormatter, timelineItemFactory, timelineMediaSizeProvider)
         }

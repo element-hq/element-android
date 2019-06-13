@@ -17,6 +17,7 @@
 package im.vector.riotredesign.core.utils
 
 import android.content.Context
+import android.text.TextUtils
 import timber.log.Timber
 import java.io.File
 
@@ -58,9 +59,9 @@ fun lsFiles(context: Context) {
 
 private fun logAction(file: File): Boolean {
     if (file.isDirectory) {
-        Timber.d(file.toString())
+        Timber.v(file.toString())
     } else {
-        Timber.d(file.toString() + " " + file.length() + " bytes")
+        Timber.v(file.toString() + " " + file.length() + " bytes")
     }
     return true
 }
@@ -87,3 +88,46 @@ private fun recursiveActionOnFile(file: File, action: ActionOnFile): Boolean {
     return action.invoke(file)
 }
 
+
+/**
+ * Get the file extension of a fileUri or a filename
+ *
+ * @param fileUri the fileUri (can be a simple filename)
+ * @return the file extension, in lower case, or null is extension is not available or empty
+ */
+fun getFileExtension(fileUri: String): String? {
+    var reducedStr = fileUri
+
+    if (!TextUtils.isEmpty(reducedStr)) {
+        // Remove fragment
+        val fragment = fileUri.lastIndexOf('#')
+        if (fragment > 0) {
+            reducedStr = fileUri.substring(0, fragment)
+        }
+
+        // Remove query
+        val query = reducedStr.lastIndexOf('?')
+        if (query > 0) {
+            reducedStr = reducedStr.substring(0, query)
+        }
+
+        // Remove path
+        val filenamePos = reducedStr.lastIndexOf('/')
+        val filename = if (0 <= filenamePos) reducedStr.substring(filenamePos + 1) else reducedStr
+
+        // Contrary to method MimeTypeMap.getFileExtensionFromUrl, we do not check the pattern
+        // See https://stackoverflow.com/questions/14320527/android-should-i-use-mimetypemap-getfileextensionfromurl-bugs
+        if (!filename.isEmpty()) {
+            val dotPos = filename.lastIndexOf('.')
+            if (0 <= dotPos) {
+                val ext = filename.substring(dotPos + 1)
+
+                if (ext.isNotBlank()) {
+                    return ext.toLowerCase()
+                }
+            }
+        }
+    }
+
+    return null
+}

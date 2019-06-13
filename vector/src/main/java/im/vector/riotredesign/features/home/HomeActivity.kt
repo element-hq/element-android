@@ -37,6 +37,8 @@ import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
+import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
@@ -56,6 +58,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
     private val homeNavigator by inject<HomeNavigator>()
+
+    // TODO Move this elsewhere
+    private val incomingVerificationRequestHandler by inject<IncomingVerificationRequestHandler>()
+    // TODO Move this elsewhere
+    private val keyRequestHandler by inject<KeyRequestHandler>()
 
     private var progress: ProgressDialog? = null
 
@@ -99,6 +106,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
             }
         }
+
+        incomingVerificationRequestHandler.ensureStarted()
+        keyRequestHandler.ensureStarted()
     }
 
     override fun onDestroy() {

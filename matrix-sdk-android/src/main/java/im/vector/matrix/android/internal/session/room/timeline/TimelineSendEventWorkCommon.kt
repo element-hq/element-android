@@ -35,11 +35,27 @@ private val WORK_CONSTRAINTS = Constraints.Builder()
  */
 internal object TimelineSendEventWorkCommon {
 
+    fun postSequentialWorks(roomId: String, vararg workRequests: OneTimeWorkRequest) {
+        when {
+            workRequests.isEmpty() -> return
+            workRequests.size == 1 -> postWork(roomId, workRequests.first())
+            else                   -> {
+                val firstWork = workRequests.first()
+                var continuation = WorkManager.getInstance()
+                        .beginUniqueWork(buildWorkIdentifier(roomId), ExistingWorkPolicy.APPEND, firstWork)
+                for (i in 1 until workRequests.size) {
+                    val workRequest = workRequests[i]
+                    continuation = continuation.then(workRequest)
+                }
+                continuation.enqueue()
+            }
+        }
+    }
+
     fun postWork(roomId: String, workRequest: OneTimeWorkRequest) {
         WorkManager.getInstance()
                 .beginUniqueWork(buildWorkIdentifier(roomId), ExistingWorkPolicy.APPEND, workRequest)
                 .enqueue()
-
     }
 
     inline fun <reified W : ListenableWorker> createWork(data: Data): OneTimeWorkRequest {

@@ -81,4 +81,8 @@
 
     <string name="room_displayname_empty_room">Празна стая</string>
 
+    <string name="notice_event_redacted">Премахнато съобщение</string>
+    <string name="notice_event_redacted_by">Съобщение премахнато от %1$s</string>
+    <string name="notice_event_redacted_with_reason">Премахнато съобщение [причина: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Съобщение премахнато от %1$s [причина: %2$s]</string>
 </resources>

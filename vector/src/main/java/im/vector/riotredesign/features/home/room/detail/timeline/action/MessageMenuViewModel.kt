@@ -121,14 +121,13 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                     //TODO sent by me or sufficient power level
                 }
 
-
                 this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, JSONObject(event.root.toContent()).toString(4)))
                 if (event.isEncrypted()) {
                     this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, parcel.eventId))
                 }
                 this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, parcel.eventId))
 
-                if (currentSession.sessionParams.credentials.userId != event.root.sender && event.root.type == EventType.MESSAGE) {
+                if (currentSession.sessionParams.credentials.userId != event.root.sender && event.root.getClearType() == EventType.MESSAGE) {
                     //not sent by me
                     this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, parcel.eventId))
                 }
@@ -139,7 +138,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
         private fun canReply(event: TimelineEvent, messageContent: MessageContent?): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.type != EventType.MESSAGE) return false
+            if (event.root.getClearType() != EventType.MESSAGE) return false
             return when (messageContent?.type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
@@ -154,12 +153,12 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
         private fun canReact(event: TimelineEvent, messageContent: MessageContent?): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            return event.root.type == EventType.MESSAGE
+            return event.root.getClearType() == EventType.MESSAGE
         }
 
         private fun canQuote(event: TimelineEvent, messageContent: MessageContent?): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.type != EventType.MESSAGE) return false
+            if (event.root.getClearType() != EventType.MESSAGE) return false
             return when (messageContent?.type) {
                 MessageType.MSGTYPE_TEXT,
                 MessageType.MSGTYPE_NOTICE,
@@ -174,21 +173,21 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
         private fun canRedact(event: TimelineEvent, myUserId: String): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.type != EventType.MESSAGE) return false
+            if (event.root.getClearType() != EventType.MESSAGE) return false
             //TODO if user is admin or moderator
             return event.root.sender == myUserId
         }
 
         private fun canViewReactions(event: TimelineEvent): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.type != EventType.MESSAGE) return false
+            if (event.root.getClearType() != EventType.MESSAGE) return false
             //TODO if user is admin or moderator
             return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
         }
 
         private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.type != EventType.MESSAGE) return false
+            if (event.root.getClearType() != EventType.MESSAGE) return false
             //TODO if user is admin or moderator
             val messageContent = event.root.content.toModel<MessageContent>()
             return event.root.sender == myUserId && (

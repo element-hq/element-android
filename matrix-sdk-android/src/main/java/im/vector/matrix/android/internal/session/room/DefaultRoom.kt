@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -40,6 +41,7 @@ internal class DefaultRoom(
         private val sendService: SendService,
         private val stateService: StateService,
         private val readService: ReadService,
+        private val cryptoService: CryptoService,
         private val relationService: RelationService,
         private val roomMembersService: MembershipService
 ) : Room,
@@ -48,7 +50,7 @@ internal class DefaultRoom(
         StateService by stateService,
         ReadService by readService,
         RelationService by relationService,
-    MembershipService by roomMembersService {
+        MembershipService by roomMembersService {
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
         val liveRealmData = RealmLiveData<RoomSummaryEntity>(monarchy.realmConfiguration) { realm ->
@@ -64,6 +66,18 @@ internal class DefaultRoom(
                 roomSummaries.first()
             }
         }
+    }
+
+    override fun isEncrypted(): Boolean {
+        return cryptoService.isRoomEncrypted(roomId)
+    }
+
+    override fun encryptionAlgorithm(): String? {
+        return cryptoService.getEncryptionAlgorithm(roomId)
+    }
+
+    override fun shouldEncryptForInvitedMembers(): Boolean {
+        return cryptoService.shouldEncryptForInvitedMembers(roomId)
     }
 
 }

@@ -30,6 +30,8 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTex
 import timber.log.Timber
 
 class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
+                          private val encryptionItemFactory: EncryptionItemFactory,
+                          private val encryptedItemFactory: EncryptedItemFactory,
                           private val noticeItemFactory: NoticeItemFactory,
                           private val defaultItemFactory: DefaultItemFactory) {
 
@@ -38,10 +40,8 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
 
         val computedModel = try {
-            when (event.root.type) {
-                // Message
+            when (event.root.getClearType()) {
                 EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, callback)
-
                 // State and call
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
@@ -51,9 +51,11 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER       -> noticeItemFactory.create(event, callback)
 
+                // Crypto
+                EventType.ENCRYPTION        -> encryptionItemFactory.create(event)
+                EventType.ENCRYPTED         -> encryptedItemFactory.create(event)
+
                 // Unhandled event types (yet)
-                EventType.ENCRYPTED,
-                EventType.ENCRYPTION,
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STICKER,
                 EventType.STATE_ROOM_CREATE -> defaultItemFactory.create(event)
@@ -86,7 +88,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 }
             }
         } catch (e: Exception) {
-            Timber.e(e,"failed to create message item")
+            Timber.e(e, "failed to create message item")
             defaultItemFactory.create(event, e)
         }
         return (computedModel ?: EmptyItem_())

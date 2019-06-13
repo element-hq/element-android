@@ -225,7 +225,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                                       items: List<TimelineEvent>,
                                       addDaySeparator: Boolean,
                                       currentPosition: Int): MergedHeaderItem? {
-        return if (!event.canBeMerged() || (nextEvent?.root?.type == event.root.type && !addDaySeparator)) {
+        return if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
             null
         } else {
             val prevSameTypeEvents = items.prevSameTypeEvents(currentPosition, 2)

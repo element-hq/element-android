@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.group
 
 import android.content.Context
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import arrow.core.Try
@@ -27,7 +28,7 @@ import org.koin.standalone.inject
 
 internal class GetGroupDataWorker(context: Context,
                                   workerParameters: WorkerParameters
-) : Worker(context, workerParameters), MatrixKoinComponent {
+) : CoroutineWorker(context, workerParameters), MatrixKoinComponent {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -36,7 +37,7 @@ internal class GetGroupDataWorker(context: Context,
 
     private val getGroupDataTask by inject<GetGroupDataTask>()
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                      ?: return Result.failure()
 
@@ -47,7 +48,7 @@ internal class GetGroupDataWorker(context: Context,
         return if (isSuccessful) Result.success() else Result.retry()
     }
 
-    private fun fetchGroupData(groupId: String): Try<Unit> {
+    private suspend fun fetchGroupData(groupId: String): Try<Unit> {
         return getGroupDataTask.execute(GetGroupDataTask.Params(groupId))
     }
 
