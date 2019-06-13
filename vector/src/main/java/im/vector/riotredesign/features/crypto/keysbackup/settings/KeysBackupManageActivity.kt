@@ -77,4 +77,14 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        // When there is no network we could get stuck in infinite loading
+        // because backup state will stay in CheckingBackUpOnHomeserver
+        if (viewModel.canExit()) {
+            finish()
+            return
+        }
+        super.onBackPressed()
+    }
 }

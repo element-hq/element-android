@@ -1379,6 +1379,7 @@ Why choose Riot.im?
     <string name="keys_backup_settings_untrusted_backup">To use Key Backup on this device, restore with your passphrase or recovery key now.</string>
     <string name="keys_backup_settings_deleting_backup">Deleting backup…</string>
     <string name="keys_backup_settings_delete_backup_error">Failed to delete backup (%s)</string>
+    <string name="keys_backup_settings_checking_backup_state">Checking backup state</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Delete Backup</string>
     <string name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>

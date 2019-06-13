@@ -80,7 +80,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                     .setMessage(R.string.keys_backup_settings_delete_confirm_message)
                     .setCancelable(false)
                     .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
-                        viewModel.deleteCurrentBackup(it)
+                        viewModel.deleteCurrentBackup()
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .setCancelable(true)

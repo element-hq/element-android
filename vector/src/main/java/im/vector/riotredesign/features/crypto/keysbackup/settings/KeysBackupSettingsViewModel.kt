@@ -15,7 +15,6 @@
  */
 package im.vector.riotredesign.features.crypto.keysbackup.settings
 
-import android.content.Context
 import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
@@ -105,7 +104,7 @@ class KeysBackupSettingsViewModel(initialState: KeysBackupSettingViewState,
         getKeysBackupTrust()
     }
 
-    fun deleteCurrentBackup(context: Context) {
+    fun deleteCurrentBackup() {
         val keysBackupService = keysBackupService
 
         if (keysBackupService.currentBackupVersion != null) {
@@ -136,5 +135,12 @@ class KeysBackupSettingsViewModel(initialState: KeysBackupSettingViewState,
                 }
             })
         }
+    }
+
+    fun canExit(): Boolean {
+        val currentBackupState = keysBackupService.state
+
+        return currentBackupState == KeysBackupState.Unknown
+                || currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
     }
 }

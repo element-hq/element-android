@@ -59,6 +59,7 @@ class KeysBackupSettingsRecyclerViewController(val stringProvider: StringProvide
             KeysBackupState.CheckingBackUpOnHomeserver -> {
                 loadingItem {
                     id("summary")
+                    loadingText(stringProvider.getString(R.string.keys_backup_settings_checking_backup_state))
                 }
             }
             KeysBackupState.Disabled                   -> {
