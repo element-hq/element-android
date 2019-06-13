@@ -16,10 +16,13 @@
 
 package im.vector.matrix.android.internal.session.sync.job
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.squareup.moshi.JsonEncodingException
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
+import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
@@ -42,61 +45,52 @@ internal class SyncThread(private val syncTask: SyncTask,
                           private val taskExecutor: TaskExecutor
 ) : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
-    enum class State {
-        IDLE,
-        RUNNING,
-        PAUSED,
-        KILLING,
-        KILLED
-    }
-
-    private var state: State = State.IDLE
+    private var state: SyncState = SyncState.IDLE
+    private var liveState = MutableLiveData<SyncState>()
     private val lock = Object()
     private var nextBatch = syncTokenStore.getLastToken()
     private var cancelableTask: Cancelable? = null
 
-    fun restart() {
-        synchronized(lock) {
-            if (state != State.PAUSED) {
-                return@synchronized
-            }
-            Timber.v("Resume sync...")
+    init {
+        updateStateTo(SyncState.IDLE)
+    }
 
+    fun restart() = synchronized(lock) {
+        if (state is SyncState.PAUSED) {
+            Timber.v("Resume sync...")
             // Retrieve the last token, it may have been deleted in case of a clear cache
             nextBatch = syncTokenStore.getLastToken()
-
-            state = State.RUNNING
+            updateStateTo(SyncState.RUNNING(catchingUp = true))
             lock.notify()
         }
     }
 
-    fun pause() {
-        synchronized(lock) {
-            if (state != State.RUNNING) {
-                return@synchronized
-            }
+    fun pause() = synchronized(lock) {
+        if (state is SyncState.RUNNING) {
             Timber.v("Pause sync...")
-            state = State.PAUSED
+            updateStateTo(SyncState.PAUSED)
         }
     }
 
-    fun kill() {
-        synchronized(lock) {
-            Timber.v("Kill sync...")
-            state = State.KILLING
-            cancelableTask?.cancel()
-            lock.notify()
-        }
+    fun kill() = synchronized(lock) {
+        Timber.v("Kill sync...")
+        updateStateTo(SyncState.KILLING)
+        cancelableTask?.cancel()
+        lock.notify()
     }
 
+    fun liveState(): LiveData<SyncState> {
+        return liveState
+    }
 
     override fun run() {
         Timber.v("Start syncing...")
         networkConnectivityChecker.register(this)
         backgroundDetectionObserver.register(this)
-        state = State.RUNNING
-        while (state != State.KILLING) {
-            if (!networkConnectivityChecker.isConnected() || state == State.PAUSED) {
+        updateStateTo(SyncState.RUNNING(catchingUp = true))
+
+        while (state != SyncState.KILLING) {
+            if (!networkConnectivityChecker.isConnected() || state == SyncState.PAUSED) {
                 Timber.v("Waiting...")
                 synchronized(lock) {
                     lock.wait()
@@ -133,7 +127,7 @@ internal class SyncThread(private val syncTask: SyncTask,
                                 if (failure is Failure.ServerError
                                         && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
                                     // No token or invalid token, stop the thread
-                                    state = State.KILLING
+                                    updateStateTo(SyncState.KILLING)
                                 }
 
                                 latch.countDown()
@@ -141,14 +135,21 @@ internal class SyncThread(private val syncTask: SyncTask,
 
                         })
                         .executeBy(taskExecutor)
-
                 latch.await()
+                if (state is SyncState.RUNNING) {
+                    updateStateTo(SyncState.RUNNING(catchingUp = false))
+                }
             }
         }
         Timber.v("Sync killed")
-        state = State.KILLED
+        updateStateTo(SyncState.KILLED)
         backgroundDetectionObserver.unregister(this)
         networkConnectivityChecker.unregister(this)
+    }
+
+    private fun updateStateTo(newState: SyncState) {
+        state = newState
+        liveState.postValue(newState)
     }
 
     override fun onConnect() {

@@ -46,6 +46,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRooms
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
+import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.Cancelable
@@ -148,6 +149,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         }
         scope.close()
         isOpen = false
+    }
+
+    override fun syncState(): LiveData<SyncState> {
+        return syncThread.liveState()
     }
 
     @MainThread

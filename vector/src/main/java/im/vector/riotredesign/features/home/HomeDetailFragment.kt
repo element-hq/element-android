@@ -19,6 +19,7 @@ package im.vector.riotredesign.features.home
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.View
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -29,6 +30,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
@@ -199,6 +201,10 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         unreadCounterBadgeViews[INDEX_CATCHUP].render(UnreadCounterBadgeView.State(it.notificationCountCatchup, it.notificationHighlightCatchup))
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
+        syncProgressBar.visibility = when (it.syncState) {
+            is SyncState.RUNNING -> if (it.syncState.catchingUp) View.VISIBLE else View.GONE
+            else                 -> View.GONE
+        }
     }
 
     companion object {
