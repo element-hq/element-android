@@ -49,18 +49,24 @@ import im.vector.matrix.android.api.extensions.sortByLastSeen
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
+import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.dialogs.ExportKeysDialog
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.extensions.withArgs
+import im.vector.riotredesign.core.intent.ExternalIntentData
+import im.vector.riotredesign.core.intent.analyseIntent
+import im.vector.riotredesign.core.intent.getFilenameFromUri
+import im.vector.riotredesign.core.intent.getMimeTypeFromUri
 import im.vector.riotredesign.core.platform.SimpleTextWatcher
 import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.ProgressBarPreference
 import im.vector.riotredesign.core.preference.UserAvatarPreference
 import im.vector.riotredesign.core.preference.VectorPreference
+import im.vector.riotredesign.core.resources.openResource
 import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.configuration.VectorConfiguration
@@ -2643,100 +2649,115 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             return
         }
 
-        notImplemented()
+        val sharedDataItems = analyseIntent(intent)
+        val thisActivity = activity
 
-        /*
-val sharedDataItems = ArrayList(RoomMediaMessage.listRoomMediaMessages(intent))
-val thisActivity = activity
+        if (sharedDataItems.isNotEmpty() && thisActivity != null) {
+            val sharedDataItem = sharedDataItems[0]
 
-if (sharedDataItems.isNotEmpty() && thisActivity != null) {
-    val sharedDataItem = sharedDataItems[0]
-    val dialogLayout = thisActivity.layoutInflater.inflate(R.layout.dialog_import_e2e_keys, null)
-    val builder = AlertDialog.Builder(thisActivity)
-            .setTitle(R.string.encryption_import_room_keys)
-            .setView(dialogLayout)
-
-    val passPhraseEditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
-    val importButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_import_button)
-
-    passPhraseEditText.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-        }
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            importButton.isEnabled = !TextUtils.isEmpty(passPhraseEditText.text)
-        }
-
-        override fun afterTextChanged(s: Editable) {
-
-        }
-    })
-
-    val importDialog = builder.show()
-    val appContext = thisActivity.applicationContext
-
-    importButton.setOnClickListener(View.OnClickListener {
-        val password = passPhraseEditText.text.toString()
-        val resource = openResource(appContext, sharedDataItem.uri, sharedDataItem.getMimeType(appContext))
-
-        if (resource?.mContentStream == null) {
-            appContext.toast("Error")
-
-            return@OnClickListener
-        }
-
-        val data: ByteArray
-
-        try {
-            data = ByteArray(resource.mContentStream!!.available())
-            resource!!.mContentStream!!.read(data)
-            resource!!.mContentStream!!.close()
-        } catch (e: Exception) {
-            try {
-                resource!!.mContentStream!!.close()
-            } catch (e2: Exception) {
-                Timber.e(e2, "## importKeys()")
+            val uri = when (sharedDataItem) {
+                is ExternalIntentData.IntentDataUri      -> sharedDataItem.uri
+                is ExternalIntentData.IntentDataClipData -> sharedDataItem.clipDataItem.uri
+                else                                     -> null
             }
 
-            appContext.toast(e.localizedMessage)
+            val mimetype = when (sharedDataItem) {
+                is ExternalIntentData.IntentDataClipData -> sharedDataItem.mimeType
+                else                                     -> null
+            }
 
-            return@OnClickListener
+            if (uri == null) {
+                return
+            }
+
+            val appContext = thisActivity.applicationContext
+
+            val filename = getFilenameFromUri(appContext, uri)
+
+            val dialogLayout = thisActivity.layoutInflater.inflate(R.layout.dialog_import_e2e_keys, null)
+
+            val textView = dialogLayout.findViewById<TextView>(R.id.dialog_e2e_keys_passphrase_filename)
+
+            if (filename.isNullOrBlank()) {
+                textView.isVisible = false
+            } else {
+                textView.isVisible = true
+                textView.text = getString(R.string.import_e2e_keys_from_file, filename)
+            }
+
+            val builder = AlertDialog.Builder(thisActivity)
+                    .setTitle(R.string.encryption_import_room_keys)
+                    .setView(dialogLayout)
+
+            val passPhraseEditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
+            val importButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_import_button)
+
+            passPhraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    importButton.isEnabled = !TextUtils.isEmpty(passPhraseEditText.text)
+                }
+            })
+
+            val importDialog = builder.show()
+
+            importButton.setOnClickListener(View.OnClickListener {
+                val password = passPhraseEditText.text.toString()
+                val resource = openResource(appContext, uri, mimetype ?: getMimeTypeFromUri(appContext, uri))
+
+                if (resource?.mContentStream == null) {
+                    appContext.toast("Error")
+
+                    return@OnClickListener
+                }
+
+                val data: ByteArray
+// TODO BG
+                try {
+                    data = ByteArray(resource.mContentStream!!.available())
+                    resource.mContentStream!!.read(data)
+                    resource.mContentStream!!.close()
+                } catch (e: Exception) {
+                    try {
+                        resource.mContentStream!!.close()
+                    } catch (e2: Exception) {
+                        Timber.e(e2, "## importKeys()")
+                    }
+
+                    appContext.toast(e.localizedMessage)
+
+                    return@OnClickListener
+                }
+
+                displayLoadingView()
+
+                mSession.importRoomKeys(data,
+                        password,
+                        null,
+                        object : MatrixCallback<ImportRoomKeysResult> {
+                            override fun onSuccess(data: ImportRoomKeysResult) {
+                                if (!isAdded) {
+                                    return
+                                }
+
+                                hideLoadingView()
+
+                                AlertDialog.Builder(thisActivity)
+                                        .setMessage(getString(R.string.encryption_import_room_keys_success,
+                                                data.successfullyNumberOfImportedKeys,
+                                                data.totalNumberOfKeys))
+                                        .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                        .show()
+                            }
+
+                            override fun onFailure(failure: Throwable) {
+                                appContext.toast(failure.localizedMessage)
+                                hideLoadingView()
+                            }
+                        })
+
+                importDialog.dismiss()
+            })
         }
-
-        displayLoadingView()
-
-        session.importRoomKeys(data,
-                password,
-                null,
-                object : MatrixCallback<ImportRoomKeysResult> {
-                    override fun onSuccess(info: ImportRoomKeysResult) {
-                        if (!isAdded) {
-                            return
-                        }
-
-                        hideLoadingView()
-
-                        info?.let {
-                            AlertDialog.Builder(thisActivity)
-                                    .setMessage(getString(R.string.encryption_import_room_keys_success,
-                                            it.successfullyNumberOfImportedKeys,
-                                            it.totalNumberOfKeys))
-                                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                    .show()
-                        }
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        appContext.toast(failure.localizedMessage)
-                        hideLoadingView()
-                    }
-                })
-
-        importDialog.dismiss()
-    })
-}
-*/
     }
 
     //==============================================================================================================
