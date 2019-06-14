@@ -19,13 +19,15 @@ package im.vector.matrix.android.internal.session.signout
 import arrow.core.Try
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface SignOutTask : Task<Unit, Unit>
 
-
-internal class DefaultSignOutTask(private val signOutAPI: SignOutAPI,
-                                  private val sessionParamsStore: SessionParamsStore) : SignOutTask {
+@SessionScope
+internal class DefaultSignOutTask @Inject constructor(private val signOutAPI: SignOutAPI,
+                                                      private val sessionParamsStore: SessionParamsStore) : SignOutTask {
 
     override suspend fun execute(params: Unit): Try<Unit> {
         return executeRequest<Unit> {

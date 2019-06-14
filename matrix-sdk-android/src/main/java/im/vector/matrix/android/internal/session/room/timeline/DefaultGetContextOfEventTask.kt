@@ -18,9 +18,11 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, TokenChunkEventPersistor.Result> {
 
@@ -31,7 +33,8 @@ internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, To
 
 }
 
-internal class DefaultGetContextOfEventTask(private val roomAPI: RoomAPI,
+@SessionScope
+internal class DefaultGetContextOfEventTask @Inject constructor(private val roomAPI: RoomAPI,
                                             private val filterRepository: FilterRepository,
                                             private val tokenChunkEventPersistor: TokenChunkEventPersistor
 ) : GetContextOfEventTask {

@@ -23,11 +23,14 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShare
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-internal class IncomingRoomKeyRequestManager(
+@SessionScope
+internal class IncomingRoomKeyRequestManager @Inject constructor(
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
         private val roomDecryptorProvider: RoomDecryptorProvider) {

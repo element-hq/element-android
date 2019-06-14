@@ -25,8 +25,9 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import javax.inject.Inject
 
-internal class DefaultGroupService(private val monarchy: Monarchy) : GroupService {
+internal class DefaultGroupService @Inject constructor(private val monarchy: Monarchy) : GroupService {
 
     override fun getGroup(groupId: String): Group? {
         return null

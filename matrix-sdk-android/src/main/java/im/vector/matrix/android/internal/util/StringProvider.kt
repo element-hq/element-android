@@ -19,8 +19,12 @@ package im.vector.matrix.android.internal.util
 import android.content.res.Resources
 import androidx.annotation.NonNull
 import androidx.annotation.StringRes
+import im.vector.matrix.android.internal.di.MatrixScope
+import javax.inject.Inject
+import javax.inject.Singleton
 
-internal class StringProvider(private val resources: Resources) {
+@MatrixScope
+internal class StringProvider @Inject constructor(private val resources: Resources) {
 
     /**
      * Returns a localized string from the application's package's

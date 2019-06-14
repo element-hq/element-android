@@ -26,16 +26,20 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 // Legacy name: MXDeviceList
-internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
-                                 private val olmDevice: MXOlmDevice,
-                                 private val syncTokenStore: SyncTokenStore,
-                                 private val credentials: Credentials,
-                                 private val downloadKeysForUsersTask: DownloadKeysForUsersTask) {
+
+@SessionScope
+internal class DeviceListManager @Inject constructor(private val cryptoStore: IMXCryptoStore,
+                                                     private val olmDevice: MXOlmDevice,
+                                                     private val syncTokenStore: SyncTokenStore,
+                                                     private val credentials: Credentials,
+                                                     private val downloadKeysForUsersTask: DownloadKeysForUsersTask) {
 
     // HS not ready for retry
     private val notReadyToRetryHS = HashSet<String>()
@@ -410,7 +414,7 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
 
         if (!isVerified) {
             Timber.e("## validateDeviceKeys() : Unable to verify signature on device " + userId + ":"
-                    + deviceKeys.deviceId + " with error " + errorMessage)
+                     + deviceKeys.deviceId + " with error " + errorMessage)
             return false
         }
 
@@ -421,8 +425,8 @@ internal class DeviceListManager(private val cryptoStore: IMXCryptoStore,
                 //
                 // Should we warn the user about it somehow?
                 Timber.e("## validateDeviceKeys() : WARNING:Ed25519 key for device " + userId + ":"
-                        + deviceKeys.deviceId + " has changed : "
-                        + previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
+                         + deviceKeys.deviceId + " has changed : "
+                         + previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
 
                 Timber.e("## validateDeviceKeys() : $previouslyStoredDeviceKeys -> $deviceKeys")
                 Timber.e("## validateDeviceKeys() : " + previouslyStoredDeviceKeys.keys + " -> " + deviceKeys.keys)

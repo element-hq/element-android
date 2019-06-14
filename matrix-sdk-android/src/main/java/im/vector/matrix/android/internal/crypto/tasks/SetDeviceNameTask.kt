@@ -21,7 +21,9 @@ import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.UpdateDeviceInfoBody
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface SetDeviceNameTask : Task<SetDeviceNameTask.Params, Unit> {
     data class Params(
@@ -32,7 +34,8 @@ internal interface SetDeviceNameTask : Task<SetDeviceNameTask.Params, Unit> {
     )
 }
 
-internal class DefaultSetDeviceNameTask(private val cryptoApi: CryptoApi)
+@SessionScope
+internal class DefaultSetDeviceNameTask @Inject constructor(private val cryptoApi: CryptoApi)
     : SetDeviceNameTask {
 
     override suspend fun execute(params: SetDeviceNameTask.Params): Try<Unit> {

@@ -32,14 +32,15 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
+import javax.inject.Inject
 
 /**
  * This class computes room display name
  */
-internal class RoomDisplayNameResolver(private val context: Context,
-                                       private val monarchy: Monarchy,
-                                       private val roomMemberDisplayNameResolver: RoomMemberDisplayNameResolver,
-                                       private val credentials: Credentials
+internal class RoomDisplayNameResolver @Inject constructor(private val context: Context,
+                                                           private val monarchy: Monarchy,
+                                                           private val roomMemberDisplayNameResolver: RoomMemberDisplayNameResolver,
+                                                           private val credentials: Credentials
 ) {
 
     /**

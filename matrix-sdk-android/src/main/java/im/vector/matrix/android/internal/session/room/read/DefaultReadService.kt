@@ -21,11 +21,14 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.latestEvent
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
+import javax.inject.Inject
 
-internal class DefaultReadService(private val roomId: String,
+@SessionScope
+internal class DefaultReadService @Inject constructor(private val roomId: String,
                                   private val monarchy: Monarchy,
                                   private val taskExecutor: TaskExecutor,
                                   private val setReadMarkersTask: SetReadMarkersTask) : ReadService {

@@ -29,9 +29,11 @@ import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoo
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionAsync
+import javax.inject.Inject
 
 internal interface SetReadMarkersTask : Task<SetReadMarkersTask.Params, Unit> {
 
@@ -45,7 +47,8 @@ internal interface SetReadMarkersTask : Task<SetReadMarkersTask.Params, Unit> {
 private const val READ_MARKER = "m.fully_read"
 private const val READ_RECEIPT = "m.read"
 
-internal class DefaultSetReadMarkersTask(private val roomAPI: RoomAPI,
+@SessionScope
+internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI: RoomAPI,
                                          private val credentials: Credentials,
                                          private val monarchy: Monarchy
 ) : SetReadMarkersTask {

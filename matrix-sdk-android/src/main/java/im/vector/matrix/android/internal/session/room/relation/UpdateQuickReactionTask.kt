@@ -21,8 +21,10 @@ import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryE
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import io.realm.Realm
+import javax.inject.Inject
 
 
 internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params, UpdateQuickReactionTask.Result> {
@@ -41,7 +43,8 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
     )
 }
 
-internal class DefaultUpdateQuickReactionTask(private val monarchy: Monarchy) : UpdateQuickReactionTask {
+@SessionScope
+internal class DefaultUpdateQuickReactionTask @Inject constructor(private val monarchy: Monarchy) : UpdateQuickReactionTask {
     override suspend fun execute(params: UpdateQuickReactionTask.Params): Try<UpdateQuickReactionTask.Result> {
         return Try {
             var res: Pair<String?, List<String>?>? = null

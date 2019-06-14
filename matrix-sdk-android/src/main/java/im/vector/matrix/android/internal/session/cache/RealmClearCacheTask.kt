@@ -17,13 +17,16 @@
 package im.vector.matrix.android.internal.session.cache
 
 import arrow.core.Try
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import javax.inject.Inject
 
 internal interface ClearCacheTask : Task<Unit, Unit>
 
-internal class RealmClearCacheTask(val realmConfiguration: RealmConfiguration) : ClearCacheTask {
+@SessionScope
+internal class RealmClearCacheTask @Inject constructor(val realmConfiguration: RealmConfiguration) : ClearCacheTask {
 
     override suspend fun execute(params: Unit): Try<Unit> {
         return Try {

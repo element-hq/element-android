@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync
+package im.vector.matrix.android.internal.session;
 
-import dagger.Module
-import im.vector.matrix.android.internal.session.SessionScope
-import retrofit2.Retrofit
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
 
-@Module
-internal class SyncModule {
+import javax.inject.Scope;
 
-    @SessionScope
-    fun providesSyncAPI(retrofit: Retrofit): SyncAPI {
-        return retrofit.create(SyncAPI::class.java)
-    }
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-}
+@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface SessionScope {}

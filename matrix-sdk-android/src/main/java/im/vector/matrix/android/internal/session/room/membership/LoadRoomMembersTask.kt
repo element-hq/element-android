@@ -23,12 +23,14 @@ import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
+import javax.inject.Inject
 
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Boolean> {
 
@@ -38,7 +40,8 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Boolea
     )
 }
 
-internal class DefaultLoadRoomMembersTask(private val roomAPI: RoomAPI,
+@SessionScope
+internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAPI: RoomAPI,
                                           private val monarchy: Monarchy,
                                           private val syncTokenStore: SyncTokenStore,
                                           private val roomSummaryUpdater: RoomSummaryUpdater

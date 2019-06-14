@@ -25,12 +25,14 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import javax.inject.Inject
 
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
-internal class GroupSummaryUpdater(monarchy: Monarchy
-) : RealmLiveEntityObserver<GroupEntity>(monarchy) {
+@SessionScope
+internal class GroupSummaryUpdater @Inject constructor(monarchy: Monarchy) : RealmLiveEntityObserver<GroupEntity>(monarchy) {
 
     override val query = Monarchy.Query<GroupEntity> { GroupEntity.where(it) }
 

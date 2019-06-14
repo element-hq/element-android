@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.matrix.android.internal.di;
 
-import org.koin.core.Koin
-import org.koin.core.KoinContext
-import org.koin.standalone.KoinComponent
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
 
-internal object MatrixKoinHolder {
+import javax.inject.Scope;
 
-    val instance: Koin by lazy {
-        Koin.create()
-    }
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-}
-
-internal interface MatrixKoinComponent : KoinComponent {
-
-    override fun getKoin(): KoinContext {
-        return MatrixKoinHolder.instance.koinContext
-    }
-
-}
+@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface MatrixScope {}

@@ -18,24 +18,24 @@ package im.vector.matrix.android.internal.session.group
 
 import android.content.Context
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import arrow.core.Try
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
+import im.vector.matrix.android.internal.di.ChildWorkerFactory
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.inject
 
-internal class GetGroupDataWorker(context: Context,
-                                  workerParameters: WorkerParameters
-) : CoroutineWorker(context, workerParameters), MatrixKoinComponent {
+internal class GetGroupDataWorker @AssistedInject constructor(
+        @Assisted context: Context,
+        @Assisted workerParameters: WorkerParameters,
+        private val getGroupDataTask: GetGroupDataTask
+) : CoroutineWorker(context, workerParameters) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
             val groupIds: List<String>
     )
-
-    private val getGroupDataTask by inject<GetGroupDataTask>()
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -51,5 +51,8 @@ internal class GetGroupDataWorker(context: Context,
     private suspend fun fetchGroupData(groupId: String): Try<Unit> {
         return getGroupDataTask.execute(GetGroupDataTask.Params(groupId))
     }
+
+    @AssistedInject.Factory
+    interface Factory  : ChildWorkerFactory
 
 }

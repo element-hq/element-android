@@ -40,6 +40,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -47,6 +48,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.HashMap
 
 /**
@@ -54,14 +56,16 @@ import kotlin.collections.HashMap
  * Short codes interactive verification is a more user friendly way of verifying devices
  * that is still maintaining a good level of security (alternative to the 43-character strings compare method).
  */
-internal class DefaultSasVerificationService(private val credentials: Credentials,
-                                             private val cryptoStore: IMXCryptoStore,
-                                             private val myDeviceInfoHolder: MyDeviceInfoHolder,
-                                             private val deviceListManager: DeviceListManager,
-                                             private val setDeviceVerificationAction: SetDeviceVerificationAction,
-                                             private val sendToDeviceTask: SendToDeviceTask,
-                                             private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                             private val taskExecutor: TaskExecutor)
+
+@SessionScope
+internal class DefaultSasVerificationService @Inject constructor(private val credentials: Credentials,
+                                                                 private val cryptoStore: IMXCryptoStore,
+                                                                 private val myDeviceInfoHolder: MyDeviceInfoHolder,
+                                                                 private val deviceListManager: DeviceListManager,
+                                                                 private val setDeviceVerificationAction: SetDeviceVerificationAction,
+                                                                 private val sendToDeviceTask: SendToDeviceTask,
+                                                                 private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                                 private val taskExecutor: TaskExecutor)
     : VerificationTransaction.Listener, SasVerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())

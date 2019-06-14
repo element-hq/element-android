@@ -23,11 +23,14 @@ import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.SessionScope
 import org.matrix.olm.OlmAccount
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
-internal class OneTimeKeysUploader(
+@SessionScope
+internal class OneTimeKeysUploader @Inject constructor(
         private val credentials: Credentials,
         private val olmDevice: MXOlmDevice,
         private val objectSigner: ObjectSigner,

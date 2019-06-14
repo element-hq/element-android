@@ -23,9 +23,11 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
+import javax.inject.Inject
 
 internal interface UpdateUserTask : Task<UpdateUserTask.Params, Unit> {
 
@@ -33,7 +35,8 @@ internal interface UpdateUserTask : Task<UpdateUserTask.Params, Unit> {
 
 }
 
-internal class DefaultUpdateUserTask(private val monarchy: Monarchy) : UpdateUserTask {
+@SessionScope
+internal class DefaultUpdateUserTask @Inject constructor(private val monarchy: Monarchy) : UpdateUserTask {
 
     override suspend fun execute(params: UpdateUserTask.Params): Try<Unit> {
         return monarchy.tryTransactionSync { realm ->

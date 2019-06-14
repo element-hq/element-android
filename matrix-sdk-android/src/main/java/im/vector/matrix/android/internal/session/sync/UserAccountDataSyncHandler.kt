@@ -20,10 +20,13 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirectMessages
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataSync
+import javax.inject.Inject
 
-internal class UserAccountDataSyncHandler(private val monarchy: Monarchy) {
+@SessionScope
+internal class UserAccountDataSyncHandler @Inject constructor(private val monarchy: Monarchy) {
 
     fun handle(accountData: UserAccountDataSync) {
         accountData.list.forEach {

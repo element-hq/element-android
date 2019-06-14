@@ -29,16 +29,19 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import javax.inject.Inject
 
-internal class RoomSummaryUpdater(private val credentials: Credentials,
-                                  private val roomDisplayNameResolver: RoomDisplayNameResolver,
-                                  private val roomAvatarResolver: RoomAvatarResolver) {
+@SessionScope
+internal class RoomSummaryUpdater @Inject constructor(private val credentials: Credentials,
+                                                      private val roomDisplayNameResolver: RoomDisplayNameResolver,
+                                                      private val roomAvatarResolver: RoomAvatarResolver) {
 
     fun update(realm: Realm,
                roomId: String,

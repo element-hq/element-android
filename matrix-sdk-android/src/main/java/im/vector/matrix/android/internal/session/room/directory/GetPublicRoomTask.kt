@@ -20,8 +20,10 @@ import arrow.core.Try
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoomsResponse> {
     data class Params(
@@ -30,7 +32,8 @@ internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoom
     )
 }
 
-internal class DefaultGetPublicRoomTask(private val roomAPI: RoomAPI) : GetPublicRoomTask {
+@SessionScope
+internal class DefaultGetPublicRoomTask @Inject constructor(private val roomAPI: RoomAPI) : GetPublicRoomTask {
 
     override suspend fun execute(params: GetPublicRoomTask.Params): Try<PublicRoomsResponse> {
         return executeRequest {

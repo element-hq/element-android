@@ -21,7 +21,9 @@ import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeyBackupData
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface StoreRoomSessionDataTask : Task<StoreRoomSessionDataTask.Params, BackupKeysResult> {
     data class Params(
@@ -32,8 +34,8 @@ internal interface StoreRoomSessionDataTask : Task<StoreRoomSessionDataTask.Para
     )
 }
 
-
-internal class DefaultStoreRoomSessionDataTask(private val roomKeysApi: RoomKeysApi)
+@SessionScope
+internal class DefaultStoreRoomSessionDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : StoreRoomSessionDataTask {
 
     override suspend fun execute(params: StoreRoomSessionDataTask.Params): Try<BackupKeysResult> {

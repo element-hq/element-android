@@ -23,8 +23,10 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceKeys
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadBody
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.convertToUTF8
+import javax.inject.Inject
 
 internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadResponse> {
     data class Params(
@@ -36,7 +38,8 @@ internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadRespon
             val deviceId: String)
 }
 
-internal class DefaultUploadKeysTask(private val cryptoApi: CryptoApi)
+@SessionScope
+internal class DefaultUploadKeysTask @Inject constructor(private val cryptoApi: CryptoApi)
     : UploadKeysTask {
 
     override suspend fun execute(params: UploadKeysTask.Params): Try<KeysUploadResponse> {

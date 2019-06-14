@@ -20,10 +20,13 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomTagEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
 import java.util.*
+import javax.inject.Inject
 
-internal class RoomTagHandler {
+@SessionScope
+internal class RoomTagHandler @Inject constructor() {
 
     fun handle(realm: Realm, roomId: String, content: RoomTagContent?) {
         if (content == null) {
@@ -41,7 +44,7 @@ internal class RoomTagHandler {
             tags.add(tag)
         }
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                ?: RoomSummaryEntity(roomId)
+                                ?: RoomSummaryEntity(roomId)
 
         roomSummaryEntity.tags.clear()
         roomSummaryEntity.tags.addAll(tags)

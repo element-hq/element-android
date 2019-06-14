@@ -20,12 +20,16 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
+import javax.inject.Inject
 
 /**
  * Fetches annotations (reactions, edits...) associated to a given eventEntity from the data layer.
  */
-internal class EventRelationExtractor {
+
+@SessionScope
+internal class EventRelationExtractor @Inject constructor() {
 
     fun extractFrom(event: EventEntity, realm: Realm = event.realm): EventAnnotationsSummary? {
         return EventAnnotationsSummaryEntity.where(realm, event.eventId).findFirst()?.asDomain()

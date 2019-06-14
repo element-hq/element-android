@@ -33,12 +33,14 @@ import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.util.StringProvider
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Creates local echo of events for room events.
@@ -49,7 +51,9 @@ import java.util.*
  *
  * The transactionID is used as loc
  */
-internal class LocalEchoEventFactory(private val credentials: Credentials, private val stringProvider: StringProvider) {
+
+@SessionScope
+internal class LocalEchoEventFactory @Inject constructor(private val credentials: Credentials, private val stringProvider: StringProvider) {
 
     fun createTextEvent(roomId: String, msgType: String, text: String, autoMarkdown: Boolean): Event {
         if (autoMarkdown && msgType == MessageType.MSGTYPE_TEXT) {

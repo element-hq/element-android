@@ -20,7 +20,9 @@ import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     data class Params(
@@ -29,7 +31,8 @@ internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     )
 }
 
-internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi)
+@SessionScope
+internal class DefaultDeleteDeviceTask @Inject constructor(private val cryptoApi: CryptoApi)
     : DeleteDeviceTask {
 
     override suspend fun execute(params: DeleteDeviceTask.Params): Try<Unit> {

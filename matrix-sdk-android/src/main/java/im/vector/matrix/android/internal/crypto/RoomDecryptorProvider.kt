@@ -20,10 +20,13 @@ import android.text.TextUtils
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmDecryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
+import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
-internal class RoomDecryptorProvider(
+@SessionScope
+internal class RoomDecryptorProvider @Inject constructor(
         private val olmDecryptionFactory: MXOlmDecryptionFactory,
         private val megolmDecryptionFactory: MXMegolmDecryptionFactory
 ) {

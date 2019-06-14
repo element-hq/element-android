@@ -18,11 +18,14 @@ package im.vector.matrix.android.internal.session.signout
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.signout.SignOutService
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import javax.inject.Inject
 
-internal class DefaultSignOutService(private val signOutTask: SignOutTask,
-                                     private val taskExecutor: TaskExecutor) : SignOutService {
+@SessionScope
+internal class DefaultSignOutService @Inject constructor(private val signOutTask: SignOutTask,
+                                                         private val taskExecutor: TaskExecutor) : SignOutService {
 
     override fun signOut(callback: MatrixCallback<Unit>) {
         signOutTask

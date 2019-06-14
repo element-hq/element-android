@@ -20,12 +20,14 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.GroupsSyncResponse
 import im.vector.matrix.android.internal.session.sync.model.InvitedGroupSync
 import io.realm.Realm
+import javax.inject.Inject
 
-
-internal class GroupSyncHandler(private val monarchy: Monarchy) {
+@SessionScope
+internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarchy) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, Any>) : HandlingStrategy()

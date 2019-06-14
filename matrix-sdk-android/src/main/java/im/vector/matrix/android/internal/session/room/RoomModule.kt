@@ -16,7 +16,9 @@
 
 package im.vector.matrix.android.internal.session.room
 
-import im.vector.matrix.android.internal.session.DefaultSession
+import dagger.Module
+import dagger.Provides
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
@@ -39,87 +41,20 @@ import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.LocalEchoUpdater
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
-import im.vector.matrix.android.internal.session.room.timeline.*
-import org.koin.dsl.module.module
+import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
 import retrofit2.Retrofit
 
+@Module
+internal class RoomModule {
 
-class RoomModule {
-
-    val definition = module(override = true) {
-
-        scope(DefaultSession.SCOPE) {
-            val retrofit: Retrofit = get()
-            retrofit.create(RoomAPI::class.java)
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultLoadRoomMembersTask(get(), get(), get(), get()) as LoadRoomMembersTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            TokenChunkEventPersistor(get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultPaginationTask(get(), get(), get()) as PaginationTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGetContextOfEventTask(get(), get(), get()) as GetContextOfEventTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultSetReadMarkersTask(get(), get(), get()) as SetReadMarkersTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            LocalEchoEventFactory(get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            LocalEchoUpdater(get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultCreateRoomTask(get(), get("SessionRealmConfiguration")) as CreateRoomTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultInviteTask(get()) as InviteTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultJoinRoomTask(get()) as JoinRoomTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultLeaveRoomTask(get()) as LeaveRoomTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultSendStateTask(get()) as SendStateTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultFindReactionEventForUndoTask(get()) as FindReactionEventForUndoTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultUpdateQuickReactionTask(get()) as UpdateQuickReactionTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultPruneEventTask(get()) as PruneEventTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultEventRelationsAggregationTask(get()) as EventRelationsAggregationTask
-        }
-
+    @SessionScope
+    @Provides
+    fun providesRoomAPI(retrofit: Retrofit): RoomAPI {
+        return retrofit.create(RoomAPI::class.java)
     }
+
 }

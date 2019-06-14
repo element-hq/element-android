@@ -22,34 +22,25 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
-import im.vector.matrix.android.internal.auth.AuthModule
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
-import im.vector.matrix.android.internal.di.MatrixKoinHolder
-import im.vector.matrix.android.internal.di.MatrixModule
-import im.vector.matrix.android.internal.di.NetworkModule
 import im.vector.matrix.android.internal.network.UserAgentHolder
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
-import org.koin.standalone.inject
 import java.util.concurrent.atomic.AtomicBoolean
+import javax.inject.Inject
 
 /**
  * This is the main entry point to the matrix sdk.
  * This class is automatically init by a provider.
  * To get the singleton instance, use getInstance static method.
  */
-class Matrix private constructor(context: Context) : MatrixKoinComponent {
+class Matrix private constructor(context: Context) {
 
-    private val authenticator by inject<Authenticator>()
-    private val userAgentHolder by inject<UserAgentHolder>()
-    private val backgroundDetectionObserver by inject<BackgroundDetectionObserver>()
+    @Inject internal lateinit var authenticator: Authenticator
+    @Inject internal lateinit var userAgentHolder: UserAgentHolder
+    @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     var currentSession: Session? = null
 
     init {
         Monarchy.init(context)
-        val matrixModule = MatrixModule(context).definition
-        val networkModule = NetworkModule().definition
-        val authModule = AuthModule().definition
-        MatrixKoinHolder.instance.loadModules(listOf(matrixModule, networkModule, authModule))
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
         authenticator.getLastActiveSession()?.also {
             currentSession = it

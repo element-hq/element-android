@@ -20,7 +20,9 @@ import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface UpdateKeysBackupVersionTask : Task<UpdateKeysBackupVersionTask.Params, Unit> {
     data class Params(
@@ -29,8 +31,8 @@ internal interface UpdateKeysBackupVersionTask : Task<UpdateKeysBackupVersionTas
     )
 }
 
-
-internal class DefaultUpdateKeysBackupVersionTask(private val roomKeysApi: RoomKeysApi)
+@SessionScope
+internal class DefaultUpdateKeysBackupVersionTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : UpdateKeysBackupVersionTask {
 
 

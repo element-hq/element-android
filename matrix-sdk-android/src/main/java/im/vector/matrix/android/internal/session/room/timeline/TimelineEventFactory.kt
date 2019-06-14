@@ -30,12 +30,13 @@ import im.vector.matrix.android.internal.session.room.membership.SenderRoomMembe
 import io.realm.Realm
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 /**
  * This class is responsible for building [TimelineEvent] returned by a [Timeline] through [TimelineService]
  * It handles decryption, extracting additional data around an event as sender data and relation.
  */
-internal class TimelineEventFactory(
+internal class TimelineEventFactory @Inject constructor(
         private val roomMemberExtractor: SenderRoomMemberExtractor,
         private val relationExtractor: EventRelationExtractor,
         private val cryptoService: CryptoService) {

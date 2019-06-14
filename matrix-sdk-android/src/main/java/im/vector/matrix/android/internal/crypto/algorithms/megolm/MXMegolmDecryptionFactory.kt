@@ -24,9 +24,12 @@ import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevi
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import javax.inject.Inject
 
-internal class MXMegolmDecryptionFactory(private val credentials: Credentials,
+@SessionScope
+internal class MXMegolmDecryptionFactory @Inject constructor(private val credentials: Credentials,
                                          private val olmDevice: MXOlmDevice,
                                          private val deviceListManager: DeviceListManager,
                                          private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,

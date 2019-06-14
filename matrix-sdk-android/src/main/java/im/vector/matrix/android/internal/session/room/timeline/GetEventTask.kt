@@ -22,7 +22,7 @@ import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 
-internal class GetEventTask(private val roomAPI: RoomAPI
+internal class GetEventTask @Inject constructor(private val roomAPI: RoomAPI
 ) : Task<GetEventTask.Params, Event> {
 
     internal data class Params(

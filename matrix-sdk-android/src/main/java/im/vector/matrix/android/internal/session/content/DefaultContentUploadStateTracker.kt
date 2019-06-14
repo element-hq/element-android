@@ -19,8 +19,11 @@ package im.vector.matrix.android.internal.session.content
 import android.os.Handler
 import android.os.Looper
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
+import im.vector.matrix.android.internal.session.SessionScope
+import javax.inject.Inject
 
-internal class DefaultContentUploadStateTracker : ContentUploadStateTracker {
+@SessionScope
+internal class DefaultContentUploadStateTracker @Inject constructor() : ContentUploadStateTracker {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val states = mutableMapOf<String, ContentUploadStateTracker.State>()

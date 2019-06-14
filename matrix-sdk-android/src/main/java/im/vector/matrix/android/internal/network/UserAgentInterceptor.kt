@@ -16,10 +16,13 @@
 
 package im.vector.matrix.android.internal.network
 
+import im.vector.matrix.android.internal.di.MatrixScope
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
-internal class UserAgentInterceptor(private val userAgentHolder: UserAgentHolder) : Interceptor {
+@MatrixScope
+internal class UserAgentInterceptor @Inject constructor(private val userAgentHolder: UserAgentHolder) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()

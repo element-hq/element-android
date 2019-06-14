@@ -274,7 +274,7 @@ internal class DefaultTimeline(
             val newRequestedCount = count - builtCount
             updatePaginationState(direction) { it.copy(requestedCount = newRequestedCount) }
             val fetchingCount = Math.max(MIN_FETCHING_COUNT, newRequestedCount)
-            executePaginationTask(direction, fetchingCount)
+            executePaginationTask @Inject constructor(direction, fetchingCount)
         } else {
             updatePaginationState(direction) { it.copy(isPaginating = false, requestedCount = 0) }
         }
@@ -350,7 +350,7 @@ internal class DefaultTimeline(
     /**
      * This has to be called on TimelineThread as it access realm live results
      */
-    private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
+    private fun executePaginationTask @Inject constructor(direction: Timeline.Direction, limit: Int) {
         val token = getTokenLive(direction) ?: return
         val params = PaginationTask.Params(roomId = roomId,
                 from = token,
@@ -367,7 +367,7 @@ internal class DefaultTimeline(
                         } else {
                             // Database won't be updated, so we force pagination request
                             backgroundHandler.get()?.post {
-                                executePaginationTask(direction, limit)
+                                executePaginationTask @Inject constructor(direction, limit)
                             }
                         }
                     }

@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
@@ -35,14 +36,16 @@ import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.concurrent.CountDownLatch
+import javax.inject.Inject
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
 
-internal class SyncThread(private val syncTask: SyncTask,
-                          private val networkConnectivityChecker: NetworkConnectivityChecker,
-                          private val syncTokenStore: SyncTokenStore,
-                          private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                          private val taskExecutor: TaskExecutor
+@SessionScope
+internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
+                                              private val networkConnectivityChecker: NetworkConnectivityChecker,
+                                              private val syncTokenStore: SyncTokenStore,
+                                              private val backgroundDetectionObserver: BackgroundDetectionObserver,
+                                              private val taskExecutor: TaskExecutor
 ) : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.IDLE
@@ -111,7 +114,7 @@ internal class SyncThread(private val syncTask: SyncTask,
 
                             override fun onFailure(failure: Throwable) {
                                 if (failure is Failure.NetworkConnection
-                                        && failure.cause is SocketTimeoutException) {
+                                    && failure.cause is SocketTimeoutException) {
                                     // Timeout are not critical
                                     Timber.v("Timeout")
                                 } else {
@@ -119,13 +122,13 @@ internal class SyncThread(private val syncTask: SyncTask,
                                 }
 
                                 if (failure !is Failure.NetworkConnection
-                                        || failure.cause is JsonEncodingException) {
+                                    || failure.cause is JsonEncodingException) {
                                     // Wait 10s before retrying
                                     sleep(RETRY_WAIT_TIME_MS)
                                 }
 
                                 if (failure is Failure.ServerError
-                                        && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                                    && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
                                     // No token or invalid token, stop the thread
                                     updateStateTo(SyncState.KILLING)
                                 }

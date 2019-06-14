@@ -23,12 +23,15 @@ import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedMessage
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.convertToUTF8
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
-internal class MessageEncrypter(private val credentials: Credentials,
-                                private val olmDevice: MXOlmDevice) {
+@SessionScope
+internal class MessageEncrypter @Inject constructor(private val credentials: Credentials,
+                                                    private val olmDevice: MXOlmDevice) {
 
     /**
      * Encrypt an event payload for a list of devices.

@@ -26,10 +26,12 @@ import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import timber.log.Timber
+import javax.inject.Inject
 
 internal interface EventRelationsAggregationTask : Task<EventRelationsAggregationTask.Params, Unit> {
 
@@ -42,7 +44,8 @@ internal interface EventRelationsAggregationTask : Task<EventRelationsAggregatio
 /**
  * Called by EventRelationAggregationUpdater, when new events that can affect relations are inserted in base.
  */
-internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarchy) : EventRelationsAggregationTask {
+@SessionScope
+internal class DefaultEventRelationsAggregationTask @Inject constructor(private val monarchy: Monarchy) : EventRelationsAggregationTask {
 
     //OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false

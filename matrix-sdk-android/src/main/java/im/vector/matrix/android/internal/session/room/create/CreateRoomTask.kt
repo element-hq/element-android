@@ -23,14 +23,16 @@ import im.vector.matrix.android.internal.database.RealmQueryLatch
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
 import io.realm.RealmConfiguration
+import javax.inject.Inject
 
 internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
-
-internal class DefaultCreateRoomTask(private val roomAPI: RoomAPI,
+@SessionScope
+internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: RoomAPI,
                                      private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
 
 

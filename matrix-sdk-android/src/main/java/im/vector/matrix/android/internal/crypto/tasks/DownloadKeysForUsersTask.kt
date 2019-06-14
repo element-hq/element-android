@@ -22,8 +22,10 @@ import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryResponse
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import java.util.*
+import javax.inject.Inject
 
 internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Params, KeysQueryResponse> {
     data class Params(
@@ -33,7 +35,8 @@ internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Para
             val token: String?)
 }
 
-internal class DefaultDownloadKeysForUsers(private val cryptoApi: CryptoApi)
+@SessionScope
+internal class DefaultDownloadKeysForUsers @Inject constructor(private val cryptoApi: CryptoApi)
     : DownloadKeysForUsersTask {
 
     override suspend fun execute(params: DownloadKeysForUsersTask.Params): Try<KeysQueryResponse> {

@@ -18,21 +18,25 @@ package im.vector.matrix.android.internal.session.room.relation
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
+import im.vector.matrix.android.internal.di.ChildWorkerFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.inject
 
-class SendRelationWorker(context: Context, params: WorkerParameters)
-    : Worker(context, params), MatrixKoinComponent {
+internal class SendRelationWorker @AssistedInject constructor(
+        @Assisted context: Context,
+        @Assisted params: WorkerParameters,
+        private val roomAPI: RoomAPI)
+    : Worker(context, params) {
 
 
     @JsonClass(generateAdapter = true)
@@ -42,21 +46,19 @@ class SendRelationWorker(context: Context, params: WorkerParameters)
             val relationType: String? = null
     )
 
-    private val roomAPI by inject<RoomAPI>()
-
     override fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.failure()
+                     ?: return Result.failure()
 
         val localEvent = params.event
         if (localEvent.eventId == null) {
             return Result.failure()
         }
         val relationContent = localEvent.content.toModel<ReactionContent>()
-                ?: return Result.failure()
+                              ?: return Result.failure()
         val relatedEventId = relationContent.relatesTo?.eventId ?: return Result.failure()
         val relationType = (relationContent.relatesTo as? ReactionInfo)?.type ?: params.relationType
-        ?: return Result.failure()
+                           ?: return Result.failure()
 
         val result = executeRequest<SendResponse> {
             apiCall = roomAPI.sendRelation(
@@ -68,14 +70,17 @@ class SendRelationWorker(context: Context, params: WorkerParameters)
             )
         }
         return result.fold({
-            when (it) {
-                is Failure.NetworkConnection -> Result.retry()
-                else -> {
-                    //TODO mark as failed to send?
-                    //always return success, or the chain will be stuck for ever!
-                    Result.success()
-                }
-            }
-        }, { Result.success() })
+                               when (it) {
+                                   is Failure.NetworkConnection -> Result.retry()
+                                   else                         -> {
+                                       //TODO mark as failed to send?
+                                       //always return success, or the chain will be stuck for ever!
+                                       Result.success()
+                                   }
+                               }
+                           }, { Result.success() })
     }
+
+    @AssistedInject.Factory
+    interface Factory : ChildWorkerFactory
 }

@@ -21,19 +21,23 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Acts as a listener of incoming messages in order to incrementally computes a summary of annotations.
  * For reactions will build a EventAnnotationsSummaryEntity, ans for edits a EditAggregatedSummaryEntity.
  * The summaries can then be extracted and added (as a decoration) to a TimelineEvent for final display.
  */
-internal class EventRelationsAggregationUpdater(monarchy: Monarchy,
-                                                private val credentials: Credentials,
-                                                private val task: EventRelationsAggregationTask,
-                                                private val taskExecutor: TaskExecutor) :
+
+@SessionScope
+internal class EventRelationsAggregationUpdater @Inject constructor(monarchy: Monarchy,
+                                                                    private val credentials: Credentials,
+                                                                    private val task: EventRelationsAggregationTask,
+                                                                    private val taskExecutor: TaskExecutor) :
         RealmLiveEntityObserver<EventEntity>(monarchy) {
 
     override val query = Monarchy.Query<EventEntity> {

@@ -20,8 +20,11 @@ import android.content.Context
 import com.novoda.merlin.Merlin
 import com.novoda.merlin.MerlinsBeard
 import com.novoda.merlin.registerable.connection.Connectable
+import im.vector.matrix.android.internal.di.MatrixScope
+import javax.inject.Inject
 
-internal class NetworkConnectivityChecker(context: Context) {
+@MatrixScope
+internal class NetworkConnectivityChecker @Inject constructor(context: Context) {
 
     private val merlin = Merlin.Builder().withConnectableCallbacks().build(context)
     private val merlinsBeard = MerlinsBeard.from(context)

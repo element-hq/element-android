@@ -23,9 +23,11 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimResponse
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 internal interface ClaimOneTimeKeysForUsersDeviceTask : Task<ClaimOneTimeKeysForUsersDeviceTask.Params, MXUsersDevicesMap<MXKey>> {
     data class Params(
@@ -34,7 +36,8 @@ internal interface ClaimOneTimeKeysForUsersDeviceTask : Task<ClaimOneTimeKeysFor
     )
 }
 
-internal class DefaultClaimOneTimeKeysForUsersDevice(private val cryptoApi: CryptoApi)
+@SessionScope
+internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(private val cryptoApi: CryptoApi)
     : ClaimOneTimeKeysForUsersDeviceTask {
 
     override suspend fun execute(params: ClaimOneTimeKeysForUsersDeviceTask.Params): Try<MXUsersDevicesMap<MXKey>> {

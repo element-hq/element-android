@@ -24,10 +24,13 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
-internal class EnsureOlmSessionsForUsersAction(private val olmDevice: MXOlmDevice,
+@SessionScope
+internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val olmDevice: MXOlmDevice,
                                                private val cryptoStore: IMXCryptoStore,
                                                private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction) {
 

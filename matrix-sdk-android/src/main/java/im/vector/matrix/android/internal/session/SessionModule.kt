@@ -18,161 +18,68 @@ package im.vector.matrix.android.internal.session
 
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
+import dagger.Module
+import dagger.Provides
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.api.session.cache.CacheService
-import im.vector.matrix.android.api.session.group.GroupService
-import im.vector.matrix.android.api.session.room.RoomDirectoryService
-import im.vector.matrix.android.api.session.room.RoomService
-import im.vector.matrix.android.api.session.signout.SignOutService
-import im.vector.matrix.android.api.session.sync.FilterService
-import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
-import im.vector.matrix.android.internal.session.cache.ClearCacheTask
-import im.vector.matrix.android.internal.session.cache.RealmCacheService
-import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
-import im.vector.matrix.android.internal.session.filter.*
-import im.vector.matrix.android.internal.session.group.DefaultGroupService
+import im.vector.matrix.android.internal.session.filter.FilterApi
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
-import im.vector.matrix.android.internal.session.room.*
-import im.vector.matrix.android.internal.session.room.directory.DefaultGetPublicRoomTask
-import im.vector.matrix.android.internal.session.room.directory.DefaultGetThirdPartyProtocolsTask
-import im.vector.matrix.android.internal.session.room.directory.GetPublicRoomTask
-import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyProtocolsTask
-import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
-import im.vector.matrix.android.internal.session.room.membership.RoomMemberDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
-import im.vector.matrix.android.internal.session.signout.DefaultSignOutService
-import im.vector.matrix.android.internal.session.user.DefaultUserService
 import im.vector.matrix.android.internal.session.user.UserEntityUpdater
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
-import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import java.io.File
 
+@Module
 internal class SessionModule(private val sessionParams: SessionParams) {
 
-    val definition = module(override = true) {
+    @Provides
+    fun providesCredentials(): Credentials {
+        return sessionParams.credentials
+    }
 
-        scope(DefaultSession.SCOPE) {
-            sessionParams
-        }
+    @Provides
+    fun providesRealmConfiguration(context: Context): RealmConfiguration {
+        val childPath = sessionParams.credentials.userId.md5()
+        val directory = File(context.filesDir, childPath)
 
-        scope(DefaultSession.SCOPE) {
-            sessionParams.credentials
-        }
+        return RealmConfiguration.Builder()
+                .directory(directory)
+                .name("disk_store.realm")
+                .modules(SessionRealmModule())
+                .deleteRealmIfMigrationNeeded()
+                .build()
+    }
 
-        scope(DefaultSession.SCOPE, name = "SessionRealmConfiguration") {
-            val context = get<Context>()
-            val childPath = sessionParams.credentials.userId.md5()
-            val directory = File(context.filesDir, childPath)
+    @Provides
+    fun providesMonarchy(realmConfiguration: RealmConfiguration): Monarchy {
+        return Monarchy.Builder()
+                .setRealmConfiguration(realmConfiguration)
+                .build()
+    }
 
-            RealmConfiguration.Builder()
-                    .directory(directory)
-                    .name("disk_store.realm")
-                    .modules(SessionRealmModule())
-                    .deleteRealmIfMigrationNeeded()
-                    .build()
-        }
+    @Provides
+    fun providesRetrofit(retrofitBuilder: Retrofit.Builder): Retrofit {
+        return retrofitBuilder
+                .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
+                .build()
+    }
 
-        scope(DefaultSession.SCOPE) {
-            Monarchy.Builder()
-                    .setRealmConfiguration(get("SessionRealmConfiguration"))
-                    .build()
-        }
+    @Provides
+    fun providesFilterAPI(retrofit: Retrofit): FilterApi {
+        return retrofit.create(FilterApi::class.java)
+    }
 
-        scope(DefaultSession.SCOPE) {
-            val retrofitBuilder = get<Retrofit.Builder>()
-            retrofitBuilder
-                    .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
-                    .build()
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RoomMemberDisplayNameResolver()
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RoomDisplayNameResolver(get(), get(), get(), sessionParams.credentials)
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RoomAvatarResolver(get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RoomSummaryUpdater(get(), get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultRoomService(get(), get(), get(), get()) as RoomService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGetPublicRoomTask(get()) as GetPublicRoomTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGetThirdPartyProtocolsTask(get()) as GetThirdPartyProtocolsTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultRoomDirectoryService(get(), get(), get(), get()) as RoomDirectoryService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGroupService(get()) as GroupService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultSignOutService(get(), get()) as SignOutService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RealmCacheService(get("ClearTaskMainCache"), get()) as CacheService
-        }
-
-        // Give a name, because we have a clear task for crypto store as well
-        scope(DefaultSession.SCOPE, name = "ClearTaskMainCache") {
-            RealmClearCacheTask(get("SessionRealmConfiguration")) as ClearCacheTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultUserService(get()) as UserService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            SessionListeners()
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultFilterRepository(get("SessionRealmConfiguration")) as FilterRepository
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultSaveFilterTask(get(), get(), get()) as SaveFilterTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultFilterService(get(), get(), get()) as FilterService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            val retrofit: Retrofit = get()
-            retrofit.create(FilterApi::class.java)
-        }
-
-        scope(DefaultSession.SCOPE) {
-            val groupSummaryUpdater = GroupSummaryUpdater(get())
-            val userEntityUpdater = UserEntityUpdater(get(), get(), get())
-            val aggregationUpdater = EventRelationsAggregationUpdater(get(), get(), get(), get())
-            //Event pruner must be the last one, because it will clear contents
-            val eventsPruner = EventsPruner(get(), get(), get(), get())
-            listOf<LiveEntityObserver>(groupSummaryUpdater, userEntityUpdater, aggregationUpdater, eventsPruner)
-        }
-
-
+    @Provides
+    fun providesLiveEntityObservers(groupSummaryUpdater: GroupSummaryUpdater,
+                                    userEntityUpdater: UserEntityUpdater,
+                                    aggregationUpdater: EventRelationsAggregationUpdater,
+                                    eventsPruner: EventsPruner): List<LiveEntityObserver> {
+        return listOf<LiveEntityObserver>(groupSummaryUpdater, userEntityUpdater, aggregationUpdater, eventsPruner)
     }
 
 

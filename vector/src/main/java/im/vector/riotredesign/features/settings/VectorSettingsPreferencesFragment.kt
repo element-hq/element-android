@@ -710,7 +710,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 /* TODO
                 displayLoadingView()
 
-                val task = ClearMediaCacheAsyncTask(
+                val task = ClearMediaCacheAsyncTask @Inject constructor(
                         backgroundTask = {
                             session.mediaCache.clear()
                             activity?.let { it -> Glide.get(it).clearDiskCache() }

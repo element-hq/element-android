@@ -20,7 +20,9 @@ import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 
 internal interface GetRoomSessionsDataTask : Task<GetRoomSessionsDataTask.Params, RoomKeysBackupData> {
@@ -30,8 +32,8 @@ internal interface GetRoomSessionsDataTask : Task<GetRoomSessionsDataTask.Params
     )
 }
 
-
-internal class DefaultGetRoomSessionsDataTask(private val roomKeysApi: RoomKeysApi)
+@SessionScope
+internal class DefaultGetRoomSessionsDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : GetRoomSessionsDataTask {
 
     override suspend fun execute(params: GetRoomSessionsDataTask.Params): Try<RoomKeysBackupData> {

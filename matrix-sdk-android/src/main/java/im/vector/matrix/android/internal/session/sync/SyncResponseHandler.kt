@@ -18,15 +18,18 @@ package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import timber.log.Timber
+import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
-internal class SyncResponseHandler(private val roomSyncHandler: RoomSyncHandler,
-                                   private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-                                   private val groupSyncHandler: GroupSyncHandler,
-                                   private val cryptoSyncHandler: CryptoSyncHandler,
-                                   private val cryptoManager: CryptoManager) {
+@SessionScope
+internal class SyncResponseHandler @Inject constructor(private val roomSyncHandler: RoomSyncHandler,
+                                                       private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
+                                                       private val groupSyncHandler: GroupSyncHandler,
+                                                       private val cryptoSyncHandler: CryptoSyncHandler,
+                                                       private val cryptoManager: CryptoManager) {
 
     fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
         return Try {

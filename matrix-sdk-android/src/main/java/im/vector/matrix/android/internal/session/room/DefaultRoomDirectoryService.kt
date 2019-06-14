@@ -27,11 +27,12 @@ import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyPro
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import javax.inject.Inject
 
-internal class DefaultRoomDirectoryService(private val getPublicRoomTask: GetPublicRoomTask,
-                                           private val joinRoomTask: JoinRoomTask,
-                                           private val getThirdPartyProtocolsTask: GetThirdPartyProtocolsTask,
-                                           private val taskExecutor: TaskExecutor) : RoomDirectoryService {
+internal class DefaultRoomDirectoryService @Inject constructor(private val getPublicRoomTask: GetPublicRoomTask,
+                                                               private val joinRoomTask: JoinRoomTask,
+                                                               private val getThirdPartyProtocolsTask: GetThirdPartyProtocolsTask,
+                                                               private val taskExecutor: TaskExecutor) : RoomDirectoryService {
 
     override fun getPublicRooms(server: String?,
                                 publicRoomsParams: PublicRoomsParams,

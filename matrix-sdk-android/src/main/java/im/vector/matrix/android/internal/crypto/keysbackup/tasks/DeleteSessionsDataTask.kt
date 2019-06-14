@@ -19,7 +19,9 @@ package im.vector.matrix.android.internal.crypto.keysbackup.tasks
 import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface DeleteSessionsDataTask : Task<DeleteSessionsDataTask.Params, Unit> {
     data class Params(
@@ -27,8 +29,8 @@ internal interface DeleteSessionsDataTask : Task<DeleteSessionsDataTask.Params, 
     )
 }
 
-
-internal class DefaultDeleteSessionsDataTask(private val roomKeysApi: RoomKeysApi)
+@SessionScope
+internal class DefaultDeleteSessionsDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : DeleteSessionsDataTask {
 
     override suspend fun execute(params: DeleteSessionsDataTask.Params): Try<Unit> {

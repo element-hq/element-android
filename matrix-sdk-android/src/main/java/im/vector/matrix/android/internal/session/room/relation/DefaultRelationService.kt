@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryE
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
@@ -41,14 +42,14 @@ import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import timber.log.Timber
+import javax.inject.Inject
 
-
-internal class DefaultRelationService(private val roomId: String,
-                                      private val eventFactory: LocalEchoEventFactory,
-                                      private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-                                      private val updateQuickReactionTask: UpdateQuickReactionTask,
-                                      private val monarchy: Monarchy,
-                                      private val taskExecutor: TaskExecutor)
+internal class DefaultRelationService constructor(private val roomId: String,
+                                                          private val eventFactory: LocalEchoEventFactory,
+                                                          private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
+                                                          private val updateQuickReactionTask: UpdateQuickReactionTask,
+                                                          private val monarchy: Monarchy,
+                                                          private val taskExecutor: TaskExecutor)
     : RelationService {
 
 
@@ -139,7 +140,7 @@ internal class DefaultRelationService(private val roomId: String,
     private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
 
         val sendContentWorkerParams = RedactEventWorker.Params(localEvent.eventId!!,
-                roomId, eventId, reason)
+                                                               roomId, eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
@@ -194,9 +195,9 @@ internal class DefaultRelationService(private val roomId: String,
     private fun saveLocalEcho(event: Event) {
         monarchy.tryTransactionAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                    ?: return@tryTransactionAsync
+                             ?: return@tryTransactionAsync
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-                    ?: return@tryTransactionAsync
+                            ?: return@tryTransactionAsync
 
             roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
         }

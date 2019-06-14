@@ -21,8 +21,10 @@ import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryE
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import io.realm.Realm
+import javax.inject.Inject
 
 
 internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoTask.Params, FindReactionEventForUndoTask.Result> {
@@ -40,7 +42,8 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
 
 }
 
-internal class DefaultFindReactionEventForUndoTask(private val monarchy: Monarchy) : FindReactionEventForUndoTask {
+@SessionScope
+internal class DefaultFindReactionEventForUndoTask @Inject constructor(private val monarchy: Monarchy) : FindReactionEventForUndoTask {
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): Try<FindReactionEventForUndoTask.Result> {
         return Try {

@@ -27,9 +27,12 @@ import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.fetchCopied
+import javax.inject.Inject
 
-internal class DefaultUserService(private val monarchy: Monarchy) : UserService {
+@SessionScope
+internal class DefaultUserService @Inject constructor(private val monarchy: Monarchy) : UserService {
 
     override fun getUser(userId: String): User? {
         val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }

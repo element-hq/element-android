@@ -63,6 +63,7 @@ import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificat
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
@@ -76,6 +77,7 @@ import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
 /**
@@ -88,7 +90,8 @@ import kotlin.coroutines.EmptyCoroutineContext
  * CryptoService maintains all necessary keys and their sharing with other devices required for the crypto.
  * Specially, it tracks all room membership changes events in order to do keys updates.
  */
-internal class CryptoManager(
+@SessionScope
+internal class CryptoManager @Inject constructor(
         // The credentials,
         private val credentials: Credentials,
         private val myDeviceInfoHolder: MyDeviceInfoHolder,

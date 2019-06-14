@@ -26,12 +26,15 @@ import im.vector.matrix.android.internal.crypto.RoomDecryptorProvider
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
+import javax.inject.Inject
 
-internal class MegolmSessionDataImporter(private val olmDevice: MXOlmDevice,
-                                         private val roomDecryptorProvider: RoomDecryptorProvider,
-                                         private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
-                                         private val cryptoStore: IMXCryptoStore) {
+@SessionScope
+internal class MegolmSessionDataImporter @Inject constructor(private val olmDevice: MXOlmDevice,
+                                                             private val roomDecryptorProvider: RoomDecryptorProvider,
+                                                             private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+                                                             private val cryptoStore: IMXCryptoStore) {
 
     /**
      * Import a list of megolm session keys.

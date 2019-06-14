@@ -17,9 +17,12 @@
 package im.vector.matrix.android.internal.crypto
 
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.internal.session.SessionScope
 import java.util.*
+import javax.inject.Inject
 
-internal class ObjectSigner(private val credentials: Credentials,
+@SessionScope
+internal class ObjectSigner @Inject constructor(private val credentials: Credentials,
                             private val olmDevice: MXOlmDevice) {
 
     /**

@@ -17,8 +17,9 @@
 package im.vector.matrix.android.internal.session
 
 import im.vector.matrix.android.api.session.Session
+import javax.inject.Inject
 
-internal class SessionListeners {
+internal class SessionListeners @Inject constructor(){
 
     private val listeners = ArrayList<Session.Listener>()
 

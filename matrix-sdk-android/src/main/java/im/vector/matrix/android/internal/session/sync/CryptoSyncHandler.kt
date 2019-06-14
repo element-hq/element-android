@@ -25,20 +25,23 @@ import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.MXDecryptionException
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
+import javax.inject.Inject
 
 
-internal class CryptoSyncHandler(private val cryptoManager: CryptoManager,
-                                 private val sasVerificationService: DefaultSasVerificationService) {
+@SessionScope
+internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: CryptoManager,
+                                                     private val sasVerificationService: DefaultSasVerificationService) {
 
     fun handleToDevice(toDevice: ToDeviceSyncResponse) {
         toDevice.events?.forEach { event ->
             // Decrypt event if necessary
             decryptEvent(event, null)
             if (TextUtils.equals(event.getClearType(), EventType.MESSAGE)
-                    && event.mClearEvent?.content?.toModel<MessageContent>()?.type == "m.bad.encrypted") {
+                && event.mClearEvent?.content?.toModel<MessageContent>()?.type == "m.bad.encrypted") {
                 Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : " + event.content)
             } else {
                 sasVerificationService.onToDeviceEvent(event)

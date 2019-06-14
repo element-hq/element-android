@@ -17,12 +17,14 @@
 
 package im.vector.matrix.android.internal.network.interceptors
 
+import im.vector.matrix.android.internal.di.MatrixScope
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.Buffer
 import java.io.IOException
 import java.nio.charset.Charset
+import javax.inject.Inject
 
 /**
  * An OkHttp interceptor that logs requests as curl shell commands. They can then
@@ -33,7 +35,8 @@ import java.nio.charset.Charset
  * information. It should only be used in a controlled manner or in a
  * non-production environment.
  */
-internal class CurlLoggingInterceptor(private val logger: HttpLoggingInterceptor.Logger = HttpLoggingInterceptor.Logger.DEFAULT)
+@MatrixScope
+internal class CurlLoggingInterceptor @Inject constructor(private val logger: HttpLoggingInterceptor.Logger = HttpLoggingInterceptor.Logger.DEFAULT)
     : Interceptor {
 
     /**

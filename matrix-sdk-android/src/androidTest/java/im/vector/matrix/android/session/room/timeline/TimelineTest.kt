@@ -59,8 +59,8 @@ internal class TimelineTest : InstrumentedTest {
     private fun createTimeline(initialEventId: String? = null): Timeline {
         val taskExecutor = TaskExecutor(testCoroutineDispatchers)
         val tokenChunkEventPersistor = TokenChunkEventPersistor(monarchy)
-        val paginationTask = FakePaginationTask(tokenChunkEventPersistor)
-        val getContextOfEventTask = FakeGetContextOfEventTask(tokenChunkEventPersistor)
+        val paginationTask = FakePaginationTask @Inject constructor(tokenChunkEventPersistor)
+        val getContextOfEventTask = FakeGetContextOfEventTask @Inject constructor(tokenChunkEventPersistor)
         val roomMemberExtractor = SenderRoomMemberExtractor(ROOM_ID)
         val timelineEventFactory = TimelineEventFactory(roomMemberExtractor, EventRelationExtractor())
         return DefaultTimeline(

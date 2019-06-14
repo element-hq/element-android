@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.user
+package im.vector.matrix.android.internal.di
 
-import im.vector.matrix.android.internal.session.DefaultSession
-import org.koin.dsl.module.module
+import android.content.Context
+import androidx.work.ListenableWorker
+import androidx.work.WorkerParameters
 
-internal class UserModule {
+interface ChildWorkerFactory {
 
-    val definition = module(override = true) {
+    fun create(appContext: Context, params: WorkerParameters): ListenableWorker
 
-        scope(DefaultSession.SCOPE) {
-            DefaultUpdateUserTask(get()) as UpdateUserTask
-        }
-
-    }
 }

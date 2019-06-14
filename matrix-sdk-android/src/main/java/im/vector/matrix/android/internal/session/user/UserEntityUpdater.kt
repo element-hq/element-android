@@ -24,14 +24,17 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Sort
+import javax.inject.Inject
 
-internal class UserEntityUpdater(monarchy: Monarchy,
-                                 private val updateUserTask: UpdateUserTask,
-                                 private val taskExecutor: TaskExecutor)
+@SessionScope
+internal class UserEntityUpdater @Inject constructor(monarchy: Monarchy,
+                                                     private val updateUserTask: UpdateUserTask,
+                                                     private val taskExecutor: TaskExecutor)
     : RealmLiveEntityObserver<EventEntity>(monarchy) {
 
     override val query = Monarchy.Query<EventEntity> {

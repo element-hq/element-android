@@ -25,9 +25,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.EmptyCoroutineContext
 
-internal class TaskExecutor(private val coroutineDispatchers: MatrixCoroutineDispatchers) {
+@Singleton
+internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers) {
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
 

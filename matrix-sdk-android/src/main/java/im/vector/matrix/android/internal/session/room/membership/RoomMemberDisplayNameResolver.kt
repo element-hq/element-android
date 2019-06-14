@@ -17,8 +17,9 @@
 package im.vector.matrix.android.internal.session.room.membership
 
 import im.vector.matrix.android.api.session.room.model.RoomMember
+import javax.inject.Inject
 
-internal class RoomMemberDisplayNameResolver {
+internal class RoomMemberDisplayNameResolver @Inject constructor() {
 
     fun resolve(userId: String, members: Map<String, RoomMember>): String? {
         val currentMember = members[userId]

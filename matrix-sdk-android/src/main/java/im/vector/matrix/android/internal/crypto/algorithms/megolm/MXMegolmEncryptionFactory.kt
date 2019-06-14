@@ -25,9 +25,12 @@ import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
+import javax.inject.Inject
 
-internal class MXMegolmEncryptionFactory(
+@SessionScope
+internal class MXMegolmEncryptionFactory @Inject constructor(
         private val olmDevice: MXOlmDevice,
         private val keysBackup: KeysBackup,
         private val cryptoStore: IMXCryptoStore,

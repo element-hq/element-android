@@ -20,11 +20,14 @@ import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface GetDevicesTask : Task<Unit, DevicesListResponse>
 
-internal class DefaultGetDevicesTask(private val cryptoApi: CryptoApi)
+@SessionScope
+internal class DefaultGetDevicesTask @Inject constructor(private val cryptoApi: CryptoApi)
     : GetDevicesTask {
 
     override suspend fun execute(params: Unit): Try<DevicesListResponse> {

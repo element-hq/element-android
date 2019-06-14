@@ -26,12 +26,15 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareCancellat
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
-internal class OutgoingRoomKeyRequestManager(
+@SessionScope
+internal class OutgoingRoomKeyRequestManager @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val sendToDeviceTask: SendToDeviceTask,
         private val taskExecutor: TaskExecutor) {

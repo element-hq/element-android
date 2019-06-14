@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync
+package im.vector.matrix.android.internal.di
 
-import dagger.Module
-import im.vector.matrix.android.internal.session.SessionScope
-import retrofit2.Retrofit
+import dagger.Component
 
-@Module
-internal class SyncModule {
-
-    @SessionScope
-    fun providesSyncAPI(retrofit: Retrofit): SyncAPI {
-        return retrofit.create(SyncAPI::class.java)
-    }
+@Component
+@MatrixScope
+interface MatrixComponent {
 
 }

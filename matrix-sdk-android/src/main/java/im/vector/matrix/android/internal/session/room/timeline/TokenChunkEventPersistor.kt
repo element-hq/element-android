@@ -25,14 +25,17 @@ import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Insert Chunk in DB, and eventually merge with existing chunk event
  */
-internal class TokenChunkEventPersistor(private val monarchy: Monarchy) {
+@SessionScope
+internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy) {
 
     /**
      * <pre>

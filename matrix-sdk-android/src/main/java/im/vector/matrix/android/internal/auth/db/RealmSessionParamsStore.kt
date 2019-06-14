@@ -19,11 +19,14 @@ package im.vector.matrix.android.internal.auth.db
 import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.di.MatrixScope
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import javax.inject.Inject
 
-internal class RealmSessionParamsStore(private val mapper: SessionParamsMapper,
-                                       private val realmConfiguration: RealmConfiguration) : SessionParamsStore {
+@MatrixScope
+internal class RealmSessionParamsStore @Inject constructor(private val mapper: SessionParamsMapper,
+                                                           private val realmConfiguration: RealmConfiguration) : SessionParamsStore {
 
     override fun save(sessionParams: SessionParams): Try<SessionParams> {
         return Try {
