@@ -6,8 +6,8 @@
     <Transition
         motion:constraintSetEnd="@+id/constraint_set_fab_menu_open"
         motion:constraintSetStart="@+id/constraint_set_fab_menu_close"
-        motion:motionInterpolator="easeInOut"
-        motion:duration="300">
+        motion:duration="300"
+        motion:motionInterpolator="easeInOut">
 
         <OnClick
             motion:clickAction="toggle"
@@ -17,36 +17,32 @@
 
             <!-- First icon goes up quickly to let room for other-->
             <KeyPosition
+                motion:framePosition="50"
+                motion:keyPositionType="deltaRelative"
                 motion:motionTarget="@id/createRoomItemGroup"
-                motion:framePosition="50"
                 motion:percentX="0.8"
-                motion:percentY="0.8"
-                motion:keyPositionType="deltaRelative"
-                />
+                motion:percentY="0.8" />
             <KeyPosition
-                motion:motionTarget="@id/createRoomItemGroupLabel"
                 motion:framePosition="50"
-                motion:percentX="0.9"
-                motion:percentY="0.8"
                 motion:keyPositionType="deltaRelative"
-                />
+                motion:motionTarget="@id/createRoomItemGroupLabel"
+                motion:percentX="0.9"
+                motion:percentY="0.8" />
 
             <!-- Delay apparition of labels-->
             <KeyAttribute
-                motion:motionTarget="@id/createRoomItemChatLabel"
                 android:alpha="0.4"
                 motion:framePosition="80"
-                />
+                motion:motionTarget="@id/createRoomItemChatLabel" />
             <KeyAttribute
-                motion:motionTarget="@id/createRoomItemGroupLabel"
                 android:alpha="0.4"
                 motion:framePosition="80"
-                />
+                motion:motionTarget="@id/createRoomItemGroupLabel" />
 
         </KeyFrameSet>
     </Transition>
 
-    <ConstraintSet android:id="@+id/constraint_set_fab_menu_close" >
+    <ConstraintSet android:id="@+id/constraint_set_fab_menu_close">
 
         <Constraint
             android:id="@+id/createRoomTouchGuard"
@@ -128,7 +124,7 @@
 
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/constraint_set_fab_menu_open" >
+    <ConstraintSet android:id="@+id/constraint_set_fab_menu_open">
 
         <Constraint
             android:id="@+id/createRoomTouchGuard"
