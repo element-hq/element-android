@@ -16,8 +16,18 @@
 
 package im.vector.matrix.android.internal.auth.data
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * An interactive authentication flow.
+ */
 @JsonClass(generateAdapter = true)
-internal data class LoginFlow(val type: String,
-                     val stages: List<String>)
+internal data class InteractiveAuthenticationFlow(
+
+        @Json(name = "type")
+        val type: String? = null,
+
+        @Json(name = "stages")
+        val stages: List<String>? = null
+)

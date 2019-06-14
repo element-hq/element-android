@@ -227,7 +227,7 @@ internal class CryptoModule {
             DefaultClaimOneTimeKeysForUsersDevice(get()) as ClaimOneTimeKeysForUsersDeviceTask
         }
         scope(DefaultSession.SCOPE) {
-            DefaultDeleteDeviceTask(get()) as DeleteDeviceTask
+            DefaultDeleteDeviceTask(get(), get()) as DeleteDeviceTask
         }
         scope(DefaultSession.SCOPE) {
             DefaultDownloadKeysForUsers(get()) as DownloadKeysForUsersTask
