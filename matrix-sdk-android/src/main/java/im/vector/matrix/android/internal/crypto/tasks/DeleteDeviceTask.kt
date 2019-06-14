@@ -58,12 +58,12 @@ internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi,
                 }
 
                 // check if the server response can be casted
-                if (registrationFlowResponse?.loginFlows?.isNotEmpty() == true) {
+                if (registrationFlowResponse?.flows?.isNotEmpty() == true) {
                     val stages = ArrayList<String>()
 
                     // Get all stages
-                    registrationFlowResponse.loginFlows?.forEach {
-                        stages.addAll(it.stages)
+                    registrationFlowResponse.flows?.forEach {
+                        stages.addAll(it.stages ?: emptyList())
                     }
 
                     Timber.v("## deleteDevice() : supported stages $stages")

@@ -16,7 +16,11 @@
 
 package im.vector.matrix.android.internal.auth.data
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class LoginFlowResponse(val flows: List<LoginFlow>)
+internal data class LoginFlowResponse(
+        @Json(name = "flows")
+        val flows: List<InteractiveAuthenticationFlow>
+)
