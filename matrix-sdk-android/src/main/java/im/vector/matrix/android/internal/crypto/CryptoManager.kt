@@ -19,6 +19,8 @@
 package im.vector.matrix.android.internal.crypto
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
@@ -137,6 +139,8 @@ internal class CryptoManager(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor
 ) : CryptoService {
+
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     // MXEncrypting instance for each room.
     private val roomEncryptors: MutableMap<String, IMXEncrypting> = HashMap()
@@ -825,41 +829,33 @@ internal class CryptoManager(
                                 password: String,
                                 progressListener: ProgressListener?,
                                 callback: MatrixCallback<ImportRoomKeysResult>) {
-        // TODO Use coroutines
-        Timber.v("## importRoomKeys starts")
+        GlobalScope.launch(coroutineDispatchers.main) {
+            withContext(coroutineDispatchers.crypto) {
+                Try {
+                    Timber.v("## importRoomKeys starts")
 
-        val t0 = System.currentTimeMillis()
-        val roomKeys: String
+                    val t0 = System.currentTimeMillis()
+                    val roomKeys: String = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
 
-        try {
-            roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
-        } catch (e: Exception) {
-            callback.onFailure(e)
-            return
+                    val importedSessions: List<MegolmSessionData>
+
+                    val t1 = System.currentTimeMillis()
+
+                    Timber.v("## importRoomKeys : decryptMegolmKeyFile done in " + (t1 - t0) + " ms")
+
+                    val list = MoshiProvider.providesMoshi()
+                            .adapter(List::class.java)
+                            .fromJson(roomKeys)
+                    importedSessions = list as List<MegolmSessionData>
+
+                    val t2 = System.currentTimeMillis()
+
+                    Timber.v("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
+
+                    megolmSessionDataImporter.handle(importedSessions, true, uiHandler, progressListener)
+                }
+            }.foldToCallback(callback)
         }
-
-        val importedSessions: List<MegolmSessionData>
-
-        val t1 = System.currentTimeMillis()
-
-        Timber.v("## importRoomKeys : decryptMegolmKeyFile done in " + (t1 - t0) + " ms")
-
-        try {
-            val list = MoshiProvider.providesMoshi()
-                    .adapter(List::class.java)
-                    .fromJson(roomKeys)
-            importedSessions = list as List<MegolmSessionData>
-        } catch (e: Exception) {
-            Timber.e(e, "## importRoomKeys failed")
-            callback.onFailure(e)
-            return
-        }
-
-        val t2 = System.currentTimeMillis()
-
-        Timber.v("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
-
-        megolmSessionDataImporter.handle(importedSessions, true, progressListener, callback)
     }
 
     /**
@@ -1067,9 +1063,9 @@ internal class CryptoManager(
                 .executeBy(taskExecutor)
     }
 
-/* ==========================================================================================
- * DEBUG INFO
- * ========================================================================================== */
+    /* ==========================================================================================
+     * DEBUG INFO
+     * ========================================================================================== */
 
     override fun toString(): String {
         return "CryptoManager of " + credentials.userId + " (" + credentials.deviceId + ")"

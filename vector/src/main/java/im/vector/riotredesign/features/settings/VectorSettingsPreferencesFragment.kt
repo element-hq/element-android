@@ -59,18 +59,17 @@ import im.vector.riotredesign.core.extensions.withArgs
 import im.vector.riotredesign.core.intent.ExternalIntentData
 import im.vector.riotredesign.core.intent.analyseIntent
 import im.vector.riotredesign.core.intent.getFilenameFromUri
-import im.vector.riotredesign.core.intent.getMimeTypeFromUri
 import im.vector.riotredesign.core.platform.SimpleTextWatcher
 import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.ProgressBarPreference
 import im.vector.riotredesign.core.preference.UserAvatarPreference
 import im.vector.riotredesign.core.preference.VectorPreference
-import im.vector.riotredesign.core.resources.openResource
 import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keys.KeysExporter
+import im.vector.riotredesign.features.crypto.keys.KeysImporter
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
 import org.koin.android.ext.android.inject
@@ -2702,58 +2701,33 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
             importButton.setOnClickListener(View.OnClickListener {
                 val password = passPhraseEditText.text.toString()
-                val resource = openResource(appContext, uri, mimetype ?: getMimeTypeFromUri(appContext, uri))
 
-                if (resource?.mContentStream == null) {
-                    appContext.toast("Error")
+                KeysImporter(mSession)
+                        .import(requireContext(),
+                                uri,
+                                mimetype,
+                                password,
+                                object : MatrixCallback<ImportRoomKeysResult> {
+                                    override fun onSuccess(data: ImportRoomKeysResult) {
+                                        if (!isAdded) {
+                                            return
+                                        }
 
-                    return@OnClickListener
-                }
+                                        hideLoadingView()
 
-                val data: ByteArray
-// TODO BG
-                try {
-                    data = ByteArray(resource.mContentStream!!.available())
-                    resource.mContentStream!!.read(data)
-                    resource.mContentStream!!.close()
-                } catch (e: Exception) {
-                    try {
-                        resource.mContentStream!!.close()
-                    } catch (e2: Exception) {
-                        Timber.e(e2, "## importKeys()")
-                    }
+                                        AlertDialog.Builder(thisActivity)
+                                                .setMessage(getString(R.string.encryption_import_room_keys_success,
+                                                        data.successfullyNumberOfImportedKeys,
+                                                        data.totalNumberOfKeys))
+                                                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                                .show()
+                                    }
 
-                    appContext.toast(e.localizedMessage)
-
-                    return@OnClickListener
-                }
-
-                displayLoadingView()
-
-                mSession.importRoomKeys(data,
-                        password,
-                        null,
-                        object : MatrixCallback<ImportRoomKeysResult> {
-                            override fun onSuccess(data: ImportRoomKeysResult) {
-                                if (!isAdded) {
-                                    return
-                                }
-
-                                hideLoadingView()
-
-                                AlertDialog.Builder(thisActivity)
-                                        .setMessage(getString(R.string.encryption_import_room_keys_success,
-                                                data.successfullyNumberOfImportedKeys,
-                                                data.totalNumberOfKeys))
-                                        .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                        .show()
-                            }
-
-                            override fun onFailure(failure: Throwable) {
-                                appContext.toast(failure.localizedMessage)
-                                hideLoadingView()
-                            }
-                        })
+                                    override fun onFailure(failure: Throwable) {
+                                        appContext.toast(failure.localizedMessage)
+                                        hideLoadingView()
+                                    }
+                                })
 
                 importDialog.dismiss()
             })

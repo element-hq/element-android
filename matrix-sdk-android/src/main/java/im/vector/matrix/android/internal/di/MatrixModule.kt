@@ -17,7 +17,8 @@
 package im.vector.matrix.android.internal.di
 
 import android.content.Context
-import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
+import android.os.Handler
+import android.os.HandlerThread
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -36,11 +37,14 @@ class MatrixModule(private val context: Context) {
         }
 
         single {
-            val cryptoHandler = CryptoAsyncHelper.getDecryptBackgroundHandler()
+            val THREAD_CRYPTO_NAME = "Crypto_Thread"
+            val handlerThread = HandlerThread(THREAD_CRYPTO_NAME)
+            handlerThread.start()
+
             MatrixCoroutineDispatchers(io = Dispatchers.IO,
                     computation = Dispatchers.IO,
                     main = Dispatchers.Main,
-                    crypto = cryptoHandler.asCoroutineDispatcher("crypto")
+                    crypto = Handler(handlerThread.looper).asCoroutineDispatcher("crypto")
             )
         }
 

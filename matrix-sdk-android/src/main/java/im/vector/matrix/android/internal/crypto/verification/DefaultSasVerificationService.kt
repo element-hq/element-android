@@ -27,17 +27,12 @@ import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -138,8 +133,8 @@ internal class DefaultSasVerificationService(private val credentials: Credential
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         setDeviceVerificationAction.handle(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
-                                           deviceID,
-                                           userId)
+                deviceID,
+                userId)
 
         listeners.forEach {
             try {
@@ -206,7 +201,7 @@ internal class DefaultSasVerificationService(private val credentials: Credential
                         } else {
                             Timber.e("## SAS onStartRequestReceived - unknown method ${startReq.method}")
                             cancelTransaction(tid, otherUserId, startReq.fromDevice
-                                                                ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
+                                    ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
                         }
                     }
                 },
@@ -372,9 +367,8 @@ internal class DefaultSasVerificationService(private val credentials: Credential
                     userId,
                     deviceID)
             addTransaction(tx)
-            CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                tx.start()
-            }
+
+            tx.start()
             return txID
         } else {
             throw IllegalArgumentException("Unknown verification method")
@@ -399,9 +393,9 @@ internal class DefaultSasVerificationService(private val credentials: Credential
     override fun transactionUpdated(tx: VerificationTransaction) {
         dispatchTxUpdated(tx)
         if (tx is SASVerificationTransaction
-            && (tx.state == SasVerificationTxState.Cancelled
-                || tx.state == SasVerificationTxState.OnCancelled
-                || tx.state == SasVerificationTxState.Verified)
+                && (tx.state == SasVerificationTxState.Cancelled
+                        || tx.state == SasVerificationTxState.OnCancelled
+                        || tx.state == SasVerificationTxState.Verified)
         ) {
             //remove
             this.removeTransaction(tx.otherUserId, tx.transactionId)

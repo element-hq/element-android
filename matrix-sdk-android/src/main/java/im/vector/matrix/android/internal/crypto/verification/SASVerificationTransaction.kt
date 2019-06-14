@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXKey
@@ -278,21 +277,17 @@ internal abstract class SASVerificationTransaction(
                 .dispatchTo(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         Timber.v("## SAS verification [$transactionId] toDevice type '$type' success.")
-                        CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                            if (onDone != null) {
-                                onDone()
-                            } else {
-                                state = nextState
-                            }
+                        if (onDone != null) {
+                            onDone()
+                        } else {
+                            state = nextState
                         }
                     }
 
                     override fun onFailure(failure: Throwable) {
                         Timber.e("## SAS verification [$transactionId] failed to send toDevice in state : $state")
 
-                        CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                            cancel(onErrorReason)
-                        }
+                        cancel(onErrorReason)
                     }
                 })
                 .executeBy(taskExecutor)
