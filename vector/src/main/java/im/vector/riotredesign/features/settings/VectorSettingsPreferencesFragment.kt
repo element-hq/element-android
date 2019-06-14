@@ -2702,6 +2702,8 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             importButton.setOnClickListener(View.OnClickListener {
                 val password = passPhraseEditText.text.toString()
 
+                displayLoadingView()
+
                 KeysImporter(mSession)
                         .import(requireContext(),
                                 uri,

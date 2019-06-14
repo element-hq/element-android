@@ -33,7 +33,7 @@ import timber.log.Timber
 class KeysImporter(private val session: Session) {
 
     /**
-     * Export keys and return the file path with the callback
+     * Import keys from provided Uri
      */
     fun import(context: Context,
                uri: Uri,

@@ -23,6 +23,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import arrow.core.Try
+import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -810,8 +811,7 @@ internal class CryptoManager(
                     val adapter = MoshiProvider.providesMoshi()
                             .adapter(List::class.java)
 
-                    MXMegolmExportEncryption
-                            .encryptMegolmKeyFile(adapter.toJson(exportedSessions), password, iterationCount)
+                    MXMegolmExportEncryption.encryptMegolmKeyFile(adapter.toJson(exportedSessions), password, iterationCount)
                 }
             }.foldToCallback(callback)
         }
@@ -835,22 +835,22 @@ internal class CryptoManager(
                     Timber.v("## importRoomKeys starts")
 
                     val t0 = System.currentTimeMillis()
-                    val roomKeys: String = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
-
-                    val importedSessions: List<MegolmSessionData>
-
+                    val roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
                     val t1 = System.currentTimeMillis()
 
                     Timber.v("## importRoomKeys : decryptMegolmKeyFile done in " + (t1 - t0) + " ms")
 
-                    val list = MoshiProvider.providesMoshi()
-                            .adapter(List::class.java)
+                    val importedSessions = MoshiProvider.providesMoshi()
+                            .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
                             .fromJson(roomKeys)
-                    importedSessions = list as List<MegolmSessionData>
 
                     val t2 = System.currentTimeMillis()
 
                     Timber.v("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
+
+                    if (importedSessions == null) {
+                        throw Exception("Error")
+                    }
 
                     megolmSessionDataImporter.handle(importedSessions, true, uiHandler, progressListener)
                 }

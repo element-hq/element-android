@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.extensions.toUnsignedInt
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import org.matrix.olm.OlmSAS
@@ -354,11 +355,11 @@ internal abstract class SASVerificationTransaction(
      * or with the three numbers on separate lines.
      */
     fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
-        val b0 = byteArray[0].toInt().and(0xff) //need unsigned byte
-        val b1 = byteArray[1].toInt().and(0xff) //need unsigned byte
-        val b2 = byteArray[2].toInt().and(0xff) //need unsigned byte
-        val b3 = byteArray[3].toInt().and(0xff) //need unsigned byte
-        val b4 = byteArray[4].toInt().and(0xff) //need unsigned byte
+        val b0 = byteArray[0].toUnsignedInt() //need unsigned byte
+        val b1 = byteArray[1].toUnsignedInt() //need unsigned byte
+        val b2 = byteArray[2].toUnsignedInt() //need unsigned byte
+        val b3 = byteArray[3].toUnsignedInt() //need unsigned byte
+        val b4 = byteArray[4].toUnsignedInt() //need unsigned byte
         //(B0 << 5 | B1 >> 3) + 1000
         val first = (b0.shl(5) or b1.shr(3)) + 1000
         //((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000
@@ -379,12 +380,12 @@ internal abstract class SASVerificationTransaction(
      * to that number 7 emoji are selected from a list of 64 emoji (see Appendix A)
      */
     fun getEmojiCodeRepresentation(byteArray: ByteArray): List<EmojiRepresentation> {
-        val b0 = byteArray[0].toInt().and(0xff)
-        val b1 = byteArray[1].toInt().and(0xff)
-        val b2 = byteArray[2].toInt().and(0xff)
-        val b3 = byteArray[3].toInt().and(0xff)
-        val b4 = byteArray[4].toInt().and(0xff)
-        val b5 = byteArray[5].toInt().and(0xff)
+        val b0 = byteArray[0].toUnsignedInt()
+        val b1 = byteArray[1].toUnsignedInt()
+        val b2 = byteArray[2].toUnsignedInt()
+        val b3 = byteArray[3].toUnsignedInt()
+        val b4 = byteArray[4].toUnsignedInt()
+        val b5 = byteArray[5].toUnsignedInt()
         return listOf(
                 getEmojiForCode((b0 and 0xFC).shr(2)),
                 getEmojiForCode((b0 and 0x3).shl(4) or (b1 and 0xF0).shr(4)),
