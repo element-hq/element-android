@@ -56,7 +56,6 @@ import im.vector.riotredesign.core.dialogs.ExportKeysDialog
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.extensions.withArgs
 import im.vector.riotredesign.core.platform.SimpleTextWatcher
-import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.ProgressBarPreference
@@ -1781,6 +1780,9 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
      * @param errorMessage the error message
      */
     private fun onCommonDone(errorMessage: String?) {
+        if (!isAdded) {
+            return
+        }
         activity?.runOnUiThread {
             if (!TextUtils.isEmpty(errorMessage) && errorMessage != null) {
                 activity?.toast(errorMessage!!)
@@ -2600,13 +2602,15 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                                         passphrase,
                                         object : MatrixCallback<String> {
                                             override fun onSuccess(data: String) {
-                                                hideLoadingView()
+                                                if (isAdded) {
+                                                    hideLoadingView()
 
-                                                AlertDialog.Builder(activity)
-                                                        .setMessage(getString(R.string.encryption_export_saved_as, data))
-                                                        .setCancelable(false)
-                                                        .setPositiveButton(R.string.ok, null)
-                                                        .show()
+                                                    AlertDialog.Builder(activity)
+                                                            .setMessage(getString(R.string.encryption_export_saved_as, data))
+                                                            .setCancelable(false)
+                                                            .setPositiveButton(R.string.ok, null)
+                                                            .show()
+                                                }
                                             }
 
                                             override fun onFailure(failure: Throwable) {
