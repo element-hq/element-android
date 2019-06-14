@@ -598,10 +598,7 @@ internal class CryptoManager(
             val result = withContext(coroutineDispatchers.crypto) {
                 internalDecryptEvent(event, timeline)
             }
-            result.fold(
-                    { callback.onFailure(it) },
-                    { callback.onSuccess(it) }
-            )
+            result.foldToCallback(callback)
         }
     }
 
@@ -1060,10 +1057,7 @@ internal class CryptoManager(
         CoroutineScope(coroutineDispatchers.crypto).launch {
             deviceListManager
                     .downloadKeys(userIds, forceDownload)
-                    .fold(
-                            { callback.onFailure(it) },
-                            { callback.onSuccess(it) }
-                    )
+                    .foldToCallback(callback)
         }
     }
 
@@ -1073,9 +1067,9 @@ internal class CryptoManager(
                 .executeBy(taskExecutor)
     }
 
-    /* ==========================================================================================
-     * DEBUG INFO
-     * ========================================================================================== */
+/* ==========================================================================================
+ * DEBUG INFO
+ * ========================================================================================== */
 
     override fun toString(): String {
         return "CryptoManager of " + credentials.userId + " (" + credentials.deviceId + ")"

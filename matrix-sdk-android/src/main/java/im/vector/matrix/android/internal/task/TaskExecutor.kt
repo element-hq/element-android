@@ -18,6 +18,8 @@ package im.vector.matrix.android.internal.task
 
 import arrow.core.Try
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.extensions.foldToCallback
+import im.vector.matrix.android.internal.extensions.onError
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
@@ -38,12 +40,10 @@ internal class TaskExecutor(private val coroutineDispatchers: MatrixCoroutineDis
                     task.execute(task.params)
                 }
             }
-            resultOrFailure.fold({
+            resultOrFailure.onError {
                 Timber.d(it, "Task failed")
-                task.callback.onFailure(it)
-            }, {
-                task.callback.onSuccess(it)
-            })
+            }
+                    .foldToCallback(task.callback)
         }
         return CancelableCoroutine(job)
     }
