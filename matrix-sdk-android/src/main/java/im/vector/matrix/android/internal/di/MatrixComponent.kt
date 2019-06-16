@@ -16,10 +16,32 @@
 
 package im.vector.matrix.android.internal.di
 
+import android.content.Context
+import com.squareup.moshi.Moshi
+import dagger.BindsInstance
 import dagger.Component
+import im.vector.matrix.android.internal.auth.AuthModule
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.worker.WorkerBindingModule
+import retrofit2.Retrofit
+import java.net.Authenticator
 
-@Component
+
+@Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class])
 @MatrixScope
-interface MatrixComponent {
+internal interface MatrixComponent {
+
+    fun matrixCoroutineDispatchers(): MatrixCoroutineDispatchers
+
+    fun moshi(): Moshi
+
+    fun retrofitBuilder(): Retrofit.Builder
+
+    fun authenticator(): Authenticator
+
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance context: Context): MatrixComponent
+    }
 
 }

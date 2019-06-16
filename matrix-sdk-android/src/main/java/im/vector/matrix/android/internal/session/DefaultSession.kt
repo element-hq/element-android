@@ -42,7 +42,7 @@ import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import timber.log.Timber
 
-
+@SessionScope
 internal class DefaultSession @AssistedInject constructor(@Assisted override val sessionParams: SessionParams,
                                                           private val monarchy: Monarchy,
                                                           private val liveEntityUpdaters: List<LiveEntityObserver>,

@@ -24,8 +24,8 @@ import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
 @SessionScope
-internal class RealmCacheService @Inject constructor(private val clearCacheTask: ClearCacheTask,
-                                                     private val taskExecutor: TaskExecutor) : CacheService {
+internal class DefaultCacheService @Inject constructor(private val clearCacheTask: ClearCacheTask,
+                                                       private val taskExecutor: TaskExecutor) : CacheService {
 
     override fun clearCache(callback: MatrixCallback<Unit>) {
         clearCacheTask

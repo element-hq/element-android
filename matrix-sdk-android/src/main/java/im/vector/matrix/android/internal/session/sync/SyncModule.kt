@@ -16,16 +16,28 @@
 
 package im.vector.matrix.android.internal.session.sync
 
+import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.user.DefaultUpdateUserTask
+import im.vector.matrix.android.internal.session.user.UpdateUserTask
 import retrofit2.Retrofit
 
 @Module
-internal class SyncModule {
+internal abstract class SyncModule {
 
-    @SessionScope
-    fun providesSyncAPI(retrofit: Retrofit): SyncAPI {
-        return retrofit.create(SyncAPI::class.java)
+    @Module
+    companion object {
+        @SessionScope
+        @Provides
+        @JvmStatic
+        fun providesSyncAPI(retrofit: Retrofit): SyncAPI {
+            return retrofit.create(SyncAPI::class.java)
+        }
     }
+
+    @Binds
+    abstract fun bindSyncTask(syncTask: DefaultSyncTask): SyncTask
 
 }

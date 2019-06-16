@@ -18,16 +18,20 @@ package im.vector.matrix.android.internal.session.room.send
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.inject
+import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 
-internal class RedactEventWorker(context: Context, params: WorkerParameters)
-    : Worker(context, params), MatrixKoinComponent {
+internal class RedactEventWorker @AssistedInject constructor(
+        @Assisted context: Context,
+        @Assisted params: WorkerParameters,
+        private val roomAPI: RoomAPI)
+    : Worker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -36,8 +40,6 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters)
             val eventId: String,
             val reason: String?
     )
-
-    private val roomAPI by inject<RoomAPI>()
 
     override fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -65,5 +67,8 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters)
             Result.success()
         })
     }
+
+    @AssistedInject.Factory
+    interface Factory : DelegateWorkerFactory
 
 }

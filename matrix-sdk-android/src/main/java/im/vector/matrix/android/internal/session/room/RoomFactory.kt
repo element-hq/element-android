@@ -58,7 +58,7 @@ internal class RoomFactory @Inject constructor(private val monarchy: Monarchy,
                                                private val joinRoomTask: JoinRoomTask,
                                                private val leaveRoomTask: LeaveRoomTask) {
 
-    fun instantiate(roomId: String): Room {
+    fun create(roomId: String): Room {
         val roomMemberExtractor = SenderRoomMemberExtractor(roomId)
         val relationExtractor = EventRelationExtractor()
         val timelineEventFactory = TimelineEventFactory(roomMemberExtractor, relationExtractor, cryptoService)

@@ -19,6 +19,8 @@ package im.vector.matrix.android.internal.session.room.send
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
@@ -26,13 +28,16 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.inject
+import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import java.util.concurrent.CountDownLatch
 
-internal class EncryptEventWorker(context: Context, params: WorkerParameters)
-    : Worker(context, params), MatrixKoinComponent {
+internal class EncryptEventWorker @AssistedInject constructor(
+        @Assisted context: Context,
+        @Assisted params: WorkerParameters,
+        private val crypto: CryptoService,
+        private val localEchoUpdater: LocalEchoUpdater)
+    : Worker(context, params) {
 
 
     @JsonClass(generateAdapter = true)
@@ -40,9 +45,6 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             val roomId: String,
             val event: Event
     )
-
-    private val crypto by inject<CryptoService>()
-    private val localEchoUpdater by inject<LocalEchoUpdater>()
 
     override fun doWork(): Result {
 
@@ -97,4 +99,8 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         //always return success, or the chain will be stuck for ever!
         return Result.success()
     }
+
+    @AssistedInject.Factory
+    interface Factory : DelegateWorkerFactory
+
 }

@@ -31,7 +31,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
-import im.vector.matrix.android.internal.di.ChildWorkerFactory
+import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
@@ -138,7 +138,7 @@ internal class UploadContentWorker @AssistedInject constructor(
     }
 
     @AssistedInject.Factory
-    interface Factory : ChildWorkerFactory
+    interface Factory : DelegateWorkerFactory
 
 }
 

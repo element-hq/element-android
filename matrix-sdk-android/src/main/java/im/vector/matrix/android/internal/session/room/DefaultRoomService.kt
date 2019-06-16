@@ -50,7 +50,7 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
 
     override fun getRoom(roomId: String): Room? {
         monarchy.fetchManaged { RoomEntity.where(it, roomId).findFirst() } ?: return null
-        return roomFactory.instantiate(roomId)
+        return roomFactory.create(roomId)
     }
 
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {

@@ -24,12 +24,11 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
 import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.DefaultSession
-import im.vector.matrix.android.internal.session.SessionFactory
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,13 +36,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import javax.inject.Inject
-import kotlin.random.Random
 
 @MatrixScope
 internal class DefaultAuthenticator @Inject constructor(private val retrofitBuilder: Retrofit.Builder,
                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                         private val sessionParamsStore: SessionParamsStore,
-                                                        private val sessionFactory: DefaultSession.Factory
+                                                        private val sessionManager: SessionManager
 ) : Authenticator {
 
     override fun hasActiveSessions(): Boolean {
@@ -53,7 +51,7 @@ internal class DefaultAuthenticator @Inject constructor(private val retrofitBuil
     override fun getLastActiveSession(): Session? {
         val sessionParams = sessionParamsStore.get()
         return sessionParams?.let {
-            sessionFactory.create(it)
+            sessionManager.createSession(it.credentials.userId)
         }
     }
 
@@ -87,7 +85,7 @@ internal class DefaultAuthenticator @Inject constructor(private val retrofitBuil
             sessionParamsStore.save(sessionParams)
             sessionParams
         }.map {
-            sessionFactory.create(it)
+            sessionManager.createSession(it.credentials.userId)!!
         }
 
     }

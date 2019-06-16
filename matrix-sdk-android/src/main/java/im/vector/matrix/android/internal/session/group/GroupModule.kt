@@ -16,15 +16,31 @@
 
 package im.vector.matrix.android.internal.session.group
 
+import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.internal.session.SessionScope
 import retrofit2.Retrofit
 
 @Module
-internal class GroupModule {
+internal abstract class GroupModule {
 
-    @SessionScope
-    fun providesGroupAPI(retrofit: Retrofit): GroupAPI {
-        return retrofit.create(GroupAPI::class.java)
+    @Module
+    companion object {
+        @SessionScope
+        @Provides
+        @JvmStatic
+        fun providesGroupAPI(retrofit: Retrofit): GroupAPI {
+            return retrofit.create(GroupAPI::class.java)
+        }
     }
+
+    @Binds
+    @SessionScope
+    abstract fun bindGetGroupDataTask(getGroupDataTask: DefaultGetGroupDataTask): GetGroupDataTask
+
+    @Binds
+    @SessionScope
+    abstract fun bindGroupService(groupService: DefaultGroupService): GroupService
 }

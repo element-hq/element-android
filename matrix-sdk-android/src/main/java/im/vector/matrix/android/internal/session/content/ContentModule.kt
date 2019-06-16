@@ -16,10 +16,20 @@
 
 package im.vector.matrix.android.internal.session.content
 
+import dagger.Binds
 import dagger.Module
+import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
+import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.matrix.android.internal.session.SessionScope
 
 @Module
-internal class ContentModule {
+internal abstract class ContentModule {
 
+    @Binds
+    @SessionScope
+    abstract fun bindContentUploadStateTracker(contentUploadStateTracker: DefaultContentUploadStateTracker): ContentUploadStateTracker
 
+    @Binds
+    @SessionScope
+    abstract fun bindContentUrlResolver(contentUrlResolver: DefaultContentUrlResolver): ContentUrlResolver
 }

@@ -33,8 +33,11 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
+import javax.inject.Inject
 
-internal class DefaultRoom(
+@SessionScope
+internal class DefaultRoom @Inject constructor(
         override val roomId: String,
         private val monarchy: Monarchy,
         private val timelineService: TimelineService,

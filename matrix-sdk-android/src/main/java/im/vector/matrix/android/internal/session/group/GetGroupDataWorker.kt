@@ -23,7 +23,7 @@ import arrow.core.Try
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.di.ChildWorkerFactory
+import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 
 internal class GetGroupDataWorker @AssistedInject constructor(
@@ -53,6 +53,6 @@ internal class GetGroupDataWorker @AssistedInject constructor(
     }
 
     @AssistedInject.Factory
-    interface Factory  : ChildWorkerFactory
+    interface Factory  : DelegateWorkerFactory
 
 }

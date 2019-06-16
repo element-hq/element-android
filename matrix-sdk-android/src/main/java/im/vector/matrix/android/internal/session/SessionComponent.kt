@@ -16,16 +16,46 @@
 
 package im.vector.matrix.android.internal.session
 
+import dagger.BindsInstance
 import dagger.Component
+import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.internal.crypto.CryptoModule
+import im.vector.matrix.android.internal.di.MatrixAssistedInjectModule
 import im.vector.matrix.android.internal.di.MatrixComponent
+import im.vector.matrix.android.internal.session.content.ContentModule
+import im.vector.matrix.android.internal.session.cache.CacheModule
+import im.vector.matrix.android.internal.session.filter.FilterModule
+import im.vector.matrix.android.internal.session.group.GroupModule
+import im.vector.matrix.android.internal.session.room.RoomModule
+import im.vector.matrix.android.internal.session.signout.SignOutModule
+import im.vector.matrix.android.internal.session.sync.SyncModule
+import im.vector.matrix.android.internal.worker.WorkerBindingModule
 
-@Component(dependencies = [MatrixComponent::class])
+@Component(dependencies = [MatrixComponent::class],
+        modules = [
+            SessionModule::class,
+            RoomModule::class,
+            SyncModule::class,
+            SignOutModule::class,
+            GroupModule::class,
+            FilterModule::class,
+            GroupModule::class,
+            ContentModule::class,
+            CacheModule::class,
+            CryptoModule::class,
+            MatrixAssistedInjectModule::class,
+            WorkerBindingModule::class
+        ]
+)
 @SessionScope
-interface SessionComponent {
+internal interface SessionComponent {
 
-    @Component.Builder
-    interface Builder {
-        fun matrixComponent(matrixComponent: MatrixComponent): Builder
+    @Component.Factory
+    interface Factory {
+        fun create(
+                matrixComponent: MatrixComponent,
+                @BindsInstance sessionParams: SessionParams): SessionComponent
     }
+
 
 }

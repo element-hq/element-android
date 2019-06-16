@@ -22,8 +22,11 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.SessionScope
+import javax.inject.Inject
 
-internal class EventFactory(private val credentials: Credentials) {
+@SessionScope
+internal class EventFactory @Inject constructor(private val credentials: Credentials) {
 
     private val moshi = MoshiProvider.providesMoshi()
 

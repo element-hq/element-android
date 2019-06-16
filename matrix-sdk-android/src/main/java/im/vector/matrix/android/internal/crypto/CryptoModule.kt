@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.RealmConfiguration
 import retrofit2.Retrofit
 import java.io.File
+import javax.inject.Named
 
 @Module
 internal class CryptoModule {
@@ -38,6 +39,7 @@ internal class CryptoModule {
     // Realm configuration, named to avoid clash with main cache realm configuration
     @Provides
     @SessionScope
+    @Named("CryptonRealmConfiguration")
     fun providesRealmConfiguration(context: Context, credentials: Credentials): RealmConfiguration {
         return RealmConfiguration.Builder()
                 .directory(File(context.filesDir, credentials.userId.hash()))
@@ -50,10 +52,11 @@ internal class CryptoModule {
 
     @Provides
     @SessionScope
-    fun providesCryptoStore(realmConfiguration: RealmConfiguration, credentials: Credentials): IMXCryptoStore {
+    fun providesCryptoStore(@Named("CryptonRealmConfiguration")
+                            realmConfiguration: RealmConfiguration, credentials: Credentials): IMXCryptoStore {
         return RealmCryptoStore(false /* TODO*/,
-                                realmConfiguration,
-                                credentials)
+                realmConfiguration,
+                credentials)
     }
 
     @Provides

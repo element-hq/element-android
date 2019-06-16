@@ -25,7 +25,7 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.di.ChildWorkerFactory
+import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
@@ -76,6 +76,6 @@ internal class SendEventWorker @AssistedInject constructor(
     }
 
     @AssistedInject.Factory
-    interface Factory : ChildWorkerFactory
+    interface Factory : DelegateWorkerFactory
 
 }

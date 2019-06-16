@@ -26,7 +26,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
-import im.vector.matrix.android.internal.di.ChildWorkerFactory
+import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.SendResponse
@@ -82,5 +82,5 @@ internal class SendRelationWorker @AssistedInject constructor(
     }
 
     @AssistedInject.Factory
-    interface Factory : ChildWorkerFactory
+    interface Factory : DelegateWorkerFactory
 }

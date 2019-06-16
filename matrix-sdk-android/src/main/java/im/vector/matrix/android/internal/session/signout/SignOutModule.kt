@@ -16,16 +16,34 @@
 
 package im.vector.matrix.android.internal.session.signout
 
+import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.user.DefaultUpdateUserTask
+import im.vector.matrix.android.internal.session.user.UpdateUserTask
 import retrofit2.Retrofit
 
 @Module
-internal class SignOutModule {
+internal abstract class SignOutModule {
 
-    @SessionScope
-    fun providesSignOutAPI(retrofit: Retrofit): SignOutAPI {
-        return retrofit.create(SignOutAPI::class.java)
+    @Module
+    companion object {
+        @SessionScope
+        @Provides
+        @JvmStatic
+        fun providesSignOutAPI(retrofit: Retrofit): SignOutAPI {
+            return retrofit.create(SignOutAPI::class.java)
+        }
     }
+
+    @Binds
+    @SessionScope
+    abstract fun bindSignOutTask(signOutTask: DefaultSignOutTask): SignOutTask
+
+    @Binds
+    @SessionScope
+    abstract fun bindSignOutService(signOutService: DefaultSignOutService): SignOutService
 
 }

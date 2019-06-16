@@ -17,27 +17,43 @@
 package im.vector.matrix.android.internal.auth
 
 import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
+import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
 import im.vector.matrix.android.internal.di.MatrixScope
+import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.cache.ClearCacheTask
+import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
 import io.realm.RealmConfiguration
 import java.io.File
+import javax.inject.Named
 
 @Module
-internal class AuthModule {
+internal abstract class AuthModule {
 
-    @Provides
-    @MatrixScope
-    fun providesRealmConfiguration(context: Context): RealmConfiguration {
-        val old = File(context.filesDir, "matrix-sdk-auth")
-        if (old.exists()) {
-            old.renameTo(File(context.filesDir, "matrix-sdk-auth.realm"))
+    @Module
+    companion object {
+        @Provides
+        @MatrixScope
+        @Named("AuthRealmConfiguration")
+        fun providesRealmConfiguration(context: Context): RealmConfiguration {
+            val old = File(context.filesDir, "matrix-sdk-auth")
+            if (old.exists()) {
+                old.renameTo(File(context.filesDir, "matrix-sdk-auth.realm"))
+            }
+            return RealmConfiguration.Builder()
+                    .name("matrix-sdk-auth.realm")
+                    .modules(AuthRealmModule())
+                    .deleteRealmIfMigrationNeeded()
+                    .build()
         }
-        return RealmConfiguration.Builder()
-                .name("matrix-sdk-auth.realm")
-                .modules(AuthRealmModule())
-                .deleteRealmIfMigrationNeeded()
-                .build()
     }
+
+    @Binds
+    @MatrixScope
+    abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
+
+
 }

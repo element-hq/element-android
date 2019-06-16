@@ -36,7 +36,7 @@ import javax.inject.Inject
  * non-production environment.
  */
 @MatrixScope
-internal class CurlLoggingInterceptor @Inject constructor(private val logger: HttpLoggingInterceptor.Logger = HttpLoggingInterceptor.Logger.DEFAULT)
+internal class CurlLoggingInterceptor @Inject constructor(private val logger: HttpLoggingInterceptor.Logger)
     : Interceptor {
 
     /**

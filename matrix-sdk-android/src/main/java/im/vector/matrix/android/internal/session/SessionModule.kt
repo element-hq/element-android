@@ -33,17 +33,21 @@ import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import retrofit2.Retrofit
 import java.io.File
+import javax.inject.Named
 
 @Module
-internal class SessionModule(private val sessionParams: SessionParams) {
+internal object SessionModule {
 
     @Provides
-    fun providesCredentials(): Credentials {
+    @SessionScope
+    fun providesCredentials(sessionParams: SessionParams): Credentials {
         return sessionParams.credentials
     }
 
     @Provides
-    fun providesRealmConfiguration(context: Context): RealmConfiguration {
+    @SessionScope
+    @Named("SessionRealmConfiguration")
+    fun providesRealmConfiguration(sessionParams: SessionParams, context: Context): RealmConfiguration {
         val childPath = sessionParams.credentials.userId.md5()
         val directory = File(context.filesDir, childPath)
 
@@ -56,31 +60,35 @@ internal class SessionModule(private val sessionParams: SessionParams) {
     }
 
     @Provides
-    fun providesMonarchy(realmConfiguration: RealmConfiguration): Monarchy {
+    @SessionScope
+    fun providesMonarchy(@Named("SessionRealmConfiguration")
+                         realmConfiguration: RealmConfiguration): Monarchy {
         return Monarchy.Builder()
                 .setRealmConfiguration(realmConfiguration)
                 .build()
     }
 
     @Provides
-    fun providesRetrofit(retrofitBuilder: Retrofit.Builder): Retrofit {
+    @SessionScope
+    fun providesRetrofit(sessionParams: SessionParams, retrofitBuilder: Retrofit.Builder): Retrofit {
         return retrofitBuilder
                 .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
                 .build()
     }
 
     @Provides
+    @SessionScope
     fun providesFilterAPI(retrofit: Retrofit): FilterApi {
         return retrofit.create(FilterApi::class.java)
     }
 
     @Provides
+    @SessionScope
     fun providesLiveEntityObservers(groupSummaryUpdater: GroupSummaryUpdater,
                                     userEntityUpdater: UserEntityUpdater,
                                     aggregationUpdater: EventRelationsAggregationUpdater,
                                     eventsPruner: EventsPruner): List<LiveEntityObserver> {
         return listOf<LiveEntityObserver>(groupSummaryUpdater, userEntityUpdater, aggregationUpdater, eventsPruner)
     }
-
 
 }

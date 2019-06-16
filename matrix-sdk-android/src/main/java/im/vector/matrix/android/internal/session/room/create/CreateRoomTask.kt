@@ -33,7 +33,7 @@ internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
 @SessionScope
 internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: RoomAPI,
-                                     private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
+                                                         private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
 
 
     override suspend fun execute(params: CreateRoomParams): Try<String> {
