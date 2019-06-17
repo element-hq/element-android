@@ -223,13 +223,17 @@ internal abstract class SASVerificationTransaction(
             cancel(CancelCode.MismatchedKeys)
             return
         }
+
+        val verifiedDevices = ArrayList<String>()
+
         //cannot be empty because it has been validated
         theirMac!!.mac!!.keys.forEach {
             val keyIDNoPrefix = if (it.startsWith("ed25519:")) it.substring("ed25519:".length) else it
             val otherDeviceKey = otherUserKnownDevices?.get(keyIDNoPrefix)?.fingerprint()
             if (otherDeviceKey == null) {
-                cancel(CancelCode.MismatchedKeys)
-                return
+                Timber.e("Verification: Could not find device $keyIDNoPrefix to verify")
+                //just ignore and continue
+                return@forEach
             }
             val mac = macUsingAgreedMethod(otherDeviceKey, baseInfo + it)
             if (mac != theirMac?.mac?.get(it)) {
@@ -237,13 +241,21 @@ internal abstract class SASVerificationTransaction(
                 cancel(CancelCode.MismatchedKeys)
                 return
             }
+            verifiedDevices.add(keyIDNoPrefix)
         }
 
-        setDeviceVerified(
-                otherDeviceId ?: "",
-                otherUserId)
+        // if none of the keys could be verified, then error because the app
+        // should be informed about that
+        if (verifiedDevices.isEmpty()) {
+            Timber.e("Verification: No devices verified")
+            cancel(CancelCode.MismatchedKeys)
+            return
+        }
 
-        state = SasVerificationTxState.Verified
+        //TODO what if the otherDevice is not in this list? and should we
+        verifiedDevices.forEach {
+            setDeviceVerified(it, otherUserId)
+        }
     }
 
     private fun setDeviceVerified(deviceId: String, userId: String) {
