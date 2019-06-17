@@ -22,8 +22,10 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
+import im.vector.matrix.android.internal.di.DaggerMatrixComponent
 import im.vector.matrix.android.internal.network.UserAgentHolder
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
+import org.matrix.olm.OlmManager
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -34,6 +36,7 @@ import javax.inject.Inject
  */
 class Matrix private constructor(context: Context) {
 
+    @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var authenticator: Authenticator
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
@@ -41,6 +44,7 @@ class Matrix private constructor(context: Context) {
 
     init {
         Monarchy.init(context)
+        DaggerMatrixComponent.factory().create(context).inject(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
         authenticator.getLastActiveSession()?.also {
             currentSession = it

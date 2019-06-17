@@ -26,7 +26,7 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import javax.inject.Inject
 
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"

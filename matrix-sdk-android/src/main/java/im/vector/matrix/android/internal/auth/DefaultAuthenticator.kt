@@ -51,7 +51,7 @@ internal class DefaultAuthenticator @Inject constructor(private val retrofitBuil
     override fun getLastActiveSession(): Session? {
         val sessionParams = sessionParamsStore.get()
         return sessionParams?.let {
-            sessionManager.createSession(it.credentials.userId)
+            sessionManager.createSession(it)
         }
     }
 
@@ -85,7 +85,7 @@ internal class DefaultAuthenticator @Inject constructor(private val retrofitBuil
             sessionParamsStore.save(sessionParams)
             sessionParams
         }.map {
-            sessionManager.createSession(it.credentials.userId)!!
+            sessionManager.createSession(it)
         }
 
     }

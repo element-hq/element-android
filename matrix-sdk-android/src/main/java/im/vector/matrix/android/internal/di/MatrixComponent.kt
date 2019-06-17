@@ -17,17 +17,24 @@
 package im.vector.matrix.android.internal.di
 
 import android.content.Context
+import android.content.res.Resources
 import com.squareup.moshi.Moshi
 import dagger.BindsInstance
 import dagger.Component
+import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.internal.auth.AuthModule
+import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.worker.WorkerBindingModule
+import org.matrix.olm.OlmManager
 import retrofit2.Retrofit
-import java.net.Authenticator
 
 
-@Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class])
+@Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class, WorkerBindingModule::class])
 @MatrixScope
 internal interface MatrixComponent {
 
@@ -38,6 +45,22 @@ internal interface MatrixComponent {
     fun retrofitBuilder(): Retrofit.Builder
 
     fun authenticator(): Authenticator
+
+    fun context(): Context
+
+    fun resources(): Resources
+
+    fun olmManager(): OlmManager
+
+    fun taskExecutor(): TaskExecutor
+
+    fun sessionParamsStore(): SessionParamsStore
+
+    fun networkConnectivityChecker(): NetworkConnectivityChecker
+
+    fun backgroundDetectionObserver(): BackgroundDetectionObserver
+
+    fun inject(matrix: Matrix)
 
     @Component.Factory
     interface Factory {

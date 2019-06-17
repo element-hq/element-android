@@ -19,12 +19,15 @@ package im.vector.matrix.android.internal.util
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import im.vector.matrix.android.internal.di.MatrixScope
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * To be attached to ProcessLifecycleOwner lifecycle
  */
-internal class BackgroundDetectionObserver : LifecycleObserver {
+@MatrixScope
+internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObserver {
 
     var isIsBackground: Boolean = false
         private set

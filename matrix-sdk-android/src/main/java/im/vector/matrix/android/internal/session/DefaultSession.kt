@@ -19,8 +19,6 @@ package im.vector.matrix.android.internal.session
 import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
@@ -41,23 +39,23 @@ import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import timber.log.Timber
+import javax.inject.Inject
 
 @SessionScope
-internal class DefaultSession @AssistedInject constructor(@Assisted override val sessionParams: SessionParams,
-                                                          private val monarchy: Monarchy,
-                                                          private val liveEntityUpdaters: List<LiveEntityObserver>,
-                                                          private val sessionListeners: SessionListeners,
-                                                          private val roomService: RoomService,
-                                                          private val roomDirectoryService: RoomDirectoryService,
-                                                          private val groupService: GroupService,
-                                                          private val userService: UserService,
-                                                          private val filterService: FilterService,
-                                                          private val cacheService: CacheService,
-                                                          private val signOutService: SignOutService,
-                                                          private val cryptoService: CryptoManager,
-                                                          private val syncThread: SyncThread,
-                                                          private val contentUrlResolver: ContentUrlResolver,
-                                                          private val contentUploadProgressTracker: ContentUploadStateTracker)
+internal class DefaultSession @Inject constructor(override val sessionParams: SessionParams,
+                                                  private val monarchy: Monarchy,
+                                                  private val sessionListeners: SessionListeners,
+                                                  private val roomService: RoomService,
+                                                  private val roomDirectoryService: RoomDirectoryService,
+                                                  private val groupService: GroupService,
+                                                  private val userService: UserService,
+                                                  private val filterService: FilterService,
+                                                  private val cacheService: CacheService,
+                                                  private val signOutService: SignOutService,
+                                                  private val cryptoService: CryptoManager,
+                                                  private val syncThread: SyncThread,
+                                                  private val contentUrlResolver: ContentUrlResolver,
+                                                  private val contentUploadProgressTracker: ContentUploadStateTracker)
     : Session,
       RoomService by roomService,
       RoomDirectoryService by roomDirectoryService,
@@ -67,11 +65,6 @@ internal class DefaultSession @AssistedInject constructor(@Assisted override val
       CacheService by cacheService,
       SignOutService by signOutService,
       FilterService by filterService {
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(sessionParams: SessionParams): DefaultSession
-    }
 
     private var isOpen = false
 
@@ -83,7 +76,7 @@ internal class DefaultSession @AssistedInject constructor(@Assisted override val
         if (!monarchy.isMonarchyThreadOpen) {
             monarchy.openManually()
         }
-        liveEntityUpdaters.forEach { it.start() }
+        //liveEntityObservers.forEach { it.start() }
     }
 
     @MainThread
@@ -102,7 +95,7 @@ internal class DefaultSession @AssistedInject constructor(@Assisted override val
     override fun close() {
         assertMainThread()
         assert(isOpen)
-        liveEntityUpdaters.forEach { it.dispose() }
+        //liveEntityObservers.forEach { it.dispose() }
         cryptoService.close()
         if (monarchy.isMonarchyThreadOpen) {
             monarchy.closeManually()

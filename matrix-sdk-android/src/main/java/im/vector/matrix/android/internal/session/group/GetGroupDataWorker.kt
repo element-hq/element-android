@@ -24,13 +24,16 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 
 internal class GetGroupDataWorker @AssistedInject constructor(
         @Assisted context: Context,
-        @Assisted workerParameters: WorkerParameters,
+        @Assisted params: WorkerParameters,
         private val getGroupDataTask: GetGroupDataTask
-) : CoroutineWorker(context, workerParameters) {
+) : CoroutineWorker(context, params) {
+
+    @AssistedInject.Factory
+    interface Factory : DelegateWorkerFactory
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -51,8 +54,5 @@ internal class GetGroupDataWorker @AssistedInject constructor(
     private suspend fun fetchGroupData(groupId: String): Try<Unit> {
         return getGroupDataTask.execute(GetGroupDataTask.Params(groupId))
     }
-
-    @AssistedInject.Factory
-    interface Factory  : DelegateWorkerFactory
 
 }

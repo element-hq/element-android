@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.util
+package im.vector.matrix.android.internal.worker
 
 import androidx.work.Data
 import im.vector.matrix.android.internal.di.MoshiProvider

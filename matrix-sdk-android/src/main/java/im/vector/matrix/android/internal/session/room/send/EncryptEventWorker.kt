@@ -28,7 +28,7 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import java.util.concurrent.CountDownLatch
 
@@ -49,7 +49,7 @@ internal class EncryptEventWorker @AssistedInject constructor(
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success()
+                     ?: return Result.success()
 
         val localEvent = params.event
         if (localEvent.eventId == null) {

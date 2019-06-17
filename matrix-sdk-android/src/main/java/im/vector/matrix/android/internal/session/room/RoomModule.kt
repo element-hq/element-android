@@ -50,7 +50,9 @@ import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkers
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.relation.*
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
+import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.DefaultStateService
+import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.*
 import retrofit2.Retrofit
 
@@ -134,6 +136,10 @@ internal abstract class RoomModule {
     @Binds
     @SessionScope
     abstract fun bindUpdateQuickReactionTask(updateQuickReactionTask: DefaultUpdateQuickReactionTask): UpdateQuickReactionTask
+
+    @Binds
+    @SessionScope
+    abstract fun bindSendStateTask(sendStateTask: DefaultSendStateTask): SendStateTask
 
     @Binds
     @SessionScope

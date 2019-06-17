@@ -18,9 +18,7 @@
 
 package im.vector.matrix.android.internal.worker
 
-import androidx.work.ListenableWorker
 import dagger.Binds
-import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
@@ -29,12 +27,7 @@ import im.vector.matrix.android.internal.session.room.relation.SendRelationWorke
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
-import kotlin.reflect.KClass
 
-@MapKey
-@Target(AnnotationTarget.FUNCTION)
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class WorkerKey(val value: KClass<out ListenableWorker>)
 
 @Module
 internal interface WorkerBindingModule {

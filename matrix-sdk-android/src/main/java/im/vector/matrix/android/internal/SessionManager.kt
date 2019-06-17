@@ -18,25 +18,41 @@
 
 package im.vector.matrix.android.internal
 
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.internal.di.MatrixComponent
 import im.vector.matrix.android.internal.di.MatrixScope
+import im.vector.matrix.android.internal.session.DaggerSessionComponent
 import im.vector.matrix.android.internal.session.SessionComponent
 import javax.inject.Inject
 
 @MatrixScope
-internal class SessionManager @Inject constructor() {
+internal class SessionManager @Inject constructor(private val matrixComponent: MatrixComponent) {
 
     private val sessionComponents = HashMap<String, SessionComponent>()
-    private val sessions = HashMap<String, Session>()
 
-    fun createSession(userId: String): Session? {
+    fun createSession(sessionParams: SessionParams): Session {
+        val userId = sessionParams.credentials.userId
         if (sessionComponents.containsKey(userId)) {
             throw RuntimeException("You already have a session for the user $userId")
         }
-        return null
+        return DaggerSessionComponent
+                .factory()
+                .create(matrixComponent, sessionParams)
+                .also {
+                    sessionComponents[userId] = it
+                }.let {
+                    it.session()
+                }
     }
 
     fun releaseSession(userId: String) {
+        if (sessionComponents.containsKey(userId).not()) {
+            throw RuntimeException("You don't have a session for the user $userId")
+        }
+        sessionComponents.remove(userId)?.also {
+            it.session().close()
+        }
     }
 
 

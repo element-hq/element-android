@@ -19,36 +19,39 @@ package im.vector.matrix.android.internal.session
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.CryptoModule
-import im.vector.matrix.android.internal.di.MatrixAssistedInjectModule
+import im.vector.matrix.android.internal.di.MatrixAssistedModule
 import im.vector.matrix.android.internal.di.MatrixComponent
-import im.vector.matrix.android.internal.session.content.ContentModule
 import im.vector.matrix.android.internal.session.cache.CacheModule
+import im.vector.matrix.android.internal.session.content.ContentModule
 import im.vector.matrix.android.internal.session.filter.FilterModule
 import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.signout.SignOutModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
-import im.vector.matrix.android.internal.worker.WorkerBindingModule
+import im.vector.matrix.android.internal.session.user.UserModule
 
 @Component(dependencies = [MatrixComponent::class],
-        modules = [
-            SessionModule::class,
-            RoomModule::class,
-            SyncModule::class,
-            SignOutModule::class,
-            GroupModule::class,
-            FilterModule::class,
-            GroupModule::class,
-            ContentModule::class,
-            CacheModule::class,
-            CryptoModule::class,
-            MatrixAssistedInjectModule::class,
-            WorkerBindingModule::class
-        ]
+           modules = [
+               SessionModule::class,
+               RoomModule::class,
+               SyncModule::class,
+               SignOutModule::class,
+               GroupModule::class,
+               UserModule::class,
+               FilterModule::class,
+               GroupModule::class,
+               ContentModule::class,
+               CacheModule::class,
+               CryptoModule::class,
+               MatrixAssistedModule::class
+           ]
 )
 @SessionScope
 internal interface SessionComponent {
+
+    fun session(): Session
 
     @Component.Factory
     interface Factory {

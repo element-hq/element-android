@@ -16,8 +16,10 @@
 
 package im.vector.matrix.android.internal.task
 
+
 import arrow.core.Try
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,10 +28,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.coroutines.EmptyCoroutineContext
 
-@Singleton
+@MatrixScope
 internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers) {
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
@@ -42,11 +43,11 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
                 }
             }
             resultOrFailure.fold({
-                Timber.d(it, "Task failed")
-                task.callback.onFailure(it)
-            }, {
-                task.callback.onSuccess(it)
-            })
+                                     Timber.d(it, "Task failed")
+                                     task.callback.onFailure(it)
+                                 }, {
+                                     task.callback.onSuccess(it)
+                                 })
         }
         return CancelableCoroutine(job)
     }

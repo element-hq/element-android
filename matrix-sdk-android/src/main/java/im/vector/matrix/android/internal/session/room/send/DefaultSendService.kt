@@ -28,7 +28,7 @@ import im.vector.matrix.android.api.util.addTo
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.util.CancelableWork
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 

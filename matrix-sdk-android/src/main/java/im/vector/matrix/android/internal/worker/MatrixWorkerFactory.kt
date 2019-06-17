@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.di.MatrixScope
 import javax.inject.Inject
 import javax.inject.Provider
 
-@MatrixScope
 class MatrixWorkerFactory @Inject constructor(
         private val workerFactories: Map<Class<out ListenableWorker>, @JvmSuppressWildcards Provider<DelegateWorkerFactory>>
 ) : WorkerFactory() {

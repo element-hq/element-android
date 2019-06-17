@@ -18,13 +18,14 @@ package im.vector.matrix.android.internal.session.cache
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.cache.CacheService
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultCacheService @Inject constructor(private val clearCacheTask: ClearCacheTask,
+internal class DefaultCacheService @Inject constructor(@SessionDatabase private val clearCacheTask: ClearCacheTask,
                                                        private val taskExecutor: TaskExecutor) : CacheService {
 
     override fun clearCache(callback: MatrixCallback<Unit>) {

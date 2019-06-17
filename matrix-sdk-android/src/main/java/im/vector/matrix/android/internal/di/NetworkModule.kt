@@ -34,10 +34,11 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
-internal class NetworkModule {
+internal object NetworkModule {
 
     @MatrixScope
     @Provides
+    @JvmStatic
     fun providesHttpLogingInterceptor(): HttpLoggingInterceptor {
         val logger = FormattedJsonHttpLogger()
         val interceptor = HttpLoggingInterceptor(logger)
@@ -47,18 +48,28 @@ internal class NetworkModule {
 
     @MatrixScope
     @Provides
+    @JvmStatic
     fun providesOkReplayInterceptor(): OkReplayInterceptor {
         return OkReplayInterceptor()
     }
 
     @MatrixScope
     @Provides
+    @JvmStatic
     fun providesStethoInterceptor(): StethoInterceptor {
         return StethoInterceptor()
     }
 
     @MatrixScope
     @Provides
+    @JvmStatic
+    fun providesCurlLoggingInterceptor(): CurlLoggingInterceptor {
+        return CurlLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
+    }
+
+    @MatrixScope
+    @Provides
+    @JvmStatic
     fun providesOkHttpClient(stethoInterceptor: StethoInterceptor,
                              userAgentInterceptor: UserAgentInterceptor,
                              accessTokenInterceptor: AccessTokenInterceptor,
@@ -84,11 +95,14 @@ internal class NetworkModule {
 
     @MatrixScope
     @Provides
+    @JvmStatic
     fun providesMoshi(): Moshi {
         return MoshiProvider.providesMoshi()
     }
 
+    @MatrixScope
     @Provides
+    @JvmStatic
     fun providesRetrofitBuilder(okHttpClient: OkHttpClient,
                                 moshi: Moshi): Retrofit.Builder {
         return Retrofit.Builder()

@@ -20,24 +20,23 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
+import im.vector.matrix.android.internal.di.AuthDatabase
 import im.vector.matrix.android.internal.di.MatrixScope
-import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.cache.ClearCacheTask
-import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
 import io.realm.RealmConfiguration
 import java.io.File
-import javax.inject.Named
 
 @Module
 internal abstract class AuthModule {
 
     @Module
     companion object {
+        @JvmStatic
         @Provides
         @MatrixScope
-        @Named("AuthRealmConfiguration")
+        @AuthDatabase
         fun providesRealmConfiguration(context: Context): RealmConfiguration {
             val old = File(context.filesDir, "matrix-sdk-auth")
             if (old.exists()) {
@@ -55,5 +54,8 @@ internal abstract class AuthModule {
     @MatrixScope
     abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
 
+    @Binds
+    @MatrixScope
+    abstract fun bindAuthenticator(authenticator: DefaultAuthenticator): Authenticator
 
 }

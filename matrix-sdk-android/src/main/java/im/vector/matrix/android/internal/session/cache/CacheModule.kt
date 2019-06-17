@@ -20,19 +20,28 @@ package im.vector.matrix.android.internal.session.cache
 
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import im.vector.matrix.android.api.session.cache.CacheService
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.SessionScope
+import io.realm.RealmConfiguration
 
 @Module
 internal abstract class CacheModule {
 
+    @Module
+    companion object {
+        @JvmStatic
+        @Provides
+        @SessionScope
+        @SessionDatabase
+        fun providesClearCacheTask(@SessionDatabase realmConfiguration: RealmConfiguration): ClearCacheTask {
+            return RealmClearCacheTask(realmConfiguration)
+        }
+    }
+
     @Binds
     @SessionScope
     abstract fun bindCacheService(cacheService: DefaultCacheService): CacheService
-
-    @Binds
-    @SessionScope
-    abstract fun bindClearCacheTask(clearCacheTask: RealmClearCacheTask): ClearCacheTask
-
 
 }

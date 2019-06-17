@@ -34,7 +34,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVideoConte
 import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.io.File
 

@@ -60,6 +60,7 @@ import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
 import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
+import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
@@ -132,7 +133,7 @@ internal class CryptoManager @Inject constructor(
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val clearCryptoDataTask: ClearCacheTask,
+        @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
         private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor

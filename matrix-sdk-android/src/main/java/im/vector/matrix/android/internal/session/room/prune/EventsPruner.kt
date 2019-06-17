@@ -44,8 +44,7 @@ internal class EventsPruner @Inject constructor(monarchy: Monarchy,
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
         Timber.v("Event pruner called with ${inserted.size} insertions")
-        val redactionEvents = inserted
-                .mapNotNull { it.asDomain() }
+        val redactionEvents = inserted.map { it.asDomain() }
 
         val params = PruneEventTask.Params(
                 redactionEvents,

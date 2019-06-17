@@ -24,7 +24,7 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 
 internal class RedactEventWorker @AssistedInject constructor(
@@ -43,7 +43,7 @@ internal class RedactEventWorker @AssistedInject constructor(
 
     override fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.failure()
+                     ?: return Result.failure()
 
         val eventId = params.eventId
         val result = executeRequest<SendResponse> {

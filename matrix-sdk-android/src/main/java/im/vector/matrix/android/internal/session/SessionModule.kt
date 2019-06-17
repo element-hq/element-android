@@ -18,13 +18,17 @@ package im.vector.matrix.android.internal.session
 
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.IntoSet
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
-import im.vector.matrix.android.internal.session.filter.FilterApi
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
@@ -33,62 +37,86 @@ import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import retrofit2.Retrofit
 import java.io.File
-import javax.inject.Named
 
 @Module
-internal object SessionModule {
+internal abstract class SessionModule {
 
-    @Provides
-    @SessionScope
-    fun providesCredentials(sessionParams: SessionParams): Credentials {
-        return sessionParams.credentials
+    @Module
+    companion object {
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesHomeServerConnectionConfig(sessionParams: SessionParams): HomeServerConnectionConfig {
+            return sessionParams.homeServerConnectionConfig
+        }
+
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesCredentials(sessionParams: SessionParams): Credentials {
+            return sessionParams.credentials
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        @SessionDatabase
+        fun providesRealmConfiguration(sessionParams: SessionParams, context: Context): RealmConfiguration {
+            val childPath = sessionParams.credentials.userId.md5()
+            val directory = File(context.filesDir, childPath)
+
+            return RealmConfiguration.Builder()
+                    .directory(directory)
+                    .name("disk_store.realm")
+                    .modules(SessionRealmModule())
+                    .deleteRealmIfMigrationNeeded()
+                    .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesMonarchy(@SessionDatabase
+                             realmConfiguration: RealmConfiguration): Monarchy {
+            return Monarchy.Builder()
+                    .setRealmConfiguration(realmConfiguration)
+                    .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesRetrofit(sessionParams: SessionParams, retrofitBuilder: Retrofit.Builder): Retrofit {
+            return retrofitBuilder
+                    .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
+                    .build()
+        }
     }
 
-    @Provides
+    @Binds
     @SessionScope
-    @Named("SessionRealmConfiguration")
-    fun providesRealmConfiguration(sessionParams: SessionParams, context: Context): RealmConfiguration {
-        val childPath = sessionParams.credentials.userId.md5()
-        val directory = File(context.filesDir, childPath)
+    abstract fun bindSession(session: DefaultSession): Session
 
-        return RealmConfiguration.Builder()
-                .directory(directory)
-                .name("disk_store.realm")
-                .modules(SessionRealmModule())
-                .deleteRealmIfMigrationNeeded()
-                .build()
-    }
-
-    @Provides
+    @Binds
+    @IntoSet
     @SessionScope
-    fun providesMonarchy(@Named("SessionRealmConfiguration")
-                         realmConfiguration: RealmConfiguration): Monarchy {
-        return Monarchy.Builder()
-                .setRealmConfiguration(realmConfiguration)
-                .build()
-    }
+    abstract fun bindGroupSummaryUpdater(groupSummaryUpdater: GroupSummaryUpdater): LiveEntityObserver
 
-    @Provides
+    @Binds
+    @IntoSet
     @SessionScope
-    fun providesRetrofit(sessionParams: SessionParams, retrofitBuilder: Retrofit.Builder): Retrofit {
-        return retrofitBuilder
-                .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
-                .build()
-    }
+    abstract fun bindEventsPruner(eventsPruner: EventsPruner): LiveEntityObserver
 
-    @Provides
+    @Binds
+    @IntoSet
     @SessionScope
-    fun providesFilterAPI(retrofit: Retrofit): FilterApi {
-        return retrofit.create(FilterApi::class.java)
-    }
+    abstract fun bindEventRelationsAggregationUpdater(groupSummaryUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
 
-    @Provides
+    @Binds
+    @IntoSet
     @SessionScope
-    fun providesLiveEntityObservers(groupSummaryUpdater: GroupSummaryUpdater,
-                                    userEntityUpdater: UserEntityUpdater,
-                                    aggregationUpdater: EventRelationsAggregationUpdater,
-                                    eventsPruner: EventsPruner): List<LiveEntityObserver> {
-        return listOf<LiveEntityObserver>(groupSummaryUpdater, userEntityUpdater, aggregationUpdater, eventsPruner)
-    }
+    abstract fun bindUserEntityUpdater(groupSummaryUpdater: UserEntityUpdater): LiveEntityObserver
 
 }

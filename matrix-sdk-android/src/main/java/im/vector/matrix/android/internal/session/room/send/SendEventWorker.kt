@@ -28,7 +28,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 
 internal class SendEventWorker @AssistedInject constructor(
         @Assisted context: Context,
