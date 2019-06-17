@@ -1405,4 +1405,66 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="error_jitsi_not_supported_on_old_device">Désolé, les appels en visioconférence avec Jitsi ne sont pas pris en charge sur les vieux appareils (avec une version d\'Android antérieure à 5.0)</string>
 
+    <string name="title_activity_verify_device">Vérifier l’appareil</string>
+
+    <string name="encryption_information_unknown_ip">adresse IP inconnue</string>
+    <string name="you_added_a_new_device_with_info">Un nouvel appareil demande les clés de chiffrement.
+\nNom de l’appareil : %1$s
+\nVu : %2$s
+\nSi vous ne vous êtes pas connecté sur un autre appareil, ignorez cette demande.</string>
+    <string name="your_unverified_device_requesting_with_info">Un appareil non vérifié demande les clés de chiffrement.
+\nNom de l’appareil : %1$s
+\nVu : %2$s
+\nSi vous ne vous êtes pas connecté sur un autre appareil, ignorez cette demande.</string>
+
+    <string name="start_verification_short_label">Vérifier</string>
+    <string name="share_without_verifying_short_label">Partager</string>
+    <string name="key_share_request">Demande de partage de clé</string>
+    <string name="ignore_request_short_label">Ignorer</string>
+
+    <string name="sas_verify_title">Vérifier en comparant une courte chaîne de caractères.</string>
+    <string name="sas_security_advise">Pour une sécurité maximale, nous vous recommandons de faire cela en personne ou d’utiliser d’autres moyens de communication sécurisés.</string>
+    <string name="sas_verify_start_button_title">Commencer la vérification</string>
+    <string name="sas_incoming_request_title">Demande de vérification entrante</string>
+    <string name="sas_incoming_request_description">Vérifiez cet appareil pour le marquer comme fiable. Faire confiance aux appareils de vos partenaires vous permet d’être plus serein en utilisant les messages chiffrés de bout en bout.</string>
+    <string name="sas_incoming_request_description_2">La vérification de cet appareil le marquera comme fiable, et marquera aussi votre appareil comme fiable auprès de votre partenaire.</string>
+
+    <string name="sas_emoji_description">Vérifiez cet appareil en confirmant que les émojis suivant apparaissent sur l’écran de votre partenaire</string>
+    <string name="sas_decimal_description">Vérifiez cet appareil en confirmant que les chiffres suivants apparaissent sur l’écran de votre partenaire</string>
+
+    <string name="sas_incoming_verification_request_dialog">Vous avez reçu une demande de vérification entrante.</string>
+    <string name="sas_view_request_action">Voir la demande</string>
+    <string name="sas_waiting_for_partner">Attente de la confirmation du partenaire…</string>
+
+    <string name="sas_verified">Vérifié !</string>
+    <string name="sas_verified_successful">Vous avez bien vérifié cet appareil.</string>
+    <string name="sas_verified_successful_description">Les messages sécurisés avec cet utilisateur sont chiffrés de bout en bout et ne peuvent être lus par des tiers.</string>
+    <string name="sas_got_it">Compris</string>
+
+    <string name="sas_verifying_keys">Rien n’apparaît \? Tous les clients ne prennent pas encore en charge la vérification interactive. Utilisez la vérification traditionnelle.</string>
+    <string name="sas_legacy_verification_button_title">Utiliser la vérification traditionnelle.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Vérification de clé</string>
+    <string name="sas_cancelled_dialog_title">Demande annulée</string>
+    <string name="sas_cancelled_by_other">Votre interlocuteur a annulé la vérification.
+\n%s</string>
+    <string name="sas_cancelled_by_me">La vérification est annulée.
+\nMotif : %s</string>
+
+    <string name="sas_verification_request_notification_channel">Vérification d’appareil interactive</string>
+    <string name="sas_incoming_request_notif_title">Demande de vérification</string>
+    <string name="sas_incoming_request_notif_content">%s veut vérifier votre appareil</string>
+
+    <string name="sas_error_m_user">L’utilisateur a annulé la vérification</string>
+    <string name="sas_error_m_timeout">Le processus de vérification a expiré</string>
+    <string name="sas_error_m_unknown_transaction">L’appareil n’est pas au courant de cette transaction</string>
+    <string name="sas_error_m_unknown_method">L’appareil ne peut pas s’accorder sur une méthode de concordance, de hachage, de MAC ou de SAS de clé</string>
+    <string name="sas_error_m_mismatched_commitment">L’engagement de hachage ne correspond pas</string>
+    <string name="sas_error_m_mismatched_sas">Le SAS ne correspond pas</string>
+    <string name="sas_error_m_unexpected_message">L’appareil a reçu un message inattendu</string>
+    <string name="sas_error_m_invalid_message">Un message non valide a été reçu</string>
+    <string name="sas_error_m_key_mismatch">Non-concordance de clé</string>
+    <string name="sas_error_m_user_error">Non-concordance d’utilisateur</string>
+    <string name="sas_error_unknown">Erreur inconnue</string>
+
 </resources>

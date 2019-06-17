@@ -703,4 +703,407 @@
     <string name="new_recovery_method_popup_description">একটি নতুন সুরক্ষিত বার্তা কুঞ্জি ব্যাকআপ সনাক্ত করা হয়েছে।
 \n
 \nআপনি যদি নতুন পুনরুদ্ধারের পদ্ধতি সেট না করে থাকেন তবে একজন আক্রমণকারী আপনার অ্যাকাউন্ট অ্যাক্সেস করার চেষ্টা করছেন। আপনার অ্যাকাউন্ট পাসওয়ার্ড পরিবর্তন করুন এবং সেটিংসে অবিলম্বে একটি নতুন পুনরুদ্ধার পদ্ধতি সেট করুন।</string>
+    <string name="title_activity_verify_device">ডিভাইস যাচাই করুন</string>
+
+    <string name="settings_notification_privacy_no_background_sync">অ্যাপগুলি ব্যাকগ্রাউন্ডে হোম সার্ভারের সাথে সংযোগ করার প্রয়োজন করার প্রয়োজন <b>নেই</b> , এটি ব্যাটারির ব্যবহারকে কমাতে পারে</string>
+    <string name="settings_notification_privacy_fcm">• বিজ্ঞপ্তি Firebase ক্লাউড মেসেজিং মাধ্যমে পাঠানো হয়</string>
+    <string name="settings_notification_privacy_metadata">• বিজ্ঞপ্তিগুলি তে শুধুমাত্র মেটাডেটা থাকে</string>
+    <string name="settings_notification_privacy_secure_message_content">• বিজ্ঞপ্তিটির বার্তা সামগ্রী <b>ম্যাট্রিক্স হোমসার্ভার থেকে নিরাপদে সরাসরি অবস্থিত হয়</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• বিজ্ঞপ্তিগুলি তে <b>মেটা এবং বার্তা ডেটা</b> থাকে</string>
+    <string name="settings_notification_privacy_message_content_not_shown">• বিজ্ঞপ্তিগুলি <b>বার্তা সামগ্রী দেখাবে না</b></string>
+
+    <string name="settings_notification_ringtone">বিজ্ঞপ্তি শব্দ</string>
+    <string name="settings_enable_all_notif">এই অ্যাকাউন্টের জন্য বিজ্ঞপ্তি সক্রিয় করুন</string>
+    <string name="settings_enable_this_device">এই ডিভাইসের জন্য বিজ্ঞপ্তি সক্রিয় করুন</string>
+    <string name="settings_turn_screen_on">স্ক্রিন টি ৩ সেকেন্ডের জন্য চালু করুন</string>
+    <string name="settings_noisy_notifications_preferences">হাল্লা বিজ্ঞপ্তিগুলি কনফিগার করুন</string>
+    <string name="settings_call_notifications_preferences">কল বিজ্ঞপ্তিগুলি কনফিগার করুন</string>
+    <string name="settings_silent_notifications_preferences">নীরব বিজ্ঞপ্তিগুলি কনফিগার করুন</string>
+    <string name="settings_system_preferences_summary">"LED\'র  রং, কম্পন, শব্দ নির্বাচন করুন…"</string>
+
+
+    <string name="settings_containing_my_display_name">আমার প্রদর্শন নাম ধারণকারী বার্তা</string>
+    <string name="settings_containing_my_user_name">আমার ব্যবহারকারী নাম ধারণকারী বার্তা</string>
+    <string name="settings_messages_in_one_to_one">এক থেকে এক চ্যাট বার্তা</string>
+    <string name="settings_messages_in_group_chat">গ্রুপ চ্যাটে বার্তা</string>
+    <string name="settings_invited_to_room">যখন আমি একটি রুম আমন্ত্রিত</string>
+    <string name="settings_call_invitations">কল এর আমন্ত্রণগুলি</string>
+    <string name="settings_messages_sent_by_bot">বোট দ্বারা পাঠানো বার্তাগুলি</string>
+
+    <string name="settings_background_sync">পটভূমি সিঙ্ক্রোনাইজেশন</string>
+    <string name="settings_start_on_boot">বুট করার সময় শুরু</string>
+    <string name="settings_enable_background_sync">ব্যাকগ্রাউন্ড সিঙ্ক সক্ষম করুন</string>
+    <string name="settings_set_sync_timeout">সিঙ্ক অনুরোধ সময়সীমার</string>
+    <string name="settings_set_sync_delay">প্রতিটি অনুরোধের মধ্যে বিলম্ব</string>
+    <string name="settings_second">সেকেন্ড</string>
+    <string name="settings_seconds">সেকেন্ড</string>
+
+    <string name="settings_version">সংস্করণ</string>
+    <string name="settings_olm_version">olm সংস্করণ</string>
+    <string name="settings_app_term_conditions">শর্তাবলী</string>
+    <string name="settings_third_party_notices">তৃতীয় পক্ষের নোটিশ</string>
+    <string name="settings_copyright">কপিরাইট</string>
+    <string name="settings_privacy_policy">গোপনীয়তা নীতি</string>
+    <string name="settings_keep_media">মিডিয়া রাখুন</string>
+    <string name="settings_clear_cache">ক্যাশে পরিষ্কার করুন</string>
+    <string name="settings_clear_media_cache">মিডিয়া ক্যাশে পরিষ্কার করুন</string>
+
+    <string name="settings_notifications">বিজ্ঞপ্তিগুলি</string>
+    <string name="settings_ignored_users">উপেক্ষিত ব্যবহারকারীদের</string>
+    <string name="settings_other">অন্যান্য</string>
+    <string name="settings_advanced">উন্নত</string>
+    <string name="settings_cryptography">ক্রিপ্টোগ্রাফি</string>
+    <string name="settings_cryptography_manage_keys">ক্র্রিপ্টোগ্রাফি কুঞ্জি ব্যবস্থাপনা</string>
+    <string name="settings_notifications_targets">বিজ্ঞপ্তি লক্ষ্যমাত্রা</string>
+    <string name="settings_contact">স্থানীয় যোগাযোগগুলি</string>
+    <string name="settings_contacts_app_permission">পরিচিতিগুলির অনুমতি</string>
+    <string name="settings_contacts_phonebook_country">ফোনবুকের দেশ</string>
+    <string name="settings_home_display">হোম প্রদর্শন</string>
+    <string name="settings_pin_missed_notifications">মিস বিজ্ঞপ্তি সঙ্গে পিন রুমগুলি</string>
+    <string name="settings_pin_unread_messages">অপঠিত বার্তা সঙ্গে পিন কক্ষগুলি</string>
+    <string name="settings_devices_list">যন্ত্রগুলি</string>
+    <string name="settings_send_typing_notifs_summary">অন্যান্য ব্যবহারকারীদের কে আপনি টাইপ করছেন সেটা জানান।</string>
+    <string name="settings_send_markdown">মার্কডাউন বিন্যাস</string>
+    <string name="settings_send_markdown_summary">প্রেরিত হওয়ার আগে মার্কডাউন সিনট্যাক্স ব্যবহার করে বার্তাগুলি ফরম্যাট করুন। এটি ইটালিক পাঠ্য প্রদর্শনের জন্য তারকাচিহ্নগুলি ব্যবহার করার মতো উন্নত ফর্ম্যাটিংয়ের জন্য অনুমতি দেয়।</string>
+    <string name="settings_always_show_timestamps">সব বার্তা জন্য টাইমস্ট্যাম্প প্রদর্শন করুন</string>
+    <string name="settings_12_24_timestamps">১২-ঘন্টা ফরম্যাটে টাইমস্ট্যাম্প দেখান</string>
+    <string name="settings_show_read_receipts">পাঠানো প্রাপ্তি দেখান</string>
+    <string name="settings_show_read_receipts_summary">একটি বিস্তারিত তালিকা জন্য পঠন প্রাপ্তি ক্লিক করুন।</string>
+    <string name="settings_show_join_leave_messages">যোগ এবং ছাড়া তথ্য দেখান</string>
+    <string name="settings_show_join_leave_messages_summary">আমন্ত্রণ, kicks, এবং নিষেধাজ্ঞা অনিবন্ধিত হয়।</string>
+    <string name="settings_show_avatar_display_name_changes_messages">অ্যাকাউন্ট ইভেন্ট দেখান</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">অবতার এবং প্রদর্শন নাম পরিবর্তন অন্তর্ভুক্ত।</string>
+    <string name="settings_vibrate_on_mention">একটি ব্যবহারকারী উল্লেখ এর সময় কম্পন করুন</string>
+    <string name="settings_send_message_with_enter">এন্টার বোতাম টিপে বার্তা পাঠান</string>
+    <string name="settings_send_message_with_enter_summary">নরম কীবোর্ডের প্রবেশ বোতামটি লাইন বিরতি যোগ করার পরিবর্তে বার্তা পাঠাবে</string>
+
+    <string name="settings_deactivate_account_section">একাউন্ট নিষ্ক্রিয়</string>
+    <string name="settings_deactivate_my_account">আমার একাউন্ট নিষ্ক্রিয় করুন</string>
+
+    <string name="startup_notification_privacy_title">বিজ্ঞপ্তি\'র গোপনীয়তা</string>
+    <string name="startup_notification_privacy_message">সুরক্ষিতভাবে এবং ব্যক্তিগতভাবে আপনার বিজ্ঞপ্তি পরিচালনা করতে Riot পটভূমিতে চালাতে পারে। এই ব্যাটারি ব্যবহার প্রভাবিত হতে পারে।</string>
+    <string name="startup_notification_privacy_button_grant">অনুমতি প্রদান করুন</string>
+    <string name="startup_notification_privacy_button_other">অন্য বিকল্প চয়ন করুন</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">পটভূমি সংযোগ</string>
+    <string name="startup_notification_fdroid_battery_optim_message">নির্ভরযোগ্য বিজ্ঞপ্তি পেতে Riot কম প্রভাব ব্যাকগ্রাউন্ড সংযোগ রাখা প্রয়োজন।
+\nপরবর্তী স্ক্রিনে আপনাকে দাঙ্গাটি সর্বদা ব্যাকগ্রাউন্ডে চালানোর অনুমতি দেওয়া হবে, দয়া করে স্বীকার করুন।</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">অনুমতি প্রদান করুন</string>
+
+    <string name="settings_analytics">বৈশ্লেষিক ন্যায়</string>
+    <string name="settings_opt_in_of_analytics">বিশ্লেষণ তথ্য পাঠান</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot আমাদের অ্যাপ্লিকেশন উন্নত করার অনুমতি দেওয়ার জন্য বেনামী বিশ্লেষণ সংগ্রহ করে।</string>
+    <string name="settings_opt_in_of_analytics_prompt">আমাদের Riot উন্নত করতে সাহায্য করার জন্য বিশ্লেষণ সক্রিয় করুন।</string>
+    <string name="settings_opt_in_of_analytics_ok">হ্যাঁ, আমি সাহায্য করতে চাই!</string>
+
+    <string name="settings_data_save_mode">ডেটা সংরক্ষণ মোড</string>
+    <string name="settings_data_save_mode_summary">ডেটা সংরক্ষণ মোড একটি নির্দিষ্ট ফিল্টার প্রয়োগ করে যাতে উপস্থিতি আপডেট এবং টাইপিং বিজ্ঞপ্তি ফিল্টার করা হয়।</string>
+
+    <string name="devices_details_dialog_title">যন্ত্র বিবরণ</string>
+    <string name="devices_details_id_title">আইডি</string>
+    <string name="devices_details_name_title">নাম</string>
+    <string name="devices_details_device_name">যন্ত্রের নাম</string>
+    <string name="devices_details_last_seen_title">শেষ দেখা</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_delete_dialog_text">এই অপারেশন অতিরিক্ত প্রমাণীকরণ প্রয়োজন।
+\nচালিয়ে যেতে, আপনার পাসওয়ার্ড লিখুন।</string>
+    <string name="devices_delete_dialog_title">প্রমাণীকরণ</string>
+    <string name="devices_delete_pswd">পাসওয়ার্ড:</string>
+    <string name="devices_delete_submit_button_label">জমা দিন</string>
+
+    <string name="settings_logged_in">লগ ইন করুন</string>
+    <string name="settings_home_server">হোম সার্ভার</string>
+    <string name="settings_identity_server">পরিচয় সার্ভার</string>
+
+    <string name="settings_user_interface">ব্যবহারকারী ইন্টারফেস</string>
+    <string name="account_email_validation_title">যাচাই মুলতুবি</string>
+    <string name="account_email_validation_message">আপনার ইমেইল চেক করুন এবং লিঙ্কে ক্লিক করুন। একবার সম্পন্ন হলে, অবিরত ক্লিক করুন।</string>
+    <string name="account_email_validation_error">ইমেইল ঠিকানা যাচাই করতে অক্ষম। আপনার ইমেইল চেক করুন এবং লিঙ্কে ক্লিক করুন। একবার সম্পন্ন হলে, অবিরত ক্লিক করুন।</string>
+    <string name="account_email_already_used_error">এই ইমেইলটা ইতোমধ্যে ব্যবহৃত হচ্ছে।</string>
+    <string name="account_email_not_found_error">এই ইমেইল ঠিকানা পাওয়া যায় নি।</string>
+    <string name="account_phone_number_already_used_error">এই ফোন নম্বর ইতিমধ্যে ব্যবহার করা আছে।</string>
+    <string name="account_email_error">আপনার ইমেল ঠিকানা যাচাই করার সময় একটি ত্রুটি ঘটেছে।</string>
+
+    <string name="settings_password">পাসওয়ার্ড</string>
+    <string name="settings_change_password">পাসওয়ার্ড পরিবর্তন করুন</string>
+    <string name="settings_old_password">বর্তমান পাসওয়ার্ড</string>
+    <string name="settings_new_password">নতুন পাসওয়ার্ড</string>
+    <string name="settings_confirm_password">নিশ্চিত কর নতুন পাসওয়ার্ড</string>
+    <string name="settings_change_password_submit">পাসওয়ার্ড আপডেট করুন</string>
+    <string name="settings_fail_to_update_password">পাসওয়ার্ড আপডেট করতে ব্যর্থ হয়েছে</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">পাসওয়ার্ড বৈধ নয়</string>
+    <string name="settings_password_updated">আপনার পাসওয়ার্ড আপডেট করা হয়েছে</string>
+    <string name="settings_unignore_user">%s থেকে সব বার্তা দেখতে চান\?
+\n
+\nমনে রাখবেন যে এই পদক্ষেপটি অ্যাপ্লিকেশনটি পুনরায় চালু করবে এবং এটি কিছু সময় নিতে পারে।</string>
+    <string name="passwords_do_not_match">পাসওয়ার্ড মিলছে না</string>
+
+    <string name="settings_delete_notification_targets_confirmation">আপনি এই বিজ্ঞপ্তি লক্ষ্য অপসারণ করতে চান আপনি কি নিশ্চিত\?</string>
+
+    <string name="settings_delete_threepid_confirmation">আপনি কি %1$s %2$s সরাতে নিশ্চিত\?</string>
+
+    <string name="settings_select_country">দেশ বেঁচে নিন</string>
+
+    <string name="settings_phone_number_country_label">দেশ</string>
+    <string name="settings_phone_number_country_error">একটি দেশ নির্বাচন করুন</string>
+    <string name="settings_phone_number_label">ফোন নম্বর</string>
+    <string name="settings_phone_number_error">নির্বাচিত দেশের জন্য অবৈধ ফোন নম্বর</string>
+    <string name="settings_phone_number_verification">ফোন যাচাইকরণ</string>
+    <string name="settings_phone_number_verification_instruction">আমরা একটি অ্যাক্টিভেশন কোড দিয়ে একটি এসএমএস পাঠিয়েছি। নীচের এই কোড লিখুন দয়া করে।</string>
+    <string name="settings_phone_number_verification_error_empty_code">অ্যাক্টিভেশন কোড প্রবেশ করান</string>
+    <string name="settings_phone_number_verification_error">আপনার ফোন নম্বর যাচাই করার সময় ত্রুটি হয়েছে</string>
+    <string name="settings_phone_number_code">কোড</string>
+    <string name="account_phone_number_error">আপনার ফোন নম্বর যাচাই করার সময় একটি ত্রুটি ঘটেছে।</string>
+    <string name="account_additional_info">"অতিরিক্ত তথ্য:  %s"</string>
+
+    <string name="settings_media">মিডিয়া</string>
+    <string name="settings_default_compression">ডিফল্ট কম্প্রেশন</string>
+    <string name="compression_opt_list_choose">চয়ন</string>
+    <string name="settings_default_media_source">ডিফল্ট মিডিয়া উৎস</string>
+    <string name="media_source_choose">চয়ন</string>
+    <string name="settings_play_shutter_sound">শাটার শব্দ চালান</string>
+
+    <string name="settings_flair">ফ্লেয়ার</string>
+    <string name="settings_without_flair">আপনি বর্তমানে কোন সম্প্রদায়ের সদস্য নন।</string>
+
+    <string name="media_saving_period_3_days">৩ দিন</string>
+    <string name="media_saving_period_1_week">১ সপ্তা</string>
+    <string name="media_saving_period_1_month">১ মাস</string>
+    <string name="media_saving_period_forever">চিরতরে</string>
+
+    <string name="room_settings_room_photo">রুমের ছবি</string>
+    <string name="room_settings_room_name">রুমের নাম</string>
+    <string name="room_settings_topic">বিষয়</string>
+    <string name="room_settings_room_tag">রুমের ট্যাগ</string>
+    <string name="room_settings_tag_pref_dialog_title">হিসেবে ট্যাগ করা:</string>
+
+    <string name="room_settings_tag_pref_entry_favourite">প্রিয়</string>
+    <string name="room_settings_tag_pref_entry_low_priority">কম অগ্রাধিকার</string>
+    <string name="room_settings_tag_pref_entry_none">কেউ না</string>
+
+    <string name="room_settings_category_access_visibility_title">অ্যাক্সেস এবং দৃশ্যমানতা</string>
+    <string name="room_settings_directory_visibility">রুমের তালিকা তে এই রুম টি যোগ করুন</string>
+    <string name="room_settings_room_notifications_title">বিজ্ঞপ্তিগুলি</string>
+    <string name="room_settings_room_access_rules_pref_title">রুম অ্যাক্সেস</string>
+    <string name="room_settings_room_read_history_rules_pref_title">কক্ষ ইতিহাস পাঠযোগ্যতা</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">কে ইতিহাস পড়তে পারে\?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">কে এই রুম অ্যাক্সেস করতে পারেন\?</string>
+
+    <string name="room_settings_read_history_entry_anyone">যে কেউ</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">সদস্য শুধুমাত্র (এই বিকল্পটি নির্বাচন করার সময় থেকে)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">সদস্য শুধুমাত্র (তারা আমন্ত্রিত ছিল)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">সদস্য শুধুমাত্র (তারা যোগদান করে)</string>
+
+    <string name="room_settings_room_access_warning">একটি রুম লিঙ্ক করার জন্য এটি একটি ঠিকানা থাকতে হবে।</string>
+    <string name="room_settings_room_access_entry_only_invited">শুধুমাত্র যারা আমন্ত্রিত হয়েছে</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">রুমের লিঙ্কটি যে কেউ জানে, অতিথিদের ছাড়া</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">রুম এর লিঙ্ক জানেন যে কেউ, অতিথি সহ</string>
+
+    <string name="room_settings_banned_users_title">নিষিদ্ধ ব্যবহারকারীরা</string>
+
+    <string name="room_settings_category_advanced_title">উন্নত</string>
+    <string name="room_settings_room_internal_id">এই রুম এর অভ্যন্তরীণ আইডি</string>
+    <string name="room_settings_addresses_pref_title">ঠিকানা</string>
+    <string name="room_settings_labs_pref_title">ল্যাবস</string>
+    <string name="room_settings_labs_warning_message">এই অপ্রত্যাশিত উপায়ে বিরতি পারে যে পরীক্ষামূলক বৈশিষ্ট্য। সতর্কতার সাথে ব্যবহার করুন।</string>
+    <string name="room_settings_labs_end_to_end">শেষ থেকে শেষ এনক্রিপশন</string>
+    <string name="room_settings_labs_end_to_end_is_active">শেষ থেকে শেষ এনক্রিপশন সক্রিয় আছে</string>
+    <string name="room_settings_labs_end_to_end_warnings">এনক্রিপশন সক্রিয় করতে সক্ষম হবার জন্য আপনাকে লগআউট করতে হবে।</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">শুধুমাত্র যাচাই ডিভাইসে এনক্রিপ্ট করুন</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">এই ডিভাইস থেকে এই রুমে যাচাই করা ডিভাইসগুলিতে এনক্রিপ্ট করা বার্তাগুলি কখনও প্রেরণ করবেন না।</string>
+
+    <string name="room_settings_addresses_no_local_addresses">এই রুমে কোন স্থানীয় ঠিকানা নেই</string>
+    <string name="room_settings_addresses_add_new_address">নতুন ঠিকানা (যেমন #foo:matrix.org)</string>
+
+    <string name="room_settings_no_flair">এই রুম কোন সম্প্রদায়ের জন্য ফ্লেয়ার দেখাচ্ছে না</string>
+    <string name="room_settings_add_new_group">নতুন সম্প্রদায় আইডি (উদাঃ +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">অবৈধ কমিউনিটি আইডি</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' একটি বৈধ সম্প্রদায় আইডি নয়</string>
+
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">অবৈধ উদীয়মান বিন্যাস</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' একটি উপনাম জন্য বৈধ বিন্যাস নয়</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">আপনার এই রুমের জন্য নির্দিষ্ট কোন প্রধান ঠিকানা থাকবে না।</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">প্রধান ঠিকানা সতর্কতা</string>
+
+    <string name="room_settings_set_main_address">প্রধান ঠিকানা হিসাবে সেট করুন</string>
+    <string name="room_settings_unset_main_address">প্রধান ঠিকানা হিসাবে আনসেট করুন</string>
+    <string name="room_settings_copy_room_id">রুমের আইডি অনুলিপি করুন</string>
+    <string name="room_settings_copy_room_address">রুমের ঠিকানা অনুলিপি করুন</string>
+
+    <string name="room_settings_addresses_e2e_enabled">এনক্রিপশন এই রুমে সক্রিয় করা আছে।</string>
+    <string name="room_settings_addresses_e2e_disabled">এনক্রিপশন এই রুমে নিষ্ক্রিয় করা আছে।</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">এনক্রিপশন সক্রিয় করুন
+\n(সতর্কতা: আবার নিষ্ক্রিয় করা যাবে না!)</string>
+
+    <string name="directory_title">নির্দেশিকা</string>
+    <string name="failed_to_load_timeline_position">%s এই রুমের টাইমলাইনে একটি নির্দিষ্ট বিন্দু লোড করার চেষ্টা করছিল কিন্তু এটি খুঁজে পেতে অক্ষম।</string>
+
+    <string name="encryption_information_title">শেষ থেকে শেষ এনক্র্যাপশনের তথ্য</string>
+
+    <string name="encryption_information_device_info">ঘটনা তথ্য</string>
+    <string name="encryption_information_user_id">ব্যবহারকারীর প্রমানপত্র</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519 পরিচয় কুঞ্জি</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">ED25519 ফিঙ্গারপ্রিন্ট কুঞ্জি স্বীকৃত</string>
+    <string name="encryption_information_algorithm">অ্যালগরিদম</string>
+    <string name="encryption_information_session_id">সেশন আইডি</string>
+    <string name="encryption_information_decryption_error">ডিক্রিপশন সমস্যা</string>
+
+    <string name="encryption_information_sender_device_information">প্রেরক ডিভাইস তথ্য</string>
+    <string name="encryption_information_device_name">যন্ত্রের নাম</string>
+    <string name="encryption_information_name">নাম</string>
+    <string name="encryption_information_device_id">ডিভাইস আইডি</string>
+    <string name="encryption_information_device_key">যন্ত্রের কুঞ্জি</string>
+    <string name="encryption_information_verification">প্রতিপাদন</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 ফিঙ্গারপ্রিন্ট</string>
+
+    <string name="encryption_export_e2e_room_keys">শেষ থেকে শেষ রুমের কুঞ্জিগুলি এক্সপোর্ট করুন</string>
+    <string name="encryption_export_room_keys">রুমের কুঞ্জিগুলি এক্সপোর্ট করুন</string>
+    <string name="encryption_export_room_keys_summary">একটি স্থানীয় ফাইলে কুঞ্জি এক্সপোর্ট করুন</string>
+    <string name="encryption_export_export">এক্সপোর্ট</string>
+    <string name="encryption_export_notice">এক্সপোর্ট করা কুঞ্জিগুলি এনক্রিপ্ট করার জন্য একটি পাসফ্রেজ তৈরি করুন। কুঞ্জিগুলি ইম্পোর্ট করতে সক্ষম হবার জন্য আপনাকে একই পাসফ্রেজটি প্রবেশ করতে হবে।</string>
+    <string name="encryption_export_saved_as">E2E রুম কীগুলি \'%s\' তে সংরক্ষিত হয়েছে।
+\n
+\nসতর্কতা: অ্যাপ্লিকেশন আনইনস্টল হলে এই ফাইল মুছে যেতে পারে।</string>
+
+    <string name="encryption_message_recovery">এনক্রিপ্ট করা বার্তা পুনরুদ্ধার</string>
+    <string name="encryption_settings_manage_message_recovery_summary">কুঞ্জি ব্যাকআপ পরিচালনা করুন</string>
+
+    <string name="encryption_import_e2e_room_keys">E2E রুমের কুনজিগুলি ইম্পোর্ট করুন</string>
+    <string name="encryption_import_room_keys">রুমের কুঞ্জিগুলি ইমপোর্ট করুন</string>
+    <string name="encryption_import_room_keys_summary">একটি স্থানীয় ফাইল থেকে কুঞ্জি ইম্পোর্ট করুন</string>
+    <string name="encryption_import_import">ইম্পোর্ট</string>
+    <string name="encryption_never_send_to_unverified_devices_title">শুধুমাত্র যাচাই ডিভাইসে এনক্রিপ্ট করুন</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">এই ডিভাইস থেকে যাচাই করা ডিভাইসগুলিতে এনক্রিপ্ট করা বার্তাগুলি কখনও প্রেরণ করবেন না।</string>
+    <string name="encryption_import_room_keys_success">%1$d/%2$d কুঞ্জি(গুলি) সাফল্য সাথে ইম্পোর্ট করা হয়েছে।</string>
+
+    <string name="encryption_information_not_verified">যাচাই করা হয়নি</string>
+    <string name="encryption_information_verified">প্রতিপাদিত</string>
+    <string name="encryption_information_blocked">কালোতালিকাভুক্ত</string>
+
+    <string name="encryption_information_unknown_device">অজ্ঞাত যন্ত্র</string>
+    <string name="encryption_information_unknown_ip">অজ্ঞাত ip</string>
+    <string name="encryption_information_none">কেউ না</string>
+
+    <string name="encryption_information_verify">যাচাই করুন</string>
+    <string name="encryption_information_unverify">অযাচাই</string>
+    <string name="encryption_information_block">কালোতালিকা</string>
+    <string name="encryption_information_unblock">কালোতালিকাযুক্ত না</string>
+
+    <string name="encryption_information_verify_device">ডিভাইস যাচাই করুন</string>
+    <string name="encryption_information_verify_device_warning2">এটি মিললে, নীচের যাচাই বাটন টিপুন। যদি এটি না হয় তবে অন্য কেউ এই ডিভাইসটিকে আটক করছে এবং আপনাকে সম্ভবত এটি কালো তালিকাভুক্ত করা উচিত। ভবিষ্যতে এই যাচাই প্রক্রিয়া আরো পরিশীলিত হবে।</string>
+    <string name="encryption_information_verify_key_match">আমি যে কি মেলে মেলে যাচাই</string>
+
+    <string name="unknown_devices_alert_title">রুমে অজানা ডিভাইস রয়েছে</string>
+    <string name="unknown_devices_alert_message">এই রুমে অজানা ডিভাইস রয়েছে যা যাচাই করা হয়নি।
+\nএর অর্থ এই যে ডিভাইসগুলি যে ব্যবহারকারীদের দাবি করে সেগুলির সাথে ডিভাইসগুলির কোনও নিশ্চয়তা নেই।
+\nআমরা আপনাকে চালিয়ে যাওয়ার আগে প্রতিটি ডিভাইসের জন্য যাচাইকরণ প্রক্রিয়ার মধ্য দিয়ে যেতে পরামর্শ দিই তবে আপনি যদি পছন্দ করেন তবে যাচাই না করে বার্তাটি পুনরায় পাঠাতে পারেন।
+\n
+\nঅজানা ডিভাইস:</string>
+
+    <string name="select_room_directory">একটি রুম ডিরেক্টরি নির্বাচন করুন</string>
+    <string name="directory_server_fail_to_retrieve_server">সার্ভার অনুপলব্ধ বা ওভারলোড হতে পারে</string>
+    <string name="directory_server_type_homeserver">পাবলিক রুমগুলি তালিকায় পেতে একটি হোমসেরভের টাইপ করুন</string>
+    <string name="directory_server_placeholder">হোমসেরভের ইউআরএল</string>
+    <string name="directory_server_all_rooms_on_server">%s সার্ভার থেকে সব রুমগুলি</string>
+    <string name="directory_server_native_rooms">সমস্ত নেটিভ %s রুমগুলি</string>
+
+    <string name="lock_screen_hint">এখানে টাইপ করুন…</string>
+
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">১ টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
+        <item quantity="other">%d টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+        <item quantity="one">১ টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
+        <item quantity="other">%d টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">১ টি রুম</item>
+        <item quantity="other">%d টি রুম</item>
+    </plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: ১ টি বার্তা</item>
+        <item quantity="other">%1$s: %2$d টি বার্তা</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d টি বিজ্ঞপ্তি</item>
+        <item quantity="other">%d টি বিজ্ঞপ্তি</item>
+    </plurals>
+
+    <string name="notification_unread_notified_messages_in_room">%2$s এ %1$s</string>
+    <string name="notification_unknown_new_event">নতুন ইভেন্ট</string>
+    <string name="notification_unknown_room_name">রুম</string>
+    <string name="notification_new_messages">নতুন বার্তাগুলি</string>
+    <string name="notification_new_invitation">নতুন আমন্ত্রণগুলি</string>
+    <string name="notification_sender_me">আমি</string>
+    <string name="notification_inline_reply_failed">** পাঠাতে ব্যর্থ - দয়া করে রুম খুলুন</string>
+
+    <string name="historical_placeholder">ঐতিহাসিক জন্য অনুসন্ধান করুন</string>
+
+    <string name="tiny">অতি ক্ষুদ্র</string>
+    <string name="small">ছোট</string>
+    <string name="normal">সাধারন</string>
+    <string name="large">বড়</string>
+    <string name="larger">বৃহত্তর</string>
+    <string name="largest">বৃহত্তম</string>
+    <string name="huge">বিপুল</string>
+
+    <string name="widget_no_power_to_manage">আপনি এই রুমে উইজেট পরিচালনা করার অনুমতি প্রয়োজন</string>
+    <string name="widget_creation_failure">উইজেট এর নির্মাণ ব্যর্থ হয়েছে</string>
+    <string name="event_formatter_widget_added">%1$s %2$s দ্বারা যোগ করা হয়েছে</string>
+    <string name="event_formatter_widget_removed">%1$s %2$s দ্বারা সরানো হয়েছে</string>
+    <string name="settings_labs_create_conference_with_jitsi">Jitsi সঙ্গে কনফারেন্স কল তৈরি করুন</string>
+    <string name="widget_delete_message_confirmation">আপনি কি এই রুমে উইজেট মুছে ফেলতে চান\?</string>
+    <plurals name="active_widgets">
+        <item quantity="one">১ টি সক্রিয় উইজেট</item>
+        <item quantity="other">%d টা সক্রিয় উইজেট</item>
+    </plurals>
+
+    <string name="error_jitsi_not_supported_on_old_device">দুঃখিত, জিটসির সাথে কনফারেন্স কলগুলি পুরোনো ডিভাইসগুলিতে সমর্থিত নয় (৫.০ এর নীচে এন্ড্রোইড অপারেটিং সিস্টেম সহ ডিভাইসগুলি)</string>
+
+    <string name="widget_integration_unable_to_create">উইজেট তৈরি করতে অক্ষম।</string>
+    <string name="widget_integration_failed_to_send_request">অনুরোধ পাঠাতে ব্যর্থ।</string>
+    <string name="widget_integration_positive_power_level">শক্তি স্তর ইতিবাচক পূর্ণসংখ্যা হতে হবে।</string>
+    <string name="widget_integration_must_be_in_room">আপনি এই রুমে নেই।</string>
+    <string name="widget_integration_no_permission_in_room">আপনি এই রুমে এটা করার অনুমতি নেই।</string>
+    <string name="widget_integration_missing_room_id">অনুরোধে room_id অনুপস্থিত।</string>
+    <string name="widget_integration_missing_user_id">অনুরোধে user_id অনুপস্থিত।</string>
+    <string name="widget_integration_room_not_visible">রুম %s দৃশ্যমান নয়।</string>
+    <string name="widget_integration_missing_parameter">একটি প্রয়োজনীয় প্যারামিটারটি অনুপস্থিত আছে।</string>
+    <string name="widget_integration_invalid_parameter">একটি পেরামিটার বৈধ নয়।</string>
+    <string name="room_add_matrix_apps">ম্যাট্রিক্স এপ্লিকেশনগুলি যোগ করুন</string>
+    <string name="settings_labs_native_camera">নেটিভ ক্যামেরা ব্যবহার করুন</string>
+    <string name="settings_labs_native_camera_summary">কাস্টম ক্যামেরা স্ক্রীনের পরিবর্তে সিস্টেম ক্যামেরাটি শুরু করে।</string>
+    <string name="settings_labs_keyboard_options_to_send_message">বার্তা পাঠাবার জন্য কীবোর্ড এর এন্টার বোতাম প্রয়োগ করুন</string>
+    <string name="settings_labs_enable_send_voice">ভয়েস বার্তা পাঠান</string>
+    <string name="settings_labs_enable_send_voice_summary">এই বিকল্প বার্তা রেকর্ড করার জন্য একটি তৃতীয় পক্ষের অ্যাপ্লিকেশন প্রয়োজন।</string>
+
+    <string name="you_added_a_new_device_with_info">একটি নতুন ডিভাইস এনক্রিপশন কুঞ্জি অনুরোধ করছে।
+\nডিভাইসের নাম: %1$s
+\nশেষ দেখা হয়েছে: %2$s
+\nআপনি অন্য ডিভাইসে লগ ইন না করলে, এই অনুরোধটি উপেক্ষা করুন।</string>
+    <string name="your_unverified_device_requesting">আপনার যাচাই না করা ডিভাইস \'%s\' এনক্রিপশন কুঞ্জি অনুরোধ করছে।</string>
+    <string name="your_unverified_device_requesting_with_info">একটি যাচাইকরণ ডিভাইস এনক্রিপশন কুঞ্জি অনুরোধ করছে।
+\nডিভাইসের নাম: %1$s
+\nশেষ দেখা হয়েছে: %2$s
+\nআপনি অন্য ডিভাইসে লগ ইন না করলে, এই অনুরোধটি উপেক্ষা করুন।</string>
+
+    <string name="start_verification">যাচাই শুরু করুন</string>
+    <string name="start_verification_short_label">যাচাই</string>
+    <string name="share_without_verifying">যাচাই না করে শেয়ার করুন</string>
+    <string name="share_without_verifying_short_label">ভাগ</string>
+    <string name="key_share_request">কুঞ্জি ভাগ অনুরোধ</string>
+    <string name="ignore_request">অনুরোধ উপেক্ষা করুন</string>
+    <string name="ignore_request_short_label">উপেক্ষা</string>
+
+    <string name="conference_call_warning_title">সতর্কবাণী!</string>
+    <string name="conference_call_warning_message">কনফারেন্স কল এখনো ডেভেলপমেন্ট এ আছে আর নির্ভরযোগ্য নাও হতে পারে।</string>
+
+    <string name="command_error">কম্যান্ড এর ত্রুটি</string>
+    <string name="unrecognized_command">অজ্ঞাত কম্যান্ড: %s</string>
+    <string name="command_problem_with_parameters">কমান্ড \"%s\" আরও পেরামিটার প্রয়োজন, অথবা কিছু পেরামিটার ভুল।</string>
+    <string name="command_description_emote">কর্ম প্রদর্শন করে</string>
+    <string name="command_description_ban_user">দেওয়া আইডি সঙ্গে ব্যবহারকারী কে নিষিদ্ধ করে</string>
 </resources>

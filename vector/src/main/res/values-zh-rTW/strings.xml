@@ -1357,4 +1357,66 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 5.0 的裝置）</string>
 
+    <string name="title_activity_verify_device">驗證裝置</string>
+
+    <string name="encryption_information_unknown_ip">未知的 IP</string>
+    <string name="you_added_a_new_device_with_info">有新裝置正在要求加密金鑰。
+\n裝置名稱：%1$s
+\n上次檢視：%2$s
+\n如果您沒有在其他裝置上登入，請忽略本請求。</string>
+    <string name="your_unverified_device_requesting_with_info">有未驗證的裝置正在要求加密金鑰。
+\n裝置名稱：%1$s
+\n上次檢視：%2$s
+\n如果您沒有在其他裝置上登入，請忽略本請求。</string>
+
+    <string name="start_verification_short_label">驗證</string>
+    <string name="share_without_verifying_short_label">分享</string>
+    <string name="key_share_request">金鑰分享請求</string>
+    <string name="ignore_request_short_label">忽略</string>
+
+    <string name="sas_verify_title">透過比較短文字字串來驗證。</string>
+    <string name="sas_security_advise">為了最佳的安全性，我們建議您面對面或以其他可信的通訊方式執行此操作。</string>
+    <string name="sas_verify_start_button_title">開始驗證</string>
+    <string name="sas_incoming_request_title">傳來的驗證請求</string>
+    <string name="sas_incoming_request_description">驗證此裝置以將其標記為可信任。在使用端到端加密訊息時，信任夥伴的裝置可以讓您更安心。</string>
+    <string name="sas_incoming_request_description_2">驗證此裝置會將其標記為可信任，同時也會在對方的裝置上將您的裝置標記為可信任。</string>
+
+    <string name="sas_emoji_description">透過確認出現在夥伴螢幕下方的顏文字來驗證此裝置</string>
+    <string name="sas_decimal_description">透過確認出現在夥伴螢幕下方的數字來驗證此裝置</string>
+
+    <string name="sas_incoming_verification_request_dialog">您已收到傳來的驗證請求。</string>
+    <string name="sas_view_request_action">檢視請求</string>
+    <string name="sas_waiting_for_partner">正在等待夥伴確認……</string>
+
+    <string name="sas_verified">已驗證！</string>
+    <string name="sas_verified_successful">您已成功驗證此裝置。</string>
+    <string name="sas_verified_successful_description">與此使用者的安全訊息是端到端加密，無法被第三方讀取。</string>
+    <string name="sas_got_it">知道了</string>
+
+    <string name="sas_verifying_keys">沒有出現東西嗎？不是所有客戶端都支援互動式驗證。使用舊版驗證方式。</string>
+    <string name="sas_legacy_verification_button_title">使用舊版驗證方式。</string>
+
+    <string name="sas_verification_request_notification_channel_title">金鑰驗證</string>
+    <string name="sas_cancelled_dialog_title">請求已取消</string>
+    <string name="sas_cancelled_by_other">其他夥伴已取消驗證。
+\n%s</string>
+    <string name="sas_cancelled_by_me">驗證已取消。
+\n理由：%s</string>
+
+    <string name="sas_verification_request_notification_channel">互動式裝置驗證</string>
+    <string name="sas_incoming_request_notif_title">驗證請求</string>
+    <string name="sas_incoming_request_notif_content">%s 想要驗證您的裝置</string>
+
+    <string name="sas_error_m_user">使用者已取消驗證</string>
+    <string name="sas_error_m_timeout">驗證程序逾時</string>
+    <string name="sas_error_m_unknown_transaction">裝置不知道該處理過程</string>
+    <string name="sas_error_m_unknown_method">裝置無法就金鑰協議、雜湊、MAC 或 SAS 方法達成一致</string>
+    <string name="sas_error_m_mismatched_commitment">雜湊不符合</string>
+    <string name="sas_error_m_mismatched_sas">SAS 不符合</string>
+    <string name="sas_error_m_unexpected_message">裝置收到未預期的訊息</string>
+    <string name="sas_error_m_invalid_message">收到無效的訊息</string>
+    <string name="sas_error_m_key_mismatch">金鑰不符合</string>
+    <string name="sas_error_m_user_error">使用者不符合</string>
+    <string name="sas_error_unknown">未知錯誤</string>
+
 </resources>

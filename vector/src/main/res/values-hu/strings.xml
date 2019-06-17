@@ -1404,4 +1404,66 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="error_jitsi_not_supported_on_old_device">Elnézést, Jitsi konferencia hívások a régi eszközökön (Android OS 5.0-nál régebbi) nem támogatottak</string>
 
+    <string name="title_activity_verify_device">Eszköz ellenőrzése</string>
+
+    <string name="encryption_information_unknown_ip">ismeretlen ip</string>
+    <string name="you_added_a_new_device_with_info">Új eszköz kér titkosítási kulcsokat.
+\nEszköz neve: %1$s
+\nUtoljára látszott: %2$s
+\nHa nem jelentkeztél be másik eszközön, hagyd figyelmen kívül a kérést.</string>
+    <string name="your_unverified_device_requesting_with_info">Ellenőrizetlen eszköz kér titkosítási kulcsokat.
+\nEszköz neve: %1$s
+\nUtoljára látszott: %2$s
+\nHa nem jelentkeztél be másik eszközzel, hagyd figyelmen kívül ezt a kérést.</string>
+
+    <string name="start_verification_short_label">Ellenőriz</string>
+    <string name="share_without_verifying_short_label">Megoszt</string>
+    <string name="key_share_request">Kulcs Megosztási Kérés</string>
+    <string name="ignore_request_short_label">Mellőz</string>
+
+    <string name="sas_verify_title">Rövid szöveggel ellenőriz.</string>
+    <string name="sas_security_advise">A maximális biztonság érdekében azt javasoljuk, hogy személyesen vagy más megbízható kommunikációs csatornán tedd meg.</string>
+    <string name="sas_verify_start_button_title">Ellenőrzés megkezdése</string>
+    <string name="sas_incoming_request_title">Ellenőrzési kérés érkezett</string>
+    <string name="sas_incoming_request_description">Eszköz ellenőrzése és beállítás megbízhatónak. A partnerek eszközeiben való megbízás megnyugtató lehet, ha végponttól végpontig titkosítást használsz.</string>
+    <string name="sas_incoming_request_description_2">Az eszköz ellenőrzése megbízhatónak fogja jelezni az eszközt és a partnernél a te eszközödet szintén megbízhatónak fogja jelezni.</string>
+
+    <string name="sas_emoji_description">Eszköz ellenőrzése az alábbi emojik a partner képernyőjén való megjelenésének megerősítésével történik</string>
+    <string name="sas_decimal_description">Eszköz ellenőrzése az alábbi számok a partner képernyőjén való megjelenésének megerősítésével történik</string>
+
+    <string name="sas_incoming_verification_request_dialog">Bejövő ellenőrzési kérés érkezett.</string>
+    <string name="sas_view_request_action">Kérés megjelenítése</string>
+    <string name="sas_waiting_for_partner">Várakozás a partner megerősítésére…</string>
+
+    <string name="sas_verified">Ellenőrizve!</string>
+    <string name="sas_verified_successful">Sikeresen ellenőrizted az eszközt.</string>
+    <string name="sas_verified_successful_description">Biztonságos üzenetek ezzel a felhasználóval végponttól végpontig titkosítva vannak és harmadik fél nem tudja elolvasni.</string>
+    <string name="sas_got_it">Értem</string>
+
+    <string name="sas_verifying_keys">Nem jelenik meg semmi\? Nem minden kliens támogatja az interaktív ellenőrzést. Használd a hagyományos ellenőrzést.</string>
+    <string name="sas_legacy_verification_button_title">Hagyományos ellenőrzés használata.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Kulcs Ellenőrzés</string>
+    <string name="sas_cancelled_dialog_title">Kérés törölve</string>
+    <string name="sas_cancelled_by_other">A másik fél megszakította az ellenőrzést.
+\n%s</string>
+    <string name="sas_cancelled_by_me">Az ellenőrzés megszakítva.
+\nOk: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Interaktív Eszköz Ellenőrzés</string>
+    <string name="sas_incoming_request_notif_title">Ellenőrzési kérés</string>
+    <string name="sas_incoming_request_notif_content">%s szeretné ellenőrizni az eszközödet</string>
+
+    <string name="sas_error_m_user">A felhasználó megszakította az ellenőrzést</string>
+    <string name="sas_error_m_timeout">Az ellenőrzési folyamat időtúllépés miatt megszakadt</string>
+    <string name="sas_error_m_unknown_transaction">Az eszköz nem tud a tranzakcióról</string>
+    <string name="sas_error_m_unknown_method">Az eszköz nem tud megegyezni a kulcs kezelésről, hash, MAC vagy SAS metódus</string>
+    <string name="sas_error_m_mismatched_commitment">A hash nem egyezik</string>
+    <string name="sas_error_m_mismatched_sas">A SAS nem egyezik</string>
+    <string name="sas_error_m_unexpected_message">Az eszköz egy váratlan üzenetet kapott</string>
+    <string name="sas_error_m_invalid_message">Érvénytelen üzenet érkezett</string>
+    <string name="sas_error_m_key_mismatch">Kulcsok nem egyeznek</string>
+    <string name="sas_error_m_user_error">A felhasználó nem egyezik</string>
+    <string name="sas_error_unknown">Ismeretlen Hiba</string>
+
 </resources>

@@ -58,8 +58,6 @@
     <string name="stay">Stay</string>
     <string name="send">Send</string>
     <string name="copy">Copy</string>
-    <string name="edit">Edit</string>
-    <string name="reply">Reply</string>
     <string name="resend">Resend</string>
     <string name="redact">Remove</string>
     <string name="quote">Quote</string>
@@ -366,8 +364,8 @@
     <string name="permissions_rationale_msg_record_audio">Riot needs permission to access your microphone to perform audio calls.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
-    <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
+    <string name="permissions_rationale_msg_contacts">Riot can check your address book to find other Matrix users based on their email and phone numbers. If you agree to share your address book for this purpose, please allow access on the next pop-up.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
 
@@ -1308,6 +1306,11 @@ Why choose Riot.im?
     <string name="keys_backup_setup_step3_save_button_title">Save as File</string>
     <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
 
+    <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your HomeServer</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another device. Do you want to replace it with the one you’re creating?</string>
+    <string name="keys_backup_setup_override_replace">Replace</string>
+    <string name="keys_backup_setup_override_stop">Stop</string>
+
     <string name="keys_backup_setup_step3_please_make_copy">Please make a copy</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Share recovery key with…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
@@ -1379,8 +1382,8 @@ Why choose Riot.im?
     <string name="keys_backup_settings_untrusted_backup">To use Key Backup on this device, restore with your passphrase or recovery key now.</string>
     <string name="keys_backup_settings_deleting_backup">Deleting backup…</string>
     <string name="keys_backup_settings_delete_backup_error">Failed to delete backup (%s)</string>
-    <string name="keys_backup_settings_checking_backup_state">Checking backup state</string>
 
+    <string name="keys_backup_settings_checking_backup_state">Checking backup state</string>
     <string name="keys_backup_settings_delete_confirm_title">Delete Backup</string>
     <string name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>
 
@@ -1414,6 +1417,8 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%1$s\":\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
+
+    <string name="invalid_or_expired_credentials">You have been logged out due to invalid or expired credentials.</string>
 
     <string name="sas_verify_title">Verify by comparing a short text string.</string>
     <string name="sas_security_advise">For maximum security, we recommend you do this in person or use another trusted means of communication.</string>
@@ -1458,5 +1463,62 @@ Why choose Riot.im?
     <string name="sas_error_m_key_mismatch">Key mismatch</string>
     <string name="sas_error_m_user_error">User mismatch</string>
     <string name="sas_error_unknown">Unknown Error</string>
+
+
+    <!-- String for RiotX -->
+    <string name="edit">Edit</string>
+    <string name="reply">Reply</string>
+
+    <string name="global_retry">"Retry"</string>
+    <string name="room_list_empty">"Join a room to start using the app."</string>
+    <string name="send_you_invite">"Sent you an invitation"</string>
+    <string name="invited_by">Invited by %s</string>
+
+    <string name="room_list_catchup_empty_title">You’re all caught up!</string>
+    <string name="room_list_catchup_empty_body">You have no more unread messages</string>
+    <string name="room_list_catchup_welcome_title">Welcome home!</string>
+    <string name="room_list_catchup_welcome_body">Catch up on unread messages here</string>
+    <string name="room_list_people_empty_title">Conversations</string>
+    <string name="room_list_people_empty_body">Your direct message conversation will be displayed here</string>
+    <string name="room_list_rooms_empty_title">Rooms</string>
+    <string name="room_list_rooms_empty_body">Your rooms will be displayed here</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reactions</string>
+    <string name="reactions_agree">Agree</string>
+    <string name="reactions_like">Like</string>
+    <string name="message_add_reaction">Add Reaction</string>
+    <string name="message_view_reaction">View Reactions</string>
+    <string name="reactions">Reactions</string>
+
+    <string name="event_redacted_by_user_reason">Event deleted by user</string>
+    <string name="event_redacted_by_admin_reason">Event moderated by room admin</string>
+    <string name="last_edited_info_message">Last edited by %s on %s</string>
+
+
+    <string name="malformed_message">Malformed event, cannot display</string>
+    <string name="create_new_room">Create New Room</string>
+    <string name="error_no_network">No network. Please check your Internet connection.</string>
+    <string name="action_change">"Change"</string>
+    <string name="change_room_directory_network">"Change network"</string>
+    <string name="please_wait">"Please wait…"</string>
+    <string name="group_all_communities">"All Communities"</string>
+
+    <string name="room_preview_no_preview">"This room can't be previewed"</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">"The preview of world-readable room is not supported yet in RiotX"</string>
+
+    <string name="fab_menu_create_room">"Rooms"</string>
+    <string name="fab_menu_create_chat">"Direct Messages"</string>
+
+    <!-- Create room screen -->
+    <string name="create_room_title">"New Room"</string>
+    <string name="create_room_action_create">"CREATE"</string>
+    <string name="create_room_name_hint">"Room name"</string>
+    <string name="create_room_public_title">"Public"</string>
+    <string name="create_room_public_description">"Anyone will be able to join this room"</string>
+    <string name="create_room_directory_title">"Room Directory"</string>
+    <string name="create_room_directory_description">"Publish this room in the room directory"</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">"An error occurred getting trust info"</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
 
 </resources>
