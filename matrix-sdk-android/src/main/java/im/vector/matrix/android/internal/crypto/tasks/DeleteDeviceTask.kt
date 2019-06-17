@@ -29,7 +29,10 @@ import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.concurrent.CountDownLatch
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     data class Params(
@@ -50,9 +53,10 @@ internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi,
                 // Replay the request with passing the credentials
 
                 // Parse to get a RegistrationFlowResponse
-                val registrationFlowResponseAdapter = MoshiProvider.providesMoshi().adapter(RegistrationFlowResponse::class.java)
                 val registrationFlowResponse = try {
-                    registrationFlowResponseAdapter.fromJson(throwable.errorBody)
+                    MoshiProvider.providesMoshi()
+                            .adapter(RegistrationFlowResponse::class.java)
+                            .fromJson(throwable.errorBody)
                 } catch (e: Exception) {
                     null
                 }
@@ -68,7 +72,16 @@ internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi,
 
                     Timber.v("## deleteDevice() : supported stages $stages")
 
-                    deleteDeviceRecursive(registrationFlowResponse.session, params, stages)
+                    val latch = CountDownLatch(1)
+                    var deleteDeviceRecursiveResult: Try<Unit> = Try.just(Unit)
+
+                    GlobalScope.launch {
+                        deleteDeviceRecursiveResult = deleteDeviceRecursive(registrationFlowResponse.session, params, stages)
+                        latch.countDown()
+                    }
+
+                    latch.await()
+                    deleteDeviceRecursiveResult
                 } else {
                     throwable.failure()
                 }
@@ -80,9 +93,9 @@ internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi,
         }
     }
 
-    private fun deleteDeviceRecursive(authSession: String?,
-                                      params: DeleteDeviceTask.Params,
-                                      remainingStages: MutableList<String>): Try<Unit> {
+    private suspend fun deleteDeviceRecursive(authSession: String?,
+                                              params: DeleteDeviceTask.Params,
+                                              remainingStages: MutableList<String>): Try<Unit> {
         // Pick the first stage
         val stage = remainingStages.first()
 
@@ -107,7 +120,16 @@ internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi,
                     // Try next stage
                     val otherStages = remainingStages.subList(1, remainingStages.size)
 
-                    deleteDeviceRecursive(authSession, params, otherStages)
+                    val latch = CountDownLatch(1)
+                    var deleteDeviceRecursiveResult: Try<Unit> = Try.just(Unit)
+
+                    GlobalScope.launch {
+                        deleteDeviceRecursiveResult = deleteDeviceRecursive(authSession, params, otherStages)
+                        latch.countDown()
+                    }
+
+                    latch.await()
+                    deleteDeviceRecursiveResult
                 } else {
                     // No more stage remaining
                     throwable.failure()
