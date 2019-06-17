@@ -16,6 +16,7 @@
 package im.vector.matrix.android.internal.session.room.relation
 
 import android.content.Context
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
@@ -32,7 +33,7 @@ import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import org.koin.standalone.inject
 
 class SendRelationWorker(context: Context, params: WorkerParameters)
-    : Worker(context, params), MatrixKoinComponent {
+    : CoroutineWorker(context, params), MatrixKoinComponent {
 
 
     @JsonClass(generateAdapter = true)
@@ -44,7 +45,7 @@ class SendRelationWorker(context: Context, params: WorkerParameters)
 
     private val roomAPI by inject<RoomAPI>()
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
 

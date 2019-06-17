@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * This class provides the parameter to delete a device
  */
 @JsonClass(generateAdapter = true)
-data class DeleteDeviceParams(
+internal data class DeleteDeviceParams(
         @Json(name = "auth")
         var deleteDeviceAuth: DeleteDeviceAuth? = null
 )

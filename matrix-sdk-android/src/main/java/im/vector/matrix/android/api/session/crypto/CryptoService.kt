@@ -36,7 +36,9 @@ interface CryptoService {
 
     fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>)
 
-    fun deleteDevice(deviceId: String, accountPassword: String, callback: MatrixCallback<Unit>)
+    fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>)
+
+    fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>)
 
     fun getCryptoVersion(context: Context, longFormat: Boolean): String
 

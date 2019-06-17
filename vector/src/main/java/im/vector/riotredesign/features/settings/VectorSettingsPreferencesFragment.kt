@@ -46,7 +46,9 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.getFingerprintHumanReadable
 import im.vector.matrix.android.api.extensions.sortByLastSeen
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotredesign.R
@@ -2413,7 +2415,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
             // disable the deletion for our own device
             if (!TextUtils.equals(mSession.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
-                builder.setNegativeButton(R.string.delete) { _, _ -> displayDeviceDeletionDialog(aDeviceInfo) }
+                builder.setNegativeButton(R.string.delete) { _, _ -> deleteDevice(aDeviceInfo) }
             }
 
             builder.setNeutralButton(R.string.cancel, null)
@@ -2486,11 +2488,17 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     /**
      * Try to delete a device.
      *
-     * @param deviceId the device id
+     * @param deviceInfo the device to delete
      */
-    private fun deleteDevice(deviceId: String) {
+    private fun deleteDevice(deviceInfo: DeviceInfo) {
+        val deviceId = deviceInfo.deviceId
+        if (deviceId == null) {
+            Timber.e("## displayDeviceDeletionDialog(): sanity check failure")
+            return
+        }
+
         displayLoadingView()
-        mSession.deleteDevice(deviceId, mAccountPassword, object : MatrixCallback<Unit> {
+        mSession.deleteDevice(deviceId, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 hideLoadingView()
                 // force settings update
@@ -2498,57 +2506,83 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             }
 
             override fun onFailure(failure: Throwable) {
-                mAccountPassword = ""
-                onCommonDone(failure.localizedMessage)
+                var isPasswordRequestFound = false
+
+                if (failure is Failure.RegistrationFlowError) {
+                    // We only support LoginFlowTypes.PASSWORD
+                    // Check if we can provide the user password
+                    failure.registrationFlowResponse.flows?.forEach { interactiveAuthenticationFlow ->
+                        isPasswordRequestFound = isPasswordRequestFound || interactiveAuthenticationFlow.stages?.any { it == LoginFlowTypes.PASSWORD } == true
+                    }
+
+                    if (isPasswordRequestFound) {
+                        maybeShowDeleteDeviceWithPasswordDialog(deviceId, failure.registrationFlowResponse.session)
+                    }
+
+                }
+
+                if (!isPasswordRequestFound) {
+                    // LoginFlowTypes.PASSWORD not supported, and this is the only one RiotX supports so far...
+                    onCommonDone(failure.localizedMessage)
+                }
             }
         })
     }
 
     /**
-     * Display a delete confirmation dialog to remove a device.<br></br>
-     * The user is invited to enter his password to confirm the deletion.
-     *
-     * @param aDeviceInfoToDelete device info
+     * Show a dialog to ask for user password, or use a previously entered password.
      */
-    private fun displayDeviceDeletionDialog(aDeviceInfoToDelete: DeviceInfo) {
-        if (aDeviceInfoToDelete.deviceId != null) {
-            if (!TextUtils.isEmpty(mAccountPassword)) {
-                deleteDevice(aDeviceInfoToDelete.deviceId!!)
-            } else {
-                activity?.let {
-                    val inflater = it.layoutInflater
-                    val layout = inflater.inflate(R.layout.dialog_device_delete, null)
-                    val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
-
-                    AlertDialog.Builder(it)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle(R.string.devices_delete_dialog_title)
-                            .setView(layout)
-                            .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
-                                if (TextUtils.isEmpty(passwordEditText.toString())) {
-                                    it.toast(R.string.error_empty_field_your_password)
-                                    return@OnClickListener
-                                }
-                                mAccountPassword = passwordEditText.text.toString()
-                                deleteDevice(aDeviceInfoToDelete.deviceId!!)
-                            })
-                            .setNegativeButton(R.string.cancel) { _, _ ->
-                                hideLoadingView()
-                            }
-                            .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                                if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                                    dialog.cancel()
-                                    hideLoadingView()
-                                    return@OnKeyListener true
-                                }
-                                false
-                            })
-                            .show()
-                }
-            }
+    private fun maybeShowDeleteDeviceWithPasswordDialog(deviceId: String, authSession: String?) {
+        if (!TextUtils.isEmpty(mAccountPassword)) {
+            deleteDeviceWithPassword(deviceId, authSession, mAccountPassword)
         } else {
-            Timber.e("## displayDeviceDeletionDialog(): sanity check failure")
+            activity?.let {
+                val inflater = it.layoutInflater
+                val layout = inflater.inflate(R.layout.dialog_device_delete, null)
+                val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
+
+                AlertDialog.Builder(it)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(R.string.devices_delete_dialog_title)
+                        .setView(layout)
+                        .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
+                            if (TextUtils.isEmpty(passwordEditText.toString())) {
+                                it.toast(R.string.error_empty_field_your_password)
+                                return@OnClickListener
+                            }
+                            mAccountPassword = passwordEditText.text.toString()
+                            deleteDeviceWithPassword(deviceId, authSession, mAccountPassword)
+                        })
+                        .setNegativeButton(R.string.cancel) { _, _ ->
+                            hideLoadingView()
+                        }
+                        .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
+                            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                                dialog.cancel()
+                                hideLoadingView()
+                                return@OnKeyListener true
+                            }
+                            false
+                        })
+                        .show()
+            }
         }
+    }
+
+    private fun deleteDeviceWithPassword(deviceId: String, authSession: String?, accountPassword: String) {
+        mSession.deleteDeviceWithUserPassword(deviceId, authSession, accountPassword, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                hideLoadingView()
+                // force settings update
+                refreshDevicesList()
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // Password is maybe not good
+                onCommonDone(failure.localizedMessage)
+                mAccountPassword = ""
+            }
+        })
     }
 
     /**
