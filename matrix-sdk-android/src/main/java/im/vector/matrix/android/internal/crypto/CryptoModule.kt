@@ -193,6 +193,7 @@ internal class CryptoModule {
                     megolmEncryptionFactory = get(),
                     olmEncryptionFactory = get(),
                     deleteDeviceTask = get(),
+                    deleteDeviceWithUserPasswordTask = get(),
                     // Tasks
                     getDevicesTask = get(),
                     setDeviceNameTask = get(),
@@ -227,7 +228,10 @@ internal class CryptoModule {
             DefaultClaimOneTimeKeysForUsersDevice(get()) as ClaimOneTimeKeysForUsersDeviceTask
         }
         scope(DefaultSession.SCOPE) {
-            DefaultDeleteDeviceTask(get(), get()) as DeleteDeviceTask
+            DefaultDeleteDeviceTask(get()) as DeleteDeviceTask
+        }
+        scope(DefaultSession.SCOPE) {
+            DefaultDeleteDeviceWithUserPasswordTask(get(), get()) as DeleteDeviceWithUserPasswordTask
         }
         scope(DefaultSession.SCOPE) {
             DefaultDownloadKeysForUsers(get()) as DownloadKeysForUsersTask

@@ -55,6 +55,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
 import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
 import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
@@ -124,6 +125,7 @@ internal class CryptoManager(
         private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
         private val olmEncryptionFactory: MXOlmEncryptionFactory,
         private val deleteDeviceTask: DeleteDeviceTask,
+        private val deleteDeviceWithUserPasswordTask: DeleteDeviceWithUserPasswordTask,
         // Tasks
         private val getDevicesTask: GetDevicesTask,
         private val setDeviceNameTask: SetDeviceNameTask,
@@ -163,9 +165,16 @@ internal class CryptoManager(
                 .executeBy(taskExecutor)
     }
 
-    override fun deleteDevice(deviceId: String, accountPassword: String, callback: MatrixCallback<Unit>) {
+    override fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
-                .configureWith(DeleteDeviceTask.Params(deviceId, accountPassword))
+                .configureWith(DeleteDeviceTask.Params(deviceId))
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
+    }
+
+    override fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>) {
+        deleteDeviceWithUserPasswordTask
+                .configureWith(DeleteDeviceWithUserPasswordTask.Params(deviceId, authSession, password))
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }

@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.auth.data.InteractiveAuthenticationFlow
 
 @JsonClass(generateAdapter = true)
-internal data class RegistrationFlowResponse(
+data class RegistrationFlowResponse(
 
         /**
          * The list of flows.

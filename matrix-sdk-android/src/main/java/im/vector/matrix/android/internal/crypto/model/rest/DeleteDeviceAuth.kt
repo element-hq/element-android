@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * This class provides the authentication data to delete a device
  */
 @JsonClass(generateAdapter = true)
-data class DeleteDeviceAuth(
+internal data class DeleteDeviceAuth(
 
         // device device session id
         @Json(name = "session")

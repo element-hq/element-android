@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * An interactive authentication flow.
  */
 @JsonClass(generateAdapter = true)
-internal data class InteractiveAuthenticationFlow(
+data class InteractiveAuthenticationFlow(
 
         @Json(name = "type")
         val type: String? = null,

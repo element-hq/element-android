@@ -290,8 +290,12 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         cryptoService.setDeviceName(deviceId, deviceName, callback)
     }
 
-    override fun deleteDevice(deviceId: String, accountPassword: String, callback: MatrixCallback<Unit>) {
-        cryptoService.deleteDevice(deviceId, accountPassword, callback)
+    override fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>) {
+        cryptoService.deleteDevice(deviceId, callback)
+    }
+
+    override fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>) {
+        cryptoService.deleteDeviceWithUserPassword(deviceId, authSession, password, callback)
     }
 
     override fun getCryptoVersion(context: Context, longFormat: Boolean): String {

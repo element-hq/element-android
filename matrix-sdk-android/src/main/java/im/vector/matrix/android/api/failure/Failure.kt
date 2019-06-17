@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.failure
 
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
+import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
 import java.io.IOException
 
 /**
@@ -34,6 +35,8 @@ sealed class Failure(cause: Throwable? = null) : Throwable(cause = cause) {
     data class ServerError(val error: MatrixError, val httpCode: Int) : Failure(RuntimeException(error.toString()))
     // When server send an error, but it cannot be interpreted as a MatrixError
     data class OtherServerError(val errorBody: String, val httpCode: Int) : Failure(RuntimeException(errorBody))
+
+    data class RegistrationFlowError(val registrationFlowResponse: RegistrationFlowResponse) : Failure(RuntimeException(registrationFlowResponse.toString()))
 
     data class CryptoError(val error: MXCryptoError) : Failure(RuntimeException(error.toString()))
 

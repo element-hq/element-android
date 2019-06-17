@@ -19,30 +19,21 @@ package im.vector.matrix.android.internal.crypto.tasks
 import arrow.core.Try
 import arrow.core.failure
 import arrow.core.recoverWith
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
-import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceAuth
 import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.util.concurrent.CountDownLatch
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     data class Params(
-            val deviceId: String,
-            val accountPassword: String
+            val deviceId: String
     )
 }
 
-internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi,
-                                       private val credentials: Credentials)
+internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi)
     : DeleteDeviceTask {
 
     override suspend fun execute(params: DeleteDeviceTask.Params): Try<Unit> {
@@ -50,8 +41,6 @@ internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi,
             apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams())
         }.recoverWith { throwable ->
             if (throwable is Failure.OtherServerError && throwable.httpCode == 401) {
-                // Replay the request with passing the credentials
-
                 // Parse to get a RegistrationFlowResponse
                 val registrationFlowResponse = try {
                     MoshiProvider.providesMoshi()
@@ -62,78 +51,12 @@ internal class DefaultDeleteDeviceTask(private val cryptoApi: CryptoApi,
                 }
 
                 // check if the server response can be casted
-                if (registrationFlowResponse?.flows?.isNotEmpty() == true) {
-                    val stages = ArrayList<String>()
-
-                    // Get all stages
-                    registrationFlowResponse.flows?.forEach {
-                        stages.addAll(it.stages ?: emptyList())
-                    }
-
-                    Timber.v("## deleteDevice() : supported stages $stages")
-
-                    val latch = CountDownLatch(1)
-                    var deleteDeviceRecursiveResult: Try<Unit> = Try.just(Unit)
-
-                    GlobalScope.launch {
-                        deleteDeviceRecursiveResult = deleteDeviceRecursive(registrationFlowResponse.session, params, stages)
-                        latch.countDown()
-                    }
-
-                    latch.await()
-                    deleteDeviceRecursiveResult
+                if (registrationFlowResponse != null) {
+                    Failure.RegistrationFlowError(registrationFlowResponse).failure()
                 } else {
                     throwable.failure()
                 }
 
-            } else {
-                // Other error
-                throwable.failure()
-            }
-        }
-    }
-
-    private suspend fun deleteDeviceRecursive(authSession: String?,
-                                              params: DeleteDeviceTask.Params,
-                                              remainingStages: MutableList<String>): Try<Unit> {
-        // Pick the first stage
-        val stage = remainingStages.first()
-
-        val newParams = DeleteDeviceParams()
-                .apply {
-                    deleteDeviceAuth = DeleteDeviceAuth()
-                            .apply {
-                                type = stage
-                                session = authSession
-                                user = credentials.userId
-                                password = params.accountPassword
-                            }
-                }
-
-        return executeRequest<Unit> {
-            apiCall = cryptoApi.deleteDevice(params.deviceId, newParams)
-        }.recoverWith { throwable ->
-            if (throwable is Failure.ServerError
-                    && throwable.httpCode == 401
-                    && (throwable.error.code == MatrixError.FORBIDDEN || throwable.error.code == MatrixError.UNKNOWN)) {
-                if (remainingStages.size > 1) {
-                    // Try next stage
-                    val otherStages = remainingStages.subList(1, remainingStages.size)
-
-                    val latch = CountDownLatch(1)
-                    var deleteDeviceRecursiveResult: Try<Unit> = Try.just(Unit)
-
-                    GlobalScope.launch {
-                        deleteDeviceRecursiveResult = deleteDeviceRecursive(authSession, params, otherStages)
-                        latch.countDown()
-                    }
-
-                    latch.await()
-                    deleteDeviceRecursiveResult
-                } else {
-                    // No more stage remaining
-                    throwable.failure()
-                }
             } else {
                 // Other error
                 throwable.failure()
