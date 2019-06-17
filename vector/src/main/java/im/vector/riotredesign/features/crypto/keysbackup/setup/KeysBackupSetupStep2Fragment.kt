@@ -30,7 +30,6 @@ import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import com.nulabinc.zxcvbn.Zxcvbn
-import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.VectorBaseFragment

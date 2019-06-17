@@ -29,7 +29,6 @@ import arrow.core.Try
 import butterknife.BindView
 import butterknife.OnClick
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.files.addEntryToDownloadManager
 import im.vector.riotredesign.core.files.writeToFile

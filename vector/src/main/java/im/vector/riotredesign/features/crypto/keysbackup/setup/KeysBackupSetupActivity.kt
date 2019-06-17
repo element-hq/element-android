@@ -22,7 +22,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.dialogs.ExportKeysDialog
@@ -67,19 +66,19 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
         viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
             when (uxStateEvent) {
-                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2     -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2      -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupSetupStep2Fragment.newInstance())
                             .commit()
                 }
-                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3     -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3      -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
                             .commit()
                 }
-                KeysBackupSetupSharedViewModel.NAVIGATE_FINISH        -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_FINISH         -> {
                     val resultIntent = Intent()
                     viewModel.keysVersion.value?.version?.let {
                         resultIntent.putExtra(KEYS_VERSION, it)
@@ -87,7 +86,18 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     setResult(RESULT_OK, resultIntent)
                     finish()
                 }
-                KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_PROMPT_REPLACE -> {
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.keys_backup_setup_override_backup_prompt_tile)
+                            .setMessage(R.string.keys_backup_setup_override_backup_prompt_description)
+                            .setPositiveButton(R.string.keys_backup_setup_override_replace) { _, _ ->
+                                viewModel.forceCreateKeyBackup(this)
+                            }.setNegativeButton(R.string.keys_backup_setup_override_stop) { _, _ ->
+                                viewModel.stopAndKeepAfterDetectingExistingOnServer()
+                            }
+                            .show()
+                }
+                KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT  -> {
                     exportKeysManually()
                 }
             }
