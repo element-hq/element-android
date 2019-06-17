@@ -1449,4 +1449,66 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="error_jitsi_not_supported_on_old_device">Spiacenti, le chiamate di gruppo con Jitsi non sono supportate sui vecchi dispositivi (con Android precedenti al 5.0)</string>
 
+    <string name="title_activity_verify_device">Verifica dispositivo</string>
+
+    <string name="encryption_information_unknown_ip">IP sconosciuto</string>
+    <string name="you_added_a_new_device_with_info">Un nuovo dispositivo sta richiedendo le chiavi di cifratura.
+\nNome dispositivo: %1$s
+\nUltimo accesso: %2$s
+\nSe non hai effettuato l\'accesso in un altro dispositivo, ignora questa richiesta.</string>
+    <string name="your_unverified_device_requesting_with_info">Un dispositivo non verificato sta richiedendo le chiavi di cifratura.
+\nNome dispositivo: %1$s
+\nUltimo accesso: %2$s
+\nSe non hai effettuato l\'accesso in un altro dispositivo, ignora questa richiesta.</string>
+
+    <string name="start_verification_short_label">Verifica</string>
+    <string name="share_without_verifying_short_label">Condividi</string>
+    <string name="key_share_request">Richiesta condivisione chiave</string>
+    <string name="ignore_request_short_label">Ignora</string>
+
+    <string name="sas_verify_title">Verifica confrontando una breve stringa.</string>
+    <string name="sas_security_advise">Per la massima sicurezza, consigliamo di farlo di persona o di utilizzare un altro metodo di comunicazione fidato.</string>
+    <string name="sas_verify_start_button_title">Inizia la verifica</string>
+    <string name="sas_incoming_request_title">Richiesta di verifica in arrivo</string>
+    <string name="sas_incoming_request_description">Verifica questo dispositivo per segnarlo come fidato. Verificare i dispositivi dei partner ti dà una maggiore tranquillità quando usi messaggi cifrati end-to-end.</string>
+    <string name="sas_incoming_request_description_2">Verificare questo dispositivo lo segnerà come fidato e segnerà anche il tuo dispositivo come fidato per il tuo partner.</string>
+
+    <string name="sas_emoji_description">Verifica questo dispositivo confermando che il seguente emoji compare sullo schermo del partner</string>
+    <string name="sas_decimal_description">Verifica questo dispositivo confermando che i seguenti numeri compaiono sullo schermo del partner</string>
+
+    <string name="sas_incoming_verification_request_dialog">Hai ricevuto una richiesta di verifica.</string>
+    <string name="sas_view_request_action">Vedi la richiesta</string>
+    <string name="sas_waiting_for_partner">In attesa che il partner confermi…</string>
+
+    <string name="sas_verified">Verificato!</string>
+    <string name="sas_verified_successful">Hai verificato correttamente questo dispositivo.</string>
+    <string name="sas_verified_successful_description">I messaggi sicuri con questo utente sono cifrati end-to-end e impossibili da leggere da parte di terze parti.</string>
+    <string name="sas_got_it">Capito</string>
+
+    <string name="sas_verifying_keys">Non compare nulla\? Non tutti i client supportano già la verifica interattiva. Usa la verifica classica.</string>
+    <string name="sas_legacy_verification_button_title">Usa la verifica classica.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Verifica chiave</string>
+    <string name="sas_cancelled_dialog_title">Richiesta annullata</string>
+    <string name="sas_cancelled_by_other">L\'altra parte ha annullato la verifica.
+\n%s</string>
+    <string name="sas_cancelled_by_me">La verifica è annullata.
+\nMotivo: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Verifica dispositivo interattiva</string>
+    <string name="sas_incoming_request_notif_title">Richiesta di verifica</string>
+    <string name="sas_incoming_request_notif_content">%s vuole verificare il tuo dispositivo</string>
+
+    <string name="sas_error_m_user">L\'utente ha annullato la verifica</string>
+    <string name="sas_error_m_timeout">Il processo di verifica è scaduto</string>
+    <string name="sas_error_m_unknown_transaction">Il dispositivo non sa della transazione</string>
+    <string name="sas_error_m_unknown_method">Il dispositivo non riesce ad accordarsi sulla chiave, hash, MAC, o metodo SAS</string>
+    <string name="sas_error_m_mismatched_commitment">L\'hash non corrispondeva</string>
+    <string name="sas_error_m_mismatched_sas">Il SAS non corrispondeva</string>
+    <string name="sas_error_m_unexpected_message">Il dispositivo ha ricevuto un messaggio inaspettato</string>
+    <string name="sas_error_m_invalid_message">È stato ricevuto un messaggio non valido</string>
+    <string name="sas_error_m_key_mismatch">Chiave non corrispondente</string>
+    <string name="sas_error_m_user_error">Utente non corrispondente</string>
+    <string name="sas_error_unknown">Errore sconosciuto</string>
+
 </resources>

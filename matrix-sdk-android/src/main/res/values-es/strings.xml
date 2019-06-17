@@ -92,4 +92,8 @@
     </plurals>
 
 
+    <string name="notice_event_redacted">Mensaje eliminado</string>
+    <string name="notice_event_redacted_by">Mensaje eliminado por %1$s</string>
+    <string name="notice_event_redacted_with_reason">Mensaje eliminado [motivo: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Mensaje eliminado por %1$s [motivo: %2$s]</string>
 </resources>

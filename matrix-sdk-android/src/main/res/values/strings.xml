@@ -168,7 +168,7 @@
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_glasses">Glasses</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_wrench">Wrench</string>
+    <string name="verification_emoji_wrench">Spanner</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_santa">Santa</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
@@ -206,7 +206,7 @@
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_bicycle">Bicycle</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_airplane">Airplane</string>
+    <string name="verification_emoji_airplane">Aeroplane</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_rocket">Rocket</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
@@ -222,7 +222,7 @@
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_anchor">Anchor</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_headphone">Headphone</string>
+    <string name="verification_emoji_headphone">Headphones</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_folder">Folder</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->

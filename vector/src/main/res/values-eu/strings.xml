@@ -1400,4 +1400,66 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="error_jitsi_not_supported_on_old_device">Sentitzen dugu, gailu zaharretan ezin dira Jitsi bidezko konferentzia deiak egin (Android OS 5.0 baino zaharragoak)</string>
 
+    <string name="title_activity_verify_device">Egiaztatu gailua</string>
+
+    <string name="encryption_information_unknown_ip">ip ezezaguna</string>
+    <string name="you_added_a_new_device_with_info">"Gailu berri bat zifratze gakoak eskatzen ari da.
+\nGailuaren izena: %1$s
+\nAzkenekoz ikusia:  %2$s
+\nEz baduzu saioa zuk hasi beste gailu batekin, ezikusi eskari hau."</string>
+    <string name="your_unverified_device_requesting_with_info">"Egiaztatu gabeko gailu bat zifratze gakoak eskatzen ari da.
+\nGailuaren izena: %1$s
+\nAzkenekoz ikusia:  %2$s
+\nEz baduzu saioa zuk hasi beste gailu batekin, ezikusi eskari hau."</string>
+
+    <string name="start_verification_short_label">Egiaztatu</string>
+    <string name="share_without_verifying_short_label">Partekatu</string>
+    <string name="key_share_request">Gakoa partekatzeko eskaria</string>
+    <string name="ignore_request_short_label">Ezikusi</string>
+
+    <string name="sas_verify_title">Egiaztatu testu kate labur bat alderatuz.</string>
+    <string name="sas_security_advise">Segurtasun gehiagorako, hau aurrez aurre edo komunikatzeko beste bide fidagarri bat erabiliz egitea aholkatzen dizugu.</string>
+    <string name="sas_verify_start_button_title">Hasi egiaztaketa</string>
+    <string name="sas_incoming_request_title">Jasotako egiaztaketa eskaria</string>
+    <string name="sas_incoming_request_description">Egiaztatu gailu hau fidagarri gisa markatzeko. Gailuak fidagarritzat jotzeak lasaitasuna ematen dizu muturretik muturrera zifratutako mezuak erabiltzean.</string>
+    <string name="sas_incoming_request_description_2">Gailu hau egiaztatzean fidagarri gisa markatuko da, eta zure gailua fidagarri gisa markatuko zaio ere zure kideari.</string>
+
+    <string name="sas_emoji_description">"Egiaztatu gailu hau honako emojia kidearen pantailan agertu  dela baieztatuz"</string>
+    <string name="sas_decimal_description">"Egiaztatu gailu hau honako zenbaki hauek kidearen pantailan agertu  direla baieztatuz"</string>
+
+    <string name="sas_incoming_verification_request_dialog">Egiaztaketa eskari bat jaso duzu.</string>
+    <string name="sas_view_request_action">Ikusi eskaria</string>
+    <string name="sas_waiting_for_partner">Kideak baieztatu bitartean zain…</string>
+
+    <string name="sas_verified">Egiaztatuta!</string>
+    <string name="sas_verified_successful">Ongi egiaztatu duzu gailu hau.</string>
+    <string name="sas_verified_successful_description">Kide honekin partekatutako mezu seguruak muturretik muturrera zifratuta daude eta ezin ditu beste inork irakurri.</string>
+    <string name="sas_got_it">Ulertuta</string>
+
+    <string name="sas_verifying_keys">Ez da ezer agertzen\? Bezero guztiek ez dute onartzen egiaztaketa interaktiboa oraindik. Erabili egiaztaketa metodo zaharra.</string>
+    <string name="sas_legacy_verification_button_title">Erabili egiaztaketa metodo zaharra.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Gako-egiaztaketa</string>
+    <string name="sas_cancelled_dialog_title">Eskaria ezeztatuta</string>
+    <string name="sas_cancelled_by_other">Beste aldeak egiaztaketa ezeztatu du.
+\n%s</string>
+    <string name="sas_cancelled_by_me">Egiaztaketa ezeztatu da.
+\nArrazoia: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Gailu-egiaztaketa interaktiboa</string>
+    <string name="sas_incoming_request_notif_title">Egiaztaketa eskaria</string>
+    <string name="sas_incoming_request_notif_content">%s erabiltzaileak zure gailua egiaztatu nahi du</string>
+
+    <string name="sas_error_m_user">Erabiltzaileak egiaztaketa ezeztatu du</string>
+    <string name="sas_error_m_timeout">Egiaztaketarako denbora-muga agortu da</string>
+    <string name="sas_error_m_unknown_transaction">Gailuak ez du transakzio horren berri</string>
+    <string name="sas_error_m_unknown_method">Gailua ez dator bat gako adostasunean, hash, MAC, edo SAS metodoan</string>
+    <string name="sas_error_m_mismatched_commitment">Hash-a ez dator bat</string>
+    <string name="sas_error_m_mismatched_sas">SAS-a ez dator bat</string>
+    <string name="sas_error_m_unexpected_message">Gailuak ustekabeko mezu bat jaso du</string>
+    <string name="sas_error_m_invalid_message">Baliogabeko mezu bat jaso da</string>
+    <string name="sas_error_m_key_mismatch">Gakoa ez dator bat</string>
+    <string name="sas_error_m_user_error">Erabiltzailea ez dator bat</string>
+    <string name="sas_error_unknown">Errore ezezaguna</string>
+
 </resources>
