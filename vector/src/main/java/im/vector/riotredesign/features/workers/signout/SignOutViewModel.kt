@@ -81,6 +81,12 @@ class SignOutViewModel : ViewModel(), KeysBackupStateListener {
         keysBackupState.value = newState
     }
 
+    fun refreshRemoteStateIfNeeded() {
+        if (keysBackupState.value == KeysBackupState.Disabled) {
+            mxSession?.getKeysBackupService()?.checkAndStartKeysBackup()
+        }
+    }
+
     companion object {
         /**
          * The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready

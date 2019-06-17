@@ -24,7 +24,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
-import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.LiveEvent

@@ -46,6 +46,8 @@ import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
+import im.vector.riotredesign.features.workers.signout.SignOutViewModel
+
 
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
@@ -130,6 +132,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                     .setNegativeButton(R.string.no) { _, _ -> BugReporter.deleteCrashFile(this) }
                     .show()
         }
+
+        //Force remote backup state update to update the banner if needed
+        ViewModelProviders.of(this).get(SignOutViewModel::class.java).refreshRemoteStateIfNeeded()
     }
 
     override fun configure(toolbar: Toolbar) {
