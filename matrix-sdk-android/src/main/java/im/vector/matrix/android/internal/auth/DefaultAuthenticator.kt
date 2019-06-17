@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
+import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.util.CancelableCoroutine
@@ -57,7 +58,7 @@ internal class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builde
 
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val sessionOrFailure = authenticate(homeServerConnectionConfig, login, password)
-            sessionOrFailure.fold({ callback.onFailure(it) }, { callback.onSuccess(it) })
+            sessionOrFailure.foldToCallback(callback)
         }
         return CancelableCoroutine(job)
 

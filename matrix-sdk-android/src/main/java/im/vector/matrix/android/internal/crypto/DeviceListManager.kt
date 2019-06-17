@@ -21,7 +21,7 @@ import android.text.TextUtils
 import arrow.core.Try
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.util.onError
+import im.vector.matrix.android.internal.extensions.onError
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore

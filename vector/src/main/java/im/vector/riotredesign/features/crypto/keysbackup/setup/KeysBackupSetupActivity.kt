@@ -23,10 +23,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.dialogs.ExportKeysDialog
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.SimpleFragmentActivity
+import im.vector.riotredesign.core.utils.toast
+import im.vector.riotredesign.features.crypto.keys.KeysExporter
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
@@ -118,49 +121,38 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         })
     }
 
-    fun exportKeysManually() {
+    private fun exportKeysManually() {
         ExportKeysDialog().show(this, object : ExportKeysDialog.ExportKeyDialogListener {
             override fun onPassphrase(passphrase: String) {
-                notImplemented()
-                /*
                 showWaitingView()
 
-                CommonActivityUtils.exportKeys(session, passphrase, object : SimpleApiCallback<String>(this@KeysBackupSetupActivity) {
-                    override fun onSuccess(filename: String) {
-                        hideWaitingView()
+                KeysExporter(session)
+                        .export(this@KeysBackupSetupActivity,
+                                passphrase,
+                                object : MatrixCallback<String> {
 
-                        AlertDialog.Builder(this@KeysBackupSetupActivity)
-                                .setMessage(getString(R.string.encryption_export_saved_as, filename))
-                                .setCancelable(false)
-                                .setPositiveButton(R.string.ok) { dialog, which ->
-                                    val resultIntent = Intent()
-                                    resultIntent.putExtra(MANUAL_EXPORT, true)
-                                    setResult(RESULT_OK, resultIntent)
-                                    finish()
-                                }
-                                .show()
-                    }
+                                    override fun onSuccess(data: String) {
+                                        hideWaitingView()
 
-                    override fun onNetworkError(e: Exception) {
-                        super.onNetworkError(e)
-                        hideWaitingView()
-                    }
+                                        AlertDialog.Builder(this@KeysBackupSetupActivity)
+                                                .setMessage(getString(R.string.encryption_export_saved_as, data))
+                                                .setCancelable(false)
+                                                .setPositiveButton(R.string.ok) { dialog, which ->
+                                                    val resultIntent = Intent()
+                                                    resultIntent.putExtra(MANUAL_EXPORT, true)
+                                                    setResult(RESULT_OK, resultIntent)
+                                                    finish()
+                                                }
+                                                .show()
+                                    }
 
-                    override fun onMatrixError(e: MatrixError) {
-                        super.onMatrixError(e)
-                        hideWaitingView()
-                    }
-
-                    override fun onUnexpectedError(e: Exception) {
-                        super.onUnexpectedError(e)
-                        hideWaitingView()
-                    }
-                })
-                */
+                                    override fun onFailure(failure: Throwable) {
+                                        toast(failure.localizedMessage)
+                                        hideWaitingView()
+                                    }
+                                })
             }
         })
-
-
     }
 
 

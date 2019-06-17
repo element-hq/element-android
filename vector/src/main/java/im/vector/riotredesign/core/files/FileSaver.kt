@@ -18,16 +18,18 @@ package im.vector.riotredesign.core.files
 
 import android.app.DownloadManager
 import android.content.Context
+import androidx.annotation.WorkerThread
+import arrow.core.Try
 import okio.Okio
 import timber.log.Timber
 import java.io.File
 
 /**
  * Save a string to a file with Okio
- * @return true in case of success
  */
-fun saveStringToFile(str: String, file: File): Boolean {
-    return try {
+@WorkerThread
+fun writeToFile(str: String, file: File): Try<Unit> {
+    return Try {
         val sink = Okio.sink(file)
 
         val bufferedSink = Okio.buffer(sink)
@@ -36,14 +38,25 @@ fun saveStringToFile(str: String, file: File): Boolean {
 
         bufferedSink.close()
         sink.close()
-
-        true
-    } catch (e: Exception) {
-        Timber.e(e, "Error saving file")
-        false
     }
 }
 
+/**
+ * Save a byte array to a file with Okio
+ */
+@WorkerThread
+fun writeToFile(data: ByteArray, file: File): Try<Unit> {
+    return Try {
+        val sink = Okio.sink(file)
+
+        val bufferedSink = Okio.buffer(sink)
+
+        bufferedSink.write(data)
+
+        bufferedSink.close()
+        sink.close()
+    }
+}
 
 fun addEntryToDownloadManager(context: Context,
                               file: File,

@@ -4,4 +4,6 @@
     <!-- Strings not defined in Riot -->
 
 
+    <string name="import_e2e_keys_from_file">"Import e2e keys from file \"%1$s\"."</string>
+
 </resources>

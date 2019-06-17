@@ -25,15 +25,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import arrow.core.Try
 import butterknife.BindView
 import butterknife.OnClick
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.files.addEntryToDownloadManager
-import im.vector.riotredesign.core.files.saveStringToFile
+import im.vector.riotredesign.core.files.writeToFile
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
@@ -157,30 +162,39 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
     }
 
     private fun exportRecoveryKeyToFile(data: String) {
-        val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(parentDir, "recovery-key-" + System.currentTimeMillis() + ".txt")
+        GlobalScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
+                Try {
+                    val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    val file = File(parentDir, "recovery-key-" + System.currentTimeMillis() + ".txt")
 
-        if (saveStringToFile(data, file)) {
-            addEntryToDownloadManager(requireContext(), file, "text/plain")
+                    writeToFile(data, file)
 
-            context?.let {
-                AlertDialog.Builder(it)
-                        .setMessage(getString(R.string.recovery_key_export_saved_as_warning, file.absolutePath))
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+                    addEntryToDownloadManager(requireContext(), file, "text/plain")
+
+                    file.absolutePath
+                }
             }
+                    .fold(
+                            { throwable ->
+                                context?.let {
+                                    AlertDialog.Builder(it)
+                                            .setTitle(R.string.dialog_title_error)
+                                            .setMessage(throwable.localizedMessage)
+                                }
+                            },
+                            { path ->
+                                viewModel.copyHasBeenMade = true
 
-            viewModel.copyHasBeenMade = true
-        } else {
-            context?.let {
-                AlertDialog.Builder(it)
-                        .setTitle(R.string.dialog_title_error)
-                        .setMessage(getString(R.string.unknown_error))
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
-            }
+                                context?.let {
+                                    AlertDialog.Builder(it)
+                                            .setMessage(getString(R.string.recovery_key_export_saved_as_warning, path))
+                                }
+                            }
+                    )
+                    ?.setCancelable(false)
+                    ?.setPositiveButton(R.string.ok, null)
+                    ?.show()
         }
     }
 
