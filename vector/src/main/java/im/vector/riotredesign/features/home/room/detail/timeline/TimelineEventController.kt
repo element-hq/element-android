@@ -49,6 +49,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
     interface Callback : ReactionPillCallback, AvatarCallback, BaseCallback {
         fun onEventVisible(event: TimelineEvent)
         fun onUrlClicked(url: String)
+        fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
         fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
         fun onFileMessageClicked(messageFileContent: MessageFileContent)

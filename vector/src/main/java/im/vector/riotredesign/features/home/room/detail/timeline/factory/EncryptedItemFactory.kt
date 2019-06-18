@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
+import android.view.View
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -23,6 +24,8 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.core.utils.DebouncedClickListener
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import me.gujun.android.span.span
@@ -32,7 +35,9 @@ class EncryptedItemFactory(private val messageInformationDataFactory: MessageInf
                            private val colorProvider: ColorProvider,
                            private val stringProvider: StringProvider) {
 
-    fun create(event: TimelineEvent, nextEvent: TimelineEvent?): VectorEpoxyModel<*>? {
+    fun create(event: TimelineEvent,
+               nextEvent: TimelineEvent?,
+               callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
         return when {
@@ -57,8 +62,15 @@ class EncryptedItemFactory(private val messageInformationDataFactory: MessageInf
                 return MessageTextItem_()
                         .message(spannableStr)
                         .informationData(informationData)
-
-                // TODO Handle click on this event
+                        .avatarCallback(callback)
+                        .cellClickListener(
+                                DebouncedClickListener(View.OnClickListener { view ->
+                                    callback?.onEncryptedMessageClicked(informationData, view)
+                                }))
+                        .longClickListener { view ->
+                            return@longClickListener callback?.onEventLongClicked(informationData, null, view)
+                                    ?: false
+                        }
             }
             else                                             -> null
         }
