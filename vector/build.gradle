@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -161,6 +162,9 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
+    // OSS License
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     // Log
     implementation 'com.jakewharton.timber:timber:4.7.1'

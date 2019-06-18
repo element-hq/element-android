@@ -41,6 +41,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.preference.*
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.matrix.android.api.Matrix
@@ -690,6 +691,12 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
+            false
+        }
+
+        findPreference(PreferencesManager.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            startActivity(Intent(requireActivity(), OssLicensesMenuActivity::class.java))
             false
         }
 
