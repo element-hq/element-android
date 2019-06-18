@@ -23,6 +23,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -67,24 +68,23 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
         fun bind(test: TroubleshootTest) {
 
             val context = itemView.context
-            titleText.setTextColor(ThemeUtils.getColor(context, android.R.attr.textColorTertiary))
-            descriptionText.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_default_text_hint_color))
+            titleText.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_primary))
+            descriptionText.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
 
             when (test.status) {
                 TroubleshootTest.TestStatus.NOT_STARTED -> {
-                    titleText.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_default_text_hint_color))
-                    descriptionText.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_default_text_hint_color))
+                    titleText.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
 
                     progressBar.visibility = View.INVISIBLE
                     statusIconImage.visibility = View.VISIBLE
                     statusIconImage.setImageResource(R.drawable.unit_test)
                 }
-                TroubleshootTest.TestStatus.RUNNING -> {
+                TroubleshootTest.TestStatus.RUNNING     -> {
                     progressBar.visibility = View.VISIBLE
                     statusIconImage.visibility = View.INVISIBLE
 
                 }
-                TroubleshootTest.TestStatus.FAILED -> {
+                TroubleshootTest.TestStatus.FAILED      -> {
                     progressBar.visibility = View.INVISIBLE
                     statusIconImage.visibility = View.VISIBLE
                     statusIconImage.setImageResource(R.drawable.unit_test_ko)
@@ -93,9 +93,9 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                         statusIconImage.imageTintList = null
                     }
 
-                    descriptionText.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_highlighted_message_text_color))
+                    descriptionText.setTextColor(ContextCompat.getColor(context, R.color.riotx_notice))
                 }
-                TroubleshootTest.TestStatus.SUCCESS -> {
+                TroubleshootTest.TestStatus.SUCCESS     -> {
                     progressBar.visibility = View.INVISIBLE
                     statusIconImage.visibility = View.VISIBLE
                     statusIconImage.setImageResource(R.drawable.unit_test_ok)
