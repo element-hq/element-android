@@ -53,7 +53,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
 
                 // Crypto
                 EventType.ENCRYPTION        -> encryptionItemFactory.create(event)
-                EventType.ENCRYPTED         -> encryptedItemFactory.create(event)
+                EventType.ENCRYPTED         -> encryptedItemFactory.create(event, nextEvent)
 
                 // Unhandled event types (yet)
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,

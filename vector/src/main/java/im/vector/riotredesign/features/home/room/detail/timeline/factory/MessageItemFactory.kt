@@ -25,7 +25,6 @@ import android.text.style.RelativeSizeSpan
 import android.view.View
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
@@ -35,16 +34,14 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
-import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.DebouncedClickListener
-import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.item.*
+import im.vector.riotredesign.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.VideoContentRenderer
@@ -52,50 +49,18 @@ import me.gujun.android.span.span
 
 class MessageItemFactory(private val colorProvider: ColorProvider,
                          private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-                         private val timelineDateFormatter: TimelineDateFormatter,
                          private val htmlRenderer: EventHtmlRenderer,
                          private val stringProvider: StringProvider,
+                         private val messageInformationDataFactory: MessageInformationDataFactory,
                          private val emojiCompatFontProvider: EmojiCompatFontProvider) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
+        event.root.eventId ?: return null
 
-        val eventId = event.root.eventId ?: return null
-
-        val date = event.root.localDateTime()
-        val nextDate = nextEvent?.root?.localDateTime()
-        val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
-        val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                ?: false
-
-        val showInformation = addDaySeparator
-                || event.senderAvatar != nextEvent?.senderAvatar
-                || event.senderName != nextEvent?.senderName
-                || nextEvent?.root?.getClearType() != EventType.MESSAGE
-                || isNextMessageReceivedMoreThanOneHourAgo
-
-        val time = timelineDateFormatter.formatMessageHour(date)
-        val avatarUrl = event.senderAvatar
-        val memberName = event.senderName ?: event.root.sender ?: ""
-        val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.sender
-                    ?: ""))
-        }
-        val hasBeenEdited = event.annotations?.editSummary != null
-        val informationData = MessageInformationData(eventId = eventId,
-                senderId = event.root.sender ?: "",
-                sendState = event.sendState,
-                time = time,
-                avatarUrl = avatarUrl,
-                memberName = formattedMemberName,
-                showInformation = showInformation,
-                orderedReactionList = event.annotations?.reactionsSummary?.map {
-                    ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
-                },
-                hasBeenEdited = hasBeenEdited
-        )
+        val informationData = messageInformationDataFactory.create(event, nextEvent)
 
         if (event.root.unsignedData?.redactedEvent != null) {
             //message is redacted
@@ -117,13 +82,11 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
                     informationData,
-                    hasBeenEdited,
                     event.annotations?.editSummary,
                     callback)
             is MessageTextContent   -> buildTextMessageItem(event.sendState,
                     messageContent,
                     informationData,
-                    hasBeenEdited,
                     event.annotations?.editSummary,
                     callback
             )
@@ -266,7 +229,6 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
     private fun buildTextMessageItem(sendState: SendState,
                                      messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
-                                     hasBeenEdited: Boolean,
                                      editSummary: EditAggregatedSummary?,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
@@ -278,7 +240,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
         return MessageTextItem_()
                 .apply {
-                    if (hasBeenEdited) {
+                    if (informationData.hasBeenEdited) {
                         val spannable = annotateWithEdited(linkifiedBody, callback, informationData, editSummary)
                         message(spannable)
                     } else {
@@ -368,7 +330,6 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
                                       informationData: MessageInformationData,
-                                      hasBeenEdited: Boolean,
                                       editSummary: EditAggregatedSummary?,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
 
@@ -378,7 +339,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         }
         return MessageTextItem_()
                 .apply {
-                    if (hasBeenEdited) {
+                    if (informationData.hasBeenEdited) {
                         val spannable = annotateWithEdited(message, callback, informationData, editSummary)
                         message(spannable)
                     } else {
