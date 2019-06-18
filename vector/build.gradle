@@ -176,6 +176,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
+    // TODO RxBindings3 exists
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
@@ -185,7 +186,7 @@ dependencies {
     // Work
     implementation "android.arch.work:work-runtime-ktx:1.0.0"
 
-    // FP
+    // Functional Programming
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 
     // Pref
