@@ -136,7 +136,7 @@
 
         <!-- icon colors -->
         <item name="vctr_settings_icon_tint_color">@android:color/black</item>
-        <item name="vctr_icon_tint_on_light_action_bar_color">@android:color/white</item>
+        <item name="vctr_icon_tint_on_light_action_bar_color">@color/riotx_accent</item>
         <item name="vctr_icon_tint_on_dark_action_bar_color">@android:color/white</item>
 
         <!-- theses colours are requested a background cannot be set by an ?att on android < 5 -->

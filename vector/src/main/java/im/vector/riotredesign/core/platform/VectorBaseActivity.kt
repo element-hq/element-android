@@ -332,7 +332,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity() {
     open fun getMenuRes() = -1
 
     @AttrRes
-    open fun getMenuTint() = R.attr.vctr_icon_tint_on_dark_action_bar_color
+    open fun getMenuTint() = R.attr.vctr_icon_tint_on_light_action_bar_color
 
     /**
      * Return a object containing other themes for this activity
