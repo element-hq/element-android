@@ -20,8 +20,9 @@ import android.content.res.Resources
 import androidx.annotation.NonNull
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
+import javax.inject.Inject
 
-class StringProvider(private val resources: Resources) {
+class StringProvider @Inject constructor(private val resources: Resources) {
 
     /**
      * Returns a localized string from the application's package's

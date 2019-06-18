@@ -19,10 +19,12 @@ package im.vector.riotredesign.features.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
+import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import im.vector.matrix.android.api.Matrix
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
@@ -34,27 +36,30 @@ import im.vector.riotredesign.features.home.group.ALL_COMMUNITIES_GROUP_ID
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import org.koin.android.ext.android.get
 import java.util.concurrent.TimeUnit
 
 data class EmptyState(val isEmpty: Boolean = true) : MvRxState
 
-class HomeActivityViewModel(state: EmptyState,
-                            private val session: Session,
-                            private val selectedGroupStore: SelectedGroupStore,
-                            private val homeRoomListStore: HomeRoomListObservableStore
-) : VectorViewModel<EmptyState>(state), Session.Listener {
+class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: EmptyState,
+                                                        private val session: Session,
+                                                        private val selectedGroupStore: SelectedGroupStore,
+                                                        private val homeRoomListStore: HomeRoomListObservableStore
+) : VectorViewModel<EmptyState>(initialState), Session.Listener {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: EmptyState): HomeActivityViewModel
+    }
 
     companion object : MvRxViewModelFactory<HomeActivityViewModel, EmptyState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: EmptyState): HomeActivityViewModel? {
-            val session = Matrix.getInstance().currentSession!!
-            val selectedGroupStore = viewModelContext.activity.get<SelectedGroupStore>()
-            val homeRoomListObservableSource = viewModelContext.activity.get<HomeRoomListObservableStore>()
-            return HomeActivityViewModel(state, session, selectedGroupStore, homeRoomListObservableSource)
+            val homeActivity: HomeActivity = (viewModelContext as ActivityViewModelContext).activity()
+            return homeActivity.homeActivityViewModelFactory.create(state)
         }
     }
+
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean>

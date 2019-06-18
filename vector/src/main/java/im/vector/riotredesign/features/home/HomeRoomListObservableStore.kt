@@ -21,8 +21,11 @@ import im.vector.riotredesign.core.utils.RxStore
 import im.vector.riotredesign.features.home.room.list.RoomListDisplayModeFilter
 import im.vector.riotredesign.features.home.room.list.RoomListFragment
 import io.reactivex.Observable
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HomeRoomListObservableStore : RxStore<List<RoomSummary>>() {
+@Singleton
+class HomeRoomListObservableStore @Inject constructor() : RxStore<List<RoomSummary>>() {
 
     fun observeFilteredBy(displayMode: RoomListFragment.DisplayMode): Observable<List<RoomSummary>> {
         return observe()

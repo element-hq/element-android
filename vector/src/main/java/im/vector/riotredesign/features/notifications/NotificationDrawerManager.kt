@@ -30,13 +30,17 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * The NotificationDrawerManager receives notification events as they arrived (from event stream or fcm) and
  * organise them in order to display them in the notification drawer.
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
-class NotificationDrawerManager(val context: Context) {
+
+@Singleton
+class NotificationDrawerManager @Inject constructor(val context: Context) {
 
     //The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true

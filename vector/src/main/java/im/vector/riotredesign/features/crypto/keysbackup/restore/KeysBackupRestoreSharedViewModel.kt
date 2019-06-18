@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.keysbackup.restore
+package im.vector.riotredesign.features.crypto.keysbackup.restore
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -21,13 +21,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.WaitingViewData
 import im.vector.riotredesign.core.utils.LiveEvent
+import javax.inject.Inject
 
-class KeysBackupRestoreSharedViewModel : ViewModel() {
+class KeysBackupRestoreSharedViewModel @Inject constructor() : ViewModel() {
 
     companion object {
         const val NAVIGATE_TO_RECOVER_WITH_KEY = "NAVIGATE_TO_RECOVER_WITH_KEY"

@@ -25,20 +25,22 @@ import im.vector.riotredesign.features.settings.VectorLocale
 import im.vector.riotredesign.features.themes.ThemeUtils
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Handle locale configuration change, such as theme, font size and locale chosen by the user
  */
-class VectorConfiguration(private val context: Context) {
+
+class VectorConfiguration @Inject constructor(private val context: Context) {
 
     // TODO Import mLanguageReceiver From Riot?
     fun onConfigurationChanged(newConfig: Configuration?) {
         if (Locale.getDefault().toString() != VectorLocale.applicationLocale.toString()) {
             Timber.v("## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString()
-                    + ", restore the expected value " + VectorLocale.applicationLocale.toString())
+                     + ", restore the expected value " + VectorLocale.applicationLocale.toString())
             updateApplicationSettings(VectorLocale.applicationLocale,
-                    FontScale.getFontScalePrefValue(context),
-                    ThemeUtils.getApplicationTheme(context))
+                                      FontScale.getFontScalePrefValue(context),
+                                      ThemeUtils.getApplicationTheme(context))
         }
     }
 
@@ -65,8 +67,8 @@ class VectorConfiguration(private val context: Context) {
     fun updateApplicationTheme(theme: String) {
         ThemeUtils.setApplicationTheme(context, theme)
         updateApplicationSettings(VectorLocale.applicationLocale,
-                FontScale.getFontScalePrefValue(context),
-                theme)
+                                  FontScale.getFontScalePrefValue(context),
+                                  theme)
     }
 
     /**

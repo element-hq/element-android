@@ -31,65 +31,54 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
-import im.vector.riotredesign.core.di.AppModule
+import im.vector.riotredesign.core.di.HasInjector
+import im.vector.riotredesign.core.di.VectorComponent
 import im.vector.riotredesign.features.configuration.VectorConfiguration
-import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
-import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
-import org.koin.android.ext.android.inject
-import org.koin.log.EmptyLogger
-import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
+import javax.inject.Inject
 
 
-class VectorApplication : Application() {
+class VectorApplication : Application(), HasInjector<VectorComponent> {
 
     lateinit var appContext: Context
     //font thread handler
-    private var mFontThreadHandler: Handler? = null
-
-    val vectorConfiguration: VectorConfiguration by inject()
+    @Inject lateinit var vectorConfiguration: VectorConfiguration
+    @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
+    lateinit var vectorComponent: VectorComponent
+    private var fontThreadHandler: Handler? = null
 
     override fun onCreate() {
         super.onCreate()
         appContext = this
-
         VectorUncaughtExceptionHandler.activate(this)
-
         // Log
         VectorFileLogger.init(this)
         Timber.plant(Timber.DebugTree(), VectorFileLogger)
-
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
-
         AndroidThreeTen.init(this)
         BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
         EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-        val appModule = AppModule(applicationContext).definition
-        val homeModule = HomeModule().definition
-        val roomDirectoryModule = RoomDirectoryModule().definition
-        val keysBackupModule = KeysBackupModule().definition
-        val koin = startKoin(listOf(appModule, homeModule, roomDirectoryModule, keysBackupModule), logger = EmptyLogger())
+
         Matrix.getInstance().setApplicationFlavor(BuildConfig.FLAVOR_DESCRIPTION)
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks())
-
         val fontRequest = FontRequest(
                 "com.google.android.gms.fonts",
                 "com.google.android.gms",
                 "Noto Color Emoji Compat",
                 R.array.com_google_android_gms_fonts_certs
         )
-
-//        val efp = koin.koinContext.get<EmojiCompatFontProvider>()
-        FontsContractCompat.requestFont(this, fontRequest, koin.koinContext.get<EmojiCompatFontProvider>(), getFontThreadHandler())
-
+        FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
         vectorConfiguration.initConfiguration()
+    }
+
+    override fun injector(): VectorComponent {
+        return vectorComponent
     }
 
     override fun attachBaseContext(base: Context) {
@@ -103,12 +92,15 @@ class VectorApplication : Application() {
     }
 
     private fun getFontThreadHandler(): Handler {
-        if (mFontThreadHandler == null) {
-            val handlerThread = HandlerThread("fonts")
-            handlerThread.start()
-            mFontThreadHandler = Handler(handlerThread.looper)
+        return fontThreadHandler ?: createFontThreadHandler().also {
+            fontThreadHandler = it
         }
-        return mFontThreadHandler!!
+    }
+
+    private fun createFontThreadHandler(): Handler {
+        val handlerThread = HandlerThread("fonts")
+        handlerThread.start()
+        return Handler(handlerThread.looper)
     }
 
 }

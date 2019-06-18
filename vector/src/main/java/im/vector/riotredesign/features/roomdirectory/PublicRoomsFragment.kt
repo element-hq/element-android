@@ -34,11 +34,9 @@ import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.themes.ThemeUtils
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 /**
@@ -49,8 +47,9 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
-    private val publicRoomsController: PublicRoomsController by inject()
-    private val errorFormatter: ErrorFormatter by inject()
+
+    @Inject lateinit var publicRoomsController: PublicRoomsController
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun getLayoutResId() = R.layout.fragment_public_rooms
 
@@ -98,10 +97,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
-
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
-
         setupRecyclerView()
     }
 

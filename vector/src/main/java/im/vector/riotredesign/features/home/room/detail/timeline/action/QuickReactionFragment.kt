@@ -31,7 +31,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.R
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 /**
  * Quick Reaction Fragment (agree / like reactions)
@@ -57,7 +57,8 @@ class QuickReactionFragment : BaseMvRxFragment() {
 
     var interactionListener: InteractionListener? = null
 
-    val fontProvider by inject<EmojiCompatFontProvider>()
+    @Inject lateinit var fontProvider: EmojiCompatFontProvider
+    @Inject lateinit var quickReactionViewModelFactory: QuickReactionViewModel.Factory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.adapter_item_action_quick_reaction, container, false)
@@ -68,10 +69,10 @@ class QuickReactionFragment : BaseMvRxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        quickReact1Text.text = QuickReactionViewModel.agreePositive
-        quickReact2Text.text = QuickReactionViewModel.agreeNegative
-        quickReact3Text.text = QuickReactionViewModel.likePositive
-        quickReact4Text.text = QuickReactionViewModel.likeNegative
+        quickReact1Text.text = QuickReactionViewModel.AGREE_POSITIVE
+        quickReact2Text.text = QuickReactionViewModel.AGREE_NEGATIVE
+        quickReact3Text.text = QuickReactionViewModel.LIKE_POSITIVE
+        quickReact4Text.text = QuickReactionViewModel.LIKE_NEGATIVE
 
         listOf(quickReact1Text, quickReact2Text, quickReact3Text, quickReact4Text).forEach {
             it.typeface = fontProvider.typeface ?: Typeface.DEFAULT
@@ -96,7 +97,7 @@ class QuickReactionFragment : BaseMvRxFragment() {
     override fun invalidate() = withState(viewModel) {
 
         TransitionManager.beginDelayedTransition(rootLayout)
-        when (it.agreeTrigleState) {
+        when (it.agreeTriggleState) {
             TriggleState.NONE   -> {
                 quickReact1Text.alpha = 1f
                 quickReact2Text.alpha = 1f
@@ -130,7 +131,7 @@ class QuickReactionFragment : BaseMvRxFragment() {
         if (it.selectionResult != null) {
             val clikedOn = it.selectionResult.first
             interactionListener?.didQuickReactWith(clikedOn, QuickReactionViewModel.getOpposite(clikedOn)
-                    ?: "", it.selectionResult.second, it.eventId)
+                                                             ?: "", it.selectionResult.second, it.eventId)
         }
     }
 

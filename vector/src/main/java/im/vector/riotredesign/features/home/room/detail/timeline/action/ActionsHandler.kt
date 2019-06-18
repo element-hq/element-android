@@ -18,11 +18,12 @@ package im.vector.riotredesign.features.home.room.detail.timeline.action
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
+import javax.inject.Inject
 
 /**
  * Activity shared view model to handle message actions
  */
-class ActionsHandler : ViewModel() {
+class ActionsHandler @Inject constructor() : ViewModel() {
 
     data class ActionData(
             val actionId: String,

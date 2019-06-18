@@ -19,6 +19,8 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -27,17 +29,16 @@ import im.vector.matrix.android.api.session.room.model.message.MessageTextConten
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
-import org.commonmark.parser.Parser
-import org.koin.android.ext.android.get
-import org.koin.core.parameter.parametersOf
-import ru.noties.markwon.Markwon
-import ru.noties.markwon.html.HtmlPlugin
-import timber.log.Timber
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotredesign.features.html.EventHtmlRenderer
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 data class MessageActionState(
+        val roomId: String,
+        val eventId: String,
+        val informationData: MessageInformationData,
         val userId: String = "",
         val senderName: String = "",
         val messageBody: CharSequence? = null,
@@ -45,64 +46,77 @@ data class MessageActionState(
         val showPreview: Boolean = false,
         val canReact: Boolean = false,
         val senderAvatarPath: String? = null)
-    : MvRxState
+    : MvRxState {
+
+    constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
+
+}
 
 /**
  * Information related to an event and used to display preview in contextual bottomsheet.
  */
-class MessageActionsViewModel(initialState: MessageActionState) : VectorViewModel<MessageActionState>(initialState) {
+class MessageActionsViewModel @AssistedInject constructor(@Assisted initialState: MessageActionState,
+                                                          private val eventHtmlRenderer: EventHtmlRenderer,
+                                                          private val session: Session,
+                                                          private val noticeEventFormatter: NoticeEventFormatter
+) : VectorViewModel<MessageActionState>(initialState) {
+
+    private val roomId = initialState.roomId
+    private val eventId = initialState.eventId
+    private val informationData = initialState.informationData
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: MessageActionState): MessageActionsViewModel
+    }
 
     companion object : MvRxViewModelFactory<MessageActionsViewModel, MessageActionState> {
 
-        override fun initialState(viewModelContext: ViewModelContext): MessageActionState? {
-            val currentSession = viewModelContext.activity.get<Session>()
-            val fragment = (viewModelContext as? FragmentViewModelContext)?.fragment
-            val noticeFormatter = fragment?.get<NoticeEventFormatter>(parameters = { parametersOf(fragment) })
-            val parcel = viewModelContext.args as TimelineEventFragmentArgs
-
-            val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
-
-            val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
-            var body: CharSequence? = null
-            val originTs = event?.root?.originServerTs
-            return if (event != null) {
-                when (event.root.type) {
-                    EventType.MESSAGE     -> {
-                        val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
-                                ?: event.root.content.toModel()
-                        body = messageContent?.body
-                        if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
-                            val parser = Parser.builder().build()
-                            val document = parser.parse(messageContent.formattedBody
-                                    ?: messageContent.body)
-                            body = Markwon.builder(viewModelContext.activity)
-                                    .usePlugin(HtmlPlugin.create()).build().render(document)
-                        }
-                    }
-                    EventType.STATE_ROOM_NAME,
-                    EventType.STATE_ROOM_TOPIC,
-                    EventType.STATE_ROOM_MEMBER,
-                    EventType.STATE_HISTORY_VISIBILITY,
-                    EventType.CALL_INVITE,
-                    EventType.CALL_HANGUP,
-                    EventType.CALL_ANSWER -> {
-                        body = noticeFormatter?.format(event)
-                    }
-                }
-                MessageActionState(
-                        userId = event.root.sender ?: "",
-                        senderName = parcel.informationData.memberName?.toString() ?: "",
-                        messageBody = body,
-                        ts = dateFormat.format(Date(originTs ?: 0)),
-                        showPreview = body != null,
-                        canReact = event.root.type == EventType.MESSAGE && event.sendState.isSent(),
-                        senderAvatarPath = parcel.informationData.avatarUrl
-                )
-            } else {
-                //can this happen?
-                Timber.e("Failed to retrieve event")
-                null
-            }
+        override fun create(viewModelContext: ViewModelContext, state: MessageActionState): MessageActionsViewModel? {
+            val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.messageActionViewModelFactory.create(state)
         }
     }
+
+
+    init {
+        setState { reduceState(this) }
+    }
+
+    private fun reduceState(state: MessageActionState): MessageActionState {
+        val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
+        val event = session.getRoom(roomId)?.getTimeLineEvent(eventId) ?: return state
+        var body: CharSequence? = null
+        val originTs = event.root.originServerTs
+        when (event.root.type) {
+            EventType.MESSAGE     -> {
+                val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
+                                                      ?: event.root.content.toModel()
+                body = messageContent?.body
+                if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
+                    body = eventHtmlRenderer.render(messageContent.formattedBody
+                                                    ?: messageContent.body)
+                }
+            }
+            EventType.STATE_ROOM_NAME,
+            EventType.STATE_ROOM_TOPIC,
+            EventType.STATE_ROOM_MEMBER,
+            EventType.STATE_HISTORY_VISIBILITY,
+            EventType.CALL_INVITE,
+            EventType.CALL_HANGUP,
+            EventType.CALL_ANSWER -> {
+                body = noticeEventFormatter.format(event)
+            }
+        }
+        return state.copy(
+                userId = event.root.sender ?: "",
+                senderName = informationData.memberName?.toString() ?: "",
+                messageBody = body,
+                ts = dateFormat.format(Date(originTs ?: 0)),
+                showPreview = body != null,
+                canReact = event.root.type == EventType.MESSAGE && event.sendState.isSent(),
+                senderAvatarPath = informationData.avatarUrl
+        )
+    }
+
 }

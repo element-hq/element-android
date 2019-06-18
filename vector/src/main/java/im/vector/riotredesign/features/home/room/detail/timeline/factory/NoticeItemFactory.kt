@@ -24,8 +24,9 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderNa
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
+import javax.inject.Inject
 
-class NoticeItemFactory(private val eventFormatter: NoticeEventFormatter) {
+class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEventFormatter) {
 
     fun create(event: TimelineEvent,
                callback: TimelineEventController.Callback?): NoticeItem? {

@@ -20,7 +20,6 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
-import im.vector.fragments.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.LiveEvent
@@ -40,7 +39,7 @@ class KeysBackupRestoreSuccessFragment : VectorBaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedViewModel = activity?.run {
-            ViewModelProviders.of(this).get(KeysBackupRestoreSharedViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         sharedViewModel.importKeyResult?.let {

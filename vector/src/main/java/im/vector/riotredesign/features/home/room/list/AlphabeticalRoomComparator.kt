@@ -17,9 +17,9 @@
 package im.vector.riotredesign.features.home.room.list
 
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import javax.inject.Inject
 
-class AlphabeticalRoomComparator
-    : Comparator<RoomSummary> {
+class AlphabeticalRoomComparator @Inject constructor() : Comparator<RoomSummary> {
 
     override fun compare(leftRoomSummary: RoomSummary?, rightRoomSummary: RoomSummary?): Int {
         return when {

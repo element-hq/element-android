@@ -25,8 +25,7 @@ import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
+import javax.inject.Inject
 
 class RoomDirectoryActivity : VectorBaseActivity() {
 
@@ -39,17 +38,14 @@ class RoomDirectoryActivity : VectorBaseActivity() {
     }
 
 
+    @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
-
-        navigationViewModel = ViewModelProviders.of(this).get(RoomDirectoryNavigationViewModel::class.java)
-
+        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryNavigationViewModel::class.java)
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
             when (navigation) {
                 is Navigation.Back           -> onBackPressed()

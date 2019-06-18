@@ -18,8 +18,9 @@ package im.vector.riotredesign.features.home.group
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import javax.inject.Inject
 
-class GroupSummaryController : TypedEpoxyController<GroupListViewState>() {
+class GroupSummaryController @Inject constructor(): TypedEpoxyController<GroupListViewState>() {
 
     var callback: Callback? = null
 

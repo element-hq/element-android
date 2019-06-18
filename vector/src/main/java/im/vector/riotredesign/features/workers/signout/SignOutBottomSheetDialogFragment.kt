@@ -30,6 +30,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.transition.TransitionManager
 import butterknife.BindView
@@ -40,15 +41,19 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.HasInjector
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 
 class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
-    val session by inject<Session>()
+    @Inject lateinit var session: Session
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
 
     @BindView(R.id.bottom_sheet_signout_warning_text)
     lateinit var sheetTitle: TextView
@@ -99,7 +104,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(SignOutViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SignOutViewModel::class.java)
 
         viewModel.init(session)
 
@@ -131,7 +136,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                         startActivity(KeysBackupManageActivity.intent(context))
                                     }
                                 }
-                                KeysBackupState.Disabled -> {
+                                KeysBackupState.Disabled   -> {
                                     context?.let { context ->
                                         startActivityForResult(KeysBackupSetupActivity.intent(context, true), EXPORT_REQ)
                                     }
@@ -141,7 +146,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                     //keys are already backing up please wait
                                     context?.toast(R.string.keys_backup_is_not_finished_please_wait)
                                 }
-                                else -> {
+                                else                       -> {
                                     //nop
                                 }
                             }
@@ -190,7 +195,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
                 }
                 KeysBackupState.BackingUp,
-                KeysBackupState.WillBackUp -> {
+                KeysBackupState.WillBackUp    -> {
                     backingUpStatusGroup.isVisible = true
                     sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
                     dontWantClickableView.isVisible = true
@@ -202,14 +207,14 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     backupStatusTex.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
 
                 }
-                KeysBackupState.NotTrusted -> {
+                KeysBackupState.NotTrusted    -> {
                     backingUpStatusGroup.isVisible = false
                     dontWantClickableView.isVisible = true
                     setupClickableView.isVisible = false
                     activateClickableView.isVisible = true
                     sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
                 }
-                else -> {
+                else                          -> {
                     backingUpStatusGroup.isVisible = false
                     dontWantClickableView.isVisible = true
                     setupClickableView.isVisible = true

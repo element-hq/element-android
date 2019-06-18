@@ -84,7 +84,7 @@ class SASVerificationActivity : SimpleFragmentActivity() {
 
     override fun initUiAndData() {
         super.initUiAndData()
-        viewModel = ViewModelProviders.of(this).get(SasVerificationViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SasVerificationViewModel::class.java)
         val transactionID: String? = intent.getStringExtra(EXTRA_TRANSACTION_ID)
 
         if (isFirstCreation()) {

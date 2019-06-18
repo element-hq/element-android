@@ -30,11 +30,8 @@ import im.vector.riotredesign.core.platform.ButtonStateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.roomdirectory.JoinState
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import kotlinx.android.synthetic.main.fragment_room_preview_no_preview.*
-import org.koin.android.ext.android.get
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
+import javax.inject.Inject
 
 /**
  * Note: this Fragment is also used for world readable room for the moment
@@ -47,14 +44,14 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
         }
     }
 
-    private val errorFormatter = get<ErrorFormatter>()
+    @Inject lateinit var errorFormatter: ErrorFormatter
+    @Inject lateinit var roomPreviewViewModelFactory: RoomPreviewViewModel.Factory
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
-
     private val roomPreviewData: RoomPreviewData by args()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        injector().inject(this)
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
         setupToolbar(roomPreviewNoPreviewToolbar)
     }
 

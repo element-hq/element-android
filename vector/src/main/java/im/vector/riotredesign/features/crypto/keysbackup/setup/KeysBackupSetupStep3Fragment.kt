@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.files.addEntryToDownloadManager
 import im.vector.riotredesign.core.files.saveStringToFile
@@ -58,7 +57,7 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = activity?.run {
-            ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
 

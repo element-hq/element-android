@@ -28,8 +28,9 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderNa
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
+import javax.inject.Inject
 
-class EncryptionItemFactory(private val stringProvider: StringProvider) {
+class EncryptionItemFactory @Inject constructor(private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent): NoticeItem? {
         val text = buildNoticeText(event.root, event.senderName) ?: return null
@@ -52,7 +53,7 @@ class EncryptionItemFactory(private val stringProvider: StringProvider) {
                 val content = event.content.toModel<EncryptionEventContent>() ?: return null
                 stringProvider.getString(R.string.notice_end_to_end, senderName, content.algorithm)
             }
-            else -> null
+            else                                         -> null
         }
 
     }

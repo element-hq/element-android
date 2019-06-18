@@ -17,8 +17,9 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.helper
 
 import androidx.recyclerview.widget.RecyclerView
+import javax.inject.Inject
 
-class TimelineMediaSizeProvider {
+class TimelineMediaSizeProvider @Inject constructor() {
 
     lateinit var recyclerView: RecyclerView
     private var cachedSize: Pair<Int, Int>? = null

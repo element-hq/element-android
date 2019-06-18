@@ -17,8 +17,9 @@
 package im.vector.riotredesign.features.home.room.list
 
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import javax.inject.Inject
 
-class ChronologicalRoomComparator : Comparator<RoomSummary> {
+class ChronologicalRoomComparator @Inject constructor() : Comparator<RoomSummary> {
 
     override fun compare(leftRoomSummary: RoomSummary?, rightRoomSummary: RoomSummary?): Int {
         var rightTimestamp = 0L

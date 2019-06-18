@@ -29,7 +29,14 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.EmojiCompatFontProvider
@@ -44,18 +51,32 @@ import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.riotredesign.features.home.room.detail.timeline.item.*
+import im.vector.riotredesign.features.home.room.detail.timeline.item.BlankItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageFileItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageFileItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageVideoItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageImageVideoItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.ReactionInfoData
+import im.vector.riotredesign.features.home.room.detail.timeline.item.RedactedMessageItem
+import im.vector.riotredesign.features.home.room.detail.timeline.item.RedactedMessageItem_
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.VideoContentRenderer
 import me.gujun.android.span.span
+import javax.inject.Inject
 
-class MessageItemFactory(private val colorProvider: ColorProvider,
-                         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-                         private val timelineDateFormatter: TimelineDateFormatter,
-                         private val htmlRenderer: EventHtmlRenderer,
-                         private val stringProvider: StringProvider,
-                         private val emojiCompatFontProvider: EmojiCompatFontProvider) {
+class MessageItemFactory @Inject constructor(
+        private val colorProvider: ColorProvider,
+        private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
+        private val timelineDateFormatter: TimelineDateFormatter,
+        private val htmlRenderer: EventHtmlRenderer,
+        private val stringProvider: StringProvider,
+        private val emojiCompatFontProvider: EmojiCompatFontProvider) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -68,33 +89,33 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                ?: false
+                                                      ?: false
 
         val showInformation = addDaySeparator
-                || event.senderAvatar != nextEvent?.senderAvatar
-                || event.senderName != nextEvent?.senderName
-                || nextEvent?.root?.getClearType() != EventType.MESSAGE
-                || isNextMessageReceivedMoreThanOneHourAgo
+                              || event.senderAvatar != nextEvent?.senderAvatar
+                              || event.senderName != nextEvent?.senderName
+                              || nextEvent?.root?.getClearType() != EventType.MESSAGE
+                              || isNextMessageReceivedMoreThanOneHourAgo
 
         val time = timelineDateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
         val memberName = event.senderName ?: event.root.sender ?: ""
         val formattedMemberName = span(memberName) {
             textColor = colorProvider.getColor(getColorFromUserId(event.root.sender
-                    ?: ""))
+                                                                  ?: ""))
         }
         val hasBeenEdited = event.annotations?.editSummary != null
         val informationData = MessageInformationData(eventId = eventId,
-                senderId = event.root.sender ?: "",
-                sendState = event.sendState,
-                time = time,
-                avatarUrl = avatarUrl,
-                memberName = formattedMemberName,
-                showInformation = showInformation,
-                orderedReactionList = event.annotations?.reactionsSummary?.map {
-                    ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
-                },
-                hasBeenEdited = hasBeenEdited
+                                                     senderId = event.root.sender ?: "",
+                                                     sendState = event.sendState,
+                                                     time = time,
+                                                     avatarUrl = avatarUrl,
+                                                     memberName = formattedMemberName,
+                                                     showInformation = showInformation,
+                                                     orderedReactionList = event.annotations?.reactionsSummary?.map {
+                                                         ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
+                                                     },
+                                                     hasBeenEdited = hasBeenEdited
         )
 
         if (event.root.unsignedData?.redactedEvent != null) {
@@ -104,9 +125,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
         val messageContent: MessageContent =
                 event.annotations?.editSummary?.aggregatedContent?.toModel()
-                        ?: event.root.getClearContent().toModel()
-                        ?: //Malformed content, we should echo something on screen
-                        return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
+                ?: event.root.getClearContent().toModel()
+                ?: //Malformed content, we should echo something on screen
+                return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 
         if (messageContent.relatesTo?.type == RelationType.REPLACE) {
             // ignore replace event, the targeted id is already edited
@@ -116,16 +137,16 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
-                    informationData,
-                    hasBeenEdited,
-                    event.annotations?.editSummary,
-                    callback)
+                                                             informationData,
+                                                             hasBeenEdited,
+                                                             event.annotations?.editSummary,
+                                                             callback)
             is MessageTextContent   -> buildTextMessageItem(event.sendState,
-                    messageContent,
-                    informationData,
-                    hasBeenEdited,
-                    event.annotations?.editSummary,
-                    callback
+                                                            messageContent,
+                                                            informationData,
+                                                            hasBeenEdited,
+                                                            event.annotations?.editSummary,
+                                                            callback
             )
             is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
@@ -156,7 +177,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -176,7 +197,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { _ ->
@@ -221,7 +242,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -259,7 +280,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -296,7 +317,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -328,9 +349,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 //nop
             }
         },
-                editStart,
-                editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                          editStart,
+                          editEnd,
+                          Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         return spannable
     }
 
@@ -362,7 +383,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -395,7 +416,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 

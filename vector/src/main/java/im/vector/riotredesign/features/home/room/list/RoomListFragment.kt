@@ -23,7 +23,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -36,7 +40,7 @@ import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.room.list.widget.FabMenuView
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 @Parcelize
 data class RoomListParams(
@@ -61,7 +65,8 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
     }
 
     private val roomListParams: RoomListParams by args()
-    private val roomController by inject<RoomSummaryController>()
+    @Inject lateinit var roomController: RoomSummaryController
+    @Inject lateinit var roomListViewModelFactory: RoomListViewModel.Factory
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list

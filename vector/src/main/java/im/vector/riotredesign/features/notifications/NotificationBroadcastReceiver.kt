@@ -22,16 +22,15 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)
  */
-class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
+class NotificationBroadcastReceiver : BroadcastReceiver() {
 
-    private val notificationDrawerManager by inject<NotificationDrawerManager>()
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return

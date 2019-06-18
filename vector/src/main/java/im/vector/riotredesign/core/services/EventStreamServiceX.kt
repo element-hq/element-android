@@ -28,7 +28,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.notifications.NotifiableEventResolver
 import im.vector.riotredesign.features.notifications.NotificationUtils
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -162,7 +161,7 @@ class EventStreamServiceX : VectorService() {
                 val notification = NotificationUtils.buildForegroundServiceNotification(this, R.string.notification_sync_in_progress)
                 startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
             }
-            ACTION_GO_TO_FOREGROUND -> {
+            ACTION_GO_TO_FOREGROUND        -> {
                 // Stop foreground notification display
                 Timber.i("stopForeground")
                 stopForeground(true)
@@ -177,9 +176,9 @@ class EventStreamServiceX : VectorService() {
 
         when (action) {
             ACTION_START,
-            ACTION_GO_TO_FOREGROUND ->
+            ACTION_GO_TO_FOREGROUND        ->
                 when (serviceState) {
-                    ServiceState.INIT ->
+                    ServiceState.INIT    ->
                         start(false)
                     ServiceState.CATCHUP ->
                         // A push has been received before, just change state, to avoid stopping the service when catchup is over
@@ -190,12 +189,12 @@ class EventStreamServiceX : VectorService() {
                 }
             ACTION_STOP,
             ACTION_GO_TO_BACKGROUND,
-            ACTION_LOGOUT ->
+            ACTION_LOGOUT                  ->
                 stop()
             ACTION_PUSH_RECEIVED,
             ACTION_SIMULATED_PUSH_RECEIVED ->
                 when (serviceState) {
-                    ServiceState.INIT ->
+                    ServiceState.INIT    ->
                         start(true)
                     ServiceState.CATCHUP ->
                         catchup(true)
@@ -203,17 +202,17 @@ class EventStreamServiceX : VectorService() {
                         // Nothing to do
                         Unit
                 }
-            ACTION_PUSH_UPDATE -> pushStatusUpdate()
-            ACTION_BOOT_COMPLETE -> {
+            ACTION_PUSH_UPDATE             -> pushStatusUpdate()
+            ACTION_BOOT_COMPLETE           -> {
                 // No FCM only
                 mSimulatePushImmediate = true
                 stop()
             }
-            ACTION_APPLICATION_UPGRADE -> {
+            ACTION_APPLICATION_UPGRADE     -> {
                 // FDroid only
                 catchup(true)
             }
-            else -> {
+            else                           -> {
                 // Should not happen
             }
         }
@@ -247,8 +246,8 @@ class EventStreamServiceX : VectorService() {
             val pushSimulatorRequest = OneTimeWorkRequestBuilder<PushSimulatorWorker>()
                     .setInitialDelay(delay.toLong(), TimeUnit.MILLISECONDS)
                     .setConstraints(Constraints.Builder()
-                            .setRequiredNetworkType(NetworkType.CONNECTED)
-                            .build())
+                                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                                            .build())
                     .addTag(PUSH_SIMULATOR_REQUEST_TAG)
                     .build()
 

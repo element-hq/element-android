@@ -36,6 +36,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import kotlinx.android.synthetic.main.bottom_sheet_message_actions.*
+import javax.inject.Inject
 
 /**
  * Bottom sheet fragment that shows a message preview with list of contextual actions
@@ -43,6 +44,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_message_actions.*
  */
 class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
 
+    @Inject lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
     private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
 
     private lateinit var actionHandlerModel: ActionsHandler

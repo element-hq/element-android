@@ -24,7 +24,7 @@ import im.vector.riotredesign.core.extensions.replaceChildFragment
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.group.GroupListFragment
 import kotlinx.android.synthetic.main.fragment_home_drawer.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 class HomeDrawerFragment : VectorBaseFragment() {
 
@@ -35,7 +35,7 @@ class HomeDrawerFragment : VectorBaseFragment() {
         }
     }
 
-    val session by inject<Session>()
+    @Inject lateinit var session: Session
 
     override fun getLayoutResId() = R.layout.fragment_home_drawer
 

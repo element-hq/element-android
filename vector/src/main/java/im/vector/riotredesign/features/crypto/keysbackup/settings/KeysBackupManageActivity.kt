@@ -17,16 +17,16 @@ package im.vector.riotredesign.features.crypto.keysbackup.settings
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.injector
 import im.vector.riotredesign.core.platform.SimpleFragmentActivity
 import im.vector.riotredesign.core.platform.WaitingViewData
-import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
+import javax.inject.Inject
 
 
 class KeysBackupManageActivity : SimpleFragmentActivity() {
@@ -41,12 +41,15 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
     override fun getTitleRes() = R.string.encryption_message_recovery
 
     private val viewModel: KeysBackupSettingsViewModel by viewModel()
+    @Inject lateinit var keysBackupSettingsViewModelFactory: KeysBackupSettingsViewModel.Factory
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun initUiAndData() {
         super.initUiAndData()
-
-        bindScope(getOrCreateScope(KeysBackupModule.KEYS_BACKUP_SCOPE))
-
         if (supportFragmentManager.fragments.isEmpty()) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, KeysBackupSettingsFragment.newInstance())

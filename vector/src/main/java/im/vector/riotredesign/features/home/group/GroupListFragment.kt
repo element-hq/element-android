@@ -27,7 +27,7 @@ import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.HomeNavigator
 import kotlinx.android.synthetic.main.fragment_group_list.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback {
 
@@ -38,8 +38,10 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
     }
 
     private val viewModel: GroupListViewModel by fragmentViewModel()
-    private val homeNavigator by inject<HomeNavigator>()
-    private val groupController by inject<GroupSummaryController>()
+
+    @Inject lateinit var groupListViewModelFactory: GroupListViewModel.Factory
+    @Inject lateinit var homeNavigator: HomeNavigator
+    @Inject lateinit var groupController: GroupSummaryController
 
     override fun getLayoutResId() = R.layout.fragment_group_list
 

@@ -18,7 +18,6 @@ package im.vector.riotredesign.features.crypto.keysbackup.restore
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import im.vector.fragments.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.StepProgressListener
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
@@ -28,8 +27,9 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.WaitingViewData
 import im.vector.riotredesign.core.ui.views.KeysBackupBanner
 import timber.log.Timber
+import javax.inject.Inject
 
-class KeysBackupRestoreFromKeyViewModel : ViewModel() {
+class KeysBackupRestoreFromKeyViewModel @Inject constructor() : ViewModel() {
 
     var recoveryCode: MutableLiveData<String> = MutableLiveData()
     var recoveryCodeErrorText: MutableLiveData<String> = MutableLiveData()

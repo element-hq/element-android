@@ -20,15 +20,21 @@ import android.text.TextUtils
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.*
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
+import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomNameContent
+import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
 import timber.log.Timber
+import javax.inject.Inject
 
-class NoticeEventFormatter(private val stringProvider: StringProvider) {
+class NoticeEventFormatter @Inject constructor(private val stringProvider: StringProvider) {
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
@@ -66,7 +72,7 @@ class NoticeEventFormatter(private val stringProvider: StringProvider) {
 
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?): CharSequence? {
         val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility
-                ?: return null
+                                ?: return null
 
         val formattedVisibility = when (historyVisibility) {
             RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
@@ -116,7 +122,7 @@ class NoticeEventFormatter(private val stringProvider: StringProvider) {
                     stringProvider.getString(R.string.notice_display_name_removed, event.sender, prevEventContent?.displayName)
                 else                                          ->
                     stringProvider.getString(R.string.notice_display_name_changed_from,
-                            event.sender, prevEventContent?.displayName, eventContent?.displayName)
+                                             event.sender, prevEventContent?.displayName, eventContent?.displayName)
             }
             displayText.append(displayNameText)
         }
@@ -143,7 +149,7 @@ class NoticeEventFormatter(private val stringProvider: StringProvider) {
                 when {
                     eventContent.thirdPartyInvite != null        ->
                         stringProvider.getString(R.string.notice_room_third_party_registered_invite,
-                                targetDisplayName, eventContent.thirdPartyInvite?.displayName)
+                                                 targetDisplayName, eventContent.thirdPartyInvite?.displayName)
                     TextUtils.equals(event.stateKey, selfUserId) ->
                         stringProvider.getString(R.string.notice_room_invite_you, senderDisplayName)
                     event.stateKey.isNullOrEmpty()               ->

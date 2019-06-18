@@ -15,7 +15,15 @@
  */
 package im.vector.riotredesign.features.crypto.keysbackup.settings
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
@@ -23,33 +31,37 @@ import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.riotredesign.core.platform.VectorViewModel
-import org.koin.android.ext.android.get
 
 
-class KeysBackupSettingsViewModel(initialState: KeysBackupSettingViewState,
-                                  session: Session) : VectorViewModel<KeysBackupSettingViewState>(initialState),
-        KeysBackupStateListener {
+class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
+                                                              session: Session
+) : VectorViewModel<KeysBackupSettingViewState>(initialState),
+    KeysBackupStateListener {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: KeysBackupSettingViewState): KeysBackupSettingsViewModel
+    }
 
     companion object : MvRxViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: KeysBackupSettingViewState): KeysBackupSettingsViewModel? {
-            val session = viewModelContext.activity.get<Session>()
-
-            val firstState = state.copy(
-                    keysBackupState = session.getKeysBackupService().state,
-                    keysBackupVersion = session.getKeysBackupService().keysBackupVersion
-            )
-
-            return KeysBackupSettingsViewModel(firstState, session)
+            val activity: KeysBackupManageActivity = (viewModelContext as ActivityViewModelContext).activity()
+            return activity.keysBackupSettingsViewModelFactory.create(state)
         }
     }
 
     private var keysBackupService: KeysBackupService = session.getKeysBackupService()
 
     init {
+        setState {
+            this.copy(
+                    keysBackupState = session.getKeysBackupService().state,
+                    keysBackupVersion = session.getKeysBackupService().keysBackupVersion
+            )
+        }
         keysBackupService.addListener(this)
-
         getKeysBackupTrust()
     }
 
@@ -90,8 +102,8 @@ class KeysBackupSettingsViewModel(initialState: KeysBackupSettingViewState,
     }
 
     override fun onCleared() {
-        super.onCleared()
         keysBackupService.removeListener(this)
+        super.onCleared()
     }
 
     override fun onStateChange(newState: KeysBackupState) {
@@ -142,6 +154,6 @@ class KeysBackupSettingsViewModel(initialState: KeysBackupSettingViewState,
         val currentBackupState = keysBackupService.state
 
         return currentBackupState == KeysBackupState.Unknown
-                || currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
+               || currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
     }
 }

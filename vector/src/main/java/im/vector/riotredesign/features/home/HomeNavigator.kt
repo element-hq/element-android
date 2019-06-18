@@ -24,11 +24,11 @@ import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.features.navigation.Navigator
 import kotlinx.android.synthetic.main.activity_home.*
 import timber.log.Timber
+import javax.inject.Inject
 
-class HomeNavigator {
+class HomeNavigator @Inject constructor() {
 
     var activity: HomeActivity? = null
-
     private var rootRoomId: String? = null
 
     fun openSelectedGroup(groupSummary: GroupSummary) {

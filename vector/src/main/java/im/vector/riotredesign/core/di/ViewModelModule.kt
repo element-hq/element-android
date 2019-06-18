@@ -1,0 +1,150 @@
+/*
+ * Copyright 2019 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.riotredesign.core.di
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoMap
+import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyViewModel
+import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
+import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
+import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel
+import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel_AssistedFactory
+import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
+import im.vector.riotredesign.features.crypto.verification.SasVerificationViewModel
+import im.vector.riotredesign.features.home.HomeActivityViewModel
+import im.vector.riotredesign.features.home.HomeActivityViewModel_AssistedFactory
+import im.vector.riotredesign.features.home.HomeDetailViewModel
+import im.vector.riotredesign.features.home.HomeDetailViewModel_AssistedFactory
+import im.vector.riotredesign.features.home.HomeNavigationViewModel
+import im.vector.riotredesign.features.home.group.GroupListViewModel
+import im.vector.riotredesign.features.home.group.GroupListViewModel_AssistedFactory
+import im.vector.riotredesign.features.home.room.detail.RoomDetailViewModel
+import im.vector.riotredesign.features.home.room.detail.RoomDetailViewModel_AssistedFactory
+import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewModel
+import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewModel_AssistedFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageActionsViewModel
+import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageActionsViewModel_AssistedFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageMenuViewModel
+import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageMenuViewModel_AssistedFactory
+import im.vector.riotredesign.features.home.room.detail.timeline.action.QuickReactionViewModel
+import im.vector.riotredesign.features.home.room.detail.timeline.action.QuickReactionViewModel_AssistedFactory
+import im.vector.riotredesign.features.home.room.list.RoomListViewModel
+import im.vector.riotredesign.features.home.room.list.RoomListViewModel_AssistedFactory
+import im.vector.riotredesign.features.reactions.EmojiChooserViewModel
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryNavigationViewModel
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryViewModel
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryViewModel_AssistedFactory
+import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerViewModel
+import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerViewModel_AssistedFactory
+import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewViewModel
+import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewViewModel_AssistedFactory
+import im.vector.riotredesign.features.workers.signout.SignOutViewModel
+
+@Module
+interface ViewModelModule {
+
+    @Binds
+    fun bindViewModelFactory(factory: VectorViewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SignOutViewModel::class)
+    fun bindSignOutViewModel(viewModel: SignOutViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EmojiChooserViewModel::class)
+    fun bindEmojiChooserViewModel(viewModel: EmojiChooserViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SasVerificationViewModel::class)
+    fun bindSasVerificationViewModel(viewModel: SasVerificationViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(KeysBackupRestoreFromKeyViewModel::class)
+    fun bindKeysBackupRestoreFromKeyViewModel(viewModel: KeysBackupRestoreFromKeyViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(KeysBackupRestoreSharedViewModel::class)
+    fun bindKeysBackupRestoreSharedViewModel(viewModel: KeysBackupRestoreSharedViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(KeysBackupRestoreFromPassphraseViewModel::class)
+    fun bindKeysBackupRestoreFromPassphraseViewModel(viewModel: KeysBackupRestoreFromPassphraseViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RoomDirectoryNavigationViewModel::class)
+    fun bindRoomDirectoryNavigationViewModel(viewModel: RoomDirectoryNavigationViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HomeNavigationViewModel::class)
+    fun bindHomeNavigationViewModel(viewModel: HomeNavigationViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(KeysBackupSetupSharedViewModel::class)
+    fun bindKeysBackupSetupSharedViewModel(viewModel: KeysBackupSetupSharedViewModel): ViewModel
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_home_HomeActivityViewModel(factory: HomeActivityViewModel_AssistedFactory): HomeActivityViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_home_room_detail_composer_TextComposerViewModel(factory: TextComposerViewModel_AssistedFactory): TextComposerViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_home_room_detail_RoomDetailViewModel(factory: RoomDetailViewModel_AssistedFactory): RoomDetailViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_home_room_detail_timeline_action_QuickReactionViewModel(factory: QuickReactionViewModel_AssistedFactory): QuickReactionViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_home_room_detail_timeline_action_MessageActionsViewModel(factory: MessageActionsViewModel_AssistedFactory): MessageActionsViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_home_room_detail_timeline_action_MessageMenuViewModel(factory: MessageMenuViewModel_AssistedFactory): MessageMenuViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_home_room_list_RoomListViewModel(factory: RoomListViewModel_AssistedFactory): RoomListViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_home_group_GroupListViewModel(factory: GroupListViewModel_AssistedFactory): GroupListViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_home_HomeDetailViewModel(factory: HomeDetailViewModel_AssistedFactory): HomeDetailViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_crypto_keysbackup_settings_KeysBackupSettingsViewModel(factory: KeysBackupSettingsViewModel_AssistedFactory): KeysBackupSettingsViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_roomdirectory_picker_RoomDirectoryPickerViewModel(factory: RoomDirectoryPickerViewModel_AssistedFactory): RoomDirectoryPickerViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_roomdirectory_RoomDirectoryViewModel(factory: RoomDirectoryViewModel_AssistedFactory): RoomDirectoryViewModel.Factory
+
+    @Binds
+    fun bind_im_vector_riotredesign_features_roomdirectory_roompreview_RoomPreviewViewModel(factory: RoomPreviewViewModel_AssistedFactory): RoomPreviewViewModel.Factory
+
+}

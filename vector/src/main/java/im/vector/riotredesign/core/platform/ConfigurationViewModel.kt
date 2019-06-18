@@ -21,13 +21,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.configuration.VectorConfiguration
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 import timber.log.Timber
+import javax.inject.Inject
 
-class ConfigurationViewModel : ViewModel(), KoinComponent {
-
-    private val vectorConfiguration: VectorConfiguration by inject()
+class ConfigurationViewModel @Inject constructor(
+        private val vectorConfiguration: VectorConfiguration
+) : ViewModel() {
 
     private var currentConfigurationValue: String? = null
 
@@ -47,7 +46,6 @@ class ConfigurationViewModel : ViewModel(), KoinComponent {
             if (newHash != currentConfigurationValue) {
                 Timber.v("Configuration: recreate the Activity")
                 currentConfigurationValue = newHash
-
                 _activityRestarter.postValue(LiveEvent(Unit))
             }
         }

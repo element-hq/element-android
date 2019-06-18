@@ -27,7 +27,6 @@ import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
-import im.vector.fragments.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.startImportTextFromFileIntent
@@ -53,9 +52,9 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(KeysBackupRestoreFromKeyViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreFromKeyViewModel::class.java)
         sharedViewModel = activity?.run {
-            ViewModelProviders.of(this).get(KeysBackupRestoreSharedViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         mKeyTextEdit.setText(viewModel.recoveryCode.value)

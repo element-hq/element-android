@@ -43,9 +43,7 @@ import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
 import kotlinx.android.synthetic.main.activity_home.*
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
+import javax.inject.Inject
 
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
@@ -57,12 +55,13 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
-    private val homeNavigator by inject<HomeNavigator>()
 
+    @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
+    @Inject lateinit var homeNavigator: HomeNavigator
     // TODO Move this elsewhere
-    private val incomingVerificationRequestHandler by inject<IncomingVerificationRequestHandler>()
+    @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
     // TODO Move this elsewhere
-    private val keyRequestHandler by inject<KeyRequestHandler>()
+    @Inject lateinit var keyRequestHandler: KeyRequestHandler
 
     private var progress: ProgressDialog? = null
 
@@ -76,10 +75,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindScope(getOrCreateScope(HomeModule.HOME_SCOPE))
         homeNavigator.activity = this
-
-        navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
+        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeNavigationViewModel::class.java)
 
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {

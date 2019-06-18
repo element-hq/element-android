@@ -23,18 +23,20 @@ import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransactio
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.popup.PopupAlertManager
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Listens to the VerificationManager and add a new notification when an incoming request is detected.
  */
-class IncomingVerificationRequestHandler(val context: Context,
-                                         private val session: Session) : SasVerificationService.SasVerificationListener {
+@Singleton
+class IncomingVerificationRequestHandler @Inject constructor(val context: Context,
+                                                             private val session: Session
+) : SasVerificationService.SasVerificationListener {
 
     init {
         session.getSasVerificationService().addListener(this)
     }
-
-    fun ensureStarted() = Unit
 
     override fun transactionCreated(tx: SasVerificationTransaction) {}
 
@@ -44,7 +46,7 @@ class IncomingVerificationRequestHandler(val context: Context,
                 //Add a notification for every incoming request
                 val session = Matrix.getInstance().currentSession!!
                 val name = session.getUser(tx.otherUserId)?.displayName
-                        ?: tx.otherUserId
+                           ?: tx.otherUserId
 
                 val alert = PopupAlertManager.VectorAlert(
                         "kvr_${tx.transactionId}",
@@ -54,9 +56,9 @@ class IncomingVerificationRequestHandler(val context: Context,
                         .apply {
                             contentAction = Runnable {
                                 val intent = SASVerificationActivity.incomingIntent(context,
-                                        session.sessionParams.credentials.userId,
-                                        tx.otherUserId,
-                                        tx.transactionId)
+                                                                                    session.sessionParams.credentials.userId,
+                                                                                    tx.otherUserId,
+                                                                                    tx.transactionId)
                                 weakCurrentActivity?.get()?.startActivity(intent)
                             }
                             dismissedAction = Runnable {
@@ -72,9 +74,9 @@ class IncomingVerificationRequestHandler(val context: Context,
                                     context.getString(R.string.action_open),
                                     Runnable {
                                         val intent = SASVerificationActivity.incomingIntent(context,
-                                                session.sessionParams.credentials.userId,
-                                                tx.otherUserId,
-                                                tx.transactionId)
+                                                                                            session.sessionParams.credentials.userId,
+                                                                                            tx.otherUserId,
+                                                                                            tx.transactionId)
                                         weakCurrentActivity?.get()?.startActivity(intent)
                                     }
                             )

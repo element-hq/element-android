@@ -15,12 +15,15 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.core.platform.VectorViewModel
-import org.koin.android.ext.android.get
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 
 /**
  * Quick reactions state, it's a toggle with 3rd state
@@ -32,33 +35,99 @@ enum class TriggleState {
 }
 
 data class QuickReactionState(
-        val agreeTrigleState: TriggleState = TriggleState.NONE,
+        val roomId: String,
+        val eventId: String,
+        val informationData: MessageInformationData,
+        val agreeTriggleState: TriggleState = TriggleState.NONE,
         val likeTriggleState: TriggleState = TriggleState.NONE,
         /** Pair of 'clickedOn' and current toggles state*/
-        val selectionResult: Pair<String, List<String>>? = null,
-        val eventId: String = "") : MvRxState
+        val selectionResult: Pair<String, List<String>>? = null
+) : MvRxState {
+
+    constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
+
+}
+
 
 /**
  * Quick reaction view model
  */
-class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel<QuickReactionState>(initialState) {
+class QuickReactionViewModel @AssistedInject constructor(@Assisted initialState: QuickReactionState,
+                                                         private val session: Session) : VectorViewModel<QuickReactionState>(initialState) {
 
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: QuickReactionState): QuickReactionViewModel
+    }
+
+    companion object : MvRxViewModelFactory<QuickReactionViewModel, QuickReactionState> {
+
+        const val AGREE_POSITIVE = "👍"
+        const val AGREE_NEGATIVE = "👎"
+        const val LIKE_POSITIVE = "🙂"
+        const val LIKE_NEGATIVE = "😔"
+
+        fun getOpposite(reaction: String): String? {
+            return when (reaction) {
+                AGREE_POSITIVE -> AGREE_NEGATIVE
+                AGREE_NEGATIVE -> AGREE_POSITIVE
+                LIKE_POSITIVE  -> LIKE_NEGATIVE
+                LIKE_NEGATIVE  -> LIKE_POSITIVE
+                else           -> null
+            }
+        }
+
+        override fun create(viewModelContext: ViewModelContext, state: QuickReactionState): QuickReactionViewModel? {
+            val fragment: QuickReactionFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.quickReactionViewModelFactory.create(state)
+        }
+    }
+
+    init {
+        setState { reduceState(this) }
+    }
+
+    private fun reduceState(state: QuickReactionState): QuickReactionState {
+        val event = session.getRoom(state.roomId)?.getTimeLineEvent(state.eventId) ?: return state
+        var agreeTriggle: TriggleState = TriggleState.NONE
+        var likeTriggle: TriggleState = TriggleState.NONE
+        event.annotations?.reactionsSummary?.forEach {
+            //it.addedByMe
+            if (it.addedByMe) {
+                if (AGREE_POSITIVE == it.key) {
+                    agreeTriggle = TriggleState.FIRST
+                } else if (AGREE_NEGATIVE == it.key) {
+                    agreeTriggle = TriggleState.SECOND
+                }
+
+                if (LIKE_POSITIVE == it.key) {
+                    likeTriggle = TriggleState.FIRST
+                } else if (LIKE_NEGATIVE == it.key) {
+                    likeTriggle = TriggleState.SECOND
+                }
+            }
+        }
+        return state.copy(
+                agreeTriggleState = agreeTriggle,
+                likeTriggleState = likeTriggle
+        )
+    }
 
     fun toggleAgree(isFirst: Boolean) = withState {
         if (isFirst) {
             setState {
-                val newTriggle = if (it.agreeTrigleState == TriggleState.FIRST) TriggleState.NONE else TriggleState.FIRST
+                val newTriggle = if (it.agreeTriggleState == TriggleState.FIRST) TriggleState.NONE else TriggleState.FIRST
                 copy(
-                        agreeTrigleState = newTriggle,
-                        selectionResult = Pair(agreePositive, getReactions(this, newTriggle, null))
+                        agreeTriggleState = newTriggle,
+                        selectionResult = Pair(AGREE_POSITIVE, getReactions(this, newTriggle, null))
                 )
             }
         } else {
             setState {
-                val newTriggle = if (it.agreeTrigleState == TriggleState.SECOND) TriggleState.NONE else TriggleState.SECOND
+                val newTriggle = if (it.agreeTriggleState == TriggleState.SECOND) TriggleState.NONE else TriggleState.SECOND
                 copy(
-                        agreeTrigleState = agreeTrigleState,
-                        selectionResult = Pair(agreeNegative, getReactions(this, newTriggle, null))
+                        agreeTriggleState = agreeTriggleState,
+                        selectionResult = Pair(AGREE_NEGATIVE, getReactions(this, newTriggle, null))
                 )
             }
         }
@@ -70,7 +139,7 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
                 val newTriggle = if (it.likeTriggleState == TriggleState.FIRST) TriggleState.NONE else TriggleState.FIRST
                 copy(
                         likeTriggleState = newTriggle,
-                        selectionResult = Pair(likePositive, getReactions(this, null, newTriggle))
+                        selectionResult = Pair(LIKE_POSITIVE, getReactions(this, null, newTriggle))
                 )
             }
         } else {
@@ -78,7 +147,7 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
                 val newTriggle = if (it.likeTriggleState == TriggleState.SECOND) TriggleState.NONE else TriggleState.SECOND
                 copy(
                         likeTriggleState = newTriggle,
-                        selectionResult = Pair(likeNegative, getReactions(this, null, newTriggle))
+                        selectionResult = Pair(LIKE_NEGATIVE, getReactions(this, null, newTriggle))
                 )
             }
         }
@@ -87,64 +156,17 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
     private fun getReactions(state: QuickReactionState, newState1: TriggleState?, newState2: TriggleState?): List<String> {
         return ArrayList<String>(4).apply {
             when (newState2 ?: state.likeTriggleState) {
-                TriggleState.FIRST  -> add(likePositive)
-                TriggleState.SECOND -> add(likeNegative)
+                TriggleState.FIRST  -> add(LIKE_POSITIVE)
+                TriggleState.SECOND -> add(LIKE_NEGATIVE)
                 else                -> {
                 }
             }
-            when (newState1 ?: state.agreeTrigleState) {
-                TriggleState.FIRST  -> add(agreePositive)
-                TriggleState.SECOND -> add(agreeNegative)
+            when (newState1 ?: state.agreeTriggleState) {
+                TriggleState.FIRST  -> add(AGREE_POSITIVE)
+                TriggleState.SECOND -> add(AGREE_NEGATIVE)
                 else                -> {
                 }
             }
-        }
-    }
-
-
-    companion object : MvRxViewModelFactory<QuickReactionViewModel, QuickReactionState> {
-
-        val agreePositive = "👍"
-        val agreeNegative = "👎"
-        val likePositive = "🙂"
-        val likeNegative = "😔"
-
-        fun getOpposite(reaction: String): String? {
-            return when (reaction) {
-                agreePositive -> agreeNegative
-                agreeNegative -> agreePositive
-                likePositive  -> likeNegative
-                likeNegative  -> likePositive
-                else          -> null
-            }
-        }
-
-        override fun initialState(viewModelContext: ViewModelContext): QuickReactionState? {
-            // Args are accessible from the context.
-            // val foo = vieWModelContext.args<MyArgs>.foo
-            val currentSession = viewModelContext.activity.get<Session>()
-            val parcel = viewModelContext.args as TimelineEventFragmentArgs
-            val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
-                    ?: return null
-            var agreeTriggle: TriggleState = TriggleState.NONE
-            var likeTriggle: TriggleState = TriggleState.NONE
-            event.annotations?.reactionsSummary?.forEach {
-                //it.addedByMe
-                if (it.addedByMe) {
-                    if (agreePositive == it.key) {
-                        agreeTriggle = TriggleState.FIRST
-                    } else if (agreeNegative == it.key) {
-                        agreeTriggle = TriggleState.SECOND
-                    }
-
-                    if (likePositive == it.key) {
-                        likeTriggle = TriggleState.FIRST
-                    } else if (likeNegative == it.key) {
-                        likeTriggle = TriggleState.SECOND
-                    }
-                }
-            }
-            return QuickReactionState(agreeTriggle, likeTriggle, null, event.root.eventId ?: "")
         }
     }
 }

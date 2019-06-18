@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.fragments.keysbackup.setup
+package im.vector.riotredesign.features.crypto.keysbackup.setup
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
@@ -30,11 +30,12 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.WaitingViewData
 import im.vector.riotredesign.core.utils.LiveEvent
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * The shared view model between all fragments.
  */
-class KeysBackupSetupSharedViewModel : ViewModel() {
+class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
 
     companion object {
         const val NAVIGATE_TO_STEP_2 = "NAVIGATE_TO_STEP_2"

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.crypto.keysbackup
+package im.vector.riotredesign.core.di
 
-import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupSettingsRecyclerViewController
-import org.koin.dsl.module.module
+import androidx.appcompat.app.AppCompatActivity
+import dagger.Module
+import dagger.Provides
+import im.vector.riotredesign.core.glide.GlideApp
 
-class KeysBackupModule {
+@Module
+object ScreenModule {
 
-    companion object {
-        const val KEYS_BACKUP_SCOPE = "KEYS_BACKUP_SCOPE"
-    }
+    @Provides
+    @JvmStatic
+    fun providesGlideRequests(context: AppCompatActivity) = GlideApp.with(context)
 
-    val definition = module(override = true) {
-
-        scope(KEYS_BACKUP_SCOPE) {
-            KeysBackupSettingsRecyclerViewController(get(), get())
-        }
-
-    }
 }

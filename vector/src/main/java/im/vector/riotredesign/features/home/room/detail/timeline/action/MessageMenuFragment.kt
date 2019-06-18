@@ -29,16 +29,16 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.themes.ThemeUtils
+import javax.inject.Inject
 
 /**
  * Fragment showing the list of available contextual action for a given message.
  */
 class MessageMenuFragment : BaseMvRxFragment() {
 
+    @Inject lateinit var messageMenuViewModelFactory: MessageMenuViewModel.Factory
     private val viewModel: MessageMenuViewModel by fragmentViewModel(MessageMenuViewModel::class)
-
     private var addSeparators = false
-
     var interactionListener: InteractionListener? = null
 
     override fun invalidate() = withState(viewModel) { state ->

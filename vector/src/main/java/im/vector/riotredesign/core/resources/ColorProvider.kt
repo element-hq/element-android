@@ -18,14 +18,15 @@
 
 package im.vector.riotredesign.core.resources
 
-import android.content.Context
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import im.vector.riotredesign.features.themes.ThemeUtils
+import javax.inject.Inject
 
-class ColorProvider(private val context: Context) {
+class ColorProvider @Inject constructor(private val context: AppCompatActivity) {
 
     fun getColor(@ColorRes colorRes: Int): Int {
         return ContextCompat.getColor(context, colorRes)

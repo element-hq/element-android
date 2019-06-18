@@ -22,7 +22,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.dialogs.ExportKeysDialog
 import im.vector.riotredesign.core.extensions.observeEvent
@@ -42,7 +41,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     .commitNow()
         }
 
-        viewModel = ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
         viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT, false)
         viewModel.initSession(session)
 

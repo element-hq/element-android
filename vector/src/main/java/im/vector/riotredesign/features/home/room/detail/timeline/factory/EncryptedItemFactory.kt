@@ -30,9 +30,10 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAv
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
+import javax.inject.Inject
 
 // This class handles timeline event who haven't been successfully decrypted
-class EncryptedItemFactory(private val stringProvider: StringProvider) {
+class EncryptedItemFactory @Inject constructor(private val stringProvider: StringProvider) {
 
     fun create(timelineEvent: TimelineEvent): VectorEpoxyModel<*>? {
         return when {

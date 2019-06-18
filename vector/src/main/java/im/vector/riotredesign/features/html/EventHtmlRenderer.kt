@@ -19,11 +19,12 @@
 package im.vector.riotredesign.features.html
 
 import android.content.Context
-import android.text.style.ClickableSpan
 import android.text.style.URLSpan
+import androidx.appcompat.app.AppCompatActivity
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.glide.GlideRequests
 import org.commonmark.node.BlockQuote
 import org.commonmark.node.HtmlBlock
@@ -50,13 +51,12 @@ import ru.noties.markwon.html.tag.SubScriptHandler
 import ru.noties.markwon.html.tag.SuperScriptHandler
 import ru.noties.markwon.html.tag.UnderlineHandler
 import java.util.Arrays.asList
+import javax.inject.Inject
 
-class EventHtmlRenderer(glideRequests: GlideRequests,
-                        context: Context,
-                        session: Session) {
-
+class EventHtmlRenderer @Inject constructor(context: AppCompatActivity,
+                                            session: Session) {
     private val markwon = Markwon.builder(context)
-            .usePlugin(MatrixPlugin.create(glideRequests, context, session))
+            .usePlugin(MatrixPlugin.create(GlideApp.with(context), context, session))
             .build()
 
     fun render(text: String): CharSequence {

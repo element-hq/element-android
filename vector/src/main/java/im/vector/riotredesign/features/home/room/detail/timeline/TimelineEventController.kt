@@ -25,13 +25,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.LoadingItem_
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.*
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.canBeMerged
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.nextDisplayableEvent
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.prevSameTypeEvents
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAvatar
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MergedHeaderItem
@@ -39,11 +51,12 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInf
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.VideoContentRenderer
 import org.threeten.bp.LocalDateTime
+import javax.inject.Inject
 
-class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
-                              private val timelineItemFactory: TimelineItemFactory,
-                              private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-                              private val backgroundHandler: Handler = TimelineAsyncHelper.getBackgroundHandler()
+class TimelineEventController @Inject constructor(private val dateFormatter: TimelineDateFormatter,
+                                                  private val timelineItemFactory: TimelineItemFactory,
+                                                  private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
+                                                  @TimelineEventControllerHandler private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
     interface Callback : ReactionPillCallback, AvatarCallback, BaseCallback {
@@ -175,8 +188,8 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
             // Should be build if not cached or if cached but contains mergedHeader or formattedDay
             // We then are sure we always have items up to date.
             if (modelCache[position] == null
-                    || modelCache[position]?.mergedHeaderModel != null
-                    || modelCache[position]?.formattedDayModel != null) {
+                || modelCache[position]?.mergedHeaderModel != null
+                || modelCache[position]?.formattedDayModel != null) {
                 modelCache[position] = buildItemModels(position, currentSnapshot)
             }
         }
@@ -248,7 +261,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                 // => handle case where paginating from mergeable events and we get more
                 val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
                 val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
-                        ?: true
+                                           ?: true
                 val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
                 if (isCollapsed) {
                     collapsedEventIds.addAll(mergedEventIds)

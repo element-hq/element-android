@@ -20,9 +20,10 @@ import android.content.Context
 import com.airbnb.epoxy.EpoxyController
 import im.vector.riotredesign.features.autocomplete.EpoxyAutocompletePresenter
 import im.vector.riotredesign.features.command.Command
+import javax.inject.Inject
 
-class AutocompleteCommandPresenter(context: Context,
-                                   private val controller: AutocompleteCommandController) :
+class AutocompleteCommandPresenter @Inject constructor(context: Context,
+                                               private val controller: AutocompleteCommandController) :
         EpoxyAutocompletePresenter<Command>(context) {
 
     init {

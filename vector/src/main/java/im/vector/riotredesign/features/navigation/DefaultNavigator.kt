@@ -27,9 +27,9 @@ import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewActivity
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
+import javax.inject.Inject
 
-class DefaultNavigator : Navigator {
-
+class DefaultNavigator @Inject constructor() : Navigator {
 
     override fun openRoom(roomId: String, context: Context) {
         val args = RoomDetailArgs(roomId)

@@ -28,12 +28,13 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.Timeline
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
 import timber.log.Timber
+import javax.inject.Inject
 
-class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
-                          private val encryptionItemFactory: EncryptionItemFactory,
-                          private val encryptedItemFactory: EncryptedItemFactory,
-                          private val noticeItemFactory: NoticeItemFactory,
-                          private val defaultItemFactory: DefaultItemFactory) {
+class TimelineItemFactory @Inject constructor(private val messageItemFactory: MessageItemFactory,
+                                              private val encryptionItemFactory: EncryptionItemFactory,
+                                              private val encryptedItemFactory: EncryptedItemFactory,
+                                              private val noticeItemFactory: NoticeItemFactory,
+                                              private val defaultItemFactory: DefaultItemFactory) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -64,22 +65,23 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                     //These are just for debug to display hidden event, they should be filtered out in normal mode
                     if (TimelineDisplayableEvents.DEBUG_HIDDEN_EVENT) {
                         val informationData = MessageInformationData(eventId = event.root.eventId
-                                ?: "?",
-                                senderId = event.root.sender ?: "",
-                                sendState = event.sendState,
-                                time = "",
-                                avatarUrl = null,
-                                memberName = "",
-                                showInformation = false
+                                                                               ?: "?",
+                                                                     senderId = event.root.sender
+                                                                                ?: "",
+                                                                     sendState = event.sendState,
+                                                                     time = "",
+                                                                     avatarUrl = null,
+                                                                     memberName = "",
+                                                                     showInformation = false
                         )
                         val messageContent = event.root.content.toModel<MessageContent>()
-                                ?: MessageDefaultContent("", "", null, null)
+                                             ?: MessageDefaultContent("", "", null, null)
                         MessageTextItem_()
                                 .informationData(informationData)
                                 .message("{ \"type\": ${event.root.type} }")
                                 .longClickListener { view ->
                                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                                            ?: false
+                                                             ?: false
                                 }
                     } else {
                         Timber.w("Ignored event (type: ${event.root.type}")

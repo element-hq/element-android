@@ -33,7 +33,6 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
-import org.koin.android.ext.android.inject
 
 /**
  *
@@ -55,7 +54,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
     override fun getTitleRes(): Int = R.string.title_activity_emoji_reaction_picker
 
-    val emojiCompatFontProvider by inject<EmojiCompatFontProvider>()
+    lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
 
     private var tabLayoutSelectionListener = object : TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
         override fun onTabReselected(p0: TabLayout.Tab) {
@@ -72,7 +71,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
     override fun initUiAndData() {
         configureToolbar(emojiPickerToolbar)
-
         emojiCompatFontProvider.let {
             EmojiDrawView.configureTextPaint(this, it.typeface)
             it.addListener(this)
@@ -80,7 +78,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
         tabLayout = findViewById(R.id.tabs)
 
-        viewModel = ViewModelProviders.of(this).get(EmojiChooserViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(EmojiChooserViewModel::class.java)
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
 

@@ -15,34 +15,27 @@
  */
 package im.vector.riotredesign.features.reactions
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.platform.VectorBaseFragment
 
 
-class EmojiChooserFragment : Fragment() {
+class EmojiChooserFragment : VectorBaseFragment() {
 
     companion object {
         fun newInstance() = EmojiChooserFragment()
     }
 
-    private lateinit var viewModel: EmojiChooserViewModel
+    override fun getLayoutResId() = R.layout.emoji_chooser_fragment
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.emoji_chooser_fragment, container, false)
-    }
+    private lateinit var viewModel: EmojiChooserViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = activity?.run {
-            ViewModelProviders.of(this).get(EmojiChooserViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory).get(EmojiChooserViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
         viewModel.initWithContect(context!!)
         (view as? RecyclerView)?.let {
@@ -53,9 +46,4 @@ class EmojiChooserFragment : Fragment() {
 //        val ds = EmojiDataSource(this.context!!)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-    }
 }

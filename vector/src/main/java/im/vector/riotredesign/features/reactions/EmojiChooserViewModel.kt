@@ -19,8 +19,9 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
+import javax.inject.Inject
 
-class EmojiChooserViewModel : ViewModel() {
+class EmojiChooserViewModel @Inject constructor() : ViewModel() {
 
     var adapter: EmojiRecyclerAdapter? = null
     val emojiSourceLiveData: MutableLiveData<EmojiDataSource> = MutableLiveData()

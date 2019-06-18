@@ -17,11 +17,14 @@ package im.vector.riotredesign.features.crypto.keysbackup.settings
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
-import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.errorWithRetryItem
 import im.vector.riotredesign.core.epoxy.loadingItem
@@ -29,9 +32,10 @@ import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.ui.list.GenericItem
 import im.vector.riotredesign.core.ui.list.genericItem
 import java.util.*
+import javax.inject.Inject
 
-class KeysBackupSettingsRecyclerViewController(val stringProvider: StringProvider,
-                                               val session: Session) : TypedEpoxyController<KeysBackupSettingViewState>() {
+class KeysBackupSettingsRecyclerViewController @Inject constructor(val stringProvider: StringProvider,
+                                                                   val session: Session) : TypedEpoxyController<KeysBackupSettingViewState>() {
 
     var listener: Listener? = null
 

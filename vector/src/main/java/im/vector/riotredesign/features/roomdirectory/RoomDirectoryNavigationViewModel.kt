@@ -17,5 +17,6 @@
 package im.vector.riotredesign.features.roomdirectory
 
 import im.vector.riotredesign.core.mvrx.NavigationViewModel
+import javax.inject.Inject
 
-class RoomDirectoryNavigationViewModel : NavigationViewModel<RoomDirectoryActivity.Navigation>()
+class RoomDirectoryNavigationViewModel @Inject constructor(): NavigationViewModel<RoomDirectoryActivity.Navigation>()

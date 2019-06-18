@@ -58,11 +58,7 @@ class SASVerificationStartFragment : VectorBaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel = activity?.run {
-            ViewModelProviders.of(this).get(SasVerificationViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
-
+        viewModel = ViewModelProviders.of(vectorBaseActivity, viewModelFactory).get(SasVerificationViewModel::class.java)
         viewModel.transactionState.observe(this, Observer {
             val uxState = (viewModel.transaction as? OutgoingSasVerificationRequest)?.uxState
             when (uxState) {
@@ -75,14 +71,14 @@ class SASVerificationStartFragment : VectorBaseFragment() {
                     this.startButtonLoading.animate()
 
                 }
-                OutgoingSasVerificationRequest.UxState.SHOW_SAS -> {
+                OutgoingSasVerificationRequest.UxState.SHOW_SAS               -> {
                     viewModel.shortCodeReady()
                 }
                 OutgoingSasVerificationRequest.UxState.CANCELLED_BY_ME,
-                OutgoingSasVerificationRequest.UxState.CANCELLED_BY_OTHER -> {
+                OutgoingSasVerificationRequest.UxState.CANCELLED_BY_OTHER     -> {
                     viewModel.navigateCancel()
                 }
-                else -> {
+                else                                                          -> {
                     TransitionManager.beginDelayedTransition(this.rootLayout)
                     this.loadingText.isVisible = false
                     this.startButton.isVisible = true

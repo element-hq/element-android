@@ -22,9 +22,10 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.features.autocomplete.EpoxyAutocompletePresenter
+import javax.inject.Inject
 
-class AutocompleteUserPresenter(context: Context,
-                                private val controller: AutocompleteUserController
+class AutocompleteUserPresenter @Inject constructor(context: Context,
+                                            private val controller: AutocompleteUserController
 ) : EpoxyAutocompletePresenter<User>(context) {
 
     var callback: Callback? = null

@@ -41,7 +41,7 @@ import im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotredesign.features.workers.signout.SignOutViewModel
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_home_detail.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 
 @Parcelize
@@ -67,7 +67,8 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
 
-    private val session by inject<Session>()
+    @Inject lateinit var session: Session
+    @Inject lateinit var homeDetailViewModelFactory: HomeDetailViewModel.Factory
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
@@ -76,7 +77,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         currentDisplayMode = savedInstanceState?.getSerializable(CURRENT_DISPLAY_MODE) as? RoomListFragment.DisplayMode
-                ?: RoomListFragment.DisplayMode.HOME
+                             ?: RoomListFragment.DisplayMode.HOME
 
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
 
@@ -89,7 +90,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     private fun setupKeysBackupBanner() {
         // Keys backup banner
         // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
-        val model = ViewModelProviders.of(this).get(SignOutViewModel::class.java)
+        val model = ViewModelProviders.of(this, viewModelFactory).get(SignOutViewModel::class.java)
 
         model.init(session)
 
