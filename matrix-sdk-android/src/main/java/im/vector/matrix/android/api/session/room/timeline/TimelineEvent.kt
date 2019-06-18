@@ -19,7 +19,6 @@ package im.vector.matrix.android.api.session.room.timeline
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.send.SendState
 
 /**
@@ -63,7 +62,8 @@ data class TimelineEvent(
         return metadata[key] as T?
     }
 
-    fun isEncrypted() : Boolean {
-        return EventType.ENCRYPTED == root.getClearType()
+    fun isEncrypted(): Boolean {
+        // warning: Do not use getClearType here
+        return EventType.ENCRYPTED == root.type
     }
 }
