@@ -52,7 +52,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                 EventType.CALL_ANSWER       -> noticeItemFactory.create(event, callback)
 
                 // Crypto
-                EventType.ENCRYPTION        -> encryptionItemFactory.create(event)
+                EventType.ENCRYPTION        -> encryptionItemFactory.create(event, callback)
                 EventType.ENCRYPTED         -> encryptedItemFactory.create(event, nextEvent, callback)
 
                 // Unhandled event types (yet)
