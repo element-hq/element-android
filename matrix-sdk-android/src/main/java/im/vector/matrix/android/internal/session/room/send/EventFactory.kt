@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.internal.di.MoshiProvider
 
+// TODO Remove
 internal class EventFactory(private val credentials: Credentials) {
 
     private val moshi = MoshiProvider.providesMoshi()
@@ -33,7 +34,7 @@ internal class EventFactory(private val credentials: Credentials) {
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
-                sender = credentials.userId,
+                senderId = credentials.userId,
                 eventId = dummyEventId(roomId),
                 type = EventType.MESSAGE,
                 content = toContent(content)

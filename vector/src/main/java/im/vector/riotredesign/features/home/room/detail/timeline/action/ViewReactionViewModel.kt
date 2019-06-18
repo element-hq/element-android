@@ -49,7 +49,7 @@ class ViewReactionViewModel(private val session: Session,
 
                 sum.sourceEvents.mapNotNull { room.getTimeLineEvent(it) }.forEach {
                     val localDate = it.root.localDateTime()
-                    results.add(ReactionInfo(it.root.eventId!!, sum.key, it.root.sender
+                    results.add(ReactionInfo(it.root.eventId!!, sum.key, it.root.senderId
                             ?: "", it.getDisambiguatedDisplayName(), timelineDateFormatter.formatMessageHour(localDate)))
                 }
             }

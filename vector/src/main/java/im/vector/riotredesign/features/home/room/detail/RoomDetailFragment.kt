@@ -223,7 +223,7 @@ class RoomDetailFragment :
                     //switch to expanded bar
                     composerLayout.composerRelatedMessageTitle.apply {
                         text = event.getDisambiguatedDisplayName()
-                        setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.sender)))
+                        setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
                     }
 
                     //TODO this is used at several places, find way to refactor?
@@ -255,7 +255,7 @@ class RoomDetailFragment :
                         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_reply))
                     }
 
-                    AvatarRenderer.render(event.senderAvatar, event.root.sender
+                    AvatarRenderer.render(event.senderAvatar, event.root.senderId
                             ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
                     composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)

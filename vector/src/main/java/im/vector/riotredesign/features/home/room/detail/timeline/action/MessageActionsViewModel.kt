@@ -90,7 +90,7 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
                     }
                 }
                 MessageActionState(
-                        userId = event.root.sender ?: "",
+                        userId = event.root.senderId ?: "",
                         senderName = parcel.informationData.memberName?.toString() ?: "",
                         messageBody = body,
                         ts = dateFormat.format(Date(originTs ?: 0)),

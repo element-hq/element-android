@@ -257,7 +257,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
         try {
             return Event(eventId = data["event_id"],
-                    sender = data["sender"],
+                    senderId = data["sender"],
                     roomId = data["room_id"],
                     type = data.getValue("type"),
                     // TODO content = data.getValue("content"),

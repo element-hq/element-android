@@ -53,7 +53,7 @@ class MessageInformationDataFactory(private val timelineDateFormatter: TimelineD
         val avatarUrl = event.senderAvatar
         val memberName = event.getDisambiguatedDisplayName()
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.sender
+            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId
                     ?: ""))
         }
 
@@ -61,7 +61,7 @@ class MessageInformationDataFactory(private val timelineDateFormatter: TimelineD
 
         return MessageInformationData(
                 eventId = eventId,
-                senderId = event.root.sender ?: "",
+                senderId = event.root.senderId ?: "",
                 sendState = event.sendState,
                 time = time,
                 avatarUrl = avatarUrl,

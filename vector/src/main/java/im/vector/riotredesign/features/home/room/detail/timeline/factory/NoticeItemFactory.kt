@@ -32,7 +32,7 @@ class NoticeItemFactory(private val eventFormatter: NoticeEventFormatter) {
         val formattedText = eventFormatter.format(event) ?: return null
         val informationData = MessageInformationData(
                 eventId = event.root.eventId ?: "?",
-                senderId = event.root.sender ?: "",
+                senderId = event.root.senderId ?: "",
                 sendState = event.sendState,
                 avatarUrl = event.senderAvatar(),
                 memberName = event.senderName(),

@@ -227,7 +227,7 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
                     sum.count = 1
                     sum.sourceEvents.add(reactionEventId)
                 }
-                sum.addedByMe = sum.addedByMe || (userId == event.sender)
+                sum.addedByMe = sum.addedByMe || (userId == event.senderId)
                 eventSummary.reactionsSummary.add(sum)
             } else {
                 //is this a known event (is possible? pagination?)
@@ -249,7 +249,7 @@ internal class DefaultEventRelationsAggregationTask(private val monarchy: Monarc
                             sum.sourceEvents.add(reactionEventId)
                         }
 
-                        sum.addedByMe = sum.addedByMe || (userId == event.sender)
+                        sum.addedByMe = sum.addedByMe || (userId == event.senderId)
                     }
 
                 }

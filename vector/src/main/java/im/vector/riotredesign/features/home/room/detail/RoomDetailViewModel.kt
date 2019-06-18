@@ -429,7 +429,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private fun observeInvitationState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
-                summary.lastMessage?.sender?.let { senderId ->
+                summary.lastMessage?.senderId?.let { senderId ->
                     session.getUser(senderId)
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }
