@@ -282,7 +282,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
         _nonBlockingPopAlert.postValue(LiveEvent(
                 Pair(R.string.last_edited_info_message, listOf(
-                        lastReplace.senderName ?: "?",
+                        lastReplace.getDisambiguatedDisplayName(),
                         dateFormat.format(Date(lastReplace.root.originServerTs ?: 0)))
                 ))
         )

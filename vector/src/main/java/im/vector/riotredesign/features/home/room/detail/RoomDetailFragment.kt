@@ -222,7 +222,7 @@ class RoomDetailFragment :
                     }
                     //switch to expanded bar
                     composerLayout.composerRelatedMessageTitle.apply {
-                        text = event.senderName
+                        text = event.getDisambiguatedDisplayName()
                         setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.sender)))
                     }
 

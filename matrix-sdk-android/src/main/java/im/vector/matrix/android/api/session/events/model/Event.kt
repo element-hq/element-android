@@ -71,6 +71,7 @@ data class Event(
         @Json(name = "content") val content: Content? = null,
         @Json(name = "prev_content") val prevContent: Content? = null,
         @Json(name = "origin_server_ts") val originServerTs: Long? = null,
+        // MatrixId of the sender (TODO rename)
         @Json(name = "sender") val sender: String? = null,
         @Json(name = "state_key") val stateKey: String? = null,
         @Json(name = "room_id") val roomId: String? = null,
