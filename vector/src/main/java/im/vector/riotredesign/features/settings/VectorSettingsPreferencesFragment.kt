@@ -696,6 +696,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         findPreference(PreferencesManager.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            // See https://developers.google.com/android/guides/opensource
             startActivity(Intent(requireActivity(), OssLicensesMenuActivity::class.java))
             false
         }
