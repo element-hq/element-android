@@ -29,6 +29,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.factory.*
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotredesign.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import im.vector.riotredesign.features.home.room.list.RoomSummaryController
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import org.koin.core.parameter.parametersOf
@@ -69,15 +70,22 @@ class HomeModule {
             val eventHtmlRenderer = EventHtmlRenderer(GlideApp.with(fragment), fragment.requireContext(), get())
             val noticeEventFormatter = get<NoticeEventFormatter>(parameters = { parametersOf(fragment) })
             val timelineMediaSizeProvider = TimelineMediaSizeProvider()
-            val messageItemFactory = MessageItemFactory(colorProvider, timelineMediaSizeProvider,
-                    timelineDateFormatter, eventHtmlRenderer, get(), get())
+            val messageInformationDataFactory = MessageInformationDataFactory(timelineDateFormatter, colorProvider)
+            val messageItemFactory = MessageItemFactory(colorProvider,
+                    timelineMediaSizeProvider,
+                    eventHtmlRenderer,
+                    get(),
+                    messageInformationDataFactory,
+                    get())
+
+            val encryptedItemFactory = EncryptedItemFactory(messageInformationDataFactory, colorProvider, get())
 
             val timelineItemFactory = TimelineItemFactory(
                     messageItemFactory = messageItemFactory,
                     noticeItemFactory = NoticeItemFactory(noticeEventFormatter),
                     defaultItemFactory = DefaultItemFactory(),
                     encryptionItemFactory = EncryptionItemFactory(get()),
-                    encryptedItemFactory = EncryptedItemFactory(get())
+                    encryptedItemFactory = encryptedItemFactory
             )
             TimelineEventController(timelineDateFormatter, timelineItemFactory, timelineMediaSizeProvider)
         }

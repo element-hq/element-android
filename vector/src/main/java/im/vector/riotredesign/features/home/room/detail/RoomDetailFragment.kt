@@ -542,6 +542,10 @@ class RoomDetailFragment :
         roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event))
     }
 
+    override fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View) {
+        vectorBaseActivity.notImplemented("encrypted message click")
+    }
+
     override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {
         val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
         startActivity(intent)
@@ -576,7 +580,7 @@ class RoomDetailFragment :
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        vectorBaseActivity.notImplemented()
+        vectorBaseActivity.notImplemented("Click on user avatar")
     }
 
     @SuppressLint("SetTextI18n")

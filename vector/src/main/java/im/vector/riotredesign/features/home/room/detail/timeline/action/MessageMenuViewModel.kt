@@ -123,7 +123,11 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
 
                 this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, JSONObject(event.root.toContent()).toString(4)))
                 if (event.isEncrypted()) {
-                    this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, parcel.eventId))
+                    val decryptedContent = event.root.mClearEvent?.toContent()?.let {
+                        JSONObject(it).toString(4)
+                    } ?: viewModelContext.activity.getString(R.string.encryption_information_decryption_error)
+
+                    this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, decryptedContent))
                 }
                 this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, parcel.eventId))
 
