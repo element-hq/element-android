@@ -39,9 +39,11 @@ import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
+import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
+import im.vector.riotredesign.push.fcm.FcmHelper
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
@@ -52,7 +54,7 @@ import im.vector.riotredesign.features.workers.signout.SignOutViewModel
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
-    // Supported navigation actions for this Activity
+    // Supported navigation domainActions for this Activity
     sealed class Navigation {
         object OpenDrawer : Navigation()
     }
@@ -60,6 +62,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
     private val homeNavigator by inject<HomeNavigator>()
+    private val pushManager by inject<PushersManager>()
 
     // TODO Move this elsewhere
     private val incomingVerificationRequestHandler by inject<IncomingVerificationRequestHandler>()
@@ -80,6 +83,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         super.onCreate(savedInstanceState)
         bindScope(getOrCreateScope(HomeModule.HOME_SCOPE))
         homeNavigator.activity = this
+        FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager)
 
         navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
 

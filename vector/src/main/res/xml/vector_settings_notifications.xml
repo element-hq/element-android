@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        android:key="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+        android:title="@string/settings_enable_all_notif" />
+
+    <SwitchPreference
+        android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+        android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+        android:title="@string/settings_enable_this_device" />
+
+    <!--<im.vector.riotredesign.core.preference.VectorSwitchPreference-->
+    <!--android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"-->
+    <!--android:key="SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY"-->
+    <!--android:title="@string/settings_turn_screen_on" />-->
+
+    <!--<Preference-->
+    <!--android:dialogTitle="@string/settings_notification_privacy"-->
+    <!--android:key="SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY"-->
+    <!--android:title="@string/settings_notification_privacy" />-->
+
+    <Preference
+        android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+        android:key="SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
+        android:persistent="false"
+        android:summary="@string/settings_notification_advanced_summary"
+        android:title="@string/settings_notification_advanced"
+        app:fragment="im.vector.fragments.VectorSettingsNotificationsAdvancedFragment" />
+
+    <Preference
+        android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
+        android:title="@string/settings_notification_troubleshoot"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
+
+    <PreferenceCategory android:title="@string/settings_expert">
+
+        <Preference
+            android:layout_width="match_parent"
+            android:title="@string/settings_push_gateways"
+            app:fragment="im.vector.riotredesign.features.settings.push.PushGatewaysFragment" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

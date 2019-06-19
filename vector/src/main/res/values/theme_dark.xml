@@ -28,10 +28,13 @@
         <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_dark</item>
         <item name="riotx_fab_label_color">@color/riotx_fab_label_color_dark</item>
         <item name="riotx_touch_guard_bg">@color/riotx_touch_guard_bg_dark</item>
+
         <item name="riotx_keys_backup_banner_accent_color">@color/riotx_keys_backup_banner_accent_color_dark</item>
 
         <!-- Drawables -->
         <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_dark</item>
+
+        <item name="android:listDivider">@color/riotx_header_panel_border_mobile_dark</item>
 
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/riotx_accent</item>

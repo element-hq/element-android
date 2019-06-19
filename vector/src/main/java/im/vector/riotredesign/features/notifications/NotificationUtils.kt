@@ -64,7 +64,7 @@ object NotificationUtils {
     const val NOTIFICATION_ID_FOREGROUND_SERVICE = 61
 
     /* ==========================================================================================
-     * IDs for actions
+     * IDs for domainActions
      * ========================================================================================== */
 
     private const val JOIN_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.JOIN_ACTION"
@@ -180,7 +180,7 @@ object NotificationUtils {
      * @return the polling thread listener notification
      */
     @SuppressLint("NewApi")
-    fun buildForegroundServiceNotification(context: Context, @StringRes subTitleResId: Int): Notification {
+    fun buildForegroundServiceNotification(context: Context, @StringRes subTitleResId: Int, withProgress: Boolean = true): Notification {
         // build the pending intent go to the home screen if this is clicked.
         val i = Intent(context, HomeActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -190,16 +190,21 @@ object NotificationUtils {
 
         val builder = NotificationCompat.Builder(context, LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(context.getString(subTitleResId))
-                .setCategory(NotificationCompat.CATEGORY_PROGRESS)
-                .setSmallIcon(R.drawable.logo_transparent)
-                .setProgress(0, 0, true)
+                .setSmallIcon(R.drawable.sync)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .setColor(accentColor)
                 .setContentIntent(pi)
+                .apply {
+                    if (withProgress) {
+                        setProgress(0, 0, true)
+                    }
+                }
 
-        // hide the notification from the status bar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder.priority = NotificationCompat.PRIORITY_MIN
-        }
+        // PRIORITY_MIN should not be used with Service#startForeground(int, Notification)
+        builder.priority = NotificationCompat.PRIORITY_LOW
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            builder.priority = NotificationCompat.PRIORITY_MIN
+//        }
 
         val notification = builder.build()
 
@@ -220,7 +225,7 @@ object NotificationUtils {
                                 PendingIntent::class.java)
                 deprecatedMethod.invoke(notification, context, context.getString(R.string.app_name), context.getString(subTitleResId), pi)
             } catch (ex: Exception) {
-                Timber.e(ex, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.message)
+                Timber.e(ex, "## buildNotification(): Exception - setLatestEventInfo() Msg=")
             }
 
         }
@@ -421,7 +426,7 @@ object NotificationUtils {
                         priority = NotificationCompat.PRIORITY_LOW
                     }
 
-                    //Add actions and notification intents
+                    //Add domainActions and notification intents
                     // Mark room as read
                     val markRoomReadIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                     markRoomReadIntent.action = MARK_ROOM_READ_ACTION

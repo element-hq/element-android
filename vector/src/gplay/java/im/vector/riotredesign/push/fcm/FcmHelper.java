@@ -23,16 +23,15 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import im.vector.riotredesign.R;
+import im.vector.riotredesign.core.pushers.PushersManager;
 import timber.log.Timber;
 
 /**
@@ -66,6 +65,7 @@ public class FcmHelper {
                 .edit()
                 .putString(PREFS_KEY_FCM_TOKEN, token)
                 .apply();
+
     }
 
     /**
@@ -73,8 +73,8 @@ public class FcmHelper {
      *
      * @param activity the first launch Activity
      */
-    public static void ensureFcmTokenIsRetrieved(final Activity activity) {
-        if (TextUtils.isEmpty(getFcmToken(activity))) {
+    public static void ensureFcmTokenIsRetrieved(final Activity activity, PushersManager pushersManager) {
+//        if (TextUtils.isEmpty(getFcmToken(activity))) {
 
 
             //vfe: according to firebase doc
@@ -82,18 +82,11 @@ public class FcmHelper {
             if (checkPlayServices(activity)) {
                 try {
                     FirebaseInstanceId.getInstance().getInstanceId()
-                            .addOnSuccessListener(activity, new OnSuccessListener<InstanceIdResult>() {
-                                @Override
-                                public void onSuccess(InstanceIdResult instanceIdResult) {
-                                    storeFcmToken(activity, instanceIdResult.getToken());
-                                }
+                            .addOnSuccessListener(activity, instanceIdResult -> {
+                                storeFcmToken(activity, instanceIdResult.getToken());
+                                pushersManager.registerPusherWithFcmKey(instanceIdResult.getToken());
                             })
-                            .addOnFailureListener(activity, new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed " + e.getMessage());
-                                }
-                            });
+                            .addOnFailureListener(activity, e -> Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed " + e.getMessage()));
                 } catch (Throwable e) {
                     Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed " + e.getMessage());
                 }
@@ -101,7 +94,7 @@ public class FcmHelper {
                 Toast.makeText(activity, R.string.no_valid_google_play_services_apk, Toast.LENGTH_SHORT).show();
                 Timber.e("No valid Google Play Services found. Cannot use FCM.");
             }
-        }
+//        }
     }
 
     /**

@@ -19,11 +19,13 @@ package im.vector.matrix.android.api.session
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
@@ -43,7 +45,9 @@ interface Session :
         CryptoService,
         CacheService,
         SignOutService,
-        FilterService {
+        FilterService,
+        PushRuleService,
+        PushersService {
 
     /**
      * The params associated to the session
@@ -56,17 +60,35 @@ interface Session :
     @MainThread
     fun open()
 
-    /**
-     * This method start the sync thread.
-     */
-    @MainThread
-    fun startSync()
+//    /**
+//     * This method start the sync thread.
+//     */
+//    @MainThread
+//    fun startSync()
+//
+//
+//    fun isSyncThreadAlice() : Boolean
+//    fun syncThreadState() : String
+//
+////    fun pauseSync()
+////    fun resumeSync()
+//
+//    fun shoudPauseOnBackground(shouldPause: Boolean)
 
     /**
-     * This method stop the sync thread.
+     * Configures the sync long pooling options
+     * @param timoutMS The maximum time to wait, in milliseconds, before returning the sync request.
+     * If no events (or other data) become available before this time elapses, the server will return a response with empty fields.
+     * If set to 0 the server will return immediately even if the response is empty.
+     * @param delayMs When the server responds to a sync request, the client waits for `longPoolDelay` before calling a new sync.
      */
-    @MainThread
-    fun stopSync()
+//    fun configureSyncLongPooling(timoutMS : Long, delayMs : Long )
+
+//    /**
+//     * This method stop the sync thread.
+//     */
+//    @MainThread
+//    fun stopSync()
 
     /**
      * This method allows to listen the sync state.

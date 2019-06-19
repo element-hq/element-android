@@ -22,13 +22,19 @@ package im.vector.riotredesign.push.fcm
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.work.*
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.preference.BingRule
+import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.features.badge.BadgeProxy
 import im.vector.riotredesign.features.notifications.NotifiableEventResolver
 import im.vector.riotredesign.features.notifications.NotifiableMessageEvent
@@ -36,13 +42,15 @@ import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.notifications.SimpleNotifiableEvent
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * Class extending FirebaseMessagingService.
  */
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
-    val notificationDrawerManager by inject<NotificationDrawerManager>()
+    private val notificationDrawerManager by inject<NotificationDrawerManager>()
+    private val pusherManager by inject<PushersManager>()
 
     private val notifiableEventResolver by lazy {
         NotifiableEventResolver(this)
@@ -67,18 +75,14 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             Timber.i("## onMessageReceived()" + message.data.toString())
             Timber.i("## onMessageReceived() from FCM with priority " + message.priority)
         }
-
-        //safe guard
-        /* TODO
-        val pushManager = Matrix.getInstance(applicationContext).pushManager
-        if (!pushManager.areDeviceNotificationsAllowed()) {
-            Timber.i("## onMessageReceived() : the notifications are disabled")
-            return
+        mUIHandler.post {
+            if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                //we are in foreground, let the sync do the things?
+                Timber.v("PUSH received in a foreground state, ignore")
+            } else {
+                onMessageReceivedInternal(message.data)
+            }
         }
-        */
-
-        //TODO if the app is in foreground, we could just ignore this. The sync loop is already going?
-        // TODO mUIHandler.post { onMessageReceivedInternal(message.data, pushManager) }
     }
 
     /**
@@ -90,9 +94,22 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(refreshedToken: String?) {
         Timber.i("onNewToken: FCM Token has been updated")
         FcmHelper.storeFcmToken(this, refreshedToken)
-        // TODO Matrix.getInstance(this)?.pushManager?.resetFCMRegistration(refreshedToken)
+        if (refreshedToken == null) {
+            Timber.w("onNewToken:received null token")
+        } else {
+            pusherManager.registerPusherWithFcmKey(refreshedToken)
+        }
     }
 
+    /**
+     * Called when the FCM server deletes pending messages. This may be due to:
+     *      - Too many messages stored on the FCM server.
+     *          This can occur when an app's servers send a bunch of non-collapsible messages to FCM servers while the device is offline.
+     *      - The device hasn't connected in a long time and the app server has recently (within the last 4 weeks)
+     *          sent a message to the app on that device.
+     *
+     *  It is recommended that the app do a full sync with the app server after receiving this call.
+     */
     override fun onDeletedMessages() {
         Timber.v("## onDeletedMessages()")
     }
@@ -103,30 +120,52 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param data Data map containing message data as key/value pairs.
      * For Set of keys use data.keySet().
      */
-    private fun onMessageReceivedInternal(data: Map<String, String> /*, pushManager: PushManager*/) {
+    private fun onMessageReceivedInternal(data: Map<String, String>) {
         try {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
                 Timber.i("## onMessageReceivedInternal() : $data")
+            }
+            val eventId = data["event_id"]
+            val roomId = data["room_id"]
+            if (eventId == null || roomId == null) {
+                Timber.e("## onMessageReceivedInternal() missing eventId and/or roomId")
+                return
             }
             // update the badge counter
             val unreadCount = data.get("unread")?.let { Integer.parseInt(it) } ?: 0
             BadgeProxy.updateBadgeCount(applicationContext, unreadCount)
 
-            /* TODO
-            val session = Matrix.getInstance(applicationContext)?.defaultSession
+            val session = safeGetCurrentSession()
 
-            if (VectorApp.isAppInBackground() && !pushManager.isBackgroundSyncAllowed) {
-                //Notification contains metadata and maybe data information
-                handleNotificationWithoutSyncingMode(data, session)
+            if (session == null) {
+                Timber.w("## Can't sync from push, no current session")
             } else {
-                // Safe guard... (race?)
-                if (isEventAlreadyKnown(data["event_id"], data["room_id"])) return
-                //Catch up!!
-                EventStreamServiceX.onPushReceived(this)
+                if (isEventAlreadyKnown(eventId, roomId)) {
+                    Timber.i("Ignoring push, event already knwown")
+                } else {
+                    Timber.v("Requesting background sync")
+                    val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+                            .setInputData(Data.Builder().put("timeout", 0L).build())
+                            .setConstraints(Constraints.Builder()
+                                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                                    .build())
+                            .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000, TimeUnit.MILLISECONDS)
+                            .build()
+                    WorkManager.getInstance().enqueueUniqueWork("BG_SYNCP", ExistingWorkPolicy.REPLACE, workRequest)
+                }
             }
-            */
+
         } catch (e: Exception) {
             Timber.e(e, "## onMessageReceivedInternal() failed : " + e.message)
+        }
+    }
+
+    fun safeGetCurrentSession(): Session? {
+        try {
+            return Matrix.getInstance().currentSession
+        } catch (e: Throwable) {
+            Timber.e(e, "## Failed to get current session")
+            return null
         }
     }
 
@@ -135,21 +174,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private fun isEventAlreadyKnown(eventId: String?, roomId: String?): Boolean {
         if (null != eventId && null != roomId) {
             try {
-                /* TODO
-                val sessions = Matrix.getInstance(applicationContext).sessions
-
-                if (null != sessions && !sessions.isEmpty()) {
-                    for (session in sessions) {
-                        if (session.dataHandler?.store?.isReady == true) {
-                            session.dataHandler.store?.getEvent(eventId, roomId)?.let {
-                                Timber.e("## isEventAlreadyKnown() : ignore the event " + eventId
-                                        + " in room " + roomId + " because it is already known")
-                                return true
-                            }
-                        }
-                    }
-                }
-                */
+                val session = safeGetCurrentSession() ?: return false
+                val room = session.getRoom(roomId) ?: return false
+                return room.getTimeLineEvent(eventId) != null
             } catch (e: Exception) {
                 Timber.e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined " + e.message)
             }
@@ -199,7 +226,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 return
             } else {
 
-                var notifiableEvent = notifiableEventResolver.resolveEvent(event, null, null /* TODO session.fulfillRule(event) */, session)
+                var notifiableEvent = notifiableEventResolver.resolveEvent(event, null /* TODO session.fulfillRule(event) */, session)
 
                 if (notifiableEvent == null) {
                     Timber.e("Unsupported notifiable event ${eventId}")
@@ -211,7 +238,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
                     if (notifiableEvent is NotifiableMessageEvent) {
                         if (TextUtils.isEmpty(notifiableEvent.senderName)) {
-                            notifiableEvent.senderName = data["sender_display_name"] ?: data["sender"] ?: ""
+                            notifiableEvent.senderName = data["sender_display_name"]
+                                    ?: data["sender"] ?: ""
                         }
                         if (TextUtils.isEmpty(notifiableEvent.roomName)) {
                             notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""

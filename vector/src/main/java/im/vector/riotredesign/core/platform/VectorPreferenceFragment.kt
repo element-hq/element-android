@@ -28,6 +28,8 @@ abstract class VectorPreferenceFragment : PreferenceFragmentCompat() {
         activity as VectorBaseActivity
     }
 
+    abstract var titleRes: Int
+
     /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
@@ -36,6 +38,7 @@ abstract class VectorPreferenceFragment : PreferenceFragmentCompat() {
     override fun onResume() {
         super.onResume()
 
+        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(titleRes)
         Timber.v("onResume Fragment ${this.javaClass.simpleName}")
     }
 

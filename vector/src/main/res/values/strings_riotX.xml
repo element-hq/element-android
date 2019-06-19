@@ -11,4 +11,12 @@
     <string name="navigate_to_room_when_already_in_the_room">You are already viewing this room!</string>
 
     <string name="quick_reactions">Quick Reactions</string>
+
+    <!-- Settings -->
+    <string name="settings_general_title">General</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_security_and_privacy">Security &amp; Privacy</string>
+    <string name="settings_expert">Expert</string>
+    <string name="settings_push_gateways">Push Gateways</string>
+
 </resources>

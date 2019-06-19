@@ -33,6 +33,8 @@
         <!-- Drawables -->
         <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_light</item>
 
+        <item name="android:listDivider">@color/riotx_header_panel_border_mobile_light</item>
+
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/riotx_accent</item>
         <!--item name="colorPrimaryVariant">@color/primary_color_dark_light</item-->

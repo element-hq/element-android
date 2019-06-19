@@ -19,8 +19,11 @@ package im.vector.matrix.android.internal.session
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.pushrules.PushRuleService
+import im.vector.matrix.android.api.pushrules.PushRulesProvider
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
@@ -34,6 +37,14 @@ import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
 import im.vector.matrix.android.internal.session.filter.*
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
+import im.vector.matrix.android.internal.session.notification.BingRuleWatcher
+import im.vector.matrix.android.internal.session.notification.MockPushRuleProvider
+import im.vector.matrix.android.internal.session.notification.PushRulesManager
+import im.vector.matrix.android.internal.session.pushers.*
+import im.vector.matrix.android.internal.session.pushers.DefaultGetPusherTask
+import im.vector.matrix.android.internal.session.pushers.DefaultPusherService
+import im.vector.matrix.android.internal.session.pushers.GetPushersTask
+import im.vector.matrix.android.internal.session.pushers.PushersAPI
 import im.vector.matrix.android.internal.session.room.*
 import im.vector.matrix.android.internal.session.room.directory.DefaultGetPublicRoomTask
 import im.vector.matrix.android.internal.session.room.directory.DefaultGetThirdPartyProtocolsTask
@@ -164,6 +175,21 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
+            MockPushRuleProvider() as PushRulesProvider
+        }
+
+        scope(DefaultSession.SCOPE) {
+            get<PushRulesManager>() as PushRuleService
+        }
+        scope(DefaultSession.SCOPE) {
+            PushRulesManager(get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            BingRuleWatcher(get(), get(), get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
             val groupSummaryUpdater = GroupSummaryUpdater(get())
             val userEntityUpdater = UserEntityUpdater(get(), get(), get())
             val aggregationUpdater = EventRelationsAggregationUpdater(get(), get(), get(), get())
@@ -172,6 +198,16 @@ internal class SessionModule(private val sessionParams: SessionParams) {
             listOf<LiveEntityObserver>(groupSummaryUpdater, userEntityUpdater, aggregationUpdater, eventsPruner)
         }
 
+        scope(DefaultSession.SCOPE) {
+            get<Retrofit>().create(PushersAPI::class.java)
+        }
+        scope(DefaultSession.SCOPE) {
+            DefaultGetPusherTask(get()) as GetPushersTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultPusherService(get(), get(), get(), get()) as PushersService
+        }
 
     }
 

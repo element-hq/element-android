@@ -42,7 +42,7 @@ class NotificationDrawerManager(val context: Context) {
     private var firstTime = true
 
     private var eventList = loadEventInfo()
-    private var myUserDisplayName: String = ""
+    private var myUserDisplayName: String = "Todo"
     private var myUserAvatarUrl: String = ""
 
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
@@ -185,7 +185,8 @@ class NotificationDrawerManager(val context: Context) {
 
         if (myUserDisplayName.isBlank()) {
             // Should not happen, but myUserDisplayName cannot be blank if used to create a Person
-            return
+            //TODO
+//            return
         }
 
         synchronized(eventList) {

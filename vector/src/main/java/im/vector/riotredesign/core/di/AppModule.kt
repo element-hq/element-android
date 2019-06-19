@@ -21,6 +21,8 @@ import android.content.Context.MODE_PRIVATE
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.core.error.ErrorFormatter
+import im.vector.riotredesign.core.pushers.PushersManager
+import im.vector.riotredesign.core.resources.AppNameProvider
 import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringArrayProvider
 import im.vector.riotredesign.core.resources.StringProvider
@@ -33,7 +35,9 @@ import im.vector.riotredesign.features.home.room.list.AlphabeticalRoomComparator
 import im.vector.riotredesign.features.home.room.list.ChronologicalRoomComparator
 import im.vector.riotredesign.features.navigation.DefaultNavigator
 import im.vector.riotredesign.features.navigation.Navigator
+import im.vector.riotredesign.features.notifications.NotifiableEventResolver
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
+import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import org.koin.dsl.module.module
 
 class AppModule(private val context: Context) {
@@ -81,7 +85,15 @@ class AppModule(private val context: Context) {
         }
 
         single {
+            PushRuleTriggerListener(get(),get())
+        }
+
+        single {
             NotificationDrawerManager(context)
+        }
+
+        single {
+            NotifiableEventResolver(context)
         }
 
         factory {
@@ -102,6 +114,14 @@ class AppModule(private val context: Context) {
 
         single {
             EmojiCompatFontProvider()
+        }
+
+        single {
+            AppNameProvider(context)
+        }
+
+        single {
+            PushersManager(get(), get(), get(), get())
         }
     }
 }

@@ -16,9 +16,16 @@
 package im.vector.riotredesign.features.notifications
 
 import android.content.Context
+import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.riotredesign.R
 import im.vector.riotredesign.core.preference.BingRule
+import timber.log.Timber
 
 // TODO Remove
 class RoomState {
@@ -36,128 +43,128 @@ class NotifiableEventResolver(val context: Context) {
 
     //private val eventDisplay = RiotEventDisplay(context)
 
-    fun resolveEvent(event: Event, roomState: RoomState?, bingRule: BingRule?, session: Session): NotifiableEvent? {
-        // TODO
-        return null
-        /*
-        val store = session.dataHandler.store
-        if (store == null) {
-            Log.e("## NotifiableEventResolver, unable to get store")
-            //TODO notify somehow that something did fail?
-            return null
-        }
+    fun resolveEvent(event: Event/*, roomState: RoomState?*/, bingRule: PushRule?, session: Session): NotifiableEvent? {
+
+
+//        val store = session.dataHandler.store
+//        if (store == null) {
+//            Log.e("## NotifiableEventResolver, unable to get store")
+//            //TODO notify somehow that something did fail?
+//            return null
+//        }
 
         when (event.getClearType()) {
-            EventType.MESSAGE -> {
-                return resolveMessageEvent(event, bingRule, session, store)
+            EventType.MESSAGE           -> {
+                return resolveMessageEvent(event, bingRule, session)
             }
-            EventType.ENCRYPTED -> {
-                val messageEvent = resolveMessageEvent(event, bingRule, session, store)
-                messageEvent?.lockScreenVisibility = NotificationCompat.VISIBILITY_PRIVATE
-                return messageEvent
-            }
-            EventType.STATE_ROOM_MEMBER -> {
-                return resolveStateRoomEvent(event, bingRule, session, store)
-            }
+//            EventType.ENCRYPTED         -> {
+//                val messageEvent = resolveMessageEvent(event, bingRule, session, store)
+//                messageEvent?.lockScreenVisibility = NotificationCompat.VISIBILITY_PRIVATE
+//                return messageEvent
+//            }
+//            EventType.STATE_ROOM_MEMBER -> {
+//                return resolveStateRoomEvent(event, bingRule, session, store)
+//            }
             else -> {
 
                 //If the event can be displayed, display it as is
-                eventDisplay.getTextualDisplay(event, roomState)?.toString()?.let { body ->
-                    return SimpleNotifiableEvent(
-                            session.myUserId,
-                            eventId = event.eventId,
-                            noisy = bingRule?.notificationSound != null,
-                            timestamp = event.originServerTs,
-                            description = body,
-                            soundName = bingRule?.notificationSound,
-                            title = context.getString(R.string.notification_unknown_new_event),
-                            type = event.getClearType())
-                }
+//                eventDisplay.getTextualDisplay(event, roomState)?.toString()?.let { body ->
+//                    return SimpleNotifiableEvent(
+//                            session.myUserId,
+//                            eventId = event.eventId,
+//                            noisy = bingRule?.notificationSound != null,
+//                            timestamp = event.originServerTs,
+//                            description = body,
+//                            soundName = bingRule?.notificationSound,
+//                            title = context.getString(R.string.notification_unknown_new_event),
+//                            type = event.type)
+//                }
 
                 //Unsupported event
                 Timber.w("NotifiableEventResolver Received an unsupported event matching a bing rule")
                 return null
             }
         }
-        */
     }
 
-    /*
-    private fun resolveMessageEvent(event: Event, bingRule: BingRule?, session: MXSession, store: IMXStore): NotifiableEvent? {
+
+    private fun resolveMessageEvent(event: Event, pushRule: PushRule?, session: Session): NotifiableEvent? {
         //If we are here, that means that the event should be notified to the user, we check now how it should be presented (sound)
-        val soundName = bingRule?.notificationSound
-        val noisy = bingRule?.notificationSound != null
+//        val soundName = pushRule?.notificationSound
+
+        val noisy =  true//pushRule?.notificationSound != null
 
         //The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
-        val room = store.getRoom(event.roomId /*roomID cannot be null (see Matrix SDK code)*/)
+        val room = session.getRoom(event.roomId!! /*roomID cannot be null (see Matrix SDK code)*/)
+
 
         if (room == null) {
             Timber.e("## Unable to resolve room for eventId [${event.eventId}] and roomID [${event.roomId}]")
             // Ok room is not known in store, but we can still display something
-            val body = eventDisplay.getTextualDisplay(event, null)?.toString()
+            val body = event.content?.toModel<MessageContent>()?.body
                     ?: context.getString(R.string.notification_unknown_new_event)
             val roomName = context.getString(R.string.notification_unknown_room_name)
-            val senderDisplayName = event.sender ?: ""
+            val senderDisplayName = event.senderId ?: ""
 
             val notifiableEvent = NotifiableMessageEvent(
-                    eventId = event.eventId,
-                    timestamp = event.originServerTs,
+                    eventId = event.eventId ?: "",
+                    timestamp = event.originServerTs ?: 0,
                     noisy = noisy,
                     senderName = senderDisplayName,
-                    senderId = event.sender,
+                    senderId = event.senderId,
                     body = body,
-                    roomId = event.roomId,
+                    roomId = event.roomId ?: "",
                     roomName = roomName)
 
-            notifiableEvent.matrixID = session.myUserId
-            notifiableEvent.soundName = soundName
+            notifiableEvent.matrixID = session.sessionParams.credentials.userId
+//            notifiableEvent.soundName = soundName
 
             return notifiableEvent
         } else {
-
-            val body = eventDisplay.getTextualDisplay(event, room.state)?.toString()
+            val tEvent = room.getTimeLineEvent(event.eventId!!)
+            val body = event.content?.toModel<MessageContent>()?.body
                     ?: context.getString(R.string.notification_unknown_new_event)
-            val roomName = room.getRoomDisplayName(context)
-            val senderDisplayName = room.state.getMemberName(event.sender) ?: event.sender ?: ""
+            val roomName = event.roomId ?: "room"
+            val senderDisplayName = tEvent?.senderName ?: "?"
 
             val notifiableEvent = NotifiableMessageEvent(
-                    eventId = event.eventId,
-                    timestamp = event.originServerTs,
+                    eventId = event.eventId!!,
+                    timestamp = event.originServerTs ?: 0,
                     noisy = noisy,
                     senderName = senderDisplayName,
-                    senderId = event.sender,
+                    senderId = event.senderId,
                     body = body,
-                    roomId = event.roomId,
+                    roomId = event.roomId ?: "00",
                     roomName = roomName,
-                    roomIsDirect = room.isDirect)
+                    roomIsDirect = true)
 
-            notifiableEvent.matrixID = session.myUserId
-            notifiableEvent.soundName = soundName
+            notifiableEvent.matrixID = session.sessionParams.credentials.userId
+            notifiableEvent.soundName = null
 
 
-            val roomAvatarPath = session.mediaCache?.thumbnailCacheFile(room.avatarUrl, 50)
-            if (roomAvatarPath != null) {
-                notifiableEvent.roomAvatarPath = roomAvatarPath.path
-            } else {
-                // prepare for the next time
-                session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), room.avatarUrl, 50)
-            }
-
-            room.state.getMember(event.sender)?.avatarUrl?.let {
-                val size = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
-                val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, size)
-                if (userAvatarUrlPath != null) {
-                    notifiableEvent.senderAvatarPath = userAvatarUrlPath.path
-                } else {
-                    // prepare for the next time
-                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), it, size)
-                }
-            }
+//            val roomAvatarPath = session.mediaCache?.thumbnailCacheFile(room.avatarUrl, 50)
+//            if (roomAvatarPath != null) {
+//                notifiableEvent.roomAvatarPath = roomAvatarPath.path
+//            } else {
+//                // prepare for the next time
+//                session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), room.avatarUrl, 50)
+//            }
+//
+//            room.state.getMember(event.sender)?.avatarUrl?.let {
+//                val size = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
+//                val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, size)
+//                if (userAvatarUrlPath != null) {
+//                    notifiableEvent.senderAvatarPath = userAvatarUrlPath.path
+//                } else {
+//                    // prepare for the next time
+//                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), it, size)
+//                }
+//            }
 
             return notifiableEvent
         }
     }
-
+    /*
     private fun resolveStateRoomEvent(event: Event, bingRule: BingRule?, session: MXSession, store: IMXStore): NotifiableEvent? {
         if (RoomMember.MEMBERSHIP_INVITE == event.contentAsJsonObject?.getAsJsonPrimitive("membership")?.asString) {
             val room = store.getRoom(event.roomId /*roomID cannot be null (see Matrix SDK code)*/)

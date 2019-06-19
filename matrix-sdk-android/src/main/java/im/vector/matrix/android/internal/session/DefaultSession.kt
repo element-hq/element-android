@@ -24,6 +24,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.listeners.ProgressListener
+import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
@@ -36,6 +37,8 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.pushers.Pusher
+import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
@@ -65,6 +68,7 @@ import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
 import im.vector.matrix.android.internal.session.content.ContentModule
 import im.vector.matrix.android.internal.session.group.GroupModule
+import im.vector.matrix.android.internal.session.notification.BingRuleWatcher
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.signout.SignOutModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
@@ -73,6 +77,7 @@ import im.vector.matrix.android.internal.session.user.UserModule
 import org.koin.core.scope.Scope
 import org.koin.standalone.inject
 import timber.log.Timber
+import java.util.*
 
 
 internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent {
@@ -96,7 +101,11 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val syncThread by inject<SyncThread>()
     private val contentUrlResolver by inject<ContentUrlResolver>()
     private val contentUploadProgressTracker by inject<ContentUploadStateTracker>()
+    private val pushRuleService by inject<PushRuleService>()
+    private val pushersService by inject<PushersService>()
     private var isOpen = false
+
+    private val bingRuleWatcher by inject<BingRuleWatcher>()
 
     @MainThread
     override fun open() {
@@ -124,19 +133,48 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
             monarchy.openManually()
         }
         liveEntityUpdaters.forEach { it.start() }
+        bingRuleWatcher.start()
     }
 
-    @MainThread
-    override fun startSync() {
-        assert(isOpen)
-        syncThread.start()
-    }
+//    @MainThread
+//    override fun startSync() {
+//        assert(isOpen)
+//        if (!syncThread.isAlive) {
+//            syncThread.start()
+//        } else {
+//            syncThread.restart()
+//            Timber.w("Attempt to start an already started thread")
+//        }
+//    }
+//
+//    override fun isSyncThreadAlice(): Boolean = syncThread.isAlive
+//
+//    override fun syncThreadState(): String = syncThread.getSyncState()
+//
+//    override fun shoudPauseOnBackground(shouldPause: Boolean) {
+//        //TODO check if using push or not (should pause if we use push)
+//        syncThread.shouldPauseOnBackground = shouldPause
+//    }
 
-    @MainThread
-    override fun stopSync() {
-        assert(isOpen)
-        syncThread.kill()
-    }
+//    override fun resumeSync() {
+//        assert(isOpen)
+//        syncThread.restart()
+//    }
+//
+//    override fun pauseSync() {
+//        assert(isOpen)
+//        syncThread.pause()
+//    }
+
+//    override fun configureSyncLongPooling(timoutMS: Long, delayMs: Long) {
+//        syncThread.configureLongPoolingSettings(timoutMS, delayMs)
+//    }
+//
+//    @MainThread
+//    override fun stopSync() {
+//        assert(isOpen)
+//        syncThread.kill()
+//    }
 
     @MainThread
     override fun close() {
@@ -144,6 +182,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         assert(isOpen)
         liveEntityUpdaters.forEach { it.dispose() }
         cryptoService.close()
+        bingRuleWatcher.dispose()
         if (monarchy.isMonarchyThreadOpen) {
             monarchy.closeManually()
         }
@@ -160,8 +199,8 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         Timber.w("SIGN_OUT: start")
 
         assert(isOpen)
-        Timber.w("SIGN_OUT: kill sync thread")
-        syncThread.kill()
+        //Timber.w("SIGN_OUT: kill sync thread")
+        //syncThread.kill()
 
         Timber.w("SIGN_OUT: call webservice")
         return signOutService.signOut(object : MatrixCallback<Unit> {
@@ -261,11 +300,11 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     override fun clearCache(callback: MatrixCallback<Unit>) {
         assert(isOpen)
-        syncThread.pause()
+        // syncThread.pause()
         cacheService.clearCache(object : MatrixCallbackDelegate<Unit>(callback) {
             override fun onSuccess(data: Unit) {
                 // Restart the sync
-                syncThread.restart()
+                //  syncThread.restart()
 
                 super.onSuccess(data)
             }
@@ -426,12 +465,46 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         cryptoService.clearCryptoCache(callback)
     }
 
+    // PUSH RULE SERVICE
+
+    override fun addPushRuleListener(listener: PushRuleService.PushRuleListener) {
+        pushRuleService.addPushRuleListener(listener)
+    }
+
+    override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {
+        pushRuleService.removePushRuleListener(listener)
+    }
+
     // Private methods *****************************************************************************
 
     private fun assertMainThread() {
         if (Looper.getMainLooper().thread !== Thread.currentThread()) {
             throw IllegalStateException("This method can only be called on the main thread!")
         }
+    }
+
+    override fun refreshPushers() {
+        pushersService.refreshPushers()
+    }
+
+    override fun addHttpPusher(
+            pushkey: String,
+            appId: String,
+            profileTag: String,
+            lang: String,
+            appDisplayName: String,
+            deviceDisplayName: String,
+            url: String,
+            append: Boolean,
+            withEventIdOnly: Boolean): UUID {
+        return pushersService
+                .addHttpPusher(
+                        pushkey, appId, profileTag, lang, appDisplayName, deviceDisplayName, url, append, withEventIdOnly
+                )
+    }
+
+    override fun livePushers(): LiveData<List<Pusher>> {
+        return pushersService.livePushers()
     }
 
 }

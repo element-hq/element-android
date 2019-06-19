@@ -38,8 +38,8 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInf
 import kotlinx.android.synthetic.main.bottom_sheet_message_actions.*
 
 /**
- * Bottom sheet fragment that shows a message preview with list of contextual actions
- * (Includes fragments for quick reactions and list of actions)
+ * Bottom sheet fragment that shows a message preview with list of contextual domainActions
+ * (Includes fragments for quick reactions and list of domainActions)
  */
 class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
 

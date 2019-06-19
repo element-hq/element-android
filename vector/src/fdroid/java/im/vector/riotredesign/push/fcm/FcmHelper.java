@@ -50,7 +50,7 @@ public class FcmHelper {
      *
      * @param activity the first launch Activity
      */
-    public static void ensureFcmTokenIsRetrieved(final Activity activity) {
+    public static void ensureFcmTokenIsRetrieved(final Activity activity, PushersManager pushersManager) {
         // No op
     }
 }
