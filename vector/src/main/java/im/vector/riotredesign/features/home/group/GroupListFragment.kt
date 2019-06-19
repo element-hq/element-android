@@ -16,12 +16,14 @@
 
 package im.vector.riotredesign.features.home.group
 
+import android.content.Context
 import android.os.Bundle
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
@@ -44,6 +46,10 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
     @Inject lateinit var groupController: GroupSummaryController
 
     override fun getLayoutResId() = R.layout.fragment_group_list
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

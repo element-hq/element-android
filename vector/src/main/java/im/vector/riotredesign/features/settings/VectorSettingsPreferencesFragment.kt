@@ -64,17 +64,18 @@ import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     // members
-    private val mSession by inject<Session>()
+    @Inject lateinit var session: Session
+    @Inject lateinit var vectorConfiguration: VectorConfiguration
 
     // disable some updates if there is
     // TODO private val mNetworkListener = IMXNetworkEventListener { refreshDisplay() }
@@ -111,7 +112,6 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     // used to avoid requesting to enter the password for each deletion
     private var mAccountPassword: String = ""
 
-    private val vectorConfiguration by inject<VectorConfiguration>()
 
     // current publicised group list
     private var mPublicisedGroups: MutableSet<String>? = null
@@ -272,7 +272,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         // Avatar
         mUserAvatarPreference.let {
-            it.setSession(mSession)
+            it.setSession(session)
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 onUpdateAvatarClick()
                 false
@@ -479,7 +479,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         val cryptoIsEnabledPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
 
 
-        if (mSession.isCryptoEnabled()) {
+        if (session.isCryptoEnabled()) {
             mLabsCategory.removePreference(useCryptoPref)
 
             cryptoIsEnabledPref.isEnabled = false
@@ -489,7 +489,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             useCryptoPref.isChecked = false
 
             useCryptoPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValueAsVoid ->
-                if (TextUtils.isEmpty(mSession.sessionParams.credentials.deviceId)) {
+                if (TextUtils.isEmpty(session.sessionParams.credentials.deviceId)) {
                     activity?.let { activity ->
                         AlertDialog.Builder(activity)
                                 .setMessage(R.string.room_settings_labs_end_to_end_warnings)
@@ -508,7 +508,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 } else {
                     val newValue = newValueAsVoid as Boolean
 
-                    if (mSession.isCryptoEnabled() != newValue) {
+                    if (session.isCryptoEnabled() != newValue) {
                         notImplemented()
                         /* TODO
                         displayLoadingView()
@@ -575,15 +575,15 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         // user account
         findPreference(PreferencesManager.SETTINGS_LOGGED_IN_PREFERENCE_KEY)
-                .summary = mSession.sessionParams.credentials.userId
+                .summary = session.sessionParams.credentials.userId
 
         // home server
         findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
-                .summary = mSession.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
+                .summary = session.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
 
         // identity server
         findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
-                .summary = mSession.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
+                .summary = session.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
 
         // Analytics
 
@@ -641,7 +641,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         // olm version
         findPreference(PreferencesManager.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
-                .summary = mSession.getCryptoVersion(requireContext(), false)
+                .summary = session.getCryptoVersion(requireContext(), false)
 
         // copyright
         findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
@@ -2163,8 +2163,8 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
      * @param aMyDeviceInfo the device info
      */
     private fun refreshCryptographyPreference(aMyDeviceInfo: DeviceInfo?) {
-        val userId = mSession.sessionParams.credentials.userId
-        val deviceId = mSession.sessionParams.credentials.deviceId
+        val userId = session.sessionParams.credentials.userId
+        val deviceId = session.sessionParams.credentials.deviceId
 
         // device name
         if (null != aMyDeviceInfo) {
@@ -2195,7 +2195,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         // crypto section: device key (fingerprint)
         if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
-            val deviceInfo = mSession.getDeviceInfo(userId, deviceId)
+            val deviceInfo = session.getDeviceInfo(userId, deviceId)
 
             if (null != deviceInfo && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
                 cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
@@ -2211,10 +2211,10 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         sendToUnverifiedDevicesPref.isChecked = false
 
-        sendToUnverifiedDevicesPref.isChecked = mSession.getGlobalBlacklistUnverifiedDevices()
+        sendToUnverifiedDevicesPref.isChecked = session.getGlobalBlacklistUnverifiedDevices()
 
         sendToUnverifiedDevicesPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            mSession.setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked)
+            session.setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked)
 
             true
         }
@@ -2258,7 +2258,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
      * It can be any mobile device, as any browser.
      */
     private fun refreshDevicesList() {
-        if (mSession.isCryptoEnabled() && !TextUtils.isEmpty(mSession.sessionParams.credentials.deviceId)) {
+        if (session.isCryptoEnabled() && !TextUtils.isEmpty(session.sessionParams.credentials.deviceId)) {
             // display a spinner while loading the devices list
             if (0 == mDevicesListSettingsCategory.preferenceCount) {
                 activity?.let {
@@ -2267,7 +2267,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 }
             }
 
-            mSession.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+            session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
                 override fun onSuccess(data: DevicesListResponse) {
                     if (!isAdded) {
                         return
@@ -2306,7 +2306,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         var preference: VectorPreference
         var typeFaceHighlight: Int
         var isNewList = true
-        val myDeviceId = mSession.sessionParams.credentials.deviceId
+        val myDeviceId = session.sessionParams.credentials.deviceId
 
         if (aDeviceInfoList.size == mDevicesNameList.size) {
             isNewList = !mDevicesNameList.containsAll(aDeviceInfoList)
@@ -2412,7 +2412,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                     .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
             // disable the deletion for our own device
-            if (!TextUtils.equals(mSession.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
+            if (!TextUtils.equals(session.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> displayDeviceDeletionDialog(aDeviceInfo) }
             }
 
@@ -2449,7 +2449,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                         val newName = input.text.toString()
 
-                        mSession.setDeviceName(aDeviceInfoToRename.deviceId!!, newName, object : MatrixCallback<Unit> {
+                        session.setDeviceName(aDeviceInfoToRename.deviceId!!, newName, object : MatrixCallback<Unit> {
                             override fun onSuccess(data: Unit) {
                                 hideLoadingView()
 

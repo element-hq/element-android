@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import butterknife.BindView
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity.*
 import javax.inject.Inject
@@ -44,12 +45,10 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
     @BindView(R.id.waiting_view_status_horizontal_progress)
     lateinit var waitingHorizontalProgress: ProgressBar
 
-    @Inject
-    lateinit var session: Session
+    @Inject lateinit var session: Session
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        injector().inject(this)
-        super.onCreate(savedInstanceState)
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun initUiAndData() {

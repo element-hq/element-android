@@ -17,24 +17,30 @@
 package im.vector.riotredesign.features.roomdirectory.createroom
 
 import com.airbnb.mvrx.*
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomPreset
 import im.vector.riotredesign.core.platform.VectorViewModel
-import org.koin.android.ext.android.get
 
-class CreateRoomViewModel(initialState: CreateRoomViewState,
-                          private val session: Session) : VectorViewModel<CreateRoomViewState>(initialState) {
+class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
+                                                      private val session: Session
+) : VectorViewModel<CreateRoomViewState>(initialState) {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: CreateRoomViewState): CreateRoomViewModel
+    }
 
     companion object : MvRxViewModelFactory<CreateRoomViewModel, CreateRoomViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreateRoomViewState): CreateRoomViewModel? {
-            val currentSession = viewModelContext.activity.get<Session>()
-
-            return CreateRoomViewModel(state, currentSession)
+            val fragment: CreateRoomFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.createRoomViewModelFactory.create(state)
         }
     }
 

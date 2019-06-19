@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.replaceFragment
@@ -73,6 +74,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun getLayoutRes() = R.layout.activity_home
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeNavigator.activity = this
@@ -103,9 +108,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
             }
         }
-
-        incomingVerificationRequestHandler.ensureStarted()
-        keyRequestHandler.ensureStarted()
     }
 
     override fun onDestroy() {

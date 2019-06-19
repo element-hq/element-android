@@ -24,6 +24,7 @@ import butterknife.BindView
 import butterknife.OnClick
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.AvatarRenderer
 
@@ -48,6 +49,10 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
     override fun getLayoutResId() = R.layout.fragment_sas_verification_incoming_request
 
     private lateinit var viewModel: SasVerificationViewModel
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

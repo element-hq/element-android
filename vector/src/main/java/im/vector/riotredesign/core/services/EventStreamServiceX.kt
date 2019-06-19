@@ -30,6 +30,7 @@ import im.vector.riotredesign.features.notifications.NotifiableEventResolver
 import im.vector.riotredesign.features.notifications.NotificationUtils
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * A service in charge of controlling whether the event stream is running or not.
@@ -41,7 +42,7 @@ class EventStreamServiceX : VectorService() {
     /**
      * Managed session (no multi session for Riot)
      */
-    private val mSession by inject<Session>()
+    @Inject lateinit var session: Session
 
     /**
      * Set to true to simulate a push immediately when service is destroyed
@@ -135,6 +136,11 @@ class EventStreamServiceX : VectorService() {
         STARTED
     }
 
+    override fun onCreate() {
+        //setup injector
+        super.onCreate()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Cancel any previous worker
         cancelAnySimulatedPushSchedule()
@@ -168,7 +174,7 @@ class EventStreamServiceX : VectorService() {
             }
         }
 
-        if (null == mSession) {
+        if (null == session) {
             Timber.e("onStartCommand : no sessions")
             myStopSelf()
             return START_NOT_STICKY
@@ -334,7 +340,7 @@ class EventStreamServiceX : VectorService() {
         // TODO mPushManager = Matrix.getInstance(applicationContext)!!.pushManager
         mNotifiableEventResolver = NotifiableEventResolver(applicationContext)
 
-        monitorSession(mSession!!)
+        monitorSession(session!!)
 
         serviceState = if (forPush) {
             ServiceState.CATCHUP
@@ -387,7 +393,7 @@ class EventStreamServiceX : VectorService() {
         }
 
         if (canCatchup) {
-            if (mSession != null) {
+            if (session != null) {
                 // TODO session!!.catchupEventStream()
             } else {
                 Timber.i("catchup no session")

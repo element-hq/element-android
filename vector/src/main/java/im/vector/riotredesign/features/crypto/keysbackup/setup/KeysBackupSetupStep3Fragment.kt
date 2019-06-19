@@ -29,6 +29,7 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.files.addEntryToDownloadManager
 import im.vector.riotredesign.core.files.saveStringToFile
 import im.vector.riotredesign.core.platform.VectorBaseFragment
@@ -53,6 +54,10 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
     }
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -31,6 +31,7 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
+import im.vector.riotredesign.core.di.DaggerVectorComponent
 import im.vector.riotredesign.core.di.HasInjector
 import im.vector.riotredesign.core.di.VectorComponent
 import im.vector.riotredesign.features.configuration.VectorConfiguration
@@ -53,6 +54,8 @@ class VectorApplication : Application(), HasInjector<VectorComponent> {
     override fun onCreate() {
         super.onCreate()
         appContext = this
+        vectorComponent = DaggerVectorComponent.factory().create(this)
+        vectorComponent.inject(this)
         VectorUncaughtExceptionHandler.activate(this)
         // Log
         VectorFileLogger.init(this)

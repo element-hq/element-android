@@ -34,12 +34,12 @@ import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.BingRulePreference
 import im.vector.riotredesign.features.notifications.NotificationUtils
 import im.vector.riotredesign.features.notifications.supportNotificationChannels
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFragment() {
 
     // members
-    private val mSession by inject<Session>()
+    @Inject lateinit var session: Session
     private var mLoadingView: View? = null
 
     // events listener

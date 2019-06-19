@@ -23,9 +23,10 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_vector_settings.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 /**
  * Displays the client settings.
@@ -43,7 +44,11 @@ class VectorSettingsActivity : VectorBaseActivity(),
 
     private var keyToHighlight: String? = null
 
-    private val session by inject<Session>()
+    @Inject lateinit var session: Session
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun initUiAndData() {
         configureToolbar(settingsToolbar)

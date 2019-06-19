@@ -20,12 +20,15 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenScope
 import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.features.navigation.Navigator
 import kotlinx.android.synthetic.main.activity_home.*
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class HomeNavigator @Inject constructor() {
 
     var activity: HomeActivity? = null

@@ -44,8 +44,10 @@ import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.DaggerScreenComponent
 import im.vector.riotredesign.core.di.HasInjector
 import im.vector.riotredesign.core.di.ScreenComponent
+import im.vector.riotredesign.core.di.VectorComponent
 import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.rageshake.BugReportActivity
@@ -78,7 +80,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
      * ========================================================================================== */
 
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var vectorConfiguration: VectorConfiguration
     private lateinit var configurationViewModel: ConfigurationViewModel
 
     private var unBinder: Unbinder? = null
@@ -95,6 +96,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
     private lateinit var screenComponent: ScreenComponent
 
     override fun attachBaseContext(base: Context) {
+        val vectorConfiguration = VectorConfiguration(this)
         super.attachBaseContext(vectorConfiguration.getLocalisedContext(base))
     }
 
@@ -121,8 +123,10 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        screenComponent = DaggerScreenComponent.factory().create(getVectorComponent(), this)
         super.onCreate(savedInstanceState)
+        injectWith(screenComponent)
+        viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfigurationViewModel::class.java)
         configurationViewModel.activityRestarter.observe(this, Observer {
             if (!it.hasBeenHandled) {
@@ -219,9 +223,15 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
         return screenComponent
     }
 
+    protected open fun injectWith(injector: ScreenComponent) = Unit
+
     /* ==========================================================================================
      * PRIVATE METHODS
      * ========================================================================================== */
+
+    internal fun getVectorComponent(): VectorComponent {
+        return (application as HasInjector<VectorComponent>).injector()
+    }
 
     /**
      * Force to render the activity in fullscreen

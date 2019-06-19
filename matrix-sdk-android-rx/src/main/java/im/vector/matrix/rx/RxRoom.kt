@@ -17,6 +17,7 @@
 package im.vector.matrix.rx
 
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import io.reactivex.Observable
 
@@ -28,6 +29,10 @@ class RxRoom(private val room: Room) {
 
     fun liveRoomMemberIds(): Observable<List<String>> {
         return room.getRoomMemberIdsLive().asObservable()
+    }
+
+    fun liveAnnotationSummary(eventId: String): Observable<List<EventAnnotationsSummary>> {
+        return room.getEventSummaryLive(eventId).asObservable()
     }
 
 }

@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.LiveEvent
 
@@ -35,6 +36,10 @@ class KeysBackupRestoreSuccessFragment : VectorBaseFragment() {
 
 
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

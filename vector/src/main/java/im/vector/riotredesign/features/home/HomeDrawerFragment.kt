@@ -19,6 +19,7 @@ package im.vector.riotredesign.features.home
 import android.os.Bundle
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.observeK
 import im.vector.riotredesign.core.extensions.replaceChildFragment
 import im.vector.riotredesign.core.platform.VectorBaseFragment
@@ -38,6 +39,10 @@ class HomeDrawerFragment : VectorBaseFragment() {
     @Inject lateinit var session: Session
 
     override fun getLayoutResId() = R.layout.fragment_home_drawer
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

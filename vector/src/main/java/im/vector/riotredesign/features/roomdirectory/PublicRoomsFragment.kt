@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.widget.RxTextView
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
@@ -54,6 +55,10 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     override fun getLayoutResId() = R.layout.fragment_public_rooms
 
     override fun getMenuRes() = R.menu.menu_room_directory
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

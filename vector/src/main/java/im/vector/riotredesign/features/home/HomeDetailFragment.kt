@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.ui.views.KeysBackupBanner
@@ -72,6 +73,10 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
+    }
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

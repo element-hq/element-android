@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.core.platform
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -33,6 +34,7 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
+import im.vector.riotredesign.core.di.DaggerScreenComponent
 import im.vector.riotredesign.core.di.HasInjector
 import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.features.navigation.Navigator
@@ -55,10 +57,21 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed, HasInject
 
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
     protected lateinit var navigator: Navigator
+    private lateinit var screenComponent: ScreenComponent
 
     /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
+
+    override fun onAttach(context: Context) {
+        screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
+        super.onAttach(context)
+        navigator = vectorBaseActivity.getVectorComponent().navigator()
+        viewModelFactory = screenComponent.viewModelFactory()
+        injectWith(injector())
+    }
+
+    protected open fun injectWith(injector: ScreenComponent) = Unit
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +91,6 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed, HasInject
     @CallSuper
     override fun onResume() {
         super.onResume()
-
         Timber.v("onResume Fragment ${this.javaClass.simpleName}")
     }
 
@@ -101,7 +113,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed, HasInject
     }
 
     override fun injector(): ScreenComponent {
-        return vectorBaseActivity.injector()
+        return screenComponent
     }
 
     /* ==========================================================================================

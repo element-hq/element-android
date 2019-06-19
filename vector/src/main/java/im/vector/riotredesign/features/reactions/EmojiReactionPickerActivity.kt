@@ -30,9 +30,11 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
+import javax.inject.Inject
 
 /**
  *
@@ -54,7 +56,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
     override fun getTitleRes(): Int = R.string.title_activity_emoji_reaction_picker
 
-    lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
+    @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
 
     private var tabLayoutSelectionListener = object : TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
         override fun onTabReselected(p0: TabLayout.Tab) {
@@ -67,6 +69,10 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
             viewModel.scrollToSection(p0.position)
         }
 
+    }
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun initUiAndData() {

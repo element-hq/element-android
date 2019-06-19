@@ -37,7 +37,7 @@ import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.riotredesign.features.settings.troubleshoot.TroubleshootTest
 import im.vector.riotredesign.push.fcm.NotificationTroubleshootTestManagerFactory
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
@@ -54,7 +54,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     private var testManager: NotificationTroubleshootTestManager? = null
     // members
-    private val mSession by inject<Session>()
+    @Inject lateinit var session: Session
 
     override fun getLayoutResId() = R.layout.fragment_settings_notifications_troubleshoot
 
@@ -92,7 +92,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
         mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status,
                 0, 0)
 
-        testManager = NotificationTroubleshootTestManagerFactory.createTestManager(this, mSession)
+        testManager = NotificationTroubleshootTestManagerFactory.createTestManager(this, session)
 
         testManager?.statusListener = { troubleshootTestManager ->
             if (isAdded) {

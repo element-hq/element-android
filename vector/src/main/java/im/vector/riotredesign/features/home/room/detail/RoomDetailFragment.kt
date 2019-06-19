@@ -67,6 +67,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVideoConte
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.dialogs.DialogListItem
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.hideKeyboard
@@ -189,8 +190,11 @@ class RoomDetailFragment :
     @BindView(R.id.composerLayout)
     lateinit var composerLayout: TextComposerView
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        injector().inject(this)
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
         setupToolbar(roomToolbar)

@@ -21,7 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.injector
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity
@@ -40,9 +40,8 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
     @Inject lateinit var keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController
     private val viewModel: KeysBackupSettingsViewModel by activityViewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        injector().inject(this)
-        super.onCreate(savedInstanceState)
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

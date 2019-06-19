@@ -24,6 +24,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.setTextOrHide
 import im.vector.riotredesign.core.platform.ButtonStateView
@@ -49,8 +50,11 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
     private val roomPreviewData: RoomPreviewData by args()
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        injector().inject(this)
         super.onActivityCreated(savedInstanceState)
         setupToolbar(roomPreviewNoPreviewToolbar)
     }

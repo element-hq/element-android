@@ -20,13 +20,32 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
+import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
 import im.vector.riotredesign.core.platform.SimpleFragmentActivity
+import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyFragment
+import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreSuccessFragment
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
+import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupStep1Fragment
+import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupStep2Fragment
+import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupStep3Fragment
+import im.vector.riotredesign.features.crypto.verification.SASVerificationIncomingFragment
 import im.vector.riotredesign.features.home.HomeActivity
+import im.vector.riotredesign.features.home.HomeDetailFragment
+import im.vector.riotredesign.features.home.HomeDrawerFragment
 import im.vector.riotredesign.features.home.HomeModule
+import im.vector.riotredesign.features.home.group.GroupListFragment
 import im.vector.riotredesign.features.home.room.detail.RoomDetailFragment
+import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageActionsBottomSheet
+import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageMenuFragment
+import im.vector.riotredesign.features.home.room.detail.timeline.action.QuickReactionFragment
+import im.vector.riotredesign.features.home.room.detail.timeline.action.ViewReactionBottomSheet
+import im.vector.riotredesign.features.home.room.list.RoomListFragment
+import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
+import im.vector.riotredesign.features.roomdirectory.PublicRoomsFragment
+import im.vector.riotredesign.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
+import im.vector.riotredesign.features.settings.VectorSettingsActivity
 
 @Component(dependencies = [VectorComponent::class], modules = [ViewModelModule::class, HomeModule::class])
 @ScreenScope
@@ -40,11 +59,50 @@ interface ScreenComponent {
 
     fun inject(roomDetailFragment: RoomDetailFragment)
 
+    fun inject(roomListFragment: RoomListFragment)
+
+    fun inject(groupListFragment: GroupListFragment)
+
     fun inject(roomDirectoryPickerFragment: RoomDirectoryPickerFragment)
 
     fun inject(roomPreviewNoPreviewFragment: RoomPreviewNoPreviewFragment)
     
     fun inject(keysBackupSettingsFragment: KeysBackupSettingsFragment)
+
+    fun inject(homeDrawerFragment: HomeDrawerFragment)
+
+    fun inject(homeDetailFragment: HomeDetailFragment)
+
+    fun inject(messageActionsBottomSheet: MessageActionsBottomSheet)
+
+    fun inject(viewReactionBottomSheet: ViewReactionBottomSheet)
+
+    fun inject(messageMenuFragment: MessageMenuFragment)
+
+    fun inject(vectorSettingsActivity: VectorSettingsActivity)
+
+    fun inject(createRoomFragment: CreateRoomFragment)
+
+    fun inject(keysBackupRestoreFromKeyFragment: KeysBackupRestoreFromKeyFragment)
+
+    fun inject(keysBackupRestoreFromPassphraseFragment: KeysBackupRestoreFromPassphraseFragment)
+
+    fun inject(keysBackupRestoreSuccessFragment: KeysBackupRestoreSuccessFragment)
+
+    fun inject(keysBackupSetupStep1Fragment: KeysBackupSetupStep1Fragment)
+
+    fun inject(keysBackupSetupStep2Fragment: KeysBackupSetupStep2Fragment)
+
+    fun inject(keysBackupSetupStep3Fragment: KeysBackupSetupStep3Fragment)
+
+    fun inject(publicRoomsFragment: PublicRoomsFragment)
+
+    fun inject(sasVerificationIncomingFragment: SASVerificationIncomingFragment)
+
+    fun inject(quickReactionFragment: QuickReactionFragment)
+
+    fun inject(emojiReactionPickerActivity: EmojiReactionPickerActivity)
+
 
     @Component.Factory
     interface Factory {

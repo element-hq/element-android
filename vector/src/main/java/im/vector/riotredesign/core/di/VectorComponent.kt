@@ -22,9 +22,11 @@ import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotredesign.VectorApplication
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
+import im.vector.riotredesign.features.home.HomeNavigator
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.navigation.Navigator
@@ -49,6 +51,8 @@ interface VectorComponent {
 
     fun navigator(): Navigator
 
+    fun homeNavigator(): HomeNavigator
+
     fun homeRoomListObservableStore(): HomeRoomListObservableStore
 
     fun selectedGroupStore(): SelectedGroupStore
@@ -56,6 +60,8 @@ interface VectorComponent {
     fun incomingVerificationRequestHandler(): IncomingVerificationRequestHandler
 
     fun incomingKeyRequestHandler(): KeyRequestHandler
+
+    fun inject(vectorApplication: VectorApplication)
 
     @Component.Factory
     interface Factory {

@@ -28,6 +28,7 @@ import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.startImportTextFromFileIntent
 import timber.log.Timber
@@ -49,6 +50,10 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
     lateinit var mKeyInputLayout: TextInputLayout
     @BindView(R.id.keys_restore_key_enter_edittext)
     lateinit var mKeyTextEdit: EditText
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

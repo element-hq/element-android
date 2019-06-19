@@ -33,6 +33,7 @@ import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
@@ -64,6 +65,10 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
 
     companion object {
         fun newInstance() = KeysBackupRestoreFromPassphraseFragment()
+    }
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

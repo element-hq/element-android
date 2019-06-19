@@ -28,8 +28,9 @@ import im.vector.riotredesign.core.epoxy.loadingItem
 import im.vector.riotredesign.core.epoxy.noResultItem
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.StringProvider
+import javax.inject.Inject
 
-class PublicRoomsController(private val stringProvider: StringProvider,
+class PublicRoomsController @Inject constructor(private val stringProvider: StringProvider,
                             private val errorFormatter: ErrorFormatter) : TypedEpoxyController<PublicRoomsViewState>() {
 
     var callback: Callback? = null

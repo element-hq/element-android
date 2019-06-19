@@ -28,7 +28,9 @@ import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewActivity
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class DefaultNavigator @Inject constructor() : Navigator {
 
     override fun openRoom(roomId: String, context: Context) {

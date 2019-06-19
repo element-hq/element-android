@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.extensions.injector
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.SimpleFragmentActivity
 import im.vector.riotredesign.core.platform.WaitingViewData
 import javax.inject.Inject
@@ -43,9 +43,8 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
     private val viewModel: KeysBackupSettingsViewModel by viewModel()
     @Inject lateinit var keysBackupSettingsViewModelFactory: KeysBackupSettingsViewModel.Factory
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
-        super.onCreate(savedInstanceState)
     }
 
     override fun initUiAndData() {
