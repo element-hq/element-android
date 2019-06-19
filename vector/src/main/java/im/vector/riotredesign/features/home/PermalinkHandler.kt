@@ -16,41 +16,40 @@
 
 package im.vector.riotredesign.features.home
 
+import android.content.Context
 import android.net.Uri
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
+import im.vector.riotredesign.core.utils.openUrlInExternalBrowser
 import im.vector.riotredesign.features.navigation.Navigator
 
-class HomePermalinkHandler(private val homeNavigator: HomeNavigator,
-                           private val navigator: Navigator) {
+class PermalinkHandler(private val navigator: Navigator) {
 
-    fun launch(deepLink: String?) {
+    fun launch(context: Context, deepLink: String?) {
         val uri = deepLink?.let { Uri.parse(it) }
-        launch(uri)
+        launch(context, uri)
     }
 
-    fun launch(deepLink: Uri?) {
+    fun launch(context: Context, deepLink: Uri?) {
         if (deepLink == null) {
             return
         }
-        val permalinkData = PermalinkParser.parse(deepLink)
-        when (permalinkData) {
-            is PermalinkData.EventLink -> {
-                homeNavigator.openRoomDetail(permalinkData.roomIdOrAlias, permalinkData.eventId, navigator)
+        when (val permalinkData = PermalinkParser.parse(deepLink)) {
+            is PermalinkData.EventLink    -> {
+                navigator.openRoom(context, permalinkData.roomIdOrAlias, permalinkData.eventId)
             }
-            is PermalinkData.RoomLink -> {
-                homeNavigator.openRoomDetail(permalinkData.roomIdOrAlias, null, navigator)
+            is PermalinkData.RoomLink     -> {
+                navigator.openRoom(context, permalinkData.roomIdOrAlias)
             }
-            is PermalinkData.GroupLink -> {
-                homeNavigator.openGroupDetail(permalinkData.groupId)
+            is PermalinkData.GroupLink    -> {
+                navigator.openGroupDetail(permalinkData.groupId, context)
             }
-            is PermalinkData.UserLink -> {
-                homeNavigator.openUserDetail(permalinkData.userId)
+            is PermalinkData.UserLink     -> {
+                navigator.openUserDetail(permalinkData.userId, context)
             }
             is PermalinkData.FallbackLink -> {
-
+                openUrlInExternalBrowser(context, permalinkData.uri)
             }
         }
     }
-
 }

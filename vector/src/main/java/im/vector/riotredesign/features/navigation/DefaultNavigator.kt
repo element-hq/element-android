@@ -27,12 +27,13 @@ import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewActivity
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
+import timber.log.Timber
 
 class DefaultNavigator : Navigator {
 
 
-    override fun openRoom(roomId: String, context: Context) {
-        val args = RoomDetailArgs(roomId)
+    override fun openRoom(context: Context, roomId: String, eventId: String?) {
+        val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
         context.startActivity(intent)
     }
@@ -62,5 +63,13 @@ class DefaultNavigator : Navigator {
 
     override fun openKeysBackupManager(context: Context) {
         context.startActivity(KeysBackupManageActivity.intent(context))
+    }
+
+    override fun openGroupDetail(groupId: String, context: Context) {
+        Timber.v("Open group detail $groupId")
+    }
+
+    override fun openUserDetail(userId: String, context: Context) {
+        Timber.v("Open user detail $userId")
     }
 }

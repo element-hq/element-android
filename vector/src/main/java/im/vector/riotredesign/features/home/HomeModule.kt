@@ -51,7 +51,7 @@ class HomeModule {
         }
 
         scope(HOME_SCOPE) {
-            HomePermalinkHandler(get(), get())
+            PermalinkHandler(get())
         }
 
         // Fragment scopes

@@ -74,7 +74,7 @@ import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresent
 import im.vector.riotredesign.features.command.Command
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeModule
-import im.vector.riotredesign.features.home.HomePermalinkHandler
+import im.vector.riotredesign.features.home.PermalinkHandler
 import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerActions
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
@@ -167,7 +167,7 @@ class RoomDetailFragment :
     private val commandAutocompletePolicy = CommandAutocompletePolicy()
     private val autocompleteCommandPresenter: AutocompleteCommandPresenter by inject { parametersOf(this) }
     private val autocompleteUserPresenter: AutocompleteUserPresenter by inject { parametersOf(this) }
-    private val homePermalinkHandler: HomePermalinkHandler by inject()
+    private val permalinkHandler: PermalinkHandler by inject()
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
 
@@ -535,7 +535,8 @@ class RoomDetailFragment :
     // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String) {
-        homePermalinkHandler.launch(url)
+        // TODO Room can be the same
+        permalinkHandler.launch(requireActivity(), url)
     }
 
     override fun onEventVisible(event: TimelineEvent) {

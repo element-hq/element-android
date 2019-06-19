@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 
 interface Navigator {
 
-    fun openRoom(roomId: String, context: Context)
+    fun openRoom(context: Context, roomId: String, eventId: String? = null)
 
     fun openRoomPreview(publicRoom: PublicRoom, context: Context)
 
@@ -34,4 +34,8 @@ interface Navigator {
     fun openKeysBackupSetup(context: Context, showManualExport: Boolean)
 
     fun openKeysBackupManager(context: Context)
+
+    fun openGroupDetail(groupId: String, context: Context)
+
+    fun openUserDetail(userId: String, context: Context)
 }
