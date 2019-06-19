@@ -34,9 +34,10 @@ class HomeNavigator {
     fun openSelectedGroup(groupSummary: GroupSummary) {
         Timber.v("Open selected group ${groupSummary.groupId}")
         activity?.let {
+            it.drawerLayout?.closeDrawer(GravityCompat.START)
+
             val args = HomeDetailParams(groupSummary.groupId, groupSummary.displayName, groupSummary.avatarUrl)
             val homeDetailFragment = HomeDetailFragment.newInstance(args)
-            it.drawerLayout?.closeDrawer(GravityCompat.START)
             it.replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
         }
     }
@@ -47,7 +48,6 @@ class HomeNavigator {
         Timber.v("Open room detail $roomId - $eventId")
         activity?.let {
             //TODO enable eventId permalink. It doesn't work enough at the moment.
-            it.drawerLayout?.closeDrawer(GravityCompat.START)
             navigator.openRoom(roomId, it)
         }
     }
