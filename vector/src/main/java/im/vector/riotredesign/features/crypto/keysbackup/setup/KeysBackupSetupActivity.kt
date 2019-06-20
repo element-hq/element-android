@@ -174,8 +174,8 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             AlertDialog.Builder(this)
                     .setTitle(R.string.keys_backup_setup_skip_title)
                     .setMessage(R.string.keys_backup_setup_skip_msg)
-                    .setNegativeButton(R.string.stay, null)
-                    .setPositiveButton(R.string.abort) { _, _ ->
+                    .setNegativeButton(R.string.cancel, null)
+                    .setPositiveButton(R.string.leave) { _, _ ->
                         finish()
                     }
                     .show()
