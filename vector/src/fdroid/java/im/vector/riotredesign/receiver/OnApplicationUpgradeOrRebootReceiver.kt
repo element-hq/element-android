@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +15,18 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.receiver;
+package im.vector.riotredesign.receiver
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import im.vector.riotredesign.core.services.AlarmSyncBroadcastReceiver
+import timber.log.Timber
 
-import timber.log.Timber;
+class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
 
-public class OnApplicationUpgradeReceiver extends BroadcastReceiver {
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Timber.v("## onReceive() : Application has been upgraded, restart event stream service.");
-
-        // Start Event stream
-        // TODO EventStreamServiceX.Companion.onApplicationUpgrade(context);
+    override fun onReceive(context: Context, intent: Intent) {
+        Timber.v("## onReceive() ${intent.action}")
+        AlarmSyncBroadcastReceiver.scheduleAlarm(context, 10)
     }
 }

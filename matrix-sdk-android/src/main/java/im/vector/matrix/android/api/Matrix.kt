@@ -61,9 +61,7 @@ class Matrix private constructor(context: Context) : MatrixKoinComponent {
             currentSession = it
             it.open()
             it.setFilter(FilterService.FilterPreset.RiotFilter)
-            //TODO check if using push or not (should pause if we use push)
-//            it.shoudPauseOnBackground(false)
-//            it.startSync()
+            it.startSync()
         }
     }
 

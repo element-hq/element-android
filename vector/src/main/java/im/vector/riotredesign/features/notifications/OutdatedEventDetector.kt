@@ -16,6 +16,7 @@
 package im.vector.riotredesign.features.notifications
 
 import android.content.Context
+import im.vector.matrix.android.api.Matrix
 
 class OutdatedEventDetector(val context: Context) {
 
@@ -28,20 +29,9 @@ class OutdatedEventDetector(val context: Context) {
         if (notifiableEvent is NotifiableMessageEvent) {
             val eventID = notifiableEvent.eventId
             val roomID = notifiableEvent.roomId
-            /*
-            TODO
-            Matrix.getMXSession(context.applicationContext, notifiableEvent.matrixID)?.let { session ->
-                //find the room
-                if (session.isAlive) {
-                    session.dataHandler.getRoom(roomID)?.let { room ->
-                        if (room.isEventRead(eventID)) {
-                            Timber.v("Notifiable Event $eventID is read, and should be removed")
-                            return true
-                        }
-                    }
-                }
-            }
-            */
+            val session = Matrix.getInstance().currentSession ?: return false
+            val room = session.getRoom(roomID) ?: return false
+            return room.isEventRead(eventID)
         }
         return false
     }

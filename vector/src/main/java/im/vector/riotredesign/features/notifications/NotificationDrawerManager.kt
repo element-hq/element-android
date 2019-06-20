@@ -36,7 +36,7 @@ import java.io.FileOutputStream
  * organise them in order to display them in the notification drawer.
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
-class NotificationDrawerManager(val context: Context) {
+class NotificationDrawerManager(val context: Context, private val outdatedDetector: OutdatedEventDetector?) {
 
     //The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
@@ -53,7 +53,7 @@ class NotificationDrawerManager(val context: Context) {
             object : IconLoader.IconLoaderListener {
                 override fun onIconsLoaded() {
                     // Force refresh
-                    refreshNotificationDrawer(null)
+                    refreshNotificationDrawer()
                 }
             })
 
@@ -123,7 +123,7 @@ class NotificationDrawerManager(val context: Context) {
         synchronized(eventList) {
             eventList.clear()
         }
-        refreshNotificationDrawer(null)
+        refreshNotificationDrawer()
     }
 
     /** Clear all known message events for this room and refresh the notification drawer */
@@ -139,7 +139,7 @@ class NotificationDrawerManager(val context: Context) {
             }
             NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
         }
-        refreshNotificationDrawer(null)
+        refreshNotificationDrawer()
     }
 
     /**
@@ -177,7 +177,7 @@ class NotificationDrawerManager(val context: Context) {
     }
 
 
-    fun refreshNotificationDrawer(outdatedDetector: OutdatedEventDetector?) {
+    fun refreshNotificationDrawer() {
         if (myUserDisplayName.isBlank()) {
             // TODO
             // initWithSession(Matrix.getInstance(context).defaultSession)

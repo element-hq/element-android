@@ -38,4 +38,5 @@ interface ReadService {
      */
     fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>)
 
+    fun isEventRead(eventId: String): Boolean
 }

@@ -17,8 +17,6 @@ package im.vector.matrix.android.internal.session.sync.job
 
 import android.content.Context
 import androidx.work.*
-import arrow.core.failure
-import arrow.core.recoverWith
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
@@ -33,19 +31,19 @@ import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.util.WorkerParamsFactory
 import org.koin.standalone.inject
 import timber.log.Timber
-import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 
 private const val DEFAULT_LONG_POOL_TIMEOUT = 0L
 
-class SyncWorker(context: Context,
+internal class SyncWorker(context: Context,
                  workerParameters: WorkerParameters
 ) : CoroutineWorker(context, workerParameters), MatrixKoinComponent {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            val timeout: Long = DEFAULT_LONG_POOL_TIMEOUT
+            val timeout: Long = DEFAULT_LONG_POOL_TIMEOUT,
+            val automaticallyRetry: Boolean = false
     )
 
     private val syncAPI by inject<SyncAPI>()
@@ -54,7 +52,6 @@ class SyncWorker(context: Context,
     private val sessionParamsStore by inject<SessionParamsStore>()
     private val syncTokenStore by inject<SyncTokenStore>()
 
-    val autoMode = false
 
     override suspend fun doWork(): Result {
         Timber.i("Sync work starting")
@@ -69,51 +66,56 @@ class SyncWorker(context: Context,
 
         return executeRequest<SyncResponse> {
             apiCall = syncAPI.sync(requestParams)
-        }.recoverWith { throwable ->
-            // Intercept 401
-            if (throwable is Failure.ServerError
-                    && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
-                sessionParamsStore.delete()
-            }
-            Timber.i("Sync work failed $throwable")
-            // Transmit the throwable
-            throwable.failure()
         }.fold(
                 {
-                    Timber.i("Sync work failed $it")
-                    again()
-                    if (it is Failure.NetworkConnection && it.cause is SocketTimeoutException) {
-                        // Timeout are not critical
-                        Result.Success()
+                    if (it is Failure.ServerError
+                            && it.error.code == MatrixError.UNKNOWN_TOKEN) {
+                        sessionParamsStore.delete()
+                        Result.failure()
                     } else {
-                        Result.Success()
+                        Timber.i("Sync work failed $it")
+                        Result.retry()
                     }
                 },
                 {
                     Timber.i("Sync work success next batch ${it.nextBatch}")
-                    syncResponseHandler.handleResponse(it, token, false)
-                    syncTokenStore.saveToken(it.nextBatch)
-                    again()
-                    Result.success()
+                    if (!isStopped) {
+                        syncResponseHandler.handleResponse(it, token, false)
+                        syncTokenStore.saveToken(it.nextBatch)
+                    }
+                    if (params.automaticallyRetry) Result.retry() else Result.success()
                 }
         )
-
     }
 
-    fun again() {
-        if (autoMode) {
-            Timber.i("Sync work Again!!")
+    companion object {
+        fun requireBackgroundSync(serverTimeout: Long = 0) {
+            val data = WorkerParamsFactory.toData(Params(serverTimeout, false))
             val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
-                    .setInitialDelay(30_000, TimeUnit.MILLISECONDS)
+                    .setInputData(data)
                     .setConstraints(Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.CONNECTED)
                             .build())
-                    .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000, TimeUnit.MILLISECONDS)
+                    .setBackoffCriteria(BackoffPolicy.LINEAR, 1_000, TimeUnit.MILLISECONDS)
                     .build()
-            WorkManager.getInstance().enqueueUniqueWork("BG_SYNCP", ExistingWorkPolicy.APPEND, workRequest)
-
+            WorkManager.getInstance().enqueueUniqueWork("BG_SYNCP", ExistingWorkPolicy.REPLACE, workRequest)
         }
 
+        fun automaticallyBackgroundSync(serverTimeout: Long = 0, delay: Long = 30_000) {
+            val data = WorkerParamsFactory.toData(Params(serverTimeout, true))
+            val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+                    .setInputData(data)
+                    .setConstraints(Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build())
+                    .setBackoffCriteria(BackoffPolicy.LINEAR, delay, TimeUnit.MILLISECONDS)
+                    .build()
+            WorkManager.getInstance().enqueueUniqueWork("BG_SYNCP", ExistingWorkPolicy.REPLACE, workRequest)
+        }
+
+        fun stopAnyBackgroundSync() {
+            WorkManager.getInstance().cancelUniqueWork("BG_SYNCP")
+        }
     }
 
 }

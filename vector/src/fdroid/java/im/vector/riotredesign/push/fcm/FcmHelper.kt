@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotredesign.push.fcm;
+package im.vector.riotredesign.push.fcm
 
-import android.app.Activity;
-import android.content.Context;
+import android.app.Activity
+import android.content.Context
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import im.vector.riotredesign.core.pushers.PushersManager
 
-public class FcmHelper {
+object FcmHelper {
+
+    fun isPushSupported(): Boolean = false
 
     /**
      * Retrieves the FCM registration token.
      *
      * @return the FCM token or null if not received from FCM
      */
-    @Nullable
-    public static String getFcmToken(Context context) {
-        return null;
+    fun getFcmToken(context: Context): String? {
+        return null
     }
 
     /**
@@ -40,8 +40,7 @@ public class FcmHelper {
      * @param context android context
      * @param token   the token to store
      */
-    public static void storeFcmToken(@NonNull Context context,
-                                     @Nullable String token) {
+    fun storeFcmToken(context: Context, token: String?) {
         // No op
     }
 
@@ -50,7 +49,7 @@ public class FcmHelper {
      *
      * @param activity the first launch Activity
      */
-    public static void ensureFcmTokenIsRetrieved(final Activity activity, PushersManager pushersManager) {
+    fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager) {
         // No op
     }
 }

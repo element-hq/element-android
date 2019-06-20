@@ -73,6 +73,7 @@ import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.signout.SignOutModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
+import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.session.user.UserModule
 import org.koin.core.scope.Scope
 import org.koin.standalone.inject
@@ -136,45 +137,34 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         bingRuleWatcher.start()
     }
 
-//    @MainThread
-//    override fun startSync() {
-//        assert(isOpen)
-//        if (!syncThread.isAlive) {
-//            syncThread.start()
-//        } else {
-//            syncThread.restart()
-//            Timber.w("Attempt to start an already started thread")
-//        }
-//    }
-//
-//    override fun isSyncThreadAlice(): Boolean = syncThread.isAlive
-//
-//    override fun syncThreadState(): String = syncThread.getSyncState()
-//
-//    override fun shoudPauseOnBackground(shouldPause: Boolean) {
-//        //TODO check if using push or not (should pause if we use push)
-//        syncThread.shouldPauseOnBackground = shouldPause
-//    }
+    override fun requireBackgroundSync() {
+        SyncWorker.requireBackgroundSync()
+    }
 
-//    override fun resumeSync() {
-//        assert(isOpen)
-//        syncThread.restart()
-//    }
-//
-//    override fun pauseSync() {
-//        assert(isOpen)
-//        syncThread.pause()
-//    }
+    override fun startAutomaticBackgroundSync(repeatDelay: Long) {
+        SyncWorker.automaticallyBackgroundSync(0, repeatDelay)
+    }
 
-//    override fun configureSyncLongPooling(timoutMS: Long, delayMs: Long) {
-//        syncThread.configureLongPoolingSettings(timoutMS, delayMs)
-//    }
-//
-//    @MainThread
-//    override fun stopSync() {
-//        assert(isOpen)
-//        syncThread.kill()
-//    }
+    override fun stopAnyBackgroundSync() {
+        SyncWorker.stopAnyBackgroundSync()
+    }
+
+    @MainThread
+    override fun startSync() {
+        assert(isOpen)
+        if (!syncThread.isAlive) {
+            syncThread.start()
+        } else {
+            syncThread.restart()
+            Timber.w("Attempt to start an already started thread")
+        }
+    }
+
+    @MainThread
+    override fun stopSync() {
+        assert(isOpen)
+        syncThread.kill()
+    }
 
     @MainThread
     override fun close() {

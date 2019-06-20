@@ -15,12 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
         tools:replace="android:allowBackup">
-        <receiver
-            android:name=".core.services.RestartBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false">
-
-        </receiver>
 
         <activity
             android:name=".features.MainActivity"

@@ -34,7 +34,6 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
-import androidx.work.*
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.facebook.stetho.Stetho
@@ -43,9 +42,8 @@ import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.internal.session.sync.job.SyncService
-import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.riotredesign.core.di.AppModule
-import im.vector.riotredesign.core.services.RestartBroadcastReceiver
+import im.vector.riotredesign.core.services.AlarmSyncBroadcastReceiver
 import im.vector.riotredesign.core.services.VectorSyncService
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
@@ -57,6 +55,7 @@ import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import im.vector.riotredesign.features.version.getVersion
+import im.vector.riotredesign.push.fcm.FcmHelper
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.log.EmptyLogger
@@ -66,7 +65,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class VectorApplication : Application(), SyncService.SyncListener {
+class VectorApplication : Application() {
 
 
     lateinit var appContext: Context
@@ -74,26 +73,6 @@ class VectorApplication : Application(), SyncService.SyncListener {
     private var mFontThreadHandler: Handler? = null
 
     val vectorConfiguration: VectorConfiguration by inject()
-
-    private var mBinder: SyncService.LocalBinder? = null
-
-    private val connection = object : ServiceConnection {
-        override fun onServiceDisconnected(name: ComponentName?) {
-            Timber.v("Service unbounded")
-            mBinder?.removeListener(this@VectorApplication)
-            mBinder = null
-        }
-
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            Timber.v("Service bounded")
-            mBinder = service as SyncService.LocalBinder
-            mBinder?.addListener(this@VectorApplication)
-            mBinder?.getService()?.nextBatchDelay = 0
-            mBinder?.getService()?.timeout = 10_000L
-            mBinder?.getService()?.doSync()
-        }
-
-    }
 
 //    var slowMode = false
 
@@ -141,92 +120,26 @@ class VectorApplication : Application(), SyncService.SyncListener {
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
 
-            fun cancelAlarm() {
-                val intent = Intent(applicationContext, RestartBroadcastReceiver::class.java)
-                val pIntent = PendingIntent.getBroadcast(applicationContext, RestartBroadcastReceiver.REQUEST_CODE,
-                        intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                alarm.cancel(pIntent)
-            }
-
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
-                // HttpLongPoolingSyncService.startService(applicationContext)
-//                cancelAlarm()
-                if (Matrix.getInstance().currentSession == null) return
-                WorkManager.getInstance().cancelAllWorkByTag("BG_SYNC")
-                Intent(applicationContext, VectorSyncService::class.java).also { intent ->
-                    //                    intent.action = "NORMAL"
-//                    try {
-//                        startService(intent)
-//                    } catch (e: Throwable) {
-//                        Timber.e("Failed to launch sync service")
-//                    }
-                    bindService(intent, connection, Context.BIND_AUTO_CREATE)
-
+                AlarmSyncBroadcastReceiver.cancelAlarm(appContext)
+                Matrix.getInstance().currentSession?.also {
+                    it.stopAnyBackgroundSync()
                 }
             }
 
-            var isPushAvailable = true
             @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
             fun entersBackground() {
                 Timber.i("App entered background")
-                //we have here 3 modes
 
-                if (isPushAvailable) {
-                    // PUSH IS AVAILABLE:
-                    // Just stop the service, we will sync when a notification is received
-                    try {
-                        unbindService(connection)
-                        mBinder?.getService()?.stopMe()
-                        mBinder = null
-                    } catch (t: Throwable) {
-                        Timber.e(t)
-                    }
+                if (FcmHelper.isPushSupported()) {
+                    //TODO FCM fallback
                 } else {
-
-                    // NO PUSH, and don't care about battery
-//                unbindService(connection)
-//                mBinder?.getService()?.stopMe()// kill also
-//                mBinder = null
-                    //In this case we will keep a permanent
-
-                    //TODO if no push schedule reccuring alarm
-
-//                val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.MINUTES)
-//                        .setConstraints(Constraints.Builder()
-//                                .setRequiredNetworkType(NetworkType.CONNECTED)
-//                                .build())
-//                        .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000, TimeUnit.MILLISECONDS)
-//                        .build()
-//                WorkManager.getInstance().enqueueUniquePeriodicWork(
-//                        "BG_SYNC",
-//                        ExistingPeriodicWorkPolicy.KEEP,
-//                        workRequest)
-                    val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
-//                        .setInitialDelay(30_000, TimeUnit.MILLISECONDS)
-                            .setInputData(Data.Builder().put("timeout", 0L).build())
-                            .setConstraints(Constraints.Builder()
-                                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                                    .build())
-                            .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000, TimeUnit.MILLISECONDS)
-                            .build()
-                    WorkManager.getInstance().enqueueUniqueWork("BG_SYNCP", ExistingWorkPolicy.REPLACE, workRequest)
-
-//                val intent = Intent(applicationContext, RestartBroadcastReceiver::class.java)
-//                // Create a PendingIntent to be triggered when the alarm goes off
-//                val pIntent = PendingIntent.getBroadcast(applicationContext, RestartBroadcastReceiver.REQUEST_CODE,
-//                        intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                // Setup periodic alarm every every half hour from this point onwards
-//                val firstMillis = System.currentTimeMillis(); // alarm is set right away
-//                val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//                // First parameter is the type: ELAPSED_REALTIME, ELAPSED_REALTIME_WAKEUP, RTC_WAKEUP
-//                // Interval can be INTERVAL_FIFTEEN_MINUTES, INTERVAL_HALF_HOUR, INTERVAL_HOUR, INTERVAL_DAY
-////                alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
-////                        30_000L, pIntent)
-//                alarmMgr.set(AlarmManager.RTC_WAKEUP, firstMillis, pIntent);
-
+                    //TODO check if notifications are enabled for this device
+                    //We need to use alarm in this mode
+                    AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext,4_000L)
                     Timber.i("Alarm scheduled to restart service")
+
                 }
             }
 
@@ -271,38 +184,6 @@ class VectorApplication : Application(), SyncService.SyncListener {
             mFontThreadHandler = Handler(handlerThread.looper)
         }
         return mFontThreadHandler!!
-    }
-
-    override fun onSyncFinsh() {
-        //in foreground sync right now!!
-        Timber.v("Sync just finished")
-//        mBinder?.getService()?.doSync()
-    }
-
-    override fun networkNotAvailable() {
-        //we then want to retry in 10s?
-    }
-
-    override fun onFailed(failure: Throwable) {
-        //stop it also?
-//        if (failure is Failure.NetworkConnection
-//                && failure.cause is SocketTimeoutException) {
-//            // Timeout are not critical just retry?
-//            //TODO
-//        }
-//
-//        if (failure !is Failure.NetworkConnection
-//                || failure.cause is JsonEncodingException) {
-//            //TODO Retry in 10S?
-//        }
-//
-//        if (failure is Failure.ServerError
-//                && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
-//            // No token or invalid token, stop the thread
-//            mBinder?.getService()?.unbindService(connection)
-//            mBinder?.getService()?.stopMe()
-//        }
-
     }
 
 }

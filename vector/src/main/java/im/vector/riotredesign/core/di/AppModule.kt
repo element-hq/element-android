@@ -37,6 +37,7 @@ import im.vector.riotredesign.features.navigation.DefaultNavigator
 import im.vector.riotredesign.features.navigation.Navigator
 import im.vector.riotredesign.features.notifications.NotifiableEventResolver
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
+import im.vector.riotredesign.features.notifications.OutdatedEventDetector
 import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import org.koin.dsl.module.module
 
@@ -85,11 +86,15 @@ class AppModule(private val context: Context) {
         }
 
         single {
-            PushRuleTriggerListener(get(),get())
+            PushRuleTriggerListener(get(), get())
         }
 
         single {
-            NotificationDrawerManager(context)
+            OutdatedEventDetector(context)
+        }
+
+        single {
+            NotificationDrawerManager(context, get())
         }
 
         single {

@@ -72,7 +72,7 @@ open class SyncService : Service(), MatrixKoinComponent {
             if (cancelableTask == null) {
                 timer.cancel()
                 timer = Timer()
-                doSync()
+                doSync(true)
             } else {
                 //Already syncing ignore
                 Timber.i("Received a start while was already syncking... ignore")
@@ -101,7 +101,7 @@ open class SyncService : Service(), MatrixKoinComponent {
         stopSelf()
     }
 
-    fun doSync() {
+    fun doSync(once: Boolean = false) {
         var nextBatch = syncTokenStore.getLastToken()
         if (!networkConnectivityChecker.isConnected()) {
             Timber.v("Sync is Paused. Waiting...")
@@ -110,7 +110,7 @@ open class SyncService : Service(), MatrixKoinComponent {
                 override fun run() {
                     doSync()
                 }
-            }, 10_000L)
+            }, 5_000L)
         } else {
             Timber.v("Execute sync request with token $nextBatch and timeout $timeout")
             val params = SyncTask.Params(nextBatch, timeout)
@@ -123,11 +123,16 @@ open class SyncService : Service(), MatrixKoinComponent {
                             nextBatch = data.nextBatch
                             syncTokenStore.saveToken(nextBatch)
                             localBinder.notifySyncFinish()
-                            timer.schedule(object : TimerTask() {
-                                override fun run() {
-                                    doSync()
-                                }
-                            }, nextBatchDelay)
+                            if (!once) {
+                                timer.schedule(object : TimerTask() {
+                                    override fun run() {
+                                        doSync()
+                                    }
+                                }, nextBatchDelay)
+                            } else {
+                                //stop
+                                stopMe()
+                            }
                         }
 
                         override fun onFailure(failure: Throwable) {
@@ -141,7 +146,7 @@ open class SyncService : Service(), MatrixKoinComponent {
                                     override fun run() {
                                         doSync()
                                     }
-                                }, 10_000L)
+                                }, 5_000L)
                             }
 
                             if (failure !is Failure.NetworkConnection
@@ -151,7 +156,7 @@ open class SyncService : Service(), MatrixKoinComponent {
                                     override fun run() {
                                         doSync()
                                     }
-                                }, 10_000L)
+                                }, 5_000L)
                             }
 
                             if (failure is Failure.ServerError

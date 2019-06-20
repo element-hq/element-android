@@ -144,14 +144,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     Timber.i("Ignoring push, event already knwown")
                 } else {
                     Timber.v("Requesting background sync")
-                    val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
-                            .setInputData(Data.Builder().put("timeout", 0L).build())
-                            .setConstraints(Constraints.Builder()
-                                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                                    .build())
-                            .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000, TimeUnit.MILLISECONDS)
-                            .build()
-                    WorkManager.getInstance().enqueueUniqueWork("BG_SYNCP", ExistingWorkPolicy.REPLACE, workRequest)
+                    session.requireBackgroundSync(0L)
                 }
             }
 
@@ -214,7 +207,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     isPushGatewayEvent = true
             )
             notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent)
-            notificationDrawerManager.refreshNotificationDrawer(null)
+            notificationDrawerManager.refreshNotificationDrawer()
 
             return
         } else {
@@ -249,7 +242,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     notifiableEvent.isPushGatewayEvent = true
                     notifiableEvent.matrixID = session.sessionParams.credentials.userId
                     notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
-                    notificationDrawerManager.refreshNotificationDrawer(null)
+                    notificationDrawerManager.refreshNotificationDrawer()
                 }
             }
         }

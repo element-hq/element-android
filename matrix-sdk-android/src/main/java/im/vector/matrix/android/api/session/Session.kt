@@ -60,35 +60,31 @@ interface Session :
     @MainThread
     fun open()
 
-//    /**
-//     * This method start the sync thread.
-//     */
-//    @MainThread
-//    fun startSync()
-//
-//
-//    fun isSyncThreadAlice() : Boolean
-//    fun syncThreadState() : String
-//
-////    fun pauseSync()
-////    fun resumeSync()
-//
-//    fun shoudPauseOnBackground(shouldPause: Boolean)
+    /**
+     * Requires a one time background sync
+     */
+    fun requireBackgroundSync()
 
     /**
-     * Configures the sync long pooling options
-     * @param timoutMS The maximum time to wait, in milliseconds, before returning the sync request.
-     * If no events (or other data) become available before this time elapses, the server will return a response with empty fields.
-     * If set to 0 the server will return immediately even if the response is empty.
-     * @param delayMs When the server responds to a sync request, the client waits for `longPoolDelay` before calling a new sync.
+     * Launches infinite periodic background syncs
+     * THis does not work in doze mode :/
+     * If battery optimization is on it can work in app standby but that's all :/
      */
-//    fun configureSyncLongPooling(timoutMS : Long, delayMs : Long )
+    fun startAutomaticBackgroundSync(repeatDelay: Long = 30_000L)
 
-//    /**
-//     * This method stop the sync thread.
-//     */
-//    @MainThread
-//    fun stopSync()
+    fun stopAnyBackgroundSync()
+
+    /**
+     * This method start the sync thread.
+     */
+    @MainThread
+    fun startSync()
+
+    /**
+     * This method stop the sync thread.
+     */
+    @MainThread
+    fun stopSync()
 
     /**
      * This method allows to listen the sync state.

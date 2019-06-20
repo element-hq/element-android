@@ -76,9 +76,7 @@ class LoginActivity : VectorBaseActivity() {
                 Matrix.getInstance().currentSession = data
                 data.open()
                 data.setFilter(FilterService.FilterPreset.RiotFilter)
-                //TODO sync
-//                data.shoudPauseOnBackground(false)
-//                data.startSync()
+                data.startSync()
                 get<PushRuleTriggerListener>().startWithSession(data)
                 goToHome()
             }

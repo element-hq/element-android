@@ -40,11 +40,6 @@ private const val RETRY_WAIT_TIME_MS = 10_000L
 private const val DEFAULT_LONG_POOL_TIMEOUT = 10_000L
 private const val DEFAULT_LONG_POOL_DELAY = 0L
 
-
-private const val DEFAULT_BACKGROUND_LONG_POOL_TIMEOUT = 0L
-private const val DEFAULT_BACKGROUND_LONG_POOL_DELAY = 30_000L
-
-
 internal class SyncThread(private val syncTask: SyncTask,
                           private val networkConnectivityChecker: NetworkConnectivityChecker,
                           private val syncTokenStore: SyncTokenStore,
@@ -62,27 +57,6 @@ internal class SyncThread(private val syncTask: SyncTask,
         updateStateTo(SyncState.IDLE)
     }
 
-    /**
-     * The maximum time to wait, in milliseconds, before returning this request.
-     * If no events (or other data) become available before this time elapses, the server will return a response with empty fields.
-     * If set to 0 the server will return immediately even if the response is empty.
-     */
-    private var longPoolTimeoutMs = DEFAULT_LONG_POOL_TIMEOUT
-    /**
-     * When the server responds to a sync request, the client waits for `longPoolDelay` before calling a new sync.
-     */
-    private var longPoolDelayMs = DEFAULT_LONG_POOL_DELAY
-
-
-    var shouldPauseOnBackground: Boolean = true
-    private var backgroundedLongPoolTimeoutMs = DEFAULT_BACKGROUND_LONG_POOL_TIMEOUT
-    private var backgroundedLongPoolDelayMs = DEFAULT_BACKGROUND_LONG_POOL_DELAY
-
-
-    private var currentLongPoolTimeoutMs = longPoolTimeoutMs
-    private var currentLongPoolDelayMs = longPoolDelayMs
-
-
     fun restart() = synchronized(lock) {
         if (state is SyncState.PAUSED) {
             Timber.v("Resume sync...")
@@ -91,30 +65,6 @@ internal class SyncThread(private val syncTask: SyncTask,
             updateStateTo(SyncState.RUNNING(catchingUp = true))
             lock.notify()
         }
-    }
-
-    /**
-     * Configures the long pooling settings
-     */
-    fun configureLongPoolingSettings(timoutMS: Long, delayMs: Long) {
-        longPoolTimeoutMs = Math.max(0, timoutMS)
-        longPoolDelayMs = Math.max(0, delayMs)
-    }
-
-    /**
-     * Configures the long pooling settings in background mode (used only if should not pause on BG)
-     */
-    fun configureBackgroundeLongPoolingSettings(timoutMS: Long, delayMs: Long) {
-        backgroundedLongPoolTimeoutMs = Math.max(0, timoutMS)
-        backgroundedLongPoolDelayMs = Math.max(0, delayMs)
-    }
-
-
-    fun resetLongPoolingSettings() {
-        longPoolTimeoutMs = DEFAULT_LONG_POOL_TIMEOUT
-        longPoolDelayMs = DEFAULT_LONG_POOL_DELAY
-        backgroundedLongPoolTimeoutMs = DEFAULT_BACKGROUND_LONG_POOL_TIMEOUT
-        backgroundedLongPoolDelayMs = DEFAULT_BACKGROUND_LONG_POOL_DELAY
     }
 
     fun pause() = synchronized(lock) {
@@ -148,9 +98,9 @@ internal class SyncThread(private val syncTask: SyncTask,
                     lock.wait()
                 }
             } else {
-                Timber.v("Execute sync request with token $nextBatch and timeout $currentLongPoolTimeoutMs")
+                Timber.v("Execute sync request with token $nextBatch and timeout $DEFAULT_LONG_POOL_TIMEOUT")
                 val latch = CountDownLatch(1)
-                val params = SyncTask.Params(nextBatch, currentLongPoolTimeoutMs)
+                val params = SyncTask.Params(nextBatch, DEFAULT_LONG_POOL_TIMEOUT)
                 cancelableTask = syncTask.configureWith(params)
                         .callbackOn(TaskThread.CALLER)
                         .executeOn(TaskThread.CALLER)
@@ -193,8 +143,8 @@ internal class SyncThread(private val syncTask: SyncTask,
                     updateStateTo(SyncState.RUNNING(catchingUp = false))
                 }
 
-                Timber.v("Waiting for $currentLongPoolDelayMs delay before new pool...")
-                if (currentLongPoolDelayMs > 0) sleep(currentLongPoolDelayMs)
+                Timber.v("Waiting for $DEFAULT_LONG_POOL_DELAY delay before new pool...")
+                if (DEFAULT_LONG_POOL_DELAY > 0) sleep(DEFAULT_LONG_POOL_DELAY)
                 Timber.v("...Continue")
             }
         }
@@ -216,20 +166,11 @@ internal class SyncThread(private val syncTask: SyncTask,
     }
 
     override fun onMoveToForeground() {
-        currentLongPoolTimeoutMs = longPoolTimeoutMs
-        currentLongPoolDelayMs = longPoolDelayMs
         restart()
     }
 
     override fun onMoveToBackground() {
-        if (shouldPauseOnBackground) {
-            pause()
-        } else {
-            Timber.v("Slower sync in background mode")
-            //we continue but with a slower pace
-            currentLongPoolTimeoutMs = backgroundedLongPoolTimeoutMs
-            currentLongPoolDelayMs = backgroundedLongPoolDelayMs
-        }
+        pause()
     }
 
 }

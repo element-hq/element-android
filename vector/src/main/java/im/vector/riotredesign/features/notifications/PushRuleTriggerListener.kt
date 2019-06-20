@@ -26,7 +26,7 @@ class PushRuleTriggerListener(
     }
 
     override fun batchFinish() {
-        drawerManager.refreshNotificationDrawer(null)
+        drawerManager.refreshNotificationDrawer()
     }
 
     fun startWithSession(session: Session) {
@@ -41,6 +41,6 @@ class PushRuleTriggerListener(
         session?.removePushRuleListener(this)
         session = null
         drawerManager.clearAllEvents()
-        drawerManager.refreshNotificationDrawer(null)
+        drawerManager.refreshNotificationDrawer()
     }
 }
