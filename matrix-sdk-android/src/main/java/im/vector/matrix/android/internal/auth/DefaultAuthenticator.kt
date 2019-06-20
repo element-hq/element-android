@@ -37,7 +37,6 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import javax.inject.Inject
 
-@MatrixScope
 internal class DefaultAuthenticator @Inject constructor(private val retrofitBuilder: Retrofit.Builder,
                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                         private val sessionParamsStore: SessionParamsStore,

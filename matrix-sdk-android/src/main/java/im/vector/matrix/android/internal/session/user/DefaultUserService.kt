@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 
-@SessionScope
 internal class DefaultUserService @Inject constructor(private val monarchy: Monarchy) : UserService {
 
     override fun getUser(userId: String): User? {

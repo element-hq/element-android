@@ -32,7 +32,6 @@ internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoom
     )
 }
 
-@SessionScope
 internal class DefaultGetPublicRoomTask @Inject constructor(private val roomAPI: RoomAPI) : GetPublicRoomTask {
 
     override suspend fun execute(params: GetPublicRoomTask.Params): Try<PublicRoomsResponse> {

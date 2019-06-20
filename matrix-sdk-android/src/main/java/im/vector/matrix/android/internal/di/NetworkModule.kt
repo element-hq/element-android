@@ -36,7 +36,6 @@ import java.util.concurrent.TimeUnit
 @Module
 internal object NetworkModule {
 
-    @MatrixScope
     @Provides
     @JvmStatic
     fun providesHttpLogingInterceptor(): HttpLoggingInterceptor {
@@ -46,21 +45,18 @@ internal object NetworkModule {
         return interceptor
     }
 
-    @MatrixScope
     @Provides
     @JvmStatic
     fun providesOkReplayInterceptor(): OkReplayInterceptor {
         return OkReplayInterceptor()
     }
 
-    @MatrixScope
     @Provides
     @JvmStatic
     fun providesStethoInterceptor(): StethoInterceptor {
         return StethoInterceptor()
     }
 
-    @MatrixScope
     @Provides
     @JvmStatic
     fun providesCurlLoggingInterceptor(): CurlLoggingInterceptor {
@@ -93,14 +89,12 @@ internal object NetworkModule {
                 .build()
     }
 
-    @MatrixScope
     @Provides
     @JvmStatic
     fun providesMoshi(): Moshi {
         return MoshiProvider.providesMoshi()
     }
 
-    @MatrixScope
     @Provides
     @JvmStatic
     fun providesRetrofitBuilder(okHttpClient: OkHttpClient,

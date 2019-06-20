@@ -120,7 +120,7 @@ dependencies {
     kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
 
     // Work
-    implementation "android.arch.work:work-runtime-ktx:1.0.0"
+    implementation "androidx.work:work-runtime-ktx:2.1.0-beta01"
 
     // FP
     implementation "io.arrow-kt:arrow-core:$arrow_version"

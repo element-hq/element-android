@@ -35,7 +35,6 @@ internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
 }
 
-@SessionScope
 internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
                                                    private val filterRepository: FilterRepository,
                                                    private val syncResponseHandler: SyncResponseHandler,

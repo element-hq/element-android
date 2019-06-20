@@ -44,7 +44,6 @@ internal interface EventRelationsAggregationTask : Task<EventRelationsAggregatio
 /**
  * Called by EventRelationAggregationUpdater, when new events that can affect relations are inserted in base.
  */
-@SessionScope
 internal class DefaultEventRelationsAggregationTask @Inject constructor(private val monarchy: Monarchy) : EventRelationsAggregationTask {
 
     //OPT OUT serer aggregation until API mature enough

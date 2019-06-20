@@ -43,7 +43,6 @@ internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
 
 }
 
-@SessionScope
 internal class DefaultPruneEventTask @Inject constructor(private val monarchy: Monarchy) : PruneEventTask {
 
     override suspend fun execute(params: PruneEventTask.Params): Try<Unit> {

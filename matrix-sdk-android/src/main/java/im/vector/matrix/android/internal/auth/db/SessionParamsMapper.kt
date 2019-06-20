@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.di.MatrixScope
 import javax.inject.Inject
 
-@MatrixScope
 internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
 
     private val credentialsAdapter = moshi.adapter(Credentials::class.java)

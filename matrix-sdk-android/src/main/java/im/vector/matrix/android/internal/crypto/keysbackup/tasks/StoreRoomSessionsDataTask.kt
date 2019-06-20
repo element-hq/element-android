@@ -33,7 +33,6 @@ internal interface StoreRoomSessionsDataTask : Task<StoreRoomSessionsDataTask.Pa
     )
 }
 
-@SessionScope
 internal class DefaultStoreRoomSessionsDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : StoreRoomSessionsDataTask {
 

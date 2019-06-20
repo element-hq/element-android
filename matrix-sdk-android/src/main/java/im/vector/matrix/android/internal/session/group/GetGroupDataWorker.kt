@@ -24,25 +24,27 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.getSessionComponent
+import javax.inject.Inject
 
-internal class GetGroupDataWorker @AssistedInject constructor(
-        @Assisted context: Context,
-        @Assisted params: WorkerParameters,
-        private val getGroupDataTask: GetGroupDataTask
-) : CoroutineWorker(context, params) {
-
-    @AssistedInject.Factory
-    interface Factory : DelegateWorkerFactory
+internal class GetGroupDataWorker (context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            override val userId: String,
             val groupIds: List<String>
-    )
+    ): SessionWorkerParams
+
+    @Inject lateinit var getGroupDataTask: GetGroupDataTask
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                      ?: return Result.failure()
+
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        sessionComponent.inject(this)
 
         val results = params.groupIds.map { groupId ->
             fetchGroupData(groupId)

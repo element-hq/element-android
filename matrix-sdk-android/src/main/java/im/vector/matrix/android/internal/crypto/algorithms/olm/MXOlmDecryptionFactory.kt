@@ -21,7 +21,6 @@ import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.session.SessionScope
 import javax.inject.Inject
 
-@SessionScope
 internal class MXOlmDecryptionFactory @Inject constructor(private val olmDevice: MXOlmDevice,
                                                           private val credentials: Credentials) {
 

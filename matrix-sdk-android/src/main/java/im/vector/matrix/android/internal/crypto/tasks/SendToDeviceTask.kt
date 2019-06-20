@@ -37,7 +37,6 @@ internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
     )
 }
 
-@SessionScope
 internal class DefaultSendToDeviceTask @Inject constructor(private val cryptoApi: CryptoApi)
     : SendToDeviceTask {
 

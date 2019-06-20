@@ -24,7 +24,6 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import javax.inject.Inject
 
-@SessionScope
 internal class GetEventTask @Inject constructor(private val roomAPI: RoomAPI
 ) : Task<GetEventTask.Params, Event> {
 

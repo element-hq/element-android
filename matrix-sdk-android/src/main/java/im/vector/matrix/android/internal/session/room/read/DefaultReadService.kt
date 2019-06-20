@@ -27,7 +27,6 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 
-@SessionScope
 internal class DefaultReadService @Inject constructor(private val roomId: String,
                                   private val monarchy: Monarchy,
                                   private val taskExecutor: TaskExecutor,

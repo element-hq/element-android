@@ -16,8 +16,16 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
-import androidx.work.*
+import android.content.Context
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
@@ -31,6 +39,7 @@ import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 private const val UPLOAD_WORK = "UPLOAD_WORK"
 private const val BACKOFF_DELAY = 10_000L
@@ -39,10 +48,12 @@ private val WORK_CONSTRAINTS = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
         .build()
 
-internal class DefaultSendService(private val roomId: String,
-                                  private val localEchoEventFactory: LocalEchoEventFactory,
-                                  private val cryptoService: CryptoService,
-                                  private val monarchy: Monarchy)
+internal class DefaultSendService @Inject constructor(private val context: Context,
+                                                      private val credentials: Credentials,
+                                                      private val roomId: String,
+                                                      private val localEchoEventFactory: LocalEchoEventFactory,
+                                                      private val cryptoService: CryptoService,
+                                                      private val monarchy: Monarchy)
     : SendService {
 
     override fun sendTextMessage(text: String, msgType: String, autoMarkdown: Boolean): Cancelable {
@@ -54,8 +65,8 @@ internal class DefaultSendService(private val roomId: String,
             Timber.v("Send event in encrypted room")
             val encryptWork = createEncryptEventWork(event)
             val sendWork = createSendEventWork(event)
-            TimelineSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, sendWork)
-            CancelableWork(encryptWork.id)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, sendWork)
+            CancelableWork(context, encryptWork.id)
         } else {
             sendEvent(event)
         }
@@ -63,8 +74,8 @@ internal class DefaultSendService(private val roomId: String,
 
     private fun sendEvent(event: Event): Cancelable {
         val sendWork = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(roomId, sendWork)
-        return CancelableWork(sendWork.id)
+        TimelineSendEventWorkCommon.postWork(context, roomId, sendWork)
+        return CancelableWork(context, sendWork.id)
     }
 
     override fun sendFormattedTextMessage(text: String, formattedText: String): Cancelable {
@@ -72,8 +83,8 @@ internal class DefaultSendService(private val roomId: String,
             saveLocalEcho(it)
         }
         val sendWork = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(roomId, sendWork)
-        return CancelableWork(sendWork.id)
+        TimelineSendEventWorkCommon.postWork(context, roomId, sendWork)
+        return CancelableWork(context, sendWork.id)
     }
 
     override fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable {
@@ -87,8 +98,8 @@ internal class DefaultSendService(private val roomId: String,
     override fun redactEvent(event: Event, reason: String?): Cancelable {
         //TODO manage media/attachements?
         val redactWork = createRedactEventWork(event, reason)
-        TimelineSendEventWorkCommon.postWork(roomId, redactWork)
-        return CancelableWork(redactWork.id)
+        TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
+        return CancelableWork(context, redactWork.id)
     }
 
     override fun sendMedia(attachment: ContentAttachmentData): Cancelable {
@@ -99,12 +110,12 @@ internal class DefaultSendService(private val roomId: String,
         val uploadWork = createUploadMediaWork(event, attachment)
         val sendWork = createSendEventWork(event)
 
-        WorkManager.getInstance()
+        WorkManager.getInstance(context)
                 .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
                 .then(sendWork)
                 .enqueue()
 
-        return CancelableWork(sendWork.id)
+        return CancelableWork(context, sendWork.id)
     }
 
     private fun saveLocalEcho(event: Event) {
@@ -117,7 +128,7 @@ internal class DefaultSendService(private val roomId: String,
 
     private fun createEncryptEventWork(event: Event): OneTimeWorkRequest {
         // Same parameter
-        val params = EncryptEventWorker.Params(roomId, event)
+        val params = EncryptEventWorker.Params(credentials.userId ,roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(params)
 
         return OneTimeWorkRequestBuilder<EncryptEventWorker>()
@@ -128,7 +139,7 @@ internal class DefaultSendService(private val roomId: String,
     }
 
     private fun createSendEventWork(event: Event): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId ,roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
@@ -138,13 +149,13 @@ internal class DefaultSendService(private val roomId: String,
         val redactEvent = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason).also {
             saveLocalEcho(it)
         }
-        val sendContentWorkerParams = RedactEventWorker.Params(redactEvent.eventId!!, roomId, event.eventId, reason)
+        val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId ,redactEvent.eventId!!, roomId, event.eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
 
     private fun createUploadMediaWork(event: Event, attachment: ContentAttachmentData): OneTimeWorkRequest {
-        val uploadMediaWorkerParams = UploadContentWorker.Params(roomId, event, attachment)
+        val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId ,roomId, event, attachment)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return OneTimeWorkRequestBuilder<UploadContentWorker>()

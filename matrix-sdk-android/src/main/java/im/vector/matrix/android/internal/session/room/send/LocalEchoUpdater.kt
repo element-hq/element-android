@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import javax.inject.Inject
 
-@SessionScope
 internal class LocalEchoUpdater @Inject constructor(private val monarchy: Monarchy) {
 
     fun updateSendState(eventId: String, sendState: SendState) {

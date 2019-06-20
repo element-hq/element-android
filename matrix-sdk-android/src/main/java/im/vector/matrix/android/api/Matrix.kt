@@ -18,10 +18,13 @@ package im.vector.matrix.android.api
 
 import android.content.Context
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
+import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.di.DaggerMatrixComponent
 import im.vector.matrix.android.internal.network.UserAgentHolder
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
@@ -29,23 +32,37 @@ import org.matrix.olm.OlmManager
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
+data class MatrixConfiguration(
+        val applicationFlavor: String = "Default-application-flavor"
+) {
+
+    interface Provider {
+        fun providesMatrixConfiguration(): MatrixConfiguration
+    }
+
+}
+
 /**
  * This is the main entry point to the matrix sdk.
- * This class is automatically init by a provider.
  * To get the singleton instance, use getInstance static method.
  */
-class Matrix private constructor(context: Context) {
+class Matrix private constructor(context: Context, matrixConfiguration: MatrixConfiguration) {
 
-    @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var authenticator: Authenticator
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
+    @Inject internal lateinit var olmManager: OlmManager
+    @Inject internal lateinit var sessionManager: SessionManager
     var currentSession: Session? = null
 
     init {
         Monarchy.init(context)
         DaggerMatrixComponent.factory().create(context).inject(this)
+        if (context.applicationContext !is Configuration.Provider) {
+            WorkManager.initialize(context, Configuration.Builder().build())
+        }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        userAgentHolder.setApplicationFlavor(matrixConfiguration.applicationFlavor)
         authenticator.getLastActiveSession()?.also {
             currentSession = it
             it.open()
@@ -54,30 +71,33 @@ class Matrix private constructor(context: Context) {
         }
     }
 
+    fun getUserAgent() = userAgentHolder.userAgent
+
     fun authenticator(): Authenticator {
         return authenticator
     }
 
-    /**
-     * Set application flavor, to alter user agent.
-     */
-    fun setApplicationFlavor(flavor: String) {
-        userAgentHolder.setApplicationFlavor(flavor)
-    }
-
-    fun getUserAgent() = userAgentHolder.userAgent
-
     companion object {
+
         private lateinit var instance: Matrix
         private val isInit = AtomicBoolean(false)
 
-        internal fun initialize(context: Context) {
+        fun initialize(context: Context, matrixConfiguration: MatrixConfiguration) {
             if (isInit.compareAndSet(false, true)) {
-                instance = Matrix(context.applicationContext)
+                instance = Matrix(context.applicationContext, matrixConfiguration)
             }
         }
 
-        fun getInstance(): Matrix {
+        fun getInstance(context: Context): Matrix {
+            if (isInit.compareAndSet(false, true)) {
+                val appContext = context.applicationContext
+                if (appContext is MatrixConfiguration.Provider) {
+                    val matrixConfiguration = (appContext as MatrixConfiguration.Provider).providesMatrixConfiguration()
+                    instance = Matrix(appContext, matrixConfiguration)
+                } else {
+                    throw IllegalStateException("Matrix is not initialized properly.  You should call Matrix.initialize or let your application implements MatrixConfiguration.Provider.")
+                }
+            }
             return instance
         }
 

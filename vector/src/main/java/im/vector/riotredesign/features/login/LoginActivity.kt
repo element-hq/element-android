@@ -25,10 +25,12 @@ import arrow.core.Try
 import com.jakewharton.rxbinding2.widget.RxTextView
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
@@ -36,6 +38,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_login.*
+import javax.inject.Inject
 
 private const val DEFAULT_HOME_SERVER_URI = "https://matrix.org"
 private const val DEFAULT_IDENTITY_SERVER_URI = "https://vector.im"
@@ -43,9 +46,13 @@ private const val DEFAULT_ANTIVIRUS_SERVER_URI = "https://matrix.org"
 
 class LoginActivity : VectorBaseActivity() {
 
-    private val authenticator = Matrix.getInstance().authenticator()
+    @Inject lateinit var authenticator: Authenticator
 
     private var passwordShown = false
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +78,7 @@ class LoginActivity : VectorBaseActivity() {
         progressBar.visibility = View.VISIBLE
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session) {
-                Matrix.getInstance().currentSession = data
+                Matrix.getInstance(this@LoginActivity).currentSession = data
                 data.open()
                 data.setFilter(FilterService.FilterPreset.RiotFilter)
                 data.startSync()

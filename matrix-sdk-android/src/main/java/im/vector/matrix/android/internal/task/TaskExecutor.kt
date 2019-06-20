@@ -30,7 +30,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
-@MatrixScope
 internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers) {
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {

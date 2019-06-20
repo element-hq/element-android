@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.*
 import im.vector.matrix.android.internal.crypto.store.db.query.delete
 import im.vector.matrix.android.internal.crypto.store.db.query.getById
 import im.vector.matrix.android.internal.crypto.store.db.query.getOrCreate
+import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.RealmConfiguration
 import io.realm.Sort
 import io.realm.kotlin.where
@@ -38,6 +39,7 @@ import timber.log.Timber
 import kotlin.collections.set
 
 // enableFileEncryption is used to migrate the previous store
+@SessionScope
 internal class RealmCryptoStore(private val enableFileEncryption: Boolean = false,
                                 private val realmConfiguration: RealmConfiguration,
                                 private val credentials: Credentials) : IMXCryptoStore {

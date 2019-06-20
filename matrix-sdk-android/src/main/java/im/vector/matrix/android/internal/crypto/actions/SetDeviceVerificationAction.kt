@@ -23,7 +23,6 @@ import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 
-@SessionScope
 internal class SetDeviceVerificationAction @Inject constructor(private val cryptoStore: IMXCryptoStore,
                                            private val credentials: Credentials,
                                            private val keysBackup: KeysBackup) {

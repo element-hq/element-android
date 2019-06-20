@@ -33,7 +33,6 @@ internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, To
 
 }
 
-@SessionScope
 internal class DefaultGetContextOfEventTask @Inject constructor(private val roomAPI: RoomAPI,
                                             private val filterRepository: FilterRepository,
                                             private val tokenChunkEventPersistor: TokenChunkEventPersistor

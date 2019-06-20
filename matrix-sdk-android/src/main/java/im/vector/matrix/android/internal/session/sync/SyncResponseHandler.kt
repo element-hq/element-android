@@ -24,7 +24,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
-@SessionScope
 internal class SyncResponseHandler @Inject constructor(private val roomSyncHandler: RoomSyncHandler,
                                                        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
                                                        private val groupSyncHandler: GroupSyncHandler,

@@ -36,7 +36,6 @@ internal interface ClaimOneTimeKeysForUsersDeviceTask : Task<ClaimOneTimeKeysFor
     )
 }
 
-@SessionScope
 internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(private val cryptoApi: CryptoApi)
     : ClaimOneTimeKeysForUsersDeviceTask {
 

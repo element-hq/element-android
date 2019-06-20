@@ -25,7 +25,6 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
-@MatrixScope
 internal class RealmSessionParamsStore @Inject constructor(private val mapper: SessionParamsMapper,
                                                            @AuthDatabase private val realmConfiguration: RealmConfiguration
 ) : SessionParamsStore {

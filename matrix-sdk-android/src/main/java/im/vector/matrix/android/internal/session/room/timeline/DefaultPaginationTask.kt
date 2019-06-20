@@ -36,7 +36,6 @@ internal interface PaginationTask : Task<PaginationTask.Params, TokenChunkEventP
 
 }
 
-@SessionScope
 internal class DefaultPaginationTask @Inject constructor(private val roomAPI: RoomAPI,
                                                          private val filterRepository: FilterRepository,
                                                          private val tokenChunkEventPersistor: TokenChunkEventPersistor

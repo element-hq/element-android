@@ -33,7 +33,6 @@ internal abstract class CacheModule {
     companion object {
         @JvmStatic
         @Provides
-        @SessionScope
         @SessionDatabase
         fun providesClearCacheTask(@SessionDatabase realmConfiguration: RealmConfiguration): ClearCacheTask {
             return RealmClearCacheTask(realmConfiguration)
@@ -41,7 +40,6 @@ internal abstract class CacheModule {
     }
 
     @Binds
-    @SessionScope
     abstract fun bindCacheService(cacheService: DefaultCacheService): CacheService
 
 }

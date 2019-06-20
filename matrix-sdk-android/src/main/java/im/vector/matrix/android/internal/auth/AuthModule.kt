@@ -35,7 +35,6 @@ internal abstract class AuthModule {
     companion object {
         @JvmStatic
         @Provides
-        @MatrixScope
         @AuthDatabase
         fun providesRealmConfiguration(context: Context): RealmConfiguration {
             val old = File(context.filesDir, "matrix-sdk-auth")
@@ -51,11 +50,9 @@ internal abstract class AuthModule {
     }
 
     @Binds
-    @MatrixScope
     abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
 
     @Binds
-    @MatrixScope
     abstract fun bindAuthenticator(authenticator: DefaultAuthenticator): Authenticator
 
 }

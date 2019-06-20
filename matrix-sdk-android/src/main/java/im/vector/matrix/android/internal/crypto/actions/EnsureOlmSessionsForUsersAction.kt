@@ -29,7 +29,6 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-@SessionScope
 internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val olmDevice: MXOlmDevice,
                                                private val cryptoStore: IMXCryptoStore,
                                                private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction) {

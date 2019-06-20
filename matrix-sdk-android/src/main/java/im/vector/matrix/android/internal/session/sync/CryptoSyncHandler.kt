@@ -32,7 +32,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-@SessionScope
 internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: CryptoManager,
                                                      private val sasVerificationService: DefaultSasVerificationService) {
 

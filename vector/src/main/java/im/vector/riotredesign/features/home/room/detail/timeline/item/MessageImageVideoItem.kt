@@ -50,7 +50,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     }
 
     override fun unbind(holder: Holder) {
-        ContentUploadStateTrackerBinder.unbind(informationData.eventId)
+        ContentUploadStateTrackerBinder.unbind(informationData.eventId, holder.progressLayout)
         super.unbind(holder)
     }
 

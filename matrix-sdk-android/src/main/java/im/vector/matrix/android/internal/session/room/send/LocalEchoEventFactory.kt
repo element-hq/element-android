@@ -52,7 +52,6 @@ import javax.inject.Inject
  * The transactionID is used as loc
  */
 
-@SessionScope
 internal class LocalEchoEventFactory @Inject constructor(private val credentials: Credentials, private val stringProvider: StringProvider) {
 
     fun createTextEvent(roomId: String, msgType: String, text: String, autoMarkdown: Boolean): Event {

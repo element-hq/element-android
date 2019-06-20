@@ -21,7 +21,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-@MatrixScope
 internal class UserAgentInterceptor @Inject constructor(private val userAgentHolder: UserAgentHolder) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {

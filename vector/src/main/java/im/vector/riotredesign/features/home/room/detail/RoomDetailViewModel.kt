@@ -78,6 +78,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.roomDetailViewModelFactory.create(state)
         }
+
+        override fun initialState(viewModelContext: ViewModelContext): RoomDetailViewState? {
+
+            return super.initialState(viewModelContext)
+        }
     }
 
     init {

@@ -24,6 +24,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.features.navigation.DefaultNavigator
 import im.vector.riotredesign.features.navigation.Navigator
@@ -48,8 +49,8 @@ abstract class VectorModule {
 
         @Provides
         @JvmStatic
-        fun providesMatrix(): Matrix {
-            return Matrix.getInstance()
+        fun providesMatrix(context: Context): Matrix {
+            return Matrix.getInstance(context)
         }
 
         @Provides
@@ -57,6 +58,12 @@ abstract class VectorModule {
         fun providesCurrentSession(matrix: Matrix): Session {
             //TODO: handle session injection better
             return matrix.currentSession!!
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesAuthenticator(matrix: Matrix): Authenticator{
+            return matrix.authenticator()
         }
     }
 

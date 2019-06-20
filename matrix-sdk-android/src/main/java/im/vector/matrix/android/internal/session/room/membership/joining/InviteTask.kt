@@ -31,7 +31,6 @@ internal interface InviteTask : Task<InviteTask.Params, Unit> {
     )
 }
 
-@SessionScope
 internal class DefaultInviteTask @Inject constructor(private val roomAPI: RoomAPI) : InviteTask {
 
     override suspend fun execute(params: InviteTask.Params): Try<Unit> {

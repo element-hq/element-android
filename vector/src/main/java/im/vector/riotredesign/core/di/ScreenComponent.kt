@@ -22,6 +22,7 @@ import dagger.BindsInstance
 import dagger.Component
 import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
 import im.vector.riotredesign.core.platform.SimpleFragmentActivity
+import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyFragment
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreSuccessFragment
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -40,6 +41,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageM
 import im.vector.riotredesign.features.home.room.detail.timeline.action.QuickReactionFragment
 import im.vector.riotredesign.features.home.room.detail.timeline.action.ViewReactionBottomSheet
 import im.vector.riotredesign.features.home.room.list.RoomListFragment
+import im.vector.riotredesign.features.login.LoginActivity
 import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotredesign.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotredesign.features.roomdirectory.createroom.CreateRoomFragment
@@ -66,7 +68,7 @@ interface ScreenComponent {
     fun inject(roomDirectoryPickerFragment: RoomDirectoryPickerFragment)
 
     fun inject(roomPreviewNoPreviewFragment: RoomPreviewNoPreviewFragment)
-    
+
     fun inject(keysBackupSettingsFragment: KeysBackupSettingsFragment)
 
     fun inject(homeDrawerFragment: HomeDrawerFragment)
@@ -102,6 +104,10 @@ interface ScreenComponent {
     fun inject(quickReactionFragment: QuickReactionFragment)
 
     fun inject(emojiReactionPickerActivity: EmojiReactionPickerActivity)
+
+    fun inject(loginActivity: LoginActivity)
+
+    fun inject(mainActivity: MainActivity)
 
 
     @Component.Factory

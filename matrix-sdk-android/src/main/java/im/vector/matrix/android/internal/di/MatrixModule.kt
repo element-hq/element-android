@@ -31,7 +31,6 @@ internal object MatrixModule {
 
     @JvmStatic
     @Provides
-    @MatrixScope
     fun providesMatrixCoroutineDispatchers(): MatrixCoroutineDispatchers {
         val cryptoHandler = CryptoAsyncHelper.getDecryptBackgroundHandler()
         return MatrixCoroutineDispatchers(io = Dispatchers.IO,
@@ -43,7 +42,6 @@ internal object MatrixModule {
 
     @JvmStatic
     @Provides
-    @MatrixScope
     fun providesResources(context: Context): Resources {
         return context.resources
     }

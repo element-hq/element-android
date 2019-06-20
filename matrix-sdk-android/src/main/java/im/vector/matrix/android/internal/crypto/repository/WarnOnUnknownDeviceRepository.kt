@@ -20,7 +20,7 @@ import im.vector.matrix.android.internal.session.SessionScope
 import javax.inject.Inject
 
 @SessionScope
-internal class WarnOnUnknownDeviceRepository @Inject constructor(){
+internal class WarnOnUnknownDeviceRepository @Inject constructor() {
 
     // TODO: set it back to true by default. Need UI
     // Warn the user if some new devices are detected while encrypting a message.

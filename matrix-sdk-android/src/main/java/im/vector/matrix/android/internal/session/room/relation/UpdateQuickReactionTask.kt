@@ -43,7 +43,6 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
     )
 }
 
-@SessionScope
 internal class DefaultUpdateQuickReactionTask @Inject constructor(private val monarchy: Monarchy) : UpdateQuickReactionTask {
     override suspend fun execute(params: UpdateQuickReactionTask.Params): Try<UpdateQuickReactionTask.Result> {
         return Try {

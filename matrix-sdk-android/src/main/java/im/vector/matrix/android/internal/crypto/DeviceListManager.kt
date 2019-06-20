@@ -33,7 +33,6 @@ import java.util.*
 import javax.inject.Inject
 
 // Legacy name: MXDeviceList
-
 @SessionScope
 internal class DeviceListManager @Inject constructor(private val cryptoStore: IMXCryptoStore,
                                                      private val olmDevice: MXOlmDevice,

@@ -42,7 +42,6 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
 
 }
 
-@SessionScope
 internal class DefaultFindReactionEventForUndoTask @Inject constructor(private val monarchy: Monarchy) : FindReactionEventForUndoTask {
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): Try<FindReactionEventForUndoTask.Result> {

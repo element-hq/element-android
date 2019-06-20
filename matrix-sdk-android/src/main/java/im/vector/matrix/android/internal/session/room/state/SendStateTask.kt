@@ -31,7 +31,6 @@ internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
     )
 }
 
-@SessionScope
 internal class DefaultSendStateTask @Inject constructor(private val roomAPI: RoomAPI) : SendStateTask {
     override suspend fun execute(params: SendStateTask.Params): Try<Unit> {
         return executeRequest {

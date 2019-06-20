@@ -173,7 +173,7 @@ dependencies {
     implementation 'com.airbnb.android:mvrx:1.0.1'
 
     // Work
-    implementation "android.arch.work:work-runtime-ktx:1.0.0"
+    implementation "androidx.work:work-runtime-ktx:2.1.0-beta01"
 
     // FP
     implementation "io.arrow-kt:arrow-core:$arrow_version"

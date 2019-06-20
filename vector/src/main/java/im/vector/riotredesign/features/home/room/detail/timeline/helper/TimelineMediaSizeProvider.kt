@@ -17,8 +17,10 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.helper
 
 import androidx.recyclerview.widget.RecyclerView
+import im.vector.riotredesign.core.di.ScreenScope
 import javax.inject.Inject
 
+@ScreenScope
 class TimelineMediaSizeProvider @Inject constructor() {
 
     lateinit var recyclerView: RecyclerView

@@ -28,7 +28,6 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import javax.inject.Inject
 
-@SessionScope
 internal class MXMegolmDecryptionFactory @Inject constructor(private val credentials: Credentials,
                                          private val olmDevice: MXOlmDevice,
                                          private val deviceListManager: DeviceListManager,

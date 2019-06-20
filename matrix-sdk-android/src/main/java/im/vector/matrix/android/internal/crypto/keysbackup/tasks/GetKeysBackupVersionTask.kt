@@ -20,13 +20,11 @@ import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
 internal interface GetKeysBackupVersionTask : Task<String, KeysVersionResult>
 
-@SessionScope
 internal class DefaultGetKeysBackupVersionTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : GetKeysBackupVersionTask {
 

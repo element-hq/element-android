@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.room.relation
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
@@ -26,29 +25,33 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
-import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.SendResponse
+import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.getSessionComponent
+import javax.inject.Inject
 
-internal class SendRelationWorker @AssistedInject constructor(
-        @Assisted context: Context,
-        @Assisted params: WorkerParameters,
-        private val roomAPI: RoomAPI)
-    : Worker(context, params) {
-
+internal class SendRelationWorker(context: Context, params: WorkerParameters): Worker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            override val userId: String,
             val roomId: String,
             val event: Event,
             val relationType: String? = null
-    )
+    ): SessionWorkerParams
+
+    @Inject lateinit var roomAPI: RoomAPI
 
     override fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                      ?: return Result.failure()
+
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        sessionComponent.inject(this)
 
         val localEvent = params.event
         if (localEvent.eventId == null) {
@@ -81,6 +84,4 @@ internal class SendRelationWorker @AssistedInject constructor(
                            }, { Result.success() })
     }
 
-    @AssistedInject.Factory
-    interface Factory : DelegateWorkerFactory
 }

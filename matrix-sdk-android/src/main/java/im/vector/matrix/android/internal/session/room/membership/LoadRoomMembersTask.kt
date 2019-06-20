@@ -40,7 +40,6 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Boolea
     )
 }
 
-@SessionScope
 internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAPI: RoomAPI,
                                           private val monarchy: Monarchy,
                                           private val syncTokenStore: SyncTokenStore,

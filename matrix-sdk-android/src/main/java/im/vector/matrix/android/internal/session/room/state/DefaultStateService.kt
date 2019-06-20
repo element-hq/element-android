@@ -24,7 +24,6 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
-@SessionScope
 internal class DefaultStateService @Inject constructor(private val roomId: String,
                                    private val taskExecutor: TaskExecutor,
                                    private val sendStateTask: SendStateTask) : StateService {

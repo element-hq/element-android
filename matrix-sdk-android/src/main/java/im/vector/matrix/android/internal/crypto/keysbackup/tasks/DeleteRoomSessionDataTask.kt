@@ -31,7 +31,6 @@ internal interface DeleteRoomSessionDataTask : Task<DeleteRoomSessionDataTask.Pa
     )
 }
 
-@SessionScope
 internal class DefaultDeleteRoomSessionDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : DeleteRoomSessionDataTask {
 

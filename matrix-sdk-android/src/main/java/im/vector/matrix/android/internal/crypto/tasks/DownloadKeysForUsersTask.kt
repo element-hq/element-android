@@ -35,7 +35,6 @@ internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Para
             val token: String?)
 }
 
-@SessionScope
 internal class DefaultDownloadKeysForUsers @Inject constructor(private val cryptoApi: CryptoApi)
     : DownloadKeysForUsersTask {
 

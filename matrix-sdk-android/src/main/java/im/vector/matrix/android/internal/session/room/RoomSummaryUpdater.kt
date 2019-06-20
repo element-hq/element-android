@@ -38,7 +38,6 @@ import io.realm.Realm
 import io.realm.kotlin.createObject
 import javax.inject.Inject
 
-@SessionScope
 internal class RoomSummaryUpdater @Inject constructor(private val credentials: Credentials,
                                                       private val roomDisplayNameResolver: RoomDisplayNameResolver,
                                                       private val roomAvatarResolver: RoomAvatarResolver) {

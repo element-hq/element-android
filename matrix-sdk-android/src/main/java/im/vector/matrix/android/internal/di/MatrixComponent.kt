@@ -29,12 +29,12 @@ import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import im.vector.matrix.android.internal.worker.WorkerBindingModule
+import okhttp3.OkHttpClient
 import org.matrix.olm.OlmManager
 import retrofit2.Retrofit
 
 
-@Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class, WorkerBindingModule::class])
+@Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class])
 @MatrixScope
 internal interface MatrixComponent {
 
@@ -43,6 +43,8 @@ internal interface MatrixComponent {
     fun moshi(): Moshi
 
     fun retrofitBuilder(): Retrofit.Builder
+
+    fun okHttpClient(): OkHttpClient
 
     fun authenticator(): Authenticator
 

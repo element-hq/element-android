@@ -30,20 +30,18 @@ internal abstract class SignOutModule {
 
     @Module
     companion object {
-        @SessionScope
         @Provides
         @JvmStatic
+        @SessionScope
         fun providesSignOutAPI(retrofit: Retrofit): SignOutAPI {
             return retrofit.create(SignOutAPI::class.java)
         }
     }
 
     @Binds
-    @SessionScope
     abstract fun bindSignOutTask(signOutTask: DefaultSignOutTask): SignOutTask
 
     @Binds
-    @SessionScope
     abstract fun bindSignOutService(signOutService: DefaultSignOutService): SignOutService
 
 }

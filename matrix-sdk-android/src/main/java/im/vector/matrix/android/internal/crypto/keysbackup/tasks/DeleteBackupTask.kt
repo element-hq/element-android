@@ -30,7 +30,6 @@ internal interface DeleteBackupTask : Task<DeleteBackupTask.Params, Unit> {
     )
 }
 
-@SessionScope
 internal class DefaultDeleteBackupTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : DeleteBackupTask {
 

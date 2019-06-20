@@ -44,7 +44,7 @@ class IncomingVerificationRequestHandler @Inject constructor(val context: Contex
         when (tx.state) {
             SasVerificationTxState.OnStarted -> {
                 //Add a notification for every incoming request
-                val session = Matrix.getInstance().currentSession!!
+                val session = Matrix.getInstance(context).currentSession!!
                 val name = session.getUser(tx.otherUserId)?.displayName
                            ?: tx.otherUserId
 

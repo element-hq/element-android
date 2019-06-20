@@ -30,26 +30,31 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
+import im.vector.matrix.android.internal.worker.getSessionComponent
 import java.util.concurrent.CountDownLatch
+import javax.inject.Inject
 
-internal class EncryptEventWorker @AssistedInject constructor(
-        @Assisted context: Context,
-        @Assisted params: WorkerParameters,
-        private val crypto: CryptoService,
-        private val localEchoUpdater: LocalEchoUpdater)
+internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     : Worker(context, params) {
-
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            override val userId: String,
             val roomId: String,
             val event: Event
-    )
+    ): SessionWorkerParams
+
+    @Inject  lateinit var crypto: CryptoService
+    @Inject lateinit var localEchoUpdater: LocalEchoUpdater
 
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                      ?: return Result.success()
+
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        sessionComponent.inject(this)
 
         val localEvent = params.event
         if (localEvent.eventId == null) {
@@ -87,7 +92,7 @@ internal class EncryptEventWorker @AssistedInject constructor(
                     type = safeResult.eventType,
                     content = safeResult.eventContent
             )
-            val nextWorkerParams = SendEventWorker.Params(params.roomId, encryptedEvent)
+            val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, encryptedEvent)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         }
         val safeError = error
@@ -99,8 +104,4 @@ internal class EncryptEventWorker @AssistedInject constructor(
         //always return success, or the chain will be stuck for ever!
         return Result.success()
     }
-
-    @AssistedInject.Factory
-    interface Factory : DelegateWorkerFactory
-
 }

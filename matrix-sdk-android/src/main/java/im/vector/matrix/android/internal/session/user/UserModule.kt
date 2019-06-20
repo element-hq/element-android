@@ -21,17 +21,14 @@ package im.vector.matrix.android.internal.session.user
 import dagger.Binds
 import dagger.Module
 import im.vector.matrix.android.api.session.user.UserService
-import im.vector.matrix.android.internal.session.SessionScope
 
 @Module
 internal abstract class UserModule {
 
     @Binds
-    @SessionScope
     abstract fun bindUserService(userService: DefaultUserService): UserService
 
     @Binds
-    @SessionScope
     abstract fun bindUpdateUserTask(updateUserTask: DefaultUpdateUserTask): UpdateUserTask
 
 }

@@ -22,7 +22,6 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
-@SessionScope
 internal class DefaultFilterService @Inject constructor(private val filterRepository: FilterRepository,
                                                         private val saveFilterTask: SaveFilterTask,
                                                         private val taskExecutor: TaskExecutor) : FilterService {

@@ -21,10 +21,13 @@ import android.content.Intent
 import android.os.Bundle
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
 import im.vector.riotredesign.features.login.LoginActivity
 import timber.log.Timber
+import javax.inject.Inject
 
 
 class MainActivity : VectorBaseActivity() {
@@ -44,16 +47,18 @@ class MainActivity : VectorBaseActivity() {
         }
     }
 
-    private val authenticator = Matrix.getInstance().authenticator()
+    @Inject lateinit var matrix: Matrix
+    @Inject lateinit var authenticator: Authenticator
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val session = Matrix.getInstance().currentSession
-
         val clearCache = intent.getBooleanExtra(EXTRA_CLEAR_CACHE, false)
         val clearCredentials = intent.getBooleanExtra(EXTRA_CLEAR_CREDENTIALS, false)
-
+        val session = matrix.currentSession
         if (session == null) {
             start()
         } else {

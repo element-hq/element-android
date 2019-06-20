@@ -26,7 +26,6 @@ import javax.inject.Inject
 
 internal interface GetDevicesTask : Task<Unit, DevicesListResponse>
 
-@SessionScope
 internal class DefaultGetDevicesTask @Inject constructor(private val cryptoApi: CryptoApi)
     : GetDevicesTask {
 

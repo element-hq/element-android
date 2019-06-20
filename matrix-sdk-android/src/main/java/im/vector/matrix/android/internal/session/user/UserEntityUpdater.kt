@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Sort
 import javax.inject.Inject
 
-@SessionScope
 internal class UserEntityUpdater @Inject constructor(monarchy: Monarchy,
                                                      private val updateUserTask: UpdateUserTask,
                                                      private val taskExecutor: TaskExecutor)

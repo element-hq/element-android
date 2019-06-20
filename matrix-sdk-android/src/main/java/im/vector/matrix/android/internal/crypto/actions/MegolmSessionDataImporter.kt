@@ -30,7 +30,6 @@ import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 
-@SessionScope
 internal class MegolmSessionDataImporter @Inject constructor(private val olmDevice: MXOlmDevice,
                                                              private val roomDecryptorProvider: RoomDecryptorProvider,
                                                              private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,

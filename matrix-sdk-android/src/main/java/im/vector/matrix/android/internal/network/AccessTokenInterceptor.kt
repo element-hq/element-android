@@ -22,7 +22,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-@MatrixScope
 internal class AccessTokenInterceptor @Inject constructor(private val sessionParamsStore: SessionParamsStore) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {

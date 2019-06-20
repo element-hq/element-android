@@ -25,7 +25,6 @@ import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirec
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataSync
 import javax.inject.Inject
 
-@SessionScope
 internal class UserAccountDataSyncHandler @Inject constructor(private val monarchy: Monarchy) {
 
     fun handle(accountData: UserAccountDataSync) {

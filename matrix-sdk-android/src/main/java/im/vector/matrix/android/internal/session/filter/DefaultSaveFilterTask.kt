@@ -35,7 +35,6 @@ internal interface SaveFilterTask : Task<SaveFilterTask.Params, Unit> {
 
 }
 
-@SessionScope
 internal class DefaultSaveFilterTask @Inject constructor(private val sessionParams: SessionParams,
                                                          private val filterAPI: FilterApi,
                                                          private val filterRepository: FilterRepository

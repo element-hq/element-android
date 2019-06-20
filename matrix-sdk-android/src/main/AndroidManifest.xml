@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="im.vector.matrix.android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -7,9 +8,10 @@
 
     <application>
 
-        <provider
-            android:name=".internal.MatrixInitProvider"
-            android:authorities="im.vector.matrix.android.MatrixInitProvider" />
+        <provider android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            android:exported="false"
+            tools:node="remove" />
 
     </application>
 

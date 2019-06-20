@@ -20,7 +20,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.AnyThread
-import androidx.annotation.ColorRes
 import androidx.annotation.UiThread
 import androidx.core.content.ContextCompat
 import com.amulyakhare.textdrawable.TextDrawable
@@ -79,7 +78,7 @@ object AvatarRenderer {
             name
         }
         val placeholder = getPlaceholderDrawable(context, identifier, displayName)
-        buildGlideRequest(glideRequest, avatarUrl)
+        buildGlideRequest(context, glideRequest, avatarUrl)
                 .placeholder(placeholder)
                 .into(target)
     }
@@ -116,8 +115,8 @@ object AvatarRenderer {
 //        return AVATAR_COLOR_LIST[colorIndex.toInt()]
 //    }
 
-    private fun buildGlideRequest(glideRequest: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
-        val resolvedUrl = Matrix.getInstance().currentSession!!.contentUrlResolver()
+    private fun buildGlideRequest(context: Context, glideRequest: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
+        val resolvedUrl = Matrix.getInstance(context).currentSession!!.contentUrlResolver()
                 .resolveThumbnail(avatarUrl, THUMBNAIL_SIZE, THUMBNAIL_SIZE, ContentUrlResolver.ThumbnailMethod.SCALE)
 
         return glideRequest

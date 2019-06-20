@@ -143,13 +143,9 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         })
     }
 
-    override fun contentUrlResolver(): ContentUrlResolver {
-        return contentUrlResolver
-    }
+    override fun contentUrlResolver() = contentUrlResolver
 
-    override fun contentUploadProgressTracker(): ContentUploadStateTracker {
-        return contentUploadProgressTracker
-    }
+    override fun contentUploadProgressTracker() = contentUploadProgressTracker
 
     override fun addListener(listener: Session.Listener) {
         sessionListeners.addListener(listener)

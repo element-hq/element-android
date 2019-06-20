@@ -31,6 +31,10 @@ internal class SessionManager @Inject constructor(private val matrixComponent: M
 
     private val sessionComponents = HashMap<String, SessionComponent>()
 
+    fun getSessionComponent(userId: String): SessionComponent? {
+        return sessionComponents[userId]
+    }
+
     fun createSession(sessionParams: SessionParams): Session {
         val userId = sessionParams.credentials.userId
         if (sessionComponents.containsKey(userId)) {

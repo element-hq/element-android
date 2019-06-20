@@ -29,9 +29,9 @@ internal abstract class SyncModule {
 
     @Module
     companion object {
-        @SessionScope
         @Provides
         @JvmStatic
+        @SessionScope
         fun providesSyncAPI(retrofit: Retrofit): SyncAPI {
             return retrofit.create(SyncAPI::class.java)
         }

@@ -46,7 +46,6 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
-        @SessionScope
         fun providesHomeServerConnectionConfig(sessionParams: SessionParams): HomeServerConnectionConfig {
             return sessionParams.homeServerConnectionConfig
         }
@@ -54,15 +53,14 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
-        @SessionScope
         fun providesCredentials(sessionParams: SessionParams): Credentials {
             return sessionParams.credentials
         }
 
         @JvmStatic
         @Provides
-        @SessionScope
         @SessionDatabase
+        @SessionScope
         fun providesRealmConfiguration(sessionParams: SessionParams, context: Context): RealmConfiguration {
             val childPath = sessionParams.credentials.userId.md5()
             val directory = File(context.filesDir, childPath)
@@ -96,27 +94,22 @@ internal abstract class SessionModule {
     }
 
     @Binds
-    @SessionScope
     abstract fun bindSession(session: DefaultSession): Session
 
     @Binds
     @IntoSet
-    @SessionScope
     abstract fun bindGroupSummaryUpdater(groupSummaryUpdater: GroupSummaryUpdater): LiveEntityObserver
 
     @Binds
     @IntoSet
-    @SessionScope
     abstract fun bindEventsPruner(eventsPruner: EventsPruner): LiveEntityObserver
 
     @Binds
     @IntoSet
-    @SessionScope
     abstract fun bindEventRelationsAggregationUpdater(groupSummaryUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
 
     @Binds
     @IntoSet
-    @SessionScope
     abstract fun bindUserEntityUpdater(groupSummaryUpdater: UserEntityUpdater): LiveEntityObserver
 
 }

@@ -33,7 +33,6 @@ import javax.inject.Inject
  * The summaries can then be extracted and added (as a decoration) to a TimelineEvent for final display.
  */
 
-@SessionScope
 internal class EventRelationsAggregationUpdater @Inject constructor(monarchy: Monarchy,
                                                                     private val credentials: Credentials,
                                                                     private val task: EventRelationsAggregationTask,

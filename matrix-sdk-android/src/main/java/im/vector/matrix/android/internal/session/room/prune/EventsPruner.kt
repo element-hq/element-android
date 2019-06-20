@@ -33,7 +33,6 @@ import javax.inject.Inject
  * Listens to the database for the insertion of any redaction event.
  * As it will actually delete the content, it should be called last in the list of listener.
  */
-@SessionScope
 internal class EventsPruner @Inject constructor(monarchy: Monarchy,
                                                 private val credentials: Credentials,
                                                 private val pruneEventTask: PruneEventTask,

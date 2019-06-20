@@ -29,7 +29,6 @@ internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     )
 }
 
-@SessionScope
 internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: RoomAPI) : JoinRoomTask {
 
     override suspend fun execute(params: JoinRoomTask.Params): Try<Unit> {

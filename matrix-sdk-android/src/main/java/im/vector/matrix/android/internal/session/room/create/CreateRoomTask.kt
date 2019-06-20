@@ -32,7 +32,6 @@ import javax.inject.Inject
 
 internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
-@SessionScope
 internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: RoomAPI,
                                                          @SessionDatabase private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
 

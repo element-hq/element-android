@@ -35,7 +35,6 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchManaged
 import javax.inject.Inject
 
-@SessionScope
 internal class DefaultRoomService @Inject constructor(private val monarchy: Monarchy,
                                                       private val createRoomTask: CreateRoomTask,
                                                       private val roomFactory: RoomFactory,

@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.room
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
@@ -33,27 +34,24 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.SessionScope
 import javax.inject.Inject
 
-@SessionScope
-internal class DefaultRoom @Inject constructor(
-        override val roomId: String,
-        private val monarchy: Monarchy,
-        private val timelineService: TimelineService,
-        private val sendService: SendService,
-        private val stateService: StateService,
-        private val readService: ReadService,
-        private val cryptoService: CryptoService,
-        private val relationService: RelationService,
-        private val roomMembersService: MembershipService
+internal class DefaultRoom @Inject constructor(override val roomId: String,
+                                               private val monarchy: Monarchy,
+                                               private val timelineService: TimelineService,
+                                               private val sendService: SendService,
+                                               private val stateService: StateService,
+                                               private val readService: ReadService,
+                                               private val cryptoService: CryptoService,
+                                               private val relationService: RelationService,
+                                               private val roomMembersService: MembershipService
 ) : Room,
-        TimelineService by timelineService,
-        SendService by sendService,
-        StateService by stateService,
-        ReadService by readService,
-        RelationService by relationService,
-        MembershipService by roomMembersService {
+    TimelineService by timelineService,
+    SendService by sendService,
+    StateService by stateService,
+    ReadService by readService,
+    RelationService by relationService,
+    MembershipService by roomMembersService {
 
     override val roomSummary: LiveData<RoomSummary> by lazy {
         val liveRealmData = RealmLiveData<RoomSummaryEntity>(monarchy.realmConfiguration) { realm ->

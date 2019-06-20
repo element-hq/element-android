@@ -32,7 +32,6 @@ internal interface GetRoomSessionsDataTask : Task<GetRoomSessionsDataTask.Params
     )
 }
 
-@SessionScope
 internal class DefaultGetRoomSessionsDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : GetRoomSessionsDataTask {
 

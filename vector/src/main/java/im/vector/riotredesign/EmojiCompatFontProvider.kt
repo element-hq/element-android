@@ -4,7 +4,9 @@ import android.graphics.Typeface
 import androidx.core.provider.FontsContractCompat
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class EmojiCompatFontProvider @Inject constructor(): FontsContractCompat.FontRequestCallback() {
 
     var typeface: Typeface? = null

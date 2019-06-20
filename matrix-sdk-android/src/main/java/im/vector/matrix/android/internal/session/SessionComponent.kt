@@ -21,13 +21,18 @@ import dagger.Component
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.CryptoModule
-import im.vector.matrix.android.internal.di.MatrixAssistedModule
 import im.vector.matrix.android.internal.di.MatrixComponent
 import im.vector.matrix.android.internal.session.cache.CacheModule
 import im.vector.matrix.android.internal.session.content.ContentModule
+import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.filter.FilterModule
+import im.vector.matrix.android.internal.session.group.GetGroupDataWorker
 import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.room.RoomModule
+import im.vector.matrix.android.internal.session.room.relation.SendRelationWorker
+import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
+import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
+import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.session.signout.SignOutModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.user.UserModule
@@ -44,14 +49,26 @@ import im.vector.matrix.android.internal.session.user.UserModule
                GroupModule::class,
                ContentModule::class,
                CacheModule::class,
-               CryptoModule::class,
-               MatrixAssistedModule::class
+               CryptoModule::class
            ]
 )
 @SessionScope
 internal interface SessionComponent {
 
     fun session(): Session
+
+    fun inject(sendEventWorker: SendEventWorker)
+
+    fun inject(sendEventWorker: SendRelationWorker)
+
+    fun inject(encryptEventWorker: EncryptEventWorker)
+
+    fun inject(redactEventWorker: RedactEventWorker)
+
+    fun inject(getGroupDataWorker: GetGroupDataWorker)
+
+    fun inject(uploadContentWorker: UploadContentWorker)
+
 
     @Component.Factory
     interface Factory {

@@ -26,7 +26,6 @@ import javax.inject.Inject
 
 internal interface GetThirdPartyProtocolsTask : Task<Unit, Map<String, ThirdPartyProtocol>>
 
-@SessionScope
 internal class DefaultGetThirdPartyProtocolsTask @Inject constructor (private val roomAPI: RoomAPI) : GetThirdPartyProtocolsTask {
 
     override suspend fun execute(params: Unit): Try<Map<String, ThirdPartyProtocol>> {

@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.session.sync.model.InvitedGroupSync
 import io.realm.Realm
 import javax.inject.Inject
 
-@SessionScope
 internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarchy) {
 
     sealed class HandlingStrategy {

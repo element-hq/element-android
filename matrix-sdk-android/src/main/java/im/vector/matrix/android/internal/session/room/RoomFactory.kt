@@ -16,10 +16,11 @@
 
 package im.vector.matrix.android.internal.session.room
 
+import android.content.Context
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor
@@ -42,8 +43,9 @@ import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFact
 import im.vector.matrix.android.internal.task.TaskExecutor
 import javax.inject.Inject
 
-@SessionScope
-internal class RoomFactory @Inject constructor(private val monarchy: Monarchy,
+internal class RoomFactory @Inject constructor(private val context: Context,
+                                               private val credentials: Credentials,
+                                               private val monarchy: Monarchy,
                                                private val eventFactory: LocalEchoEventFactory,
                                                private val taskExecutor: TaskExecutor,
                                                private val loadRoomMembersTask: LoadRoomMembersTask,
@@ -63,11 +65,11 @@ internal class RoomFactory @Inject constructor(private val monarchy: Monarchy,
         val relationExtractor = EventRelationExtractor()
         val timelineEventFactory = TimelineEventFactory(roomMemberExtractor, relationExtractor, cryptoService)
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, timelineEventFactory, contextOfEventTask, paginationTask)
-        val sendService = DefaultSendService(roomId, eventFactory, cryptoService, monarchy)
+        val sendService = DefaultSendService(context, credentials, roomId, eventFactory, cryptoService, monarchy)
         val stateService = DefaultStateService(roomId, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
         val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask)
-        val reactionService = DefaultRelationService(roomId, eventFactory, findReactionEventForUndoTask, updateQuickReactionTask, monarchy, taskExecutor)
+        val reactionService = DefaultRelationService(context, credentials, roomId, eventFactory, findReactionEventForUndoTask, updateQuickReactionTask, monarchy, taskExecutor)
 
         return DefaultRoom(
                 roomId,

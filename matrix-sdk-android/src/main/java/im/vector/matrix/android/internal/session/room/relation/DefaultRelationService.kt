@@ -15,10 +15,12 @@
  */
 package im.vector.matrix.android.internal.session.room.relation
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.work.OneTimeWorkRequest
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageType
@@ -38,11 +40,14 @@ import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
-import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.util.tryTransactionAsync
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
+import javax.inject.Inject
 
-internal class DefaultRelationService constructor(private val roomId: String,
+internal class DefaultRelationService @Inject constructor(private val context: Context,
+                                                          private val credentials: Credentials,
+                                                          private val roomId: String,
                                                           private val eventFactory: LocalEchoEventFactory,
                                                           private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
                                                           private val updateQuickReactionTask: UpdateQuickReactionTask,
@@ -57,14 +62,13 @@ internal class DefaultRelationService constructor(private val roomId: String,
                     saveLocalEcho(it)
                 }
         val sendRelationWork = createSendRelationWork(event)
-        TimelineSendEventWorkCommon.postWork(roomId, sendRelationWork)
-        return CancelableWork(sendRelationWork.id)
+        TimelineSendEventWorkCommon.postWork(context, roomId, sendRelationWork)
+        return CancelableWork(context, sendRelationWork.id)
     }
 
 
     private fun createSendRelationWork(event: Event): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(
-                roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId,roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
@@ -94,7 +98,7 @@ internal class DefaultRelationService constructor(private val roomId: String,
                             }
                             val redactWork = createRedactEventWork(redactEvent, toRedact, null)
 
-                            TimelineSendEventWorkCommon.postWork(roomId, redactWork)
+                            TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
 
                         }
                     }
@@ -123,7 +127,7 @@ internal class DefaultRelationService constructor(private val roomId: String,
                                 saveLocalEcho(it)
                             }
                             val redactWork = createRedactEventWork(redactEvent, it, null)
-                            TimelineSendEventWorkCommon.postWork(roomId, redactWork)
+                            TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
                         }
                     }
                 })
@@ -137,7 +141,7 @@ internal class DefaultRelationService constructor(private val roomId: String,
     //TODO duplicate with send service?
     private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
 
-        val sendContentWorkerParams = RedactEventWorker.Params(localEvent.eventId!!,
+        val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId ,localEvent.eventId!!,
                                                                roomId, eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
@@ -147,14 +151,14 @@ internal class DefaultRelationService constructor(private val roomId: String,
         val event = eventFactory.createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, MessageType.MSGTYPE_TEXT, compatibilityBodyText).also {
             saveLocalEcho(it)
         }
-        val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId ,roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         //TODO use relation API?
 
         val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
-        TimelineSendEventWorkCommon.postWork(roomId, workRequest)
-        return CancelableWork(workRequest.id)
+        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+        return CancelableWork(context, workRequest.id)
 
     }
 
@@ -163,13 +167,13 @@ internal class DefaultRelationService constructor(private val roomId: String,
         val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText)?.also {
             saveLocalEcho(it)
         } ?: return null
-        val sendContentWorkerParams = SendEventWorker.Params(roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId ,roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
 
         val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
-        TimelineSendEventWorkCommon.postWork(roomId, workRequest)
-        return CancelableWork(workRequest.id)
+        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+        return CancelableWork(context, workRequest.id)
     }
 
 

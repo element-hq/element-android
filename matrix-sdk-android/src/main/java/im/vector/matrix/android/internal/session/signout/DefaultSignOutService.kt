@@ -23,7 +23,6 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
-@SessionScope
 internal class DefaultSignOutService @Inject constructor(private val signOutTask: SignOutTask,
                                                          private val taskExecutor: TaskExecutor) : SignOutService {
 

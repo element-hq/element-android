@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.content
 import android.os.Handler
 import android.os.Looper
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
+import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.session.SessionScope
 import javax.inject.Inject
 

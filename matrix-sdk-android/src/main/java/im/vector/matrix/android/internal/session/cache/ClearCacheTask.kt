@@ -26,7 +26,6 @@ import javax.inject.Named
 
 internal interface ClearCacheTask : Task<Unit, Unit>
 
-@SessionScope
 internal class RealmClearCacheTask @Inject constructor(private val realmConfiguration: RealmConfiguration) : ClearCacheTask {
 
     override suspend fun execute(params: Unit): Try<Unit> {

@@ -38,7 +38,6 @@ internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadRespon
             val deviceId: String)
 }
 
-@SessionScope
 internal class DefaultUploadKeysTask @Inject constructor(private val cryptoApi: CryptoApi)
     : UploadKeysTask {
 

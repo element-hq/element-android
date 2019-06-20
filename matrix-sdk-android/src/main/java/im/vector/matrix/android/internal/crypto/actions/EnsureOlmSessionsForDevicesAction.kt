@@ -29,7 +29,6 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-@SessionScope
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val olmDevice: MXOlmDevice,
                                                                      private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
 

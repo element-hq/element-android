@@ -40,7 +40,6 @@ import javax.inject.Inject
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
 
-@SessionScope
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
                                               private val syncTokenStore: SyncTokenStore,

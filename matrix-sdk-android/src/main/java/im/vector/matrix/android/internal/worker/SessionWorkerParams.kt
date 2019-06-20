@@ -14,18 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.util
+package im.vector.matrix.android.internal.worker
 
-import android.content.Context
-import androidx.work.WorkManager
-import im.vector.matrix.android.api.util.Cancelable
-import java.util.*
-
-internal class CancelableWork(private val context: Context,
-                              private val workId: UUID) : Cancelable {
-
-    override fun cancel() {
-        WorkManager.getInstance(context).cancelWorkById(workId)
-    }
-
+interface SessionWorkerParams {
+    val userId: String
 }

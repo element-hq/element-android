@@ -34,7 +34,6 @@ internal interface SetDeviceNameTask : Task<SetDeviceNameTask.Params, Unit> {
     )
 }
 
-@SessionScope
 internal class DefaultSetDeviceNameTask @Inject constructor(private val cryptoApi: CryptoApi)
     : SetDeviceNameTask {
 

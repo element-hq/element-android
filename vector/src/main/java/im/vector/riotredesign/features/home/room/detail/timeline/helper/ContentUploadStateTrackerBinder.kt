@@ -36,7 +36,7 @@ object ContentUploadStateTrackerBinder {
              mediaData: ImageContentRenderer.Data,
              progressLayout: ViewGroup) {
 
-        Matrix.getInstance().currentSession?.also { session ->
+        Matrix.getInstance(progressLayout.context).currentSession?.also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
             val updateListener = ContentMediaProgressUpdater(progressLayout, mediaData)
             updateListeners[eventId] = updateListener
@@ -44,8 +44,8 @@ object ContentUploadStateTrackerBinder {
         }
     }
 
-    fun unbind(eventId: String) {
-        Matrix.getInstance().currentSession?.also { session ->
+    fun unbind(eventId: String, progressLayout: ViewGroup) {
+        Matrix.getInstance(progressLayout.context).currentSession?.also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
             updateListeners[eventId]?.also {
                 uploadStateTracker.untrack(eventId, it)

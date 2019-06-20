@@ -31,7 +31,6 @@ internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     )
 }
 
-@SessionScope
 internal class DefaultDeleteDeviceTask @Inject constructor(private val cryptoApi: CryptoApi)
     : DeleteDeviceTask {
 

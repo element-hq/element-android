@@ -195,7 +195,7 @@ object BugReporter {
                 var matrixSdkVersion = "undefined"
                 var olmVersion = "undefined"
 
-                Matrix.getInstance().currentSession?.let { session ->
+                Matrix.getInstance(context).currentSession?.let { session ->
                     userId = session.sessionParams.credentials.userId
                     deviceId = session.sessionParams.credentials.deviceId ?: "undefined"
                     // TODO matrixSdkVersion = session.getVersion(true);
@@ -207,7 +207,7 @@ object BugReporter {
                     val builder = BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", "[RiotX] $bugDescription")
                             .addFormDataPart("app", "riot-android")
-                            .addFormDataPart("user_agent", Matrix.getInstance().getUserAgent())
+                            .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("device_id", deviceId)
                             // TODO .addFormDataPart("version", Matrix.getInstance(context).getVersion(true, false))

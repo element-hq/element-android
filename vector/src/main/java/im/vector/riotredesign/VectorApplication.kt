@@ -31,6 +31,7 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.riotredesign.core.di.DaggerVectorComponent
 import im.vector.riotredesign.core.di.HasInjector
 import im.vector.riotredesign.core.di.VectorComponent
@@ -42,7 +43,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class VectorApplication : Application(), HasInjector<VectorComponent> {
+class VectorApplication : Application(), HasInjector<VectorComponent>, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
 
     lateinit var appContext: Context
     //font thread handler
@@ -67,8 +68,6 @@ class VectorApplication : Application(), HasInjector<VectorComponent> {
         BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
         EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-
-        Matrix.getInstance().setApplicationFlavor(BuildConfig.FLAVOR_DESCRIPTION)
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks())
         val fontRequest = FontRequest(
                 "com.google.android.gms.fonts",
@@ -79,6 +78,10 @@ class VectorApplication : Application(), HasInjector<VectorComponent> {
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
         vectorConfiguration.initConfiguration()
     }
+
+    override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
+
+    override fun getWorkManagerConfiguration() = androidx.work.Configuration.Builder().build()
 
     override fun injector(): VectorComponent {
         return vectorComponent

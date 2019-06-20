@@ -88,8 +88,8 @@ internal abstract class CryptoModule {
         // Realm configuration, named to avoid clash with main cache realm configuration
         @JvmStatic
         @Provides
-        @SessionScope
         @CryptoDatabase
+        @SessionScope
         fun providesRealmConfiguration(context: Context, credentials: Credentials): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(File(context.filesDir, credentials.userId.hash()))
@@ -102,7 +102,6 @@ internal abstract class CryptoModule {
 
         @JvmStatic
         @Provides
-        @SessionScope
         @CryptoDatabase
         fun providesClearCacheTask(@CryptoDatabase realmConfiguration: RealmConfiguration): ClearCacheTask {
             return RealmClearCacheTask(realmConfiguration)
@@ -111,7 +110,6 @@ internal abstract class CryptoModule {
 
         @JvmStatic
         @Provides
-        @SessionScope
         fun providesCryptoStore(@CryptoDatabase realmConfiguration: RealmConfiguration, credentials: Credentials): IMXCryptoStore {
             return RealmCryptoStore(false /* TODO*/,
                                     realmConfiguration,
@@ -142,91 +140,69 @@ internal abstract class CryptoModule {
     }
 
     @Binds
-    @SessionScope
     abstract fun bindCryptoService(cryptoManager: CryptoManager): CryptoService
 
     @Binds
-    @SessionScope
     abstract fun bindDeleteDeviceTask(deleteDeviceTask: DefaultDeleteDeviceTask): DeleteDeviceTask
 
     @Binds
-    @SessionScope
     abstract fun bindGetDevicesTask(getDevicesTask: DefaultGetDevicesTask): GetDevicesTask
 
     @Binds
-    @SessionScope
     abstract fun bindSetDeviceNameTask(getDevicesTask: DefaultSetDeviceNameTask): SetDeviceNameTask
 
     @Binds
-    @SessionScope
     abstract fun bindUploadKeysTask(getDevicesTask: DefaultUploadKeysTask): UploadKeysTask
 
     @Binds
-    @SessionScope
     abstract fun bindDownloadKeysForUsersTask(downloadKeysForUsers: DefaultDownloadKeysForUsers): DownloadKeysForUsersTask
 
     @Binds
-    @SessionScope
     abstract fun bindCreateKeysBackupVersionTask(createKeysBackupVersionTask: DefaultCreateKeysBackupVersionTask): CreateKeysBackupVersionTask
 
     @Binds
-    @SessionScope
     abstract fun bindDeleteBackupTask(deleteBackupTask: DefaultDeleteBackupTask): DeleteBackupTask
 
     @Binds
-    @SessionScope
     abstract fun bindDeleteRoomSessionDataTask(deleteRoomSessionDataTask: DefaultDeleteRoomSessionDataTask): DeleteRoomSessionDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindDeleteRoomSessionsDataTask(deleteRoomSessionDataTask: DefaultDeleteRoomSessionsDataTask): DeleteRoomSessionsDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindDeleteSessionsDataTask(deleteRoomSessionDataTask: DefaultDeleteSessionsDataTask): DeleteSessionsDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindGetKeysBackupLastVersionTask(getKeysBackupLastVersionTask: DefaultGetKeysBackupLastVersionTask): GetKeysBackupLastVersionTask
 
     @Binds
-    @SessionScope
     abstract fun bindGetKeysBackupVersionTask(getKeysBackupVersionTask: DefaultGetKeysBackupVersionTask) : GetKeysBackupVersionTask
 
     @Binds
-    @SessionScope
     abstract fun bindGetRoomSessionDataTask(getRoomSessionDataTask: DefaultGetRoomSessionDataTask) : GetRoomSessionDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindGetRoomSessionsDataTask(getRoomSessionDataTask: DefaultGetRoomSessionsDataTask) : GetRoomSessionsDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindGetSessionsDataTask(getRoomSessionDataTask: DefaultGetSessionsDataTask) : GetSessionsDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindStoreRoomSessionDataTask(storeRoomSessionDataTask: DefaultStoreRoomSessionDataTask) : StoreRoomSessionDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindStoreRoomSessionsDataTask(storeRoomSessionDataTask: DefaultStoreRoomSessionsDataTask) : StoreRoomSessionsDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindStoreSessionsDataTask(storeRoomSessionDataTask: DefaultStoreSessionsDataTask) : StoreSessionsDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindUpdateKeysBackupVersionTask(updateKeysBackupVersionTask: DefaultUpdateKeysBackupVersionTask) : UpdateKeysBackupVersionTask
 
     @Binds
-    @SessionScope
     abstract fun bindSendToDeviceTask(sendToDeviceTask: DefaultSendToDeviceTask) : SendToDeviceTask
 
     @Binds
-    @SessionScope
     abstract fun bindClaimOneTimeKeysForUsersDeviceTask(claimOneTimeKeysForUsersDevice: DefaultClaimOneTimeKeysForUsersDevice) : ClaimOneTimeKeysForUsersDeviceTask
 
 

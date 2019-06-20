@@ -93,6 +93,8 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 @SessionScope
 internal class CryptoManager @Inject constructor(
+        // Olm Manager
+        private val olmManager: OlmManager,
         // The credentials,
         private val credentials: Credentials,
         private val myDeviceInfoHolder: MyDeviceInfoHolder,
@@ -118,8 +120,6 @@ internal class CryptoManager @Inject constructor(
         private val incomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
         //
         private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
-        // Olm Manager
-        private val olmManager: OlmManager,
         // Actions
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val megolmSessionDataImporter: MegolmSessionDataImporter,

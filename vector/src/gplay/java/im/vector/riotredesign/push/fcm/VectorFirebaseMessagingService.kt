@@ -34,7 +34,6 @@ import im.vector.riotredesign.features.notifications.NotifiableEventResolver
 import im.vector.riotredesign.features.notifications.NotifiableMessageEvent
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.notifications.SimpleNotifiableEvent
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 /**
@@ -42,7 +41,7 @@ import timber.log.Timber
  */
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
-    val notificationDrawerManager by inject<NotificationDrawerManager>()
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
 
     private val notifiableEventResolver by lazy {
         NotifiableEventResolver(this)

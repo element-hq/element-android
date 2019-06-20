@@ -28,7 +28,6 @@ import javax.inject.Inject
  * Fetches annotations (reactions, edits...) associated to a given eventEntity from the data layer.
  */
 
-@SessionScope
 internal class EventRelationExtractor @Inject constructor() {
 
     fun extractFrom(event: EventEntity, realm: Realm = event.realm): EventAnnotationsSummary? {

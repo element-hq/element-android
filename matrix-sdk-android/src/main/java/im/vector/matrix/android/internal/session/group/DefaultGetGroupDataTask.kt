@@ -39,7 +39,6 @@ internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 
 }
 
-@SessionScope
 internal class DefaultGetGroupDataTask @Inject constructor(
         private val groupAPI: GroupAPI,
         private val monarchy: Monarchy

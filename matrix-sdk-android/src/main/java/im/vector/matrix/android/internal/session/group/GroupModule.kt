@@ -28,19 +28,17 @@ internal abstract class GroupModule {
 
     @Module
     companion object {
-        @SessionScope
         @Provides
         @JvmStatic
+        @SessionScope
         fun providesGroupAPI(retrofit: Retrofit): GroupAPI {
             return retrofit.create(GroupAPI::class.java)
         }
     }
 
     @Binds
-    @SessionScope
     abstract fun bindGetGroupDataTask(getGroupDataTask: DefaultGetGroupDataTask): GetGroupDataTask
 
     @Binds
-    @SessionScope
     abstract fun bindGroupService(groupService: DefaultGroupService): GroupService
 }

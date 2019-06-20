@@ -26,7 +26,6 @@ import io.realm.RealmConfiguration
 import io.realm.kotlin.where
 import javax.inject.Inject
 
-@SessionScope
 internal class DefaultFilterRepository @Inject constructor(
         @SessionDatabase private val realmConfiguration: RealmConfiguration
 ) : FilterRepository {

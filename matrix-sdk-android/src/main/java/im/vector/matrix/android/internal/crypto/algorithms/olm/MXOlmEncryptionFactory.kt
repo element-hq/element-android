@@ -25,7 +25,6 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import javax.inject.Inject
 
-@SessionScope
 internal class MXOlmEncryptionFactory @Inject constructor(private val olmDevice: MXOlmDevice,
                                                           private val cryptoStore: IMXCryptoStore,
                                                           private val messageEncrypter: MessageEncrypter,

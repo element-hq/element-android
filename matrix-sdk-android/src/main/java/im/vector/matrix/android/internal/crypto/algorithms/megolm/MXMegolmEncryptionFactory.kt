@@ -29,7 +29,6 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import javax.inject.Inject
 
-@SessionScope
 internal class MXMegolmEncryptionFactory @Inject constructor(
         private val olmDevice: MXOlmDevice,
         private val keysBackup: KeysBackup,

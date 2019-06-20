@@ -25,7 +25,6 @@ import io.realm.Realm
 import java.util.*
 import javax.inject.Inject
 
-@SessionScope
 internal class RoomTagHandler @Inject constructor() {
 
     fun handle(realm: Realm, roomId: String, content: RoomTagContent?) {

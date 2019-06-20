@@ -29,7 +29,6 @@ import java.io.IOException
 import javax.inject.Inject
 
 
-@SessionScope
 internal class FileUploader @Inject constructor(private val okHttpClient: OkHttpClient,
                                                 private val sessionParams: SessionParams,
                                                 private val moshi: Moshi) {

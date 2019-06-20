@@ -32,7 +32,7 @@ object VideoContentRenderer {
     ) : Parcelable
 
     fun render(data: Data, thumbnailView: ImageView, videoView: VideoView) {
-        val contentUrlResolver = Matrix.getInstance().currentSession!!.contentUrlResolver()
+        val contentUrlResolver = Matrix.getInstance(videoView.context).currentSession!!.contentUrlResolver()
         val resolvedUrl = contentUrlResolver.resolveFullSize(data.videoUrl)
         videoView.setVideoPath(resolvedUrl)
         videoView.start()

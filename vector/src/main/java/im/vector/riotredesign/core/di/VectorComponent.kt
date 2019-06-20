@@ -21,7 +21,9 @@ import android.content.res.Resources
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.VectorApplication
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
@@ -49,6 +51,8 @@ interface VectorComponent {
 
     fun vectorConfiguration(): VectorConfiguration
 
+    fun emojiCompatFontProvider(): EmojiCompatFontProvider
+
     fun navigator(): Navigator
 
     fun homeNavigator(): HomeNavigator
@@ -62,6 +66,8 @@ interface VectorComponent {
     fun incomingKeyRequestHandler(): KeyRequestHandler
 
     fun inject(vectorApplication: VectorApplication)
+
+    fun authenticator(): Authenticator
 
     @Component.Factory
     interface Factory {

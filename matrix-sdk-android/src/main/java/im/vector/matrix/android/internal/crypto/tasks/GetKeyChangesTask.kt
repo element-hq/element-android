@@ -33,7 +33,6 @@ internal interface GetKeyChangesTask : Task<GetKeyChangesTask.Params, KeyChanges
     )
 }
 
-@SessionScope
 internal class DefaultGetKeyChangesTask @Inject constructor(private val cryptoApi: CryptoApi)
     : GetKeyChangesTask {
 

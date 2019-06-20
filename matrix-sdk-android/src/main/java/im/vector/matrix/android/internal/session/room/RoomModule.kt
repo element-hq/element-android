@@ -61,104 +61,81 @@ internal abstract class RoomModule {
 
     @Module
     companion object {
-        @SessionScope
         @Provides
         @JvmStatic
+        @SessionScope
         fun providesRoomAPI(retrofit: Retrofit): RoomAPI {
             return retrofit.create(RoomAPI::class.java)
         }
     }
 
     @Binds
-    @SessionScope
     abstract fun bindRoomService(roomService: DefaultRoomService): RoomService
 
     @Binds
-    @SessionScope
     abstract fun bindRoomDirectoryService(roomDirectoryService: DefaultRoomDirectoryService): RoomDirectoryService
 
     @Binds
-    @SessionScope
     abstract fun bindEventRelationsAggregationTask(eventRelationsAggregationTask: DefaultEventRelationsAggregationTask): EventRelationsAggregationTask
 
     @Binds
-    @SessionScope
     abstract fun bindCreateRoomTask(createRoomTask: DefaultCreateRoomTask): CreateRoomTask
 
     @Binds
-    @SessionScope
     abstract fun bindGetPublicRoomTask(getPublicRoomTask: DefaultGetPublicRoomTask): GetPublicRoomTask
 
     @Binds
-    @SessionScope
     abstract fun bindGetThirdPartyProtocolsTask(getThirdPartyProtocolsTask: DefaultGetThirdPartyProtocolsTask): GetThirdPartyProtocolsTask
 
     @Binds
-    @SessionScope
     abstract fun bindInviteTask(inviteTask: DefaultInviteTask): InviteTask
 
     @Binds
-    @SessionScope
     abstract fun bindJoinRoomTask(joinRoomTask: DefaultJoinRoomTask): JoinRoomTask
 
     @Binds
-    @SessionScope
     abstract fun bindLeaveRoomTask(leaveRoomTask: DefaultLeaveRoomTask): LeaveRoomTask
 
     @Binds
-    @SessionScope
     abstract fun bindMembershipService(membershipService: DefaultMembershipService): MembershipService
 
     @Binds
-    @SessionScope
     abstract fun bindLoadRoomMembersTask(loadRoomMembersTask: DefaultLoadRoomMembersTask): LoadRoomMembersTask
 
     @Binds
-    @SessionScope
     abstract fun bindPruneEventTask(pruneEventTask: DefaultPruneEventTask): PruneEventTask
 
     @Binds
-    @SessionScope
     abstract fun bindReadService(readService: DefaultReadService): ReadService
 
     @Binds
-    @SessionScope
     abstract fun bindSetReadMarkersTask(setReadMarkersTask: DefaultSetReadMarkersTask): SetReadMarkersTask
 
     @Binds
-    @SessionScope
     abstract fun bindRelationService(relationService: DefaultRelationService): RelationService
 
     @Binds
-    @SessionScope
     abstract fun bindFindReactionEventForUndoTask(findReactionEventForUndoTask: DefaultFindReactionEventForUndoTask): FindReactionEventForUndoTask
 
     @Binds
-    @SessionScope
     abstract fun bindUpdateQuickReactionTask(updateQuickReactionTask: DefaultUpdateQuickReactionTask): UpdateQuickReactionTask
 
     @Binds
-    @SessionScope
     abstract fun bindSendStateTask(sendStateTask: DefaultSendStateTask): SendStateTask
 
     @Binds
-    @SessionScope
     abstract fun bindSendService(sendService: DefaultSendService): SendService
 
     @Binds
-    @SessionScope
     abstract fun bindStateService(stateService: DefaultStateService): StateService
 
     @Binds
-    @SessionScope
     abstract fun bindGetContextOfEventTask(getContextOfEventTask: DefaultGetContextOfEventTask): GetContextOfEventTask
 
     @Binds
-    @SessionScope
     abstract fun bindPaginationTask(paginationTask: DefaultPaginationTask): PaginationTask
 
     @Binds
-    @SessionScope
     abstract fun bindTimelineService(timelineService: DefaultTimelineService): TimelineService
 
 

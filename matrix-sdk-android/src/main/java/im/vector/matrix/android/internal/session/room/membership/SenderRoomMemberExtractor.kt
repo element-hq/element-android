@@ -31,8 +31,9 @@ import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
+import javax.inject.Inject
 
-internal class SenderRoomMemberExtractor(private val roomId: String) {
+internal class SenderRoomMemberExtractor @Inject constructor(private val roomId: String) {
 
     fun extractFrom(event: EventEntity, realm: Realm = event.realm): RoomMember? {
         val sender = event.sender ?: return null

@@ -35,7 +35,6 @@ internal interface UpdateUserTask : Task<UpdateUserTask.Params, Unit> {
 
 }
 
-@SessionScope
 internal class DefaultUpdateUserTask @Inject constructor(private val monarchy: Monarchy) : UpdateUserTask {
 
     override suspend fun execute(params: UpdateUserTask.Params): Try<Unit> {

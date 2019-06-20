@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import javax.inject.Inject
 
-@SessionScope
 internal class RoomAvatarResolver @Inject constructor(private val monarchy: Monarchy,
                                                       private val credentials: Credentials) {
 

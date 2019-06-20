@@ -30,24 +30,21 @@ internal abstract class FilterModule {
 
     @Module
     companion object {
-        @SessionScope
         @Provides
         @JvmStatic
+        @SessionScope
         fun providesFilterApi(retrofit: Retrofit): FilterApi {
             return retrofit.create(FilterApi::class.java)
         }
     }
 
     @Binds
-    @SessionScope
     abstract fun bindFilterRepository(filterRepository: DefaultFilterRepository): FilterRepository
 
     @Binds
-    @SessionScope
     abstract fun bindFilterService(filterService: DefaultFilterService): FilterService
 
     @Binds
-    @SessionScope
     abstract fun bindSaveFilterTask(saveFilterTask_Factory: DefaultSaveFilterTask): SaveFilterTask
 
 

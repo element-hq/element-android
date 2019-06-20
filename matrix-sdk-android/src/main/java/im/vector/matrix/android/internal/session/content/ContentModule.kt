@@ -26,10 +26,8 @@ import im.vector.matrix.android.internal.session.SessionScope
 internal abstract class ContentModule {
 
     @Binds
-    @SessionScope
     abstract fun bindContentUploadStateTracker(contentUploadStateTracker: DefaultContentUploadStateTracker): ContentUploadStateTracker
 
     @Binds
-    @SessionScope
     abstract fun bindContentUrlResolver(contentUrlResolver: DefaultContentUrlResolver): ContentUrlResolver
 }

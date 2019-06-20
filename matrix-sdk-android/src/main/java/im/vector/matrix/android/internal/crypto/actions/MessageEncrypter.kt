@@ -29,7 +29,6 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-@SessionScope
 internal class MessageEncrypter @Inject constructor(private val credentials: Credentials,
                                                     private val olmDevice: MXOlmDevice) {
 

@@ -25,7 +25,6 @@ import javax.inject.Inject
 private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
 private const val URI_PREFIX_CONTENT_API = "_matrix/media/v1/"
 
-@SessionScope
 internal class DefaultContentUrlResolver @Inject constructor(private val homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
 
     companion object {

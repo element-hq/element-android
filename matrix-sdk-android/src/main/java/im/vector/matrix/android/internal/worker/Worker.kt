@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.matrix.android.internal.worker
 
-import com.squareup.inject.assisted.dagger2.AssistedModule
-import dagger.Module
+import androidx.work.ListenableWorker
+import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.internal.session.SessionComponent
 
-@Module(includes = [AssistedInject_MatrixAssistedModule::class])
-@AssistedModule
-internal class MatrixAssistedModule
+internal fun ListenableWorker.getSessionComponent(userId: String): SessionComponent? {
+    return Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId)
+}

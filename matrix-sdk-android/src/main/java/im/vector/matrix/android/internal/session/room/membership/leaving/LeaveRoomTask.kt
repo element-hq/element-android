@@ -29,7 +29,6 @@ internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
     )
 }
 
-@SessionScope
 internal class DefaultLeaveRoomTask @Inject constructor(private val roomAPI: RoomAPI) : LeaveRoomTask {
 
     override suspend fun execute(params: LeaveRoomTask.Params): Try<Unit> {

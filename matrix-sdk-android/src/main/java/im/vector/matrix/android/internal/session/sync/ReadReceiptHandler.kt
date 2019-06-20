@@ -30,7 +30,6 @@ import javax.inject.Inject
 //                    dict value ts value
 typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
 
-@SessionScope
 internal class ReadReceiptHandler @Inject constructor() {
 
     fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?) {

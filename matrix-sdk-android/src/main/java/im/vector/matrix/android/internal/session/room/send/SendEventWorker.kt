@@ -19,35 +19,39 @@ package im.vector.matrix.android.internal.session.room.send
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
+import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.getSessionComponent
+import javax.inject.Inject
 
-internal class SendEventWorker @AssistedInject constructor(
-        @Assisted context: Context,
-        @Assisted params: WorkerParameters,
-        private val roomAPI: RoomAPI,
-        private val localEchoUpdater: LocalEchoUpdater)
+internal class SendEventWorker constructor(context: Context, params: WorkerParameters)
     : Worker(context, params) {
-
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            override val userId: String,
             val roomId: String,
             val event: Event
-    )
+    ) : SessionWorkerParams
+
+    @Inject lateinit var localEchoUpdater: LocalEchoUpdater
+    @Inject lateinit var roomAPI: RoomAPI
 
     override fun doWork(): Result {
-
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                      ?: return Result.success()
+
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        sessionComponent.inject(this)
 
         val event = params.event
         if (event.eventId == null) {
@@ -74,8 +78,5 @@ internal class SendEventWorker @AssistedInject constructor(
                                }
                            }, { Result.success() })
     }
-
-    @AssistedInject.Factory
-    interface Factory : DelegateWorkerFactory
 
 }

@@ -30,7 +30,6 @@ internal interface GetSessionsDataTask : Task<GetSessionsDataTask.Params, KeysBa
     )
 }
 
-@SessionScope
 internal class DefaultGetSessionsDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : GetSessionsDataTask {
 
