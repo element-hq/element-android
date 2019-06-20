@@ -32,13 +32,13 @@ class NoticeEventFormatter(private val stringProvider: StringProvider) {
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
-            EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(timelineEvent.root, timelineEvent.senderName)
-            EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.senderName)
+            EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderName())
-            EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderName)
+            EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER              -> formatCallEvent(timelineEvent.root, timelineEvent.senderName)
+            EventType.CALL_ANSWER              -> formatCallEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             else                               -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -111,12 +111,12 @@ class NoticeEventFormatter(private val stringProvider: StringProvider) {
         if (!TextUtils.equals(eventContent?.displayName, prevEventContent?.displayName)) {
             val displayNameText = when {
                 prevEventContent?.displayName.isNullOrEmpty() ->
-                    stringProvider.getString(R.string.notice_display_name_set, event.sender, eventContent?.displayName)
+                    stringProvider.getString(R.string.notice_display_name_set, event.senderId, eventContent?.displayName)
                 eventContent?.displayName.isNullOrEmpty()     ->
-                    stringProvider.getString(R.string.notice_display_name_removed, event.sender, prevEventContent?.displayName)
+                    stringProvider.getString(R.string.notice_display_name_removed, event.senderId, prevEventContent?.displayName)
                 else                                          ->
                     stringProvider.getString(R.string.notice_display_name_changed_from,
-                            event.sender, prevEventContent?.displayName, eventContent?.displayName)
+                            event.senderId, prevEventContent?.displayName, eventContent?.displayName)
             }
             displayText.append(displayNameText)
         }
@@ -134,8 +134,8 @@ class NoticeEventFormatter(private val stringProvider: StringProvider) {
     }
 
     private fun buildMembershipNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
-        val senderDisplayName = senderName ?: event.sender
-        val targetDisplayName = eventContent?.displayName ?: event.sender
+        val senderDisplayName = senderName ?: event.senderId
+        val targetDisplayName = eventContent?.displayName ?: event.senderId
         return when {
             Membership.INVITE == eventContent?.membership -> {
                 // TODO get userId
@@ -156,7 +156,7 @@ class NoticeEventFormatter(private val stringProvider: StringProvider) {
                 stringProvider.getString(R.string.notice_room_join, senderDisplayName)
             Membership.LEAVE == eventContent?.membership  ->
                 // 2 cases here: this member may have left voluntarily or they may have been "left" by someone else ie. kicked
-                return if (TextUtils.equals(event.sender, event.stateKey)) {
+                return if (TextUtils.equals(event.senderId, event.stateKey)) {
                     if (prevEventContent?.membership == Membership.INVITE) {
                         stringProvider.getString(R.string.notice_room_reject, senderDisplayName)
                     } else {

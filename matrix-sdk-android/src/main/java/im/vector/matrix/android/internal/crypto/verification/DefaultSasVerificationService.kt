@@ -148,7 +148,7 @@ internal class DefaultSasVerificationService(private val credentials: Credential
     private suspend fun onStartRequestReceived(event: Event) {
         val startReq = event.getClearContent().toModel<KeyVerificationStart>()!!
 
-        val otherUserId = event.sender
+        val otherUserId = event.senderId
         if (!startReq.isValid()) {
             Timber.e("## received invalid verification request")
             if (startReq.transactionID != null) {
@@ -236,7 +236,7 @@ internal class DefaultSasVerificationService(private val credentials: Credential
             Timber.e("## Received invalid accept request")
             return
         }
-        val otherUserId = event.sender!!
+        val otherUserId = event.senderId!!
 
         Timber.v("## SAS onCancelReceived otherUser:$otherUserId reason:${cancelReq.reason}")
         val existing = getExistingTransaction(otherUserId, cancelReq.transactionID!!)
@@ -258,7 +258,7 @@ internal class DefaultSasVerificationService(private val credentials: Credential
             Timber.e("## Received invalid accept request")
             return
         }
-        val otherUserId = event.sender!!
+        val otherUserId = event.senderId!!
         val existing = getExistingTransaction(otherUserId, acceptReq.transactionID!!)
         if (existing == null) {
             Timber.e("## Received invalid accept request")
@@ -282,7 +282,7 @@ internal class DefaultSasVerificationService(private val credentials: Credential
             Timber.e("## Received invalid key request")
             return
         }
-        val otherUserId = event.sender!!
+        val otherUserId = event.senderId!!
         val existing = getExistingTransaction(otherUserId, keyReq.transactionID!!)
         if (existing == null) {
             Timber.e("## Received invalid accept request")
@@ -303,7 +303,7 @@ internal class DefaultSasVerificationService(private val credentials: Credential
             Timber.e("## Received invalid key request")
             return
         }
-        val otherUserId = event.sender!!
+        val otherUserId = event.senderId!!
         val existing = getExistingTransaction(otherUserId, macReq.transactionID!!)
         if (existing == null) {
             Timber.e("## Received invalid accept request")

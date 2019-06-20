@@ -65,7 +65,7 @@ class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
                     if (TimelineDisplayableEvents.DEBUG_HIDDEN_EVENT) {
                         val informationData = MessageInformationData(eventId = event.root.eventId
                                 ?: "?",
-                                senderId = event.root.sender ?: "",
+                                senderId = event.root.senderId ?: "",
                                 sendState = event.sendState,
                                 time = "",
                                 avatarUrl = null,

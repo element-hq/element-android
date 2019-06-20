@@ -282,7 +282,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
         _nonBlockingPopAlert.postValue(LiveEvent(
                 Pair(R.string.last_edited_info_message, listOf(
-                        lastReplace.senderName ?: "?",
+                        lastReplace.getDisambiguatedDisplayName(),
                         dateFormat.format(Date(lastReplace.root.originServerTs ?: 0)))
                 ))
         )
@@ -429,7 +429,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private fun observeInvitationState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
-                summary.lastMessage?.sender?.let { senderId ->
+                summary.lastMessage?.senderId?.let { senderId ->
                     session.getUser(senderId)
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }

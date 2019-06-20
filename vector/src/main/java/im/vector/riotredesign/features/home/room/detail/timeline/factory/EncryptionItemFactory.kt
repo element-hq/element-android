@@ -37,7 +37,7 @@ class EncryptionItemFactory(private val stringProvider: StringProvider) {
         val text = buildNoticeText(event.root, event.senderName) ?: return null
         val informationData = MessageInformationData(
                 eventId = event.root.eventId ?: "?",
-                senderId = event.root.sender ?: "",
+                senderId = event.root.senderId ?: "",
                 sendState = event.sendState,
                 avatarUrl = event.senderAvatar(),
                 memberName = event.senderName(),

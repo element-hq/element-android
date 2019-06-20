@@ -83,7 +83,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     override fun bind(holder: H) {
         super.bind(holder)
         if (informationData.showInformation) {
-
             holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
                 val size = dpToPx(avatarStyle.avatarSizeDP, holder.view.context)
                 height = size

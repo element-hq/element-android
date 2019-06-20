@@ -31,6 +31,7 @@ data class TimelineEvent(
         val localId: String,
         val displayIndex: Int,
         val senderName: String?,
+        val isUniqueDisplayName: Boolean,
         val senderAvatar: String?,
         val sendState: SendState,
         val annotations: EventAnnotationsSummary? = null
@@ -51,6 +52,18 @@ data class TimelineEvent(
         if (!metadata.containsKey(key)) {
             metadata[key] = data
         }
+    }
+
+    fun getDisambiguatedDisplayName(): String {
+        return if (isUniqueDisplayName) {
+            senderName
+        } else {
+            senderName?.let { name ->
+                "$name (${root.senderId})"
+            }
+        }
+                ?: root.senderId
+                ?: ""
     }
 
     /**

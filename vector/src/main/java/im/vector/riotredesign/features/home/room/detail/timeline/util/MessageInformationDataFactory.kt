@@ -22,7 +22,6 @@ import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAvatar
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.ReactionInfoData
 import me.gujun.android.span.span
@@ -38,23 +37,23 @@ class MessageInformationDataFactory(private val timelineDateFormatter: TimelineD
         val eventId = event.root.eventId!!
 
         val date = event.root.localDateTime()
-
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
                 ?: false
+
         val showInformation =
                 addDaySeparator
                         || event.senderAvatar != nextEvent?.senderAvatar
-                        || event.senderName != nextEvent?.senderName
+                        || event.getDisambiguatedDisplayName() != nextEvent?.getDisambiguatedDisplayName()
                         || (nextEvent?.root?.getClearType() != EventType.MESSAGE && nextEvent?.root?.getClearType() != EventType.ENCRYPTED)
                         || isNextMessageReceivedMoreThanOneHourAgo
 
         val time = timelineDateFormatter.formatMessageHour(date)
-        val avatarUrl = event.senderAvatar()
-        val memberName = event.senderName ?: event.root.sender ?: ""
+        val avatarUrl = event.senderAvatar
+        val memberName = event.getDisambiguatedDisplayName()
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.sender
+            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId
                     ?: ""))
         }
 
@@ -62,7 +61,7 @@ class MessageInformationDataFactory(private val timelineDateFormatter: TimelineD
 
         return MessageInformationData(
                 eventId = eventId,
-                senderId = event.root.sender ?: "",
+                senderId = event.root.senderId ?: "",
                 sendState = event.sendState,
                 time = time,
                 avatarUrl = avatarUrl,

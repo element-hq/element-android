@@ -131,7 +131,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
                 }
                 this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, parcel.eventId))
 
-                if (currentSession.sessionParams.credentials.userId != event.root.sender && event.root.getClearType() == EventType.MESSAGE) {
+                if (currentSession.sessionParams.credentials.userId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
                     //not sent by me
                     this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, parcel.eventId))
                 }
@@ -179,7 +179,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
             if (event.root.getClearType() != EventType.MESSAGE) return false
             //TODO if user is admin or moderator
-            return event.root.sender == myUserId
+            return event.root.senderId == myUserId
         }
 
         private fun canViewReactions(event: TimelineEvent): Boolean {
@@ -194,7 +194,7 @@ class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<Mes
             if (event.root.getClearType() != EventType.MESSAGE) return false
             //TODO if user is admin or moderator
             val messageContent = event.root.content.toModel<MessageContent>()
-            return event.root.sender == myUserId && (
+            return event.root.senderId == myUserId && (
                     messageContent?.type == MessageType.MSGTYPE_TEXT
                             || messageContent?.type == MessageType.MSGTYPE_EMOTE
                     )

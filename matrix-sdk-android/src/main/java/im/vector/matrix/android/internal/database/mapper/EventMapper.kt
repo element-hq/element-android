@@ -37,7 +37,7 @@ internal object EventMapper {
         eventEntity.prevContent = ContentMapper.map(resolvedPrevContent)
         eventEntity.stateKey = event.stateKey
         eventEntity.type = event.getClearType()
-        eventEntity.sender = event.sender
+        eventEntity.sender = event.senderId
         eventEntity.originServerTs = event.originServerTs
         eventEntity.redacts = event.redacts
         eventEntity.age = event.unsignedData?.age ?: event.originServerTs
@@ -63,7 +63,7 @@ internal object EventMapper {
                 content = ContentMapper.map(eventEntity.content),
                 prevContent = ContentMapper.map(eventEntity.prevContent),
                 originServerTs = eventEntity.originServerTs,
-                sender = eventEntity.sender,
+                senderId = eventEntity.sender,
                 stateKey = eventEntity.stateKey,
                 roomId = eventEntity.roomId,
                 unsignedData = ud,

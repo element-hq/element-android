@@ -238,7 +238,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                     val senderAvatar = mergedEvent.senderAvatar()
                     val senderName = mergedEvent.senderName()
                     MergedHeaderItem.Data(
-                            userId = mergedEvent.root.sender ?: "",
+                            userId = mergedEvent.root.senderId ?: "",
                             avatarUrl = senderAvatar,
                             memberName = senderName ?: "",
                             eventId = mergedEvent.localId
