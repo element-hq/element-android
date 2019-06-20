@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
 
 /**
  * This data class is a wrapper around an Event. It allows to get useful data in the context of a timeline.
- * This class is used by [TimelineService] through [TimelineData]
+ * This class is used by [TimelineService]
  * Users can also enrich it with metadata.
  */
 data class TimelineEvent(

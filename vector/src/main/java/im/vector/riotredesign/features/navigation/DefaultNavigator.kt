@@ -19,6 +19,9 @@ package im.vector.riotredesign.features.navigation
 import android.content.Context
 import android.content.Intent
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.riotredesign.R
+import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.riotredesign.features.debug.DebugMenuActivity
@@ -36,6 +39,14 @@ class DefaultNavigator : Navigator {
         val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
         context.startActivity(intent)
+    }
+
+    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String?) {
+        if (context is VectorBaseActivity) {
+            context.notImplemented("Open not joined room")
+        } else {
+            context.toast(R.string.not_implemented)
+        }
     }
 
     override fun openRoomPreview(publicRoom: PublicRoom, context: Context) {

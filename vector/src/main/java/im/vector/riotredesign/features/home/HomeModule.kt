@@ -51,7 +51,7 @@ class HomeModule {
         }
 
         scope(HOME_SCOPE) {
-            PermalinkHandler(get())
+            PermalinkHandler(get(), get())
         }
 
         // Fragment scopes

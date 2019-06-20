@@ -8,5 +8,6 @@
 
     <string name="settings_sdk_version">Matrix SDK Version</string>
     <string name="settings_other_third_party_notices">Other third party notices</string>
+    <string name="navigate_to_room_when_already_in_the_room">You are already viewing this room!</string>
 
 </resources>

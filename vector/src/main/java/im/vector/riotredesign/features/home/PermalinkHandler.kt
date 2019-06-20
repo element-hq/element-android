@@ -20,36 +20,68 @@ import android.content.Context
 import android.net.Uri
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
-import im.vector.riotredesign.core.utils.openUrlInExternalBrowser
+import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.features.navigation.Navigator
 
-class PermalinkHandler(private val navigator: Navigator) {
+class PermalinkHandler(private val session: Session,
+                       private val navigator: Navigator) {
 
-    fun launch(context: Context, deepLink: String?) {
+    fun launch(context: Context, deepLink: String?, navigateToRoomInterceptor: NavigateToRoomInterceptor? = null): Boolean {
         val uri = deepLink?.let { Uri.parse(it) }
-        launch(context, uri)
+        return launch(context, uri, navigateToRoomInterceptor)
     }
 
-    fun launch(context: Context, deepLink: Uri?) {
+    fun launch(context: Context, deepLink: Uri?, navigateToRoomInterceptor: NavigateToRoomInterceptor? = null): Boolean {
         if (deepLink == null) {
-            return
+            return false
         }
-        when (val permalinkData = PermalinkParser.parse(deepLink)) {
+
+        return when (val permalinkData = PermalinkParser.parse(deepLink)) {
             is PermalinkData.EventLink    -> {
-                navigator.openRoom(context, permalinkData.roomIdOrAlias, permalinkData.eventId)
+                if (navigateToRoomInterceptor?.navToRoom(permalinkData.roomIdOrAlias, permalinkData.eventId) != true) {
+                    openRoom(context, permalinkData.roomIdOrAlias, permalinkData.eventId)
+                }
+
+                true
             }
             is PermalinkData.RoomLink     -> {
-                navigator.openRoom(context, permalinkData.roomIdOrAlias)
+                if (navigateToRoomInterceptor?.navToRoom(permalinkData.roomIdOrAlias) != true) {
+                    openRoom(context, permalinkData.roomIdOrAlias)
+                }
+
+                true
             }
             is PermalinkData.GroupLink    -> {
                 navigator.openGroupDetail(permalinkData.groupId, context)
+                true
             }
             is PermalinkData.UserLink     -> {
                 navigator.openUserDetail(permalinkData.userId, context)
+                true
             }
             is PermalinkData.FallbackLink -> {
-                openUrlInExternalBrowser(context, permalinkData.uri)
+                false
             }
         }
     }
+
+    /**
+     * Open room either joined, or not unknown
+     */
+    private fun openRoom(context: Context, roomIdOrAlias: String, eventId: String? = null) {
+        if (session.getRoom(roomIdOrAlias) != null) {
+            navigator.openRoom(context, roomIdOrAlias, eventId)
+        } else {
+            navigator.openNotJoinedRoom(context, roomIdOrAlias, eventId)
+        }
+    }
+}
+
+interface NavigateToRoomInterceptor {
+
+    /**
+     * Return true if the navigation has been intercepted
+     */
+    fun navToRoom(roomId: String, eventId: String? = null): Boolean
+
 }

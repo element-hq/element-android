@@ -32,7 +32,7 @@ package im.vector.matrix.android.api.session.room.timeline
  */
 interface Timeline {
 
-    var listener: Timeline.Listener?
+    var listener: Listener?
 
     /**
      * This should be called before any other method after creating the timeline. It ensures the underlying database is open

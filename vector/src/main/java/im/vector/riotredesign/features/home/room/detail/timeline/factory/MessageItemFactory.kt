@@ -56,6 +56,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
+               highlight: Boolean,
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
@@ -64,7 +65,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
         if (event.root.unsignedData?.redactedEvent != null) {
             //message is redacted
-            return buildRedactedItem(informationData, callback)
+            return buildRedactedItem(informationData, highlight, callback)
         }
 
         val messageContent: MessageContent =
@@ -83,27 +84,31 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
                     informationData,
                     event.annotations?.editSummary,
+                    highlight,
                     callback)
             is MessageTextContent   -> buildTextMessageItem(event.sendState,
                     messageContent,
                     informationData,
                     event.annotations?.editSummary,
+                    highlight,
                     callback
             )
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, callback)
-            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
-            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, callback)
-            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, callback)
-            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, callback)
-            else                    -> buildNotHandledMessageItem(messageContent)
+            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback)
+            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback)
+            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback)
+            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, highlight, callback)
+            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, highlight, callback)
+            else                    -> buildNotHandledMessageItem(messageContent, highlight)
         }
     }
 
     private fun buildAudioMessageItem(messageContent: MessageAudioContent,
                                       informationData: MessageInformationData,
+                                      highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
@@ -125,9 +130,11 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
     private fun buildFileMessageItem(messageContent: MessageFileContent,
                                      informationData: MessageInformationData,
+                                     highlight: Boolean,
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .filename(messageContent.body)
                 .reactionPillCallback(callback)
@@ -147,13 +154,16 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         }))
     }
 
-    private fun buildNotHandledMessageItem(messageContent: MessageContent): DefaultItem? {
+    private fun buildNotHandledMessageItem(messageContent: MessageContent, highlight: Boolean): DefaultItem? {
         val text = "${messageContent.type} message events are not yet handled"
-        return DefaultItem_().text(text)
+        return DefaultItem_()
+                .text(text)
+                .highlighted(highlight)
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,
                                       informationData: MessageInformationData,
+                                      highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -170,6 +180,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageImageVideoItem_()
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .mediaData(data)
                 .reactionPillCallback(callback)
@@ -190,6 +201,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
     private fun buildVideoMessageItem(messageContent: MessageVideoContent,
                                       informationData: MessageInformationData,
+                                      highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -211,6 +223,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageImageVideoItem_()
                 .playable(true)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .mediaData(thumbnailData)
                 .reactionPillCallback(callback)
@@ -230,6 +243,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                      messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
                                      editSummary: EditAggregatedSummary?,
+                                     highlight: Boolean,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val bodyToUse = messageContent.formattedBody?.let {
@@ -248,7 +262,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                     }
                 }
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
+                .urlClickCallback(callback)
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 //click on the text
@@ -298,6 +314,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
 
     private fun buildNoticeMessageItem(messageContent: MessageNoticeContent,
                                        informationData: MessageInformationData,
+                                       highlight: Boolean,
                                        callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -311,8 +328,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         return MessageTextItem_()
                 .message(message)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .reactionPillCallback(callback)
+                .urlClickCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .memberClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -331,6 +350,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
                                       informationData: MessageInformationData,
                                       editSummary: EditAggregatedSummary?,
+                                      highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -347,8 +367,10 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                     }
                 }
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .reactionPillCallback(callback)
+                .urlClickCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -361,9 +383,11 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
     }
 
     private fun buildRedactedItem(informationData: MessageInformationData,
+                                  highlight: Boolean,
                                   callback: TimelineEventController.Callback?): RedactedMessageItem? {
         return RedactedMessageItem_()
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
     }
 

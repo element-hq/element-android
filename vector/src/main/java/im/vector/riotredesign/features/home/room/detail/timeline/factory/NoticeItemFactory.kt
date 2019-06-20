@@ -28,6 +28,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 class NoticeItemFactory(private val eventFormatter: NoticeEventFormatter) {
 
     fun create(event: TimelineEvent,
+               highlight: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
         val formattedText = eventFormatter.format(event) ?: return null
         val informationData = MessageInformationData(
@@ -41,6 +42,7 @@ class NoticeItemFactory(private val eventFormatter: NoticeEventFormatter) {
 
         return NoticeItem_()
                 .noticeText(formattedText)
+                .highlighted(highlight)
                 .informationData(informationData)
                 .baseCallback(callback)
     }

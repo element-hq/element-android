@@ -23,6 +23,8 @@ interface Navigator {
 
     fun openRoom(context: Context, roomId: String, eventId: String? = null)
 
+    fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String? = null)
+
     fun openRoomPreview(publicRoom: PublicRoom, context: Context)
 
     fun openRoomDirectory(context: Context)
