@@ -56,13 +56,13 @@ data class TimelineEvent(
 
     fun getDisambiguatedDisplayName(): String {
         return if (isUniqueDisplayName) {
-            senderName ?: root.senderId
+            senderName
         } else {
-            senderName?.let {
-                it + " (" + root.senderId + ")"
+            senderName?.let { name ->
+                "$name (${root.senderId})"
             }
-                    ?: root.senderId
         }
+                ?: root.senderId
                 ?: ""
     }
 
