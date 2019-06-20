@@ -142,7 +142,10 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         if (this.eventIdToHighlight != eventIdToHighlight) {
             // Clear cache to force a refresh
             for (i in 0 until modelCache.size) {
-                modelCache[i] = null
+                if (modelCache[i]?.eventId == eventIdToHighlight
+                        || modelCache[i]?.eventId == this.eventIdToHighlight) {
+                    modelCache[i] = null
+                }
             }
             this.eventIdToHighlight = eventIdToHighlight
 
