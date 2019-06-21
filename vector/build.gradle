@@ -51,7 +51,7 @@ project.android.buildTypes.all { buildType ->
             ]
 }
 
-def buildNumber = System.getenv("BUILD_NUMBER") as Integer ?: 0
+def buildNumber = System.getenv("BUILDKITE_BUILD_NUMBER") as Integer ?: 0
 
 android {
     compileSdkVersion 28
@@ -63,9 +63,16 @@ android {
         versionCode generateVersionCodeFromTimestamp()
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
+        buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""
+
+        buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
         resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+
+        buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
         resValue "string", "git_branch_name", "\"${gitBranchName()}\""
+
+        buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
         resValue "string", "build_number", "\"${buildNumber}\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

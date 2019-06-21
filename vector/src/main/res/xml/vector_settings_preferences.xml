@@ -455,9 +455,14 @@
             tools:summary="1.2.3" />
 
         <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_SDK_VERSION_PREFERENCE_KEY"
+            android:title="@string/settings_sdk_version"
+            tools:summary="4.5.6" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
             android:key="SETTINGS_OLM_VERSION_PREFERENCE_KEY"
             android:title="@string/settings_olm_version"
-            tools:summary="1.2.3" />
+            tools:summary="7.8.9" />
 
         <im.vector.riotredesign.core.preference.VectorPreference
             android:key="SETTINGS_COPYRIGHT_PREFERENCE_KEY"

@@ -19,6 +19,7 @@ package im.vector.matrix.android.api
 import android.content.Context
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
@@ -86,6 +87,9 @@ class Matrix private constructor(context: Context) : MatrixKoinComponent {
             return instance
         }
 
+        fun getSdkVersion(): String {
+            return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
+        }
     }
 
 }

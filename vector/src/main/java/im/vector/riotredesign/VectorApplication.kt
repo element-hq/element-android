@@ -39,10 +39,13 @@ import im.vector.riotredesign.features.lifecycle.VectorActivityLifecycleCallback
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
+import im.vector.riotredesign.features.version.getVersion
 import org.koin.android.ext.android.inject
 import org.koin.log.EmptyLogger
 import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class VectorApplication : Application() {
@@ -56,6 +59,8 @@ class VectorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = this
+
+        logInfo()
 
         VectorUncaughtExceptionHandler.activate(this)
 
@@ -90,6 +95,20 @@ class VectorApplication : Application() {
         FontsContractCompat.requestFont(this, fontRequest, koin.koinContext.get<EmojiCompatFontProvider>(), getFontThreadHandler())
 
         vectorConfiguration.initConfiguration()
+    }
+
+    private fun logInfo() {
+        val appVersion = getVersion(longFormat = true, useBuildNumber = true)
+        val sdkVersion = Matrix.getSdkVersion()
+        val date = SimpleDateFormat("MM-dd HH:mm:ss.SSSZ", Locale.US).format(Date())
+
+        Timber.v("----------------------------------------------------------------")
+        Timber.v("----------------------------------------------------------------")
+        Timber.v(" Application version: $appVersion")
+        Timber.v(" SDK version: $sdkVersion")
+        Timber.v(" Local time: $date")
+        Timber.v("----------------------------------------------------------------")
+        Timber.v("----------------------------------------------------------------\n\n\n\n")
     }
 
     override fun attachBaseContext(base: Context) {
