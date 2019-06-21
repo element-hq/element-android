@@ -50,7 +50,7 @@ By default, this is 0, so the server will return immediately even if the respons
 
 **delay** is a client preference. When the server responds to a sync request, the client waits for `delay`before calling a new sync.
 
-When the Riot X Android app is open (i.e in foreground state), the default timeout is 30 seconds, and delay is 0.
+When the Riot X Android app is open (i.e in foreground state), the default timeout is 10 seconds, and delay is 0.
 
 ## How does a mobile app receives push notification
 
@@ -132,7 +132,7 @@ A Home Server can be configured with default rules (for Direct messages, group m
 
 There are different kind of push rules, it can be per room (each new message on this room should be notified), it can also define a pattern that a message should match (when you are mentioned, or key word based).
 
-Notifications have 2 'levels' (`highlighted = true/false`). In RiotX these notifications level are reflected as Noisy/Silent. 
+Notifications have 2 'levels' (`highlighted = true/false sound = default/custom`). In RiotX these notifications level are reflected as Noisy/Silent. 
 
 **What about encrypted messages?**
 
