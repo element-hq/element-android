@@ -21,10 +21,11 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
-import im.vector.riotredesign.core.platform.SimpleFragmentActivity
+import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyFragment
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreSuccessFragment
+import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupStep1Fragment
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupStep2Fragment
@@ -44,18 +45,20 @@ import im.vector.riotredesign.features.home.room.list.RoomListFragment
 import im.vector.riotredesign.features.login.LoginActivity
 import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotredesign.features.roomdirectory.PublicRoomsFragment
+import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
+import im.vector.riotredesign.features.settings.VectorSettingsPreferencesFragment
 
 @Component(dependencies = [VectorComponent::class], modules = [ViewModelModule::class, HomeModule::class])
 @ScreenScope
 interface ScreenComponent {
 
-    fun viewModelFactory(): ViewModelProvider.Factory
+    fun session(): Session
 
-    fun inject(activity: SimpleFragmentActivity)
+    fun viewModelFactory(): ViewModelProvider.Factory
 
     fun inject(activity: HomeActivity)
 
@@ -85,6 +88,8 @@ interface ScreenComponent {
 
     fun inject(createRoomFragment: CreateRoomFragment)
 
+    fun inject(keysBackupManageActivity: KeysBackupManageActivity)
+
     fun inject(keysBackupRestoreFromKeyFragment: KeysBackupRestoreFromKeyFragment)
 
     fun inject(keysBackupRestoreFromPassphraseFragment: KeysBackupRestoreFromPassphraseFragment)
@@ -109,6 +114,9 @@ interface ScreenComponent {
 
     fun inject(mainActivity: MainActivity)
 
+    fun inject(vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment)
+
+    fun inject(roomDirectoryActivity: RoomDirectoryActivity)
 
     @Component.Factory
     interface Factory {

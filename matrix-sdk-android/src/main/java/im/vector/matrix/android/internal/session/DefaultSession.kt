@@ -43,6 +43,7 @@ import javax.inject.Inject
 
 @SessionScope
 internal class DefaultSession @Inject constructor(override val sessionParams: SessionParams,
+                                                  private val liveEntityObservers: Set<@JvmSuppressWildcards LiveEntityObserver>,
                                                   private val monarchy: Monarchy,
                                                   private val sessionListeners: SessionListeners,
                                                   private val roomService: RoomService,
@@ -76,7 +77,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         if (!monarchy.isMonarchyThreadOpen) {
             monarchy.openManually()
         }
-        //liveEntityObservers.forEach { it.start() }
+        liveEntityObservers.forEach { it.start() }
     }
 
     @MainThread
@@ -95,7 +96,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     override fun close() {
         assertMainThread()
         assert(isOpen)
-        //liveEntityObservers.forEach { it.dispose() }
+        liveEntityObservers.forEach { it.dispose() }
         cryptoService.close()
         if (monarchy.isMonarchyThreadOpen) {
             monarchy.closeManually()

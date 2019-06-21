@@ -50,6 +50,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.DaggerScreenComponent
 import im.vector.riotredesign.core.dialogs.ExportKeysDialog
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.extensions.withArgs
@@ -95,6 +96,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     // TODO         refreshDisplay()
     // TODO     }
     // TODO }
+
 
     private var mLoadingView: View? = null
 
@@ -809,10 +811,13 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     }
 
     override fun onAttach(context: Context) {
+        val screenComponent = DaggerScreenComponent.factory().create(vectorActivity.getVectorComponent(), vectorActivity)
         super.onAttach(context)
+        screenComponent.inject(this)
         if (context is VectorSettingsFragmentInteractionListener) {
             interactionListener = context
         }
+
     }
 
     override fun onDetach() {

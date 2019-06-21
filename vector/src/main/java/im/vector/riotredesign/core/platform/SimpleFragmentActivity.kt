@@ -48,7 +48,7 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
     @Inject lateinit var session: Session
 
     override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
+        session = injector.session()
     }
 
     override fun initUiAndData() {

@@ -19,6 +19,7 @@ package im.vector.riotredesign.features.roomdirectory
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.addFragment
 import im.vector.riotredesign.core.extensions.addFragmentToBackstack
 import im.vector.riotredesign.core.extensions.observeEvent
@@ -42,6 +43,10 @@ class RoomDirectoryActivity : VectorBaseActivity() {
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
