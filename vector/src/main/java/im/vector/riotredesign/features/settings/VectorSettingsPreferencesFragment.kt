@@ -43,6 +43,7 @@ import androidx.core.view.isVisible
 import androidx.preference.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.getFingerprintHumanReadable
 import im.vector.matrix.android.api.extensions.sortByLastSeen
@@ -72,6 +73,7 @@ import im.vector.riotredesign.features.crypto.keys.KeysExporter
 import im.vector.riotredesign.features.crypto.keys.KeysImporter
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
+import im.vector.riotredesign.features.version.getVersion
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.lang.ref.WeakReference
@@ -637,11 +639,23 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         // application version
         (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY)).let {
-            it.summary = "TODO" // VectorUtils.getApplicationVersion(appContext)
+            it.summary = getVersion(longFormat = false, useBuildNumber = true)
 
-            it.setOnPreferenceClickListener {
-                appContext?.let {
-                    copyToClipboard(it, "TODO") //VectorUtils.getApplicationVersion(it))
+            it.setOnPreferenceClickListener { pref ->
+                appContext?.let { ctx ->
+                    copyToClipboard(ctx, pref.summary)
+                }
+                true
+            }
+        }
+
+        // SDK version
+        (findPreference(PreferencesManager.SETTINGS_SDK_VERSION_PREFERENCE_KEY)).let {
+            it.summary = Matrix.getSdkVersion()
+
+            it.setOnPreferenceClickListener { pref ->
+                appContext?.let { ctx ->
+                    copyToClipboard(ctx, pref.summary)
                 }
                 true
             }
@@ -1456,7 +1470,6 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     private fun refreshPreferences() {
         PreferenceManager.getDefaultSharedPreferences(activity).edit {
             putString(PreferencesManager.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, "TODO") //session.myUser.displayname)
-            putString(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY, "TODO") // VectorUtils.getApplicationVersion(activity))
 
             /* TODO
             session.dataHandler.pushRules()?.let {

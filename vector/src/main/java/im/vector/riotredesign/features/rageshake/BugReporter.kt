@@ -34,6 +34,7 @@ import im.vector.riotredesign.core.extensions.toOnOff
 import im.vector.riotredesign.core.utils.getDeviceLocale
 import im.vector.riotredesign.features.settings.VectorLocale
 import im.vector.riotredesign.features.themes.ThemeUtils
+import im.vector.riotredesign.features.version.getVersion
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -192,13 +193,11 @@ object BugReporter {
 
                 var deviceId = "undefined"
                 var userId = "undefined"
-                var matrixSdkVersion = "undefined"
                 var olmVersion = "undefined"
 
                 Matrix.getInstance().currentSession?.let { session ->
                     userId = session.sessionParams.credentials.userId
                     deviceId = session.sessionParams.credentials.deviceId ?: "undefined"
-                    // TODO matrixSdkVersion = session.getVersion(true);
                     olmVersion = session.getCryptoVersion(context, true)
                 }
 
@@ -210,9 +209,9 @@ object BugReporter {
                             .addFormDataPart("user_agent", Matrix.getInstance().getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("device_id", deviceId)
-                            // TODO .addFormDataPart("version", Matrix.getInstance(context).getVersion(true, false))
+                            .addFormDataPart("version", getVersion(longFormat = true, useBuildNumber = false))
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
-                            .addFormDataPart("matrix_sdk_version", matrixSdkVersion)
+                            .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
                             .addFormDataPart("olm_version", olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("lazy_loading", true.toOnOff())

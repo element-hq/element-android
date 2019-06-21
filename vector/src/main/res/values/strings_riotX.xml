@@ -6,4 +6,6 @@
 
     <string name="import_e2e_keys_from_file">"Import e2e keys from file \"%1$s\"."</string>
 
+    <string name="settings_sdk_version">Matrix SDK Version</string>
+
 </resources>
