@@ -16,12 +16,24 @@ class PushRuleTriggerListener(
     var session: Session? = null
 
     override fun onMatchRule(event: Event, actions: List<Action>) {
+        Timber.v("Push rule match for event ${event.eventId}")
         if (session == null) {
             Timber.e("Called without active session")
             return
         }
-        resolver.resolveEvent(event,null,session!!)?.let {
-            drawerManager.onNotifiableEventReceived(it)
+        val notificationAction = NotificationAction.extractFrom(actions)
+        if (notificationAction.shouldNotify) {
+            val resolveEvent = resolver.resolveEvent(event, session!!)
+            if (resolveEvent == null) {
+                Timber.v("## Failed to resolve event")
+                //TODO
+            } else {
+                resolveEvent.noisy = !notificationAction.soundName.isNullOrBlank()
+                Timber.v("New event to notify $resolveEvent tweaks:$notificationAction")
+                drawerManager.onNotifiableEventReceived(resolveEvent)
+            }
+        } else {
+            Timber.v("Matched push rule is set to not notify")
         }
     }
 
@@ -43,4 +55,5 @@ class PushRuleTriggerListener(
         drawerManager.clearAllEvents()
         drawerManager.refreshNotificationDrawer()
     }
+
 }

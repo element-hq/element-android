@@ -17,6 +17,8 @@
     <string name="settings_preferences">Preferences</string>
     <string name="settings_security_and_privacy">Security &amp; Privacy</string>
     <string name="settings_expert">Expert</string>
-    <string name="settings_push_gateways">Push Gateways</string>
+    <string name="settings_push_rules">Push Rules</string>
+    <string name="settings_push_rules_no_rules">No push rules defined</string>
+    <string name="settings_push_gateway_no_pushers">No registered push gateways</string>
 
 </resources>

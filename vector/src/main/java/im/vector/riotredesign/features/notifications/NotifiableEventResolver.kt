@@ -43,7 +43,7 @@ class NotifiableEventResolver(val context: Context) {
 
     //private val eventDisplay = RiotEventDisplay(context)
 
-    fun resolveEvent(event: Event/*, roomState: RoomState?*/, bingRule: PushRule?, session: Session): NotifiableEvent? {
+    fun resolveEvent(event: Event/*, roomState: RoomState?, bingRule: PushRule?*/, session: Session): NotifiableEvent? {
 
 
 //        val store = session.dataHandler.store
@@ -55,7 +55,7 @@ class NotifiableEventResolver(val context: Context) {
 
         when (event.getClearType()) {
             EventType.MESSAGE           -> {
-                return resolveMessageEvent(event, bingRule, session)
+                return resolveMessageEvent(event, session)
             }
 //            EventType.ENCRYPTED         -> {
 //                val messageEvent = resolveMessageEvent(event, bingRule, session, store)
@@ -88,11 +88,9 @@ class NotifiableEventResolver(val context: Context) {
     }
 
 
-    private fun resolveMessageEvent(event: Event, pushRule: PushRule?, session: Session): NotifiableEvent? {
+    private fun resolveMessageEvent(event: Event, session: Session): NotifiableEvent? {
         //If we are here, that means that the event should be notified to the user, we check now how it should be presented (sound)
 //        val soundName = pushRule?.notificationSound
-
-        val noisy =  true//pushRule?.notificationSound != null
 
         //The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
         val room = session.getRoom(event.roomId!! /*roomID cannot be null (see Matrix SDK code)*/)
@@ -109,7 +107,7 @@ class NotifiableEventResolver(val context: Context) {
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.eventId ?: "",
                     timestamp = event.originServerTs ?: 0,
-                    noisy = noisy,
+                    noisy = false,//will be updated
                     senderName = senderDisplayName,
                     senderId = event.senderId,
                     body = body,
@@ -130,7 +128,7 @@ class NotifiableEventResolver(val context: Context) {
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.eventId!!,
                     timestamp = event.originServerTs ?: 0,
-                    noisy = noisy,
+                    noisy = false,//will be updated
                     senderName = senderDisplayName,
                     senderId = event.senderId,
                     body = body,

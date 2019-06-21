@@ -1671,15 +1671,15 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                 var index = 0
 
-                for (pusher in mDisplayedPushers) {
-                    if (null != pusher.lang) {
-                        val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pusher.pushkey)
+                for (pushRule in mDisplayedPushers) {
+                    if (null != pushRule.lang) {
+                        val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pushRule.pushkey)
 
                         val preference = VectorPreference(activity).apply {
                             mTypeface = if (isThisDeviceTarget) Typeface.BOLD else Typeface.NORMAL
                         }
-                        preference.title = pusher.deviceDisplayName
-                        preference.summary = pusher.appDisplayName
+                        preference.title = pushRule.deviceDisplayName
+                        preference.summary = pushRule.appDisplayName
                         preference.key = PUSHER_PREFERENCE_KEY_BASE + index
                         index++
                         mPushersSettingsCategory.addPreference(preference)
@@ -1694,7 +1694,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                                             .setPositiveButton(R.string.remove)
                                             { _, _ ->
                                                 displayLoadingView()
-                                                pushManager.unregister(session, pusher, object : MatrixCallback<Unit> {
+                                                pushManager.unregister(session, pushRule, object : MatrixCallback<Unit> {
                                                     override fun onSuccess(info: Void?) {
                                                         refreshPushersList()
                                                         onCommonDone(null)

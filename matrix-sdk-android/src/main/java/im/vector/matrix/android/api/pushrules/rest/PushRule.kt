@@ -25,7 +25,7 @@ data class PushRule(
         //Required. The domainActions to perform when this rule is matched.
         val actions: List<Any>,
         //Required. Whether this is a default rule, or has been set explicitly.
-        val default: Boolean,
+        val default: Boolean? = false,
         //Required. Whether the push rule is enabled or not.
         val enabled: Boolean,
         //Required. The ID of this rule.

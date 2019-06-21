@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.pushrules.PushRuleService
+import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
@@ -82,6 +83,7 @@ import java.util.*
 
 
 internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent {
+
     companion object {
         const val SCOPE: String = "session"
     }
@@ -496,5 +498,14 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     override fun livePushers(): LiveData<List<Pusher>> {
         return pushersService.livePushers()
     }
+
+    override fun getPushrules(scope: String): List<PushRule> {
+        return pushRuleService.getPushrules(scope)
+    }
+
+    override fun fetchPushRules(scope: String) {
+        pushRuleService.fetchPushRules(scope)
+    }
+
 
 }

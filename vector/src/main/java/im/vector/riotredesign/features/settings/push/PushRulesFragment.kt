@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package im.vector.riotredesign.features.settings.push
 
 import android.os.Bundle
@@ -30,17 +29,19 @@ import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.ui.list.genericFooterItem
 import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
 
-class PushGatewaysFragment : VectorBaseFragment() {
+
+class PushRulesFragment : VectorBaseFragment() {
 
     override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler_epoxy
 
-    private val viewModel: PushGatewaysViewModel by fragmentViewModel(PushGatewaysViewModel::class)
+    private val viewModel: PushRulesViewModel by fragmentViewModel(PushRulesViewModel::class)
 
-    private val epoxyController by lazy { PushGateWayController(StringProvider(requireContext().resources)) }
+    private val epoxyController by lazy { PushRulesFragment.PushRulesController(StringProvider(requireContext().resources)) }
+
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_notifications_targets)
+        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_push_rules)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -57,26 +58,20 @@ class PushGatewaysFragment : VectorBaseFragment() {
         epoxyController.setData(it)
     }
 
-    class PushGateWayController(private val stringProvider: StringProvider) : TypedEpoxyController<PushGatewayViewState>() {
-        override fun buildModels(data: PushGatewayViewState?) {
-            data?.pushgateways?.invoke()?.let { pushers ->
-                if (pushers.isEmpty()) {
-                    genericFooterItem {
-                        id("footer")
-                        text(stringProvider.getString(R.string.settings_push_gateway_no_pushers))
-                    }
-                } else {
-                    pushers.forEach {
-                        pushGatewayItem {
-                            id("${it.pushKey}_${it.appId}")
-                            pusher(it)
-                        }
+    class PushRulesController(private val stringProvider: StringProvider) : TypedEpoxyController<PushRulesViewState>() {
+
+        override fun buildModels(data: PushRulesViewState?) {
+            data?.let {
+                it.rules.forEach {
+                    pushRuleItem {
+                        id(it.ruleId)
+                        pushRule(it)
                     }
                 }
             } ?: run {
                 genericFooterItem {
                     id("footer")
-                    text(stringProvider.getString(R.string.loading))
+                    text(stringProvider.getString(R.string.settings_push_rules_no_rules))
                 }
             }
         }

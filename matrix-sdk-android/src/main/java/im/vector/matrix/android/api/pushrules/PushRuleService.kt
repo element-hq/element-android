@@ -15,18 +15,27 @@
  */
 package im.vector.matrix.android.api.pushrules
 
+import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
 
 interface PushRuleService {
 
 
+    /**
+     * Fetch the push rules from the server
+     */
+    fun fetchPushRules(scope: String = "global")
+
     //TODO get push rule set
+    fun getPushrules(scope: String = "global"): List<PushRule>
 
     //TODO update rule
 
     fun addPushRuleListener(listener: PushRuleListener)
 
     fun removePushRuleListener(listener: PushRuleListener)
+
+//    fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule?
 
     interface PushRuleListener {
         fun onMatchRule(event: Event, actions: List<Action>)

@@ -24,7 +24,7 @@ internal open class PushRulesEntity(
         @Index var userId: String = "",
         var scope: String = "",
         var rulesetKey: String = "",
-        var pushRules: RealmList<PushRulesEntity> = RealmList()
+        var pushRules: RealmList<PushRuleEntity> = RealmList()
 ) : RealmObject() {
     companion object
 }

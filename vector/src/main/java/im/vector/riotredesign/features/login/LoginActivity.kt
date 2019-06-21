@@ -78,6 +78,7 @@ class LoginActivity : VectorBaseActivity() {
                 data.setFilter(FilterService.FilterPreset.RiotFilter)
                 data.startSync()
                 get<PushRuleTriggerListener>().startWithSession(data)
+                data.fetchPushRules()
                 goToHome()
             }
 

@@ -137,8 +137,10 @@ class VectorApplication : Application() {
                 } else {
                     //TODO check if notifications are enabled for this device
                     //We need to use alarm in this mode
-                    AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext,4_000L)
-                    Timber.i("Alarm scheduled to restart service")
+                    if (Matrix.getInstance().currentSession != null) {
+                        AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext, 4_000L)
+                        Timber.i("Alarm scheduled to restart service")
+                    }
 
                 }
             }
@@ -150,6 +152,7 @@ class VectorApplication : Application() {
             it.refreshPushers()
             //bind to the sync service
             get<PushRuleTriggerListener>().startWithSession(it)
+            it.fetchPushRules()
         }
     }
 

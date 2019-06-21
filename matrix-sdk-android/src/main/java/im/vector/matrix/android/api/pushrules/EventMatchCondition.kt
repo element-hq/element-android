@@ -19,9 +19,18 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.di.MoshiProvider
 import timber.log.Timber
 
-class EventMatchCondition(val key: String, val pattern: String) : Condition(Kind.EVENT_MATCH) {
+class EventMatchCondition(val key: String, val pattern: String) : Condition(Kind.event_match) {
 
-    override fun isSatisfied(event: Event): Boolean {
+    override fun isSatisfied(conditionResolver: ConditionResolver) : Boolean {
+        return conditionResolver.resolveEventMatchCondition(this)
+    }
+
+    override fun technicalDescription(): String {
+        return "'$key' Matches '$pattern'"
+    }
+
+
+    fun isSatisfied(event: Event): Boolean {
         //TODO encrypted events?
         val rawJson = MoshiProvider.providesMoshi().adapter(Event::class.java).toJsonValue(event) as? Map<*, *>
                 ?: return false

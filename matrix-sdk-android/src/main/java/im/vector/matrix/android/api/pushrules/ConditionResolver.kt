@@ -15,11 +15,14 @@
  */
 package im.vector.matrix.android.api.pushrules
 
-import im.vector.matrix.android.api.pushrules.rest.PushRule
+/**
+ * Acts like a visitor on Conditions.
+ * This class as all required context needed to evaluate rules
+ */
+interface ConditionResolver {
 
-interface PushRulesProvider {
-
-    fun getOrderedPushrules(): List<PushRule>
-
-    fun onRulesUpdate(newRules: List<PushRule>)
+    fun resolveEventMatchCondition(eventMatchCondition: EventMatchCondition): Boolean
+    fun resolveRoomMemberCountCondition(roomMemberCountCondition: RoomMemberCountCondition): Boolean
+    fun resolveSenderNotificationPermissionCondition(senderNotificationPermissionCondition: SenderNotificationPermissionCondition): Boolean
+    fun resolveContainsDisplayNameCondition(containsDisplayNameCondition: ContainsDisplayNameCondition) : Boolean
 }

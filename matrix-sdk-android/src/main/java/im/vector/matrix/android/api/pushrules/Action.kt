@@ -43,51 +43,53 @@ class Action(val type: Type) {
     var stringValue: String? = null
     var boolValue: Boolean? = null
 
-}
-
-fun PushRule.domainActions(): List<Action>? {
-    val actions = ArrayList<Action>()
-    this.actions.forEach { actionStrOrObj ->
-        if (actionStrOrObj is String) {
-            val action = when (actionStrOrObj) {
-                Action.Type.NOTIFY.value      -> Action(Action.Type.NOTIFY)
-                Action.Type.DONT_NOTIFY.value -> Action(Action.Type.DONT_NOTIFY)
-                else                          -> {
-                    Timber.w("Unsupported action type ${actionStrOrObj}")
-                    null
-                }
-            }?.let {
-                actions.add(it)
-            }
-        } else if (actionStrOrObj is Map<*, *>) {
-            val tweakAction = actionStrOrObj["set_tweak"] as? String
-            when (tweakAction) {
-                "sound"     -> {
-                    (actionStrOrObj["value"] as? String)?.let { stringValue ->
-                        Action(Action.Type.SET_TWEAK).also {
-                            it.tweak_action = "sound"
-                            it.stringValue = stringValue
-                            actions.add(it)
+    companion object {
+        fun mapFrom(pushRule: PushRule): List<Action>? {
+            val actions = ArrayList<Action>()
+            pushRule.actions.forEach { actionStrOrObj ->
+                if (actionStrOrObj is String) {
+                    when (actionStrOrObj) {
+                        Action.Type.NOTIFY.value      -> Action(Action.Type.NOTIFY)
+                        Action.Type.DONT_NOTIFY.value -> Action(Action.Type.DONT_NOTIFY)
+                        else                          -> {
+                            Timber.w("Unsupported action type ${actionStrOrObj}")
+                            null
+                        }
+                    }?.let {
+                        actions.add(it)
+                    }
+                } else if (actionStrOrObj is Map<*, *>) {
+                    val tweakAction = actionStrOrObj["set_tweak"] as? String
+                    when (tweakAction) {
+                        "sound"     -> {
+                            (actionStrOrObj["value"] as? String)?.let { stringValue ->
+                                Action(Action.Type.SET_TWEAK).also {
+                                    it.tweak_action = "sound"
+                                    it.stringValue = stringValue
+                                    actions.add(it)
+                                }
+                            }
+                        }
+                        "highlight" -> {
+                            (actionStrOrObj["value"] as? Boolean)?.let { boolValue ->
+                                Action(Action.Type.SET_TWEAK).also {
+                                    it.tweak_action = "highlight"
+                                    it.boolValue = boolValue
+                                    actions.add(it)
+                                }
+                            }
+                        }
+                        else        -> {
+                            Timber.w("Unsupported action type ${actionStrOrObj}")
                         }
                     }
-                }
-                "highlight" -> {
-                    (actionStrOrObj["value"] as? Boolean)?.let { boolValue ->
-                        Action(Action.Type.SET_TWEAK).also {
-                            it.tweak_action = "highlight"
-                            it.boolValue = boolValue
-                            actions.add(it)
-                        }
-                    }
-                }
-                else        -> {
+                } else {
                     Timber.w("Unsupported action type ${actionStrOrObj}")
+                    return null
                 }
             }
-        } else {
-            Timber.w("Unsupported action type ${actionStrOrObj}")
-            return null
+            return if (actions.isEmpty()) null else actions
         }
     }
-    return if (actions.isEmpty()) null else actions
 }
+

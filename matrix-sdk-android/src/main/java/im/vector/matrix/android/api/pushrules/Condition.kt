@@ -15,25 +15,23 @@
  */
 package im.vector.matrix.android.api.pushrules
 
-import im.vector.matrix.android.api.session.events.model.Event
-
 abstract class Condition(val kind: Kind) {
 
     enum class Kind(val value: String) {
-        EVENT_MATCH("event_match"),
-        CONTAINS_DISPLAY_NAME("contains_display_name"),
-        ROOM_MEMBER_COUNT("room_member_count"),
-        SENDER_NOTIFICATION_PERMISSION("sender_notification_permission"),
+        event_match("event_match"),
+        contains_display_name("contains_display_name"),
+        room_member_count("room_member_count"),
+        sender_notification_permission("sender_notification_permission"),
         UNRECOGNIZE("");
 
         companion object {
 
             fun fromString(value: String): Kind {
                 return when (value) {
-                    "event_match"                    -> EVENT_MATCH
-                    "contains_display_name"          -> CONTAINS_DISPLAY_NAME
-                    "room_member_count"              -> ROOM_MEMBER_COUNT
-                    "sender_notification_permission" -> SENDER_NOTIFICATION_PERMISSION
+                    "event_match"                    -> event_match
+                    "contains_display_name"          -> contains_display_name
+                    "room_member_count"              -> room_member_count
+                    "sender_notification_permission" -> sender_notification_permission
                     else                             -> UNRECOGNIZE
                 }
             }
@@ -42,10 +40,9 @@ abstract class Condition(val kind: Kind) {
 
     }
 
-    abstract fun isSatisfied(event: Event): Boolean
+    abstract fun isSatisfied(conditionResolver: ConditionResolver): Boolean
 
-    companion object {
-        //TODO factory methods?
+    open fun technicalDescription(): String {
+        return "Kind: $kind"
     }
-
 }

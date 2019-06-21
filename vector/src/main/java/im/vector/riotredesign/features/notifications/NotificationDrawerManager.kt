@@ -58,28 +58,6 @@ class NotificationDrawerManager(val context: Context, private val outdatedDetect
             })
 
     /**
-     * No multi session support for now
-     */
-    private fun initWithSession(session: Session?) {
-        session?.let {
-            /*
-            myUserDisplayName = it.myUser?.displayname ?: it.myUserId
-
-            // User Avatar
-            it.myUser?.avatarUrl?.let { avatarUrl ->
-                val userAvatarUrlPath = it.mediaCache?.thumbnailCacheFile(avatarUrl, avatarSize)
-                if (userAvatarUrlPath != null) {
-                    myUserAvatarUrl = userAvatarUrlPath.path
-                } else {
-                    // prepare for the next time
-                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), avatarUrl, avatarSize)
-                }
-            }
-            */
-        }
-    }
-
-    /**
     Should be called as soon as a new event is ready to be displayed.
     The notification corresponding to this event will not be displayed until
     #refreshNotificationDrawer() is called.

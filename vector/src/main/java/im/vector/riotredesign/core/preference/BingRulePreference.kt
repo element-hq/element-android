@@ -25,7 +25,7 @@ import android.widget.TextView
 import androidx.preference.PreferenceViewHolder
 import im.vector.riotredesign.R
 
-// TODO Replace by real Bingrule class
+// TODO Replace by real Bingrule class, then delete
 class BingRule(rule: BingRule) {
     fun shouldNotNotify() = false
     fun shouldNotify() = false

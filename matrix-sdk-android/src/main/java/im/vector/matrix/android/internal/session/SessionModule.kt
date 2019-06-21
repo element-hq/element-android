@@ -20,7 +20,6 @@ import android.content.Context
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.PushRuleService
-import im.vector.matrix.android.api.pushrules.PushRulesProvider
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.pushers.PushersService
@@ -38,11 +37,11 @@ import im.vector.matrix.android.internal.session.filter.*
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.notification.BingRuleWatcher
-import im.vector.matrix.android.internal.session.notification.MockPushRuleProvider
-import im.vector.matrix.android.internal.session.notification.PushRulesManager
+import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.pushers.*
 import im.vector.matrix.android.internal.session.pushers.DefaultGetPusherTask
 import im.vector.matrix.android.internal.session.pushers.DefaultPusherService
+import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
 import im.vector.matrix.android.internal.session.pushers.GetPushersTask
 import im.vector.matrix.android.internal.session.pushers.PushersAPI
 import im.vector.matrix.android.internal.session.room.*
@@ -175,18 +174,25 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            MockPushRuleProvider() as PushRulesProvider
+            val retrofit: Retrofit = get()
+            retrofit.create(PushrulesApi::class.java)
         }
 
         scope(DefaultSession.SCOPE) {
-            get<PushRulesManager>() as PushRuleService
-        }
-        scope(DefaultSession.SCOPE) {
-            PushRulesManager(get(), get())
+            get<DefaultPushRuleService>() as PushRuleService
         }
 
         scope(DefaultSession.SCOPE) {
-            BingRuleWatcher(get(), get(), get(), get())
+            DefaultPushRuleService(get(), get(), get(), get())
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultGetPushrulesTask(get()) as GetPushRulesTask
+        }
+
+
+        scope(DefaultSession.SCOPE) {
+            BingRuleWatcher(get(), get())
         }
 
         scope(DefaultSession.SCOPE) {

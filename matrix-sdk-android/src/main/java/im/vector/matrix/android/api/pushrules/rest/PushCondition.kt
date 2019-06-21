@@ -17,8 +17,7 @@ package im.vector.matrix.android.api.pushrules.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.pushrules.Condition
-import im.vector.matrix.android.api.pushrules.EventMatchCondition
+import im.vector.matrix.android.api.pushrules.*
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
@@ -37,7 +36,7 @@ data class PushCondition(
 
     fun asExecutableCondition(): Condition? {
         return when (Condition.Kind.fromString(this.kind)) {
-            Condition.Kind.EVENT_MATCH                    -> {
+            Condition.Kind.event_match                    -> {
                 if (this.key != null && this.pattern != null) {
                     EventMatchCondition(key, pattern)
                 } else {
@@ -45,10 +44,24 @@ data class PushCondition(
                     null
                 }
             }
-            Condition.Kind.CONTAINS_DISPLAY_NAME          -> TODO()
-            Condition.Kind.ROOM_MEMBER_COUNT              -> TODO()
-            Condition.Kind.SENDER_NOTIFICATION_PERMISSION -> TODO()
-            Condition.Kind.UNRECOGNIZE                    -> null
+            Condition.Kind.contains_display_name          -> {
+                ContainsDisplayNameCondition()
+            }
+            Condition.Kind.room_member_count              -> {
+                if (this.iz.isNullOrBlank()) {
+                    Timber.e("Malformed ROOM_MEMBER_COUNT condition")
+                    null
+                } else {
+                    RoomMemberCountCondition(this.iz)
+                }
+            }
+            Condition.Kind.sender_notification_permission -> {
+                this.key?.let { SenderNotificationPermissionCondition(it) }
+            }
+            Condition.Kind.UNRECOGNIZE                    ->  {
+                Timber.e("Unknwon kind $kind")
+                null
+            }
         }
     }
 }

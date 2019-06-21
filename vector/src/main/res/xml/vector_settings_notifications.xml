@@ -2,14 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
-        android:key="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-        android:title="@string/settings_enable_all_notif" />
+    <!--<SwitchPreference-->
+        <!--android:key="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"-->
+        <!--android:title="@string/settings_enable_all_notif" />-->
 
     <SwitchPreference
-        android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+
         android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
         android:title="@string/settings_enable_this_device" />
+    <!--android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"-->
 
     <!--<im.vector.riotredesign.core.preference.VectorSwitchPreference-->
     <!--android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"-->
@@ -27,6 +28,7 @@
         android:persistent="false"
         android:summary="@string/settings_notification_advanced_summary"
         android:title="@string/settings_notification_advanced"
+        android:enabled="false"
         app:fragment="im.vector.fragments.VectorSettingsNotificationsAdvancedFragment" />
 
     <Preference
@@ -38,8 +40,15 @@
 
         <Preference
             android:layout_width="match_parent"
-            android:title="@string/settings_push_gateways"
+            android:title="@string/settings_notifications_targets"
+            android:persistent="false"
             app:fragment="im.vector.riotredesign.features.settings.push.PushGatewaysFragment" />
+
+        <Preference
+            android:layout_width="match_parent"
+            android:title="@string/settings_push_rules"
+            android:persistent="false"
+            app:fragment="im.vector.riotredesign.features.settings.push.PushRulesFragment" />
 
     </PreferenceCategory>
 </PreferenceScreen>

@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.pushrules.rest.Ruleset
  * All push rulesets for a user.
  */
 @JsonClass(generateAdapter = true)
-data class PushruleResponse(
+data class PushrulesResponse(
         //Global rules, account level applying to all devices
         val global: Ruleset,
         //Device specific rules, apply only to current device
