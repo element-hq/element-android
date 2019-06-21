@@ -24,13 +24,11 @@ import android.os.Looper
 import android.text.TextUtils
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.work.*
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.preference.BingRule
@@ -42,7 +40,6 @@ import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.notifications.SimpleNotifiableEvent
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 /**
  * Class extending FirebaseMessagingService.
@@ -144,7 +141,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     Timber.i("Ignoring push, event already knwown")
                 } else {
                     Timber.v("Requesting background sync")
-                    session.requireBackgroundSync(0L)
+                    session.requireBackgroundSync()
                 }
             }
 
@@ -219,7 +216,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 return
             } else {
 
-                var notifiableEvent = notifiableEventResolver.resolveEvent(event, null /* TODO session.fulfillRule(event) */, session)
+                var notifiableEvent = notifiableEventResolver.resolveEvent(event, session)
 
                 if (notifiableEvent == null) {
                     Timber.e("Unsupported notifiable event ${eventId}")
