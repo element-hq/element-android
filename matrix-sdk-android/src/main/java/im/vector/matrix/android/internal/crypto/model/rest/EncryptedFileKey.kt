@@ -15,14 +15,39 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class EncryptedFileKey(
+        /**
+         * Required. Algorithm. Must be "A256CTR".
+         */
+        @Json(name = "alg")
         var alg: String,
+
+        /**
+         * Required. Extractable. Must be true. This is a W3C extension.
+         */
+        @Json(name = "ext")
         var ext: Boolean? = null,
+
+        /**
+         * Required. Key operations. Must at least contain "encrypt" and "decrypt".
+         */
+        @Json(name = "key_ops")
         var key_ops: List<String>,
+
+        /**
+         * Required. Key type. Must be "oct".
+         */
+        @Json(name = "kty")
         var kty: String,
+
+        /**
+         * Required. The key, encoded as urlsafe unpadded base64.
+         */
+        @Json(name = "k")
         var k: String
 )
 

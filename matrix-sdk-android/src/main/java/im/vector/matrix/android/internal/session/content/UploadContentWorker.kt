@@ -124,7 +124,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
     }
 
     private fun MessageVideoContent.update(url: String, thumbnailUrl: String?): MessageVideoContent {
-        return copy(url = url, info = info?.copy(thumbnailUrl = thumbnailUrl))
+        return copy(url = url, videoInfo = videoInfo?.copy(thumbnailUrl = thumbnailUrl))
     }
 
     private fun MessageFileContent.update(url: String): MessageFileContent {

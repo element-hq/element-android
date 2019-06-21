@@ -20,14 +20,37 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
+import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
 data class MessageFileContent(
+        /**
+         * Not documented
+         */
         @Json(name = "msgtype") override val type: String,
+
+        /**
+         * Required. A human-readable description of the file. This is recommended to be the filename of the original upload.
+         */
         @Json(name = "body") override val body: String,
+
+        /**
+         * The original filename of the uploaded file.
+         */
         @Json(name = "filename") val filename: String? = null,
+
+        /**
+         * Information about the file referred to in url.
+         */
         @Json(name = "info") val info: FileInfo? = null,
+
+        /**
+         * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the file.
+         */
         @Json(name = "url") val url: String? = null,
+
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
-        @Json(name = "m.new_content") override val newContent: Content? = null
-) : MessageContent
+        @Json(name = "m.new_content") override val newContent: Content? = null,
+
+        @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
+) : MessageEncyptedContent

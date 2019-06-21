@@ -15,14 +15,48 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * In Matrix specs: EncryptedFile
+ */
 @JsonClass(generateAdapter = true)
 data class EncryptedFileInfo(
+        /**
+         * Required. The URL to the file.
+         */
+        @Json(name = "url")
         var url: String? = null,
+
+        /**
+         * Not documented
+         */
+        @Json(name = "mimetype")
         var mimetype: String,
+
+        /**
+         * Required. A JSON Web Key object.
+         */
+        @Json(name = "key")
         var key: EncryptedFileKey? = null,
+
+        /**
+         * Required. The Initialisation Vector used by AES-CTR, encoded as unpadded base64.
+         */
+        @Json(name = "iv")
         var iv: String,
+
+        /**
+         * Required. A map from an algorithm name to a hash of the ciphertext, encoded as unpadded base64.
+         * Clients should support the SHA-256 hash, which uses the key "sha256".
+         */
+        @Json(name = "hashes")
         var hashes: Map<String, String>,
+
+        /**
+         * Required. Version of the encrypted attachments protocol. Must be "v2".
+         */
+        @Json(name = "v")
         var v: String? = null
 )

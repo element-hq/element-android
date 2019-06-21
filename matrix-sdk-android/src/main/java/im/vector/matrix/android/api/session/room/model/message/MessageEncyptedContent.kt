@@ -16,23 +16,12 @@
 
 package im.vector.matrix.android.api.session.room.model.message
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 
-@JsonClass(generateAdapter = true)
-data class AudioInfo(
-        /**
-         * The mimetype of the audio e.g. "audio/aac".
-         */
-        @Json(name = "mimetype") val mimeType: String,
 
-        /**
-         * The size of the audio clip in bytes.
-         */
-        @Json(name = "size") val size: Long = 0,
-
-        /**
-         * The duration of the audio in milliseconds.
-         */
-        @Json(name = "duration") val duration: Int = 0
-)
+/**
+ * Interface for message which can contains encrypted data
+ */
+interface MessageEncyptedContent : MessageContent {
+    val encryptedFileInfo: EncryptedFileInfo?
+}

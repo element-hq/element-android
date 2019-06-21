@@ -220,10 +220,10 @@ class MessageItemFactory @Inject constructor(
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
-                url = messageContent.info?.thumbnailUrl,
-                height = messageContent.info?.height,
+                url = messageContent.videoInfo?.thumbnailUrl,
+                height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
-                width = messageContent.info?.width,
+                width = messageContent.videoInfo?.width,
                 maxWidth = maxWidth
         )
 

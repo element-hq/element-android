@@ -179,7 +179,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         val content = MessageVideoContent(
                 type = MessageType.MSGTYPE_VIDEO,
                 body = attachment.name ?: "video",
-                info = VideoInfo(
+                videoInfo = VideoInfo(
                         mimeType = attachment.mimeType,
                         width = width,
                         height = height,
@@ -198,7 +198,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         val content = MessageAudioContent(
                 type = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
-                info = AudioInfo(
+                audioInfo = AudioInfo(
                         mimeType = attachment.mimeType ?: "audio/mpeg",
                         size = attachment.size
                 ),
