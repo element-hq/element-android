@@ -175,7 +175,10 @@ class PushrulesConditionTest {
             return _numberOfJoinedMembers
         }
 
-        override val roomSummary: LiveData<RoomSummary>
+        override val liveRoomSummary: LiveData<RoomSummary>
+            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+
+        override val roomSummary: RoomSummary?
             get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
         override fun createTimeline(eventId: String?, allowedTypes: List<String>?): Timeline {

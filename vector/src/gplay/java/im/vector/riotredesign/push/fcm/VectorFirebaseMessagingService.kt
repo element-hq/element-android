@@ -49,10 +49,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private val notificationDrawerManager by inject<NotificationDrawerManager>()
     private val pusherManager by inject<PushersManager>()
 
-    private val notifiableEventResolver by lazy {
-        NotifiableEventResolver(this)
-    }
-
+    private val notifiableEventResolver by inject<NotifiableEventResolver>()
     // UI handler
     private val mUIHandler by lazy {
         Handler(Looper.getMainLooper())
@@ -69,8 +66,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             return
         }
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.i("## onMessageReceived()" + message.data.toString())
-            Timber.i("## onMessageReceived() from FCM with priority " + message.priority)
+            Timber.i("## onMessageReceived() %s", message.data.toString())
+            Timber.i("## onMessageReceived() from FCM with priority %s", message.priority)
         }
         mUIHandler.post {
             if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
@@ -168,7 +165,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 val room = session.getRoom(roomId) ?: return false
                 return room.getTimeLineEvent(eventId) != null
             } catch (e: Exception) {
-                Timber.e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined " + e.message)
+                Timber.e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
             }
 
         }
@@ -209,44 +206,39 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             return
         } else {
 
-            val event = parseEvent(data)
-            if (event?.roomId == null) {
-                //unsupported event
-                Timber.e("Received an event with no room id")
-                return
+            val event = parseEvent(data) ?: return
+
+            val notifiableEvent = notifiableEventResolver.resolveEvent(event, session)
+
+            if (notifiableEvent == null) {
+                Timber.e("Unsupported notifiable event ${eventId}")
+                if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                    Timber.e("--> ${event}")
+                }
             } else {
 
-                var notifiableEvent = notifiableEventResolver.resolveEvent(event, session)
 
-                if (notifiableEvent == null) {
-                    Timber.e("Unsupported notifiable event ${eventId}")
-                    if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                        Timber.e("--> ${event}")
+                if (notifiableEvent is NotifiableMessageEvent) {
+                    if (TextUtils.isEmpty(notifiableEvent.senderName)) {
+                        notifiableEvent.senderName = data["sender_display_name"]
+                                ?: data["sender"] ?: ""
                     }
-                } else {
-
-
-                    if (notifiableEvent is NotifiableMessageEvent) {
-                        if (TextUtils.isEmpty(notifiableEvent.senderName)) {
-                            notifiableEvent.senderName = data["sender_display_name"]
-                                    ?: data["sender"] ?: ""
-                        }
-                        if (TextUtils.isEmpty(notifiableEvent.roomName)) {
-                            notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""
-                        }
+                    if (TextUtils.isEmpty(notifiableEvent.roomName)) {
+                        notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""
                     }
-
-                    notifiableEvent.isPushGatewayEvent = true
-                    notifiableEvent.matrixID = session.sessionParams.credentials.userId
-                    notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
-                    notificationDrawerManager.refreshNotificationDrawer()
                 }
+
+                notifiableEvent.isPushGatewayEvent = true
+                notifiableEvent.matrixID = session.sessionParams.credentials.userId
+                notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
+                notificationDrawerManager.refreshNotificationDrawer()
             }
         }
+
     }
 
     private fun findRoomNameBestEffort(data: Map<String, String>, session: Session?): String? {
-        var roomName: String? = data["room_name"]
+        val roomName: String? = data["room_name"]
         val roomId = data["room_id"]
         if (null == roomName && null != roomId) {
             // Try to get the room name from our store
@@ -281,7 +273,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     // TODO content = data.getValue("content"),
                     originServerTs = System.currentTimeMillis())
         } catch (e: Exception) {
-            Timber.e(e, "buildEvent fails " + e.localizedMessage)
+            Timber.e(e, "buildEvent fails ")
         }
 
         return null

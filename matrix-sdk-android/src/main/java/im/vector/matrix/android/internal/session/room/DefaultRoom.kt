@@ -52,7 +52,7 @@ internal class DefaultRoom(
         RelationService by relationService,
         MembershipService by roomMembersService {
 
-    override val roomSummary: LiveData<RoomSummary> by lazy {
+    override val liveRoomSummary: LiveData<RoomSummary> by lazy {
         val liveRealmData = RealmLiveData<RoomSummaryEntity>(monarchy.realmConfiguration) { realm ->
             RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
         }
@@ -67,6 +67,15 @@ internal class DefaultRoom(
             }
         }
     }
+
+    override val roomSummary: RoomSummary?
+        get() {
+            var sum: RoomSummaryEntity? = null
+            monarchy.runTransactionSync {
+                sum = RoomSummaryEntity.where(it, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME).findFirst()
+            }
+            return sum?.asDomain()
+        }
 
     override fun isEncrypted(): Boolean {
         return cryptoService.isRoomEncrypted(roomId)

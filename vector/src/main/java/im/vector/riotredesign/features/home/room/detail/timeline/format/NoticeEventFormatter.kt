@@ -46,6 +46,22 @@ class NoticeEventFormatter(private val stringProvider: StringProvider) {
         }
     }
 
+    fun format(event: Event, senderName: String?): CharSequence? {
+        return when (val type = event.getClearType()) {
+            EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(event, senderName)
+            EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(event, senderName)
+            EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(event, senderName)
+            EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
+            EventType.CALL_INVITE,
+            EventType.CALL_HANGUP,
+            EventType.CALL_ANSWER              -> formatCallEvent(event, senderName)
+            else                               -> {
+                Timber.v("Type $type not handled by this formatter")
+                null
+            }
+        }
+    }
+
     private fun formatRoomNameEvent(event: Event, senderName: String?): CharSequence? {
         val content = event.getClearContent().toModel<RoomNameContent>() ?: return null
         return if (!TextUtils.isEmpty(content.name)) {

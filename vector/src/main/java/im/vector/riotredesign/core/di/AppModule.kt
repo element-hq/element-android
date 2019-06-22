@@ -90,7 +90,7 @@ class AppModule(private val context: Context) {
         }
 
         single {
-            OutdatedEventDetector(context)
+            OutdatedEventDetector()
         }
 
         single {
@@ -98,7 +98,7 @@ class AppModule(private val context: Context) {
         }
 
         single {
-            NotifiableEventResolver(context)
+            NotifiableEventResolver(get(), get())
         }
 
         factory {

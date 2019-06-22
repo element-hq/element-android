@@ -15,10 +15,9 @@
  */
 package im.vector.riotredesign.features.notifications
 
-import android.content.Context
 import im.vector.matrix.android.api.Matrix
 
-class OutdatedEventDetector(val context: Context) {
+class OutdatedEventDetector() {
 
     /**
      * Returns true if the given event is outdated.

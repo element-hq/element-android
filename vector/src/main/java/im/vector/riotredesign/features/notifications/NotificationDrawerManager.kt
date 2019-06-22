@@ -22,7 +22,8 @@ import android.graphics.BitmapFactory
 import android.text.TextUtils
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
-import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.SecretStoringUtils
@@ -36,14 +37,14 @@ import java.io.FileOutputStream
  * organise them in order to display them in the notification drawer.
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
-class NotificationDrawerManager(val context: Context, private val outdatedDetector: OutdatedEventDetector?) {
+class NotificationDrawerManager(val context: Context,
+                                private val outdatedDetector: OutdatedEventDetector?) {
+
 
     //The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
 
     private var eventList = loadEventInfo()
-    private var myUserDisplayName: String = "Todo"
-    private var myUserAvatarUrl: String = ""
 
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
 
@@ -156,17 +157,11 @@ class NotificationDrawerManager(val context: Context, private val outdatedDetect
 
 
     fun refreshNotificationDrawer() {
-        if (myUserDisplayName.isBlank()) {
-            // TODO
-            // initWithSession(Matrix.getInstance(context).defaultSession)
-        }
 
-        if (myUserDisplayName.isBlank()) {
-            // Should not happen, but myUserDisplayName cannot be blank if used to create a Person
-            //TODO
-//            return
-        }
-
+        val session = Matrix.getInstance().currentSession ?: return
+        val user = session.getUser(session.sessionParams.credentials.userId)
+        val myUserDisplayName = user?.displayName ?: ""
+        val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
 
             Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")
