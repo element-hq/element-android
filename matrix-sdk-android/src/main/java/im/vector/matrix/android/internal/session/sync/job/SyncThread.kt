@@ -37,7 +37,7 @@ import java.net.SocketTimeoutException
 import java.util.concurrent.CountDownLatch
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
-private const val DEFAULT_LONG_POOL_TIMEOUT = 10_000L
+private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 private const val DEFAULT_LONG_POOL_DELAY = 0L
 
 internal class SyncThread(private val syncTask: SyncTask,

@@ -50,7 +50,7 @@ By default, this is 0, so the server will return immediately even if the respons
 
 **delay** is a client preference. When the server responds to a sync request, the client waits for `delay`before calling a new sync.
 
-When the Riot X Android app is open (i.e in foreground state), the default timeout is 10 seconds, and delay is 0.
+When the Riot X Android app is open (i.e in foreground state), the default timeout is 30 seconds, and delay is 0.
 
 ## How does a mobile app receives push notification
 
