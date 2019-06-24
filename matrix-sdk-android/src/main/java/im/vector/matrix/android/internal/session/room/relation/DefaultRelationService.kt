@@ -46,7 +46,6 @@ import timber.log.Timber
 internal class DefaultRelationService(private val roomId: String,
                                       private val eventFactory: LocalEchoEventFactory,
                                       private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-                                      private val updateQuickReactionTask: UpdateQuickReactionTask,
                                       private val monarchy: Monarchy,
                                       private val taskExecutor: TaskExecutor)
     : RelationService {
@@ -105,31 +104,6 @@ internal class DefaultRelationService(private val roomId: String,
     }
 
 
-    override fun updateQuickReaction(reaction: String, oppositeReaction: String, targetEventId: String, myUserId: String) {
-
-        val params = UpdateQuickReactionTask.Params(
-                roomId,
-                targetEventId,
-                reaction,
-                oppositeReaction,
-                myUserId
-        )
-
-        updateQuickReactionTask.configureWith(params)
-                .dispatchTo(object : MatrixCallback<UpdateQuickReactionTask.Result> {
-                    override fun onSuccess(data: UpdateQuickReactionTask.Result) {
-                        data.reactionToAdd?.also { sendReaction(it, targetEventId) }
-                        data.reactionToRedact.forEach {
-                            val redactEvent = eventFactory.createRedactEvent(roomId, it, null).also {
-                                saveLocalEcho(it)
-                            }
-                            val redactWork = createRedactEventWork(redactEvent, it, null)
-                            TimelineSendEventWorkCommon.postWork(roomId, redactWork)
-                        }
-                    }
-                })
-                .executeBy(taskExecutor)
-    }
 
     private fun buildWorkIdentifier(identifier: String): String {
         return "${roomId}_$identifier"

@@ -8,4 +8,5 @@
 
     <string name="settings_sdk_version">Matrix SDK Version</string>
 
+    <string name="quick_reactions">Quick Reactions</string>
 </resources>

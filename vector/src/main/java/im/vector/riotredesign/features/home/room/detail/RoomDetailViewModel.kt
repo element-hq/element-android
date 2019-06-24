@@ -333,7 +333,11 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
 
 
     private fun handleUpdateQuickReaction(action: RoomDetailActions.UpdateQuickReactAction) {
-        room.updateQuickReaction(action.selectedReaction, action.opposite, action.targetEventId, session.sessionParams.credentials.userId)
+        if (action.add) {
+            room.sendReaction(action.selectedReaction, action.targetEventId)
+        } else {
+            room.undoReaction(action.selectedReaction, action.targetEventId, session.sessionParams.credentials.userId)
+        }
     }
 
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
