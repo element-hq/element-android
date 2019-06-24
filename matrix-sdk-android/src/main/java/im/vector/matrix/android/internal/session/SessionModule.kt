@@ -192,7 +192,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            BingRuleWatcher(get(), get(), get(), get())
+            BingRuleWatcher(get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
