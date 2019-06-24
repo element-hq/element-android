@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import timber.log.Timber
 
 
 internal class DefaultPushRuleService(
@@ -170,7 +171,7 @@ internal class DefaultPushRuleService(
                 it.onMatchRule(event, Action.mapFrom(rule) ?: emptyList())
             }
         } catch (e: Throwable) {
-
+            Timber.e(e, "Error while dispatching bing")
         }
     }
 

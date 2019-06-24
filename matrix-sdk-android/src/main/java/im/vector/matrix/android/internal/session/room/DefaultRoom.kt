@@ -33,6 +33,7 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.util.fetchCopied
 
 internal class DefaultRoom(
         override val roomId: String,
@@ -70,10 +71,7 @@ internal class DefaultRoom(
 
     override val roomSummary: RoomSummary?
         get() {
-            var sum: RoomSummaryEntity? = null
-            monarchy.runTransactionSync {
-                sum = RoomSummaryEntity.where(it, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME).findFirst()
-            }
+            var sum: RoomSummaryEntity? = monarchy.fetchCopied { RoomSummaryEntity.where(it, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME).findFirst() }
             return sum?.asDomain()
         }
 
