@@ -32,7 +32,7 @@ class PushRuleActionsTest {
                         "pattern": "[the user's Matrix ID]"
                     }
                 ],
-                "domainActions": [
+                "actions": [
                    "notify",
                     {
                         "set_tweak": "sound",
@@ -50,23 +50,25 @@ class PushRuleActionsTest {
         val pushRule = MoshiProvider.providesMoshi().adapter<PushRule>(PushRule::class.java).fromJson(rawPushRule)
 
         Assert.assertNotNull("Should have parsed the rule", pushRule)
-        Assert.assertNotNull("Failed to parse domainActions", pushRule?.domainActions())
-        Assert.assertEquals(3, pushRule!!.domainActions()!!.size)
+        Assert.assertNotNull("Failed to parse domainActions", Action.mapFrom(pushRule!!))
+
+        val actions = Action.mapFrom(pushRule)
+        Assert.assertEquals(3, actions!!.size)
 
 
-        Assert.assertEquals("First action should be notify", Action.Type.NOTIFY, pushRule!!.domainActions()!![0].type)
+        Assert.assertEquals("First action should be notify", Action.Type.NOTIFY, actions[0].type)
 
 
-        Assert.assertEquals("Second action should be tweak", Action.Type.SET_TWEAK, pushRule!!.domainActions()!![1].type)
-        Assert.assertEquals("Second action tweak key should be sound", "sound", pushRule!!.domainActions()!![1].tweak_action)
-        Assert.assertEquals("Second action should have default as stringValue", "default", pushRule!!.domainActions()!![1].stringValue)
-        Assert.assertNull("Second action boolValue should be null",  pushRule!!.domainActions()!![1].boolValue)
+        Assert.assertEquals("Second action should be tweak", Action.Type.SET_TWEAK, actions[1].type)
+        Assert.assertEquals("Second action tweak key should be sound", "sound", actions[1].tweak_action)
+        Assert.assertEquals("Second action should have default as stringValue", "default", actions[1].stringValue)
+        Assert.assertNull("Second action boolValue should be null", actions[1].boolValue)
 
 
-        Assert.assertEquals("Third action should be tweak", Action.Type.SET_TWEAK, pushRule!!.domainActions()!![2].type)
-        Assert.assertEquals("Third action tweak key should be highlight", "highlight", pushRule!!.domainActions()!![2].tweak_action)
-        Assert.assertEquals("Third action tweak param should be false", false, pushRule!!.domainActions()!![2].boolValue)
-        Assert.assertNull("Third action stringValue should be null",  pushRule!!.domainActions()!![2].stringValue)
+        Assert.assertEquals("Third action should be tweak", Action.Type.SET_TWEAK, actions[2].type)
+        Assert.assertEquals("Third action tweak key should be highlight", "highlight", actions[2].tweak_action)
+        Assert.assertEquals("Third action tweak param should be false", false, actions[2].boolValue)
+        Assert.assertNull("Third action stringValue should be null", actions[2].stringValue)
 
     }
 }
