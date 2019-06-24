@@ -51,7 +51,7 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
 
     companion object : MvRxViewModelFactory<QuickReactionViewModel, QuickReactionState> {
 
-        val quickEmojis = listOf("👍", "👎", "😀", "🎉", "😕", "❤️", "🚀", "👀")
+        val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
 
         override fun initialState(viewModelContext: ViewModelContext): QuickReactionState? {
             val currentSession = viewModelContext.activity.get<Session>()
