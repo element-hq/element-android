@@ -17,6 +17,7 @@ package im.vector.matrix.android.internal.session.pushers
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.di.SerializeNulls
 
 /**
  * pushkey 	string 	Required. This is a unique identifier for this pusher. See /set for more detail. Max length, 512 bytes.
@@ -50,13 +51,13 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 internal data class JsonPusher(
         @Json(name = "pushkey") val pushKey: String,
-        @Json(name = "kind") val kind: String,
+        @Json(name = "kind") @SerializeNulls val kind: String?,
         @Json(name = "app_id") val appId: String,
-        @Json(name = "app_display_name") val appDisplayName: String,
-        @Json(name = "device_display_name") val deviceDisplayName: String,
+        @Json(name = "app_display_name") val appDisplayName: String? = null,
+        @Json(name = "device_display_name") val deviceDisplayName: String? = null,
         @Json(name = "profile_tag") val profileTag: String? = null,
-        @Json(name = "lang") val lang: String,
-        @Json(name = "data") val data: JsonPusherData,
+        @Json(name = "lang") val lang: String? = null,
+        @Json(name = "data") val data: JsonPusherData? = null,
 
         // Only used to update add Pusher (body of api request)
         // Used If true, the homeserver should add another pusher with the given pushkey and App ID in addition

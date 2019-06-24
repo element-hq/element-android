@@ -1,5 +1,6 @@
 package im.vector.riotredesign.core.pushers
 
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.AppNameProvider
@@ -29,6 +30,9 @@ class PushersManager(
                 false,
                 true
         )
+    }
 
+    fun unregisterPusher(pushKey: String, callback: MatrixCallback<Unit>) {
+        currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id),callback)
     }
 }

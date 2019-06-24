@@ -7,8 +7,8 @@
         <!--android:title="@string/settings_enable_all_notif" />-->
 
     <SwitchPreference
-
         android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+        android:defaultValue="true"
         android:title="@string/settings_enable_this_device" />
     <!--android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"-->
 
@@ -26,6 +26,7 @@
         android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
         android:key="SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
         android:persistent="false"
+        android:visibility="gone"
         android:summary="@string/settings_notification_advanced_summary"
         android:title="@string/settings_notification_advanced"
         android:enabled="false"

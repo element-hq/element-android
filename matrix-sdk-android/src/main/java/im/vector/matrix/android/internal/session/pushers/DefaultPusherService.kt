@@ -39,6 +39,7 @@ internal class DefaultPusherService(
         private val monarchy: Monarchy,
         private val sessionParam: SessionParams,
         private val getPusherTask: GetPushersTask,
+        private val removePusherTask: RemovePusherTask,
         private val taskExecutor: TaskExecutor
 ) : PushersService {
 
@@ -96,6 +97,15 @@ internal class DefaultPusherService(
                 .build()
         WorkManager.getInstance().enqueue(request)
         return request.id
+    }
+
+    override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>) {
+        val params = RemovePusherTask.Params(sessionParam.credentials.userId,pushkey,appId)
+        removePusherTask
+                .configureWith(params)
+                .dispatchTo(callback)
+                //.enableRetry() ??
+                .executeBy(taskExecutor)
     }
 
     override fun livePushers(): LiveData<List<Pusher>> {

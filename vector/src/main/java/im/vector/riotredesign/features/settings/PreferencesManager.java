@@ -243,6 +243,10 @@ public class PreferencesManager {
         editor.apply();
     }
 
+    public static boolean areNotificationEnabledForDevice(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, false);
+    }
+
     /**
      * Tells if we have already asked the user to disable battery optimisations on android >= M devices.
      *

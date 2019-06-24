@@ -37,6 +37,6 @@ internal interface PushersAPI {
      * The behaviour of this endpoint varies depending on the values in the JSON body.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushers/set")
-    fun setPusher(@Body jsonPusher: JsonPusher): Call<Map<String, Any>>
+    fun setPusher(@Body jsonPusher: JsonPusher): Call<Unit>
 
 }

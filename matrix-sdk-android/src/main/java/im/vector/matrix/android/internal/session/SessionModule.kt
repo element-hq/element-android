@@ -37,13 +37,10 @@ import im.vector.matrix.android.internal.session.filter.*
 import im.vector.matrix.android.internal.session.group.DefaultGroupService
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.notification.BingRuleWatcher
+import im.vector.matrix.android.internal.session.notification.DefaultProcessEventForPushTask
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
+import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.pushers.*
-import im.vector.matrix.android.internal.session.pushers.DefaultGetPusherTask
-import im.vector.matrix.android.internal.session.pushers.DefaultPusherService
-import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
-import im.vector.matrix.android.internal.session.pushers.GetPushersTask
-import im.vector.matrix.android.internal.session.pushers.PushersAPI
 import im.vector.matrix.android.internal.session.room.*
 import im.vector.matrix.android.internal.session.room.directory.DefaultGetPublicRoomTask
 import im.vector.matrix.android.internal.session.room.directory.DefaultGetThirdPartyProtocolsTask
@@ -190,9 +187,12 @@ internal class SessionModule(private val sessionParams: SessionParams) {
             DefaultGetPushrulesTask(get()) as GetPushRulesTask
         }
 
+        scope(DefaultSession.SCOPE) {
+            DefaultProcessEventForPushTask(get()) as ProcessEventForPushTask
+        }
 
         scope(DefaultSession.SCOPE) {
-            BingRuleWatcher(get(), get())
+            BingRuleWatcher(get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -207,12 +207,16 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         scope(DefaultSession.SCOPE) {
             get<Retrofit>().create(PushersAPI::class.java)
         }
+
         scope(DefaultSession.SCOPE) {
             DefaultGetPusherTask(get()) as GetPushersTask
         }
+        scope(DefaultSession.SCOPE) {
+            DefaultRemovePusherTask(get(), get()) as RemovePusherTask
+        }
 
         scope(DefaultSession.SCOPE) {
-            DefaultPusherService(get(), get(), get(), get()) as PushersService
+            DefaultPusherService(get(), get(), get(), get(), get()) as PushersService
         }
 
     }

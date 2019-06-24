@@ -495,6 +495,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
                 )
     }
 
+    override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>) {
+        pushersService.removeHttpPusher(pushkey, appId, callback)
+    }
+
     override fun livePushers(): LiveData<List<Pusher>> {
         return pushersService.livePushers()
     }

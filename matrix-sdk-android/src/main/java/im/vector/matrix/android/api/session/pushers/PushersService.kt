@@ -16,6 +16,7 @@
 package im.vector.matrix.android.api.session.pushers
 
 import androidx.lifecycle.LiveData
+import im.vector.matrix.android.api.MatrixCallback
 import java.util.*
 
 
@@ -51,6 +52,9 @@ interface PushersService {
                       url: String,
                       append: Boolean,
                       withEventIdOnly: Boolean): UUID
+
+
+    fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>)
 
     companion object {
         const val EVENT_ID_ONLY = "event_id_only"

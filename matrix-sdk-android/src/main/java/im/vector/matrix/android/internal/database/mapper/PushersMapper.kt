@@ -28,7 +28,7 @@ internal object PushersMapper {
         return Pusher(
                 userId = pushEntity.userId,
                 pushKey = pushEntity.pushKey,
-                kind = pushEntity.kind,
+                kind = pushEntity.kind ?: "",
                 appId = pushEntity.appId,
                 appDisplayName = pushEntity.appDisplayName,
                 deviceDisplayName = pushEntity.deviceDisplayName,
@@ -49,7 +49,7 @@ internal object PushersMapper {
                 deviceDisplayName = pusher.deviceDisplayName,
                 profileTag = pusher.profileTag,
                 lang = pusher.lang,
-                data = PusherDataEntity(pusher.data.url, pusher.data.format)
+                data = PusherDataEntity(pusher.data?.url, pusher.data?.format)
         )
     }
 }

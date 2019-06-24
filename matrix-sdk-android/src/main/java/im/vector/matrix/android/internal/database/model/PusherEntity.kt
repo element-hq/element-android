@@ -30,12 +30,12 @@ import io.realm.annotations.Index
 internal open class PusherEntity(
         @Index var userId: String = "",
         var pushKey: String = "",
-        var kind: String = "",
+        var kind: String? = null,
         var appId: String = "",
-        var appDisplayName: String = "",
-        var deviceDisplayName: String = "",
+        var appDisplayName: String? = null,
+        var deviceDisplayName: String? = null,
         var profileTag: String? = null,
-        var lang: String = "",
+        var lang: String? = null,
         var data: PusherDataEntity? = null
 ) : RealmObject() {
     private var stateStr: String = PusherState.UNREGISTRED.name

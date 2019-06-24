@@ -23,7 +23,6 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.pushers.PusherState
 import im.vector.matrix.android.internal.database.mapper.toEntity
-import im.vector.matrix.android.internal.database.model.PusherDataEntity
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
@@ -55,7 +54,7 @@ class AddHttpPusherWorker(context: Context, params: WorkerParameters)
             return Result.failure()
         }
 
-        val result = executeRequest<Map<String, Any>> {
+        val result = executeRequest<Unit> {
             apiCall = pushersAPI.setPusher(pusher)
         }
         return result.fold({
@@ -82,7 +81,8 @@ class AddHttpPusherWorker(context: Context, params: WorkerParameters)
                     echo.kind = pusher.kind
                     echo.lang = pusher.lang
                     echo.profileTag = pusher.profileTag
-                    echo.data = PusherDataEntity(pusher.data.url, pusher.data.format)
+                    echo.data?.format = pusher.data?.format
+                    echo.data?.url = pusher.data?.url
                     echo.state = PusherState.REGISTERED
                 } else {
                     pusher.toEntity(params.userId).also {

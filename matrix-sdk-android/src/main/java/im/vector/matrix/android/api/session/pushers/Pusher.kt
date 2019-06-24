@@ -22,10 +22,10 @@ data class Pusher(
         val pushKey: String,
         val kind: String,
         val appId: String,
-        val appDisplayName: String,
-        val deviceDisplayName: String,
+        val appDisplayName: String?,
+        val deviceDisplayName: String?,
         val profileTag: String? = null,
-        val lang: String,
+        val lang: String?,
         val data: PusherData,
 
         val state: PusherState
@@ -34,6 +34,7 @@ data class Pusher(
 enum class PusherState {
     UNREGISTRED,
     REGISTERING,
+    UNREGISTERING,
     REGISTERED,
     FAILED_TO_REGISTER
 }
