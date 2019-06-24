@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.core.glide;
+package im.vector.riotredesign.core.glide
 
-import android.content.Context;
-import android.util.Log;
+import com.bumptech.glide.load.Option
+import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 
-import com.bumptech.glide.GlideBuilder;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
+const val ElementToDecryptOptionKey = "im.vector.riotx.core.glide.ElementToDecrypt"
 
-@GlideModule
-public final class MyAppGlideModule extends AppGlideModule {
 
-    @Override
-    public void applyOptions(Context context, GlideBuilder builder) {
-        builder.setLogLevel(Log.ERROR);
-    }
+val ELEMENT_TO_DECRYPT = Option.memory(
+        ElementToDecryptOptionKey, ElementToDecrypt("", "", ""))
 
-}

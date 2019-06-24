@@ -32,6 +32,7 @@ import androidx.core.view.isVisible
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.riotredesign.R
@@ -46,6 +47,10 @@ import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -197,6 +202,18 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 notImplemented()
+
+                // TODO DECRYPT_FILE Quick implementation of clear cache, finish this
+                GlobalScope.launch(Dispatchers.Main) {
+                    // On UI Thread
+                    Glide.get(requireContext()).clearMemory()
+
+                    withContext(Dispatchers.IO) {
+                        // On BG thread
+                        Glide.get(requireContext()).clearDiskCache()
+                    }
+                }
+
                 /* TODO
                 displayLoadingView()
 
