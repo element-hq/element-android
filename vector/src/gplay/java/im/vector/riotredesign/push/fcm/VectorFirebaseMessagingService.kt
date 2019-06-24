@@ -38,6 +38,7 @@ import im.vector.riotredesign.features.notifications.NotifiableEventResolver
 import im.vector.riotredesign.features.notifications.NotifiableMessageEvent
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.notifications.SimpleNotifiableEvent
+import im.vector.riotredesign.features.settings.PreferencesManager
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -61,6 +62,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param message the message
      */
     override fun onMessageReceived(message: RemoteMessage?) {
+        if (!PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
+            Timber.i("Notification are disabled for this device")
+            return
+        }
+
         if (message == null || message.data == null) {
             Timber.e("## onMessageReceived() : received a null message or message with no data")
             return
@@ -91,7 +97,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         if (refreshedToken == null) {
             Timber.w("onNewToken:received null token")
         } else {
-            pusherManager.registerPusherWithFcmKey(refreshedToken)
+            if (PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
+                pusherManager.registerPusherWithFcmKey(refreshedToken)
+            }
         }
     }
 

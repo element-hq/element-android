@@ -54,6 +54,7 @@ import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
+import im.vector.riotredesign.features.settings.PreferencesManager
 import im.vector.riotredesign.features.version.getVersion
 import im.vector.riotredesign.push.fcm.FcmHelper
 import org.koin.android.ext.android.get
@@ -137,11 +138,12 @@ class VectorApplication : Application() {
                 } else {
                     //TODO check if notifications are enabled for this device
                     //We need to use alarm in this mode
-                    if (Matrix.getInstance().currentSession != null) {
-                        AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext, 4_000L)
-                        Timber.i("Alarm scheduled to restart service")
+                    if (PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
+                        if (Matrix.getInstance().currentSession != null) {
+                            AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext, 4_000L)
+                            Timber.i("Alarm scheduled to restart service")
+                        }
                     }
-
                 }
             }
 

@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.SecretStoringUtils
+import im.vector.riotredesign.features.settings.PreferencesManager
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -65,6 +66,10 @@ class NotificationDrawerManager(val context: Context,
     Events might be grouped and there might not be one notification per event!
      */
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
+        if (!PreferencesManager.areNotificationEnabledForDevice(context)) {
+            Timber.i("Notification are disabled for this device")
+            return
+        }
         //If we support multi session, event list should be per userId
         //Currently only manage single session
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
