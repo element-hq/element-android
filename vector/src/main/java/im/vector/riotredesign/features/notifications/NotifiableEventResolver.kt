@@ -118,7 +118,8 @@ class NotifiableEventResolver(val stringProvider: StringProvider,
             notifiableEvent.matrixID = session.sessionParams.credentials.userId
             return notifiableEvent
         } else {
-            val body = event.root.getClearContent().toModel<MessageContent>()?.body
+            val body = event.annotations?.editSummary?.aggregatedContent?.toModel<MessageContent>()?.body
+                    ?: event.root.getClearContent().toModel<MessageContent>()?.body
                     ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = room.roomSummary?.displayName ?: ""
             val senderDisplayName = event.senderName ?: ""
