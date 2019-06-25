@@ -216,22 +216,23 @@ class NotificationDrawerManager(val context: Context,
                     continue
                 }
 
-                val roomGroup = RoomEventGroupInfo(roomId)
-                roomGroup.hasNewEvent = false
-                roomGroup.shouldBing = false
-                roomGroup.isDirect = events[0].roomIsDirect
                 val roomName = events[0].roomName ?: events[0].senderName ?: ""
+
+                val roomEventGroupInfo = RoomEventGroupInfo(
+                        roomId = roomId,
+                        isDirect = events[0].roomIsDirect,
+                        roomDisplayName = roomName)
+
                 val style = NotificationCompat.MessagingStyle(Person.Builder()
                         .setName(myUserDisplayName)
                         .setIcon(iconLoader.getUserIcon(myUserAvatarUrl))
                         .setKey(events[0].matrixID)
                         .build())
-                roomGroup.roomDisplayName = roomName
 
-                style.isGroupConversation = !roomGroup.isDirect
+                style.isGroupConversation = !roomEventGroupInfo.isDirect
 
-                if (!roomGroup.isDirect) {
-                    style.conversationTitle = roomName
+                if (!roomEventGroupInfo.isDirect) {
+                    style.conversationTitle = roomEventGroupInfo.roomDisplayName
                 }
 
                 val largeBitmap = getRoomBitmap(events)
@@ -240,10 +241,10 @@ class NotificationDrawerManager(val context: Context,
                 for (event in events) {
                     //if all events in this room have already been displayed there is no need to update it
                     if (!event.hasBeenDisplayed) {
-                        roomGroup.shouldBing = roomGroup.shouldBing || event.noisy
-                        roomGroup.customSound = event.soundName
+                        roomEventGroupInfo.shouldBing = roomEventGroupInfo.shouldBing || event.noisy
+                        roomEventGroupInfo.customSound = event.soundName
                     }
-                    roomGroup.hasNewEvent = roomGroup.hasNewEvent || !event.hasBeenDisplayed
+                    roomEventGroupInfo.hasNewEvent = roomEventGroupInfo.hasNewEvent || !event.hasBeenDisplayed
 
                     val senderPerson = Person.Builder()
                             .setName(event.senderName)
@@ -253,7 +254,7 @@ class NotificationDrawerManager(val context: Context,
 
                     if (event.outGoingMessage && event.outGoingMessageFailed) {
                         style.addMessage(context.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
-                        roomGroup.hasSmartReplyError = true
+                        roomEventGroupInfo.hasSmartReplyError = true
                     } else {
                         style.addMessage(event.body, event.timestamp, senderPerson)
                     }
@@ -274,7 +275,7 @@ class NotificationDrawerManager(val context: Context,
                     summaryInboxStyle.addLine(roomName)
                 }
 
-                if (firstTime || roomGroup.hasNewEvent) {
+                if (firstTime || roomEventGroupInfo.hasNewEvent) {
                     //Should update displayed notification
                     Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
                     val lastMessageTimestamp = events.last().timestamp
@@ -283,14 +284,14 @@ class NotificationDrawerManager(val context: Context,
                         globalLastMessageTimestamp = lastMessageTimestamp
                     }
 
-                    NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, lastMessageTimestamp, myUserDisplayName)
+                    NotificationUtils.buildMessagesListNotification(context, style, roomEventGroupInfo, largeBitmap, lastMessageTimestamp, myUserDisplayName)
                             ?.let {
                                 //is there an id for this room?
                                 notifications.add(it)
                                 NotificationUtils.showNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID, it)
                             }
                     hasNewEvent = true
-                    summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
+                    summaryIsNoisy = summaryIsNoisy || roomEventGroupInfo.shouldBing
                 } else {
                     Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId is up to date")
                 }
