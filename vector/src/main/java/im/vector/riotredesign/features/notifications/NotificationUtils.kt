@@ -39,6 +39,8 @@ import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.startNotificationChannelSettingsIntent
 import im.vector.riotredesign.features.home.HomeActivity
+import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity
+import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.settings.PreferencesManager
 import timber.log.Timber
 import java.util.*
@@ -545,27 +547,21 @@ object NotificationUtils {
     }
 
     private fun buildOpenRoomIntent(context: Context, roomId: String): PendingIntent? {
-        // TODO
-        return null
-        /*
-        val roomIntentTap = Intent(context, VectorRoomActivity::class.java)
-        roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
+        val roomIntentTap = RoomDetailActivity.newIntent(context, RoomDetailArgs(roomId))
         roomIntentTap.action = TAP_TO_VIEW_ACTION
         //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
         roomIntentTap.data = Uri.parse("foobar://openRoom?$roomId")
 
         // Recreate the back stack
         return TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
+                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
                 .addNextIntent(roomIntentTap)
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
-                */
     }
 
     private fun buildOpenHomePendingIntentForSummary(context: Context): PendingIntent {
-        val intent = Intent(context, HomeActivity::class.java)
+        val intent = HomeActivity.newIntent(context, clearNotification = true)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        // TODO intent.putExtra(VectorHomeActivity.EXTRA_CLEAR_EXISTING_NOTIFICATION, true)
         intent.data = Uri.parse("foobar://tapSummary")
         return PendingIntent.getActivity(context, Random().nextInt(1000), intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }

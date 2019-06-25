@@ -63,6 +63,8 @@
         <activity android:name=".features.home.room.detail.RoomDetailActivity" />
         <activity android:name=".features.debug.DebugMenuActivity" />
 
+        <!-- Services -->
+
         <service
             android:name=".core.services.CallService"
             android:exported="false" />
@@ -75,6 +77,16 @@
             android:exported="false">
 
         </service>
+
+        <!-- Receivers -->
+
+        <!-- Exported false, should only be accessible from this app!! -->
+        <receiver
+            android:name=".features.notifications.NotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- Providers -->
 
         <provider
             android:name="androidx.core.content.FileProvider"

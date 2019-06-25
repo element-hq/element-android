@@ -127,8 +127,8 @@ class NotificationDrawerManager(val context: Context,
     }
 
     /**
-    Should be called when the application is currently opened and showing timeline for the given roomId.
-    Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
+     * Should be called when the application is currently opened and showing timeline for the given roomId.
+     * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
      */
     fun setCurrentRoom(roomId: String?) {
         var hasChanged: Boolean

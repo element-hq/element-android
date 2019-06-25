@@ -37,19 +37,19 @@ import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
-import im.vector.riotredesign.core.pushers.PushersManager
+import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
+import im.vector.riotredesign.features.workers.signout.SignOutViewModel
 import im.vector.riotredesign.push.fcm.FcmHelper
 import kotlinx.android.synthetic.main.activity_home.*
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
-import im.vector.riotredesign.features.workers.signout.SignOutViewModel
-
 
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
@@ -63,6 +63,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     private lateinit var navigationViewModel: HomeNavigationViewModel
     private val homeNavigator by inject<HomeNavigator>()
     private val pushManager by inject<PushersManager>()
+
+    private val notificationDrawerManager by inject<NotificationDrawerManager>()
 
     // TODO Move this elsewhere
     private val incomingVerificationRequestHandler by inject<IncomingVerificationRequestHandler>()
@@ -115,6 +117,20 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
         incomingVerificationRequestHandler.ensureStarted()
         keyRequestHandler.ensureStarted()
+
+        if (intent.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)) {
+            notificationDrawerManager.clearAllEvents()
+            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        if (intent?.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION) == true) {
+            notificationDrawerManager.clearAllEvents()
+            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
+        }
     }
 
     override fun onDestroy() {
@@ -189,10 +205,14 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
 
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, HomeActivity::class.java)
-        }
+        private const val EXTRA_CLEAR_EXISTING_NOTIFICATION = "EXTRA_CLEAR_EXISTING_NOTIFICATION"
 
+        fun newIntent(context: Context, clearNotification: Boolean = false): Intent {
+            return Intent(context, HomeActivity::class.java)
+                    .apply {
+                        putExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, clearNotification)
+                    }
+        }
     }
 
 }
