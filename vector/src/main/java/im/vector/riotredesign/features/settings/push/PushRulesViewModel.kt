@@ -24,8 +24,8 @@ import im.vector.riotredesign.core.platform.VectorViewModel
 import org.koin.android.ext.android.get
 
 data class PushRulesViewState(
-        val rules: List<PushRule> = emptyList())
-    : MvRxState
+        val rules: List<PushRule> = emptyList()
+) : MvRxState
 
 
 class PushRulesViewModel(initialState: PushRulesViewState) : VectorViewModel<PushRulesViewState>(initialState) {

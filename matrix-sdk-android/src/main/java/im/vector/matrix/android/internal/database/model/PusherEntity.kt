@@ -38,7 +38,7 @@ internal open class PusherEntity(
         var lang: String? = null,
         var data: PusherDataEntity? = null
 ) : RealmObject() {
-    private var stateStr: String = PusherState.UNREGISTRED.name
+    private var stateStr: String = PusherState.UNREGISTERED.name
 
     var state: PusherState
         get() {
@@ -46,7 +46,7 @@ internal open class PusherEntity(
                 return PusherState.valueOf(stateStr)
             } catch (e: Exception) {
                 //can this happen?
-                return PusherState.UNREGISTRED
+                return PusherState.UNREGISTERED
             }
 
         }

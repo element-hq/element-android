@@ -30,6 +30,7 @@ import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.ui.list.genericFooterItem
 import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
 
+// Referenced in vector_settings_notifications.xml
 class PushGatewaysFragment : VectorBaseFragment() {
 
     override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler_epoxy
@@ -50,16 +51,16 @@ class PushGatewaysFragment : VectorBaseFragment() {
         val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context,
                 lmgr.orientation)
         epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
-        epoxyRecyclerView.adapter = epoxyController.adapter
+        epoxyRecyclerView.setController(epoxyController)
     }
 
-    override fun invalidate() = withState(viewModel) {
-        epoxyController.setData(it)
+    override fun invalidate() = withState(viewModel) { state ->
+        epoxyController.setData(state)
     }
 
     class PushGateWayController(private val stringProvider: StringProvider) : TypedEpoxyController<PushGatewayViewState>() {
         override fun buildModels(data: PushGatewayViewState?) {
-            data?.pushgateways?.invoke()?.let { pushers ->
+            data?.pushGateways?.invoke()?.let { pushers ->
                 if (pushers.isEmpty()) {
                     genericFooterItem {
                         id("footer")

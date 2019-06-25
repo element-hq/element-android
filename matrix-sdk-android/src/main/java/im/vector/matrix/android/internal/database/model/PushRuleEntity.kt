@@ -19,7 +19,7 @@ import io.realm.RealmList
 import io.realm.RealmObject
 
 internal open class PushRuleEntity(
-        //Required. The domainActions to perform when this rule is matched.
+        //Required. The actions to perform when this rule is matched.
         var actionsStr: String? = null,
         //Required. Whether this is a default rule, or has been set explicitly.
         var default: Boolean = false,

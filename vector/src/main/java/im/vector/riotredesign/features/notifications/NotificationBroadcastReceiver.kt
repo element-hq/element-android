@@ -27,7 +27,7 @@ import org.koin.standalone.inject
 import timber.log.Timber
 
 /**
- * Receives domainActions broadcast by notification (on click, on dismiss, inline replies, etc.)
+ * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)
  */
 class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
 

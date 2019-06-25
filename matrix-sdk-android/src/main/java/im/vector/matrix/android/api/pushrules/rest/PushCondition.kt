@@ -22,15 +22,26 @@ import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
 data class PushCondition(
-        //Required. The kind of condition to apply.
+        /**
+         * Required. The kind of condition to apply.
+         */
         val kind: String,
-        //Required for event_match conditions. The dot- separated field of the event to match.
+
+        /**
+         * Required for event_match conditions. The dot- separated field of the event to match.
+         */
+
         val key: String? = null,
-        //Required for event_match conditions.
+        /**
+         *Required for event_match conditions.
+         */
+
         val pattern: String? = null,
-        //Required for room_member_count conditions.
-        // A decimal integer optionally prefixed by one of, ==, <, >, >= or <=.
-        // A prefix of < matches rooms where the member count is strictly less than the given number and so forth. If no prefix is present, this parameter defaults to ==.
+        /**
+         * Required for room_member_count conditions.
+         * A decimal integer optionally prefixed by one of, ==, <, >, >= or <=.
+         * A prefix of < matches rooms where the member count is strictly less than the given number and so forth. If no prefix is present, this parameter defaults to ==.
+         */
         @Json(name = "is") val iz: String? = null
 ) {
 
@@ -58,7 +69,7 @@ data class PushCondition(
             Condition.Kind.sender_notification_permission -> {
                 this.key?.let { SenderNotificationPermissionCondition(it) }
             }
-            Condition.Kind.UNRECOGNIZE                    ->  {
+            Condition.Kind.UNRECOGNIZE                    -> {
                 Timber.e("Unknwon kind $kind")
                 null
             }

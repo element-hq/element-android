@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 
 /**
- * Activity shared view model to handle message domainActions
+ * Activity shared view model to handle message actions
  */
 class ActionsHandler : ViewModel() {
 

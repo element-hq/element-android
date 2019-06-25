@@ -50,7 +50,7 @@ class PushRuleActionsTest {
         val pushRule = MoshiProvider.providesMoshi().adapter<PushRule>(PushRule::class.java).fromJson(rawPushRule)
 
         Assert.assertNotNull("Should have parsed the rule", pushRule)
-        Assert.assertNotNull("Failed to parse domainActions", Action.mapFrom(pushRule!!))
+        Assert.assertNotNull("Failed to parse actions", Action.mapFrom(pushRule!!))
 
         val actions = Action.mapFrom(pushRule)
         Assert.assertEquals(3, actions!!.size)

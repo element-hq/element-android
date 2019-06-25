@@ -20,8 +20,15 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class JsonPusherData(
-        //Required if kind is http. The URL to use to send notifications to.
-        @Json(name = "url") val url: String? = null,
-        //The format to use when sending notifications to the Push Gateway.
-        @Json(name = "format") val format: String? = null
+        /**
+         * Required if kind is http. The URL to use to send notifications to.
+         */
+        @Json(name = "url")
+        val url: String? = null,
+
+        /**
+         * The format to use when sending notifications to the Push Gateway.
+         */
+        @Json(name = "format")
+        val format: String? = null
 )

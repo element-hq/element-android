@@ -29,14 +29,14 @@ import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.ui.list.genericFooterItem
 import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
 
-
+// Referenced in vector_settings_notifications.xml
 class PushRulesFragment : VectorBaseFragment() {
 
     override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler_epoxy
 
     private val viewModel: PushRulesViewModel by fragmentViewModel(PushRulesViewModel::class)
 
-    private val epoxyController by lazy { PushRulesFragment.PushRulesController(StringProvider(requireContext().resources)) }
+    private val epoxyController by lazy { PushRulesController(StringProvider(requireContext().resources)) }
 
 
     override fun onResume() {
@@ -51,11 +51,11 @@ class PushRulesFragment : VectorBaseFragment() {
         val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context,
                 lmgr.orientation)
         epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
-        epoxyRecyclerView.adapter = epoxyController.adapter
+        epoxyRecyclerView.setController(epoxyController)
     }
 
-    override fun invalidate() = withState(viewModel) {
-        epoxyController.setData(it)
+    override fun invalidate() = withState(viewModel) { state ->
+        epoxyController.setData(state)
     }
 
     class PushRulesController(private val stringProvider: StringProvider) : TypedEpoxyController<PushRulesViewState>() {

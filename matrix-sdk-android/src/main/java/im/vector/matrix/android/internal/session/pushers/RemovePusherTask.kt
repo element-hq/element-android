@@ -12,7 +12,9 @@ import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 
 internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
-    data class Params(val userId: String, val pushKey: String, val pushAppId: String)
+    data class Params(val userId: String,
+                      val pushKey: String,
+                      val pushAppId: String)
 }
 
 internal class DefaultRemovePusherTask(
@@ -35,10 +37,11 @@ internal class DefaultRemovePusherTask(
             }
         }.flatMap {
             executeRequest<Unit> {
-                val deleteRequest = JsonPusher(
+                val deleteBody = JsonPusher(
                         pushKey = params.pushKey,
                         appId = params.pushAppId,
-                        kind = null, //null deletes the pusher
+                        // kind null deletes the pusher
+                        kind = null,
                         appDisplayName = it.appDisplayName ?: "",
                         deviceDisplayName = it.deviceDisplayName ?: "",
                         profileTag = it.profileTag ?: "",
@@ -46,7 +49,7 @@ internal class DefaultRemovePusherTask(
                         data = JsonPusherData(it.data.url, it.data.format),
                         append = false
                 )
-                apiCall = pushersAPI.setPusher(deleteRequest)
+                apiCall = pushersAPI.setPusher(deleteBody)
             }
         }.flatMap {
             monarchy.tryTransactionSync {

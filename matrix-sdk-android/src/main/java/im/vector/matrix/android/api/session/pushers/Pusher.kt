@@ -32,7 +32,7 @@ data class Pusher(
 )
 
 enum class PusherState {
-    UNREGISTRED,
+    UNREGISTERED,
     REGISTERING,
     UNREGISTERING,
     REGISTERED,

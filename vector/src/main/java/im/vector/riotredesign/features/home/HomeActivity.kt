@@ -54,7 +54,7 @@ import im.vector.riotredesign.features.workers.signout.SignOutViewModel
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
-    // Supported navigation domainActions for this Activity
+    // Supported navigation actions for this Activity
     sealed class Navigation {
         object OpenDrawer : Navigation()
     }

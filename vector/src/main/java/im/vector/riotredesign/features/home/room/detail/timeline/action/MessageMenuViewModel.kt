@@ -37,7 +37,7 @@ data class SimpleAction(val uid: String, val titleRes: Int, val iconResId: Int?,
 data class MessageMenuState(val actions: List<SimpleAction> = emptyList()) : MvRxState
 
 /**
- * Manages list domainActions for a given message (copy / paste / forward...)
+ * Manages list actions for a given message (copy / paste / forward...)
  */
 class MessageMenuViewModel(initialState: MessageMenuState) : VectorViewModel<MessageMenuState>(initialState) {
 

@@ -25,11 +25,10 @@ import org.koin.android.ext.android.get
 
 
 data class PushGatewayViewState(
-        val pushgateways: Async<List<Pusher>> = Uninitialized)
-    : MvRxState
+        val pushGateways: Async<List<Pusher>> = Uninitialized
+) : MvRxState
 
 class PushGatewaysViewModel(initialState: PushGatewayViewState) : VectorViewModel<PushGatewayViewState>(initialState) {
-
 
     companion object : MvRxViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> {
 

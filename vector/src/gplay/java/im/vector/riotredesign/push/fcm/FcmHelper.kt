@@ -33,8 +33,6 @@ import timber.log.Timber
  * It has an alter ego in the fdroid variant.
  */
 object FcmHelper {
-    private val LOG_TAG = FcmHelper::class.java.simpleName
-
     private val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
 
 
@@ -51,6 +49,7 @@ object FcmHelper {
 
     /**
      * Store FCM token to the SharedPrefs
+     * TODO Store in realm
      *
      * @param context android context
      * @param token   the token to store

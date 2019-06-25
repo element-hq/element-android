@@ -27,14 +27,16 @@ internal interface PushersAPI {
     /**
      * Get the pushers for this user.
      *
-     * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#get-matrix-client-r0-thirdparty-protocols
+     * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-pushers
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushers")
-    fun getPushers(): Call<PushersResponse>
+    fun getPushers(): Call<GetPushersResponse>
 
     /**
      * This endpoint allows the creation, modification and deletion of pushers for this user ID.
      * The behaviour of this endpoint varies depending on the values in the JSON body.
+     *
+     * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-pushers-set
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushers/set")
     fun setPusher(@Body jsonPusher: JsonPusher): Call<Unit>

@@ -20,14 +20,7 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.di.SerializeNulls
 
 /**
- * pushkey 	string 	Required. This is a unique identifier for this pusher. See /set for more detail. Max length, 512 bytes.
- * kind 	string 	Required. The kind of pusher. "http" is a pusher that sends HTTP pokes.
- * app_id 	string 	Required. This is a reverse-DNS style identifier for the application. Max length, 64 chars.
- * app_display_name 	string 	Required. A string that will allow the user to identify what application owns this pusher.
- * device_display_name 	string 	Required. A string that will allow the user to identify what device owns this pusher.
- * profile_tag 	string 	This string determines which set of device specific rules this pusher executes.
- * lang 	string 	Required. The preferred language for receiving notifications (e.g. 'en' or 'en-US')
- * data 	PusherData 	Required. A dictionary of information for the pusher implementation itself.
+ * Example:
  *
  * <code>
  *     {
@@ -50,20 +43,61 @@ import im.vector.matrix.android.internal.di.SerializeNulls
 
 @JsonClass(generateAdapter = true)
 internal data class JsonPusher(
-        @Json(name = "pushkey") val pushKey: String,
-        @Json(name = "kind") @SerializeNulls val kind: String?,
-        @Json(name = "app_id") val appId: String,
-        @Json(name = "app_display_name") val appDisplayName: String? = null,
-        @Json(name = "device_display_name") val deviceDisplayName: String? = null,
-        @Json(name = "profile_tag") val profileTag: String? = null,
-        @Json(name = "lang") val lang: String? = null,
-        @Json(name = "data") val data: JsonPusherData? = null,
+        /**
+         * Required. This is a unique identifier for this pusher. See /set for more detail. Max length, 512 bytes.
+         */
+        @Json(name = "pushkey")
+        val pushKey: String,
+
+        /**
+         * Required. The kind of pusher. "http" is a pusher that sends HTTP pokes.
+         */
+        @SerializeNulls
+        @Json(name = "kind")
+        val kind: String?,
+
+        /**
+         * Required. This is a reverse-DNS style identifier for the application. Max length, 64 chars.
+         */
+        @Json(name = "app_id")
+        val appId: String,
+
+        /**
+         * Required. A string that will allow the user to identify what application owns this pusher.
+         */
+        @Json(name = "app_display_name")
+        val appDisplayName: String? = null,
+
+        /**
+         * Required. A string that will allow the user to identify what device owns this pusher.
+         */
+        @Json(name = "device_display_name")
+        val deviceDisplayName: String? = null,
+
+        /**
+         * This string determines which set of device specific rules this pusher executes.
+         */
+        @Json(name = "profile_tag")
+        val profileTag: String? = null,
+
+        /**
+         * Required. The preferred language for receiving notifications (e.g. 'en' or 'en-US')
+         */
+        @Json(name = "lang")
+        val lang: String? = null,
+
+        /**
+         * Required. A dictionary of information for the pusher implementation itself.
+         */
+        @Json(name = "data")
+        val data: JsonPusherData? = null,
 
         // Only used to update add Pusher (body of api request)
         // Used If true, the homeserver should add another pusher with the given pushkey and App ID in addition
         // to any others with different user IDs.
         // Otherwise, the homeserver must remove any other pushers with the same App ID and pushkey for different users.
         // The default is false.
-        @Json(name = "append") val append: Boolean? = false
+        @Json(name = "append")
+        val append: Boolean? = false
 )
 

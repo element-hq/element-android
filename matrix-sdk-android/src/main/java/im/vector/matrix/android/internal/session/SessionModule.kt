@@ -172,7 +172,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
 
         scope(DefaultSession.SCOPE) {
             val retrofit: Retrofit = get()
-            retrofit.create(PushrulesApi::class.java)
+            retrofit.create(PushRulesApi::class.java)
         }
 
         scope(DefaultSession.SCOPE) {
@@ -184,7 +184,7 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultGetPushrulesTask(get()) as GetPushRulesTask
+            DefaultGetPushRulesTask(get()) as GetPushRulesTask
         }
 
         scope(DefaultSession.SCOPE) {

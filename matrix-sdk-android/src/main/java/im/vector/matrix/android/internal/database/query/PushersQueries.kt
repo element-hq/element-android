@@ -15,15 +15,17 @@
  */
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.api.pushrules.rest.PushRule
-import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
+import im.vector.matrix.android.internal.database.model.PushRulesEntityFields
 import im.vector.matrix.android.internal.database.model.PusherEntity
+import im.vector.matrix.android.internal.database.model.PusherEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 
-internal fun PusherEntity.Companion.where(realm: Realm, userId: String, pushKey: String? = null): RealmQuery<PusherEntity> {
+internal fun PusherEntity.Companion.where(realm: Realm,
+                                          userId: String,
+                                          pushKey: String? = null): RealmQuery<PusherEntity> {
     return realm.where<PusherEntity>()
             .equalTo(PusherEntityFields.USER_ID, userId)
             .apply {
@@ -33,9 +35,12 @@ internal fun PusherEntity.Companion.where(realm: Realm, userId: String, pushKey:
             }
 }
 
-internal fun PushRulesEntity.Companion.where(realm: Realm, userId: String, scope: String, rulesetKey: String) : RealmQuery<PushRulesEntity> {
-    return  realm.where<PushRulesEntity>()
-            .equalTo(PushRulesEntityFields.USER_ID,userId)
-            .equalTo(PushRulesEntityFields.SCOPE,scope)
-            .equalTo(PushRulesEntityFields.RULESET_KEY,rulesetKey)
+internal fun PushRulesEntity.Companion.where(realm: Realm,
+                                             userId: String,
+                                             scope: String,
+                                             ruleSetKey: String): RealmQuery<PushRulesEntity> {
+    return realm.where<PushRulesEntity>()
+            .equalTo(PushRulesEntityFields.USER_ID, userId)
+            .equalTo(PushRulesEntityFields.SCOPE, scope)
+            .equalTo(PushRulesEntityFields.RULESET_KEY, ruleSetKey)
 }

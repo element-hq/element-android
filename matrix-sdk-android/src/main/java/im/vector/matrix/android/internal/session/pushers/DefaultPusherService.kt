@@ -47,8 +47,8 @@ internal class DefaultPusherService(
     override fun refreshPushers() {
         getPusherTask
                 .configureWith(Unit)
-                .dispatchTo(object : MatrixCallback<PushersResponse> {
-                    override fun onSuccess(data: PushersResponse) {
+                .dispatchTo(object : MatrixCallback<GetPushersResponse> {
+                    override fun onSuccess(data: GetPushersResponse) {
                         monarchy.runTransactionSync { realm ->
                             //clear existings?
                             realm.where(PusherEntity::class.java)
@@ -66,9 +66,6 @@ internal class DefaultPusherService(
                 .executeBy(taskExecutor)
     }
 
-    /**
-     *
-     */
     override fun addHttpPusher(pushkey: String, appId: String, profileTag: String,
                                lang: String, appDisplayName: String, deviceDisplayName: String,
                                url: String, append: Boolean, withEventIdOnly: Boolean)

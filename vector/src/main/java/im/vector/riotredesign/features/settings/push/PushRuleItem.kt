@@ -23,6 +23,7 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
     @EpoxyAttribute
     lateinit var pushRule: PushRule
 
+    // TODO i18n
     @SuppressLint("SetTextI18n")
     override fun bind(holder: Holder) {
         val context = holder.view.context
@@ -48,7 +49,7 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_dont_notify))
             }
 
-            var description = StringBuffer()
+            val description = StringBuffer()
             pushRule.conditions?.forEachIndexed { i, condition ->
                 if (i > 0) description.append("\n")
                 description.append(condition.asExecutableCondition()?.technicalDescription()

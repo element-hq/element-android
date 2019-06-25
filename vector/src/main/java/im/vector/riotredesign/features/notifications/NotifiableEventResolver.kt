@@ -30,12 +30,6 @@ import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import timber.log.Timber
 
-// TODO Remove
-class RoomState {
-
-}
-
-
 /**
  * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.
  * It is used as a bridge between the Event Thread and the NotificationDrawerManager.

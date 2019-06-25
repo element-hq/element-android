@@ -30,7 +30,7 @@ import im.vector.matrix.android.api.session.user.model.User
  * QUOTE: User is currently quoting a message
  * EDIT: User is currently editing an existing message
  *
- * Depending on the state the bottom toolbar will change (icons/preview/domainActions...)
+ * Depending on the state the bottom toolbar will change (icons/preview/actions...)
  */
 enum class SendMode {
     REGULAR,

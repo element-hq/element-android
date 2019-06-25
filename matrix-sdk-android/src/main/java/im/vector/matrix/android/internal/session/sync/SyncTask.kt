@@ -29,7 +29,7 @@ import im.vector.matrix.android.internal.task.Task
 
 internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
-    data class Params(val token: String?, var timeout: Long = 30_1000L)
+    data class Params(val token: String?, var timeout: Long = 30_000L)
 
 }
 

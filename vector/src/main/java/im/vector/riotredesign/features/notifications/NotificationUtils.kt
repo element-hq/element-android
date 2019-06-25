@@ -64,7 +64,7 @@ object NotificationUtils {
     const val NOTIFICATION_ID_FOREGROUND_SERVICE = 61
 
     /* ==========================================================================================
-     * IDs for domainActions
+     * IDs for actions
      * ========================================================================================== */
 
     private const val JOIN_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.JOIN_ACTION"
@@ -426,7 +426,7 @@ object NotificationUtils {
                         priority = NotificationCompat.PRIORITY_LOW
                     }
 
-                    //Add domainActions and notification intents
+                    //Add actions and notification intents
                     // Mark room as read
                     val markRoomReadIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                     markRoomReadIntent.action = MARK_ROOM_READ_ACTION

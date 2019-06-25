@@ -16,18 +16,18 @@
 package im.vector.matrix.android.internal.session.pushers
 
 import arrow.core.Try
-import im.vector.matrix.android.api.pushrules.rest.PushrulesResponse
+import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 
 
-internal interface GetPushRulesTask : Task<Unit, PushrulesResponse>
+internal interface GetPushRulesTask : Task<Unit, GetPushRulesResponse>
 
-internal class DefaultGetPushrulesTask(private val pushrulesApi: PushrulesApi) : GetPushRulesTask {
+internal class DefaultGetPushRulesTask(private val pushRulesApi: PushRulesApi) : GetPushRulesTask {
 
-    override suspend fun execute(params: Unit): Try<PushrulesResponse> {
+    override suspend fun execute(params: Unit): Try<GetPushRulesResponse> {
         return executeRequest {
-            apiCall = pushrulesApi.getAllRules()
+            apiCall = pushRulesApi.getAllRules()
         }
     }
 }

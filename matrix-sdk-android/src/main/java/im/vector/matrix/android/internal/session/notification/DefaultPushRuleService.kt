@@ -20,8 +20,8 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.Action
 import im.vector.matrix.android.api.pushrules.PushRuleService
+import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 import im.vector.matrix.android.api.pushrules.rest.PushRule
-import im.vector.matrix.android.api.pushrules.rest.PushrulesResponse
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
@@ -47,8 +47,8 @@ internal class DefaultPushRuleService(
     override fun fetchPushRules(scope: String) {
         pushRulesTask
                 .configureWith(Unit)
-                .dispatchTo(object : MatrixCallback<PushrulesResponse> {
-                    override fun onSuccess(data: PushrulesResponse) {
+                .dispatchTo(object : MatrixCallback<GetPushRulesResponse> {
+                    override fun onSuccess(data: GetPushRulesResponse) {
                         monarchy.runTransactionSync { realm ->
                             //clear existings?
                             //TODO
@@ -56,7 +56,7 @@ internal class DefaultPushRuleService(
                                     .equalTo(PusherEntityFields.USER_ID, sessionParams.credentials.userId)
                                     .findAll().deleteAllFromRealm()
 
-                            var content = PushRulesEntity(sessionParams.credentials.userId, scope, "content")
+                            val content = PushRulesEntity(sessionParams.credentials.userId, scope, "content")
                             data.global.content?.forEach { rule ->
                                 PushRulesMapper.map(rule).also {
                                     content.pushRules.add(it)
@@ -64,7 +64,7 @@ internal class DefaultPushRuleService(
                             }
                             realm.insertOrUpdate(content)
 
-                            var override = PushRulesEntity(sessionParams.credentials.userId, scope, "override")
+                            val override = PushRulesEntity(sessionParams.credentials.userId, scope, "override")
                             data.global.override?.forEach { rule ->
                                 PushRulesMapper.map(rule).also {
                                     override.pushRules.add(it)
@@ -72,7 +72,7 @@ internal class DefaultPushRuleService(
                             }
                             realm.insertOrUpdate(override)
 
-                            var rooms = PushRulesEntity(sessionParams.credentials.userId, scope, "room")
+                            val rooms = PushRulesEntity(sessionParams.credentials.userId, scope, "room")
                             data.global.room?.forEach { rule ->
                                 PushRulesMapper.map(rule).also {
                                     rooms.pushRules.add(it)
@@ -80,7 +80,7 @@ internal class DefaultPushRuleService(
                             }
                             realm.insertOrUpdate(rooms)
 
-                            var senders = PushRulesEntity(sessionParams.credentials.userId, scope, "sender")
+                            val senders = PushRulesEntity(sessionParams.credentials.userId, scope, "sender")
                             data.global.sender?.forEach { rule ->
                                 PushRulesMapper.map(rule).also {
                                     senders.pushRules.add(it)
@@ -88,7 +88,7 @@ internal class DefaultPushRuleService(
                             }
                             realm.insertOrUpdate(senders)
 
-                            var underrides = PushRulesEntity(sessionParams.credentials.userId, scope, "underride")
+                            val underrides = PushRulesEntity(sessionParams.credentials.userId, scope, "underride")
                             data.global.underride?.forEach { rule ->
                                 PushRulesMapper.map(rule).also {
                                     underrides.pushRules.add(it)
@@ -106,35 +106,24 @@ internal class DefaultPushRuleService(
     override fun getPushrules(scope: String): List<PushRule> {
 
         var contentRules: List<PushRule> = emptyList()
+        var overrideRules: List<PushRule> = emptyList()
+        var roomRules: List<PushRule> = emptyList()
+        var senderRules: List<PushRule> = emptyList()
+        var underrideRules: List<PushRule> = emptyList()
+
         monarchy.doWithRealm { realm ->
             PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "content").findFirst()?.let { re ->
                 contentRules = re.pushRules.map { PushRulesMapper.mapContentRule(it) }
             }
-        }
-
-        var overrideRules: List<PushRule> = emptyList()
-        monarchy.doWithRealm { realm ->
             PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "override").findFirst()?.let { re ->
                 overrideRules = re.pushRules.map { PushRulesMapper.map(it) }
             }
-        }
-
-        var roomRules: List<PushRule> = emptyList()
-        monarchy.doWithRealm { realm ->
             PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "room").findFirst()?.let { re ->
                 roomRules = re.pushRules.map { PushRulesMapper.mapRoomRule(it) }
             }
-        }
-
-        var senderRules: List<PushRule> = emptyList()
-        monarchy.doWithRealm { realm ->
             PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "sender").findFirst()?.let { re ->
                 senderRules = re.pushRules.map { PushRulesMapper.mapSenderRule(it) }
             }
-        }
-
-        var underrideRules: List<PushRule> = emptyList()
-        monarchy.doWithRealm { realm ->
             PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "underride").findFirst()?.let { re ->
                 underrideRules = re.pushRules.map { PushRulesMapper.map(it) }
             }
@@ -184,6 +173,4 @@ internal class DefaultPushRuleService(
 
         }
     }
-
-
 }

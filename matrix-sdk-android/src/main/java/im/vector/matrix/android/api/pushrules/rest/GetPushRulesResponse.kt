@@ -15,16 +15,23 @@
  */
 package im.vector.matrix.android.api.pushrules.rest
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.pushrules.rest.Ruleset
 
 /**
  * All push rulesets for a user.
  */
 @JsonClass(generateAdapter = true)
-data class PushrulesResponse(
-        //Global rules, account level applying to all devices
+data class GetPushRulesResponse(
+        /**
+         * Global rules, account level applying to all devices
+         */
+        @Json(name = "global")
         val global: Ruleset,
-        //Device specific rules, apply only to current device
+
+        /**
+         * Device specific rules, apply only to current device
+         */
+        @Json(name = "device")
         val device: Ruleset? = null
 )
