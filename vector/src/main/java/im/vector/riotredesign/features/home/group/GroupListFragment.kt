@@ -46,8 +46,8 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         groupController.callback = this
-        stateView.contentView = epoxyRecyclerView
-        epoxyRecyclerView.setController(groupController)
+        stateView.contentView = groupListEpoxyRecyclerView
+        groupListEpoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
             homeNavigator.openSelectedGroup(it)

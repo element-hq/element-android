@@ -19,6 +19,9 @@ package im.vector.riotredesign.features.navigation
 import android.content.Context
 import android.content.Intent
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.riotredesign.R
+import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.riotredesign.features.debug.DebugMenuActivity
@@ -27,14 +30,23 @@ import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewActivity
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
+import timber.log.Timber
 
 class DefaultNavigator : Navigator {
 
 
-    override fun openRoom(roomId: String, context: Context) {
-        val args = RoomDetailArgs(roomId)
+    override fun openRoom(context: Context, roomId: String, eventId: String?) {
+        val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
         context.startActivity(intent)
+    }
+
+    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String?) {
+        if (context is VectorBaseActivity) {
+            context.notImplemented("Open not joined room")
+        } else {
+            context.toast(R.string.not_implemented)
+        }
     }
 
     override fun openRoomPreview(publicRoom: PublicRoom, context: Context) {
@@ -62,5 +74,13 @@ class DefaultNavigator : Navigator {
 
     override fun openKeysBackupManager(context: Context) {
         context.startActivity(KeysBackupManageActivity.intent(context))
+    }
+
+    override fun openGroupDetail(groupId: String, context: Context) {
+        Timber.v("Open group detail $groupId")
+    }
+
+    override fun openUserDetail(userId: String, context: Context) {
+        Timber.v("Open user detail $userId")
     }
 }

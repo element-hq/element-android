@@ -22,13 +22,15 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultIte
 
 class DefaultItemFactory {
 
-    fun create(event: TimelineEvent, exception: Exception? = null): DefaultItem? {
+    fun create(event: TimelineEvent, highlight: Boolean, exception: Exception? = null): DefaultItem? {
         val text = if (exception == null) {
             "${event.root.getClearType()} events are not yet handled"
         } else {
             "an exception occurred when rendering the event ${event.root.eventId}"
         }
-        return DefaultItem_().text(text)
+        return DefaultItem_()
+                .text(text)
+                .highlighted(highlight)
     }
 
 }

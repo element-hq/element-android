@@ -37,6 +37,7 @@ class EncryptedItemFactory(private val messageInformationDataFactory: MessageInf
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
+               highlight: Boolean,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
@@ -62,7 +63,9 @@ class EncryptedItemFactory(private val messageInformationDataFactory: MessageInf
                 return MessageTextItem_()
                         .message(spannableStr)
                         .informationData(informationData)
+                        .highlighted(highlight)
                         .avatarCallback(callback)
+                        .urlClickCallback(callback)
                         .cellClickListener(
                                 DebouncedClickListener(View.OnClickListener { view ->
                                     callback?.onEncryptedMessageClicked(informationData, view)

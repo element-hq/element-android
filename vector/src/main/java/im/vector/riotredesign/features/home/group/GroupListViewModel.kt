@@ -84,7 +84,8 @@ class GroupListViewModel(initialState: GroupListViewState,
 
     private fun observeGroupSummaries() {
         session
-                .rx().liveGroupSummaries()
+                .rx()
+                .liveGroupSummaries()
                 .map {
                     val myUser = session.getUser(session.sessionParams.credentials.userId)
                     val allCommunityGroup = GroupSummary(
@@ -94,6 +95,7 @@ class GroupListViewModel(initialState: GroupListViewState,
                     listOf(allCommunityGroup) + it
                 }
                 .execute { async ->
+                    // TODO Phase2 Handle the case where the selected group is deleted on another client
                     val newSelectedGroup = selectedGroup ?: async()?.firstOrNull()
                     copy(asyncGroups = async, selectedGroup = newSelectedGroup)
                 }

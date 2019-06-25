@@ -108,7 +108,7 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
             // Quit this screen
             requireActivity().finish()
             // Open room
-            navigator.openRoom(roomPreviewData.roomId, requireActivity())
+            navigator.openRoom(requireActivity(), roomPreviewData.roomId)
         }
     }
 }

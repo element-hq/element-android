@@ -50,10 +50,6 @@ class HomeModule {
             HomeNavigator()
         }
 
-        scope(HOME_SCOPE) {
-            HomePermalinkHandler(get(), get())
-        }
-
         // Fragment scopes
 
         factory {
@@ -96,6 +92,10 @@ class HomeModule {
 
         factory {
             GroupSummaryController()
+        }
+
+        scope(ROOM_DETAIL_SCOPE) {
+            PermalinkHandler(get(), get())
         }
 
         scope(ROOM_DETAIL_SCOPE) { (fragment: Fragment) ->

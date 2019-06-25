@@ -111,8 +111,7 @@
         <item name="vctr_tabbar_background">@drawable/vector_tabbar_background_status</item>
 
         <item name="vctr_pill_background_user_id">@drawable/pill_background_user_id_status</item>
-        <item name="vctr_pill_background_room_alias">@drawable/pill_background_room_alias_status
-        </item>
+        <item name="vctr_pill_background_room_alias">@drawable/pill_background_room_alias_status</item>
 
         <item name="vctr_pill_text_color_user_id">@color/riot_primary_text_color_status</item>
         <item name="vctr_pill_text_color_room_alias">@android:color/white</item>

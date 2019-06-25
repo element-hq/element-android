@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.containsOnlyEmojis
+import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -38,15 +39,18 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var message: CharSequence? = null
     @EpoxyAttribute
     override lateinit var informationData: MessageInformationData
+    @EpoxyAttribute
+    var urlClickCallback: TimelineEventController.UrlClickCallback? = null
 
-    val mvmtMethod = BetterLinkMovementMethod.newInstance().also {
-        it.setOnLinkClickListener { textView, url ->
-            //Return false to let android manage the click on the link
-            false
+    // TODO Move this instantiation somewhere else?
+    private val mvmtMethod = BetterLinkMovementMethod.newInstance().also {
+        it.setOnLinkClickListener { _, url ->
+            //Return false to let android manage the click on the link, or true if the link is handled by the application
+            urlClickCallback?.onUrlClicked(url) == true
         }
-        it.setOnLinkLongClickListener { textView, url ->
+        it.setOnLinkLongClickListener { _, url ->
             //Long clicks are handled by parent, return true to block android to do something with url
-            true
+            urlClickCallback?.onUrlLongClicked(url) == true
         }
     }
 

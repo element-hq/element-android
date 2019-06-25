@@ -46,9 +46,8 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                               private val backgroundHandler: Handler = TimelineAsyncHelper.getBackgroundHandler()
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
-    interface Callback : ReactionPillCallback, AvatarCallback, BaseCallback {
+    interface Callback : ReactionPillCallback, AvatarCallback, BaseCallback, UrlClickCallback {
         fun onEventVisible(event: TimelineEvent)
-        fun onUrlClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
         fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
@@ -72,6 +71,11 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         fun onMemberNameClicked(informationData: MessageInformationData)
     }
 
+    interface UrlClickCallback {
+        fun onUrlClicked(url: String): Boolean
+        fun onUrlLongClicked(url: String): Boolean
+    }
+
     private val collapsedEventIds = linkedSetOf<String>()
     private val mergeItemCollapseStates = HashMap<String, Boolean>()
     private val modelCache = arrayListOf<CacheItemData?>()
@@ -84,39 +88,43 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
 
     private val listUpdateCallback = object : ListUpdateCallback {
 
-        @Synchronized
         override fun onChanged(position: Int, count: Int, payload: Any?) {
-            assertUpdateCallbacksAllowed()
-            (position until (position + count)).forEach {
-                modelCache[it] = null
+            synchronized(modelCache) {
+                assertUpdateCallbacksAllowed()
+                (position until (position + count)).forEach {
+                    modelCache[it] = null
+                }
+                requestModelBuild()
             }
-            requestModelBuild()
         }
 
-        @Synchronized
         override fun onMoved(fromPosition: Int, toPosition: Int) {
-            assertUpdateCallbacksAllowed()
-            val model = modelCache.removeAt(fromPosition)
-            modelCache.add(toPosition, model)
-            requestModelBuild()
+            synchronized(modelCache) {
+                assertUpdateCallbacksAllowed()
+                val model = modelCache.removeAt(fromPosition)
+                modelCache.add(toPosition, model)
+                requestModelBuild()
+            }
         }
 
-        @Synchronized
         override fun onInserted(position: Int, count: Int) {
-            assertUpdateCallbacksAllowed()
-            (0 until count).forEach {
-                modelCache.add(position, null)
+            synchronized(modelCache) {
+                assertUpdateCallbacksAllowed()
+                (0 until count).forEach {
+                    modelCache.add(position, null)
+                }
+                requestModelBuild()
             }
-            requestModelBuild()
         }
 
-        @Synchronized
         override fun onRemoved(position: Int, count: Int) {
-            assertUpdateCallbacksAllowed()
-            (0 until count).forEach {
-                modelCache.removeAt(position)
+            synchronized(modelCache) {
+                assertUpdateCallbacksAllowed()
+                (0 until count).forEach {
+                    modelCache.removeAt(position)
+                }
+                requestModelBuild()
             }
-            requestModelBuild()
         }
     }
 
@@ -124,12 +132,36 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         requestModelBuild()
     }
 
-    fun setTimeline(timeline: Timeline?) {
+    fun setTimeline(timeline: Timeline?, eventIdToHighlight: String?) {
         if (this.timeline != timeline) {
             this.timeline = timeline
             this.timeline?.listener = this
+
+            // Clear cache
+            synchronized(modelCache) {
+                for (i in 0 until modelCache.size) {
+                    modelCache[i] = null
+                }
+            }
+        }
+
+        if (this.eventIdToHighlight != eventIdToHighlight) {
+            // Clear cache to force a refresh
+            synchronized(modelCache) {
+                for (i in 0 until modelCache.size) {
+                    if (modelCache[i]?.eventId == eventIdToHighlight
+                            || modelCache[i]?.eventId == this.eventIdToHighlight) {
+                        modelCache[i] = null
+                    }
+                }
+            }
+            this.eventIdToHighlight = eventIdToHighlight
+
+            requestModelBuild()
         }
     }
+
+    private var eventIdToHighlight: String? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -170,28 +202,29 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         require(inSubmitList || Looper.myLooper() == backgroundHandler.looper)
     }
 
-    @Synchronized
     private fun getModels(): List<EpoxyModel<*>> {
-        (0 until modelCache.size).forEach { position ->
-            // Should be build if not cached or if cached but contains mergedHeader or formattedDay
-            // We then are sure we always have items up to date.
-            if (modelCache[position] == null
-                    || modelCache[position]?.mergedHeaderModel != null
-                    || modelCache[position]?.formattedDayModel != null) {
-                modelCache[position] = buildItemModels(position, currentSnapshot)
-            }
-        }
-        return modelCache
-                .map {
-                    val eventModel = if (it == null || collapsedEventIds.contains(it.localId)) {
-                        null
-                    } else {
-                        it.eventModel
-                    }
-                    listOf(eventModel, it?.mergedHeaderModel, it?.formattedDayModel)
+        synchronized(modelCache) {
+            (0 until modelCache.size).forEach { position ->
+                // Should be build if not cached or if cached but contains mergedHeader or formattedDay
+                // We then are sure we always have items up to date.
+                if (modelCache[position] == null
+                        || modelCache[position]?.mergedHeaderModel != null
+                        || modelCache[position]?.formattedDayModel != null) {
+                    modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
-                .flatten()
-                .filterNotNull()
+            }
+            return modelCache
+                    .map {
+                        val eventModel = if (it == null || collapsedEventIds.contains(it.localId)) {
+                            null
+                        } else {
+                            it.eventModel
+                        }
+                        listOf(eventModel, it?.mergedHeaderModel, it?.formattedDayModel)
+                    }
+                    .flatten()
+                    .filterNotNull()
+        }
     }
 
 
@@ -202,14 +235,14 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
-        val eventModel = timelineItemFactory.create(event, nextEvent, callback).also {
+        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, callback).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
         val mergedHeaderModel = buildMergedHeaderItem(event, nextEvent, items, addDaySeparator, currentPosition)
         val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)
 
-        return CacheItemData(event.localId, eventModel, mergedHeaderModel, daySeparatorItem)
+        return CacheItemData(event.localId, event.root.eventId, eventModel, mergedHeaderModel, daySeparatorItem)
     }
 
     private fun buildDaySeparatorItem(addDaySeparator: Boolean, date: LocalDateTime): DaySeparatorItem? {
@@ -221,6 +254,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         }
     }
 
+    // TODO Phase 3 Handle the case where the eventId we have to highlight is merged
     private fun buildMergedHeaderItem(event: TimelineEvent,
                                       nextEvent: TimelineEvent?,
                                       items: List<TimelineEvent>,
@@ -270,10 +304,23 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
         addIf(shouldAdd, this@TimelineEventController)
     }
 
+    fun searchPositionOfEvent(eventId: String): Int? {
+        synchronized(modelCache) {
+            // Search in the cache
+            modelCache.forEachIndexed { idx, cacheItemData ->
+                if (cacheItemData?.eventId == eventId) {
+                    return idx
+                }
+            }
+
+            return null
+        }
+    }
 }
 
 private data class CacheItemData(
         val localId: String,
+        val eventId: String?,
         val eventModel: EpoxyModel<*>? = null,
         val mergedHeaderModel: MergedHeaderItem? = null,
         val formattedDayModel: DaySeparatorItem? = null

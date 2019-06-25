@@ -72,7 +72,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.openRoomLiveData.observeEvent(this) {
-            navigator.openRoom(it, requireActivity())
+            navigator.openRoom(requireActivity(), it)
         }
 
         createChatFabMenu.listener = this

@@ -42,6 +42,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.koin.android.ext.android.get
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -60,7 +61,7 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     } else {
         TimelineDisplayableEvents.DISPLAYABLE_TYPES
     }
-    private val timeline = room.createTimeline(eventId, allowedTypes)
+    private var timeline = room.createTimeline(eventId, allowedTypes)
 
     companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 
@@ -98,6 +99,8 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
             is RoomDetailActions.EnterEditMode          -> handleEditAction(action)
             is RoomDetailActions.EnterQuoteMode         -> handleQuoteAction(action)
             is RoomDetailActions.EnterReplyMode         -> handleReplyAction(action)
+            is RoomDetailActions.NavigateToEvent        -> handleNavigateToEvent(action)
+            else                                        -> Timber.e("Unhandled Action: $action")
         }
     }
 
@@ -127,6 +130,11 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
     val sendMessageResultLiveData: LiveData<LiveEvent<SendMessageResult>>
         get() = _sendMessageResultLiveData
+
+    private val _navigateToEvent = MutableLiveData<LiveEvent<String>>()
+    val navigateToEvent: LiveData<LiveEvent<String>>
+        get() = _navigateToEvent
+
 
     // PRIVATE METHODS *****************************************************************************
 
@@ -403,6 +411,56 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
         }
     }
 
+    private fun handleNavigateToEvent(action: RoomDetailActions.NavigateToEvent) {
+        val targetEventId = action.eventId
+
+        if (action.position != null) {
+            // Event is already in RAM
+            withState {
+                if (it.eventId == targetEventId) {
+                    // ensure another click on the same permalink will also do a scroll
+                    setState {
+                        copy(
+                                eventId = null
+                        )
+                    }
+                }
+
+                setState {
+                    copy(
+                            eventId = targetEventId
+                    )
+                }
+            }
+
+            _navigateToEvent.postValue(LiveEvent(targetEventId))
+        } else {
+            // change timeline
+            timeline.dispose()
+            timeline = room.createTimeline(targetEventId, allowedTypes)
+            timeline.start()
+
+            withState {
+                if (it.eventId == targetEventId) {
+                    // ensure another click on the same permalink will also do a scroll
+                    setState {
+                        copy(
+                                eventId = null
+                        )
+                    }
+                }
+
+                setState {
+                    copy(
+                            eventId = targetEventId,
+                            timeline = this@RoomDetailViewModel.timeline
+                    )
+                }
+            }
+
+            _navigateToEvent.postValue(LiveEvent(targetEventId))
+        }
+    }
 
     private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second

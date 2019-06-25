@@ -33,6 +33,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 class EncryptionItemFactory(private val stringProvider: StringProvider) {
 
     fun create(event: TimelineEvent,
+               highlight: Boolean,
                callback: TimelineEventController.BaseCallback?): NoticeItem? {
         val text = buildNoticeText(event.root, event.senderName) ?: return null
         val informationData = MessageInformationData(
@@ -46,6 +47,7 @@ class EncryptionItemFactory(private val stringProvider: StringProvider) {
         return NoticeItem_()
                 .noticeText(text)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .baseCallback(callback)
     }
 

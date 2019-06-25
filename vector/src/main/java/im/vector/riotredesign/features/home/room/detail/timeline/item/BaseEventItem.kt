@@ -19,20 +19,28 @@ import android.view.View
 import android.view.ViewStub
 import androidx.annotation.IdRes
 import androidx.constraintlayout.widget.Guideline
+import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyHolder
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
+import im.vector.riotredesign.core.platform.CheckableView
 import im.vector.riotredesign.core.utils.DimensionUtils.dpToPx
 
 abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>() {
 
-    var avatarStyle: AvatarStyle = Companion.AvatarStyle.SMALL
+    var avatarStyle: AvatarStyle = AvatarStyle.SMALL
+
+    // To use for instance when opening a permalink with an eventId
+    @EpoxyAttribute
+    var highlighted: Boolean = false
 
     override fun bind(holder: H) {
         super.bind(holder)
         //optimize?
-        val px = dpToPx(avatarStyle.avatarSizeDP, holder.view.context)
+        val px = dpToPx(avatarStyle.avatarSizeDP + 8, holder.view.context)
         holder.leftGuideline.setGuidelineBegin(px)
+
+        holder.checkableBackground.isChecked = highlighted
     }
 
 
@@ -46,6 +54,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     abstract class BaseHolder : VectorEpoxyHolder() {
 
         val leftGuideline by bind<Guideline>(R.id.messageStartGuideline)
+        val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
 
         @IdRes
         abstract fun getStubId(): Int
