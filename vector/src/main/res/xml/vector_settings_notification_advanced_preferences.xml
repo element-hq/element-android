@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_NOTIFICATION_LEVEL"
         android:persistent="false"
         android:title="@string/settings_notification_by_event">
@@ -34,7 +34,7 @@
             android:key="SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY_2"
             android:title="@string/settings_messages_sent_by_bot" />
 
-    </PreferenceCategory>
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
 
     <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
 

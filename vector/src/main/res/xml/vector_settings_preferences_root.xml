@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference
+    <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_settings_general"
         android:title="@string/settings_general_title"
         app:fragment="com.example.SyncFragment" />
 
 
-    <Preference
+    <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_flair"
         android:title="@string/settings_flair"
         app:fragment="com.example.SyncFragment" />
 
-    <Preference
+    <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_bell"
         android:key="SETTINGS_NOTIFICATIONS_KEY"
@@ -23,32 +23,32 @@
         app:fragment="im.vector.riotredesign.features.settings.VectorSettingsNotificationPreferenceFragment" />
 
 
-    <Preference
+    <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_sliders"
         android:title="@string/settings_preferences"
         app:fragment="com.example.SyncFragment" />
 
 
-    <Preference
+    <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_lock"
         android:title="@string/settings_security_and_privacy"
         app:fragment="com.example.SyncFragment" />
 
 
-    <Preference
+    <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_settings_lab"
         android:title="@string/room_settings_labs_pref_title"
         app:fragment="com.example.SyncFragment" />
 
 
-    <Preference
+    <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_devices_info"
         android:title="Legacy"
         app:fragment="com.example.SyncFragment" />
 
 
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

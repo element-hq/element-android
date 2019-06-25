@@ -19,13 +19,11 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import android.os.IBinder
 import im.vector.matrix.android.internal.session.sync.job.SyncService
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.notifications.NotificationUtils
 import timber.log.Timber
-import java.util.*
 
 class VectorSyncService : SyncService() {
 
@@ -51,7 +49,7 @@ class VectorSyncService : SyncService() {
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.v("VectorSyncService - onStartCommand ")
-        if (SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notification = NotificationUtils.buildForegroundServiceNotification(applicationContext, R.string.notification_listening_for_events, false)
             startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
         }

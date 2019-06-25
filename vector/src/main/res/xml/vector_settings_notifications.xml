@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--<SwitchPreference-->
+    <!--<im.vector.riotredesign.core.preference.VectorSwitchPreference-->
         <!--android:key="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"-->
         <!--android:title="@string/settings_enable_all_notif" />-->
 
-    <SwitchPreference
+    <im.vector.riotredesign.core.preference.VectorSwitchPreference
         android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
         android:defaultValue="true"
         android:title="@string/settings_enable_this_device" />
@@ -17,12 +17,12 @@
     <!--android:key="SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY"-->
     <!--android:title="@string/settings_turn_screen_on" />-->
 
-    <!--<Preference-->
+    <!--<im.vector.riotredesign.core.preference.VectorPreference-->
     <!--android:dialogTitle="@string/settings_notification_privacy"-->
     <!--android:key="SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY"-->
     <!--android:title="@string/settings_notification_privacy" />-->
 
-    <Preference
+    <im.vector.riotredesign.core.preference.VectorPreference
         android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
         android:key="SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
         android:persistent="false"
@@ -32,24 +32,24 @@
         android:enabled="false"
         app:fragment="im.vector.fragments.VectorSettingsNotificationsAdvancedFragment" />
 
-    <Preference
+    <im.vector.riotredesign.core.preference.VectorPreference
         android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
         android:title="@string/settings_notification_troubleshoot"
         app:fragment="im.vector.riotredesign.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
 
     <PreferenceCategory android:title="@string/settings_expert">
 
-        <Preference
+        <im.vector.riotredesign.core.preference.VectorPreference
             android:layout_width="match_parent"
             android:title="@string/settings_notifications_targets"
             android:persistent="false"
             app:fragment="im.vector.riotredesign.features.settings.push.PushGatewaysFragment" />
 
-        <Preference
+        <im.vector.riotredesign.core.preference.VectorPreference
             android:layout_width="match_parent"
             android:title="@string/settings_push_rules"
             android:persistent="false"
             app:fragment="im.vector.riotredesign.features.settings.push.PushRulesFragment" />
 
     </PreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

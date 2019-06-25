@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import timber.log.Timber
@@ -30,7 +29,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             it.action = "SLOW"
             context.startService(it)
             try {
-                if (SDK_INT >= Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     ContextCompat.startForegroundService(context, intent)
                 } else {
                     context.startService(intent)
@@ -41,7 +40,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-        scheduleAlarm(context,30_000L)
+        scheduleAlarm(context, 30_000L)
 
         Timber.i("Alarm scheduled to restart service")
     }
@@ -56,7 +55,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
                     intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val firstMillis = System.currentTimeMillis() + delay
             val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            if (SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pIntent)
             } else {
                 alarmMgr.set(AlarmManager.RTC_WAKEUP, firstMillis, pIntent)

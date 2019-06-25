@@ -36,7 +36,8 @@ class VectorPreferenceCategory : PreferenceCategory {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
-        isIconSpaceReserved = false
+        // Set to false to remove the space when there is no icon
+        isIconSpaceReserved = true
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
@@ -47,6 +48,8 @@ class VectorPreferenceCategory : PreferenceCategory {
         titleTextView?.setTypeface(null, Typeface.BOLD)
 
         // "isIconSpaceReserved = false" does not work for preference category, so remove the padding
-        (titleTextView?.parent as? ViewGroup)?.setPadding(0, 0, 0, 0)
+        if (!isIconSpaceReserved) {
+            (titleTextView?.parent as? ViewGroup)?.setPadding(0, 0, 0, 0)
+        }
     }
 }

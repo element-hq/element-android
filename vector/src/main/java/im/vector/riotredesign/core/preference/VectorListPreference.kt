@@ -54,7 +54,8 @@ class VectorListPreference : ListPreference {
 
     init {
         widgetLayoutResource = R.layout.vector_settings_list_preference_with_warning
-        isIconSpaceReserved = false
+        // Set to false to remove the space when there is no icon
+        isIconSpaceReserved = true
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
