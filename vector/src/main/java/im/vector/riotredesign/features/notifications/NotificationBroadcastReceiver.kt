@@ -90,7 +90,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
         // Create a new event to be displayed in the notification drawer, right now
 
         val notifiableMessageEvent = NotifiableMessageEvent(
-                Random().nextInt().toString(),// TODO event.eventId,
+                // Generate a Fake event id
+                UUID.randomUUID().toString(),
                 false,
                 System.currentTimeMillis(),
                 session.getUser(session.sessionParams.credentials.userId)?.displayName
@@ -98,8 +99,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
                 session.sessionParams.credentials.userId,
                 message,
                 room.roomId,
-                "Room name", // TODO room.getRoomDisplayName(context),
-                false // TODO room.isDirect
+                room.roomSummary?.displayName ?: room.roomId,
+                room.roomSummary?.isDirect == true
         )
         notifiableMessageEvent.outGoingMessage = true
 
@@ -107,6 +108,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
         notificationDrawerManager.refreshNotificationDrawer()
 
         /*
+        // TODO Error cannot be managed the same way than in Riot
 
         val event = Event(mxMessage, session.credentials.userId, roomId)
         room.storeOutgoingEvent(event)

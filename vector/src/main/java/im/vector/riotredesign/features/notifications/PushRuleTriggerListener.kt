@@ -69,7 +69,6 @@ class PushRuleTriggerListener(
         session?.removePushRuleListener(this)
         session = null
         drawerManager.clearAllEvents()
-        drawerManager.refreshNotificationDrawer()
     }
 
 }

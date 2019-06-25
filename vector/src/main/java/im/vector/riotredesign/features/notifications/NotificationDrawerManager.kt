@@ -96,7 +96,6 @@ class NotificationDrawerManager(val context: Context,
             } else {
                 eventList.add(notifiableEvent)
             }
-
         }
     }
 
