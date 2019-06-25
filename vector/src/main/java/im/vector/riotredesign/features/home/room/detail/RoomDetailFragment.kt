@@ -708,9 +708,9 @@ class RoomDetailFragment :
                         .show()
             }
             MessageMenuViewModel.ACTION_QUICK_REACT    -> {
-                //eventId,ClickedOn,Opposite
-                (actionData.data as? Triple<String, String, String>)?.let { (eventId, clickedOn, opposite) ->
-                    roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, opposite))
+                //eventId,ClickedOn,Add
+                (actionData.data as? Triple<String, String, Boolean>)?.let { (eventId, clickedOn, add) ->
+                    roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, add))
                 }
             }
             MessageMenuViewModel.ACTION_EDIT           -> {

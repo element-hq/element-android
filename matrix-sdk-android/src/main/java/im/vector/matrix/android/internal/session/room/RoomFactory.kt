@@ -29,7 +29,6 @@ import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.relation.DefaultRelationService
 import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.state.DefaultStateService
@@ -51,7 +50,6 @@ internal class RoomFactory(private val monarchy: Monarchy,
                            private val setReadMarkersTask: SetReadMarkersTask,
                            private val cryptoService: CryptoService,
                            private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-                           private val updateQuickReactionTask: UpdateQuickReactionTask,
                            private val joinRoomTask: JoinRoomTask,
                            private val leaveRoomTask: LeaveRoomTask) {
 
@@ -64,7 +62,7 @@ internal class RoomFactory(private val monarchy: Monarchy,
         val stateService = DefaultStateService(roomId, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
         val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask)
-        val reactionService = DefaultRelationService(roomId, eventFactory, findReactionEventForUndoTask, updateQuickReactionTask, monarchy, taskExecutor)
+        val reactionService = DefaultRelationService(roomId, eventFactory, findReactionEventForUndoTask, monarchy, taskExecutor)
 
         return DefaultRoom(
                 roomId,

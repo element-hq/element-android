@@ -32,9 +32,7 @@ import im.vector.matrix.android.internal.session.room.prune.PruneEventTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.relation.DefaultFindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.LocalEchoUpdater
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
@@ -82,7 +80,7 @@ class RoomModule {
         }
 
         scope(DefaultSession.SCOPE) {
-            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+            RoomFactory(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
@@ -107,10 +105,6 @@ class RoomModule {
 
         scope(DefaultSession.SCOPE) {
             DefaultFindReactionEventForUndoTask(get()) as FindReactionEventForUndoTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultUpdateQuickReactionTask(get()) as UpdateQuickReactionTask
         }
 
         scope(DefaultSession.SCOPE) {
