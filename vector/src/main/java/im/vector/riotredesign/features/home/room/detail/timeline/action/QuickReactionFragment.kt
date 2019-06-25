@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import butterknife.ButterKnife
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
@@ -47,13 +48,13 @@ class QuickReactionFragment : BaseMvRxFragment() {
         return view
     }
 
-    private val textViews by lazy {
-        listOf(quickReaction0, quickReaction1, quickReaction2, quickReaction3,
-                quickReaction4, quickReaction5, quickReaction6, quickReaction7)
-    }
+    lateinit var textViews: List<TextView>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        textViews = listOf(quickReaction0, quickReaction1, quickReaction2, quickReaction3,
+                quickReaction4, quickReaction5, quickReaction6, quickReaction7)
 
         textViews.forEachIndexed { index, textView ->
             textView.typeface = fontProvider.typeface ?: Typeface.DEFAULT
