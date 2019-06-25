@@ -31,6 +31,6 @@ class SenderNotificationPermissionCondition(val key: String) : Condition(Kind.se
 
 
     fun isSatisfied(event: Event, powerLevels: PowerLevels): Boolean {
-        return event.sender != null && powerLevels.getUserPowerLevel(event.sender) >= powerLevels.notificationLevel(key)
+        return event.senderId != null && powerLevels.getUserPowerLevel(event.senderId) >= powerLevels.notificationLevel(key)
     }
 }
