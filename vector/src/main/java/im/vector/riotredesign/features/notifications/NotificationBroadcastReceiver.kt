@@ -40,7 +40,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
 
-        Timber.v("ReplyNotificationBroadcastReceiver received : $intent")
+        Timber.v("NotificationBroadcastReceiver received : $intent")
 
         when (intent.action) {
             NotificationUtils.SMART_REPLY_ACTION        ->

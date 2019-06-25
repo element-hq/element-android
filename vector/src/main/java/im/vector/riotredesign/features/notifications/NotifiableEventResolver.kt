@@ -17,6 +17,7 @@ package im.vector.riotredesign.features.notifications
 
 import androidx.core.app.NotificationCompat
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -36,8 +37,8 @@ import timber.log.Timber
  * The NotifiableEventResolver is the only aware of session/store, the NotificationDrawerManager has no knowledge of that,
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
-class NotifiableEventResolver(val stringProvider: StringProvider,
-                              val noticeEventFormatter: NoticeEventFormatter) {
+class NotifiableEventResolver(private val stringProvider: StringProvider,
+                              private val noticeEventFormatter: NoticeEventFormatter) {
 
     //private val eventDisplay = RiotEventDisplay(context)
 
@@ -132,26 +133,19 @@ class NotifiableEventResolver(val stringProvider: StringProvider,
             notifiableEvent.matrixID = session.sessionParams.credentials.userId
             notifiableEvent.soundName = null
 
-            //TODO get the avatar?
+            // Get the avatars URL
+            // TODO They will be not displayed the first time (known limitation)
+            notifiableEvent.roomAvatarPath = session.contentUrlResolver()
+                    .resolveThumbnail(room.roomSummary?.avatarUrl,
+                            250,
+                            250,
+                            ContentUrlResolver.ThumbnailMethod.SCALE)
 
-//            val roomAvatarPath = session.mediaCache?.thumbnailCacheFile(room.avatarUrl, 50)
-//            if (roomAvatarPath != null) {
-//                notifiableEvent.roomAvatarPath = roomAvatarPath.path
-//            } else {
-//                // prepare for the next time
-//                session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), room.avatarUrl, 50)
-//            }
-//
-//            room.state.getMember(event.sender)?.avatarUrl?.let {
-//                val size = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
-//                val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, size)
-//                if (userAvatarUrlPath != null) {
-//                    notifiableEvent.senderAvatarPath = userAvatarUrlPath.path
-//                } else {
-//                    // prepare for the next time
-//                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), it, size)
-//                }
-//            }
+            notifiableEvent.senderAvatarPath = session.contentUrlResolver()
+                    .resolveThumbnail(event.senderAvatar,
+                            250,
+                            250,
+                            ContentUrlResolver.ThumbnailMethod.SCALE)
 
             return notifiableEvent
         }

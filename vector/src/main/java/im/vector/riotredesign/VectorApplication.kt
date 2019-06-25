@@ -16,17 +16,11 @@
 
 package im.vector.riotredesign
 
-import android.app.AlarmManager
 import android.app.Application
-import android.app.PendingIntent
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
-import android.os.IBinder
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
 import androidx.lifecycle.Lifecycle
@@ -41,14 +35,13 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.internal.session.sync.job.SyncService
 import im.vector.riotredesign.core.di.AppModule
 import im.vector.riotredesign.core.services.AlarmSyncBroadcastReceiver
-import im.vector.riotredesign.core.services.VectorSyncService
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.lifecycle.VectorActivityLifecycleCallbacks
+import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.notifications.NotificationUtils
 import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
@@ -64,7 +57,6 @@ import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class VectorApplication : Application() {
 
@@ -74,6 +66,8 @@ class VectorApplication : Application() {
     private var mFontThreadHandler: Handler? = null
 
     val vectorConfiguration: VectorConfiguration by inject()
+
+    private val notificationDrawerManager by inject<NotificationDrawerManager>()
 
 //    var slowMode = false
 
@@ -131,7 +125,9 @@ class VectorApplication : Application() {
 
             @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
             fun entersBackground() {
-                Timber.i("App entered background")
+                Timber.i("App entered background") // call persistInfo
+
+                notificationDrawerManager.persistInfo()
 
                 if (FcmHelper.isPushSupported()) {
                     //TODO FCM fallback
