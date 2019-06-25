@@ -166,7 +166,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.sliding_menu_sign_out -> {
-                SignOutUiWorker(this).perform(Matrix.getInstance().currentSession!!)
+                SignOutUiWorker(this, notificationDrawerManager)
+                        .perform(Matrix.getInstance().currentSession!!)
                 return true
             }
         }
