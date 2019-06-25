@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -162,6 +163,9 @@ dependencies {
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
+    // OSS License
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+
     // Log
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
@@ -172,6 +176,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
+    // TODO RxBindings3 exists
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
@@ -181,7 +186,7 @@ dependencies {
     // Work
     implementation "android.arch.work:work-runtime-ktx:1.0.0"
 
-    // FP
+    // Functional Programming
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 
     // Pref

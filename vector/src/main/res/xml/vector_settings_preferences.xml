@@ -481,6 +481,10 @@
             android:title="@string/settings_third_party_notices" />
 
         <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
+            android:title="@string/settings_other_third_party_notices" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
             android:key="SETTINGS_MEDIA_SAVING_PERIOD_KEY"
             android:title="@string/settings_keep_media" />
 
