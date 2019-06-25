@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="app_id"
+        android:text="@string/push_gateway_item_app_id"
         android:textStyle="bold" />
 
 
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="push_key:"
+        android:text="@string/push_gateway_item_push_key"
         android:textStyle="bold" />
 
 
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="app_display_name"
+        android:text="@string/push_gateway_item_app_display_name"
         android:textStyle="bold" />
 
 
@@ -72,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="device_name:"
+        android:text="@string/push_gateway_item_device_name"
         android:textStyle="bold" />
 
 
@@ -90,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="Url:"
+        android:text="@string/push_gateway_item_url"
         android:textStyle="bold" />
 
     <TextView
@@ -106,7 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="Format:"
+        android:text="@string/push_gateway_item_format"
         android:textStyle="bold" />
 
 

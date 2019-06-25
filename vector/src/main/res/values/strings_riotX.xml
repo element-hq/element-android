@@ -21,4 +21,13 @@
     <string name="settings_push_rules_no_rules">No push rules defined</string>
     <string name="settings_push_gateway_no_pushers">No registered push gateways</string>
 
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Format:</string>
+
+    <string name="preference_root_legacy">Legacy</string>
+
 </resources>
