@@ -18,8 +18,6 @@ package im.vector.riotredesign.features.notifications
 import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.text.TextUtils
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import im.vector.matrix.android.api.Matrix
@@ -54,6 +52,14 @@ class NotificationDrawerManager(val context: Context,
     private var iconLoader = IconLoader(context,
             object : IconLoader.IconLoaderListener {
                 override fun onIconsLoaded() {
+                    // Force refresh
+                    refreshNotificationDrawer()
+                }
+            })
+
+    private var bitmapLoader = BitmapLoader(context,
+            object : BitmapLoader.BitmapLoaderListener {
+                override fun onBitmapsLoaded() {
                     // Force refresh
                     refreshNotificationDrawer()
                 }
@@ -372,19 +378,10 @@ class NotificationDrawerManager(val context: Context,
         if (events.isEmpty()) return null
 
         //Use the last event (most recent?)
-        val roomAvatarPath = events[events.size - 1].roomAvatarPath
-                ?: events[events.size - 1].senderAvatarPath
-        if (!TextUtils.isEmpty(roomAvatarPath)) {
-            val options = BitmapFactory.Options()
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888
-            try {
-                return BitmapFactory.decodeFile(roomAvatarPath, options)
-            } catch (oom: OutOfMemoryError) {
-                Timber.e(oom, "decodeFile failed with an oom")
-            }
+        val roomAvatarPath = events.last().roomAvatarPath
+                ?: events.last().senderAvatarPath
 
-        }
-        return null
+        return bitmapLoader.getRoomBitmap(roomAvatarPath)
     }
 
     private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {

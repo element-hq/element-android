@@ -22,7 +22,6 @@ package im.vector.riotredesign.features.notifications
 data class RoomEventGroupInfo(
         val roomId: String,
         val roomDisplayName: String = "",
-        val roomAvatarPath: String? = null,
         val isDirect: Boolean = false
 ) {
     // An event in the list has not yet been display
