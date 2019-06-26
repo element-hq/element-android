@@ -244,7 +244,7 @@ public class PreferencesManager {
     }
 
     public static boolean areNotificationEnabledForDevice(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, true);
     }
 
     /**
