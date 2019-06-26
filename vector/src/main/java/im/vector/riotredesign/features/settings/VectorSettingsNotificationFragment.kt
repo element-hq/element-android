@@ -59,19 +59,8 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
     private val notificationsSettingsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_NOTIFICATIONS_KEY) as PreferenceCategory
     }
-    private val mNotificationPrivacyPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY)
-    }
 
     override fun bindPref() {
-        // Notification privacy
-        mNotificationPrivacyPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            notImplemented()
-            // TODO startActivity(NotificationPrivacyActivity.getIntent(activity))
-            true
-        }
-        refreshNotificationPrivacy()
-
         for (preferenceKey in mPrefKeyToBingRuleId.keys) {
             val preference = findPreference(preferenceKey)
 
@@ -81,7 +70,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
                         // on some old android APIs,
                         // the callback is called even if there is no user interaction
                         // so the value will be checked to ensure there is really no update.
-                        onPushRuleClick(preference.key, newValueAsVoid as Boolean)
+                        // TODO onPushRuleClick(preference.key, newValueAsVoid as Boolean)
                         true
                     }
                 }
@@ -238,24 +227,6 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
                     })
                 }
             }
-        }
-        */
-    }
-
-    /**
-     * Refresh the notification privacy setting
-     */
-    private fun refreshNotificationPrivacy() {
-        /* TODO
-        val pushManager = Matrix.getInstance(activity).pushManager
-
-        // this setting apply only with FCM for the moment
-        if (pushManager.useFcm()) {
-            val notificationPrivacyString = NotificationPrivacyActivity.getNotificationPrivacyString(activity,
-                    pushManager.notificationPrivacy)
-            mNotificationPrivacyPreference.summary = notificationPrivacyString
-        } else {
-            notificationsSettingsCategory.removePreference(mNotificationPrivacyPreference)
         }
         */
     }
