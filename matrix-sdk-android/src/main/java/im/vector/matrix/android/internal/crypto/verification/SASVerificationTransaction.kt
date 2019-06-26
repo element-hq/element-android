@@ -256,6 +256,7 @@ internal abstract class SASVerificationTransaction(
         verifiedDevices.forEach {
             setDeviceVerified(it, otherUserId)
         }
+        state = SasVerificationTxState.Verified
     }
 
     private fun setDeviceVerified(deviceId: String, userId: String) {
