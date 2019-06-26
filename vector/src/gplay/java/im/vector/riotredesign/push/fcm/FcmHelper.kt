@@ -99,4 +99,12 @@ object FcmHelper {
         val resultCode = apiAvailability.isGooglePlayServicesAvailable(activity)
         return resultCode == ConnectionResult.SUCCESS
     }
+
+    fun onEnterForeground(context: Context) {
+        // No op
+    }
+
+    fun onEnterBackground(context: Context, hasSession: Boolean) {
+        // TODO FCM fallback
+    }
 }

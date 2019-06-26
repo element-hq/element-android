@@ -15,12 +15,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.receiver
+package im.vector.riotredesign.fdroid.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import im.vector.riotredesign.core.services.AlarmSyncBroadcastReceiver
 import timber.log.Timber
 
 class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {

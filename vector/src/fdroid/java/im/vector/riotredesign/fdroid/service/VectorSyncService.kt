@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotredesign.core.services
+package im.vector.riotredesign.fdroid.service
 
 import android.app.NotificationManager
 import android.content.Context
@@ -28,12 +28,12 @@ import timber.log.Timber
 class VectorSyncService : SyncService() {
 
     override fun onCreate() {
-        Timber.v("VectorSyncService - onCreate ")
+        Timber.v("VectorSyncService - onCreate")
         super.onCreate()
     }
 
     override fun onDestroy() {
-        Timber.v("VectorSyncService - onDestroy ")
+        Timber.v("VectorSyncService - onDestroy")
         removeForegroundNotif()
         super.onDestroy()
     }
@@ -57,7 +57,7 @@ class VectorSyncService : SyncService() {
     }
 
     /**
-     * If the service is bounded and the service was previously started we can remove foreground notif
+     * If the service is bounded and the service was previously started we can remove foreground notification
      */
     override fun onBind(intent: Intent?): IBinder {
         Timber.v("VectorSyncService - onBind ")

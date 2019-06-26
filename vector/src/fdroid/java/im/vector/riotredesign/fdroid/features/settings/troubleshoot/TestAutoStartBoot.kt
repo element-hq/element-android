@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotredesign.push.fcm.troubleshoot
+package im.vector.riotredesign.fdroid.features.settings.troubleshoot
 
 import androidx.fragment.app.Fragment
 import im.vector.riotredesign.R

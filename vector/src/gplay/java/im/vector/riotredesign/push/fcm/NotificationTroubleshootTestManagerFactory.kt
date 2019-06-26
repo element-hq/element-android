@@ -18,9 +18,9 @@ package im.vector.riotredesign.push.fcm
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.features.settings.troubleshoot.*
-import im.vector.riotredesign.push.fcm.troubleshoot.TestFirebaseToken
-import im.vector.riotredesign.push.fcm.troubleshoot.TestPlayServices
-import im.vector.riotredesign.push.fcm.troubleshoot.TestTokenRegistration
+import im.vector.riotredesign.gplay.features.settings.troubleshoot.TestFirebaseToken
+import im.vector.riotredesign.gplay.features.settings.troubleshoot.TestPlayServices
+import im.vector.riotredesign.gplay.features.settings.troubleshoot.TestTokenRegistration
 
 class NotificationTroubleshootTestManagerFactory {
 

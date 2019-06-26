@@ -17,9 +17,9 @@ package im.vector.riotredesign.push.fcm
 
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotredesign.fdroid.features.settings.troubleshoot.TestAutoStartBoot
+import im.vector.riotredesign.fdroid.features.settings.troubleshoot.TestBackgroundRestrictions
 import im.vector.riotredesign.features.settings.troubleshoot.*
-import im.vector.riotredesign.push.fcm.troubleshoot.TestAutoStartBoot
-import im.vector.riotredesign.push.fcm.troubleshoot.TestBackgroundRestrictions
 
 class NotificationTroubleshootTestManagerFactory {
 

@@ -18,9 +18,14 @@ package im.vector.riotredesign.push.fcm
 
 import android.app.Activity
 import android.content.Context
-
 import im.vector.riotredesign.core.pushers.PushersManager
+import im.vector.riotredesign.fdroid.receiver.AlarmSyncBroadcastReceiver
+import im.vector.riotredesign.features.settings.PreferencesManager
+import timber.log.Timber
 
+/**
+ * This class has an alter ego in the gplay variant.
+ */
 object FcmHelper {
 
     fun isPushSupported(): Boolean = false
@@ -51,5 +56,18 @@ object FcmHelper {
      */
     fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager) {
         // No op
+    }
+
+    fun onEnterForeground(context: Context) {
+        AlarmSyncBroadcastReceiver.cancelAlarm(context)
+    }
+
+    fun onEnterBackground(context: Context, hasSession: Boolean) {
+        //We need to use alarm in this mode
+        if (PreferencesManager.areNotificationEnabledForDevice(context)
+                && hasSession) {
+            AlarmSyncBroadcastReceiver.scheduleAlarm(context, 4_000L)
+            Timber.i("Alarm scheduled to restart service")
+        }
     }
 }

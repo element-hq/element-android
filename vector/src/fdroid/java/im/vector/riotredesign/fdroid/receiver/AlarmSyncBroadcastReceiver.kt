@@ -1,4 +1,20 @@
-package im.vector.riotredesign.core.services
+/*
+ * Copyright 2019 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.riotredesign.fdroid.receiver
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -8,6 +24,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
+import im.vector.riotredesign.fdroid.service.VectorSyncService
 import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
@@ -46,13 +63,12 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        const val REQUEST_CODE = 0
+        private const val REQUEST_CODE = 0
 
         fun scheduleAlarm(context: Context, delay: Long) {
             //Reschedule
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java)
-            val pIntent = PendingIntent.getBroadcast(context, AlarmSyncBroadcastReceiver.REQUEST_CODE,
-                    intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val firstMillis = System.currentTimeMillis() + delay
             val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -64,8 +80,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
 
         fun cancelAlarm(context: Context) {
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java)
-            val pIntent = PendingIntent.getBroadcast(context, AlarmSyncBroadcastReceiver.REQUEST_CODE,
-                    intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmMgr.cancel(pIntent)
         }

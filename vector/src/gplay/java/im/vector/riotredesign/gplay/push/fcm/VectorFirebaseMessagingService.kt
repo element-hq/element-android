@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.push.fcm
+package im.vector.riotredesign.gplay.push.fcm
 
 import android.os.Handler
 import android.os.Looper
@@ -39,6 +39,7 @@ import im.vector.riotredesign.features.notifications.NotifiableMessageEvent
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.notifications.SimpleNotifiableEvent
 import im.vector.riotredesign.features.settings.PreferencesManager
+import im.vector.riotredesign.push.fcm.FcmHelper
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
