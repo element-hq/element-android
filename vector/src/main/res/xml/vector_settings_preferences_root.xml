@@ -4,45 +4,57 @@
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
-        android:icon="@drawable/ic_settings_general"
+        android:icon="@drawable/ic_settings_root_general"
         android:title="@string/settings_general_title"
         app:fragment="com.example.SyncFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
-        android:icon="@drawable/ic_flair"
+        android:icon="@drawable/ic_settings_root_flair"
         android:title="@string/settings_flair"
         app:fragment="com.example.SyncFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
-        android:icon="@drawable/ic_bell"
+        android:icon="@drawable/ic_settings_root_notification"
         android:key="SETTINGS_NOTIFICATIONS_KEY"
         android:title="@string/settings_notifications"
         app:fragment="im.vector.riotredesign.features.settings.VectorSettingsNotificationPreferenceFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
-        android:icon="@drawable/ic_sliders"
+        android:icon="@drawable/ic_settings_root_preferences"
         android:title="@string/settings_preferences"
         app:fragment="com.example.SyncFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
-        android:icon="@drawable/ic_lock"
+        android:icon="@drawable/ic_settings_root_call"
+        android:title="@string/preference_voice_and_video"
+        app:fragment="com.example.SyncFragment" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:icon="@drawable/ic_settings_root_security_privacy"
         android:title="@string/settings_security_and_privacy"
         app:fragment="com.example.SyncFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
-        android:icon="@drawable/ic_settings_lab"
+        android:icon="@drawable/ic_settings_root_labs"
         android:title="@string/room_settings_labs_pref_title"
         app:fragment="com.example.SyncFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
-        android:icon="@drawable/ic_devices_info"
+        android:icon="@drawable/ic_settings_root_legacy"
         android:title="@string/preference_root_legacy"
+        app:fragment="com.example.SyncFragment" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:icon="@drawable/ic_settings_root_help_about"
+        android:title="@string/preference_root_help_about"
         app:fragment="com.example.SyncFragment" />
 
 </androidx.preference.PreferenceScreen>
