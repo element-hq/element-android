@@ -47,6 +47,7 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
 
     @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var roomPreviewViewModelFactory: RoomPreviewViewModel.Factory
+    @Inject lateinit var avatarRenderer: AvatarRenderer
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
     private val roomPreviewData: RoomPreviewData by args()
 
@@ -65,11 +66,11 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Toolbar
-        AvatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewToolbarAvatar)
+        avatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewToolbarAvatar)
         roomPreviewNoPreviewToolbarTitle.text = roomPreviewData.roomName
 
         // Screen
-        AvatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewAvatar)
+        avatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewAvatar)
         roomPreviewNoPreviewName.text = roomPreviewData.roomName
         roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
 

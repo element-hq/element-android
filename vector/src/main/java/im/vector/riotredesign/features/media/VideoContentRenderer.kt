@@ -20,9 +20,11 @@ import android.os.Parcelable
 import android.widget.ImageView
 import android.widget.VideoView
 import im.vector.matrix.android.api.Matrix
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import kotlinx.android.parcel.Parcelize
+import javax.inject.Inject
 
-object VideoContentRenderer {
+class VideoContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder){
 
     @Parcelize
     data class Data(
@@ -32,7 +34,7 @@ object VideoContentRenderer {
     ) : Parcelable
 
     fun render(data: Data, thumbnailView: ImageView, videoView: VideoView) {
-        val contentUrlResolver = Matrix.getInstance(videoView.context).currentSession!!.contentUrlResolver()
+        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
         val resolvedUrl = contentUrlResolver.resolveFullSize(data.videoUrl)
         videoView.setVideoPath(resolvedUrl)
         videoView.start()

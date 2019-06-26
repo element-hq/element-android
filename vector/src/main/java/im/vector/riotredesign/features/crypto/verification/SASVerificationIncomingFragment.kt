@@ -27,6 +27,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.AvatarRenderer
+import javax.inject.Inject
 
 class SASVerificationIncomingFragment : VectorBaseFragment() {
 
@@ -48,6 +49,7 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_sas_verification_incoming_request
 
+    @Inject lateinit var avatarRenderer: AvatarRenderer
     private lateinit var viewModel: SasVerificationViewModel
 
     override fun injectWith(injector: ScreenComponent) {
@@ -66,10 +68,10 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
         otherDeviceTextView.text = viewModel.otherDeviceId
 
         viewModel.otherUser?.let {
-            AvatarRenderer.render(it, avatarImageView)
+            avatarRenderer.render(it, avatarImageView)
         } ?: run {
             // Fallback to what we know
-            AvatarRenderer.render(null, viewModel.otherUserId ?: "", viewModel.otherUserId, avatarImageView)
+            avatarRenderer.render(null, viewModel.otherUserId ?: "", viewModel.otherUserId, avatarImageView)
         }
 
         viewModel.transactionState.observe(this, Observer {

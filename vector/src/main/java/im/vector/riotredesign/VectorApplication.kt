@@ -32,51 +32,55 @@ import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixConfiguration
-import im.vector.riotredesign.core.di.DaggerVectorComponent
-import im.vector.riotredesign.core.di.HasInjector
-import im.vector.riotredesign.core.di.VectorComponent
+import im.vector.riotredesign.core.di.*
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
 
-class VectorApplication : Application(), HasInjector<VectorComponent>, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
+class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
 
     lateinit var appContext: Context
     //font thread handler
     @Inject lateinit var vectorConfiguration: VectorConfiguration
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
+    @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
     override fun onCreate() {
-        super.onCreate()
-        appContext = this
-        vectorComponent = DaggerVectorComponent.factory().create(this)
-        vectorComponent.inject(this)
-        VectorUncaughtExceptionHandler.activate(this)
-        // Log
-        VectorFileLogger.init(this)
-        Timber.plant(Timber.DebugTree(), VectorFileLogger)
-        if (BuildConfig.DEBUG) {
-            Stetho.initializeWithDefaults(this)
+        val time = measureTimeMillis {
+            super.onCreate()
+            appContext = this
+            vectorComponent = DaggerVectorComponent.factory().create(this)
+            vectorComponent.inject(this)
+            vectorUncaughtExceptionHandler.activate(this)
+            // Log
+            VectorFileLogger.init(this)
+            Timber.plant(Timber.DebugTree(), VectorFileLogger)
+            if (BuildConfig.DEBUG) {
+                Stetho.initializeWithDefaults(this)
+            }
+            AndroidThreeTen.init(this)
+            BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
+            EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+            EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+            registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks())
+            val fontRequest = FontRequest(
+                    "com.google.android.gms.fonts",
+                    "com.google.android.gms",
+                    "Noto Color Emoji Compat",
+                    R.array.com_google_android_gms_fonts_certs
+            )
+            FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
+            vectorConfiguration.initConfiguration()
         }
-        AndroidThreeTen.init(this)
-        BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
-        EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-        EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-        registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks())
-        val fontRequest = FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                "Noto Color Emoji Compat",
-                R.array.com_google_android_gms_fonts_certs
-        )
-        FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
-        vectorConfiguration.initConfiguration()
+        Timber.v("On create took $time ms")
     }
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)

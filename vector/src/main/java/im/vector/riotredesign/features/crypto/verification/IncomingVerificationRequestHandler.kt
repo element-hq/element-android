@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.features.popup.PopupAlertManager
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,11 +32,11 @@ import javax.inject.Singleton
  */
 @Singleton
 class IncomingVerificationRequestHandler @Inject constructor(val context: Context,
-                                                             private val session: Session
+                                                             private val activeSessionHolder: ActiveSessionHolder
 ) : SasVerificationService.SasVerificationListener {
 
     init {
-        session.getSasVerificationService().addListener(this)
+        activeSessionHolder.getActiveSession().getSasVerificationService().addListener(this)
     }
 
     override fun transactionCreated(tx: SasVerificationTransaction) {}
@@ -44,7 +45,7 @@ class IncomingVerificationRequestHandler @Inject constructor(val context: Contex
         when (tx.state) {
             SasVerificationTxState.OnStarted -> {
                 //Add a notification for every incoming request
-                val session = Matrix.getInstance(context).currentSession!!
+                val session = activeSessionHolder.getActiveSession()
                 val name = session.getUser(tx.otherUserId)?.displayName
                            ?: tx.otherUserId
 

@@ -32,40 +32,32 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxActivity
-import com.airbnb.mvrx.MvRxState
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.di.DaggerScreenComponent
-import im.vector.riotredesign.core.di.HasInjector
-import im.vector.riotredesign.core.di.ScreenComponent
-import im.vector.riotredesign.core.di.VectorComponent
+import im.vector.riotredesign.core.di.*
 import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.rageshake.BugReportActivity
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.RageShake
-import im.vector.riotredesign.features.roomdirectory.PublicRoomsViewState
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryViewModel
 import im.vector.riotredesign.features.themes.ActivityOtherThemes
 import im.vector.riotredesign.features.themes.ThemeUtils
 import im.vector.riotredesign.receivers.DebugReceiver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
-import javax.inject.Provider
-import kotlin.reflect.KClass
+import kotlin.system.measureTimeMillis
 
 
-abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenComponent> {
+abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     /* ==========================================================================================
      * UI
      * ========================================================================================== */
@@ -81,6 +73,8 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
 
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var configurationViewModel: ConfigurationViewModel
+    protected lateinit var bugReporter: BugReporter
+    private lateinit var rageShake: RageShake
 
     private var unBinder: Unbinder? = null
 
@@ -92,7 +86,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
     private val uiDisposables = CompositeDisposable()
     private val restorables = ArrayList<Restorable>()
 
-    private var rageShake: RageShake? = null
     private lateinit var screenComponent: ScreenComponent
 
     override fun attachBaseContext(base: Context) {
@@ -125,9 +118,14 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
     override fun onCreate(savedInstanceState: Bundle?) {
         screenComponent = DaggerScreenComponent.factory().create(getVectorComponent(), this)
         super.onCreate(savedInstanceState)
-        injectWith(screenComponent)
+        val timeForInjection = measureTimeMillis {
+            injectWith(screenComponent)
+        }
+        Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
         viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfigurationViewModel::class.java)
+        bugReporter = screenComponent.bugReporter()
+        rageShake = screenComponent.rageShake()
         configurationViewModel.activityRestarter.observe(this, Observer {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -137,7 +135,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
         })
 
         // Shake detector
-        rageShake = RageShake(this)
 
         ThemeUtils.setActivityTheme(this, getOtherThemes())
 
@@ -215,7 +212,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
         super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
 
         Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: $isInMultiWindowMode")
-        BugReporter.inMultiWindowMode = isInMultiWindowMode
+        bugReporter.inMultiWindowMode = isInMultiWindowMode
     }
 
 
@@ -230,7 +227,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasInjector<ScreenCompon
      * ========================================================================================== */
 
     internal fun getVectorComponent(): VectorComponent {
-        return (application as HasInjector<VectorComponent>).injector()
+        return (application as HasVectorInjector).injector()
     }
 
     /**

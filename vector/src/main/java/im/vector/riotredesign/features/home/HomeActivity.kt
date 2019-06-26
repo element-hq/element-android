@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
@@ -57,8 +58,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
 
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
     @Inject lateinit var homeNavigator: HomeNavigator
+    @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     // TODO Move this elsewhere
     @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
     // TODO Move this elsewhere
@@ -119,14 +122,14 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onResume() {
         super.onResume()
 
-        if (VectorUncaughtExceptionHandler.didAppCrash(this)) {
-            VectorUncaughtExceptionHandler.clearAppCrashStatus(this)
+        if (vectorUncaughtExceptionHandler.didAppCrash(this)) {
+            vectorUncaughtExceptionHandler.clearAppCrashStatus(this)
 
             AlertDialog.Builder(this)
                     .setMessage(R.string.send_bug_report_app_crashed)
                     .setCancelable(false)
-                    .setPositiveButton(R.string.yes) { _, _ -> BugReporter.openBugReportScreen(this) }
-                    .setNegativeButton(R.string.no) { _, _ -> BugReporter.deleteCrashFile(this) }
+                    .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
+                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
                     .show()
         }
     }
@@ -140,7 +143,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.sliding_menu_sign_out -> {
-                SignOutUiWorker(this).perform(Matrix.getInstance(this).currentSession!!)
+                SignOutUiWorker(this).perform(activeSessionHolder.getActiveSession())
                 return true
             }
         }

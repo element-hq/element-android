@@ -17,8 +17,10 @@
 package im.vector.matrix.android.internal.auth.db
 
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 internal open class SessionParamsEntity(
+        @PrimaryKey var userId: String = "",
         var credentialsJson: String = "",
         var homeServerConnectionConfigJson: String = ""
 ) : RealmObject()

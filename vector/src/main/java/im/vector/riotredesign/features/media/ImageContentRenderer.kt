@@ -24,12 +24,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.github.piasy.biv.view.BigImageView
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.utils.DimensionUtils.dpToPx
 import kotlinx.android.parcel.Parcelize
 import java.io.File
+import javax.inject.Inject
 
-object ImageContentRenderer {
+class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
 
     @Parcelize
     data class Data(
@@ -57,26 +59,26 @@ object ImageContentRenderer {
         val (width, height) = processSize(data, mode)
         imageView.layoutParams.height = height
         imageView.layoutParams.width = width
-        val contentUrlResolver = Matrix.getInstance(imageView.context).currentSession!!.contentUrlResolver()
+        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
         val resolvedUrl = when (mode) {
-                              Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
-                              Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-                          }
-                          //Fallback to base url
-                          ?: data.url
+            Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
+            Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+        }
+        //Fallback to base url
+                ?: data.url
 
         GlideApp
                 .with(imageView)
                 .load(resolvedUrl)
                 .dontAnimate()
-                .transform(RoundedCorners(dpToPx(8,imageView.context)))
+                .transform(RoundedCorners(dpToPx(8, imageView.context)))
                 .thumbnail(0.3f)
                 .into(imageView)
     }
 
     fun render(data: Data, imageView: BigImageView) {
         val (width, height) = processSize(data, Mode.THUMBNAIL)
-        val contentUrlResolver = Matrix.getInstance(imageView.context).currentSession!!.contentUrlResolver()
+        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
         val fullSize = contentUrlResolver.resolveFullSize(data.url)
         val thumbnail = contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
         imageView.showImage(

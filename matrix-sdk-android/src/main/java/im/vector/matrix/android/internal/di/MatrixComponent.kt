@@ -23,9 +23,11 @@ import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -42,8 +44,7 @@ internal interface MatrixComponent {
 
     fun moshi(): Moshi
 
-    fun retrofitBuilder(): Retrofit.Builder
-
+    @Unauthenticated
     fun okHttpClient(): OkHttpClient
 
     fun authenticator(): Authenticator
@@ -61,6 +62,8 @@ internal interface MatrixComponent {
     fun networkConnectivityChecker(): NetworkConnectivityChecker
 
     fun backgroundDetectionObserver(): BackgroundDetectionObserver
+
+    fun sessionManager(): SessionManager
 
     fun inject(matrix: Matrix)
 

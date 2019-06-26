@@ -16,22 +16,19 @@
 
 package im.vector.matrix.android.internal.network
 
-import im.vector.matrix.android.internal.auth.SessionParamsStore
-import im.vector.matrix.android.internal.di.MatrixScope
+import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.internal.session.SessionScope
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-internal class AccessTokenInterceptor @Inject constructor(private val sessionParamsStore: SessionParamsStore) : Interceptor {
+internal class AccessTokenInterceptor @Inject constructor(private val credentials: Credentials) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
         val newRequestBuilder = request.newBuilder()
         // Add the access token to all requests if it is set
-        val sessionParams = sessionParamsStore.get()
-        sessionParams?.let {
-            newRequestBuilder.addHeader(HttpHeaders.Authorization, "Bearer " + it.credentials.accessToken)
-        }
+        newRequestBuilder.addHeader(HttpHeaders.Authorization, "Bearer " + credentials.accessToken)
         request = newRequestBuilder.build()
         return chain.proceed(request)
     }

@@ -24,8 +24,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.HasScreenInjector
 import im.vector.riotredesign.features.home.AvatarRenderer
 import kotlinx.android.synthetic.main.vector_invite_view.view.*
+import javax.inject.Inject
 
 class VectorInviteView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : ConstraintLayout(context, attrs, defStyle) {
@@ -40,9 +42,13 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         SMALL
     }
 
+    @Inject lateinit var avatarRenderer: AvatarRenderer
     var callback: Callback? = null
 
     init {
+        if(context is HasScreenInjector){
+            context.injector().inject(this)
+        }
         View.inflate(context, R.layout.vector_invite_view, this)
         setBackgroundColor(Color.WHITE)
         inviteRejectView.setOnClickListener { callback?.onRejectInvite() }
@@ -52,7 +58,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
     fun render(sender: User, mode: Mode = Mode.LARGE) {
         if (mode == Mode.LARGE) {
             updateLayoutParams { height = LayoutParams.MATCH_CONSTRAINT }
-            AvatarRenderer.render(sender.avatarUrl, sender.userId, sender.displayName, inviteAvatarView)
+            avatarRenderer.render(sender.avatarUrl, sender.userId, sender.displayName, inviteAvatarView)
             inviteIdentifierView.text = sender.userId
             inviteNameView.text = sender.displayName
             inviteLabelView.text = context.getString(R.string.send_you_invite)

@@ -20,6 +20,7 @@ package im.vector.matrix.android.internal
 
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.di.MatrixComponent
 import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.session.DaggerSessionComponent
@@ -27,27 +28,18 @@ import im.vector.matrix.android.internal.session.SessionComponent
 import javax.inject.Inject
 
 @MatrixScope
-internal class SessionManager @Inject constructor(private val matrixComponent: MatrixComponent) {
+internal class SessionManager @Inject constructor(private val matrixComponent: MatrixComponent,
+                                                  private val sessionParamsStore: SessionParamsStore) {
 
     private val sessionComponents = HashMap<String, SessionComponent>()
 
     fun getSessionComponent(userId: String): SessionComponent? {
-        return sessionComponents[userId]
+        val sessionParams = sessionParamsStore.get(userId) ?: return null
+        return getOrCreateSessionComponent(sessionParams)
     }
 
-    fun createSession(sessionParams: SessionParams): Session {
-        val userId = sessionParams.credentials.userId
-        if (sessionComponents.containsKey(userId)) {
-            throw RuntimeException("You already have a session for the user $userId")
-        }
-        return DaggerSessionComponent
-                .factory()
-                .create(matrixComponent, sessionParams)
-                .also {
-                    sessionComponents[userId] = it
-                }.let {
-                    it.session()
-                }
+    fun getOrCreateSession(sessionParams: SessionParams): Session {
+        return getOrCreateSessionComponent(sessionParams).session()
     }
 
     fun releaseSession(userId: String) {
@@ -59,5 +51,17 @@ internal class SessionManager @Inject constructor(private val matrixComponent: M
         }
     }
 
+    private fun getOrCreateSessionComponent(sessionParams: SessionParams): SessionComponent {
+        val userId = sessionParams.credentials.userId
+        if (sessionComponents.containsKey(userId)) {
+            return sessionComponents[userId]!!
+        }
+        return DaggerSessionComponent
+                .factory()
+                .create(matrixComponent, sessionParams)
+                .also {
+                    sessionComponents[sessionParams.credentials.userId] = it
+                }
+    }
 
 }

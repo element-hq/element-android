@@ -174,6 +174,7 @@ class RoomDetailFragment :
     private val textComposerViewModel: TextComposerViewModel by fragmentViewModel()
 
     @Inject lateinit var session: Session
+    @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var timelineEventController: TimelineEventController
     @Inject lateinit var commandAutocompletePolicy: CommandAutocompletePolicy
     @Inject lateinit var autocompleteCommandPresenter: AutocompleteCommandPresenter
@@ -182,6 +183,7 @@ class RoomDetailFragment :
     @Inject lateinit var roomDetailViewModelFactory: RoomDetailViewModel.Factory
     @Inject lateinit var textComposerViewModelFactory: TextComposerViewModel.Factory
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
+
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
 
@@ -223,7 +225,7 @@ class RoomDetailFragment :
                     commandAutocompletePolicy.enabled = true
                     val uid = session.sessionParams.credentials.userId
                     val meMember = session.getRoom(roomId)?.getRoomMember(uid)
-                    AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
+                    avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
                     composerLayout.collapse()
                 }
                 SendMode.EDIT,
@@ -270,7 +272,7 @@ class RoomDetailFragment :
                         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_reply))
                     }
 
-                    AvatarRenderer.render(event.senderAvatar, event.root.sender
+                    avatarRenderer.render(event.senderAvatar, event.root.sender
                                                               ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
                     composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
@@ -378,7 +380,7 @@ class RoomDetailFragment :
 
                         // Add the span
                         val user = session.getUser(item.userId)
-                        val span = PillImageSpan(glideRequests, requireContext(), item.userId, user)
+                        val span = PillImageSpan(glideRequests, avatarRenderer, requireContext(), item.userId, user)
                         span.bind(composerLayout.composerEditText)
 
                         editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -487,7 +489,7 @@ class RoomDetailFragment :
 
             val uid = session.sessionParams.credentials.userId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
-            AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
+            avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
 
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
@@ -500,7 +502,7 @@ class RoomDetailFragment :
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let {
             roomToolbarTitleView.text = it.displayName
-            AvatarRenderer.render(it, roomToolbarAvatarImageView)
+            avatarRenderer.render(it, roomToolbarAvatarImageView)
             if (it.topic.isNotEmpty()) {
                 roomToolbarSubtitleView.visibility = View.VISIBLE
                 roomToolbarSubtitleView.text = it.topic

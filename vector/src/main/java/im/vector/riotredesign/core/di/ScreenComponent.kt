@@ -31,10 +31,7 @@ import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupSt
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupStep2Fragment
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupStep3Fragment
 import im.vector.riotredesign.features.crypto.verification.SASVerificationIncomingFragment
-import im.vector.riotredesign.features.home.HomeActivity
-import im.vector.riotredesign.features.home.HomeDetailFragment
-import im.vector.riotredesign.features.home.HomeDrawerFragment
-import im.vector.riotredesign.features.home.HomeModule
+import im.vector.riotredesign.features.home.*
 import im.vector.riotredesign.features.home.group.GroupListFragment
 import im.vector.riotredesign.features.home.room.detail.RoomDetailFragment
 import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageActionsBottomSheet
@@ -42,7 +39,13 @@ import im.vector.riotredesign.features.home.room.detail.timeline.action.MessageM
 import im.vector.riotredesign.features.home.room.detail.timeline.action.QuickReactionFragment
 import im.vector.riotredesign.features.home.room.detail.timeline.action.ViewReactionBottomSheet
 import im.vector.riotredesign.features.home.room.list.RoomListFragment
+import im.vector.riotredesign.features.invite.VectorInviteView
 import im.vector.riotredesign.features.login.LoginActivity
+import im.vector.riotredesign.features.media.ImageMediaViewerActivity
+import im.vector.riotredesign.features.media.VideoMediaViewerActivity
+import im.vector.riotredesign.features.rageshake.BugReportActivity
+import im.vector.riotredesign.features.rageshake.BugReporter
+import im.vector.riotredesign.features.rageshake.RageShake
 import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotredesign.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
@@ -59,6 +62,10 @@ interface ScreenComponent {
     fun session(): Session
 
     fun viewModelFactory(): ViewModelProvider.Factory
+
+    fun bugReporter(): BugReporter
+
+    fun rageShake(): RageShake
 
     fun inject(activity: HomeActivity)
 
@@ -117,6 +124,15 @@ interface ScreenComponent {
     fun inject(vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment)
 
     fun inject(roomDirectoryActivity: RoomDirectoryActivity)
+
+    fun inject(bugReportActivity: BugReportActivity)
+
+    fun inject(imageMediaViewerActivity: ImageMediaViewerActivity)
+
+    fun inject(vectorInviteView: VectorInviteView)
+
+    fun inject(videoMediaViewerActivity: VideoMediaViewerActivity)
+
 
     @Component.Factory
     interface Factory {

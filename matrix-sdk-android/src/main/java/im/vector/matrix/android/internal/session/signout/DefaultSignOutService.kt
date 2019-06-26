@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.signout
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.signout.SignOutService
+import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith

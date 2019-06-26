@@ -55,6 +55,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
     private var testManager: NotificationTroubleshootTestManager? = null
     // members
     @Inject lateinit var session: Session
+    @Inject lateinit var bugReporter: BugReporter
 
     override fun getLayoutResId() = R.layout.fragment_settings_notifications_troubleshoot
 
@@ -78,7 +79,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
 
         mSummaryButton.setOnClickListener {
-            BugReporter.openBugReportScreen(activity!!)
+            bugReporter.openBugReportScreen(activity!!)
         }
 
         mRunButton.setOnClickListener {

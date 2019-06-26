@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAvatar
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
@@ -33,7 +34,8 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 import javax.inject.Inject
 
 // This class handles timeline event who haven't been successfully decrypted
-class EncryptedItemFactory @Inject constructor(private val stringProvider: StringProvider) {
+class EncryptedItemFactory @Inject constructor(private val stringProvider: StringProvider,
+                                               private val avatarRenderer: AvatarRenderer) {
 
     fun create(timelineEvent: TimelineEvent): VectorEpoxyModel<*>? {
         return when {
@@ -59,6 +61,7 @@ class EncryptedItemFactory @Inject constructor(private val stringProvider: Strin
                         showInformation = false
                 )
                 return NoticeItem_()
+                        .avatarRenderer(avatarRenderer)
                         .noticeText(spannableStr)
                         .informationData(informationData)
             }

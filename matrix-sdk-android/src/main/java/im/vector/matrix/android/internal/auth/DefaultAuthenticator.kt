@@ -28,30 +28,39 @@ import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
 import im.vector.matrix.android.internal.di.MatrixScope
+import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import javax.inject.Inject
 
-internal class DefaultAuthenticator @Inject constructor(private val retrofitBuilder: Retrofit.Builder,
+internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
+                                                        private val okHttpClient: OkHttpClient,
+                                                        private val retrofitFactory: RetrofitFactory,
                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                         private val sessionParamsStore: SessionParamsStore,
                                                         private val sessionManager: SessionManager
 ) : Authenticator {
 
-    override fun hasActiveSessions(): Boolean {
-        return sessionParamsStore.get() != null
+    override fun hasAuthenticatedSessions(): Boolean {
+        return sessionParamsStore.getLast() != null
     }
 
-    override fun getLastActiveSession(): Session? {
-        val sessionParams = sessionParamsStore.get()
+    override fun getLastAuthenticatedSession(): Session? {
+        val sessionParams = sessionParamsStore.getLast()
         return sessionParams?.let {
-            sessionManager.createSession(it)
+            sessionManager.getOrCreateSession(it)
         }
+    }
+
+    override fun getSession(sessionParams: SessionParams): Session? {
+        return sessionManager.getOrCreateSession(sessionParams)
     }
 
     override fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
@@ -84,13 +93,13 @@ internal class DefaultAuthenticator @Inject constructor(private val retrofitBuil
             sessionParamsStore.save(sessionParams)
             sessionParams
         }.map {
-            sessionManager.createSession(it)
+            sessionManager.getOrCreateSession(it)
         }
 
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
-        val retrofit = retrofitBuilder.baseUrl(homeServerConnectionConfig.homeServerUri.toString()).build()
+        val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
     }
 

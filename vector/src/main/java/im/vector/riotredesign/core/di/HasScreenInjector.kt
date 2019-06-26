@@ -16,8 +16,8 @@
 
 package im.vector.riotredesign.core.di
 
-interface HasInjector<C> {
+interface HasScreenInjector {
 
-    fun injector(): C
+    fun injector(): ScreenComponent
 
 }

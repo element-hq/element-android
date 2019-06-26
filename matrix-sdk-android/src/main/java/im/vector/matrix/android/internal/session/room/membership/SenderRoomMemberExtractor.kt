@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class SenderRoomMemberExtractor @Inject constructor(private val roomId: String) {
@@ -46,9 +47,8 @@ internal class SenderRoomMemberExtractor @Inject constructor(private val roomId:
             event.stateIndex <= 0 -> baseQuery(chunkEntity.events, sender, unlinked).next(from = event.stateIndex)?.prevContent
             else                  -> baseQuery(chunkEntity.events, sender, unlinked).prev(since = event.stateIndex)?.content
         }
-
         val fallbackContent = content
-                       ?: baseQuery(roomEntity.untimelinedStateEvents, sender, unlinked).prev(since = event.stateIndex)?.content
+                ?: baseQuery(roomEntity.untimelinedStateEvents, sender, unlinked).prev(since = event.stateIndex)?.content
 
         return ContentMapper.map(fallbackContent).toModel()
     }

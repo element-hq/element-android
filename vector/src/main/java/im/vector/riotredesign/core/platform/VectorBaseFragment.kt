@@ -35,14 +35,14 @@ import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
 import im.vector.riotredesign.core.di.DaggerScreenComponent
-import im.vector.riotredesign.core.di.HasInjector
+import im.vector.riotredesign.core.di.HasScreenInjector
 import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.features.navigation.Navigator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed, HasInjector<ScreenComponent> {
+abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed, HasScreenInjector {
 
     // Butterknife unbinder
     private var mUnBinder: Unbinder? = null

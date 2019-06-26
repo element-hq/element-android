@@ -49,7 +49,7 @@ internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
         if (credentialsJson == null || homeServerConnectionConfigJson == null) {
             return null
         }
-        return SessionParamsEntity(credentialsJson, homeServerConnectionConfigJson)
+        return SessionParamsEntity(sessionParams.credentials.userId, credentialsJson, homeServerConnectionConfigJson)
     }
 
 

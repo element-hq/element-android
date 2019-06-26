@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.auth
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -40,14 +41,24 @@ interface Authenticator {
      * Check if there is an active [Session].
      * @return true if there is at least one active session.
      */
-    fun hasActiveSessions(): Boolean
+    fun hasAuthenticatedSessions(): Boolean
 
     //TODO remove this method. Shouldn't be managed like that.
     /**
      * Get the last active [Session], if there is an active session.
      * @return the lastActive session if any, or null
      */
-    fun getLastActiveSession(): Session?
+    fun getLastAuthenticatedSession(): Session?
+
+    /**
+     * Get an authenticated session. You should at least call authenticate one time before.
+     * If you logout, this session will no longer be valid.
+     *
+     * @param sessionParams the sessionParams to open with.
+     * @return the associated session if any, or null
+     */
+    fun getSession(sessionParams: SessionParams): Session?
+
 
 
 }

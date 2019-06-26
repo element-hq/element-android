@@ -26,9 +26,11 @@ import butterknife.BindView
 import butterknife.OnCheckedChanged
 import butterknife.OnTextChanged
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_bug_report.*
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Form to send a bug report
@@ -66,13 +68,17 @@ class BugReportActivity : VectorBaseActivity() {
     @BindView(R.id.bug_report_mask_view)
     lateinit var mMaskView: View
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun getLayoutRes() = R.layout.activity_bug_report
 
     override fun initUiAndData() {
         configureToolbar(bugReportToolbar)
 
-        if (BugReporter.screenshot != null) {
-            mScreenShotPreview.setImageBitmap(BugReporter.screenshot)
+        if (bugReporter.screenshot != null) {
+            mScreenShotPreview.setImageBitmap(bugReporter.screenshot)
         } else {
             mScreenShotPreview.isVisible = false
             mIncludeScreenShotButton.isChecked = false
@@ -120,7 +126,7 @@ class BugReportActivity : VectorBaseActivity() {
         mProgressBar.isVisible = true
         mProgressBar.progress = 0
 
-        BugReporter.sendBugReport(this,
+        bugReporter.sendBugReport(this,
                 mIncludeLogsButton.isChecked,
                 mIncludeCrashLogsButton.isChecked,
                 mIncludeScreenShotButton.isChecked,
@@ -190,12 +196,12 @@ class BugReportActivity : VectorBaseActivity() {
 
     @OnCheckedChanged(R.id.bug_report_button_include_screenshot)
     internal fun onSendScreenshotChanged() {
-        mScreenShotPreview.isVisible = mIncludeScreenShotButton.isChecked && BugReporter.screenshot != null
+        mScreenShotPreview.isVisible = mIncludeScreenShotButton.isChecked && bugReporter.screenshot != null
     }
 
     override fun onBackPressed() {
         // Ensure there is no crash status remaining, which will be sent later on by mistake
-        BugReporter.deleteCrashFile(this)
+        bugReporter.deleteCrashFile(this)
 
         super.onBackPressed()
     }

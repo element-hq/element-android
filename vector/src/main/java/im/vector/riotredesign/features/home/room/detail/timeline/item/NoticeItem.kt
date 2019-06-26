@@ -29,6 +29,9 @@ import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventCo
 abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
 
     @EpoxyAttribute
+    lateinit var avatarRenderer: AvatarRenderer
+
+    @EpoxyAttribute
     var noticeText: CharSequence? = null
 
     @EpoxyAttribute
@@ -46,7 +49,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.noticeTextView.text = noticeText
-        AvatarRenderer.render(
+        avatarRenderer.render(
                 informationData.avatarUrl,
                 informationData.senderId,
                 informationData.memberName?.toString()

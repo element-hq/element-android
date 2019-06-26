@@ -55,9 +55,9 @@ abstract class VectorModule {
 
         @Provides
         @JvmStatic
-        fun providesCurrentSession(matrix: Matrix): Session {
+        fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
             //TODO: handle session injection better
-            return matrix.currentSession!!
+            return activeSessionHolder.getActiveSession()
         }
 
         @Provides

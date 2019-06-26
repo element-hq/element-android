@@ -53,7 +53,6 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var sessionManager: SessionManager
-    var currentSession: Session? = null
 
     init {
         Monarchy.init(context)
@@ -63,12 +62,6 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
         userAgentHolder.setApplicationFlavor(matrixConfiguration.applicationFlavor)
-        authenticator.getLastActiveSession()?.also {
-            currentSession = it
-            it.open()
-            it.setFilter(FilterService.FilterPreset.RiotFilter)
-            it.startSync()
-        }
     }
 
     fun getUserAgent() = userAgentHolder.userAgent

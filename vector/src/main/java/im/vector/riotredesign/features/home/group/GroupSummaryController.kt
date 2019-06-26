@@ -18,9 +18,10 @@ package im.vector.riotredesign.features.home.group
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.riotredesign.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class GroupSummaryController @Inject constructor(): TypedEpoxyController<GroupListViewState>() {
+class GroupSummaryController @Inject constructor(private val avatarRenderer: AvatarRenderer): TypedEpoxyController<GroupListViewState>() {
 
     var callback: Callback? = null
 
@@ -35,6 +36,7 @@ class GroupSummaryController @Inject constructor(): TypedEpoxyController<GroupLi
         summaries.forEach { groupSummary ->
             val isSelected = groupSummary.groupId == selected?.groupId
             groupSummaryItem {
+                avatarRenderer(avatarRenderer)
                 id(groupSummary.groupId)
                 groupId(groupSummary.groupId)
                 groupName(groupSummary.displayName)

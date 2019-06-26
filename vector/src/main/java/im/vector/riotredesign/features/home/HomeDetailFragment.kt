@@ -70,6 +70,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     @Inject lateinit var session: Session
     @Inject lateinit var homeDetailViewModelFactory: HomeDetailViewModel.Factory
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
@@ -138,7 +139,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
             parentActivity.configure(groupToolbar)
         }
         groupToolbar.title = ""
-        AvatarRenderer.render(
+        avatarRenderer.render(
                 params.groupAvatar,
                 params.groupId,
                 params.groupName,

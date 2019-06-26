@@ -26,37 +26,25 @@ import im.vector.matrix.android.api.permalinks.PermalinkParser
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.glide.GlideRequests
+import im.vector.riotredesign.features.home.AvatarRenderer
 import org.commonmark.node.BlockQuote
 import org.commonmark.node.HtmlBlock
 import org.commonmark.node.HtmlInline
 import org.commonmark.node.Node
-import ru.noties.markwon.AbstractMarkwonPlugin
-import ru.noties.markwon.Markwon
-import ru.noties.markwon.MarkwonConfiguration
-import ru.noties.markwon.MarkwonVisitor
-import ru.noties.markwon.SpannableBuilder
+import ru.noties.markwon.*
 import ru.noties.markwon.html.HtmlTag
 import ru.noties.markwon.html.MarkwonHtmlParserImpl
 import ru.noties.markwon.html.MarkwonHtmlRenderer
 import ru.noties.markwon.html.TagHandler
-import ru.noties.markwon.html.tag.BlockquoteHandler
-import ru.noties.markwon.html.tag.EmphasisHandler
-import ru.noties.markwon.html.tag.HeadingHandler
-import ru.noties.markwon.html.tag.ImageHandler
-import ru.noties.markwon.html.tag.LinkHandler
-import ru.noties.markwon.html.tag.ListHandler
-import ru.noties.markwon.html.tag.StrikeHandler
-import ru.noties.markwon.html.tag.StrongEmphasisHandler
-import ru.noties.markwon.html.tag.SubScriptHandler
-import ru.noties.markwon.html.tag.SuperScriptHandler
-import ru.noties.markwon.html.tag.UnderlineHandler
+import ru.noties.markwon.html.tag.*
 import java.util.Arrays.asList
 import javax.inject.Inject
 
 class EventHtmlRenderer @Inject constructor(context: AppCompatActivity,
+                                            val avatarRenderer: AvatarRenderer,
                                             session: Session) {
     private val markwon = Markwon.builder(context)
-            .usePlugin(MatrixPlugin.create(GlideApp.with(context), context, session))
+            .usePlugin(MatrixPlugin.create(GlideApp.with(context), context, avatarRenderer, session))
             .build()
 
     fun render(text: String): CharSequence {
@@ -67,6 +55,7 @@ class EventHtmlRenderer @Inject constructor(context: AppCompatActivity,
 
 private class MatrixPlugin private constructor(private val glideRequests: GlideRequests,
                                                private val context: Context,
+                                               private val avatarRenderer: AvatarRenderer,
                                                private val session: Session) : AbstractMarkwonPlugin() {
 
     override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
@@ -80,7 +69,7 @@ private class MatrixPlugin private constructor(private val glideRequests: GlideR
                         ImageHandler.create())
                 .setHandler(
                         "a",
-                        MxLinkHandler(glideRequests, context, session))
+                        MxLinkHandler(glideRequests, context, avatarRenderer, session))
                 .setHandler(
                         "blockquote",
                         BlockquoteHandler())
@@ -112,7 +101,7 @@ private class MatrixPlugin private constructor(private val glideRequests: GlideR
                         asList<String>("h1", "h2", "h3", "h4", "h5", "h6"),
                         HeadingHandler())
                 .setHandler("mx-reply",
-                            MxReplyTagHandler())
+                        MxReplyTagHandler())
 
     }
 
@@ -135,14 +124,15 @@ private class MatrixPlugin private constructor(private val glideRequests: GlideR
 
     companion object {
 
-        fun create(glideRequests: GlideRequests, context: Context, session: Session): MatrixPlugin {
-            return MatrixPlugin(glideRequests, context, session)
+        fun create(glideRequests: GlideRequests, context: Context, avatarRenderer: AvatarRenderer, session: Session): MatrixPlugin {
+            return MatrixPlugin(glideRequests, context, avatarRenderer, session)
         }
     }
 }
 
 private class MxLinkHandler(private val glideRequests: GlideRequests,
                             private val context: Context,
+                            private val avatarRenderer: AvatarRenderer,
                             private val session: Session) : TagHandler() {
 
     private val linkHandler = LinkHandler()
@@ -154,7 +144,7 @@ private class MxLinkHandler(private val glideRequests: GlideRequests,
             when (permalinkData) {
                 is PermalinkData.UserLink -> {
                     val user = session.getUser(permalinkData.userId)
-                    val span = PillImageSpan(glideRequests, context, permalinkData.userId, user)
+                    val span = PillImageSpan(glideRequests, avatarRenderer, context, permalinkData.userId, user)
                     SpannableBuilder.setSpans(
                             visitor.builder(),
                             span,

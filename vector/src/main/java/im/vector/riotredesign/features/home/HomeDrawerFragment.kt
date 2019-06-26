@@ -37,6 +37,7 @@ class HomeDrawerFragment : VectorBaseFragment() {
     }
 
     @Inject lateinit var session: Session
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override fun getLayoutResId() = R.layout.fragment_home_drawer
 
@@ -53,7 +54,7 @@ class HomeDrawerFragment : VectorBaseFragment() {
 
         session.observeUser(session.sessionParams.credentials.userId).observeK(this) { user ->
             if (user != null) {
-                AvatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)
+                avatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)
                 homeDrawerUsernameView.text = user.displayName
                 homeDrawerUserIdView.text = user.userId
             }

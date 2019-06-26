@@ -20,14 +20,47 @@ import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.di.AuthDatabase
-import im.vector.matrix.android.internal.di.MatrixScope
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 internal class RealmSessionParamsStore @Inject constructor(private val mapper: SessionParamsMapper,
-                                                           @AuthDatabase private val realmConfiguration: RealmConfiguration
+                                                           @AuthDatabase
+                                                           private val realmConfiguration: RealmConfiguration
 ) : SessionParamsStore {
+
+    override fun getLast(): SessionParams? {
+        val realm = Realm.getInstance(realmConfiguration)
+        val sessionParams = realm
+                .where(SessionParamsEntity::class.java)
+                .findAll()
+                .map { mapper.map(it) }
+                .lastOrNull()
+        realm.close()
+        return sessionParams
+    }
+
+    override fun get(userId: String): SessionParams? {
+        val realm = Realm.getInstance(realmConfiguration)
+        val sessionParams = realm
+                .where(SessionParamsEntity::class.java)
+                .equalTo(SessionParamsEntityFields.USER_ID, userId)
+                .findAll()
+                .map { mapper.map(it) }
+                .firstOrNull()
+        realm.close()
+        return sessionParams
+    }
+
+    override fun getAll(): List<SessionParams> {
+        val realm = Realm.getInstance(realmConfiguration)
+        val sessionParams = realm
+                .where(SessionParamsEntity::class.java)
+                .findAll()
+                .mapNotNull { mapper.map(it) }
+        realm.close()
+        return sessionParams
+    }
 
     override fun save(sessionParams: SessionParams): Try<SessionParams> {
         return Try {
@@ -43,18 +76,20 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         }
     }
 
-    override fun get(): SessionParams? {
-        val realm = Realm.getInstance(realmConfiguration)
-        val sessionParams = realm
-                .where(SessionParamsEntity::class.java)
-                .findAll()
-                .map { mapper.map(it) }
-                .lastOrNull()
-        realm.close()
-        return sessionParams
+    override fun delete(userId: String): Try<Unit> {
+        return Try {
+            val realm = Realm.getInstance(realmConfiguration)
+            realm.executeTransaction {
+                it.where(SessionParamsEntity::class.java)
+                        .equalTo(SessionParamsEntityFields.USER_ID, userId)
+                        .findAll()
+                        .deleteAllFromRealm()
+            }
+            realm.close()
+        }
     }
 
-    override fun delete(): Try<Unit> {
+    override fun deleteAll(): Try<Unit> {
         return Try {
             val realm = Realm.getInstance(realmConfiguration)
             realm.executeTransaction {

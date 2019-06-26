@@ -28,13 +28,18 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
+import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.network.AccessTokenInterceptor
+import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.user.UserEntityUpdater
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.io.File
 
@@ -86,12 +91,25 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesRetrofit(sessionParams: SessionParams, retrofitBuilder: Retrofit.Builder): Retrofit {
-            return retrofitBuilder
-                    .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
+        @Authenticated
+        fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
+                                 accessTokenInterceptor: AccessTokenInterceptor): OkHttpClient {
+            return okHttpClient.newBuilder()
+                    .addInterceptor(accessTokenInterceptor)
                     .build()
         }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesRetrofit(@Authenticated okHttpClient: OkHttpClient,
+                             sessionParams: SessionParams,
+                             retrofitFactory: RetrofitFactory): Retrofit {
+            return retrofitFactory
+                    .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUri.toString())
+        }
     }
+
 
     @Binds
     abstract fun bindSession(session: DefaultSession): Session

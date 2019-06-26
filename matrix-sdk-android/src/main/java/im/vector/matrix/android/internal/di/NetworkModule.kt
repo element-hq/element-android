@@ -66,9 +66,9 @@ internal object NetworkModule {
     @MatrixScope
     @Provides
     @JvmStatic
+    @Unauthenticated
     fun providesOkHttpClient(stethoInterceptor: StethoInterceptor,
                              userAgentInterceptor: UserAgentInterceptor,
-                             accessTokenInterceptor: AccessTokenInterceptor,
                              httpLoggingInterceptor: HttpLoggingInterceptor,
                              curlLoggingInterceptor: CurlLoggingInterceptor,
                              okReplayInterceptor: OkReplayInterceptor): OkHttpClient {
@@ -78,7 +78,6 @@ internal object NetworkModule {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .addNetworkInterceptor(stethoInterceptor)
                 .addInterceptor(userAgentInterceptor)
-                .addInterceptor(accessTokenInterceptor)
                 .addInterceptor(httpLoggingInterceptor)
                 .apply {
                     if (BuildConfig.LOG_PRIVATE_DATA) {
@@ -94,15 +93,4 @@ internal object NetworkModule {
     fun providesMoshi(): Moshi {
         return MoshiProvider.providesMoshi()
     }
-
-    @Provides
-    @JvmStatic
-    fun providesRetrofitBuilder(okHttpClient: OkHttpClient,
-                                moshi: Moshi): Retrofit.Builder {
-        return Retrofit.Builder()
-                .client(okHttpClient)
-                .addConverterFactory(UnitConverterFactory)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-    }
-
 }

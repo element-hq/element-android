@@ -30,7 +30,9 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.di.ScreenComponent
+import im.vector.riotredesign.core.extensions.openAndStartSync
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
@@ -47,6 +49,7 @@ private const val DEFAULT_ANTIVIRUS_SERVER_URI = "https://matrix.org"
 class LoginActivity : VectorBaseActivity() {
 
     @Inject lateinit var authenticator: Authenticator
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     private var passwordShown = false
 
@@ -78,11 +81,8 @@ class LoginActivity : VectorBaseActivity() {
         progressBar.visibility = View.VISIBLE
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session) {
-                Matrix.getInstance(this@LoginActivity).currentSession = data
-                data.open()
-                data.setFilter(FilterService.FilterPreset.RiotFilter)
-                data.startSync()
-
+                activeSessionHolder.setActiveSession(data)
+                data.openAndStartSync()
                 goToHome()
             }
 

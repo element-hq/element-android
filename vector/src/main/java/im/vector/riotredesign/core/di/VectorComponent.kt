@@ -28,16 +28,22 @@ import im.vector.riotredesign.VectorApplication
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeNavigator
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.navigation.Navigator
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
+import im.vector.riotredesign.features.rageshake.BugReporter
+import im.vector.riotredesign.features.rageshake.RageShake
+import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import javax.inject.Singleton
 
 @Component(modules = [VectorModule::class])
 @Singleton
 interface VectorComponent {
+
+    fun inject(vectorApplication: VectorApplication)
 
     fun matrix(): Matrix
 
@@ -50,6 +56,8 @@ interface VectorComponent {
     fun resources(): Resources
 
     fun vectorConfiguration(): VectorConfiguration
+
+    fun activeSessionHolder(): ActiveSessionHolder
 
     fun emojiCompatFontProvider(): EmojiCompatFontProvider
 
@@ -65,9 +73,11 @@ interface VectorComponent {
 
     fun incomingKeyRequestHandler(): KeyRequestHandler
 
-    fun inject(vectorApplication: VectorApplication)
-
     fun authenticator(): Authenticator
+
+    fun bugReporter(): BugReporter
+
+    fun vectorUncaughtExceptionHandler(): VectorUncaughtExceptionHandler
 
     @Component.Factory
     interface Factory {

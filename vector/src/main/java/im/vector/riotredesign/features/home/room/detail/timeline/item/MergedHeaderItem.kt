@@ -30,6 +30,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 data class MergedHeaderItem(private val isCollapsed: Boolean,
                             private val mergeId: String,
                             private val mergeData: List<Data>,
+                            private val avatarRenderer: AvatarRenderer,
                             private val onCollapsedStateChanged: (Boolean) -> Unit
 ) : BaseEventItem<MergedHeaderItem.Holder>() {
 
@@ -63,7 +64,7 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
                 val data = distinctMergeData.getOrNull(index)
                 if (data != null && view is ImageView) {
                     view.visibility = View.VISIBLE
-                    AvatarRenderer.render(data.avatarUrl, data.userId, data.memberName, view)
+                    avatarRenderer.render(data.avatarUrl, data.userId, data.memberName, view)
                 } else {
                     view.visibility = View.GONE
                 }

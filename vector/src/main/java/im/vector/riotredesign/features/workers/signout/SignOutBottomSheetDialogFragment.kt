@@ -41,8 +41,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.di.HasInjector
-import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity

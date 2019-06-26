@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAvatar
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
@@ -30,7 +31,8 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 import javax.inject.Inject
 
-class EncryptionItemFactory @Inject constructor(private val stringProvider: StringProvider) {
+class EncryptionItemFactory @Inject constructor(private val stringProvider: StringProvider,
+                                                private val avatarRenderer: AvatarRenderer) {
 
     fun create(event: TimelineEvent): NoticeItem? {
         val text = buildNoticeText(event.root, event.senderName) ?: return null
@@ -43,6 +45,7 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
                 showInformation = false
         )
         return NoticeItem_()
+                .avatarRenderer(avatarRenderer)
                 .noticeText(text)
                 .informationData(informationData)
     }

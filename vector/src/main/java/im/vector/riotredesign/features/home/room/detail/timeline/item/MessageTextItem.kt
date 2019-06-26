@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.containsOnlyEmojis
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,6 +37,8 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
     var message: CharSequence? = null
+    @EpoxyAttribute
+    override lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
     override lateinit var informationData: MessageInformationData
 

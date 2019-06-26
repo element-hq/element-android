@@ -29,6 +29,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 @EpoxyModelClass(layout = R.layout.item_group)
 abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
 
+    @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var groupName: CharSequence
     @EpoxyAttribute lateinit var groupId: String
     @EpoxyAttribute var avatarUrl: String? = null
@@ -40,7 +41,7 @@ abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
         holder.rootView.setOnClickListener { listener?.invoke() }
         holder.groupNameView.text = groupName
         holder.rootView.isChecked = selected
-        AvatarRenderer.render(avatarUrl, groupId, groupName.toString(), holder.avatarImageView)
+        avatarRenderer.render(avatarUrl, groupId, groupName.toString(), holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

@@ -25,13 +25,15 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.DateProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
                                                 private val eventFormatter: NoticeEventFormatter,
-                                                private val timelineDateFormatter: TimelineDateFormatter
+                                                private val timelineDateFormatter: TimelineDateFormatter,
+                                                private val avatarRenderer: AvatarRenderer
 ) : TypedEpoxyController<RoomListViewState>() {
 
     var callback: Callback? = null
@@ -110,6 +112,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
 
             }
             roomSummaryItem {
+                avatarRenderer(avatarRenderer)
                 id(roomSummary.roomId)
                 roomId(roomSummary.roomId)
                 lastEventTime(lastMessageTime)

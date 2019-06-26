@@ -49,6 +49,8 @@ internal abstract class AuthModule {
         }
     }
 
+
+
     @Binds
     abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
 

@@ -30,6 +30,7 @@ import android.view.View
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.extensions.toOnOff
 import im.vector.riotredesign.core.utils.getDeviceLocale
 import im.vector.riotredesign.features.settings.VectorLocale
@@ -42,19 +43,26 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.util.*
 import java.util.zip.GZIPOutputStream
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * BugReporter creates and sends the bug reports.
  */
-object BugReporter {
+@Singleton
+class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder){
     var inMultiWindowMode = false
 
-    // filenames
-    private const val LOG_CAT_ERROR_FILENAME = "logcatError.log"
-    private const val LOG_CAT_FILENAME = "logcat.log"
-    private const val LOG_CAT_SCREENSHOT_FILENAME = "screenshot.png"
-    private const val CRASH_FILENAME = "crash.log"
+    companion object {
+        // filenames
+        private const val LOG_CAT_ERROR_FILENAME = "logcatError.log"
+        private const val LOG_CAT_FILENAME = "logcat.log"
+        private const val LOG_CAT_SCREENSHOT_FILENAME = "screenshot.png"
+        private const val CRASH_FILENAME = "crash.log"
 
+        private const val BUFFER_SIZE = 1024 * 1024 * 50
+
+    }
 
     // the http client
     private val mOkHttpClient = OkHttpClient()
@@ -73,8 +81,6 @@ object BugReporter {
      */
     var screenshot: Bitmap? = null
         private set
-
-    private const val BUFFER_SIZE = 1024 * 1024 * 50
 
     private val LOGCAT_CMD_ERROR = arrayOf("logcat", ///< Run 'logcat' command
             "-d", ///< Dump the log rather than continue outputting it
@@ -195,7 +201,7 @@ object BugReporter {
                 var matrixSdkVersion = "undefined"
                 var olmVersion = "undefined"
 
-                Matrix.getInstance(context).currentSession?.let { session ->
+                activeSessionHolder.getActiveSession().let { session ->
                     userId = session.sessionParams.credentials.userId
                     deviceId = session.sessionParams.credentials.deviceId ?: "undefined"
                     // TODO matrixSdkVersion = session.getVersion(true);
