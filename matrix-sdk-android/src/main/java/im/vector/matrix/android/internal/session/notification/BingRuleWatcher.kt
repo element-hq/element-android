@@ -42,7 +42,7 @@ internal class BingRuleWatcher(monarchy: Monarchy,
     }
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
-        val rules = defaultPushRuleService.getPushrules("global")
+        val rules = defaultPushRuleService.getPushRules("global")
         inserted.map { it.asDomain() }
                 .filter { it.senderId != sessionParams.credentials.userId }
                 .let { events ->

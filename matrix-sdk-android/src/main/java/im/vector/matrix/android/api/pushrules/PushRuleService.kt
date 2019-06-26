@@ -20,14 +20,13 @@ import im.vector.matrix.android.api.session.events.model.Event
 
 interface PushRuleService {
 
-
     /**
      * Fetch the push rules from the server
      */
     fun fetchPushRules(scope: String = "global")
 
     //TODO get push rule set
-    fun getPushrules(scope: String = "global"): List<PushRule>
+    fun getPushRules(scope: String = "global"): List<PushRule>
 
     //TODO update rule
 

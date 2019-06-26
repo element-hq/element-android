@@ -34,7 +34,7 @@ class PushRulesViewModel(initialState: PushRulesViewState) : VectorViewModel<Pus
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
             val session = viewModelContext.activity.get<Session>()
-            val rules = session.getPushrules()
+            val rules = session.getPushRules()
 
             return PushRulesViewState(rules)
         }

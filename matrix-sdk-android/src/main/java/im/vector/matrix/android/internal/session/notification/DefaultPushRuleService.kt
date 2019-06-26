@@ -103,7 +103,7 @@ internal class DefaultPushRuleService(
                 .executeBy(taskExecutor)
     }
 
-    override fun getPushrules(scope: String): List<PushRule> {
+    override fun getPushRules(scope: String): List<PushRule> {
 
         var contentRules: List<PushRule> = emptyList()
         var overrideRules: List<PushRule> = emptyList()
