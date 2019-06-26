@@ -76,7 +76,7 @@
 
     <im.vector.riotredesign.core.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
 
-    <PreferenceCategory android:title="@string/settings_expert">
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory android:title="@string/settings_expert">
 
         <im.vector.riotredesign.core.preference.VectorPreference
             android:layout_width="match_parent"
@@ -90,5 +90,5 @@
             android:title="@string/settings_push_rules"
             app:fragment="im.vector.riotredesign.features.settings.push.PushRulesFragment" />
 
-    </PreferenceCategory>
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
 </androidx.preference.PreferenceScreen>
