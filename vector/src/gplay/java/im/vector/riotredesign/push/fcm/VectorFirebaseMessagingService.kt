@@ -92,6 +92,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * you retrieve the token.
      */
     override fun onNewToken(refreshedToken: String?) {
+        if (Matrix.getInstance().currentSession == null) return
         Timber.i("onNewToken: FCM Token has been updated")
         FcmHelper.storeFcmToken(this, refreshedToken)
         if (refreshedToken == null) {
