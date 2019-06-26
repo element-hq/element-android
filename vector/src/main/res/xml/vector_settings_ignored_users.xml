@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
+        android:title="@string/settings_ignored_users" />
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY" />
+
+
+</androidx.preference.PreferenceScreen>

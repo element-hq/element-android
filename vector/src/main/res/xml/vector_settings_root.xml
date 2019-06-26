@@ -33,6 +33,13 @@
         android:title="@string/preference_voice_and_video"
         app:fragment="com.example.SyncFragment" />
 
+    <!-- TODO Ignored users -->
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:icon="@drawable/ic_settings_root_security_privacy"
+        android:title="@string/settings_ignored_users"
+        app:fragment="com.example.SyncFragment" />
+
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_settings_root_security_privacy"

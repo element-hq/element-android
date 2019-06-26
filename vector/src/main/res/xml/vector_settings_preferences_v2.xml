@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_USER_INTERFACE_KEY"
+        android:title="@string/settings_user_interface">
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:dialogTitle="@string/settings_select_language"
+            android:key="SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY"
+            android:title="@string/settings_interface_language" />
+
+        <im.vector.riotredesign.core.preference.VectorListPreference
+            android:entries="@array/theme_entries"
+            android:entryValues="@array/theme_values"
+            android:key="APPLICATION_THEME_KEY"
+            android:summary="%s"
+            android:title="@string/settings_theme"
+            app:iconSpaceReserved="false" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:dialogTitle="@string/font_size"
+            android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
+            android:title="@string/font_size" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
+            android:summary="@string/settings_inline_url_preview_summary"
+            android:title="@string/settings_inline_url_preview" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SEND_TYPING_NOTIF_KEY"
+            android:summary="@string/settings_send_typing_notifs_summary"
+            android:title="@string/settings_send_typing_notifs" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_ENABLE_MARKDOWN_KEY"
+            android:summary="@string/settings_send_markdown_summary"
+            android:title="@string/settings_send_markdown" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
+            android:title="@string/settings_always_show_timestamps" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_12_24_TIMESTAMPS_KEY"
+            android:title="@string/settings_12_24_timestamps" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_READ_RECEIPTS_KEY"
+            android:summary="@string/settings_show_read_receipts_summary"
+            android:title="@string/settings_show_read_receipts" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
+            android:summary="@string/settings_show_join_leave_messages_summary"
+            android:title="@string/settings_show_join_leave_messages" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
+            android:summary="@string/settings_show_avatar_display_name_changes_messages_summary"
+            android:title="@string/settings_show_avatar_display_name_changes_messages" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
+            android:title="@string/settings_vibrate_on_mention" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_SEND_MESSAGE_WITH_ENTER"
+            android:summary="@string/settings_send_message_with_enter_summary"
+            android:title="@string/settings_send_message_with_enter" />
+
+        <im.vector.riotredesign.core.preference.VectorListPreference
+            android:defaultValue="always"
+            android:entries="@array/show_info_area_entries"
+            android:entryValues="@array/show_info_area_values"
+            android:key="SETTINGS_SHOW_INFO_AREA_KEY"
+            android:summary="%s"
+            android:title="@string/settings_info_area_show" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_HOME_DISPLAY_KEY"
+        android:title="@string/settings_home_display">
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
+            android:title="@string/settings_pin_missed_notifications" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
+            android:title="@string/settings_pin_unread_messages" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory android:title="@string/settings_media">
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_MEDIA_SAVING_PERIOD_KEY"
+            android:title="@string/settings_keep_media" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
+            android:summary="@string/settings_labs_native_camera_summary"
+            android:title="@string/settings_labs_native_camera" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_PLAY_SHUTTER_SOUND_KEY"
+
+            android:title="@string/settings_play_shutter_sound" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
+            android:title="@string/settings_preview_media_before_sending" />
+
+        <im.vector.riotredesign.core.preference.VectorListPreference
+            android:defaultValue="0"
+            android:entries="@array/compression_levels"
+            android:entryValues="@array/compression_level_values"
+            android:key="SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY"
+            android:summary="%s"
+            android:title="@string/settings_default_compression" />
+
+        <im.vector.riotredesign.core.preference.VectorListPreference
+            android:defaultValue="0"
+            android:entries="@array/media_sources"
+            android:entryValues="@array/media_source_values"
+            android:key="SETTINGS_DEFAULT_MEDIA_SOURCE_KEY"
+            android:summary="%s"
+            android:title="@string/settings_default_media_source" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

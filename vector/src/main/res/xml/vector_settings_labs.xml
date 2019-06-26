@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_LABS_PREFERENCE_KEY"
+        android:title="@string/room_settings_labs_pref_title">
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:focusable="false"
+            android:key="labs_warning"
+            android:title="@string/room_settings_labs_warning_message" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY"
+            android:title="@string/room_settings_labs_end_to_end" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:focusable="false"
+            android:key="SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY"
+            android:title="@string/room_settings_labs_end_to_end_is_active" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"
+            android:summary="@string/settings_data_save_mode_summary"
+            android:title="@string/settings_data_save_mode" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"
+            android:title="@string/settings_labs_create_conference_with_jitsi" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
+            android:summary="@string/settings_labs_enable_send_voice_summary"
+            android:title="@string/settings_labs_enable_send_voice" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+</androidx.preference.PreferenceScreen>
