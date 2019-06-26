@@ -507,6 +507,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return pushRuleService.getPushRules(scope)
     }
 
+    override fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>) {
+        pushRuleService.updatePushRuleEnableStatus(kind, pushRule, enabled, callback)
+    }
+
     override fun fetchPushRules(scope: String) {
         pushRuleService.fetchPushRules(scope)
     }

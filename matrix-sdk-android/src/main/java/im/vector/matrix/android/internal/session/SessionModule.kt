@@ -180,11 +180,15 @@ internal class SessionModule(private val sessionParams: SessionParams) {
         }
 
         scope(DefaultSession.SCOPE) {
-            DefaultPushRuleService(get(), get(), get(), get())
+            DefaultPushRuleService(get(), get(), get(), get(), get())
         }
 
         scope(DefaultSession.SCOPE) {
             DefaultGetPushRulesTask(get()) as GetPushRulesTask
+        }
+
+        scope(DefaultSession.SCOPE) {
+            DefaultUpdatePushRuleEnableStatusTask(get()) as UpdatePushRuleEnableStatusTask
         }
 
         scope(DefaultSession.SCOPE) {

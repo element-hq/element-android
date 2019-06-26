@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.database.model.PushRulesEntity
 import im.vector.matrix.android.internal.database.model.PusherEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
+import im.vector.matrix.android.internal.session.pushers.UpdatePushRuleEnableStatusTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
@@ -36,6 +37,7 @@ import timber.log.Timber
 internal class DefaultPushRuleService(
         private val sessionParams: SessionParams,
         private val pushRulesTask: GetPushRulesTask,
+        private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
         private val taskExecutor: TaskExecutor,
         private val monarchy: Monarchy
 ) : PushRuleService {
@@ -95,8 +97,6 @@ internal class DefaultPushRuleService(
                                 }
                             }
                             realm.insertOrUpdate(underrides)
-
-
                         }
                     }
                 })
@@ -111,6 +111,7 @@ internal class DefaultPushRuleService(
         var senderRules: List<PushRule> = emptyList()
         var underrideRules: List<PushRule> = emptyList()
 
+        // TODO Create const for ruleSetKey
         monarchy.doWithRealm { realm ->
             PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "content").findFirst()?.let { re ->
                 contentRules = re.pushRules.map { PushRulesMapper.mapContentRule(it) }
@@ -130,6 +131,14 @@ internal class DefaultPushRuleService(
         }
 
         return contentRules + overrideRules + roomRules + senderRules + underrideRules
+    }
+
+    override fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>) {
+        updatePushRuleEnableStatusTask
+                .configureWith(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled))
+                // TODO Fetch the rules
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
     }
 
     override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {

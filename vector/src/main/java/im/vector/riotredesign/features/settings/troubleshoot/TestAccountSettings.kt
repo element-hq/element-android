@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.troubleshoot
+package im.vector.riotredesign.features.settings.troubleshoot
 
 import androidx.fragment.app.Fragment
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.pushrules.RuleIds
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
-import im.vector.riotredesign.features.settings.troubleshoot.TroubleshootTest
 
 /**
  * Check that the main pushRule (RULE_ID_DISABLE_ALL) is correctly setup
  */
-class TestAccountSettings(val fragment: Fragment, val session: Session) : TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
+class TestAccountSettings(val fragment: Fragment, val session: Session)
+    : TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
 
     override fun perform() {
-        /*
-        TODO
-        val defaultRule = session?.dataHandler?.bingRulesManager?.pushRules()?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)
+        val defaultRule = session.getPushRules()
+                .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
+
         if (defaultRule != null) {
-            if (!defaultRule.isEnabled) {
+            if (!defaultRule.enabled) {
                 description = fragment.getString(R.string.settings_troubleshoot_test_account_settings_success)
                 quickFix = null
                 status = TestStatus.SUCCESS
@@ -39,14 +41,16 @@ class TestAccountSettings(val fragment: Fragment, val session: Session) : Troubl
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_account_settings_quickfix) {
                     override fun doFix() {
                         if (manager?.diagStatus == TestStatus.RUNNING) return //wait before all is finished
-                        session?.dataHandler?.bingRulesManager?.updateEnableRuleStatus(defaultRule, !defaultRule.isEnabled,
-                                object : BingRulesManager.onBingRuleUpdateListener {
 
-                                    override fun onBingRuleUpdateSuccess() {
+                        // TODO Use constant for kind
+                        session.updatePushRuleEnableStatus("override", defaultRule, !defaultRule.enabled,
+                                object : MatrixCallback<Unit> {
+
+                                    override fun onSuccess(data: Unit) {
                                         manager?.retry()
                                     }
 
-                                    override fun onBingRuleUpdateFailure(errorMessage: String) {
+                                    override fun onFailure(failure: Throwable) {
                                         manager?.retry()
                                     }
                                 })
@@ -58,8 +62,5 @@ class TestAccountSettings(val fragment: Fragment, val session: Session) : Troubl
             //should not happen?
             status = TestStatus.FAILED
         }
-         */
-
-        status = TestStatus.FAILED
     }
 }

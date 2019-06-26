@@ -23,6 +23,7 @@ import io.realm.annotations.Index
 internal open class PushRulesEntity(
         @Index var userId: String = "",
         var scope: String = "",
+        // "content", etc.
         var rulesetKey: String = "",
         var pushRules: RealmList<PushRuleEntity> = RealmList()
 ) : RealmObject() {
