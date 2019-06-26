@@ -32,10 +32,12 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
+import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_login.*
+import org.koin.android.ext.android.get
 
 private const val DEFAULT_HOME_SERVER_URI = "https://matrix.org"
 private const val DEFAULT_IDENTITY_SERVER_URI = "https://vector.im"
@@ -75,7 +77,8 @@ class LoginActivity : VectorBaseActivity() {
                 data.open()
                 data.setFilter(FilterService.FilterPreset.RiotFilter)
                 data.startSync()
-
+                get<PushRuleTriggerListener>().startWithSession(data)
+                data.fetchPushRules()
                 goToHome()
             }
 

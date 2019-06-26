@@ -66,6 +66,14 @@ internal class DefaultMembershipService(private val roomId: String,
         )
     }
 
+    override fun getNumberOfJoinedMembers(): Int {
+        var result = 0
+        monarchy.runTransactionSync {
+            result = RoomMembers(it, roomId).getNumberOfJoinedMembers()
+        }
+        return result
+    }
+
     override fun invite(userId: String, callback: MatrixCallback<Unit>) {
         val params = InviteTask.Params(roomId, userId)
         inviteTask.configureWith(params)

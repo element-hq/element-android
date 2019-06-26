@@ -11,4 +11,23 @@
     <string name="navigate_to_room_when_already_in_the_room">You are already viewing this room!</string>
 
     <string name="quick_reactions">Quick Reactions</string>
+
+    <!-- Settings -->
+    <string name="settings_general_title">General</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_security_and_privacy">Security &amp; Privacy</string>
+    <string name="settings_expert">Expert</string>
+    <string name="settings_push_rules">Push Rules</string>
+    <string name="settings_push_rules_no_rules">No push rules defined</string>
+    <string name="settings_push_gateway_no_pushers">No registered push gateways</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Format:</string>
+
+    <string name="preference_root_legacy">Legacy</string>
+
 </resources>

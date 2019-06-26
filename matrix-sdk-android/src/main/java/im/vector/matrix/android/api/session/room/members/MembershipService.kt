@@ -49,6 +49,8 @@ interface MembershipService {
      */
     fun getRoomMemberIdsLive(): LiveData<List<String>>
 
+    fun getNumberOfJoinedMembers() : Int
+
     /**
      * Invite a user in the room
      */

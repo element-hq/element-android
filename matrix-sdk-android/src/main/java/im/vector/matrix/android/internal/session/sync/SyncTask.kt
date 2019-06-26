@@ -29,7 +29,7 @@ import im.vector.matrix.android.internal.task.Task
 
 internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
-    data class Params(val token: String?)
+    data class Params(val token: String?, var timeout: Long = 30_000L)
 
 }
 
@@ -42,10 +42,10 @@ internal class DefaultSyncTask(private val syncAPI: SyncAPI,
 
     override suspend fun execute(params: SyncTask.Params): Try<SyncResponse> {
         val requestParams = HashMap<String, String>()
-        var timeout = 0
+        var timeout = 0L
         if (params.token != null) {
             requestParams["since"] = params.token
-            timeout = 30000
+            timeout = params.timeout
         }
         requestParams["timeout"] = timeout.toString()
         requestParams["filter"] = filterRepository.getFilter()

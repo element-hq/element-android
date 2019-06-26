@@ -24,6 +24,8 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.listeners.ProgressListener
+import im.vector.matrix.android.api.pushrules.PushRuleService
+import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
@@ -36,6 +38,8 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.pushers.Pusher
+import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
@@ -65,17 +69,21 @@ import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.di.MatrixKoinHolder
 import im.vector.matrix.android.internal.session.content.ContentModule
 import im.vector.matrix.android.internal.session.group.GroupModule
+import im.vector.matrix.android.internal.session.notification.BingRuleWatcher
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.signout.SignOutModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
+import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.session.user.UserModule
 import org.koin.core.scope.Scope
 import org.koin.standalone.inject
 import timber.log.Timber
+import java.util.*
 
 
 internal class DefaultSession(override val sessionParams: SessionParams) : Session, MatrixKoinComponent {
+
     companion object {
         const val SCOPE: String = "session"
     }
@@ -96,7 +104,11 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
     private val syncThread by inject<SyncThread>()
     private val contentUrlResolver by inject<ContentUrlResolver>()
     private val contentUploadProgressTracker by inject<ContentUploadStateTracker>()
+    private val pushRuleService by inject<PushRuleService>()
+    private val pushersService by inject<PushersService>()
     private var isOpen = false
+
+    private val bingRuleWatcher by inject<BingRuleWatcher>()
 
     @MainThread
     override fun open() {
@@ -124,12 +136,30 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
             monarchy.openManually()
         }
         liveEntityUpdaters.forEach { it.start() }
+        bingRuleWatcher.start()
+    }
+
+    override fun requireBackgroundSync() {
+        SyncWorker.requireBackgroundSync()
+    }
+
+    override fun startAutomaticBackgroundSync(repeatDelay: Long) {
+        SyncWorker.automaticallyBackgroundSync(0, repeatDelay)
+    }
+
+    override fun stopAnyBackgroundSync() {
+        SyncWorker.stopAnyBackgroundSync()
     }
 
     @MainThread
     override fun startSync() {
         assert(isOpen)
-        syncThread.start()
+        if (!syncThread.isAlive) {
+            syncThread.start()
+        } else {
+            syncThread.restart()
+            Timber.w("Attempt to start an already started thread")
+        }
     }
 
     @MainThread
@@ -144,6 +174,7 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         assert(isOpen)
         liveEntityUpdaters.forEach { it.dispose() }
         cryptoService.close()
+        bingRuleWatcher.dispose()
         if (monarchy.isMonarchyThreadOpen) {
             monarchy.closeManually()
         }
@@ -160,8 +191,8 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         Timber.w("SIGN_OUT: start")
 
         assert(isOpen)
-        Timber.w("SIGN_OUT: kill sync thread")
-        syncThread.kill()
+        //Timber.w("SIGN_OUT: kill sync thread")
+        //syncThread.kill()
 
         Timber.w("SIGN_OUT: call webservice")
         return signOutService.signOut(object : MatrixCallback<Unit> {
@@ -261,11 +292,11 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
 
     override fun clearCache(callback: MatrixCallback<Unit>) {
         assert(isOpen)
-        syncThread.pause()
+        // syncThread.pause()
         cacheService.clearCache(object : MatrixCallbackDelegate<Unit>(callback) {
             override fun onSuccess(data: Unit) {
                 // Restart the sync
-                syncThread.restart()
+                //  syncThread.restart()
 
                 super.onSuccess(data)
             }
@@ -426,6 +457,16 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         cryptoService.clearCryptoCache(callback)
     }
 
+    // PUSH RULE SERVICE
+
+    override fun addPushRuleListener(listener: PushRuleService.PushRuleListener) {
+        pushRuleService.addPushRuleListener(listener)
+    }
+
+    override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {
+        pushRuleService.removePushRuleListener(listener)
+    }
+
     // Private methods *****************************************************************************
 
     private fun assertMainThread() {
@@ -433,5 +474,46 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
             throw IllegalStateException("This method can only be called on the main thread!")
         }
     }
+
+    override fun refreshPushers() {
+        pushersService.refreshPushers()
+    }
+
+    override fun addHttpPusher(
+            pushkey: String,
+            appId: String,
+            profileTag: String,
+            lang: String,
+            appDisplayName: String,
+            deviceDisplayName: String,
+            url: String,
+            append: Boolean,
+            withEventIdOnly: Boolean): UUID {
+        return pushersService
+                .addHttpPusher(
+                        pushkey, appId, profileTag, lang, appDisplayName, deviceDisplayName, url, append, withEventIdOnly
+                )
+    }
+
+    override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>) {
+        pushersService.removeHttpPusher(pushkey, appId, callback)
+    }
+
+    override fun livePushers(): LiveData<List<Pusher>> {
+        return pushersService.livePushers()
+    }
+
+    override fun getPushRules(scope: String): List<PushRule> {
+        return pushRuleService.getPushRules(scope)
+    }
+
+    override fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>) {
+        pushRuleService.updatePushRuleEnableStatus(kind, pushRule, enabled, callback)
+    }
+
+    override fun fetchPushRules(scope: String) {
+        pushRuleService.fetchPushRules(scope)
+    }
+
 
 }

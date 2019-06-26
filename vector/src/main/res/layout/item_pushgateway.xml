@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/pushGatewayKind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textAllCaps="true"
+        tools:text="Http Pusher" />
+
+    <TextView
+        android:id="@+id/pushGatewayAppId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/push_gateway_item_app_id"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/pushGatewayAppIdValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textStyle=""
+        tools:text="im.vector.app.android" />
+
+    <TextView
+        android:id="@+id/pushGatewayKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/push_gateway_item_push_key"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/pushGatewayKeyValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textStyle=""
+        tools:text="fBbCDxVa-n8:APA91bE0wGY4ijpj-LQkkmjJYhNp2vA_9Xvabh02xaTKua9WA9wpNZwxfHdsbIDWthVXKPFTNcCl75ek1kqMGOggnUwnSCj-8ReF4G69pZVUhz-" />
+
+    <TextView
+        android:id="@+id/pushGatewayAppName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/push_gateway_item_app_display_name"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/pushGatewayAppNameValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textStyle=""
+        tools:text="EBMDOLFJD" />
+
+    <TextView
+        android:id="@+id/pushGatewayDeviceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/push_gateway_item_device_name"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/pushGatewayDeviceNameValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textStyle=""
+        tools:text="EBMDOLFJD" />
+
+
+    <TextView
+        android:id="@+id/pushGatewayURL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/push_gateway_item_url"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pushGatewayURLValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textStyle=""
+        tools:text="EBMDOLFJD" />
+
+    <TextView
+        android:id="@+id/pushGatewayFormat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/push_gateway_item_format"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/pushGatewayFormatValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textStyle=""
+        tools:text="event_id_only" />
+
+
+</LinearLayout>

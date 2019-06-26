@@ -18,14 +18,14 @@ package im.vector.riotredesign.features.notifications
 import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.text.TextUtils
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
-import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.SecretStoringUtils
+import im.vector.riotredesign.features.settings.PreferencesManager
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -36,14 +36,14 @@ import java.io.FileOutputStream
  * organise them in order to display them in the notification drawer.
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
-class NotificationDrawerManager(val context: Context) {
+class NotificationDrawerManager(val context: Context,
+                                private val outdatedDetector: OutdatedEventDetector?) {
+
 
     //The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
 
     private var eventList = loadEventInfo()
-    private var myUserDisplayName: String = ""
-    private var myUserAvatarUrl: String = ""
 
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
 
@@ -53,31 +53,17 @@ class NotificationDrawerManager(val context: Context) {
             object : IconLoader.IconLoaderListener {
                 override fun onIconsLoaded() {
                     // Force refresh
-                    refreshNotificationDrawer(null)
+                    refreshNotificationDrawer()
                 }
             })
 
-    /**
-     * No multi session support for now
-     */
-    private fun initWithSession(session: Session?) {
-        session?.let {
-            /*
-            myUserDisplayName = it.myUser?.displayname ?: it.myUserId
-
-            // User Avatar
-            it.myUser?.avatarUrl?.let { avatarUrl ->
-                val userAvatarUrlPath = it.mediaCache?.thumbnailCacheFile(avatarUrl, avatarSize)
-                if (userAvatarUrlPath != null) {
-                    myUserAvatarUrl = userAvatarUrlPath.path
-                } else {
-                    // prepare for the next time
-                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), avatarUrl, avatarSize)
+    private var bitmapLoader = BitmapLoader(context,
+            object : BitmapLoader.BitmapLoaderListener {
+                override fun onBitmapsLoaded() {
+                    // Force refresh
+                    refreshNotificationDrawer()
                 }
-            }
-            */
-        }
-    }
+            })
 
     /**
     Should be called as soon as a new event is ready to be displayed.
@@ -86,6 +72,10 @@ class NotificationDrawerManager(val context: Context) {
     Events might be grouped and there might not be one notification per event!
      */
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
+        if (!PreferencesManager.areNotificationEnabledForDevice(context)) {
+            Timber.i("Notification are disabled for this device")
+            return
+        }
         //If we support multi session, event list should be per userId
         //Currently only manage single session
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
@@ -112,7 +102,6 @@ class NotificationDrawerManager(val context: Context) {
             } else {
                 eventList.add(notifiableEvent)
             }
-
         }
     }
 
@@ -123,7 +112,7 @@ class NotificationDrawerManager(val context: Context) {
         synchronized(eventList) {
             eventList.clear()
         }
-        refreshNotificationDrawer(null)
+        refreshNotificationDrawer()
     }
 
     /** Clear all known message events for this room and refresh the notification drawer */
@@ -139,12 +128,12 @@ class NotificationDrawerManager(val context: Context) {
             }
             NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
         }
-        refreshNotificationDrawer(null)
+        refreshNotificationDrawer()
     }
 
     /**
-    Should be called when the application is currently opened and showing timeline for the given roomId.
-    Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
+     * Should be called when the application is currently opened and showing timeline for the given roomId.
+     * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
      */
     fun setCurrentRoom(roomId: String?) {
         var hasChanged: Boolean
@@ -177,17 +166,12 @@ class NotificationDrawerManager(val context: Context) {
     }
 
 
-    fun refreshNotificationDrawer(outdatedDetector: OutdatedEventDetector?) {
-        if (myUserDisplayName.isBlank()) {
-            // TODO
-            // initWithSession(Matrix.getInstance(context).defaultSession)
-        }
+    fun refreshNotificationDrawer() {
 
-        if (myUserDisplayName.isBlank()) {
-            // Should not happen, but myUserDisplayName cannot be blank if used to create a Person
-            return
-        }
-
+        val session = Matrix.getInstance().currentSession ?: return
+        val user = session.getUser(session.sessionParams.credentials.userId)
+        val myUserDisplayName = user?.displayName ?: ""
+        val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
 
             Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")
@@ -238,22 +222,23 @@ class NotificationDrawerManager(val context: Context) {
                     continue
                 }
 
-                val roomGroup = RoomEventGroupInfo(roomId)
-                roomGroup.hasNewEvent = false
-                roomGroup.shouldBing = false
-                roomGroup.isDirect = events[0].roomIsDirect
                 val roomName = events[0].roomName ?: events[0].senderName ?: ""
+
+                val roomEventGroupInfo = RoomEventGroupInfo(
+                        roomId = roomId,
+                        isDirect = events[0].roomIsDirect,
+                        roomDisplayName = roomName)
+
                 val style = NotificationCompat.MessagingStyle(Person.Builder()
                         .setName(myUserDisplayName)
                         .setIcon(iconLoader.getUserIcon(myUserAvatarUrl))
                         .setKey(events[0].matrixID)
                         .build())
-                roomGroup.roomDisplayName = roomName
 
-                style.isGroupConversation = !roomGroup.isDirect
+                style.isGroupConversation = !roomEventGroupInfo.isDirect
 
-                if (!roomGroup.isDirect) {
-                    style.conversationTitle = roomName
+                if (!roomEventGroupInfo.isDirect) {
+                    style.conversationTitle = roomEventGroupInfo.roomDisplayName
                 }
 
                 val largeBitmap = getRoomBitmap(events)
@@ -262,10 +247,10 @@ class NotificationDrawerManager(val context: Context) {
                 for (event in events) {
                     //if all events in this room have already been displayed there is no need to update it
                     if (!event.hasBeenDisplayed) {
-                        roomGroup.shouldBing = roomGroup.shouldBing || event.noisy
-                        roomGroup.customSound = event.soundName
+                        roomEventGroupInfo.shouldBing = roomEventGroupInfo.shouldBing || event.noisy
+                        roomEventGroupInfo.customSound = event.soundName
                     }
-                    roomGroup.hasNewEvent = roomGroup.hasNewEvent || !event.hasBeenDisplayed
+                    roomEventGroupInfo.hasNewEvent = roomEventGroupInfo.hasNewEvent || !event.hasBeenDisplayed
 
                     val senderPerson = Person.Builder()
                             .setName(event.senderName)
@@ -275,7 +260,7 @@ class NotificationDrawerManager(val context: Context) {
 
                     if (event.outGoingMessage && event.outGoingMessageFailed) {
                         style.addMessage(context.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
-                        roomGroup.hasSmartReplyError = true
+                        roomEventGroupInfo.hasSmartReplyError = true
                     } else {
                         style.addMessage(event.body, event.timestamp, senderPerson)
                     }
@@ -296,7 +281,7 @@ class NotificationDrawerManager(val context: Context) {
                     summaryInboxStyle.addLine(roomName)
                 }
 
-                if (firstTime || roomGroup.hasNewEvent) {
+                if (firstTime || roomEventGroupInfo.hasNewEvent) {
                     //Should update displayed notification
                     Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
                     val lastMessageTimestamp = events.last().timestamp
@@ -305,14 +290,14 @@ class NotificationDrawerManager(val context: Context) {
                         globalLastMessageTimestamp = lastMessageTimestamp
                     }
 
-                    NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, lastMessageTimestamp, myUserDisplayName)
+                    NotificationUtils.buildMessagesListNotification(context, style, roomEventGroupInfo, largeBitmap, lastMessageTimestamp, myUserDisplayName)
                             ?.let {
                                 //is there an id for this room?
                                 notifications.add(it)
                                 NotificationUtils.showNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID, it)
                             }
                     hasNewEvent = true
-                    summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
+                    summaryIsNoisy = summaryIsNoisy || roomEventGroupInfo.shouldBing
                 } else {
                     Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId is up to date")
                 }
@@ -393,19 +378,10 @@ class NotificationDrawerManager(val context: Context) {
         if (events.isEmpty()) return null
 
         //Use the last event (most recent?)
-        val roomAvatarPath = events[events.size - 1].roomAvatarPath
-                ?: events[events.size - 1].senderAvatarPath
-        if (!TextUtils.isEmpty(roomAvatarPath)) {
-            val options = BitmapFactory.Options()
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888
-            try {
-                return BitmapFactory.decodeFile(roomAvatarPath, options)
-            } catch (oom: OutOfMemoryError) {
-                Timber.e(oom, "decodeFile failed with an oom")
-            }
+        val roomAvatarPath = events.last().roomAvatarPath
+                ?: events.last().senderAvatarPath
 
-        }
-        return null
+        return bitmapLoader.getRoomBitmap(roomAvatarPath)
     }
 
     private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {

@@ -75,7 +75,8 @@ open class VectorPreference : Preference {
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     init {
-        isIconSpaceReserved = false
+        // Set to false to remove the space when there is no icon
+        isIconSpaceReserved = true
     }
 
     var isHighlighted = false
@@ -155,9 +156,5 @@ open class VectorPreference : Preference {
                 onPreferenceClickListener.onPreferenceClick(this@VectorPreference)
             }
         }
-    }
-
-    companion object {
-        private val LOG_TAG = VectorPreference::class.java.simpleName
     }
 }

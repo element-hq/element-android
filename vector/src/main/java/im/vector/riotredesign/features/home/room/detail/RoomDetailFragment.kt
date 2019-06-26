@@ -43,7 +43,6 @@ import butterknife.BindView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
@@ -92,6 +91,7 @@ import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.ImageMediaViewerActivity
 import im.vector.riotredesign.features.media.VideoContentRenderer
 import im.vector.riotredesign.features.media.VideoMediaViewerActivity
+import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotredesign.features.settings.PreferencesManager
 import kotlinx.android.parcel.Parcelize
@@ -167,6 +167,8 @@ class RoomDetailFragment :
     private val autocompleteCommandPresenter: AutocompleteCommandPresenter by inject { parametersOf(this) }
     private val autocompleteUserPresenter: AutocompleteUserPresenter by inject { parametersOf(this) }
     private val permalinkHandler: PermalinkHandler by inject()
+
+    private val notificationDrawerManager by inject<NotificationDrawerManager>()
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
@@ -275,6 +277,18 @@ class RoomDetailFragment :
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        notificationDrawerManager.setCurrentRoom(roomDetailArgs.roomId)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        notificationDrawerManager.setCurrentRoom(null)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

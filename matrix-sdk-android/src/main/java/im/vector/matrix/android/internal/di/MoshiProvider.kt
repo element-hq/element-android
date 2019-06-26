@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirec
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataFallback
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 
+
 object MoshiProvider {
 
     private val moshi: Moshi = Moshi.Builder()
@@ -42,6 +43,7 @@ object MoshiProvider {
                     .registerSubtype(MessageLocationContent::class.java, MessageType.MSGTYPE_LOCATION)
                     .registerSubtype(MessageFileContent::class.java, MessageType.MSGTYPE_FILE)
             )
+            .add(SerializeNulls.JSON_ADAPTER_FACTORY)
             .build()
 
     fun providesMoshi(): Moshi {
@@ -62,4 +64,5 @@ object MoshiProvider {
         return jsonSafe
     }
 }
+
 

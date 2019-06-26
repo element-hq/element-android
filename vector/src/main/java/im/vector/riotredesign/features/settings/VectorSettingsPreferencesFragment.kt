@@ -84,6 +84,7 @@ import java.util.*
 
 class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
+    override var titleRes: Int = R.string.title_activity_settings
     // members
     private val mSession by inject<Session>()
 
@@ -1493,14 +1494,14 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                         if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
                             isEnabled = !isEnabled
                         } else if (isEnabled) {
-                            val actions = rule?.actions
+                            val domainActions = rule?.domainActions
 
                             // no action -> noting will be done
-                            if (null == actions || actions.isEmpty()) {
+                            if (null == domainActions || domainActions.isEmpty()) {
                                 isEnabled = false
-                            } else if (1 == actions.size) {
+                            } else if (1 == domainActions.size) {
                                 try {
-                                    isEnabled = !TextUtils.equals(actions[0] as String, BingRule.ACTION_DONT_NOTIFY)
+                                    isEnabled = !TextUtils.equals(domainActions[0] as String, BingRule.ACTION_DONT_NOTIFY)
                                 } catch (e: Exception) {
                                     Timber.e(e, "## refreshPreferences failed " + e.message)
                                 }
@@ -1670,15 +1671,15 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                 var index = 0
 
-                for (pusher in mDisplayedPushers) {
-                    if (null != pusher.lang) {
-                        val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pusher.pushkey)
+                for (pushRule in mDisplayedPushers) {
+                    if (null != pushRule.lang) {
+                        val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pushRule.pushkey)
 
                         val preference = VectorPreference(activity).apply {
                             mTypeface = if (isThisDeviceTarget) Typeface.BOLD else Typeface.NORMAL
                         }
-                        preference.title = pusher.deviceDisplayName
-                        preference.summary = pusher.appDisplayName
+                        preference.title = pushRule.deviceDisplayName
+                        preference.summary = pushRule.appDisplayName
                         preference.key = PUSHER_PREFERENCE_KEY_BASE + index
                         index++
                         mPushersSettingsCategory.addPreference(preference)
@@ -1693,7 +1694,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                                             .setPositiveButton(R.string.remove)
                                             { _, _ ->
                                                 displayLoadingView()
-                                                pushManager.unregister(session, pusher, object : MatrixCallback<Unit> {
+                                                pushManager.unregister(session, pushRule, object : MatrixCallback<Unit> {
                                                     override fun onSuccess(info: Void?) {
                                                         refreshPushersList()
                                                         onCommonDone(null)

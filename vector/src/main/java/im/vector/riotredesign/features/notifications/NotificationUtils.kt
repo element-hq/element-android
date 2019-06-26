@@ -39,6 +39,8 @@ import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.startNotificationChannelSettingsIntent
 import im.vector.riotredesign.features.home.HomeActivity
+import im.vector.riotredesign.features.home.room.detail.RoomDetailActivity
+import im.vector.riotredesign.features.home.room.detail.RoomDetailArgs
 import im.vector.riotredesign.features.settings.PreferencesManager
 import timber.log.Timber
 import java.util.*
@@ -180,7 +182,7 @@ object NotificationUtils {
      * @return the polling thread listener notification
      */
     @SuppressLint("NewApi")
-    fun buildForegroundServiceNotification(context: Context, @StringRes subTitleResId: Int): Notification {
+    fun buildForegroundServiceNotification(context: Context, @StringRes subTitleResId: Int, withProgress: Boolean = true): Notification {
         // build the pending intent go to the home screen if this is clicked.
         val i = Intent(context, HomeActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -190,16 +192,21 @@ object NotificationUtils {
 
         val builder = NotificationCompat.Builder(context, LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(context.getString(subTitleResId))
-                .setCategory(NotificationCompat.CATEGORY_PROGRESS)
-                .setSmallIcon(R.drawable.logo_transparent)
-                .setProgress(0, 0, true)
+                .setSmallIcon(R.drawable.sync)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .setColor(accentColor)
                 .setContentIntent(pi)
+                .apply {
+                    if (withProgress) {
+                        setProgress(0, 0, true)
+                    }
+                }
 
-        // hide the notification from the status bar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder.priority = NotificationCompat.PRIORITY_MIN
-        }
+        // PRIORITY_MIN should not be used with Service#startForeground(int, Notification)
+        builder.priority = NotificationCompat.PRIORITY_LOW
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            builder.priority = NotificationCompat.PRIORITY_MIN
+//        }
 
         val notification = builder.build()
 
@@ -220,7 +227,7 @@ object NotificationUtils {
                                 PendingIntent::class.java)
                 deprecatedMethod.invoke(notification, context, context.getString(R.string.app_name), context.getString(subTitleResId), pi)
             } catch (ex: Exception) {
-                Timber.e(ex, "## buildNotification(): Exception - setLatestEventInfo() Msg=" + ex.message)
+                Timber.e(ex, "## buildNotification(): Exception - setLatestEventInfo() Msg=")
             }
 
         }
@@ -540,27 +547,21 @@ object NotificationUtils {
     }
 
     private fun buildOpenRoomIntent(context: Context, roomId: String): PendingIntent? {
-        // TODO
-        return null
-        /*
-        val roomIntentTap = Intent(context, VectorRoomActivity::class.java)
-        roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
+        val roomIntentTap = RoomDetailActivity.newIntent(context, RoomDetailArgs(roomId))
         roomIntentTap.action = TAP_TO_VIEW_ACTION
         //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
         roomIntentTap.data = Uri.parse("foobar://openRoom?$roomId")
 
         // Recreate the back stack
         return TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(Intent(context, VectorHomeActivity::class.java))
+                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
                 .addNextIntent(roomIntentTap)
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
-                */
     }
 
     private fun buildOpenHomePendingIntentForSummary(context: Context): PendingIntent {
-        val intent = Intent(context, HomeActivity::class.java)
+        val intent = HomeActivity.newIntent(context, clearNotification = true)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        // TODO intent.putExtra(VectorHomeActivity.EXTRA_CLEAR_EXISTING_NOTIFICATION, true)
         intent.data = Uri.parse("foobar://tapSummary")
         return PendingIntent.getActivity(context, Random().nextInt(1000), intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }

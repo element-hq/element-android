@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
@@ -51,7 +52,8 @@ internal class RoomFactory(private val monarchy: Monarchy,
                            private val cryptoService: CryptoService,
                            private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
                            private val joinRoomTask: JoinRoomTask,
-                           private val leaveRoomTask: LeaveRoomTask) {
+                           private val leaveRoomTask: LeaveRoomTask,
+                           private val sessionParams: SessionParams) {
 
     fun instantiate(roomId: String): Room {
         val roomMemberExtractor = SenderRoomMemberExtractor(roomId)
@@ -61,7 +63,7 @@ internal class RoomFactory(private val monarchy: Monarchy,
         val sendService = DefaultSendService(roomId, eventFactory, cryptoService, monarchy)
         val stateService = DefaultStateService(roomId, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
-        val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask)
+        val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, sessionParams)
         val reactionService = DefaultRelationService(roomId, eventFactory, findReactionEventForUndoTask, monarchy, taskExecutor)
 
         return DefaultRoom(

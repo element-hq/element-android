@@ -37,7 +37,8 @@ class VectorSwitchPreference : SwitchPreference {
     constructor(context: Context) : super(context)
 
     init {
-        isIconSpaceReserved = false
+        // Set to false to remove the space when there is no icon
+        isIconSpaceReserved = true
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {

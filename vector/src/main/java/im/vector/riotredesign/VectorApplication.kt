@@ -23,6 +23,10 @@ import android.os.Handler
 import android.os.HandlerThread
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
@@ -32,14 +36,21 @@ import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.core.di.AppModule
+import im.vector.riotredesign.core.services.AlarmSyncBroadcastReceiver
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
 import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.lifecycle.VectorActivityLifecycleCallbacks
+import im.vector.riotredesign.features.notifications.NotificationDrawerManager
+import im.vector.riotredesign.features.notifications.NotificationUtils
+import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
+import im.vector.riotredesign.features.settings.PreferencesManager
 import im.vector.riotredesign.features.version.getVersion
+import im.vector.riotredesign.push.fcm.FcmHelper
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.log.EmptyLogger
 import org.koin.standalone.StandAloneContext.startKoin
@@ -47,14 +58,19 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class VectorApplication : Application() {
+
 
     lateinit var appContext: Context
     //font thread handler
     private var mFontThreadHandler: Handler? = null
 
     val vectorConfiguration: VectorConfiguration by inject()
+
+    private val notificationDrawerManager by inject<NotificationDrawerManager>()
+
+//    var slowMode = false
+
 
     override fun onCreate() {
         super.onCreate()
@@ -91,10 +107,51 @@ class VectorApplication : Application() {
                 R.array.com_google_android_gms_fonts_certs
         )
 
-//        val efp = koin.koinContext.get<EmojiCompatFontProvider>()
         FontsContractCompat.requestFont(this, fontRequest, koin.koinContext.get<EmojiCompatFontProvider>(), getFontThreadHandler())
 
         vectorConfiguration.initConfiguration()
+
+        NotificationUtils.createNotificationChannels(applicationContext)
+
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            fun entersForeground() {
+                AlarmSyncBroadcastReceiver.cancelAlarm(appContext)
+                Matrix.getInstance().currentSession?.also {
+                    it.stopAnyBackgroundSync()
+                }
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+            fun entersBackground() {
+                Timber.i("App entered background") // call persistInfo
+
+                notificationDrawerManager.persistInfo()
+
+                if (FcmHelper.isPushSupported()) {
+                    //TODO FCM fallback
+                } else {
+                    //TODO check if notifications are enabled for this device
+                    //We need to use alarm in this mode
+                    if (PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
+                        if (Matrix.getInstance().currentSession != null) {
+                            AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext, 4_000L)
+                            Timber.i("Alarm scheduled to restart service")
+                        }
+                    }
+                }
+            }
+
+        })
+
+
+        Matrix.getInstance().currentSession?.let {
+            it.refreshPushers()
+            //bind to the sync service
+            get<PushRuleTriggerListener>().startWithSession(it)
+            it.fetchPushRules()
+        }
     }
 
     private fun logInfo() {

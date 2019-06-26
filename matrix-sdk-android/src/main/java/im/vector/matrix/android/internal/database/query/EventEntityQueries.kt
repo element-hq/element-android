@@ -53,6 +53,14 @@ internal fun EventEntity.Companion.where(realm: Realm,
 }
 
 
+internal fun EventEntity.Companion.types(realm: Realm,
+                                         typeList: List<String> = emptyList()): RealmQuery<EventEntity> {
+    val query = realm.where<EventEntity>()
+    query.`in`(EventEntityFields.TYPE, typeList.toTypedArray())
+    return query
+}
+
+
 internal fun EventEntity.Companion.latestEvent(realm: Realm,
                                                roomId: String,
                                                includedTypes: List<String> = emptyList(),

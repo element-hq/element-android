@@ -23,7 +23,7 @@ import io.reactivex.Observable
 class RxRoom(private val room: Room) {
 
     fun liveRoomSummary(): Observable<RoomSummary> {
-        return room.roomSummary.asObservable()
+        return room.liveRoomSummary.asObservable()
     }
 
     fun liveRoomMemberIds(): Observable<List<String>> {

@@ -59,17 +59,24 @@ class MainActivity : VectorBaseActivity() {
         } else {
             // Handle some wanted cleanup
             when {
-                clearCredentials -> session.signOut(object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        Timber.w("SIGN_OUT: success, start app")
-                        start()
-                    }
-                })
-                clearCache       -> session.clearCache(object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        start()
-                    }
-                })
+                clearCredentials -> {
+                    session.signOut(object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            Timber.w("SIGN_OUT: success, start app")
+                            //TODO stop sync service
+                            start()
+                        }
+                    })
+                }
+                clearCache       -> {
+                    //TODO stop sync service
+                    session.clearCache(object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            //TODO start sync service
+                            start()
+                        }
+                    })
+                }
                 else             -> start()
             }
         }

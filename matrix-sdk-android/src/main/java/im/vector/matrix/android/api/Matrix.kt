@@ -21,7 +21,10 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.pushrules.Action
+import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.di.MatrixKoinComponent
@@ -30,7 +33,9 @@ import im.vector.matrix.android.internal.di.MatrixModule
 import im.vector.matrix.android.internal.di.NetworkModule
 import im.vector.matrix.android.internal.network.UserAgentHolder
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
+import org.koin.standalone.get
 import org.koin.standalone.inject
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
