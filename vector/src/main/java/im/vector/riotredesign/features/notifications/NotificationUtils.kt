@@ -376,7 +376,7 @@ object NotificationUtils {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val openRoomIntent = buildOpenRoomIntent(context, roomInfo.roomId)
-        val smallIcon = if (roomInfo.shouldBing) R.drawable.icon_notif_important else R.drawable.logo_transparent
+        val smallIcon = R.drawable.ic_status_bar
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
@@ -479,7 +479,7 @@ object NotificationUtils {
     fun buildSimpleEventNotification(context: Context, simpleNotifiableEvent: NotifiableEvent, largeIcon: Bitmap?, matrixId: String): Notification? {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
-        val smallIcon = if (simpleNotifiableEvent.noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
+        val smallIcon = R.drawable.ic_status_bar
 
         val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
@@ -611,7 +611,7 @@ object NotificationUtils {
                                      noisy: Boolean,
                                      lastMessageTimestamp: Long): Notification? {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        val smallIcon = if (noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
+        val smallIcon = R.drawable.ic_status_bar
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
                 // used in compat < N, after summary is built based on child notifications
