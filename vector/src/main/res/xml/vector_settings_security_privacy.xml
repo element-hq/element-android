@@ -72,6 +72,4 @@
             android:title="@string/send_bug_report_rage_shake" />
     </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
-
 </androidx.preference.PreferenceScreen>

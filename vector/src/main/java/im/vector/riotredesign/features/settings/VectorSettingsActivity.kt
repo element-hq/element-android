@@ -48,20 +48,15 @@ class VectorSettingsActivity : VectorBaseActivity(),
     override fun initUiAndData() {
         configureToolbar(settingsToolbar)
 
-        var vectorSettingsPreferencesFragment: Fragment? = null
         if (isFirstCreation()) {
-            vectorSettingsPreferencesFragment = VectorSettingsPreferencesFragmentV2.newInstance()
+            val vectorSettingsPreferencesFragment = VectorSettingsRoot.newInstance()
             // display the fragment
             supportFragmentManager.beginTransaction()
                     .replace(R.id.vector_settings_page, vectorSettingsPreferencesFragment, FRAGMENT_TAG)
                     .commit()
-        } else {
-            vectorSettingsPreferencesFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
         }
 
-
         supportFragmentManager.addOnBackStackChangedListener(this)
-
     }
 
     override fun onDestroy() {
@@ -78,9 +73,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat?, pref: Preference?): Boolean {
         var oFragment: Fragment? = null
 
-        if ("Legacy" == pref?.title) {
-            oFragment = VectorSettingsPreferencesFragment.newInstance(session.sessionParams.credentials.userId)
-        } else if (PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref?.key) {
+        if (PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref?.key) {
             oFragment = VectorSettingsNotificationsTroubleshootFragment.newInstance(session.sessionParams.credentials.userId)
         } else if (PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref?.key) {
             oFragment = VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.sessionParams.credentials.userId)
