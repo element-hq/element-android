@@ -41,7 +41,7 @@
 
     <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
 
-    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+    <!--im.vector.riotredesign.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         android:title="@string/settings_background_sync">
 
@@ -74,7 +74,7 @@
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         android:title="@string/settings_notifications_targets" />
 
-    <im.vector.riotredesign.core.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" /-->
 
     <im.vector.riotredesign.core.preference.VectorPreferenceCategory android:title="@string/settings_expert">
 
