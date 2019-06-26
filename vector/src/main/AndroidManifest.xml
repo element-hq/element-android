@@ -19,13 +19,19 @@
 
         <activity
             android:name=".features.MainActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher" />
+
+        <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
+        <activity-alias
+            android:name=".features.Alias"
+            android:targetActivity=".features.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+
 
         <activity android:name=".features.home.HomeActivity" />
         <activity android:name=".features.login.LoginActivity" />
