@@ -22,13 +22,12 @@ import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTr
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -61,21 +60,21 @@ internal class IncomingSASVerificationTransaction(
     override val uxState: IncomingSasVerificationTransaction.UxState
         get() {
             return when (state) {
-                SasVerificationTxState.OnStarted -> IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT
+                SasVerificationTxState.OnStarted      -> IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT
                 SasVerificationTxState.SendingAccept,
                 SasVerificationTxState.Accepted,
                 SasVerificationTxState.OnKeyReceived,
                 SasVerificationTxState.SendingKey,
-                SasVerificationTxState.KeySent -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
+                SasVerificationTxState.KeySent        -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
                 SasVerificationTxState.ShortCodeReady -> IncomingSasVerificationTransaction.UxState.SHOW_SAS
                 SasVerificationTxState.ShortCodeAccepted,
                 SasVerificationTxState.SendingMac,
                 SasVerificationTxState.MacSent,
-                SasVerificationTxState.Verifying -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
-                SasVerificationTxState.Verified -> IncomingSasVerificationTransaction.UxState.VERIFIED
-                SasVerificationTxState.Cancelled -> IncomingSasVerificationTransaction.UxState.CANCELLED_BY_ME
-                SasVerificationTxState.OnCancelled -> IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER
-                else -> IncomingSasVerificationTransaction.UxState.UNKNOWN
+                SasVerificationTxState.Verifying      -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
+                SasVerificationTxState.Verified       -> IncomingSasVerificationTransaction.UxState.VERIFIED
+                SasVerificationTxState.Cancelled      -> IncomingSasVerificationTransaction.UxState.CANCELLED_BY_ME
+                SasVerificationTxState.OnCancelled    -> IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER
+                else                                  -> IncomingSasVerificationTransaction.UxState.UNKNOWN
             }
         }
 
@@ -125,9 +124,7 @@ internal class IncomingSASVerificationTransaction(
             //TODO force download keys!!
             //would be probably better to download the keys
             //for now I cancel
-            CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                cancel(CancelCode.User)
-            }
+            cancel(CancelCode.User)
         } else {
             //                    val otherKey = info.identityKey()
             //need to jump back to correct thread
@@ -139,9 +136,7 @@ internal class IncomingSASVerificationTransaction(
                     shortAuthenticationStrings = agreedShortCode,
                     commitment = Base64.encodeToString("temporary commitment".toByteArray(), Base64.DEFAULT)
             )
-            CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                doAccept(accept)
-            }
+            doAccept(accept)
         }
     }
 

@@ -4,116 +4,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
-    android:layout_height="96dp">
+    android:layout_height="wrap_content"
+    android:padding="8dp">
 
     <TextView
-        android:id="@+id/quick_react_1_text"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toTopOf="@id/quick_react_agree_text"
-        app:layout_constraintEnd_toStartOf="@id/quick_react_2_text"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
+        android:id="@+id/quickReactionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/quick_reactions"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/quickReaction0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
         tools:text="👍" />
 
     <TextView
-        android:id="@+id/quick_react_2_text"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toBottomOf="@id/quick_react_1_text"
-        app:layout_constraintEnd_toStartOf="@id/center_guideline"
-        app:layout_constraintStart_toEndOf="@id/quick_react_1_text"
-        app:layout_constraintTop_toTopOf="@id/quick_react_1_text"
-        tools:text="👎" />
-
-
-    <TextView
-        android:id="@+id/quick_react_agree_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/reactions_agree"
-        android:textAlignment="center"
-        android:textColor="?riotx_text_secondary"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/center_guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/quick_react_1_text" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/center_guideline"
+        android:id="@+id/quickReaction1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="👎" />
 
     <TextView
-        android:id="@+id/quick_react_3_text"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toBottomOf="@+id/quick_react_1_text"
-        app:layout_constraintEnd_toStartOf="@id/quick_react_4_text"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/center_guideline"
-        app:layout_constraintTop_toTopOf="@id/quick_react_1_text"
+        android:id="@+id/quickReaction2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
         tools:text="😀" />
 
-    <TextView
-        android:id="@+id/quick_react_4_text"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toBottomOf="@id/quick_react_3_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/quick_react_3_text"
-        app:layout_constraintTop_toTopOf="@id/quick_react_3_text"
-        tools:text="😞" />
 
     <TextView
-        android:id="@+id/quick_react_like_text"
+        android:id="@+id/quickReaction3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="🎉" />
+
+    <TextView
+        android:id="@+id/quickReaction4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="😕" />
+
+    <TextView
+        android:id="@+id/quickReaction5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="♥" />
+
+    <TextView
+        android:id="@+id/quickReaction6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="🍆" />
+
+    <TextView
+        android:id="@+id/quickReaction7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="26sp"
+        tools:ignore="MissingConstraints"
+        tools:text="👀" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/reactionsFlowHelper"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/reactions_like"
-        android:textAlignment="center"
-        android:textColor="?riotx_text_secondary"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/quick_react_agree_text"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:constraint_referenced_ids="quickReaction0,quickReaction1,quickReaction2,quickReaction3,quickReaction4,quickReaction5,quickReaction6,quickReaction7"
+        app:flow_horizontalGap="8dp"
+        app:flow_horizontalStyle="spread"
+        app:flow_verticalBias="0"
+        app:flow_verticalGap="4dp"
+        app:flow_wrapMode="chain"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/center_guideline"
-        app:layout_constraintTop_toTopOf="@id/quick_react_agree_text" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/quickReactionTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

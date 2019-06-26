@@ -86,7 +86,6 @@ internal class OutgoingSASVerificationRequest(
     }
 
     fun start() {
-
         if (state != SasVerificationTxState.None) {
             Timber.e("## start verification from invalid state")
             //should I cancel??

@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.content
 
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.internal.session.SessionScope
 import javax.inject.Inject
 
 

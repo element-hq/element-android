@@ -16,9 +16,9 @@
 
 package im.vector.matrix.android.internal.crypto.actions
 
-import im.vector.matrix.android.api.MatrixCallback
+import android.os.Handler
+import androidx.annotation.WorkerThread
 import im.vector.matrix.android.api.listeners.ProgressListener
-import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequestManager
@@ -37,34 +37,32 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
 
     /**
      * Import a list of megolm session keys.
+     * Must be call on the crypto coroutine thread
      *
      * @param megolmSessionsData megolm sessions.
      * @param backUpKeys         true to back up them to the homeserver.
      * @param progressListener   the progress listener
-     * @param callback
+     * @return import room keys result
      */
+    @WorkerThread
     fun handle(megolmSessionsData: List<MegolmSessionData>,
                fromBackup: Boolean,
-               progressListener: ProgressListener?,
-               callback: MatrixCallback<ImportRoomKeysResult>) {
+               uiHandler: Handler,
+               progressListener: ProgressListener?): ImportRoomKeysResult {
         val t0 = System.currentTimeMillis()
 
         val totalNumbersOfKeys = megolmSessionsData.size
-        var cpt = 0
         var lastProgress = 0
         var totalNumbersOfImportedKeys = 0
 
         if (progressListener != null) {
-            CryptoAsyncHelper.getUiHandler().post {
+            uiHandler.post {
                 progressListener.onProgress(0, 100)
             }
         }
         val olmInboundGroupSessionWrappers = olmDevice.importInboundGroupSessions(megolmSessionsData)
 
-        for (megolmSessionData in megolmSessionsData) {
-            cpt++
-
-
+        megolmSessionsData.forEachIndexed { cpt, megolmSessionData ->
             val decrypting = roomDecryptorProvider.getOrCreateRoomDecryptor(megolmSessionData.roomId, megolmSessionData.algorithm)
 
             if (null != decrypting) {
@@ -92,7 +90,7 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
             }
 
             if (progressListener != null) {
-                CryptoAsyncHelper.getUiHandler().post {
+                uiHandler.post {
                     val progress = 100 * cpt / totalNumbersOfKeys
 
                     if (lastProgress != progress) {
@@ -113,10 +111,6 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
 
         Timber.v("## importMegolmSessionsData : sessions import " + (t1 - t0) + " ms (" + megolmSessionsData.size + " sessions)")
 
-        val finalTotalNumbersOfImportedKeys = totalNumbersOfImportedKeys
-
-        CryptoAsyncHelper.getUiHandler().post {
-            callback.onSuccess(ImportRoomKeysResult(totalNumbersOfKeys, finalTotalNumbersOfImportedKeys))
-        }
+        return ImportRoomKeysResult(totalNumbersOfKeys, totalNumbersOfImportedKeys)
     }
 }

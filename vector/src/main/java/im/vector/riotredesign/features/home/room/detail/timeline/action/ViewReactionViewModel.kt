@@ -46,13 +46,14 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: DisplayReactionsViewState): ViewReactionViewModel
-    }
 
-    companion object : MvRxViewModelFactory<ViewReactionViewModel, DisplayReactionsViewState> {
+        companion object : MvRxViewModelFactory<ViewReactionViewModel, DisplayReactionsViewState> {
 
-        override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionViewModel? {
-            val fragment: ViewReactionBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewReactionViewModelFactory.create(state)
+            override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionViewModel? {
+                val fragment: ViewReactionBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
+                return fragment.viewReactionViewModelFactory.create(state)
+            }
+
         }
 
     }
@@ -76,7 +77,7 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
                                 ReactionInfo(
                                         event.root.eventId!!,
                                         it.key,
-                                        event.root.sender ?: "",
+                                        event.root.senderId ?: "",
                                         event.senderName,
                                         timelineDateFormatter.formatMessageHour(localDate)
                                 )

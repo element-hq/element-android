@@ -36,12 +36,20 @@ object PermalinkParser {
      * Turns an uri to a [PermalinkData]
      */
     fun parse(uri: Uri): PermalinkData {
+        if (!uri.toString().startsWith(PermalinkFactory.MATRIX_TO_URL_BASE)) {
+            return PermalinkData.FallbackLink(uri)
+        }
+
         val fragment = uri.fragment
         if (fragment.isNullOrEmpty()) {
             return PermalinkData.FallbackLink(uri)
         }
+
+        val indexOfQuery = fragment.indexOf("?")
+        val safeFragment = if (indexOfQuery != -1) fragment.substring(0, indexOfQuery) else fragment
+
         // we are limiting to 2 params
-        val params = fragment
+        val params = safeFragment
                 .split(MatrixPatterns.SEP_REGEX.toRegex())
                 .filter { it.isNotEmpty() }
                 .take(2)

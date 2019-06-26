@@ -16,9 +16,6 @@
 
 package im.vector.riotredesign.core.di
 
-import com.squareup.inject.assisted.dagger2.AssistedModule
-import dagger.Module
-
 /*
 @Module(includes = [AssistedInject_VectorAssistedModule::class])
 @AssistedModule

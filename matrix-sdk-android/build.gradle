@@ -32,10 +32,11 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision_unix_date", "\"${gitRevisionUnixDate()}\""
         resValue "string", "git_sdk_revision_date", "\"${gitRevisionDate()}\""

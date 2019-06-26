@@ -28,26 +28,22 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInf
 /**
  * Quick reactions state, it's a toggle with 3rd state
  */
-enum class TriggleState {
-    NONE,
-    FIRST,
-    SECOND
-}
+data class ToggleState(
+        val reaction: String,
+        val isSelected: Boolean
+)
 
 data class QuickReactionState(
         val roomId: String,
         val eventId: String,
         val informationData: MessageInformationData,
-        val agreeTriggleState: TriggleState = TriggleState.NONE,
-        val likeTriggleState: TriggleState = TriggleState.NONE,
+        val quickStates: List<ToggleState> = emptyList(),
+        val result: ToggleState? = null
         /** Pair of 'clickedOn' and current toggles state*/
-        val selectionResult: Pair<String, List<String>>? = null
 ) : MvRxState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
-
 }
-
 
 /**
  * Quick reaction view model
@@ -62,20 +58,7 @@ class QuickReactionViewModel @AssistedInject constructor(@Assisted initialState:
 
     companion object : MvRxViewModelFactory<QuickReactionViewModel, QuickReactionState> {
 
-        const val AGREE_POSITIVE = "👍"
-        const val AGREE_NEGATIVE = "👎"
-        const val LIKE_POSITIVE = "🙂"
-        const val LIKE_NEGATIVE = "😔"
-
-        fun getOpposite(reaction: String): String? {
-            return when (reaction) {
-                AGREE_POSITIVE -> AGREE_NEGATIVE
-                AGREE_NEGATIVE -> AGREE_POSITIVE
-                LIKE_POSITIVE  -> LIKE_NEGATIVE
-                LIKE_NEGATIVE  -> LIKE_POSITIVE
-                else           -> null
-            }
-        }
+        val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
 
         override fun create(viewModelContext: ViewModelContext, state: QuickReactionState): QuickReactionViewModel? {
             val fragment: QuickReactionFragment = (viewModelContext as FragmentViewModelContext).fragment()
@@ -89,84 +72,18 @@ class QuickReactionViewModel @AssistedInject constructor(@Assisted initialState:
 
     private fun reduceState(state: QuickReactionState): QuickReactionState {
         val event = session.getRoom(state.roomId)?.getTimeLineEvent(state.eventId) ?: return state
-        var agreeTriggle: TriggleState = TriggleState.NONE
-        var likeTriggle: TriggleState = TriggleState.NONE
-        event.annotations?.reactionsSummary?.forEach {
-            //it.addedByMe
-            if (it.addedByMe) {
-                if (AGREE_POSITIVE == it.key) {
-                    agreeTriggle = TriggleState.FIRST
-                } else if (AGREE_NEGATIVE == it.key) {
-                    agreeTriggle = TriggleState.SECOND
-                }
-
-                if (LIKE_POSITIVE == it.key) {
-                    likeTriggle = TriggleState.FIRST
-                } else if (LIKE_NEGATIVE == it.key) {
-                    likeTriggle = TriggleState.SECOND
-                }
-            }
+        val summary = event.annotations?.reactionsSummary
+        val quickReactions = quickEmojis.map { emoji ->
+            ToggleState(emoji, summary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
         }
-        return state.copy(
-                agreeTriggleState = agreeTriggle,
-                likeTriggleState = likeTriggle
-        )
+        return state.copy(quickStates = quickReactions)
     }
 
-    fun toggleAgree(isFirst: Boolean) = withState {
-        if (isFirst) {
-            setState {
-                val newTriggle = if (it.agreeTriggleState == TriggleState.FIRST) TriggleState.NONE else TriggleState.FIRST
-                copy(
-                        agreeTriggleState = newTriggle,
-                        selectionResult = Pair(AGREE_POSITIVE, getReactions(this, newTriggle, null))
-                )
-            }
-        } else {
-            setState {
-                val newTriggle = if (it.agreeTriggleState == TriggleState.SECOND) TriggleState.NONE else TriggleState.SECOND
-                copy(
-                        agreeTriggleState = agreeTriggleState,
-                        selectionResult = Pair(AGREE_NEGATIVE, getReactions(this, newTriggle, null))
-                )
-            }
+    fun didSelect(index: Int) = withState {
+        val isSelected = it.quickStates[index].isSelected
+        setState {
+            copy(result = ToggleState(it.quickStates[index].reaction, !isSelected))
         }
     }
 
-    fun toggleLike(isFirst: Boolean) = withState {
-        if (isFirst) {
-            setState {
-                val newTriggle = if (it.likeTriggleState == TriggleState.FIRST) TriggleState.NONE else TriggleState.FIRST
-                copy(
-                        likeTriggleState = newTriggle,
-                        selectionResult = Pair(LIKE_POSITIVE, getReactions(this, null, newTriggle))
-                )
-            }
-        } else {
-            setState {
-                val newTriggle = if (it.likeTriggleState == TriggleState.SECOND) TriggleState.NONE else TriggleState.SECOND
-                copy(
-                        likeTriggleState = newTriggle,
-                        selectionResult = Pair(LIKE_NEGATIVE, getReactions(this, null, newTriggle))
-                )
-            }
-        }
-    }
-
-    private fun getReactions(state: QuickReactionState, newState1: TriggleState?, newState2: TriggleState?): List<String> {
-        return ArrayList<String>(4).apply {
-            when (newState2 ?: state.likeTriggleState) {
-                TriggleState.FIRST  -> add(LIKE_POSITIVE)
-                TriggleState.SECOND -> add(LIKE_NEGATIVE)
-                else                -> {
-                }
-            }
-            when (newState1 ?: state.agreeTriggleState) {
-                TriggleState.FIRST  -> add(AGREE_POSITIVE)
-                TriggleState.SECOND -> add(AGREE_NEGATIVE)
-                else                -> {
-                }
-            }
-        }
-    }
 }

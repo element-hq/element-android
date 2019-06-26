@@ -54,7 +54,7 @@ internal class RoomMembers(private val realm: Realm,
         }
         return EventEntity
                 .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-                .equalTo(EventEntityFields.CONTENT, displayName)
+                .contains(EventEntityFields.CONTENT, "\"displayname\":\"$displayName\"")
                 .distinct(EventEntityFields.STATE_KEY)
                 .findAll()
                 .size == 1

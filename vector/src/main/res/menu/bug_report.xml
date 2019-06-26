@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.matrix.vector.activity.RoomActivity">
+    tools:context=".features.rageshake.BugReportActivity">
 
     <item
         android:id="@+id/ic_action_send_bug_report"

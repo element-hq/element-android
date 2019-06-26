@@ -19,10 +19,8 @@ package im.vector.riotredesign.features.rageshake
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.*
+import android.widget.Toast
 import androidx.core.view.isVisible
-import butterknife.BindView
 import butterknife.OnCheckedChanged
 import butterknife.OnTextChanged
 import im.vector.riotredesign.R
@@ -37,36 +35,6 @@ import javax.inject.Inject
  */
 class BugReportActivity : VectorBaseActivity() {
 
-    /* ==========================================================================================
-     * UI
-     * ========================================================================================== */
-
-    @BindView(R.id.bug_report_edit_text)
-    lateinit var mBugReportText: EditText
-
-    @BindView(R.id.bug_report_button_include_logs)
-    lateinit var mIncludeLogsButton: CheckBox
-
-    @BindView(R.id.bug_report_button_include_crash_logs)
-    lateinit var mIncludeCrashLogsButton: CheckBox
-
-    @BindView(R.id.bug_report_button_include_screenshot)
-    lateinit var mIncludeScreenShotButton: CheckBox
-
-    @BindView(R.id.bug_report_screenshot_preview)
-    lateinit var mScreenShotPreview: ImageView
-
-    @BindView(R.id.bug_report_progress_view)
-    lateinit var mProgressBar: ProgressBar
-
-    @BindView(R.id.bug_report_progress_text_view)
-    lateinit var mProgressTextView: TextView
-
-    @BindView(R.id.bug_report_scrollview)
-    lateinit var mScrollView: View
-
-    @BindView(R.id.bug_report_mask_view)
-    lateinit var mMaskView: View
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -78,11 +46,11 @@ class BugReportActivity : VectorBaseActivity() {
         configureToolbar(bugReportToolbar)
 
         if (bugReporter.screenshot != null) {
-            mScreenShotPreview.setImageBitmap(bugReporter.screenshot)
+            bug_report_screenshot_preview.setImageBitmap(bugReporter.screenshot)
         } else {
-            mScreenShotPreview.isVisible = false
-            mIncludeScreenShotButton.isChecked = false
-            mIncludeScreenShotButton.isEnabled = false
+            bug_report_screenshot_preview.isVisible = false
+            bug_report_button_include_screenshot.isChecked = false
+            bug_report_button_include_screenshot.isEnabled = false
         }
     }
 
@@ -90,8 +58,8 @@ class BugReportActivity : VectorBaseActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         menu.findItem(R.id.ic_action_send_bug_report)?.let {
-            val isValid = mBugReportText.text.toString().trim().length > 10
-                    && !mMaskView.isVisible
+            val isValid = bug_report_edit_text.text.toString().trim().length > 10
+                    && !bug_report_mask_view.isVisible
 
             it.isEnabled = isValid
             it.icon.alpha = if (isValid) 255 else 100
@@ -115,22 +83,22 @@ class BugReportActivity : VectorBaseActivity() {
      * Send the bug report
      */
     private fun sendBugReport() {
-        mScrollView.alpha = 0.3f
-        mMaskView.isVisible = true
+        bug_report_scrollview.alpha = 0.3f
+        bug_report_mask_view.isVisible = true
 
         invalidateOptionsMenu()
 
-        mProgressTextView.isVisible = true
-        mProgressTextView.text = getString(R.string.send_bug_report_progress, 0.toString() + "")
+        bug_report_progress_text_view.isVisible = true
+        bug_report_progress_text_view.text = getString(R.string.send_bug_report_progress, "0")
 
-        mProgressBar.isVisible = true
-        mProgressBar.progress = 0
+        bug_report_progress_view.isVisible = true
+        bug_report_progress_view.progress = 0
 
         bugReporter.sendBugReport(this,
-                mIncludeLogsButton.isChecked,
-                mIncludeCrashLogsButton.isChecked,
-                mIncludeScreenShotButton.isChecked,
-                mBugReportText.text.toString(),
+                bug_report_button_include_logs.isChecked,
+                bug_report_button_include_crash_logs.isChecked,
+                bug_report_button_include_screenshot.isChecked,
+                bug_report_edit_text.text.toString(),
                 object : BugReporter.IMXBugReportListener {
                     override fun onUploadFailed(reason: String?) {
                         try {
@@ -142,10 +110,10 @@ class BugReportActivity : VectorBaseActivity() {
                             Timber.e(e, "## onUploadFailed() : failed to display the toast " + e.message)
                         }
 
-                        mMaskView.isVisible = false
-                        mProgressBar.isVisible = false
-                        mProgressTextView.isVisible = false
-                        mScrollView.alpha = 1.0f
+                        bug_report_mask_view.isVisible = false
+                        bug_report_progress_view.isVisible = false
+                        bug_report_progress_text_view.isVisible = false
+                        bug_report_scrollview.alpha = 1.0f
 
                         invalidateOptionsMenu()
                     }
@@ -155,17 +123,10 @@ class BugReportActivity : VectorBaseActivity() {
                     }
 
                     override fun onProgress(progress: Int) {
-                        var progress = progress
-                        if (progress > 100) {
-                            Timber.e("## onProgress() : progress > 100")
-                            progress = 100
-                        } else if (progress < 0) {
-                            Timber.e("## onProgress() : progress < 0")
-                            progress = 0
-                        }
+                        val myProgress = progress.coerceIn(0, 100)
 
-                        mProgressBar.progress = progress
-                        mProgressTextView.text = getString(R.string.send_bug_report_progress, progress.toString() + "")
+                        bug_report_progress_view.progress = myProgress
+                        bug_report_progress_text_view.text = getString(R.string.send_bug_report_progress, "$myProgress")
                     }
 
                     override fun onUploadSucceed() {
@@ -180,7 +141,6 @@ class BugReportActivity : VectorBaseActivity() {
                         } catch (e: Exception) {
                             Timber.e(e, "## onUploadSucceed() : failed to dismiss the dialog " + e.message)
                         }
-
                     }
                 })
     }
@@ -196,7 +156,7 @@ class BugReportActivity : VectorBaseActivity() {
 
     @OnCheckedChanged(R.id.bug_report_button_include_screenshot)
     internal fun onSendScreenshotChanged() {
-        mScreenShotPreview.isVisible = mIncludeScreenShotButton.isChecked && bugReporter.screenshot != null
+        bug_report_screenshot_preview.isVisible = bug_report_button_include_screenshot.isChecked && bugReporter.screenshot != null
     }
 
     override fun onBackPressed() {
@@ -204,13 +164,5 @@ class BugReportActivity : VectorBaseActivity() {
         bugReporter.deleteCrashFile(this)
 
         super.onBackPressed()
-    }
-
-    /* ==========================================================================================
-     * Companion
-     * ========================================================================================== */
-
-    companion object {
-        private val LOG_TAG = BugReportActivity::class.java.simpleName
     }
 }

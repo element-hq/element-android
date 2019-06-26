@@ -18,11 +18,9 @@ package im.vector.matrix.android.internal.session.signout
 
 import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 

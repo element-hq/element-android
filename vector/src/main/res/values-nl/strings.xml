@@ -41,7 +41,7 @@
     <string name="missing_permissions_to_start_conf_call">Om een vergadering in dit groepsgesprek te starten heeft u uitnodigingsrechten nodig</string>
     <string name="missing_permissions_title_to_start_conf_call">Kan de oproep niet starten</string>
     <string name="device_information">Apparaatinformatie</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Vergadergesprekken worden niet ondersteund in versleutelde kamers</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Vergadergesprekken worden niet ondersteund in versleutelde gesprekken</string>
     <string name="send_anyway">Toch sturen</string>
     <string name="or">of</string>
     <string name="invite">Uitnodigen</string>
@@ -67,7 +67,7 @@
     <string name="bottom_action_home">Thuis</string>
     <string name="bottom_action_favourites">Favorieten</string>
     <string name="bottom_action_people">Personen</string>
-    <string name="bottom_action_rooms">Kamers</string>
+    <string name="bottom_action_rooms">Gesprekken</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Gespreksnamen filteren</string>
@@ -88,10 +88,10 @@
     <string name="no_result_placeholder">Geen resultaten</string>
 
     <!-- Rooms fragment -->
-    <string name="rooms_header">Kamers</string>
+    <string name="rooms_header">Gesprekken</string>
     <string name="rooms_directory_header">Gesprekscatalogus</string>
-    <string name="no_room_placeholder">Geen kamers</string>
-    <string name="no_public_room_placeholder">Geen publieke kamers beschikbaar</string>
+    <string name="no_room_placeholder">Geen gesprekken</string>
+    <string name="no_public_room_placeholder">Geen publieke gesprekken beschikbaar</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">1 gebruiker</item>
         <item quantity="other">%d gebruikers</item>
@@ -298,7 +298,7 @@
     <string name="room_preview_invitation_format">%s heeft u uitgenodigd in dit gesprek</string>
     <string name="room_preview_unlinked_email_warning">Deze uitnodiging is naar %s verstuurd, maar die is niet geassocieerd met deze account.
 \nMisschien wilt u zich met een andere account aanmelden, of dit e-mailadres aan deze account toevoegen.</string>
-    <string name="room_preview_try_join_an_unknown_room">U probeert toegang te verkrijgen tot %s Zou u de kamer willen toetreden om aan het gesprek deel te nemen\?</string>
+    <string name="room_preview_try_join_an_unknown_room">U probeert toegang te verkrijgen tot %s. Zou u het gesprek willen toetreden om eraan deel te nemen\?</string>
     <string name="room_preview_try_join_an_unknown_room_default">een gesprek</string>
     <string name="room_preview_room_interactions_disabled">Dit is een voorvertoning van dit gesprek. Gespreksinteracties zijn uitgeschakeld.</string>
 
@@ -400,7 +400,7 @@
     <string name="search_hint">Zoeken</string>
     <string name="search_members_hint">Gespreksleden filteren</string>
     <string name="search_no_results">Geen resultaten</string>
-    <string name="tab_title_search_rooms">KAMERS</string>
+    <string name="tab_title_search_rooms">GESPREKKEN</string>
     <string name="tab_title_search_messages">BERICHTEN</string>
     <string name="tab_title_search_people">PERSONEN</string>
     <string name="tab_title_search_files">BESTANDEN</string>
@@ -409,14 +409,14 @@
     <string name="room_recents_join">TOETREDEN</string>
     <string name="room_recents_directory">CATALOGUS</string>
     <string name="room_recents_favourites">FAVORIETEN</string>
-    <string name="room_recents_conversations">KAMERS</string>
+    <string name="room_recents_conversations">GESPREKKEN</string>
     <string name="room_recents_low_priority">LAGE PRIORITEIT</string>
     <string name="room_recents_invites">UITNODIGINGEN</string>
     <string name="room_recents_start_chat">Gesprek beginnen</string>
     <string name="room_recents_create_room">Gesprek aanmaken</string>
     <string name="room_recents_join_room">Gesprek toetreden</string>
     <string name="room_recents_join_room_title">Treed een gesprek toe</string>
-    <string name="room_recents_join_room_prompt">Voer een gespreks-ID of -alias in</string>
+    <string name="room_recents_join_room_prompt">Voer een gespreks(bij)naam in</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Catalogus doorbladeren</string>
@@ -487,8 +487,8 @@
     <string name="settings_contacts_app_permission">Contacten-toestemming</string>
     <string name="settings_contacts_phonebook_country">Land voor telefoonboek</string>
     <string name="settings_home_display">Startscherm</string>
-    <string name="settings_pin_missed_notifications">Kamers met gemiste meldingen vastprikken</string>
-    <string name="settings_pin_unread_messages">Kamers met ongelezen berichten vastprikken</string>
+    <string name="settings_pin_missed_notifications">Gesprekken met gemiste meldingen vastprikken</string>
+    <string name="settings_pin_unread_messages">Gesprekken met ongelezen berichten vastprikken</string>
     <string name="settings_devices_list">Apparaten</string>
     <string name="devices_details_dialog_title">Apparaatinformatie</string>
     <string name="devices_details_id_title">ID</string>
@@ -594,8 +594,8 @@
     <string name="room_settings_addresses_no_local_addresses">Dit gesprek heeft geen lokale adressen</string>
     <string name="room_settings_addresses_add_new_address">Nieuw adres (bv. #foo:matrix.org)</string>
 
-    <string name="room_settings_addresses_invalid_format_dialog_title">Ongeldig aliasformaat</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">‘%s’ is geen geldig aliasformaat</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Ongeldig bijnaamformaat</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">‘%s’ is geen geldig bijnaamformaat</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">U zult geen hoofdadres voor dit gesprek opgegeven hebben.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Hoofdadreswaarschuwingen</string>
 
@@ -683,10 +683,10 @@
     <!-- directory activity  -->
     <string name="select_room_directory">Kies een gesprekscatalogus</string>
     <string name="directory_server_fail_to_retrieve_server">Het kan zijn dat de server niet beschikbaar of overbelast is</string>
-    <string name="directory_server_type_homeserver">Voer een thuisserver in om de publieke kamers ervan weer te geven</string>
+    <string name="directory_server_type_homeserver">Voer een thuisserver in om de publieke gesprekken ervan weer te geven</string>
     <string name="directory_server_placeholder">Thuisserver-URL</string>
-    <string name="directory_server_all_rooms_on_server">Alle kamers op server %s</string>
-    <string name="directory_server_native_rooms">Alle lokale kamers op %s</string>
+    <string name="directory_server_all_rooms_on_server">Alle gesprekken op server %s</string>
+    <string name="directory_server_native_rooms">Alle lokale gesprekken op %s</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Zoeken naar historische</string>
@@ -836,7 +836,7 @@
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s gesprek gevonden voor %2$s</item>
-        <item quantity="other">%1$s gesprek gevonden voor %2$s</item>
+        <item quantity="other">%1$s gesprekken gevonden voor %2$s</item>
     </plurals>
     <string name="room_settings_all_messages_noisy">Alle berichten (luid)</string>
     <string name="room_settings_all_messages">Alle berichten</string>
@@ -882,14 +882,14 @@
     <!-- group details -->
     <string name="group_details_home">Thuis</string>
     <string name="group_details_people">Personen</string>
-    <string name="group_details_rooms">Kamers</string>
+    <string name="group_details_rooms">Gesprekken</string>
     <string name="no_users_placeholder">Geen gebruikers</string>
 
-    <string name="rooms">Kamers</string>
+    <string name="rooms">Gesprekken</string>
     <string name="joined">Toegetreden</string>
     <string name="invited">Uitgenodigd</string>
     <string name="filter_group_members">Groepsleden filteren</string>
-    <string name="filter_group_rooms">Groepskamers filteren</string>
+    <string name="filter_group_rooms">Groepsgesprekken filteren</string>
 
     <string name="group_no_long_description">De gemeenschapsbeheerder heeft geen lange beschrijving gegeven voor deze gemeenschap.</string>
 
@@ -943,10 +943,10 @@
     <string name="dialog_user_consent_submit">Nu doorlezen</string>
 
     <string name="deactivate_account_title">Account deactiveren</string>
-    <string name="deactivate_account_content">Dit zal uw account voorgoed onbruikbaar maken. U zult zich niet meer kunnen aanmelden, en niemand anders zal met dezelfde gebruikers-ID kunnen registreren. Dit zal er voor zorgen dat uw account alle kamers verlaat waar deze momenteel lid van is, en het verwijdert de accountgegevens van de identiteitsserver. <b>Deze actie is onomkeerbaar.</b>
-\n
-\nHet deactiveren van uw account <b>zal er niet standaard voor zorgen dat de berichten die u hebt verzonden worden vergeten.</b> Indien u wilt dat wij de berichten vergeten, vinkt u het vakje hieronder aan.
-\n
+    <string name="deactivate_account_content">Dit zal uw account voorgoed onbruikbaar maken. U zult zich niet meer kunnen aanmelden, en niemand anders zal met dezelfde gebruikers-ID kunnen registreren. Dit zal er voor zorgen dat uw account alle gesprekken verlaat waar deze momenteel lid van is, en het verwijdert de accountgegevens van de identiteitsserver. <b>Deze actie is onomkeerbaar.</b> 
+\n 
+\nHet deactiveren van uw account <b>zal er niet standaard voor zorgen dat de berichten die u hebt verzonden worden vergeten.</b> Indien u wilt dat wij de berichten vergeten, vinkt u het vakje hieronder aan. 
+\n 
 \nDe zichtbaarheid van berichten in Matrix is gelijkaardig aan e-mails. Het vergeten van uw berichten betekent dat berichten die u verstuurd heeft niet meer gedeeld worden met nieuwe of ongeregistreerde gebruikers, maar geregistreerde gebruikers die al toegang hebben tot deze berichten zullen alsnog toegang hebben tot hun eigen kopie ervan.</string>
     <string name="deactivate_account_delete_checkbox">Vergeet alle berichten die ik heb verstuurd wanneer mijn account gedeactiveerd is (<b>Let op:</b> dit zal er voor zorgen dat toekomstige gebruikers een onvolledig beeld krijgen van gesprekken)</string>
     <string name="deactivate_account_prompt_password">Voer uw wachtwoord in om verder te gaan:</string>
@@ -992,7 +992,7 @@
     <string name="command_description_op_user">Stel het machtsniveau van een gebruiker in</string>
     <string name="command_description_deop_user">Neemt rechten van gebruiker met gegeven ID af</string>
     <string name="command_description_invite_user">Nodigt gebruiker met gegeven ID uit in het huidige gesprek</string>
-    <string name="command_description_join_room">Treedt toe tot gesprek met gegeven alias</string>
+    <string name="command_description_join_room">Treedt toe tot gesprek met gegeven bijnaam</string>
     <string name="command_description_part_room">Gesprek verlaten</string>
     <string name="command_description_topic">Onderwerp van het gesprek instellen</string>
     <string name="command_description_kick_user">Stuurt gebruiker met gegeven ID eruit</string>
@@ -1274,7 +1274,7 @@
 
     <string name="notification_silent">Stil</string>
     <string name="error_empty_field_enter_user_name">Voer een gebruikersnaam in.</string>
-    <string name="settings_lazy_loading_title">Kamerleden lui laden</string>
+    <string name="settings_lazy_loading_title">Gespreksleden lui laden</string>
     <string name="settings_lazy_loading_description">Verbeter de prestaties door gespreksleden enkel bij de eerste weergave te laden.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Uw thuisserver ondersteunt het lui laden van gespreksleden nog niet. Probeer het later opnieuw.</string>
 
@@ -1297,20 +1297,20 @@
     <string name="store_title">Riot.im - Communiceer op uw manier</string>
     <string name="store_whats_new">We blijven Riot.im voortdurend aanpassen en verbeteren. Het volledige wijzigingslogboek vindt u hier: %1$s. Om niets te missen, houdt u best uw updates ingeschakeld.</string>
     <string name="store_short_description">Een universele en veilige chat-app, volledig onder uw controle.</string>
-    <string name="store_full_description">Een chat-app, onder uw controle en heel flexibel. Riot laat u communiceren zoals u dat wilt. Gemaakt voor [matrix] - de standaard voor open, gedecentraliseerde communicatie.
-\n
-\nMaak een gratis account aan op matrix.org, verkrijg uw eigen server op https://modular.im, of gebruik een andere Matrix-server.
-\n
-\nWaarom zou ik voor Riot.im kiezen\?
-\n
-\n• VOLLEDIGE COMMUNICATIE: maak kamers aan rond uw teams, uw vrienden, uw gemeenschap - hoe u maar wilt! Chat, deel bestanden, voeg widgets toe en maak stem- en video-oproepen - allemaal volledig gratis.
-\n
-\n• KRACHTIGE INTEGRATIE: gebruik Riot.im met de hulpmiddelen waarmee u vertrouwd bent. Met Riot.im kunt u zelfs chatten met gebruikers en groepen op andere chat-apps.
-\n
-\n• PRIVÉ EN VEILIG: houd uw gesprekken geheim. Eind-tot-eind-versleuteling van de bovenste plank zorgt ervoor dat uw privécommunicatie ook privé blijft.
-\n
-\n• OPEN, NIET GESLOTEN: vrije software, gebouwd op Matrix. Wees baas over uw eigen gegevens door uw eigen server te gebruiken, of te kiezen voor een andere server die u vertrouwt.
-\n
+    <string name="store_full_description">Een chat-app, onder uw controle en heel flexibel. Riot laat u communiceren zoals u dat wilt. Gemaakt voor [matrix] - de standaard voor open, gedecentraliseerde communicatie. 
+\n 
+\nMaak een gratis account aan op matrix.org, verkrijg uw eigen server op https://modular.im, of gebruik een andere Matrix-server. 
+\n 
+\nWaarom zou ik voor Riot.im kiezen\? 
+\n 
+\n• VOLLEDIGE COMMUNICATIE: maak gesprekken aan rond uw teams, uw vrienden, uw gemeenschap - hoe u maar wilt! Chat, deel bestanden, voeg widgets toe en maak stem- en video-oproepen - allemaal volledig gratis. 
+\n 
+\n• KRACHTIGE INTEGRATIE: gebruik Riot.im met de hulpmiddelen waarmee u vertrouwd bent. Met Riot.im kunt u zelfs chatten met gebruikers en groepen op andere chat-apps. 
+\n 
+\n• PRIVÉ EN VEILIG: houd uw gesprekken geheim. Eind-tot-eind-versleuteling van de bovenste plank zorgt ervoor dat uw privécommunicatie ook privé blijft. 
+\n 
+\n• OPEN, NIET GESLOTEN: vrije software, gebouwd op Matrix. Wees baas over uw eigen gegevens door uw eigen server te gebruiken, of te kiezen voor een andere server die u vertrouwt. 
+\n 
 \n• WAAR U OOK BENT: houd contact waar u ook bent met volledig gesynchroniseerde berichtgeschiedenis op al uw apparaten, en online op https://riot.im.</string>
 
     <string name="passphrase_create_passphrase">Wachtwoord aanmaken</string>
@@ -1322,8 +1322,8 @@
     <string name="keys_backup_no_session_error">Geen Matrix-sessie beschikbaar</string>
 
     <string name="keys_backup_setup_step1_title">Verlies nooit uw versleutelde berichten</string>
-    <string name="keys_backup_setup_step1_description">Berichten in versleutelde kamers worden beveiligd met eind-tot-eind-versleuteling. Enkel de ontvanger(s) en u hebben de sleutels om deze berichten te lezen.
-\n
+    <string name="keys_backup_setup_step1_description">Berichten in versleutelde gesprekken worden beveiligd met eind-tot-eind-versleuteling. Enkel de ontvanger(s) en u hebben de sleutels om deze berichten te lezen. 
+\n 
 \nMaak een veilige back-up van uw sleutels om ze niet te verliezen.</string>
     <string name="keys_backup_setup">Begin sleutelback-up te gebruiken</string>
     <string name="keys_backup_setup_step1_advanced">(Geavanceerd)</string>
@@ -1455,5 +1455,67 @@
     <string name="autodiscover_well_known_autofill_confirm">Configuratie gebruiken</string>
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 5.0)</string>
+
+    <string name="title_activity_verify_device">Apparaat verifiëren</string>
+
+    <string name="encryption_information_unknown_ip">onbekend IP-adres</string>
+    <string name="you_added_a_new_device_with_info">Een nieuw apparaat vraagt versleutelingssleutels aan.
+\nApparaatnaam: %1$s
+\nLaatst gezien: %2$s
+\nAls u zich niet heeft aangemeld op een ander apparaat, negeer dan dit verzoek.</string>
+    <string name="your_unverified_device_requesting_with_info">Een ongeverifieerd apparaat vraagt versleutelingssleutels aan.
+\nApparaatnaam: %1$s
+\nLaatst gezien: %2$s
+\nAls u zich niet heeft aangemeld op een ander apparaat, negeer dan dit verzoek.</string>
+
+    <string name="start_verification_short_label">Verifiëren</string>
+    <string name="share_without_verifying_short_label">Delen</string>
+    <string name="key_share_request">Sleuteldeelverzoek</string>
+    <string name="ignore_request_short_label">Negeren</string>
+
+    <string name="sas_verify_title">Verifieer door een korte tekenreeks te vergelijken.</string>
+    <string name="sas_security_advise">Voor een maximale beveiliging bevelen we aan om dit onder vier ogen te doen, of via een ander vertrouwd communicatiekanaal.</string>
+    <string name="sas_verify_start_button_title">Verificatie beginnen</string>
+    <string name="sas_incoming_request_title">Inkomend verificatieverzoek</string>
+    <string name="sas_incoming_request_description">Verifieer dit apparaat door het als vertrouwd te markeren. Door de apparaten van uw gesprekspartners te vertrouwen, hoeft u zich nog minder zorgen te maken over het gebruik van eind-tot-eind-versleutelde berichten.</string>
+    <string name="sas_incoming_request_description_2">Dit apparaat verifiëren zal het als vertrouwd markeren, en het ook aan uw gesprekspartner als vertrouwd markeren.</string>
+
+    <string name="sas_emoji_description">Verifieer dit apparaat door te bevestigen dat de volgende emoticons op het scherm van uw gesprekspartner verschijnen</string>
+    <string name="sas_decimal_description">Verifieer dit apparaat door te bevestigen dat de volgende cijfers op het scherm van uw gesprekspartner verschijnen</string>
+
+    <string name="sas_incoming_verification_request_dialog">U heeft een inkomend verificatieverzoek ontvangen.</string>
+    <string name="sas_view_request_action">Verzoek bekijken</string>
+    <string name="sas_waiting_for_partner">Wachten op bevestiging van gesprekspartner…</string>
+
+    <string name="sas_verified">Geverifieerd!</string>
+    <string name="sas_verified_successful">U heeft het apparaat geverifieerd.</string>
+    <string name="sas_verified_successful_description">Beveiligde berichten met deze gebruiker worden eind-tot-eind-versleuteld en kunnen niet door derde partijen gelezen worden.</string>
+    <string name="sas_got_it">Ik snap het</string>
+
+    <string name="sas_verifying_keys">Verschijnt er niets\? Nog niet alle cliënten bieden ondersteuning voor interactieve verificatie. Gebruik de traditionele verificatiemethode.</string>
+    <string name="sas_legacy_verification_button_title">Traditionele verificatie gebruiken.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Sleutelverificatie</string>
+    <string name="sas_cancelled_dialog_title">Verzoek geannuleerd</string>
+    <string name="sas_cancelled_by_other">De andere partij heeft de verificatie geannuleerd.
+\n%s</string>
+    <string name="sas_cancelled_by_me">De verificatie is geannuleerd.
+\nReden: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Interactieve apparaatsverificatie</string>
+    <string name="sas_incoming_request_notif_title">Verificatieverzoek</string>
+    <string name="sas_incoming_request_notif_content">%s wil uw apparaat verifiëren</string>
+
+    <string name="sas_error_m_user">De gebruiker heeft de verificatie geannuleerd</string>
+    <string name="sas_error_m_timeout">Het verificatieproces is verlopen</string>
+    <string name="sas_error_m_unknown_transaction">Het apparaat heeft geen weet van die transactie</string>
+    <string name="sas_error_m_unknown_method">Het apparaat kan geen sleutelovereenkomst-, hash-, MAC- of SAS-methode kiezen</string>
+    <string name="sas_error_m_mismatched_commitment">De hashovereenkomst kwam niet overeen</string>
+    <string name="sas_error_m_mismatched_sas">De SAS kwam niet overeen</string>
+    <string name="sas_error_m_unexpected_message">Het apparaat heeft een onverwacht bericht ontvangen</string>
+    <string name="sas_error_m_invalid_message">Er is een ongeldig bericht ontvangen</string>
+    <string name="sas_error_m_key_mismatch">Sleutels komen niet overeen</string>
+    <string name="sas_error_m_user_error">Gebruikers komen niet overeen</string>
+    <string name="sas_error_unknown">Onbekende fout</string>
 
 </resources>

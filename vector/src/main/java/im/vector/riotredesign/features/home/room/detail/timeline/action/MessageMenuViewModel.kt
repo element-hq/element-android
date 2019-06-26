@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorViewModel
+import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import org.json.JSONObject
 
@@ -52,7 +53,8 @@ data class MessageMenuState(
  * Manages list actions for a given message (copy / paste / forward...)
  */
 class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: MessageMenuState,
-                                                       private val session: Session) : VectorViewModel<MessageMenuState>(initialState) {
+                                                       private val session: Session,
+                                                       private val stringProvider: StringProvider) : VectorViewModel<MessageMenuState>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -159,10 +161,14 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, JSONObject(event.root.toContent()).toString(4)))
                 if (event.isEncrypted()) {
                     this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, state.eventId))
+                    val decryptedContent = event.root.mClearEvent?.toContent()?.let {
+                        JSONObject(it).toString(4)
+                    } ?: stringProvider.getString(R.string.encryption_information_decryption_error)
+                    this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, decryptedContent))
                 }
                 this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, state.eventId))
 
-                if (session.sessionParams.credentials.userId != event.root.sender && event.root.getClearType() == EventType.MESSAGE) {
+                if (session.sessionParams.credentials.userId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
                     //not sent by me
                     this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, state.eventId))
                 }
@@ -207,12 +213,12 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         }
     }
 
-    private fun canRedact(event: TimelineEvent, myUserId: String): Boolean {
-        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-        if (event.root.getClearType() != EventType.MESSAGE) return false
-        //TODO if user is admin or moderator
-        return event.root.sender == myUserId
-    }
+        private fun canRedact(event: TimelineEvent, myUserId: String): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            if (event.root.getClearType() != EventType.MESSAGE) return false
+            //TODO if user is admin or moderator
+            return event.root.senderId == myUserId
+        }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
         //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
@@ -221,16 +227,17 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
-    private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
-        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-        if (event.root.getClearType() != EventType.MESSAGE) return false
-        //TODO if user is admin or moderator
-        val messageContent = event.root.content.toModel<MessageContent>()
-        return event.root.sender == myUserId && (
-                messageContent?.type == MessageType.MSGTYPE_TEXT
-                || messageContent?.type == MessageType.MSGTYPE_EMOTE
-                                                )
-    }
+
+        private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
+            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+            if (event.root.getClearType() != EventType.MESSAGE) return false
+            //TODO if user is admin or moderator
+            val messageContent = event.root.content.toModel<MessageContent>()
+            return event.root.senderId == myUserId && (
+                    messageContent?.type == MessageType.MSGTYPE_TEXT
+                            || messageContent?.type == MessageType.MSGTYPE_EMOTE
+                    )
+        }
 
 
     private fun canCopy(type: String?): Boolean {

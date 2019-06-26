@@ -19,8 +19,11 @@
 package im.vector.matrix.android.internal.crypto
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import arrow.core.Try
+import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -55,15 +58,13 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
-import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
-import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
+import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
-import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
@@ -128,6 +129,7 @@ internal class CryptoManager @Inject constructor(
         private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
         private val olmEncryptionFactory: MXOlmEncryptionFactory,
         private val deleteDeviceTask: DeleteDeviceTask,
+        private val deleteDeviceWithUserPasswordTask: DeleteDeviceWithUserPasswordTask,
         // Tasks
         private val getDevicesTask: GetDevicesTask,
         private val setDeviceNameTask: SetDeviceNameTask,
@@ -138,6 +140,8 @@ internal class CryptoManager @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor
 ) : CryptoService {
+
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     // MXEncrypting instance for each room.
     private val roomEncryptors: MutableMap<String, IMXEncrypting> = HashMap()
@@ -167,9 +171,16 @@ internal class CryptoManager @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun deleteDevice(deviceId: String, accountPassword: String, callback: MatrixCallback<Unit>) {
+    override fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
-                .configureWith(DeleteDeviceTask.Params(deviceId, accountPassword))
+                .configureWith(DeleteDeviceTask.Params(deviceId))
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
+    }
+
+    override fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>) {
+        deleteDeviceWithUserPasswordTask
+                .configureWith(DeleteDeviceWithUserPasswordTask.Params(deviceId, authSession, password))
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }
@@ -555,10 +566,10 @@ internal class CryptoManager @Inject constructor(
             } else {
                 val algorithm = getEncryptionAlgorithm(roomId)
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
-                                           algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                        algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
                 Timber.e("## encryptEventContent() : $reason")
                 callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNABLE_TO_ENCRYPT_ERROR_CODE,
-                                                                     MXCryptoError.UNABLE_TO_ENCRYPT, reason)))
+                        MXCryptoError.UNABLE_TO_ENCRYPT, reason)))
             }
         }
     }
@@ -592,10 +603,7 @@ internal class CryptoManager @Inject constructor(
             val result = withContext(coroutineDispatchers.crypto) {
                 internalDecryptEvent(event, timeline)
             }
-            result.fold(
-                    { callback.onFailure(it) },
-                    { callback.onSuccess(it) }
-            )
+            result.foldToCallback(callback)
         }
     }
 
@@ -695,7 +703,7 @@ internal class CryptoManager @Inject constructor(
         monarchy.doWithRealm { realm ->
             // Check whether the event content must be encrypted for the invited members.
             val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser()
-                                           && shouldEncryptForInvitedMembers(roomId)
+                    && shouldEncryptForInvitedMembers(roomId)
 
             userIds = if (encryptForInvitedMembers) {
                 RoomMembers(realm, roomId).getActiveRoomMemberIds()
@@ -782,35 +790,31 @@ internal class CryptoManager @Inject constructor(
      * @param anIterationCount the encryption iteration count (0 means no encryption)
      * @param callback         the exported keys
      */
-    fun exportRoomKeys(password: String, anIterationCount: Int, callback: MatrixCallback<ByteArray>) {
-        val iterationCount = Math.max(0, anIterationCount)
+    private fun exportRoomKeys(password: String, anIterationCount: Int, callback: MatrixCallback<ByteArray>) {
+        GlobalScope.launch(coroutineDispatchers.main) {
+            withContext(coroutineDispatchers.crypto) {
+                Try {
+                    val iterationCount = Math.max(0, anIterationCount)
 
-        val exportedSessions = ArrayList<MegolmSessionData>()
+                    val exportedSessions = ArrayList<MegolmSessionData>()
 
-        val inboundGroupSessions = cryptoStore.getInboundGroupSessions()
+                    val inboundGroupSessions = cryptoStore.getInboundGroupSessions()
 
-        for (session in inboundGroupSessions) {
-            val megolmSessionData = session.exportKeys()
+                    for (session in inboundGroupSessions) {
+                        val megolmSessionData = session.exportKeys()
 
-            if (null != megolmSessionData) {
-                exportedSessions.add(megolmSessionData)
-            }
+                        if (null != megolmSessionData) {
+                            exportedSessions.add(megolmSessionData)
+                        }
+                    }
+
+                    val adapter = MoshiProvider.providesMoshi()
+                            .adapter(List::class.java)
+
+                    MXMegolmExportEncryption.encryptMegolmKeyFile(adapter.toJson(exportedSessions), password, iterationCount)
+                }
+            }.foldToCallback(callback)
         }
-
-        val encryptedRoomKeys: ByteArray
-
-        try {
-            val adapter = MoshiProvider.providesMoshi()
-                    .adapter(List::class.java)
-
-            encryptedRoomKeys = MXMegolmExportEncryption
-                    .encryptMegolmKeyFile(adapter.toJson(exportedSessions), password, iterationCount)
-        } catch (e: Exception) {
-            callback.onFailure(e)
-            return
-        }
-
-        callback.onSuccess(encryptedRoomKeys)
     }
 
     /**
@@ -825,40 +829,33 @@ internal class CryptoManager @Inject constructor(
                                 password: String,
                                 progressListener: ProgressListener?,
                                 callback: MatrixCallback<ImportRoomKeysResult>) {
-        Timber.v("## importRoomKeys starts")
+        GlobalScope.launch(coroutineDispatchers.main) {
+            withContext(coroutineDispatchers.crypto) {
+                Try {
+                    Timber.v("## importRoomKeys starts")
 
-        val t0 = System.currentTimeMillis()
-        val roomKeys: String
+                    val t0 = System.currentTimeMillis()
+                    val roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
+                    val t1 = System.currentTimeMillis()
 
-        try {
-            roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
-        } catch (e: Exception) {
-            callback.onFailure(e)
-            return
+                    Timber.v("## importRoomKeys : decryptMegolmKeyFile done in " + (t1 - t0) + " ms")
+
+                    val importedSessions = MoshiProvider.providesMoshi()
+                            .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
+                            .fromJson(roomKeys)
+
+                    val t2 = System.currentTimeMillis()
+
+                    Timber.v("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
+
+                    if (importedSessions == null) {
+                        throw Exception("Error")
+                    }
+
+                    megolmSessionDataImporter.handle(importedSessions, true, uiHandler, progressListener)
+                }
+            }.foldToCallback(callback)
         }
-
-        val importedSessions: List<MegolmSessionData>
-
-        val t1 = System.currentTimeMillis()
-
-        Timber.v("## importRoomKeys : decryptMegolmKeyFile done in " + (t1 - t0) + " ms")
-
-        try {
-            val list = MoshiProvider.providesMoshi()
-                    .adapter(List::class.java)
-                    .fromJson(roomKeys)
-            importedSessions = list as List<MegolmSessionData>
-        } catch (e: Exception) {
-            Timber.e(e, "## importRoomKeys failed")
-            callback.onFailure(e)
-            return
-        }
-
-        val t2 = System.currentTimeMillis()
-
-        Timber.v("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
-
-        megolmSessionDataImporter.handle(importedSessions, true, progressListener, callback)
     }
 
     /**
@@ -893,7 +890,7 @@ internal class CryptoManager @Inject constructor(
                                     // trigger an an unknown devices exception
                                     callback.onFailure(
                                             Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
-                                                                              MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
+                                                    MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
                                 }
                             }
                     )
@@ -1056,10 +1053,7 @@ internal class CryptoManager @Inject constructor(
         CoroutineScope(coroutineDispatchers.crypto).launch {
             deviceListManager
                     .downloadKeys(userIds, forceDownload)
-                    .fold(
-                            { callback.onFailure(it) },
-                            { callback.onSuccess(it) }
-                    )
+                    .foldToCallback(callback)
         }
     }
 

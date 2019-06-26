@@ -27,8 +27,8 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
-import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.util.CancelableCoroutine
@@ -37,7 +37,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit
 import javax.inject.Inject
 
 internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
@@ -70,7 +69,7 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
 
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val sessionOrFailure = authenticate(homeServerConnectionConfig, login, password)
-            sessionOrFailure.fold({ callback.onFailure(it) }, { callback.onSuccess(it) })
+            sessionOrFailure.foldToCallback(callback)
         }
         return CancelableCoroutine(job)
 

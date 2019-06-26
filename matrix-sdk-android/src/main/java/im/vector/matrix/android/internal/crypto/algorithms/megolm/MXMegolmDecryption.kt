@@ -131,7 +131,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
      * @param event the event
      */
     private fun requestKeysForEvent(event: Event) {
-        val sender = event.sender!!
+        val sender = event.senderId!!
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()!!
 
         val recipients = ArrayList<Map<String, String>>()

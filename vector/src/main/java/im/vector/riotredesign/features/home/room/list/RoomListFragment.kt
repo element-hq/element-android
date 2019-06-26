@@ -23,11 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -82,7 +78,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.openRoomLiveData.observeEvent(this) {
-            navigator.openRoom(it, requireActivity())
+            navigator.openRoom(requireActivity(), it)
         }
 
         createChatFabMenu.listener = this
@@ -103,25 +99,26 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         }
 
         // Hide FAB when list is scrolling
-        epoxyRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                createChatFabMenu.removeCallbacks(showFabRunnable)
+        epoxyRecyclerView.addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        createChatFabMenu.removeCallbacks(showFabRunnable)
 
-                when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE     -> {
-                        createChatFabMenu.postDelayed(showFabRunnable, 1000)
-                    }
-                    RecyclerView.SCROLL_STATE_DRAGGING,
-                    RecyclerView.SCROLL_STATE_SETTLING -> {
-                        when (roomListParams.displayMode) {
-                            DisplayMode.HOME   -> createChatFabMenu.hide()
-                            DisplayMode.PEOPLE -> createChatRoomButton.hide()
-                            else               -> createGroupRoomButton.hide()
+                        when (newState) {
+                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                                createChatFabMenu.postDelayed(showFabRunnable, 1000)
+                            }
+                            RecyclerView.SCROLL_STATE_DRAGGING,
+                            RecyclerView.SCROLL_STATE_SETTLING -> {
+                                when (roomListParams.displayMode) {
+                                    DisplayMode.HOME   -> createChatFabMenu.hide()
+                                    DisplayMode.PEOPLE -> createChatRoomButton.hide()
+                                    else               -> createGroupRoomButton.hide()
+                                }
+                            }
                         }
                     }
-                }
-            }
-        })
+                })
     }
 
 
@@ -230,7 +227,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         return super.onBackPressed()
     }
 
-    // RoomSummaryController.Callback **************************************************************
+// RoomSummaryController.Callback **************************************************************
 
     override fun onRoomSelected(room: RoomSummary) {
         roomListViewModel.accept(RoomListActions.SelectRoom(room))

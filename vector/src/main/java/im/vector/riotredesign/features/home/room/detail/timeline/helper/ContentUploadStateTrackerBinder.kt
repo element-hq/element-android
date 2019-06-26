@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ActiveSessionHolder

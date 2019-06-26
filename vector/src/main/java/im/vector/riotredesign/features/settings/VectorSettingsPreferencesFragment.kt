@@ -41,12 +41,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.preference.*
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.getFingerprintHumanReadable
 import im.vector.matrix.android.api.extensions.sortByLastSeen
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
+import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotredesign.R
@@ -54,6 +59,9 @@ import im.vector.riotredesign.core.di.DaggerScreenComponent
 import im.vector.riotredesign.core.dialogs.ExportKeysDialog
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.extensions.withArgs
+import im.vector.riotredesign.core.intent.ExternalIntentData
+import im.vector.riotredesign.core.intent.analyseIntent
+import im.vector.riotredesign.core.intent.getFilenameFromUri
 import im.vector.riotredesign.core.platform.SimpleTextWatcher
 import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 import im.vector.riotredesign.core.preference.BingRule
@@ -63,8 +71,12 @@ import im.vector.riotredesign.core.preference.VectorPreference
 import im.vector.riotredesign.core.utils.*
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.configuration.VectorConfiguration
+import im.vector.riotredesign.features.crypto.keys.KeysExporter
+import im.vector.riotredesign.features.crypto.keys.KeysImporter
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
+import im.vector.riotredesign.features.version.getVersion
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.text.DateFormat
@@ -74,6 +86,7 @@ import javax.inject.Inject
 
 class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
+    override var titleRes: Int = R.string.title_activity_settings
     // members
     @Inject lateinit var session: Session
     @Inject lateinit var vectorConfiguration: VectorConfiguration
@@ -631,11 +644,23 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
         // application version
         (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY)).let {
-            it.summary = "TODO" // VectorUtils.getApplicationVersion(appContext)
+            it.summary = getVersion(longFormat = false, useBuildNumber = true)
 
-            it.setOnPreferenceClickListener {
-                appContext?.let {
-                    copyToClipboard(it, "TODO") //VectorUtils.getApplicationVersion(it))
+            it.setOnPreferenceClickListener { pref ->
+                appContext?.let { ctx ->
+                    copyToClipboard(ctx, pref.summary)
+                }
+                true
+            }
+        }
+
+        // SDK version
+        (findPreference(PreferencesManager.SETTINGS_SDK_VERSION_PREFERENCE_KEY)).let {
+            it.summary = Matrix.getSdkVersion()
+
+            it.setOnPreferenceClickListener { pref ->
+                appContext?.let { ctx ->
+                    copyToClipboard(ctx, pref.summary)
                 }
                 true
             }
@@ -670,6 +695,13 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
+            false
+        }
+
+        findPreference(PreferencesManager.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            // See https://developers.google.com/android/guides/opensource
+            startActivity(Intent(requireActivity(), OssLicensesMenuActivity::class.java))
             false
         }
 
@@ -888,9 +920,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
         PreferenceManager.getDefaultSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(this)
     }
 
-    // TODO Test
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        /* TODO
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
                 changeAvatar()
@@ -898,7 +928,6 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 exportKeys()
             }
         }
-        */
     }
 
     //==============================================================================================================
@@ -1456,7 +1485,6 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     private fun refreshPreferences() {
         PreferenceManager.getDefaultSharedPreferences(activity).edit {
             putString(PreferencesManager.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, "TODO") //session.myUser.displayname)
-            putString(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY, "TODO") // VectorUtils.getApplicationVersion(activity))
 
             /* TODO
             session.dataHandler.pushRules()?.let {
@@ -1472,14 +1500,14 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                         if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
                             isEnabled = !isEnabled
                         } else if (isEnabled) {
-                            val actions = rule?.actions
+                            val domainActions = rule?.domainActions
 
                             // no action -> noting will be done
-                            if (null == actions || actions.isEmpty()) {
+                            if (null == domainActions || domainActions.isEmpty()) {
                                 isEnabled = false
-                            } else if (1 == actions.size) {
+                            } else if (1 == domainActions.size) {
                                 try {
-                                    isEnabled = !TextUtils.equals(actions[0] as String, BingRule.ACTION_DONT_NOTIFY)
+                                    isEnabled = !TextUtils.equals(domainActions[0] as String, BingRule.ACTION_DONT_NOTIFY)
                                 } catch (e: Exception) {
                                     Timber.e(e, "## refreshPreferences failed " + e.message)
                                 }
@@ -1649,15 +1677,15 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                 var index = 0
 
-                for (pusher in mDisplayedPushers) {
-                    if (null != pusher.lang) {
-                        val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pusher.pushkey)
+                for (pushRule in mDisplayedPushers) {
+                    if (null != pushRule.lang) {
+                        val isThisDeviceTarget = TextUtils.equals(pushManager.currentRegistrationToken, pushRule.pushkey)
 
                         val preference = VectorPreference(activity).apply {
                             mTypeface = if (isThisDeviceTarget) Typeface.BOLD else Typeface.NORMAL
                         }
-                        preference.title = pusher.deviceDisplayName
-                        preference.summary = pusher.appDisplayName
+                        preference.title = pushRule.deviceDisplayName
+                        preference.summary = pushRule.appDisplayName
                         preference.key = PUSHER_PREFERENCE_KEY_BASE + index
                         index++
                         mPushersSettingsCategory.addPreference(preference)
@@ -1672,7 +1700,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                                             .setPositiveButton(R.string.remove)
                                             { _, _ ->
                                                 displayLoadingView()
-                                                pushManager.unregister(session, pusher, object : MatrixCallback<Unit> {
+                                                pushManager.unregister(session, pushRule, object : MatrixCallback<Unit> {
                                                     override fun onSuccess(info: Void?) {
                                                         refreshPushersList()
                                                         onCommonDone(null)
@@ -1785,6 +1813,9 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
      * @param errorMessage the error message
      */
     private fun onCommonDone(errorMessage: String?) {
+        if (!isAdded) {
+            return
+        }
         activity?.runOnUiThread {
             if (!TextUtils.isEmpty(errorMessage) && errorMessage != null) {
                 activity?.toast(errorMessage!!)
@@ -2420,7 +2451,6 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             if (!TextUtils.equals(session.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> displayDeviceDeletionDialog(aDeviceInfo) }
             }
-
             builder.setNeutralButton(R.string.cancel, null)
                     .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
                         if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
@@ -2491,73 +2521,101 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
     /**
      * Try to delete a device.
      *
-     * @param deviceId the device id
+     * @param deviceInfo the device to delete
      */
-    private fun deleteDevice(deviceId: String) {
-        notImplemented()
+    private fun deleteDevice(deviceInfo: DeviceInfo) {
+        val deviceId = deviceInfo.deviceId
+        if (deviceId == null) {
+            Timber.e("## displayDeviceDeletionDialog(): sanity check failure")
+            return
+        }
 
-        // We have to manage registration flow first, to handle what is necessary to delete a devive
-        /*
         displayLoadingView()
-        session.deleteDevice(deviceId, mAccountPassword, object : MatrixCallback<Unit> {
+        session.deleteDevice(deviceId, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 hideLoadingView()
-                refreshDevicesList() // force settings update
+                // force settings update
+                refreshDevicesList()
             }
 
             override fun onFailure(failure: Throwable) {
-                mAccountPassword = ""
-                onCommonDone(failure.localizedMessage)
+                var isPasswordRequestFound = false
+
+                if (failure is Failure.RegistrationFlowError) {
+                    // We only support LoginFlowTypes.PASSWORD
+                    // Check if we can provide the user password
+                    failure.registrationFlowResponse.flows?.forEach { interactiveAuthenticationFlow ->
+                        isPasswordRequestFound = isPasswordRequestFound || interactiveAuthenticationFlow.stages?.any { it == LoginFlowTypes.PASSWORD } == true
+                    }
+
+                    if (isPasswordRequestFound) {
+                        maybeShowDeleteDeviceWithPasswordDialog(deviceId, failure.registrationFlowResponse.session)
+                    }
+
+                }
+
+                if (!isPasswordRequestFound) {
+                    // LoginFlowTypes.PASSWORD not supported, and this is the only one RiotX supports so far...
+                    onCommonDone(failure.localizedMessage)
+                }
             }
         })
-        */
     }
 
     /**
-     * Display a delete confirmation dialog to remove a device.<br></br>
-     * The user is invited to enter his password to confirm the deletion.
-     *
-     * @param aDeviceInfoToDelete device info
+     * Show a dialog to ask for user password, or use a previously entered password.
      */
-    private fun displayDeviceDeletionDialog(aDeviceInfoToDelete: DeviceInfo) {
-        if (aDeviceInfoToDelete.deviceId != null) {
-            if (!TextUtils.isEmpty(mAccountPassword)) {
-                deleteDevice(aDeviceInfoToDelete.deviceId!!)
-            } else {
-                activity?.let {
-                    val inflater = it.layoutInflater
-                    val layout = inflater.inflate(R.layout.dialog_device_delete, null)
-                    val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
-
-                    AlertDialog.Builder(it)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle(R.string.devices_delete_dialog_title)
-                            .setView(layout)
-                            .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
-                                if (TextUtils.isEmpty(passwordEditText.toString())) {
-                                    it.toast(R.string.error_empty_field_your_password)
-                                    return@OnClickListener
-                                }
-                                mAccountPassword = passwordEditText.text.toString()
-                                deleteDevice(aDeviceInfoToDelete.deviceId!!)
-                            })
-                            .setNegativeButton(R.string.cancel) { _, _ ->
-                                hideLoadingView()
-                            }
-                            .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                                if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                                    dialog.cancel()
-                                    hideLoadingView()
-                                    return@OnKeyListener true
-                                }
-                                false
-                            })
-                            .show()
-                }
-            }
+    private fun maybeShowDeleteDeviceWithPasswordDialog(deviceId: String, authSession: String?) {
+        if (!TextUtils.isEmpty(mAccountPassword)) {
+            deleteDeviceWithPassword(deviceId, authSession, mAccountPassword)
         } else {
-            Timber.e("## displayDeviceDeletionDialog(): sanity check failure")
+            activity?.let {
+                val inflater = it.layoutInflater
+                val layout = inflater.inflate(R.layout.dialog_device_delete, null)
+                val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
+
+                AlertDialog.Builder(it)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(R.string.devices_delete_dialog_title)
+                        .setView(layout)
+                        .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
+                            if (TextUtils.isEmpty(passwordEditText.toString())) {
+                                it.toast(R.string.error_empty_field_your_password)
+                                return@OnClickListener
+                            }
+                            mAccountPassword = passwordEditText.text.toString()
+                            deleteDeviceWithPassword(deviceId, authSession, mAccountPassword)
+                        })
+                        .setNegativeButton(R.string.cancel) { _, _ ->
+                            hideLoadingView()
+                        }
+                        .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
+                            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                                dialog.cancel()
+                                hideLoadingView()
+                                return@OnKeyListener true
+                            }
+                            false
+                        })
+                        .show()
+            }
         }
+    }
+
+    private fun deleteDeviceWithPassword(deviceId: String, authSession: String?, accountPassword: String) {
+        session.deleteDeviceWithUserPassword(deviceId, authSession, accountPassword, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                hideLoadingView()
+                // force settings update
+                refreshDevicesList()
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // Password is maybe not good
+                onCommonDone(failure.localizedMessage)
+                mAccountPassword = ""
+            }
+        })
     }
 
     /**
@@ -2569,38 +2627,29 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             activity?.let { activity ->
                 ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
                     override fun onPassphrase(passphrase: String) {
-                        notImplemented()
-                        /*
-
                         displayLoadingView()
 
-                        CommonActivityUtils.exportKeys(session, passphrase, object : SimpleApiCallback<String>(activity) {
-                            override fun onSuccess(filename: String) {
-                                hideLoadingView()
+                        KeysExporter(session)
+                                .export(requireContext(),
+                                        passphrase,
+                                        object : MatrixCallback<String> {
+                                            override fun onSuccess(data: String) {
+                                                if (isAdded) {
+                                                    hideLoadingView()
 
-                                AlertDialog.Builder(activity)
-                                        .setMessage(getString(R.string.encryption_export_saved_as, filename))
-                                        .setCancelable(false)
-                                        .setPositiveButton(R.string.ok, null)
-                                        .show()
-                            }
+                                                    AlertDialog.Builder(activity)
+                                                            .setMessage(getString(R.string.encryption_export_saved_as, data))
+                                                            .setCancelable(false)
+                                                            .setPositiveButton(R.string.ok, null)
+                                                            .show()
+                                                }
+                                            }
 
-                            override fun onNetworkError(e: Exception) {
-                                super.onNetworkError(e)
-                                hideLoadingView()
-                            }
+                                            override fun onFailure(failure: Throwable) {
+                                                onCommonDone(failure.localizedMessage)
+                                            }
 
-                            override fun onMatrixError(e: MatrixError) {
-                                super.onMatrixError(e)
-                                hideLoadingView()
-                            }
-
-                            override fun onUnexpectedError(e: Exception) {
-                                super.onUnexpectedError(e)
-                                hideLoadingView()
-                            }
-                        })
-                        */
+                                        })
                     }
                 })
             }
@@ -2626,100 +2675,92 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             return
         }
 
-        notImplemented()
+        val sharedDataItems = analyseIntent(intent)
+        val thisActivity = activity
 
-        /*
-val sharedDataItems = ArrayList(RoomMediaMessage.listRoomMediaMessages(intent))
-val thisActivity = activity
+        if (sharedDataItems.isNotEmpty() && thisActivity != null) {
+            val sharedDataItem = sharedDataItems[0]
 
-if (sharedDataItems.isNotEmpty() && thisActivity != null) {
-    val sharedDataItem = sharedDataItems[0]
-    val dialogLayout = thisActivity.layoutInflater.inflate(R.layout.dialog_import_e2e_keys, null)
-    val builder = AlertDialog.Builder(thisActivity)
-            .setTitle(R.string.encryption_import_room_keys)
-            .setView(dialogLayout)
-
-    val passPhraseEditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
-    val importButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_import_button)
-
-    passPhraseEditText.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-        }
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            importButton.isEnabled = !TextUtils.isEmpty(passPhraseEditText.text)
-        }
-
-        override fun afterTextChanged(s: Editable) {
-
-        }
-    })
-
-    val importDialog = builder.show()
-    val appContext = thisActivity.applicationContext
-
-    importButton.setOnClickListener(View.OnClickListener {
-        val password = passPhraseEditText.text.toString()
-        val resource = openResource(appContext, sharedDataItem.uri, sharedDataItem.getMimeType(appContext))
-
-        if (resource?.mContentStream == null) {
-            appContext.toast("Error")
-
-            return@OnClickListener
-        }
-
-        val data: ByteArray
-
-        try {
-            data = ByteArray(resource.mContentStream!!.available())
-            resource!!.mContentStream!!.read(data)
-            resource!!.mContentStream!!.close()
-        } catch (e: Exception) {
-            try {
-                resource!!.mContentStream!!.close()
-            } catch (e2: Exception) {
-                Timber.e(e2, "## importKeys()")
+            val uri = when (sharedDataItem) {
+                is ExternalIntentData.IntentDataUri      -> sharedDataItem.uri
+                is ExternalIntentData.IntentDataClipData -> sharedDataItem.clipDataItem.uri
+                else                                     -> null
             }
 
-            appContext.toast(e.localizedMessage)
+            val mimetype = when (sharedDataItem) {
+                is ExternalIntentData.IntentDataClipData -> sharedDataItem.mimeType
+                else                                     -> null
+            }
 
-            return@OnClickListener
+            if (uri == null) {
+                return
+            }
+
+            val appContext = thisActivity.applicationContext
+
+            val filename = getFilenameFromUri(appContext, uri)
+
+            val dialogLayout = thisActivity.layoutInflater.inflate(R.layout.dialog_import_e2e_keys, null)
+
+            val textView = dialogLayout.findViewById<TextView>(R.id.dialog_e2e_keys_passphrase_filename)
+
+            if (filename.isNullOrBlank()) {
+                textView.isVisible = false
+            } else {
+                textView.isVisible = true
+                textView.text = getString(R.string.import_e2e_keys_from_file, filename)
+            }
+
+            val builder = AlertDialog.Builder(thisActivity)
+                    .setTitle(R.string.encryption_import_room_keys)
+                    .setView(dialogLayout)
+
+            val passPhraseEditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
+            val importButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_import_button)
+
+            passPhraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    importButton.isEnabled = !TextUtils.isEmpty(passPhraseEditText.text)
+                }
+            })
+
+            val importDialog = builder.show()
+
+            importButton.setOnClickListener(View.OnClickListener {
+                val password = passPhraseEditText.text.toString()
+
+                displayLoadingView()
+
+                KeysImporter(session)
+                        .import(requireContext(),
+                                uri,
+                                mimetype,
+                                password,
+                                object : MatrixCallback<ImportRoomKeysResult> {
+                                    override fun onSuccess(data: ImportRoomKeysResult) {
+                                        if (!isAdded) {
+                                            return
+                                        }
+
+                                        hideLoadingView()
+
+                                        AlertDialog.Builder(thisActivity)
+                                                .setMessage(getString(R.string.encryption_import_room_keys_success,
+                                                        data.successfullyNumberOfImportedKeys,
+                                                        data.totalNumberOfKeys))
+                                                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                                .show()
+                                    }
+
+                                    override fun onFailure(failure: Throwable) {
+                                        appContext.toast(failure.localizedMessage)
+                                        hideLoadingView()
+                                    }
+                                })
+
+                importDialog.dismiss()
+            })
         }
-
-        displayLoadingView()
-
-        session.importRoomKeys(data,
-                password,
-                null,
-                object : MatrixCallback<ImportRoomKeysResult> {
-                    override fun onSuccess(info: ImportRoomKeysResult) {
-                        if (!isAdded) {
-                            return
-                        }
-
-                        hideLoadingView()
-
-                        info?.let {
-                            AlertDialog.Builder(thisActivity)
-                                    .setMessage(getString(R.string.encryption_import_room_keys_success,
-                                            it.successfullyNumberOfImportedKeys,
-                                            it.totalNumberOfKeys))
-                                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                    .show()
-                        }
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        appContext.toast(failure.localizedMessage)
-                        hideLoadingView()
-                    }
-                })
-
-        importDialog.dismiss()
-    })
-}
-*/
     }
 
     //==============================================================================================================

@@ -36,6 +36,11 @@ import io.realm.annotations.RealmModule
             UserEntity::class,
             EventAnnotationsSummaryEntity::class,
             ReactionAggregatedSummaryEntity::class,
-            EditAggregatedSummaryEntity::class
+            EditAggregatedSummaryEntity::class,
+            PushRulesEntity::class,
+            PushRuleEntity::class,
+            PushConditionEntity::class,
+            PusherEntity::class,
+            PusherDataEntity::class
         ])
 internal class SessionRealmModule

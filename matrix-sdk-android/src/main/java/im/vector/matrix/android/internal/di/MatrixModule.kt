@@ -18,9 +18,10 @@ package im.vector.matrix.android.internal.di
 
 import android.content.Context
 import android.content.res.Resources
+import android.os.Handler
+import android.os.HandlerThread
 import dagger.Module
 import dagger.Provides
-import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.asCoroutineDispatcher
@@ -32,11 +33,14 @@ internal object MatrixModule {
     @JvmStatic
     @Provides
     fun providesMatrixCoroutineDispatchers(): MatrixCoroutineDispatchers {
-        val cryptoHandler = CryptoAsyncHelper.getDecryptBackgroundHandler()
+        val THREAD_CRYPTO_NAME = "Crypto_Thread"
+        val handlerThread = HandlerThread(THREAD_CRYPTO_NAME)
+        handlerThread.start()
+
         return MatrixCoroutineDispatchers(io = Dispatchers.IO,
-                                          computation = Dispatchers.IO,
-                                          main = Dispatchers.Main,
-                                          crypto = cryptoHandler.asCoroutineDispatcher("crypto")
+                computation = Dispatchers.IO,
+                main = Dispatchers.Main,
+                crypto = Handler(handlerThread.looper).asCoroutineDispatcher("crypto")
         )
     }
 

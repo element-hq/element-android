@@ -21,10 +21,7 @@ import arrow.core.Try.Companion.raise
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.di.Authenticated
-import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.ProgressRequestBody
-import im.vector.matrix.android.internal.session.SessionScope
 import okhttp3.*
 import java.io.File
 import java.io.IOException

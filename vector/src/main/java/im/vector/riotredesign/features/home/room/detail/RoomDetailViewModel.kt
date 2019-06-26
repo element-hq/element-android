@@ -44,6 +44,7 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.Timeline
 import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -62,7 +63,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     } else {
         TimelineDisplayableEvents.DISPLAYABLE_TYPES
     }
-    private val timeline = room.createTimeline(eventId, allowedTypes)
+    private var timeline = room.createTimeline(eventId, allowedTypes)
 
     @AssistedInject.Factory
     interface Factory {
@@ -110,6 +111,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.EnterEditMode          -> handleEditAction(action)
             is RoomDetailActions.EnterQuoteMode         -> handleQuoteAction(action)
             is RoomDetailActions.EnterReplyMode         -> handleReplyAction(action)
+            is RoomDetailActions.NavigateToEvent        -> handleNavigateToEvent(action)
+            else                                        -> Timber.e("Unhandled Action: $action")
         }
     }
 
@@ -139,6 +142,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
     val sendMessageResultLiveData: LiveData<LiveEvent<SendMessageResult>>
         get() = _sendMessageResultLiveData
+
+    private val _navigateToEvent = MutableLiveData<LiveEvent<String>>()
+    val navigateToEvent: LiveData<LiveEvent<String>>
+        get() = _navigateToEvent
+
 
     // PRIVATE METHODS *****************************************************************************
 
@@ -213,7 +221,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
                 SendMode.EDIT    -> {
                     room.editTextMessage(state.selectedEvent?.root?.eventId
-                                         ?: "", action.text, action.autoMarkdown)
+                            ?: "", action.text, action.autoMarkdown)
                     setState {
                         copy(
                                 sendMode = SendMode.REGULAR,
@@ -225,7 +233,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 SendMode.QUOTE   -> {
                     val messageContent: MessageContent? =
                             state.selectedEvent?.annotations?.editSummary?.aggregatedContent?.toModel()
-                            ?: state.selectedEvent?.root?.content.toModel()
+                                    ?: state.selectedEvent?.root?.content.toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)
@@ -294,7 +302,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
         _nonBlockingPopAlert.postValue(LiveEvent(
                 Pair(R.string.last_edited_info_message, listOf(
-                        lastReplace.senderName ?: "?",
+                        lastReplace.getDisambiguatedDisplayName(),
                         dateFormat.format(Date(lastReplace.root.originServerTs ?: 0)))
                 ))
         )
@@ -345,7 +353,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
 
     private fun handleUpdateQuickReaction(action: RoomDetailActions.UpdateQuickReactAction) {
-        room.updateQuickReaction(action.selectedReaction, action.opposite, action.targetEventId, session.sessionParams.credentials.userId)
+        if (action.add) {
+            room.sendReaction(action.selectedReaction, action.targetEventId)
+        } else {
+            room.undoReaction(action.selectedReaction, action.targetEventId, session.sessionParams.credentials.userId)
+        }
     }
 
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
@@ -415,6 +427,56 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
+    private fun handleNavigateToEvent(action: RoomDetailActions.NavigateToEvent) {
+        val targetEventId = action.eventId
+
+        if (action.position != null) {
+            // Event is already in RAM
+            withState {
+                if (it.eventId == targetEventId) {
+                    // ensure another click on the same permalink will also do a scroll
+                    setState {
+                        copy(
+                                eventId = null
+                        )
+                    }
+                }
+
+                setState {
+                    copy(
+                            eventId = targetEventId
+                    )
+                }
+            }
+
+            _navigateToEvent.postValue(LiveEvent(targetEventId))
+        } else {
+            // change timeline
+            timeline.dispose()
+            timeline = room.createTimeline(targetEventId, allowedTypes)
+            timeline.start()
+
+            withState {
+                if (it.eventId == targetEventId) {
+                    // ensure another click on the same permalink will also do a scroll
+                    setState {
+                        copy(
+                                eventId = null
+                        )
+                    }
+                }
+
+                setState {
+                    copy(
+                            eventId = targetEventId,
+                            timeline = this@RoomDetailViewModel.timeline
+                    )
+                }
+            }
+
+            _navigateToEvent.postValue(LiveEvent(targetEventId))
+        }
+    }
 
     private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second
@@ -441,7 +503,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun observeInvitationState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
-                summary.lastMessage?.sender?.let { senderId ->
+                summary.lastMessage?.senderId?.let { senderId ->
                     session.getUser(senderId)
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }

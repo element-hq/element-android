@@ -123,7 +123,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
         when (joinState) {
             JoinState.JOINED        -> {
-                navigator.openRoom(publicRoom.roomId, requireActivity())
+                navigator.openRoom(requireActivity(), publicRoom.roomId)
             }
             JoinState.NOT_JOINED,
             JoinState.JOINING_ERROR -> {

@@ -24,53 +24,13 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultCreateKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteBackupTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetKeysBackupLastVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultStoreRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultStoreRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultStoreSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultUpdateKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteBackupTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetKeysBackupLastVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetKeysBackupVersionTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreRoomSessionDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreRoomSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
 import im.vector.matrix.android.internal.crypto.store.db.hash
-import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultClaimOneTimeKeysForUsersDevice
-import im.vector.matrix.android.internal.crypto.tasks.DefaultDeleteDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultDownloadKeysForUsers
-import im.vector.matrix.android.internal.crypto.tasks.DefaultGetDevicesTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultSendToDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultSetDeviceNameTask
-import im.vector.matrix.android.internal.crypto.tasks.DefaultUploadKeysTask
-import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
-import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
-import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
+import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
@@ -103,17 +63,19 @@ internal abstract class CryptoModule {
         @JvmStatic
         @Provides
         @CryptoDatabase
-        fun providesClearCacheTask(@CryptoDatabase realmConfiguration: RealmConfiguration): ClearCacheTask {
+        fun providesClearCacheTask(@CryptoDatabase
+                                   realmConfiguration: RealmConfiguration): ClearCacheTask {
             return RealmClearCacheTask(realmConfiguration)
         }
 
 
         @JvmStatic
         @Provides
-        fun providesCryptoStore(@CryptoDatabase realmConfiguration: RealmConfiguration, credentials: Credentials): IMXCryptoStore {
+        fun providesCryptoStore(@CryptoDatabase
+                                realmConfiguration: RealmConfiguration, credentials: Credentials): IMXCryptoStore {
             return RealmCryptoStore(false /* TODO*/,
-                                    realmConfiguration,
-                                    credentials)
+                    realmConfiguration,
+                    credentials)
         }
 
         @JvmStatic
@@ -176,36 +138,37 @@ internal abstract class CryptoModule {
     abstract fun bindGetKeysBackupLastVersionTask(getKeysBackupLastVersionTask: DefaultGetKeysBackupLastVersionTask): GetKeysBackupLastVersionTask
 
     @Binds
-    abstract fun bindGetKeysBackupVersionTask(getKeysBackupVersionTask: DefaultGetKeysBackupVersionTask) : GetKeysBackupVersionTask
+    abstract fun bindGetKeysBackupVersionTask(getKeysBackupVersionTask: DefaultGetKeysBackupVersionTask): GetKeysBackupVersionTask
 
     @Binds
-    abstract fun bindGetRoomSessionDataTask(getRoomSessionDataTask: DefaultGetRoomSessionDataTask) : GetRoomSessionDataTask
+    abstract fun bindGetRoomSessionDataTask(getRoomSessionDataTask: DefaultGetRoomSessionDataTask): GetRoomSessionDataTask
 
     @Binds
-    abstract fun bindGetRoomSessionsDataTask(getRoomSessionDataTask: DefaultGetRoomSessionsDataTask) : GetRoomSessionsDataTask
+    abstract fun bindGetRoomSessionsDataTask(getRoomSessionDataTask: DefaultGetRoomSessionsDataTask): GetRoomSessionsDataTask
 
     @Binds
-    abstract fun bindGetSessionsDataTask(getRoomSessionDataTask: DefaultGetSessionsDataTask) : GetSessionsDataTask
+    abstract fun bindGetSessionsDataTask(getRoomSessionDataTask: DefaultGetSessionsDataTask): GetSessionsDataTask
 
     @Binds
-    abstract fun bindStoreRoomSessionDataTask(storeRoomSessionDataTask: DefaultStoreRoomSessionDataTask) : StoreRoomSessionDataTask
+    abstract fun bindStoreRoomSessionDataTask(storeRoomSessionDataTask: DefaultStoreRoomSessionDataTask): StoreRoomSessionDataTask
 
     @Binds
-    abstract fun bindStoreRoomSessionsDataTask(storeRoomSessionDataTask: DefaultStoreRoomSessionsDataTask) : StoreRoomSessionsDataTask
+    abstract fun bindStoreRoomSessionsDataTask(storeRoomSessionDataTask: DefaultStoreRoomSessionsDataTask): StoreRoomSessionsDataTask
 
     @Binds
-    abstract fun bindStoreSessionsDataTask(storeRoomSessionDataTask: DefaultStoreSessionsDataTask) : StoreSessionsDataTask
+    abstract fun bindStoreSessionsDataTask(storeRoomSessionDataTask: DefaultStoreSessionsDataTask): StoreSessionsDataTask
 
     @Binds
-    abstract fun bindUpdateKeysBackupVersionTask(updateKeysBackupVersionTask: DefaultUpdateKeysBackupVersionTask) : UpdateKeysBackupVersionTask
+    abstract fun bindUpdateKeysBackupVersionTask(updateKeysBackupVersionTask: DefaultUpdateKeysBackupVersionTask): UpdateKeysBackupVersionTask
 
     @Binds
-    abstract fun bindSendToDeviceTask(sendToDeviceTask: DefaultSendToDeviceTask) : SendToDeviceTask
+    abstract fun bindSendToDeviceTask(sendToDeviceTask: DefaultSendToDeviceTask): SendToDeviceTask
 
     @Binds
-    abstract fun bindClaimOneTimeKeysForUsersDeviceTask(claimOneTimeKeysForUsersDevice: DefaultClaimOneTimeKeysForUsersDevice) : ClaimOneTimeKeysForUsersDeviceTask
+    abstract fun bindClaimOneTimeKeysForUsersDeviceTask(claimOneTimeKeysForUsersDevice: DefaultClaimOneTimeKeysForUsersDevice): ClaimOneTimeKeysForUsersDeviceTask
 
-
+    @Binds
+    abstract fun bindDeleteDeviceWithUserPasswordTask(deleteDeviceWithUserPasswordTask: DefaultDeleteDeviceWithUserPasswordTask): DeleteDeviceWithUserPasswordTask
 
 
 }

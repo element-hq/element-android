@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <im.vector.riotredesign.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/stateView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.airbnb.epoxy.EpoxyRecyclerView
-        android:id="@+id/epoxyRecyclerView"
+        android:id="@+id/groupListEpoxyRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_group" />
 
 </im.vector.riotredesign.core.platform.StateView>

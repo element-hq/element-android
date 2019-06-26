@@ -20,9 +20,12 @@
         <item>https://scalar.vector.im/api</item>
     </string-array>
 
-    <!-- empty means to use the active HS url -->
-    <!-- set a valid URL like "https://matrix.org" to use a custom one -->
-    <string name="push_server_url" translatable="false" />
+    <!--
+        Pusher config for the application
+        https://matrix.org/docs/spec/client_server/r0.4.0#id128
+     -->
+    <string name="pusher_http_url" translatable="false">https://matrix.org/_matrix/push/v1/notify</string>
+    <string name="pusher_app_id" translatable="false">im.vector.app.android</string>
 
     <string-array name="room_directory_servers" translatable="false">
         <item>matrix.org</item>

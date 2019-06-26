@@ -1363,4 +1363,65 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 5.0)</string>
 
+    <string name="title_activity_verify_device">Verifikoni pajisje</string>
+
+    <string name="encryption_information_unknown_ip">ip e panjohur</string>
+    <string name="you_added_a_new_device_with_info">Një pajisje e re po kërkon kyçe fshehtëzimi.
+\nEmër pajisje: %1$s
+\nParë së fundi më: %2$s
+\nNëse s’keni bërë hyrje në një tjetër pajisje, shpërfilleni këtë kërkesë.</string>
+    <string name="your_unverified_device_requesting_with_info">Një pajisje e paverifikuar po kërkon kyçe fshehtëzimi.
+\nEmër pajisjeje: %1$s
+\nParë së fundi: %2$s
+\nNëse s’keni bërë hyrje që nga një pajisje tjetër, shpërfilleni këtë kërkesë.</string>
+
+    <string name="start_verification_short_label">Verifikoje</string>
+    <string name="share_without_verifying_short_label">Ndaje</string>
+    <string name="key_share_request">Kërkesat Për Ndarje Kyçesh</string>
+    <string name="ignore_request_short_label">Shpërfille</string>
+
+    <string name="sas_verify_title">Verifikoje duke krahasuar një varg të shkurtër teksti.</string>
+    <string name="sas_security_advise">Për siguri maksimale, këshillojmë ta bëni këtë në prani të vetë personit, ose të përdorni një tjetër kanal të besuar komunikimesh.</string>
+    <string name="sas_verify_start_button_title">Po Verifikohet</string>
+    <string name="sas_incoming_request_title">Kërkesë Verifikimi e Ardhur</string>
+    <string name="sas_incoming_request_description">Që t’i vihet shenjë si e besuar, verifikojeni këtë pajisje. Besimi i pajisjeve të partnerëve ju jep ca qetësi më tepër kur përdoren mesazhe të fshehtëzuar skaj-më-skaj.</string>
+    <string name="sas_incoming_request_description_2">Verifikimi i kësaj pajisje do ta shënojë atë të besuar, dhe tuajën si të besuar te partneri.</string>
+
+    <string name="sas_emoji_description">Verifikojeni këtë pajisje duke ripohuar shfaqjen e emoji-t vijues në skenën e partnerit.</string>
+    <string name="sas_decimal_description">Verifikojeni këtë pajisje duke ripohuar se numri vijues shfaqet në ekranin e partnerit</string>
+
+    <string name="sas_incoming_verification_request_dialog">Morët një kërkesë verifikimi të ardhur</string>
+    <string name="sas_view_request_action">Shihni kërkesën</string>
+    <string name="sas_waiting_for_partner">Po pritet ripohimi nga partneri…</string>
+
+    <string name="sas_verified">U verifikua!</string>
+    <string name="sas_verified_successful">E verifikuat me sukses këtë pajisje.</string>
+    <string name="sas_verified_successful_description">Mesazhet e sigurt me këtë përdorues fshehtëzohen skaj-më-skaj dhe janë të palexueshëm nga palë të treta.</string>
+    <string name="sas_got_it">E mora vesh</string>
+
+    <string name="sas_verifying_keys">S’duket gjë\? Jo të tërë klientët mbulojnë verifikim ndërveprues ende. Përdorni verifikimin në stil të vjetër.</string>
+    <string name="sas_legacy_verification_button_title">Përdor verifikim të dikurshëm.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Verifikim Kyçi</string>
+    <string name="sas_cancelled_dialog_title">Kërkesa u Anulua</string>
+    <string name="sas_cancelled_by_other">Pala tjetër e anuloi verifikimin.
+\n%s</string>
+    <string name="sas_cancelled_by_me">Verifikimi u anulua.
+\nArsye: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Verifikim Ndërveprues Pajisjesh</string>
+    <string name="sas_incoming_request_notif_title">Kërkesë Verifikimi</string>
+    <string name="sas_incoming_request_notif_content">%s dëshiron të verifikojë pajisjen tuaj</string>
+
+    <string name="sas_error_m_user">Përdoruesi e anuloi verifikimin</string>
+    <string name="sas_error_m_timeout">Procesit të verifikimit i mbaroi koha</string>
+    <string name="sas_error_m_unknown_transaction">Pajisja s’di gjë rreth këtij transaksioni</string>
+    <string name="sas_error_m_unknown_method">Pajisja s’bie dot dakord për metodë marrëveshjeje kyçesh, hash, MAC, ose SAS</string>
+    <string name="sas_error_m_mismatched_sas">SAS s’u përputhën</string>
+    <string name="sas_error_m_unexpected_message">Pajisja mori përgjigje të papritur</string>
+    <string name="sas_error_m_invalid_message">U mor një mesazh i pavlefshëm</string>
+    <string name="sas_error_m_key_mismatch">Mospërputhje kyçesh</string>
+    <string name="sas_error_m_user_error">Mospërputhje përdoruesish</string>
+    <string name="sas_error_unknown">Gabim i Panjohur</string>
+
 </resources>

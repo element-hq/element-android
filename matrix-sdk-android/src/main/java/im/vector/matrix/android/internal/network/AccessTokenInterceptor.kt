@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.network
 
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.internal.session.SessionScope
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

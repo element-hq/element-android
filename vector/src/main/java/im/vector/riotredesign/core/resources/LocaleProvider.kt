@@ -26,6 +26,4 @@ class LocaleProvider @Inject constructor(private val resources: Resources) {
     fun current(): Locale {
         return ConfigurationCompat.getLocales(resources.configuration)[0]
     }
-
-
 }

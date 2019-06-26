@@ -17,8 +17,13 @@
 package im.vector.matrix.android.internal.crypto.tasks
 
 import arrow.core.Try
+import arrow.core.failure
+import arrow.core.recoverWith
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
+import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
@@ -26,8 +31,7 @@ import javax.inject.Inject
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     data class Params(
-            val deviceId: String,
-            val accountPassword: String
+            val deviceId: String
     )
 }
 
@@ -35,11 +39,30 @@ internal class DefaultDeleteDeviceTask @Inject constructor(private val cryptoApi
     : DeleteDeviceTask {
 
     override suspend fun execute(params: DeleteDeviceTask.Params): Try<Unit> {
-        return executeRequest {
-            apiCall = cryptoApi.deleteDevice(params.deviceId,
-                    DeleteDeviceParams())
-        }
+        return executeRequest<Unit> {
+            apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams())
+        }.recoverWith { throwable ->
+            if (throwable is Failure.OtherServerError && throwable.httpCode == 401) {
+                // Parse to get a RegistrationFlowResponse
+                val registrationFlowResponse = try {
+                    MoshiProvider.providesMoshi()
+                            .adapter(RegistrationFlowResponse::class.java)
+                            .fromJson(throwable.errorBody)
+                } catch (e: Exception) {
+                    null
+                }
 
-        // TODO Recover error, see legacy code MXSession.deleteDevice()
+                // check if the server response can be casted
+                if (registrationFlowResponse != null) {
+                    Failure.RegistrationFlowError(registrationFlowResponse).failure()
+                } else {
+                    throwable.failure()
+                }
+
+            } else {
+                // Other error
+                throwable.failure()
+            }
+        }
     }
 }

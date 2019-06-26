@@ -739,7 +739,7 @@ Unbekannte Geräte:</string>
 
     <string name="login_mobile_device">Mobilgerät</string>
 
-    <string name="notification_sync_in_progress">Synchronisiere</string>
+    <string name="notification_sync_in_progress">Synchronisiere…</string>
     <string name="notification_listening_for_events">Auf Ereignisse lauschen</string>
 
     <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>
@@ -1452,5 +1452,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="notification_new_invitation">Neue Einladung</string>
     <string name="notification_sender_me">Ich</string>
     <string name="notification_inline_reply_failed">** Fehler beim Senden - bitte Raum öffnen</string>
+
+    <string name="error_jitsi_not_supported_on_old_device">Entschuldige, doch Konferenzgespräche mittels Jitsi wird auf alten Geräten nicht unterstützt (älter als Android 5.0)</string>
 
 </resources>

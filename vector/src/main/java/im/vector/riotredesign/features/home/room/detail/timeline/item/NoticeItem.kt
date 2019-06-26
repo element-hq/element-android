@@ -41,10 +41,8 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     var baseCallback: TimelineEventController.BaseCallback? = null
 
     private var longClickListener = View.OnLongClickListener {
-        baseCallback?.onEventLongClicked(informationData, null, it)
-        baseCallback != null
+        return@OnLongClickListener baseCallback?.onEventLongClicked(informationData, null, it) == true
     }
-
 
     override fun bind(holder: Holder) {
         super.bind(holder)

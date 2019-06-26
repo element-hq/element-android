@@ -19,11 +19,13 @@ package im.vector.matrix.android.api.session
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
@@ -43,7 +45,9 @@ interface Session :
         CryptoService,
         CacheService,
         SignOutService,
-        FilterService {
+        FilterService,
+        PushRuleService,
+        PushersService {
 
     /**
      * The params associated to the session
@@ -55,6 +59,20 @@ interface Session :
      */
     @MainThread
     fun open()
+
+    /**
+     * Requires a one time background sync
+     */
+    fun requireBackgroundSync()
+
+    /**
+     * Launches infinite periodic background syncs
+     * THis does not work in doze mode :/
+     * If battery optimization is on it can work in app standby but that's all :/
+     */
+    fun startAutomaticBackgroundSync(repeatDelay: Long = 30_000L)
+
+    fun stopAnyBackgroundSync()
 
     /**
      * This method start the sync thread.

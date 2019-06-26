@@ -17,24 +17,22 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import javax.inject.Inject
 
+
 internal class SendEventWorker constructor(context: Context, params: WorkerParameters)
-    : Worker(context, params) {
+    : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -46,9 +44,10 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater
     @Inject lateinit var roomAPI: RoomAPI
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
+
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.success()
+                ?: return Result.success()
 
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)
@@ -68,15 +67,15 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
             )
         }
         return result.fold({
-                               when (it) {
-                                   is Failure.NetworkConnection -> Result.retry()
-                                   else                         -> {
-                                       localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
-                                       //always return success, or the chain will be stuck for ever!
-                                       Result.success()
-                                   }
-                               }
-                           }, { Result.success() })
+            when (it) {
+                is Failure.NetworkConnection -> Result.retry()
+                else                         -> {
+                    localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
+                    //always return success, or the chain will be stuck for ever!
+                    Result.success()
+                }
+            }
+        }, { Result.success() })
     }
 
 }

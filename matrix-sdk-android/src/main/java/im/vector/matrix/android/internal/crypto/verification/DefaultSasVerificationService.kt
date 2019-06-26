@@ -27,17 +27,12 @@ import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.session.SessionScope
@@ -142,8 +137,8 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         setDeviceVerificationAction.handle(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
-                                           deviceID,
-                                           userId)
+                deviceID,
+                userId)
 
         listeners.forEach {
             try {
@@ -157,7 +152,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
     private suspend fun onStartRequestReceived(event: Event) {
         val startReq = event.getClearContent().toModel<KeyVerificationStart>()!!
 
-        val otherUserId = event.sender
+        val otherUserId = event.senderId
         if (!startReq.isValid()) {
             Timber.e("## received invalid verification request")
             if (startReq.transactionID != null) {
@@ -210,7 +205,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                         } else {
                             Timber.e("## SAS onStartRequestReceived - unknown method ${startReq.method}")
                             cancelTransaction(tid, otherUserId, startReq.fromDevice
-                                                                ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
+                                    ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
                         }
                     }
                 },
@@ -245,7 +240,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
             Timber.e("## Received invalid accept request")
             return
         }
-        val otherUserId = event.sender!!
+        val otherUserId = event.senderId!!
 
         Timber.v("## SAS onCancelReceived otherUser:$otherUserId reason:${cancelReq.reason}")
         val existing = getExistingTransaction(otherUserId, cancelReq.transactionID!!)
@@ -267,7 +262,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
             Timber.e("## Received invalid accept request")
             return
         }
-        val otherUserId = event.sender!!
+        val otherUserId = event.senderId!!
         val existing = getExistingTransaction(otherUserId, acceptReq.transactionID!!)
         if (existing == null) {
             Timber.e("## Received invalid accept request")
@@ -291,7 +286,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
             Timber.e("## Received invalid key request")
             return
         }
-        val otherUserId = event.sender!!
+        val otherUserId = event.senderId!!
         val existing = getExistingTransaction(otherUserId, keyReq.transactionID!!)
         if (existing == null) {
             Timber.e("## Received invalid accept request")
@@ -312,7 +307,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
             Timber.e("## Received invalid key request")
             return
         }
-        val otherUserId = event.sender!!
+        val otherUserId = event.senderId!!
         val existing = getExistingTransaction(otherUserId, macReq.transactionID!!)
         if (existing == null) {
             Timber.e("## Received invalid accept request")
@@ -376,9 +371,8 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                     userId,
                     deviceID)
             addTransaction(tx)
-            CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                tx.start()
-            }
+
+            tx.start()
             return txID
         } else {
             throw IllegalArgumentException("Unknown verification method")
@@ -403,9 +397,9 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
     override fun transactionUpdated(tx: VerificationTransaction) {
         dispatchTxUpdated(tx)
         if (tx is SASVerificationTransaction
-            && (tx.state == SasVerificationTxState.Cancelled
-                || tx.state == SasVerificationTxState.OnCancelled
-                || tx.state == SasVerificationTxState.Verified)
+                && (tx.state == SasVerificationTxState.Cancelled
+                        || tx.state == SasVerificationTxState.OnCancelled
+                        || tx.state == SasVerificationTxState.Verified)
         ) {
             //remove
             this.removeTransaction(tx.otherUserId, tx.transactionId)

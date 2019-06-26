@@ -85,12 +85,11 @@ fun TimelineEvent.senderAvatar(): String? {
 
 fun TimelineEvent.senderName(): String? {
     // We might have no senderName when user leave, so we try to get it from prevContent
-    return senderName
-            ?: if (root.type == EventType.STATE_ROOM_MEMBER) {
-                root.prevContent.toModel<RoomMember>()?.displayName
-            } else {
-                null
-            }
+    return when {
+        senderName != null                       -> getDisambiguatedDisplayName()
+        root.type == EventType.STATE_ROOM_MEMBER -> root.prevContent.toModel<RoomMember>()?.displayName
+        else                                     -> null
+    }
 }
 
 fun TimelineEvent.canBeMerged(): Boolean {

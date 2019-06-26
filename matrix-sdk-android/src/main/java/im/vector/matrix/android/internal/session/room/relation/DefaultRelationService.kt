@@ -50,7 +50,6 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                                                           private val roomId: String,
                                                           private val eventFactory: LocalEchoEventFactory,
                                                           private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-                                                          private val updateQuickReactionTask: UpdateQuickReactionTask,
                                                           private val monarchy: Monarchy,
                                                           private val taskExecutor: TaskExecutor)
     : RelationService {
@@ -68,7 +67,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
 
 
     private fun createSendRelationWork(event: Event): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId,roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
@@ -107,42 +106,11 @@ internal class DefaultRelationService @Inject constructor(private val context: C
 
     }
 
-
-    override fun updateQuickReaction(reaction: String, oppositeReaction: String, targetEventId: String, myUserId: String) {
-
-        val params = UpdateQuickReactionTask.Params(
-                roomId,
-                targetEventId,
-                reaction,
-                oppositeReaction,
-                myUserId
-        )
-
-        updateQuickReactionTask.configureWith(params)
-                .dispatchTo(object : MatrixCallback<UpdateQuickReactionTask.Result> {
-                    override fun onSuccess(data: UpdateQuickReactionTask.Result) {
-                        data.reactionToAdd?.also { sendReaction(it, targetEventId) }
-                        data.reactionToRedact.forEach {
-                            val redactEvent = eventFactory.createRedactEvent(roomId, it, null).also {
-                                saveLocalEcho(it)
-                            }
-                            val redactWork = createRedactEventWork(redactEvent, it, null)
-                            TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
-                        }
-                    }
-                })
-                .executeBy(taskExecutor)
-    }
-
-    private fun buildWorkIdentifier(identifier: String): String {
-        return "${roomId}_$identifier"
-    }
-
     //TODO duplicate with send service?
     private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
 
-        val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId ,localEvent.eventId!!,
-                                                               roomId, eventId, reason)
+        val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId, localEvent.eventId!!,
+                roomId, eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
@@ -151,7 +119,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         val event = eventFactory.createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, MessageType.MSGTYPE_TEXT, compatibilityBodyText).also {
             saveLocalEcho(it)
         }
-        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId ,roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         //TODO use relation API?
@@ -167,7 +135,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText)?.also {
             saveLocalEcho(it)
         } ?: return null
-        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId ,roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
 
@@ -197,9 +165,9 @@ internal class DefaultRelationService @Inject constructor(private val context: C
     private fun saveLocalEcho(event: Event) {
         monarchy.tryTransactionAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                             ?: return@tryTransactionAsync
+                    ?: return@tryTransactionAsync
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-                            ?: return@tryTransactionAsync
+                    ?: return@tryTransactionAsync
 
             roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
         }

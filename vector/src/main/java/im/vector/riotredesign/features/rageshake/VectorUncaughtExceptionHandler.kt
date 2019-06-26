@@ -20,7 +20,9 @@ import android.content.Context
 import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.BuildConfig
+import im.vector.riotredesign.features.version.getVersion
 import timber.log.Timber
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -35,8 +37,8 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
         private const val PREFS_CRASH_KEY = "PREFS_CRASH_KEY"
     }
 
-    private var vectorVersion: String = ""
-    private var matrixSdkVersion: String = ""
+    private val vectorVersion = getVersion(longFormat = true, useBuildNumber = true)
+    private val matrixSdkVersion = Matrix.getSdkVersion()
 
     private var previousHandler: Thread.UncaughtExceptionHandler? = null
 
@@ -114,12 +116,6 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
 
         // Show the classical system popup
         previousHandler?.uncaughtException(thread, throwable)
-    }
-
-    // TODO Call me
-    fun setVersions(vectorVersion: String, matrixSdkVersion: String) {
-        this.vectorVersion = vectorVersion
-        this.matrixSdkVersion = matrixSdkVersion
     }
 
     /**

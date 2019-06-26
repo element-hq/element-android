@@ -93,4 +93,9 @@
     <string name="rooms">Babilejoj</string>
     <string name="room_jump_to_first_unread">Salti al unua nelegita mesaĝo.</string>
 
+    <string name="title_activity_keys_backup_setup">Ŝlosilo-Sekukopio</string>
+    <string name="title_activity_keys_backup_restore">Usi Ŝlosilo-Sekukopion</string>
+    <string name="title_activity_verify_device">Kontroli aparaton</string>
+
+    <string name="encryption_information_verify_device">Kontroli aparaton</string>
 </resources>

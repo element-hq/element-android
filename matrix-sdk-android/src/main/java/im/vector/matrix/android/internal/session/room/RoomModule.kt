@@ -138,5 +138,4 @@ internal abstract class RoomModule {
     @Binds
     abstract fun bindTimelineService(timelineService: DefaultTimelineService): TimelineService
 
-
 }

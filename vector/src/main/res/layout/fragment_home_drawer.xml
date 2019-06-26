@@ -74,6 +74,7 @@
             android:background="?attr/selectableItemBackground"
             android:padding="16dp"
             android:src="@drawable/ic_settings_x"
+            android:tint="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

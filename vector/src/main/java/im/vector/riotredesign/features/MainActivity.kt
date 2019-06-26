@@ -24,7 +24,6 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.di.ScreenComponent
-import im.vector.riotredesign.core.extensions.openAndStartSync
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
 import im.vector.riotredesign.features.login.LoginActivity
@@ -76,16 +75,12 @@ class MainActivity : VectorBaseActivity() {
                 }
             })
             else             -> start()
+
         }
     }
 
     private fun start() {
-        val intent = if (authenticator.hasAuthenticatedSessions()) {
-            if (!sessionHolder.hasActiveSession()) {
-                val lastAuthenticatedSession = authenticator.getLastAuthenticatedSession()!!
-                sessionHolder.setActiveSession(lastAuthenticatedSession)
-                lastAuthenticatedSession.openAndStartSync()
-            }
+        val intent = if (sessionHolder.hasActiveSession()) {
             HomeActivity.newIntent(this)
         } else {
             LoginActivity.newIntent(this)

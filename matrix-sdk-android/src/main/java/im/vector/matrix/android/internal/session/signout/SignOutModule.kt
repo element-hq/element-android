@@ -21,8 +21,6 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.user.DefaultUpdateUserTask
-import im.vector.matrix.android.internal.session.user.UpdateUserTask
 import retrofit2.Retrofit
 
 @Module

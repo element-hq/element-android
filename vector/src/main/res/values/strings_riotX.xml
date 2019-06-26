@@ -2,56 +2,32 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
-    <string name="global_retry">"Retry"</string>
-    <string name="room_list_empty">"Join a room to start using the app."</string>
-    <string name="send_you_invite">"Sent you an invitation"</string>
-    <string name="invited_by">Invited by %s</string>
-
-    <string name="room_list_catchup_empty_title">You’re all caught up!</string>
-    <string name="room_list_catchup_empty_body">You have no more unread messages</string>
-    <string name="room_list_catchup_welcome_title">Welcome home!</string>
-    <string name="room_list_catchup_welcome_body">Catch up on unread messages here</string>
-    <string name="room_list_people_empty_title">Conversations</string>
-    <string name="room_list_people_empty_body">Your direct message conversation will be displayed here</string>
-    <string name="room_list_rooms_empty_title">Rooms</string>
-    <string name="room_list_rooms_empty_body">Your rooms will be displayed here</string>
-
-    <string name="title_activity_emoji_reaction_picker">Reactions</string>
-    <string name="reactions_agree">Agree</string>
-    <string name="reactions_like">Like</string>
-    <string name="message_add_reaction">Add Reaction</string>
-    <string name="message_view_reaction">View Reactions</string>
-    <string name="reactions">Reactions</string>
-
-    <string name="event_redacted_by_user_reason">Event deleted by user</string>
-    <string name="event_redacted_by_admin_reason">Event moderated by room admin</string>
-    <string name="last_edited_info_message">Last edited by %s on %s</string>
 
 
-    <string name="malformed_message">Malformed event, cannot display</string>
-    <string name="create_new_room">Create New Room</string>
-    <string name="error_no_network">No network. Please check your Internet connection.</string>
-    <string name="action_change">"Change"</string>
-    <string name="change_room_directory_network">"Change network"</string>
-    <string name="please_wait">"Please wait…"</string>
-    <string name="group_all_communities">"All Communities"</string>
+    <string name="import_e2e_keys_from_file">"Import e2e keys from file \"%1$s\"."</string>
 
-    <string name="room_preview_no_preview">"This room can't be previewed"</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">"The preview of world-readable room is not supported yet in RiotX"</string>
+    <string name="settings_sdk_version">Matrix SDK Version</string>
+    <string name="settings_other_third_party_notices">Other third party notices</string>
+    <string name="navigate_to_room_when_already_in_the_room">You are already viewing this room!</string>
 
-    <string name="fab_menu_create_room">"Rooms"</string>
-    <string name="fab_menu_create_chat">"Direct Messages"</string>
+    <string name="quick_reactions">Quick Reactions</string>
 
-    <!-- Create room screen -->
-    <string name="create_room_title">"New Room"</string>
-    <string name="create_room_action_create">"CREATE"</string>
-    <string name="create_room_name_hint">"Room name"</string>
-    <string name="create_room_public_title">"Public"</string>
-    <string name="create_room_public_description">"Anyone will be able to join this room"</string>
-    <string name="create_room_directory_title">"Room Directory"</string>
-    <string name="create_room_directory_description">"Publish this room in the room directory"</string>
+    <!-- Settings -->
+    <string name="settings_general_title">General</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_security_and_privacy">Security &amp; Privacy</string>
+    <string name="settings_expert">Expert</string>
+    <string name="settings_push_rules">Push Rules</string>
+    <string name="settings_push_rules_no_rules">No push rules defined</string>
+    <string name="settings_push_gateway_no_pushers">No registered push gateways</string>
 
-    <string name="keys_backup_unable_to_get_trust_info">"An error occurred getting trust info"</string>
-    <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Format:</string>
+
+    <string name="preference_root_legacy">Legacy</string>
 
 </resources>

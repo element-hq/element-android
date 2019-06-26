@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.crypto.CryptoAsyncHelper
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXKey
@@ -31,6 +30,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.extensions.toUnsignedInt
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import org.matrix.olm.OlmSAS
@@ -223,13 +223,17 @@ internal abstract class SASVerificationTransaction(
             cancel(CancelCode.MismatchedKeys)
             return
         }
+
+        val verifiedDevices = ArrayList<String>()
+
         //cannot be empty because it has been validated
         theirMac!!.mac!!.keys.forEach {
             val keyIDNoPrefix = if (it.startsWith("ed25519:")) it.substring("ed25519:".length) else it
             val otherDeviceKey = otherUserKnownDevices?.get(keyIDNoPrefix)?.fingerprint()
             if (otherDeviceKey == null) {
-                cancel(CancelCode.MismatchedKeys)
-                return
+                Timber.e("Verification: Could not find device $keyIDNoPrefix to verify")
+                //just ignore and continue
+                return@forEach
             }
             val mac = macUsingAgreedMethod(otherDeviceKey, baseInfo + it)
             if (mac != theirMac?.mac?.get(it)) {
@@ -237,12 +241,21 @@ internal abstract class SASVerificationTransaction(
                 cancel(CancelCode.MismatchedKeys)
                 return
             }
+            verifiedDevices.add(keyIDNoPrefix)
         }
 
-        setDeviceVerified(
-                otherDeviceId ?: "",
-                otherUserId)
+        // if none of the keys could be verified, then error because the app
+        // should be informed about that
+        if (verifiedDevices.isEmpty()) {
+            Timber.e("Verification: No devices verified")
+            cancel(CancelCode.MismatchedKeys)
+            return
+        }
 
+        //TODO what if the otherDevice is not in this list? and should we
+        verifiedDevices.forEach {
+            setDeviceVerified(it, otherUserId)
+        }
         state = SasVerificationTxState.Verified
     }
 
@@ -278,21 +291,17 @@ internal abstract class SASVerificationTransaction(
                 .dispatchTo(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         Timber.v("## SAS verification [$transactionId] toDevice type '$type' success.")
-                        CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                            if (onDone != null) {
-                                onDone()
-                            } else {
-                                state = nextState
-                            }
+                        if (onDone != null) {
+                            onDone()
+                        } else {
+                            state = nextState
                         }
                     }
 
                     override fun onFailure(failure: Throwable) {
                         Timber.e("## SAS verification [$transactionId] failed to send toDevice in state : $state")
 
-                        CryptoAsyncHelper.getDecryptBackgroundHandler().post {
-                            cancel(onErrorReason)
-                        }
+                        cancel(onErrorReason)
                     }
                 })
                 .executeBy(taskExecutor)
@@ -359,11 +368,11 @@ internal abstract class SASVerificationTransaction(
      * or with the three numbers on separate lines.
      */
     fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
-        val b0 = byteArray[0].toInt().and(0xff) //need unsigned byte
-        val b1 = byteArray[1].toInt().and(0xff) //need unsigned byte
-        val b2 = byteArray[2].toInt().and(0xff) //need unsigned byte
-        val b3 = byteArray[3].toInt().and(0xff) //need unsigned byte
-        val b4 = byteArray[4].toInt().and(0xff) //need unsigned byte
+        val b0 = byteArray[0].toUnsignedInt() //need unsigned byte
+        val b1 = byteArray[1].toUnsignedInt() //need unsigned byte
+        val b2 = byteArray[2].toUnsignedInt() //need unsigned byte
+        val b3 = byteArray[3].toUnsignedInt() //need unsigned byte
+        val b4 = byteArray[4].toUnsignedInt() //need unsigned byte
         //(B0 << 5 | B1 >> 3) + 1000
         val first = (b0.shl(5) or b1.shr(3)) + 1000
         //((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000
@@ -384,12 +393,12 @@ internal abstract class SASVerificationTransaction(
      * to that number 7 emoji are selected from a list of 64 emoji (see Appendix A)
      */
     fun getEmojiCodeRepresentation(byteArray: ByteArray): List<EmojiRepresentation> {
-        val b0 = byteArray[0].toInt().and(0xff)
-        val b1 = byteArray[1].toInt().and(0xff)
-        val b2 = byteArray[2].toInt().and(0xff)
-        val b3 = byteArray[3].toInt().and(0xff)
-        val b4 = byteArray[4].toInt().and(0xff)
-        val b5 = byteArray[5].toInt().and(0xff)
+        val b0 = byteArray[0].toUnsignedInt()
+        val b1 = byteArray[1].toUnsignedInt()
+        val b2 = byteArray[2].toUnsignedInt()
+        val b3 = byteArray[3].toUnsignedInt()
+        val b4 = byteArray[4].toUnsignedInt()
+        val b5 = byteArray[5].toUnsignedInt()
         return listOf(
                 getEmojiForCode((b0 and 0xFC).shr(2)),
                 getEmojiForCode((b0 and 0x3).shl(4) or (b1 and 0xF0).shr(4)),

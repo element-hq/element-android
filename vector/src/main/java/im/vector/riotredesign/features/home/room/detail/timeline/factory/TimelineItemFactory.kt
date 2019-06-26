@@ -38,11 +38,13 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
+               eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
+        val highlight = event.root.eventId == eventIdToHighlight
 
         val computedModel = try {
             when (event.root.getClearType()) {
-                EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, callback)
+                EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, highlight, callback)
                 // State and call
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
@@ -50,38 +52,38 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_HISTORY_VISIBILITY,
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER       -> noticeItemFactory.create(event, callback)
+                EventType.CALL_ANSWER       -> noticeItemFactory.create(event, highlight, callback)
 
                 // Crypto
-                EventType.ENCRYPTION        -> encryptionItemFactory.create(event)
-                EventType.ENCRYPTED         -> encryptedItemFactory.create(event)
+                EventType.ENCRYPTION        -> encryptionItemFactory.create(event, highlight, callback)
+                EventType.ENCRYPTED         -> encryptedItemFactory.create(event, nextEvent, highlight, callback)
 
                 // Unhandled event types (yet)
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STICKER,
-                EventType.STATE_ROOM_CREATE -> defaultItemFactory.create(event)
+                EventType.STATE_ROOM_CREATE -> defaultItemFactory.create(event, highlight)
 
                 else                        -> {
                     //These are just for debug to display hidden event, they should be filtered out in normal mode
                     if (TimelineDisplayableEvents.DEBUG_HIDDEN_EVENT) {
                         val informationData = MessageInformationData(eventId = event.root.eventId
-                                                                               ?: "?",
-                                                                     senderId = event.root.sender
-                                                                                ?: "",
-                                                                     sendState = event.sendState,
-                                                                     time = "",
-                                                                     avatarUrl = null,
-                                                                     memberName = "",
-                                                                     showInformation = false
+                                ?: "?",
+                                senderId = event.root.senderId ?: "",
+                                sendState = event.sendState,
+                                time = "",
+                                avatarUrl = null,
+                                memberName = "",
+                                showInformation = false
                         )
                         val messageContent = event.root.content.toModel<MessageContent>()
-                                             ?: MessageDefaultContent("", "", null, null)
+                                ?: MessageDefaultContent("", "", null, null)
                         MessageTextItem_()
                                 .informationData(informationData)
                                 .message("{ \"type\": ${event.root.type} }")
+                                .highlighted(highlight)
                                 .longClickListener { view ->
                                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                                                             ?: false
+                                            ?: false
                                 }
                     } else {
                         Timber.w("Ignored event (type: ${event.root.type}")
@@ -91,7 +93,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             }
         } catch (e: Exception) {
             Timber.e(e, "failed to create message item")
-            defaultItemFactory.create(event, e)
+            defaultItemFactory.create(event, highlight, e)
         }
         return (computedModel ?: EmptyItem_())
     }

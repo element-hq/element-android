@@ -133,7 +133,6 @@ interface ScreenComponent {
 
     fun inject(videoMediaViewerActivity: VideoMediaViewerActivity)
 
-
     @Component.Factory
     interface Factory {
         fun create(vectorComponent: VectorComponent,

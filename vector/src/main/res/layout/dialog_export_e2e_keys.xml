@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingStart="?dialogPreferredPadding"
     android:paddingLeft="?dialogPreferredPadding"
@@ -13,21 +13,41 @@
     android:paddingBottom="12dp">
 
     <TextView
+        android:id="@+id/exportDialogText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/encryption_export_notice"
         android:textColor="?riotx_text_primary"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/exportDialogShowPassword"
+        android:layout_width="@dimen/layout_touch_size"
+        android:layout_height="@dimen/layout_touch_size"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="center"
+        android:src="@drawable/ic_eye_black"
+        android:tint="?attr/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/exportDialogTil"
+        app:layout_constraintTop_toTopOf="@id/exportDialogTil" />
+
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/exportDialogTil"
         style="@style/VectorTextInputLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColorHint="?attr/vctr_default_text_hint_color">
+        android:textColorHint="?attr/vctr_default_text_hint_color"
+        app:layout_constraintEnd_toStartOf="@+id/exportDialogShowPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exportDialogText">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dialog_e2e_keys_passphrase_edit_text"
+            android:id="@+id/exportDialogEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/passphrase_create_passphrase"
@@ -38,16 +58,19 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dialog_e2e_keys_confirm_passphrase_til"
+        android:id="@+id/exportDialogTilConfirm"
         style="@style/VectorTextInputLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textColorHint="?attr/vctr_default_text_hint_color"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="@+id/exportDialogTil"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exportDialogTil">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dialog_e2e_keys_confirm_passphrase_edit_text"
+            android:id="@+id/exportDialogEtConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/passphrase_confirm_passphrase"
@@ -57,10 +80,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/dialog_e2e_keys_export_button"
+        android:id="@+id/exportDialogSubmit"
         style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_gravity="end"
         android:enabled="false"
-        android:text="@string/encryption_export_export" />
-</LinearLayout>
+        android:text="@string/encryption_export_export"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exportDialogTilConfirm" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

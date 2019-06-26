@@ -20,6 +20,7 @@ package im.vector.riotredesign.core.utils
 
 import android.content.Context
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
 
 /**
@@ -29,6 +30,10 @@ import androidx.appcompat.app.AlertDialog
  */
 fun Context.displayInWebView(url: String) {
     val wv = WebView(this)
+
+    // Set a WebViewClient to ensure redirection is handled directly in the WebView
+    wv.webViewClient = WebViewClient()
+
     wv.loadUrl(url)
     AlertDialog.Builder(this)
             .setView(wv)

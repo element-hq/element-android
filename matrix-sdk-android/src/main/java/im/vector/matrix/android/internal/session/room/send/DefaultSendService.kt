@@ -17,13 +17,7 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
@@ -128,7 +122,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
 
     private fun createEncryptEventWork(event: Event): OneTimeWorkRequest {
         // Same parameter
-        val params = EncryptEventWorker.Params(credentials.userId ,roomId, event)
+        val params = EncryptEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(params)
 
         return OneTimeWorkRequestBuilder<EncryptEventWorker>()
@@ -139,7 +133,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     }
 
     private fun createSendEventWork(event: Event): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId ,roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
@@ -149,13 +143,13 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val redactEvent = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason).also {
             saveLocalEcho(it)
         }
-        val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId ,redactEvent.eventId!!, roomId, event.eventId, reason)
+        val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId, redactEvent.eventId!!, roomId, event.eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
 
     private fun createUploadMediaWork(event: Event, attachment: ContentAttachmentData): OneTimeWorkRequest {
-        val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId ,roomId, event, attachment)
+        val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return OneTimeWorkRequestBuilder<UploadContentWorker>()

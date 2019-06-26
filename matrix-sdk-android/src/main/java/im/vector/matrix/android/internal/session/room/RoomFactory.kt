@@ -68,8 +68,8 @@ internal class RoomFactory @Inject constructor(private val context: Context,
         val sendService = DefaultSendService(context, credentials, roomId, eventFactory, cryptoService, monarchy)
         val stateService = DefaultStateService(roomId, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
-        val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask)
-        val reactionService = DefaultRelationService(context, credentials, roomId, eventFactory, findReactionEventForUndoTask, updateQuickReactionTask, monarchy, taskExecutor)
+        val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, credentials)
+        val relationService = DefaultRelationService(context, credentials, roomId, eventFactory, findReactionEventForUndoTask, monarchy, taskExecutor)
 
         return DefaultRoom(
                 roomId,
@@ -79,7 +79,7 @@ internal class RoomFactory @Inject constructor(private val context: Context,
                 stateService,
                 readService,
                 cryptoService,
-                reactionService,
+                relationService,
                 roomMembersService
         )
     }

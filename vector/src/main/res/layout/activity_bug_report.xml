@@ -7,6 +7,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/bugReportToolbar"
+        style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp" />
@@ -28,6 +29,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:text="@string/send_bug_report_progress"
+            android:textColor="?riotx_text_primary"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -65,7 +67,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="@string/send_bug_report_description" />
+                    android:text="@string/send_bug_report_description"
+                    android:textColor="?riotx_text_primary" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/VectorTextInputLayout"
@@ -96,6 +99,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:text="@string/send_bug_report_description_in_english"
+                    android:textColor="?riotx_text_secondary"
                     android:textSize="12sp" />
 
                 <TextView
@@ -106,67 +110,41 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="@string/send_bug_report_logs_description" />
+                    android:text="@string/send_bug_report_logs_description"
+                    android:textColor="?riotx_text_primary" />
 
-                <LinearLayout
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/bug_report_button_include_logs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:checked="true"
+                    android:text="@string/send_bug_report_include_logs" />
 
-                    <CheckBox
-                        android:id="@+id/bug_report_button_include_logs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/send_bug_report_include_logs" />
-                </LinearLayout>
-
-                <LinearLayout
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/bug_report_button_include_crash_logs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:checked="true"
+                    android:text="@string/send_bug_report_include_crash_logs" />
 
-                    <CheckBox
-                        android:id="@+id/bug_report_button_include_crash_logs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/send_bug_report_include_crash_logs" />
-                </LinearLayout>
-
-                <LinearLayout
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/bug_report_button_include_screenshot"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/bug_report_button_include_screenshot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/send_bug_report_include_screenshot" />
-                </LinearLayout>
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:checked="true"
+                    android:text="@string/send_bug_report_include_screenshot" />
 
                 <ImageView
                     android:id="@+id/bug_report_screenshot_preview"
@@ -189,5 +167,6 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:clickable="true"
+        android:focusable="true"
         android:visibility="gone" />
 </LinearLayout>

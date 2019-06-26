@@ -19,8 +19,6 @@ package im.vector.matrix.android.internal.session.room.send
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
@@ -28,9 +26,8 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
-import im.vector.matrix.android.internal.worker.WorkerParamsFactory
-import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
@@ -43,15 +40,15 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             override val userId: String,
             val roomId: String,
             val event: Event
-    ): SessionWorkerParams
+    ) : SessionWorkerParams
 
-    @Inject  lateinit var crypto: CryptoService
+    @Inject lateinit var crypto: CryptoService
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater
 
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.success()
+                ?: return Result.success()
 
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)

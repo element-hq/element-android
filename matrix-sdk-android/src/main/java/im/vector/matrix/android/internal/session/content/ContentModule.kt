@@ -20,7 +20,6 @@ import dagger.Binds
 import dagger.Module
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.internal.session.SessionScope
 
 @Module
 internal abstract class ContentModule {

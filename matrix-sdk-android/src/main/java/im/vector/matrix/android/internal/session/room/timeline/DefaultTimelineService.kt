@@ -41,10 +41,11 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {
         return monarchy
                 .fetchCopyMap({
-                                  EventEntity.where(it, eventId = eventId).findFirst()
-                              }, { entity, realm ->
-                                  timelineEventFactory.create(entity, realm)
-                              })
+                    EventEntity.where(it, eventId = eventId).findFirst()
+                }, { entity, realm ->
+                    timelineEventFactory.create(entity, realm)
+                })
     }
+
 
 }

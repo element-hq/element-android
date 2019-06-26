@@ -44,6 +44,10 @@ class ActiveSessionHolder @Inject constructor(private val authenticator: Authent
         return activeSession.get() != null
     }
 
+    fun getSafeActiveSession(): Session? {
+        return activeSession.get()
+    }
+
     fun getActiveSession(): Session {
         return activeSession.get() ?: throw IllegalStateException("You should authenticate before using this")
     }

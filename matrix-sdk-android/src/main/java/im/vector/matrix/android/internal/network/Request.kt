@@ -23,44 +23,72 @@ import arrow.effects.IO
 import arrow.effects.fix
 import arrow.effects.instances.io.async.async
 import arrow.integrations.retrofit.adapter.runAsync
+import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.di.MoshiProvider
+import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.ResponseBody
 import retrofit2.Call
+import timber.log.Timber
 import java.io.IOException
+import kotlin.coroutines.resume
 
-internal inline fun <DATA> executeRequest(block: Request<DATA>.() -> Unit) = Request<DATA>().apply(block).execute()
+internal suspend inline fun <DATA> executeRequest(block: Request<DATA>.() -> Unit) = Request<DATA>().apply(block).execute()
 
 internal class Request<DATA> {
 
     private val moshi: Moshi = MoshiProvider.providesMoshi()
     lateinit var apiCall: Call<DATA>
 
-    fun execute(): Try<DATA> {
-        return Try {
-            val response = apiCall.runAsync(IO.async()).fix().unsafeRunSync()
-            if (response.isSuccessful) {
-                response.body() ?: throw IllegalStateException("The request returned a null body")
-            } else {
-                throw manageFailure(response.errorBody())
+    suspend fun execute(): Try<DATA> {
+        return suspendCancellableCoroutine { continuation ->
+            continuation.invokeOnCancellation {
+                Timber.v("Request is canceled")
+                apiCall.cancel()
             }
-        }.recoverWith {
-            when (it) {
-                is IOException         -> Failure.NetworkConnection(it)
-                is Failure.ServerError -> it
-                else                   -> Failure.Unknown(it)
-            }.failure()
+            val result = Try {
+                val response = apiCall.runAsync(IO.async()).fix().unsafeRunSync()
+                if (response.isSuccessful) {
+                    response.body()
+                            ?: throw IllegalStateException("The request returned a null body")
+                } else {
+                    throw manageFailure(response.errorBody(), response.code())
+                }
+            }.recoverWith {
+                when (it) {
+                    is IOException              -> Failure.NetworkConnection(it)
+                    is Failure.ServerError,
+                    is Failure.OtherServerError -> it
+                    else                        -> Failure.Unknown(it)
+                }.failure()
+            }
+            continuation.resume(result)
         }
+
     }
 
-    private fun manageFailure(errorBody: ResponseBody?): Throwable {
-        val matrixError = errorBody?.let {
-            val matrixErrorAdapter = moshi.adapter(MatrixError::class.java)
-            matrixErrorAdapter.fromJson(errorBody.source())
-        } ?: return RuntimeException("Matrix error should not be null")
-        return Failure.ServerError(matrixError)
-    }
+    private fun manageFailure(errorBody: ResponseBody?, httpCode: Int): Throwable {
+        if (errorBody == null) {
+            return RuntimeException("Error body should not be null")
+        }
 
+        val errorBodyStr = errorBody.string()
+
+        val matrixErrorAdapter = moshi.adapter(MatrixError::class.java)
+
+        try {
+            val matrixError = matrixErrorAdapter.fromJson(errorBodyStr)
+
+            if (matrixError != null) {
+                return Failure.ServerError(matrixError, httpCode)
+            }
+        } catch (ex: JsonDataException) {
+            // This is not a MatrixError
+            Timber.w("The error returned by the server is not a MatrixError")
+        }
+
+        return Failure.OtherServerError(errorBodyStr, httpCode)
+    }
 }

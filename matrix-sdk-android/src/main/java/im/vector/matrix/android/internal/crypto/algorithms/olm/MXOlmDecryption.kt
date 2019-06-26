@@ -121,9 +121,9 @@ internal class MXOlmDecryption(
                     MXCryptoError.UNABLE_TO_DECRYPT, String.format(MXCryptoError.ERROR_MISSING_PROPERTY_REASON, "sender")))
         }
 
-        if (!TextUtils.equals(olmPayloadContent.sender, event.sender)) {
+        if (!TextUtils.equals(olmPayloadContent.sender, event.senderId)) {
             Timber.e("Event " + event.eventId + ": original sender " + olmPayloadContent.sender
-                    + " does not match reported sender " + event.sender)
+                    + " does not match reported sender " + event.senderId)
             throw MXDecryptionException(MXCryptoError(MXCryptoError.FORWARDED_MESSAGE_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, String.format(MXCryptoError.FORWARDED_MESSAGE_REASON, olmPayloadContent.sender)))
         }

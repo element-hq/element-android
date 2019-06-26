@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,6 +11,18 @@
     android:paddingEnd="?dialogPreferredPadding"
     android:paddingRight="?dialogPreferredPadding"
     android:paddingBottom="12dp">
+
+    <TextView
+        android:id="@+id/dialog_e2e_keys_passphrase_filename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="?riotx_text_primary"
+        android:textSize="16sp"
+        android:visibility="gone"
+        tools:text="filename.txt"
+        tools:visibility="visible" />
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/VectorTextInputLayout"

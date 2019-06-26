@@ -20,9 +20,13 @@ package im.vector.riotredesign.core.extensions
 
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
+import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 
-fun Session.openAndStartSync(){
+fun Session.configureAndStart(pushRuleTriggerListener: PushRuleTriggerListener) {
     open()
     setFilter(FilterService.FilterPreset.RiotFilter)
     startSync()
+    refreshPushers()
+    pushRuleTriggerListener.startWithSession(this)
+    fetchPushRules()
 }

@@ -23,19 +23,18 @@ import android.view.View
 import android.widget.Toast
 import arrow.core.Try
 import com.jakewharton.rxbinding2.widget.RxTextView
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.di.ScreenComponent
-import im.vector.riotredesign.core.extensions.openAndStartSync
+import im.vector.riotredesign.core.extensions.configureAndStart
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
+import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
@@ -50,6 +49,7 @@ class LoginActivity : VectorBaseActivity() {
 
     @Inject lateinit var authenticator: Authenticator
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var pushRuleTriggerListener: PushRuleTriggerListener
 
     private var passwordShown = false
 
@@ -82,7 +82,7 @@ class LoginActivity : VectorBaseActivity() {
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session) {
                 activeSessionHolder.setActiveSession(data)
-                data.openAndStartSync()
+                data.configureAndStart(pushRuleTriggerListener)
                 goToHome()
             }
 

@@ -16,18 +16,21 @@
 
 package im.vector.matrix.android.internal.session
 
+import android.content.Context
 import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.signout.SignOutService
@@ -38,11 +41,13 @@ import im.vector.matrix.android.api.util.MatrixCallbackDelegate
 import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
+import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
 internal class DefaultSession @Inject constructor(override val sessionParams: SessionParams,
+                                                  private val context: Context,
                                                   private val liveEntityObservers: Set<@JvmSuppressWildcards LiveEntityObserver>,
                                                   private val monarchy: Monarchy,
                                                   private val sessionListeners: SessionListeners,
@@ -53,21 +58,26 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val filterService: FilterService,
                                                   private val cacheService: CacheService,
                                                   private val signOutService: SignOutService,
+                                                  private val pushRuleService: PushRuleService,
+                                                  private val pushersService: PushersService,
                                                   private val cryptoService: CryptoManager,
                                                   private val syncThread: SyncThread,
                                                   private val contentUrlResolver: ContentUrlResolver,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker)
     : Session,
-      RoomService by roomService,
-      RoomDirectoryService by roomDirectoryService,
-      GroupService by groupService,
-      UserService by userService,
-      CryptoService by cryptoService,
-      CacheService by cacheService,
-      SignOutService by signOutService,
-      FilterService by filterService {
+        RoomService by roomService,
+        RoomDirectoryService by roomDirectoryService,
+        GroupService by groupService,
+        UserService by userService,
+        CryptoService by cryptoService,
+        CacheService by cacheService,
+        SignOutService by signOutService,
+        FilterService by filterService,
+        PushRuleService by pushRuleService,
+        PushersService by pushersService {
 
     private var isOpen = false
+
 
     @MainThread
     override fun open() {
@@ -80,10 +90,27 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         liveEntityObservers.forEach { it.start() }
     }
 
+    override fun requireBackgroundSync() {
+        SyncWorker.requireBackgroundSync(context, sessionParams.credentials.userId)
+    }
+
+    override fun startAutomaticBackgroundSync(repeatDelay: Long) {
+        SyncWorker.automaticallyBackgroundSync(context, sessionParams.credentials.userId, 0, repeatDelay)
+    }
+
+    override fun stopAnyBackgroundSync() {
+        SyncWorker.stopAnyBackgroundSync(context)
+    }
+
     @MainThread
     override fun startSync() {
         assert(isOpen)
-        syncThread.start()
+        if (!syncThread.isAlive) {
+            syncThread.start()
+        } else {
+            syncThread.restart()
+            Timber.w("Attempt to start an already started thread")
+        }
     }
 
     @MainThread
@@ -113,8 +140,8 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         Timber.w("SIGN_OUT: start")
 
         assert(isOpen)
-        Timber.w("SIGN_OUT: kill sync thread")
-        syncThread.kill()
+        //Timber.w("SIGN_OUT: kill sync thread")
+        //syncThread.kill()
 
         Timber.w("SIGN_OUT: call webservice")
         return signOutService.signOut(object : MatrixCallback<Unit> {
@@ -163,5 +190,6 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
             throw IllegalStateException("This method can only be called on the main thread!")
         }
     }
+
 
 }

@@ -22,7 +22,6 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import javax.inject.Inject
 

@@ -59,7 +59,7 @@ object RoomDataHelper {
                 eventId = Random.nextLong().toString(),
                 content = content,
                 prevContent = prevContent,
-                sender = sender,
+                senderId = sender,
                 stateKey = stateKey
         )
     }

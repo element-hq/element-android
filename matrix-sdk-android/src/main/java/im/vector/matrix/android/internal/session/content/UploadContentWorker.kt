@@ -19,20 +19,14 @@ package im.vector.matrix.android.internal.session.content
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
-import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
@@ -56,7 +50,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.success()
+                ?: return Result.success()
 
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)

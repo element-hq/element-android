@@ -24,7 +24,7 @@ import im.vector.matrix.android.api.session.events.model.Event
  */
 object PermalinkFactory {
 
-    private val MATRIX_TO_URL_BASE = "https://matrix.to/#/"
+    const val MATRIX_TO_URL_BASE = "https://matrix.to/#/"
 
     /**
      * Creates a permalink for an event.

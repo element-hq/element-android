@@ -2,13 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="im.vector.riotredesign">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application>
 
-        <receiver android:name=".receiver.OnApplicationUpgradeReceiver">
+        <receiver android:name=".receiver.OnApplicationUpgradeOrRebootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".core.services.AlarmSyncBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
     </application>
 

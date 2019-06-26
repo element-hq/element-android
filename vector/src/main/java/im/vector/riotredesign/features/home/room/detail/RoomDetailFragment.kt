@@ -57,13 +57,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.model.message.MessageType
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
@@ -72,6 +66,7 @@ import im.vector.riotredesign.core.dialogs.DialogListItem
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
+import im.vector.riotredesign.core.extensions.setTextOrHide
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
@@ -86,9 +81,7 @@ import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandP
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotredesign.features.command.Command
-import im.vector.riotredesign.features.home.AvatarRenderer
-import im.vector.riotredesign.features.home.HomePermalinkHandler
-import im.vector.riotredesign.features.home.getColorFromUserId
+import im.vector.riotredesign.features.home.*
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerActions
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewModel
@@ -106,6 +99,7 @@ import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.ImageMediaViewerActivity
 import im.vector.riotredesign.features.media.VideoContentRenderer
 import im.vector.riotredesign.features.media.VideoMediaViewerActivity
+import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotredesign.features.settings.PreferencesManager
 import kotlinx.android.parcel.Parcelize
@@ -179,10 +173,12 @@ class RoomDetailFragment :
     @Inject lateinit var commandAutocompletePolicy: CommandAutocompletePolicy
     @Inject lateinit var autocompleteCommandPresenter: AutocompleteCommandPresenter
     @Inject lateinit var autocompleteUserPresenter: AutocompleteUserPresenter
-    @Inject lateinit var homePermalinkHandler: HomePermalinkHandler
+    @Inject lateinit var permalinkHandler: PermalinkHandler
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var roomDetailViewModelFactory: RoomDetailViewModel.Factory
     @Inject lateinit var textComposerViewModelFactory: TextComposerViewModel.Factory
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
+    private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
 
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
@@ -216,6 +212,11 @@ class RoomDetailFragment :
             handleActions(it)
         }
 
+        roomDetailViewModel.navigateToEvent.observeEvent(this) {
+            //
+            scrollOnHighlightedEventCallback.scheduleScrollTo(it)
+        }
+
         roomDetailViewModel.selectSubscribe(
                 RoomDetailViewState::sendMode,
                 RoomDetailViewState::selectedEvent,
@@ -239,25 +240,25 @@ class RoomDetailFragment :
                     }
                     //switch to expanded bar
                     composerLayout.composerRelatedMessageTitle.apply {
-                        text = event.senderName
-                        setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.sender)))
+                        text = event.getDisambiguatedDisplayName()
+                        setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
                     }
 
                     //TODO this is used at several places, find way to refactor?
                     val messageContent: MessageContent? =
                             event.annotations?.editSummary?.aggregatedContent?.toModel()
-                            ?: event.root.content.toModel()
+                                    ?: event.root.content.toModel()
                     val nonFormattedBody = messageContent?.body ?: ""
                     var formattedBody: CharSequence? = null
                     if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                         val parser = Parser.builder().build()
                         val document = parser.parse(messageContent.formattedBody
-                                                    ?: messageContent.body)
+                                ?: messageContent.body)
                         formattedBody = Markwon.builder(requireContext())
                                 .usePlugin(HtmlPlugin.create()).build().render(document)
                     }
                     composerLayout.composerRelatedMessageContent.text = formattedBody
-                                                                        ?: nonFormattedBody
+                            ?: nonFormattedBody
 
 
                     if (mode == SendMode.EDIT) {
@@ -272,8 +273,8 @@ class RoomDetailFragment :
                         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_reply))
                     }
 
-                    avatarRenderer.render(event.senderAvatar, event.root.sender
-                                                              ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                    avatarRenderer.render(event.senderAvatar, event.root.senderId
+                            ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
                     composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
                     composerLayout.expand {
@@ -289,6 +290,18 @@ class RoomDetailFragment :
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        notificationDrawerManager.setCurrentRoom(roomDetailArgs.roomId)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        notificationDrawerManager.setCurrentRoom(null)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && data != null) {
@@ -296,9 +309,9 @@ class RoomDetailFragment :
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                                  ?: return
+                            ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                                   ?: return
+                            ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -314,12 +327,14 @@ class RoomDetailFragment :
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
+        scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(layoutManager, timelineEventController)
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = null
         recyclerView.setHasFixedSize(true)
         timelineEventController.addModelBuildListener {
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
+            it.dispatchTo(scrollOnHighlightedEventCallback)
         }
 
         recyclerView.addOnScrollListener(
@@ -484,7 +499,7 @@ class RoomDetailFragment :
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
-            timelineEventController.setTimeline(state.timeline)
+            timelineEventController.setTimeline(state.timeline, state.eventId)
             inviteView.visibility = View.GONE
 
             val uid = session.sessionParams.credentials.userId
@@ -503,12 +518,7 @@ class RoomDetailFragment :
         state.asyncRoomSummary()?.let {
             roomToolbarTitleView.text = it.displayName
             avatarRenderer.render(it, roomToolbarAvatarImageView)
-            if (it.topic.isNotEmpty()) {
-                roomToolbarSubtitleView.visibility = View.VISIBLE
-                roomToolbarSubtitleView.text = it.topic
-            } else {
-                roomToolbarSubtitleView.visibility = View.GONE
-            }
+            roomToolbarSubtitleView.setTextOrHide(it.topic)
         }
     }
 
@@ -551,20 +561,49 @@ class RoomDetailFragment :
 
     // TimelineEventController.Callback ************************************************************
 
-    override fun onUrlClicked(url: String) {
-        homePermalinkHandler.launch(url)
+    override fun onUrlClicked(url: String): Boolean {
+        return permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
+            override fun navToRoom(roomId: String, eventId: String?): Boolean {
+                // Same room?
+                if (roomId == roomDetailArgs.roomId) {
+                    // Navigation to same room
+                    if (eventId == null) {
+                        showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
+                    } else {
+                        // Highlight and scroll to this event
+                        roomDetailViewModel.process(RoomDetailActions.NavigateToEvent(eventId, timelineEventController.searchPositionOfEvent(eventId)))
+                    }
+                    return true
+                }
+
+                // Not handled
+                return false
+            }
+        })
+    }
+
+    override fun onUrlLongClicked(url: String): Boolean {
+        // Copy the url to the clipboard
+        copyToClipboard(requireContext(), url)
+        return true
     }
 
     override fun onEventVisible(event: TimelineEvent) {
         roomDetailViewModel.process(RoomDetailActions.EventDisplayed(event))
     }
 
+    override fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View) {
+        vectorBaseActivity.notImplemented("encrypted message click")
+    }
+
     override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {
+        // TODO Use navigator
         val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
         startActivity(intent)
     }
 
     override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
+        // TODO Use navigator
         val intent = VideoMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
         startActivity(intent)
     }
@@ -593,7 +632,7 @@ class RoomDetailFragment :
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        vectorBaseActivity.notImplemented()
+        vectorBaseActivity.notImplemented("Click on user avatar")
     }
 
     @SuppressLint("SetTextI18n")
@@ -636,7 +675,7 @@ class RoomDetailFragment :
             }
             MessageMenuViewModel.ACTION_VIEW_REACTIONS -> {
                 val messageInformationData = actionData.data as? MessageInformationData
-                                             ?: return
+                        ?: return
                 ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, messageInformationData)
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
@@ -694,9 +733,9 @@ class RoomDetailFragment :
                         .show()
             }
             MessageMenuViewModel.ACTION_QUICK_REACT    -> {
-                //eventId,ClickedOn,Opposite
-                (actionData.data as? Triple<String, String, String>)?.let { (eventId, clickedOn, opposite) ->
-                    roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, opposite))
+                //eventId,ClickedOn,Add
+                (actionData.data as? Triple<String, String, Boolean>)?.let { (eventId, clickedOn, add) ->
+                    roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, add))
                 }
             }
             MessageMenuViewModel.ACTION_EDIT           -> {
@@ -775,7 +814,7 @@ class RoomDetailFragment :
         imm?.showSoftInput(composerLayout.composerEditText, InputMethodManager.SHOW_IMPLICIT)
     }
 
-    fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+    private fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
         val snack = Snackbar.make(view!!, message, duration)
         snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
         snack.show()

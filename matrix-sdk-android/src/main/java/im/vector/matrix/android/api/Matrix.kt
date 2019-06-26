@@ -21,9 +21,8 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.di.DaggerMatrixComponent
 import im.vector.matrix.android.internal.network.UserAgentHolder
@@ -94,6 +93,9 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
             return instance
         }
 
+        fun getSdkVersion(): String {
+            return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
+        }
     }
 
 }

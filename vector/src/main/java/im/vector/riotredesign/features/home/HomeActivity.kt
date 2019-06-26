@@ -39,11 +39,15 @@ import im.vector.riotredesign.core.extensions.replaceFragment
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
+import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
+import im.vector.riotredesign.features.workers.signout.SignOutViewModel
+import im.vector.riotredesign.push.fcm.FcmHelper
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
 
@@ -66,6 +70,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
     // TODO Move this elsewhere
     @Inject lateinit var keyRequestHandler: KeyRequestHandler
+    @Inject lateinit var pushManager: PushersManager
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
 
     private var progress: ProgressDialog? = null
 
@@ -84,8 +90,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeNavigator.activity = this
-        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeNavigationViewModel::class.java)
-
+        FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager)
+        navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             val homeDrawerFragment = HomeDrawerFragment.newInstance()
@@ -111,6 +117,20 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
             }
         }
+
+        if (intent.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)) {
+            notificationDrawerManager.clearAllEvents()
+            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        if (intent?.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION) == true) {
+            notificationDrawerManager.clearAllEvents()
+            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
+        }
     }
 
     override fun onDestroy() {
@@ -132,6 +152,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
                     .show()
         }
+
+        //Force remote backup state update to update the banner if needed
+        ViewModelProviders.of(this).get(SignOutViewModel::class.java).refreshRemoteStateIfNeeded()
     }
 
     override fun configure(toolbar: Toolbar) {
@@ -143,7 +166,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.sliding_menu_sign_out -> {
-                SignOutUiWorker(this).perform(activeSessionHolder.getActiveSession())
+                SignOutUiWorker(this, notificationDrawerManager).perform(activeSessionHolder.getActiveSession())
                 return true
             }
         }
@@ -182,10 +205,14 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
 
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, HomeActivity::class.java)
-        }
+        private const val EXTRA_CLEAR_EXISTING_NOTIFICATION = "EXTRA_CLEAR_EXISTING_NOTIFICATION"
 
+        fun newIntent(context: Context, clearNotification: Boolean = false): Intent {
+            return Intent(context, HomeActivity::class.java)
+                    .apply {
+                        putExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, clearNotification)
+                    }
+        }
     }
 
 }

@@ -20,21 +20,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Space
+        android:id="@+id/view_keys_backup_banner_space1"
+        android:layout_width="wrap_content"
+        android:layout_height="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/view_keys_backup_banner_text_1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
     <TextView
         android:id="@+id/view_keys_backup_banner_text_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginLeft="27dp"
-        android:layout_marginTop="8dp"
         android:text="@string/keys_backup_banner_setup_line1"
         android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@id/view_keys_backup_banner_text_2"
         app:layout_constraintEnd_toStartOf="@id/view_keys_backup_banner_barrier"
         app:layout_constraintStart_toEndOf="@id/view_keys_backup_banner_picto"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toBottomOf="@+id/view_keys_backup_banner_space1" />
 
     <TextView
         android:id="@+id/view_keys_backup_banner_text_2"
@@ -42,16 +48,22 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginLeft="27dp"
-        android:layout_marginBottom="8dp"
         android:text="@string/keys_backup_banner_setup_line2"
         android:textColor="?colorAccent"
         android:textSize="15sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/view_keys_backup_banner_space2"
         app:layout_constraintEnd_toStartOf="@id/view_keys_backup_banner_barrier"
         app:layout_constraintStart_toEndOf="@id/view_keys_backup_banner_picto"
         app:layout_constraintTop_toBottomOf="@id/view_keys_backup_banner_text_1"
         tools:visibility="visible" />
+
+    <Space
+        android:id="@+id/view_keys_backup_banner_space2"
+        android:layout_width="wrap_content"
+        android:layout_height="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_keys_backup_banner_text_2" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/view_keys_backup_banner_barrier"

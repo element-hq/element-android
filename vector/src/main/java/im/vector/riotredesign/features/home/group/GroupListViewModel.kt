@@ -90,7 +90,8 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
 
     private fun observeGroupSummaries() {
         session
-                .rx().liveGroupSummaries()
+                .rx()
+                .liveGroupSummaries()
                 .map {
                     val myUser = session.getUser(session.sessionParams.credentials.userId)
                     val allCommunityGroup = GroupSummary(
@@ -100,6 +101,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                     listOf(allCommunityGroup) + it
                 }
                 .execute { async ->
+                    // TODO Phase2 Handle the case where the selected group is deleted on another client
                     val newSelectedGroup = selectedGroup ?: async()?.firstOrNull()
                     copy(asyncGroups = async, selectedGroup = newSelectedGroup)
                 }

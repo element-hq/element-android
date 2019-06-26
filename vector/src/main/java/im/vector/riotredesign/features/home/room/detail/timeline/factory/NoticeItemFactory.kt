@@ -31,11 +31,12 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                                             private val avatarRenderer: AvatarRenderer) {
 
     fun create(event: TimelineEvent,
+               highlight: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
         val formattedText = eventFormatter.format(event) ?: return null
         val informationData = MessageInformationData(
                 eventId = event.root.eventId ?: "?",
-                senderId = event.root.sender ?: "",
+                senderId = event.root.senderId ?: "",
                 sendState = event.sendState,
                 avatarUrl = event.senderAvatar(),
                 memberName = event.senderName(),
@@ -45,6 +46,7 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
         return NoticeItem_()
                 .avatarRenderer(avatarRenderer)
                 .noticeText(formattedText)
+                .highlighted(highlight)
                 .informationData(informationData)
                 .baseCallback(callback)
     }

@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.network
 
-import im.vector.matrix.android.internal.di.MatrixScope
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

@@ -25,7 +25,6 @@ import android.text.style.RelativeSizeSpan
 import android.view.View
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
@@ -35,18 +34,16 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
-import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.DebouncedClickListener
 import im.vector.riotredesign.features.home.AvatarRenderer
-import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.item.*
+import im.vector.riotredesign.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.VideoContentRenderer
@@ -57,56 +54,26 @@ class MessageItemFactory @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-        private val timelineDateFormatter: TimelineDateFormatter,
         private val htmlRenderer: EventHtmlRenderer,
         private val stringProvider: StringProvider,
         private val emojiCompatFontProvider: EmojiCompatFontProvider,
         private val imageContentRenderer: ImageContentRenderer,
+        private val messageInformationDataFactory: MessageInformationDataFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder) {
+
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
+               highlight: Boolean,
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
+        event.root.eventId ?: return null
 
-        val eventId = event.root.eventId ?: return null
-
-        val date = event.root.localDateTime()
-        val nextDate = nextEvent?.root?.localDateTime()
-        val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
-        val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                ?: false
-
-        val showInformation = addDaySeparator
-                || event.senderAvatar != nextEvent?.senderAvatar
-                || event.senderName != nextEvent?.senderName
-                || nextEvent?.root?.getClearType() != EventType.MESSAGE
-                || isNextMessageReceivedMoreThanOneHourAgo
-
-        val time = timelineDateFormatter.formatMessageHour(date)
-        val avatarUrl = event.senderAvatar
-        val memberName = event.senderName ?: event.root.sender ?: ""
-        val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.sender
-                    ?: ""))
-        }
-        val hasBeenEdited = event.annotations?.editSummary != null
-        val informationData = MessageInformationData(eventId = eventId,
-                senderId = event.root.sender ?: "",
-                sendState = event.sendState,
-                time = time,
-                avatarUrl = avatarUrl,
-                memberName = formattedMemberName,
-                showInformation = showInformation,
-                orderedReactionList = event.annotations?.reactionsSummary?.map {
-                    ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
-                },
-                hasBeenEdited = hasBeenEdited
-        )
+        val informationData = messageInformationDataFactory.create(event, nextEvent)
 
         if (event.root.unsignedData?.redactedEvent != null) {
             //message is redacted
-            return buildRedactedItem(informationData, callback)
+            return buildRedactedItem(informationData, highlight, callback)
         }
 
         val messageContent: MessageContent =
@@ -124,31 +91,33 @@ class MessageItemFactory @Inject constructor(
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
                     informationData,
-                    hasBeenEdited,
                     event.annotations?.editSummary,
+                    highlight,
                     callback)
             is MessageTextContent   -> buildTextMessageItem(event.sendState,
                     messageContent,
                     informationData,
-                    hasBeenEdited,
                     event.annotations?.editSummary,
+                    highlight,
                     callback
             )
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, callback)
-            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, callback)
-            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, callback)
-            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, callback)
-            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, callback)
-            else                    -> buildNotHandledMessageItem(messageContent)
+            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback)
+            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback)
+            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback)
+            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, highlight, callback)
+            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, highlight, callback)
+            else                    -> buildNotHandledMessageItem(messageContent, highlight)
         }
     }
 
     private fun buildAudioMessageItem(messageContent: MessageAudioContent,
                                       informationData: MessageInformationData,
+                                      highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
@@ -170,10 +139,12 @@ class MessageItemFactory @Inject constructor(
 
     private fun buildFileMessageItem(messageContent: MessageFileContent,
                                      informationData: MessageInformationData,
+                                     highlight: Boolean,
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .filename(messageContent.body)
                 .reactionPillCallback(callback)
@@ -193,13 +164,16 @@ class MessageItemFactory @Inject constructor(
                         }))
     }
 
-    private fun buildNotHandledMessageItem(messageContent: MessageContent): DefaultItem? {
+    private fun buildNotHandledMessageItem(messageContent: MessageContent, highlight: Boolean): DefaultItem? {
         val text = "${messageContent.type} message events are not yet handled"
-        return DefaultItem_().text(text)
+        return DefaultItem_()
+                .text(text)
+                .highlighted(highlight)
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,
                                       informationData: MessageInformationData,
+                                      highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -219,6 +193,7 @@ class MessageItemFactory @Inject constructor(
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .mediaData(data)
                 .reactionPillCallback(callback)
@@ -239,6 +214,7 @@ class MessageItemFactory @Inject constructor(
 
     private fun buildVideoMessageItem(messageContent: MessageVideoContent,
                                       informationData: MessageInformationData,
+                                      highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageImageVideoItem? {
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
@@ -263,6 +239,7 @@ class MessageItemFactory @Inject constructor(
                 .avatarRenderer(avatarRenderer)
                 .playable(true)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .mediaData(thumbnailData)
                 .reactionPillCallback(callback)
@@ -281,8 +258,8 @@ class MessageItemFactory @Inject constructor(
     private fun buildTextMessageItem(sendState: SendState,
                                      messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
-                                     hasBeenEdited: Boolean,
                                      editSummary: EditAggregatedSummary?,
+                                     highlight: Boolean,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val bodyToUse = messageContent.formattedBody?.let {
@@ -293,7 +270,7 @@ class MessageItemFactory @Inject constructor(
 
         return MessageTextItem_()
                 .apply {
-                    if (hasBeenEdited) {
+                    if (informationData.hasBeenEdited) {
                         val spannable = annotateWithEdited(linkifiedBody, callback, informationData, editSummary)
                         message(spannable)
                     } else {
@@ -302,7 +279,9 @@ class MessageItemFactory @Inject constructor(
                 }
                 .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
+                .urlClickCallback(callback)
                 .reactionPillCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 //click on the text
@@ -352,6 +331,7 @@ class MessageItemFactory @Inject constructor(
 
     private fun buildNoticeMessageItem(messageContent: MessageNoticeContent,
                                        informationData: MessageInformationData,
+                                       highlight: Boolean,
                                        callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -366,8 +346,10 @@ class MessageItemFactory @Inject constructor(
                 .avatarRenderer(avatarRenderer)
                 .message(message)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .reactionPillCallback(callback)
+                .urlClickCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .memberClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -385,8 +367,8 @@ class MessageItemFactory @Inject constructor(
 
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
                                       informationData: MessageInformationData,
-                                      hasBeenEdited: Boolean,
                                       editSummary: EditAggregatedSummary?,
+                                      highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val message = messageContent.body.let {
@@ -395,7 +377,7 @@ class MessageItemFactory @Inject constructor(
         }
         return MessageTextItem_()
                 .apply {
-                    if (hasBeenEdited) {
+                    if (informationData.hasBeenEdited) {
                         val spannable = annotateWithEdited(message, callback, informationData, editSummary)
                         message(spannable)
                     } else {
@@ -404,8 +386,10 @@ class MessageItemFactory @Inject constructor(
                 }
                 .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
                 .reactionPillCallback(callback)
+                .urlClickCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -418,10 +402,12 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildRedactedItem(informationData: MessageInformationData,
+                                  highlight: Boolean,
                                   callback: TimelineEventController.Callback?): RedactedMessageItem? {
         return RedactedMessageItem_()
                 .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
+                .highlighted(highlight)
                 .avatarCallback(callback)
     }
 

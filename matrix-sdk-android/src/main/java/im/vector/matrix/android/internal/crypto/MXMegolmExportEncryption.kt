@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto
 
 import android.text.TextUtils
 import android.util.Base64
+import im.vector.matrix.android.internal.extensions.toUnsignedInt
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
@@ -42,16 +43,6 @@ object MXMegolmExportEncryption {
 
     // default iteration count to export the e2e keys
     const val DEFAULT_ITERATION_COUNT = 500000
-
-    /**
-     * Convert a signed byte to a int value
-     *
-     * @param bVal the byte value to convert
-     * @return the matched int value
-     */
-    private fun byteToInt(bVal: Byte): Int {
-        return (bVal and 0xFF.toByte()).toInt()
-    }
 
     /**
      * Extract the AES key from the deriveKeys result.
@@ -108,7 +99,8 @@ object MXMegolmExportEncryption {
 
         val salt = Arrays.copyOfRange(body, 1, 1 + 16)
         val iv = Arrays.copyOfRange(body, 17, 17 + 16)
-        val iterations = byteToInt(body[33]) shl 24 or (byteToInt(body[34]) shl 16) or (byteToInt(body[35]) shl 8) or byteToInt(body[36])
+        val iterations =
+                (body[33].toUnsignedInt() shl 24) or (body[34].toUnsignedInt() shl 16) or (body[35].toUnsignedInt() shl 8) or body[36].toUnsignedInt()
         val ciphertext = Arrays.copyOfRange(body, 37, 37 + ciphertextLength)
         val hmac = Arrays.copyOfRange(body, body.size - 32, body.size)
 

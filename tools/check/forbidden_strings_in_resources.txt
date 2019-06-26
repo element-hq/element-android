@@ -70,13 +70,13 @@ DO NOT COMMIT
 layout_constraintRight_
 layout_constraintLeft_
 
-### Use Preference from v7 library (android.support.v7.preference.PreferenceScreen)
+### Use Preference from androidx library (androidx.preference.PreferenceScreen)
 <PreferenceScreen
 
-### Use im.vector.preference.VectorSwitchPreference to support multiline of the title
+### Use im.vector.riotredesign.core.preference.VectorSwitchPreference to support multiline of the title
 <SwitchPreference
 
-### Use im.vector.preference.VectorPreference to support multiline of the title
+### Use im.vector.riotredesign.core.preference.VectorPreference to support multiline of the title
 <Preference\n
 
 ### Will crash on API < 21. Use ?colorAccent instead

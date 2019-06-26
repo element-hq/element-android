@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.WaitingViewData
 import im.vector.riotredesign.core.utils.LiveEvent
@@ -40,6 +41,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
     companion object {
         const val NAVIGATE_TO_STEP_2 = "NAVIGATE_TO_STEP_2"
         const val NAVIGATE_TO_STEP_3 = "NAVIGATE_TO_STEP_3"
+        const val NAVIGATE_PROMPT_REPLACE = "NAVIGATE_PROMPT_REPLACE"
         const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
         const val NAVIGATE_MANUAL_EXPORT = "NAVIGATE_MANUAL_EXPORT"
     }
@@ -124,15 +126,8 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
                             megolmBackupCreationInfo = data
                             copyHasBeenMade = false
 
-                            val keyBackup = session?.getKeysBackupService()
-                            if (keyBackup != null) {
-                                createKeysBackup(context, keyBackup)
-                            } else {
-                                loadingStatus.value = null
-
-                                isCreatingBackupVersion.value = false
-                                prepareRecoverFailError.value = Exception()
-                            }
+                            val keyBackup = session.getKeysBackupService()
+                            createKeysBackup(context, keyBackup)
                         }
 
                         override fun onFailure(failure: Throwable) {
@@ -150,18 +145,32 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun createKeysBackup(context: Context, keysBackup: KeysBackupService) {
+    fun forceCreateKeyBackup(context: Context) {
+        val keyBackup = session.getKeysBackupService()
+        createKeysBackup(context, keyBackup, true)
+    }
+
+    fun stopAndKeepAfterDetectingExistingOnServer() {
+        loadingStatus.value = null
+        navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
+        session.getKeysBackupService().checkAndStartKeysBackup()
+    }
+
+    private fun createKeysBackup(context: Context, keysBackup: KeysBackupService, forceOverride: Boolean = false) {
         loadingStatus.value = WaitingViewData(context.getString(R.string.keys_backup_setup_creating_backup), isIndeterminate = true)
 
         creatingBackupError.value = null
-        keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : MatrixCallback<KeysVersion> {
 
-            override fun onSuccess(data: KeysVersion) {
-                loadingStatus.value = null
-
-                isCreatingBackupVersion.value = false
-                keysVersion.value = data
-                navigateEvent.value = LiveEvent(NAVIGATE_TO_STEP_3)
+        keysBackup.getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
+            override fun onSuccess(data: KeysVersionResult?) {
+                if (data?.version.isNullOrBlank() || forceOverride) {
+                    processOnCreate()
+                } else {
+                    loadingStatus.value = null
+                    // we should prompt
+                    isCreatingBackupVersion.value = false
+                    navigateEvent.value = LiveEvent(NAVIGATE_PROMPT_REPLACE)
+                }
             }
 
             override fun onFailure(failure: Throwable) {
@@ -171,7 +180,26 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
                 isCreatingBackupVersion.value = false
                 creatingBackupError.value = failure
             }
+
+            fun processOnCreate() {
+                keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : MatrixCallback<KeysVersion> {
+                    override fun onSuccess(data: KeysVersion) {
+                        loadingStatus.value = null
+
+                        isCreatingBackupVersion.value = false
+                        keysVersion.value = data
+                        navigateEvent.value = LiveEvent(NAVIGATE_TO_STEP_3)
+                    }
+
+                    override fun onFailure(failure: Throwable) {
+                        Timber.e(failure, "## createKeyBackupVersion")
+                        loadingStatus.value = null
+
+                        isCreatingBackupVersion.value = false
+                        creatingBackupError.value = failure
+                    }
+                })
+            }
         })
     }
-
 }

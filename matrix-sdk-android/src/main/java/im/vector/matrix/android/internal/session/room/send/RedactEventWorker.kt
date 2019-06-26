@@ -16,20 +16,18 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.squareup.inject.assisted.AssistedInject
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.worker.DelegateWorkerFactory
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import javax.inject.Inject
 
-internal class RedactEventWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+internal class RedactEventWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -42,9 +40,9 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : W
 
     @Inject lateinit var roomAPI: RoomAPI
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.failure()
+                ?: return Result.failure()
 
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)
@@ -59,17 +57,17 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : W
             )
         }
         return result.fold({
-                               when (it) {
-                                   is Failure.NetworkConnection -> Result.retry()
-                                   else                         -> {
-                                       //TODO mark as failed to send?
-                                       //always return success, or the chain will be stuck for ever!
-                                       Result.success()
-                                   }
-                               }
-                           }, {
-                               Result.success()
-                           })
+            when (it) {
+                is Failure.NetworkConnection -> Result.retry()
+                else                         -> {
+                    //TODO mark as failed to send?
+                    //always return success, or the chain will be stuck for ever!
+                    Result.success()
+                }
+            }
+        }, {
+            Result.success()
+        })
     }
 
 }

@@ -21,8 +21,10 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.MainActivity
+import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 
-class SignOutUiWorker(val activity: VectorBaseActivity) {
+class SignOutUiWorker(private val activity: VectorBaseActivity,
+                      private val notificationDrawerManager: NotificationDrawerManager) {
 
     fun perform(session: Session) {
         if (SignOutViewModel.doYouNeedToBeDisplayed(session)) {
@@ -45,6 +47,9 @@ class SignOutUiWorker(val activity: VectorBaseActivity) {
     }
 
     private fun doSignOut() {
+        // Dismiss all notifications
+        notificationDrawerManager.clearAllEvents()
+
         MainActivity.restartApp(activity, clearCache = true, clearCredentials = true)
     }
 }

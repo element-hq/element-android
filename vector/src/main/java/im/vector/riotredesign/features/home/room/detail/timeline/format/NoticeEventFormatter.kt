@@ -20,12 +20,7 @@ import android.text.TextUtils
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
-import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
-import im.vector.matrix.android.api.session.room.model.RoomMember
-import im.vector.matrix.android.api.session.room.model.RoomNameContent
-import im.vector.matrix.android.api.session.room.model.RoomTopicContent
+import im.vector.matrix.android.api.session.room.model.*
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
@@ -38,13 +33,29 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
-            EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(timelineEvent.root, timelineEvent.senderName)
-            EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.senderName)
+            EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderName())
-            EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderName)
+            EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER              -> formatCallEvent(timelineEvent.root, timelineEvent.senderName)
+            EventType.CALL_ANSWER              -> formatCallEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            else                               -> {
+                Timber.v("Type $type not handled by this formatter")
+                null
+            }
+        }
+    }
+
+    fun format(event: Event, senderName: String?): CharSequence? {
+        return when (val type = event.getClearType()) {
+            EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(event, senderName)
+            EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(event, senderName)
+            EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(event, senderName)
+            EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
+            EventType.CALL_INVITE,
+            EventType.CALL_HANGUP,
+            EventType.CALL_ANSWER              -> formatCallEvent(event, senderName)
             else                               -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -72,7 +83,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
 
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?): CharSequence? {
         val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility
-                                ?: return null
+                ?: return null
 
         val formattedVisibility = when (historyVisibility) {
             RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
@@ -117,12 +128,12 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
         if (!TextUtils.equals(eventContent?.displayName, prevEventContent?.displayName)) {
             val displayNameText = when {
                 prevEventContent?.displayName.isNullOrEmpty() ->
-                    stringProvider.getString(R.string.notice_display_name_set, event.sender, eventContent?.displayName)
+                    stringProvider.getString(R.string.notice_display_name_set, event.senderId, eventContent?.displayName)
                 eventContent?.displayName.isNullOrEmpty()     ->
-                    stringProvider.getString(R.string.notice_display_name_removed, event.sender, prevEventContent?.displayName)
+                    stringProvider.getString(R.string.notice_display_name_removed, event.senderId, prevEventContent?.displayName)
                 else                                          ->
                     stringProvider.getString(R.string.notice_display_name_changed_from,
-                                             event.sender, prevEventContent?.displayName, eventContent?.displayName)
+                            event.senderId, prevEventContent?.displayName, eventContent?.displayName)
             }
             displayText.append(displayNameText)
         }
@@ -140,8 +151,8 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
     }
 
     private fun buildMembershipNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
-        val senderDisplayName = senderName ?: event.sender
-        val targetDisplayName = eventContent?.displayName ?: event.sender
+        val senderDisplayName = senderName ?: event.senderId
+        val targetDisplayName = eventContent?.displayName ?: event.senderId
         return when {
             Membership.INVITE == eventContent?.membership -> {
                 // TODO get userId
@@ -149,7 +160,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
                 when {
                     eventContent.thirdPartyInvite != null        ->
                         stringProvider.getString(R.string.notice_room_third_party_registered_invite,
-                                                 targetDisplayName, eventContent.thirdPartyInvite?.displayName)
+                                targetDisplayName, eventContent.thirdPartyInvite?.displayName)
                     TextUtils.equals(event.stateKey, selfUserId) ->
                         stringProvider.getString(R.string.notice_room_invite_you, senderDisplayName)
                     event.stateKey.isNullOrEmpty()               ->
@@ -162,7 +173,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
                 stringProvider.getString(R.string.notice_room_join, senderDisplayName)
             Membership.LEAVE == eventContent?.membership  ->
                 // 2 cases here: this member may have left voluntarily or they may have been "left" by someone else ie. kicked
-                return if (TextUtils.equals(event.sender, event.stateKey)) {
+                return if (TextUtils.equals(event.senderId, event.stateKey)) {
                     if (prevEventContent?.membership == Membership.INVITE) {
                         stringProvider.getString(R.string.notice_room_reject, senderDisplayName)
                     } else {

@@ -27,7 +27,6 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
@@ -66,6 +65,14 @@ internal class DefaultMembershipService @Inject constructor(private val roomId: 
                     it.stateKey!!
                 }
         )
+    }
+
+    override fun getNumberOfJoinedMembers(): Int {
+        var result = 0
+        monarchy.runTransactionSync {
+            result = RoomMembers(it, roomId).getNumberOfJoinedMembers()
+        }
+        return result
     }
 
     override fun invite(userId: String, callback: MatrixCallback<Unit>) {

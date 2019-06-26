@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.filter
 
 import im.vector.matrix.android.api.session.sync.FilterService
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject

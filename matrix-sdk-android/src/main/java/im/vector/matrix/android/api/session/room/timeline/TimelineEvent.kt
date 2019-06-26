@@ -19,12 +19,11 @@ package im.vector.matrix.android.api.session.room.timeline
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.send.SendState
 
 /**
  * This data class is a wrapper around an Event. It allows to get useful data in the context of a timeline.
- * This class is used by [TimelineService] through [TimelineData]
+ * This class is used by [TimelineService]
  * Users can also enrich it with metadata.
  */
 data class TimelineEvent(
@@ -32,6 +31,7 @@ data class TimelineEvent(
         val localId: String,
         val displayIndex: Int,
         val senderName: String?,
+        val isUniqueDisplayName: Boolean,
         val senderAvatar: String?,
         val sendState: SendState,
         val annotations: EventAnnotationsSummary? = null
@@ -54,6 +54,18 @@ data class TimelineEvent(
         }
     }
 
+    fun getDisambiguatedDisplayName(): String {
+        return if (isUniqueDisplayName) {
+            senderName
+        } else {
+            senderName?.let { name ->
+                "$name (${root.senderId})"
+            }
+        }
+                ?: root.senderId
+                ?: ""
+    }
+
     /**
      * Get the metadata associated with a key.
      * @param key the key to get the metadata
@@ -63,7 +75,8 @@ data class TimelineEvent(
         return metadata[key] as T?
     }
 
-    fun isEncrypted() : Boolean {
-        return EventType.ENCRYPTED == root.getClearType()
+    fun isEncrypted(): Boolean {
+        // warning: Do not use getClearType here
+        return EventType.ENCRYPTED == root.type
     }
 }

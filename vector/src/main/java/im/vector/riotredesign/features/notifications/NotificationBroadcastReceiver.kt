@@ -20,9 +20,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
+import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -31,22 +36,22 @@ import javax.inject.Inject
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
-
-        Timber.v("ReplyNotificationBroadcastReceiver received : $intent")
+        Timber.v("NotificationBroadcastReceiver received : $intent")
 
         when (intent.action) {
-            NotificationUtils.SMART_REPLY_ACTION ->
+            NotificationUtils.SMART_REPLY_ACTION        ->
                 handleSmartReply(intent, context)
             NotificationUtils.DISMISS_ROOM_NOTIF_ACTION ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let {
                     notificationDrawerManager.clearMessageEventOfRoom(it)
                 }
-            NotificationUtils.DISMISS_SUMMARY_ACTION ->
+            NotificationUtils.DISMISS_SUMMARY_ACTION    ->
                 notificationDrawerManager.clearAllEvents()
-            NotificationUtils.MARK_ROOM_READ_ACTION ->
+            NotificationUtils.MARK_ROOM_READ_ACTION     ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let {
                     notificationDrawerManager.clearMessageEventOfRoom(it)
                     handleMarkAsRead(context, it)
@@ -55,67 +60,61 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun handleMarkAsRead(context: Context, roomId: String) {
-        /*
-        TODO
-        Matrix.getInstance(context)?.defaultSession?.let { session ->
-            session.dataHandler
-                    ?.getRoom(roomId)
-                    ?.markAllAsRead(object : SimpleApiCallback<Unit>() {
-                        override fun onSuccess(void: Void?) {
-                            // Ignore
-                        }
-                    })
+       activeSessionHolder.getActiveSession().let { session ->
+            session.getRoom(roomId)
+                    ?.markAllAsRead(object : MatrixCallback<Unit> {})
         }
-         */
     }
 
     private fun handleSmartReply(intent: Intent, context: Context) {
-        /*
-        TODO
         val message = getReplyMessage(intent)
         val roomId = intent.getStringExtra(KEY_ROOM_ID)
 
-        if (TextUtils.isEmpty(message) || TextUtils.isEmpty(roomId)) {
+        if (message.isNullOrBlank() || roomId.isBlank()) {
             //ignore this event
             //Can this happen? should we update notification?
             return
         }
         val matrixId = intent.getStringExtra(EXTRA_MATRIX_ID)
-        Matrix.getInstance(context)?.getSession(matrixId)?.let { session ->
-            session.dataHandler?.getRoom(roomId)?.let { room ->
-                sendMatrixEvent(message!!, session, roomId!!, room, context)
+        activeSessionHolder.getActiveSession().let { session ->
+            session.getRoom(roomId)?.let { room ->
+                sendMatrixEvent(message, session, room, context)
             }
         }
-        */
     }
 
-    private fun sendMatrixEvent(message: String, session: Session, roomId: String, room: Room, context: Context?) {
-        /*
-        TODO
+    private fun sendMatrixEvent(message: String, session: Session, room: Room, context: Context?) {
 
-        val mxMessage = Message()
-        mxMessage.msgtype = Message.MSGTYPE_TEXT
-        mxMessage.body = message
+        room.sendTextMessage(message)
+
+        // Create a new event to be displayed in the notification drawer, right now
+
+        val notifiableMessageEvent = NotifiableMessageEvent(
+                // Generate a Fake event id
+                UUID.randomUUID().toString(),
+                false,
+                System.currentTimeMillis(),
+                session.getUser(session.sessionParams.credentials.userId)?.displayName
+                        ?: context?.getString(R.string.notification_sender_me),
+                session.sessionParams.credentials.userId,
+                message,
+                room.roomId,
+                room.roomSummary?.displayName ?: room.roomId,
+                room.roomSummary?.isDirect == true
+        )
+        notifiableMessageEvent.outGoingMessage = true
+
+        notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
+        notificationDrawerManager.refreshNotificationDrawer()
+
+        /*
+        // TODO Error cannot be managed the same way than in Riot
 
         val event = Event(mxMessage, session.credentials.userId, roomId)
         room.storeOutgoingEvent(event)
         room.sendEvent(event, object : MatrixCallback<Void?> {
             override fun onSuccess(info: Void?) {
                 Timber.v("Send message : onSuccess ")
-                val notifiableMessageEvent = NotifiableMessageEvent(
-                        event.eventId,
-                        false,
-                        System.currentTimeMillis(),
-                        session.myUser?.displayname
-                                ?: context?.getString(R.string.notification_sender_me),
-                        session.myUserId,
-                        message,
-                        roomId,
-                        room.getRoomDisplayName(context),
-                        room.isDirect)
-                notifiableMessageEvent.outGoingMessage = true
-                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
-                VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
 
             override fun onNetworkError(e: Exception) {

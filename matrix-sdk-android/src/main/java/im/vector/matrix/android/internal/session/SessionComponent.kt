@@ -28,6 +28,8 @@ import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.filter.FilterModule
 import im.vector.matrix.android.internal.session.group.GetGroupDataWorker
 import im.vector.matrix.android.internal.session.group.GroupModule
+import im.vector.matrix.android.internal.session.pushers.AddHttpPusherWorker
+import im.vector.matrix.android.internal.session.pushers.PushersModule
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.room.relation.SendRelationWorker
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
@@ -35,22 +37,24 @@ import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.session.signout.SignOutModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
+import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.session.user.UserModule
 
 @Component(dependencies = [MatrixComponent::class],
-           modules = [
-               SessionModule::class,
-               RoomModule::class,
-               SyncModule::class,
-               SignOutModule::class,
-               GroupModule::class,
-               UserModule::class,
-               FilterModule::class,
-               GroupModule::class,
-               ContentModule::class,
-               CacheModule::class,
-               CryptoModule::class
-           ]
+        modules = [
+            SessionModule::class,
+            RoomModule::class,
+            SyncModule::class,
+            SignOutModule::class,
+            GroupModule::class,
+            UserModule::class,
+            FilterModule::class,
+            GroupModule::class,
+            ContentModule::class,
+            CacheModule::class,
+            CryptoModule::class,
+            PushersModule::class
+        ]
 )
 @SessionScope
 internal interface SessionComponent {
@@ -68,6 +72,10 @@ internal interface SessionComponent {
     fun inject(getGroupDataWorker: GetGroupDataWorker)
 
     fun inject(uploadContentWorker: UploadContentWorker)
+
+    fun inject(syncWorker: SyncWorker)
+
+    fun inject(addHttpPusherWorker: AddHttpPusherWorker)
 
 
     @Component.Factory

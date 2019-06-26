@@ -15,12 +15,14 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
  * This class provides the parameter to delete a device
  */
 @JsonClass(generateAdapter = true)
-data class DeleteDeviceParams(
-        var auth: DeleteDeviceAuth? = null
+internal data class DeleteDeviceParams(
+        @Json(name = "auth")
+        var deleteDeviceAuth: DeleteDeviceAuth? = null
 )

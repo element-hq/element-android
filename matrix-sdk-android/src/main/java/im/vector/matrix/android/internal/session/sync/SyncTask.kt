@@ -24,7 +24,6 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.Task
@@ -32,7 +31,7 @@ import javax.inject.Inject
 
 internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
-    data class Params(val token: String?)
+    data class Params(val token: String?, var timeout: Long = 30_000L)
 
 }
 
@@ -46,10 +45,10 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
 
     override suspend fun execute(params: SyncTask.Params): Try<SyncResponse> {
         val requestParams = HashMap<String, String>()
-        var timeout = 0
+        var timeout = 0L
         if (params.token != null) {
             requestParams["since"] = params.token
-            timeout = 30000
+            timeout = params.timeout
         }
         requestParams["timeout"] = timeout.toString()
         requestParams["filter"] = filterRepository.getFilter()
@@ -59,7 +58,7 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
         }.recoverWith { throwable ->
             // Intercept 401
             if (throwable is Failure.ServerError
-                && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
+                    && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
                 sessionParamsStore.delete(credentials.userId)
             }
 

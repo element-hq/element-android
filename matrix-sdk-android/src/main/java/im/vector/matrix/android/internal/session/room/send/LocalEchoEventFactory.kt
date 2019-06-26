@@ -133,7 +133,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
-                sender = credentials.userId,
+                senderId = credentials.userId,
                 eventId = localId,
                 type = EventType.REACTION,
                 content = content.toContent(),
@@ -224,7 +224,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
-                sender = credentials.userId,
+                senderId = credentials.userId,
                 eventId = localID,
                 type = EventType.MESSAGE,
                 content = content.toContent(),
@@ -244,7 +244,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         //Fallbacks and event representation
         //TODO Add error/warning logs when any of this is null
         val permalink = PermalinkFactory.createPermalink(eventReplied) ?: return null
-        val userId = eventReplied.sender ?: return null
+        val userId = eventReplied.senderId ?: return null
         val userLink = PermalinkFactory.createPermalink(userId) ?: return null
 //        <mx-reply>
 //            <blockquote>
@@ -333,7 +333,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
-                sender = credentials.userId,
+                senderId = credentials.userId,
                 eventId = localID,
                 type = EventType.REDACTION,
                 redacts = eventId,

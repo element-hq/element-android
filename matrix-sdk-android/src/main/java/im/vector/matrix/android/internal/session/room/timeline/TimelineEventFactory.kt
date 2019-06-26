@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.session.room.EventRelationExtractor
+import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor
 import io.realm.Realm
 import timber.log.Timber
@@ -50,7 +51,11 @@ internal class TimelineEventFactory @Inject constructor(
         val cacheKey = sender + eventEntity.localId
         val senderData = senderCache.getOrPut(cacheKey) {
             val senderRoomMember = roomMemberExtractor.extractFrom(eventEntity, realm)
-            SenderData(senderRoomMember?.displayName, senderRoomMember?.avatarUrl)
+            val isUniqueDisplayName = RoomMembers(realm, eventEntity.roomId).isUniqueDisplayName(senderRoomMember?.displayName)
+
+            SenderData(senderRoomMember?.displayName,
+                    isUniqueDisplayName,
+                    senderRoomMember?.avatarUrl)
         }
         val event = eventEntity.asDomain()
         if (event.getClearType() == EventType.ENCRYPTED) {
@@ -63,6 +68,7 @@ internal class TimelineEventFactory @Inject constructor(
                 eventEntity.localId,
                 eventEntity.displayIndex,
                 senderData.senderName,
+                senderData.isUniqueDisplayName,
                 senderData.senderAvatar,
                 eventEntity.sendState,
                 relations
@@ -97,7 +103,7 @@ internal class TimelineEventFactory @Inject constructor(
 
     private data class SenderData(
             val senderName: String?,
+            val isUniqueDisplayName: Boolean,
             val senderAvatar: String?
     )
-
 }

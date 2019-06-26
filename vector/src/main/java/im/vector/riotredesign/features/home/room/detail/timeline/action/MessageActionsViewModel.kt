@@ -55,7 +55,8 @@ data class MessageActionState(
 /**
  * Information related to an event and used to display preview in contextual bottomsheet.
  */
-class MessageActionsViewModel @AssistedInject constructor(@Assisted initialState: MessageActionState,
+class MessageActionsViewModel @AssistedInject constructor(@Assisted
+                                                          initialState: MessageActionState,
                                                           private val eventHtmlRenderer: EventHtmlRenderer,
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter
@@ -91,11 +92,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted initialState
         when (event.root.type) {
             EventType.MESSAGE     -> {
                 val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
-                                                      ?: event.root.content.toModel()
+                        ?: event.root.content.toModel()
                 body = messageContent?.body
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                     body = eventHtmlRenderer.render(messageContent.formattedBody
-                                                    ?: messageContent.body)
+                            ?: messageContent.body)
                 }
             }
             EventType.STATE_ROOM_NAME,
@@ -109,7 +110,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted initialState
             }
         }
         return state.copy(
-                userId = event.root.sender ?: "",
+                userId = event.root.senderId ?: "",
                 senderName = informationData.memberName?.toString() ?: "",
                 messageBody = body,
                 ts = dateFormat.format(Date(originTs ?: 0)),
