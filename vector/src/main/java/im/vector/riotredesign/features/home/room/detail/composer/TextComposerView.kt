@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.isVisible
 import androidx.transition.AutoTransition
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
@@ -112,5 +111,14 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
             it.clone(context, currentConstraintSetId)
             it.applyTo(this)
         }
+    }
+
+    fun setRoomEncrypted(isEncrypted: Boolean) {
+        composerEditText.setHint(
+                if (isEncrypted) {
+                    R.string.room_message_placeholder_encrypted
+                } else {
+                    R.string.room_message_placeholder_not_encrypted
+                })
     }
 }

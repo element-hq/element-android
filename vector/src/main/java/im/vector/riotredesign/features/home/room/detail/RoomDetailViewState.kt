@@ -46,7 +46,8 @@ data class RoomDetailViewState(
         val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val sendMode: SendMode = SendMode.REGULAR,
-        val selectedEvent: TimelineEvent? = null
+        val selectedEvent: TimelineEvent? = null,
+        val isEncrypted: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)
