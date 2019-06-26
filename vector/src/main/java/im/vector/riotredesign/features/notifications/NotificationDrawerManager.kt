@@ -21,10 +21,10 @@ import android.graphics.Bitmap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.matrix.android.api.util.SecretStoringUtils
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ActiveSessionHolder
-import im.vector.riotredesign.core.utils.SecretStoringUtils
 import im.vector.riotredesign.features.settings.PreferencesManager
 import me.gujun.android.span.span
 import timber.log.Timber

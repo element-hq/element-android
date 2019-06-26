@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigrati
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
 import im.vector.matrix.android.internal.crypto.store.db.hash
 import im.vector.matrix.android.internal.crypto.tasks.*
+import im.vector.matrix.android.internal.database.configureEncryption
 import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
@@ -45,14 +46,16 @@ internal abstract class CryptoModule {
     @Module
     companion object {
 
-        // Realm configuration, named to avoid clash with main cache realm configuration
         @JvmStatic
         @Provides
         @CryptoDatabase
         @SessionScope
         fun providesRealmConfiguration(context: Context, credentials: Credentials): RealmConfiguration {
+            val userIDHash = credentials.userId.hash()
+
             return RealmConfiguration.Builder()
-                    .directory(File(context.filesDir, credentials.userId.hash()))
+                    .directory(File(context.filesDir, userIDHash))
+                    .configureEncryption("crypto_module_$userIDHash", context)
                     .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())
                     .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
@@ -169,6 +172,4 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindDeleteDeviceWithUserPasswordTask(deleteDeviceWithUserPasswordTask: DefaultDeleteDeviceWithUserPasswordTask): DeleteDeviceWithUserPasswordTask
-
-
 }
