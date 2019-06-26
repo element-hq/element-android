@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Created to detect what has to be implemented (especially in the settings) -->
+    <bool name="false_not_implemented">false</bool>
+
+</resources>
