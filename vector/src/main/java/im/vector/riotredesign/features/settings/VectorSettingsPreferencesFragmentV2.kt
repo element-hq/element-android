@@ -26,7 +26,7 @@ class VectorSettingsPreferencesFragmentV2 : VectorPreferenceFragment() {
     override var titleRes: Int = R.string.title_activity_settings
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.vector_settings_preferences_root)
+        addPreferencesFromResource(R.xml.vector_settings_root)
     }
 
 
