@@ -36,12 +36,15 @@ internal class BingRuleWatcher(monarchy: Monarchy,
     override val query = Monarchy.Query<EventEntity> {
 
         EventEntity.types(it, listOf(
-                EventType.REDACTION, EventType.MESSAGE, EventType.REDACTION, EventType.ENCRYPTED)
+                EventType.MESSAGE,
+                EventType.REDACTION,
+                EventType.ENCRYPTED)
         )
 
     }
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
+        // TODO Use const for "global"
         val rules = defaultPushRuleService.getPushRules("global")
         inserted.map { it.asDomain() }
                 .filter { it.senderId != sessionParams.credentials.userId }

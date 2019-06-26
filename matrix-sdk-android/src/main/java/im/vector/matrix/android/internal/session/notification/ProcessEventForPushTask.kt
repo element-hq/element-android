@@ -33,18 +33,19 @@ internal class DefaultProcessEventForPushTask(
 
     private fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule? {
         val conditionResolver = DefaultConditionResolver(event)
-        rules.filter { it.enabled }.forEach { rule ->
-            val isFullfilled = rule.conditions?.map {
-                it.asExecutableCondition()?.isSatisfied(conditionResolver) ?: false
-            }?.fold(true/*A rule with no conditions always matches*/, { acc, next ->
-                //All conditions must hold true for an event in order to apply the action for the event.
-                acc && next
-            }) ?: false
+        rules.filter { it.enabled }
+                .forEach { rule ->
+                    val isFullfilled = rule.conditions?.map {
+                        it.asExecutableCondition()?.isSatisfied(conditionResolver) ?: false
+                    }?.fold(true/*A rule with no conditions always matches*/, { acc, next ->
+                        //All conditions must hold true for an event in order to apply the action for the event.
+                        acc && next
+                    }) ?: false
 
-            if (isFullfilled) {
-                return rule
-            }
-        }
+                    if (isFullfilled) {
+                        return rule
+                    }
+                }
         return null
     }
 
