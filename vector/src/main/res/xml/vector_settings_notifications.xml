@@ -17,10 +17,10 @@
             android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:title="@string/settings_enable_this_device" />
 
-        <im.vector.riotredesign.core.preference.VectorSwitchPreference
-            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-            android:key="SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY"
-            android:title="@string/settings_turn_screen_on" />
+        <!--<im.vector.riotredesign.core.preference.VectorSwitchPreference-->
+        <!--android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"-->
+        <!--android:key="SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY"-->
+        <!--android:title="@string/settings_turn_screen_on" />-->
 
         <im.vector.riotredesign.core.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
@@ -33,13 +33,13 @@
             app:fragment="im.vector.fragments.VectorSettingsNotificationsAdvancedFragment" />
 
         <im.vector.riotredesign.core.preference.VectorPreference
+            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
             android:title="@string/settings_notification_troubleshoot"
             app:fragment="im.vector.riotredesign.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
 
     </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
 
     <!--im.vector.riotredesign.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"

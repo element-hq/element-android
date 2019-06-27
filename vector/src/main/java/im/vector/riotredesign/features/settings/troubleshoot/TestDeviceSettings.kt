@@ -17,6 +17,7 @@ package im.vector.riotredesign.features.settings.troubleshoot
 
 import androidx.fragment.app.Fragment
 import im.vector.riotredesign.R
+import im.vector.riotredesign.features.settings.PreferencesManager
 
 /**
  * Checks if notifications are enable in the system settings for this app.
@@ -24,24 +25,20 @@ import im.vector.riotredesign.R
 class TestDeviceSettings(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_device_settings_title) {
 
     override fun perform() {
-        /* TODO
-        val pushManager = Matrix.getInstance(fragment.activity).pushManager
-        if (pushManager.areDeviceNotificationsAllowed()) {
+
+        if (PreferencesManager.areNotificationEnabledForDevice(fragment.requireContext())) {
             description = fragment.getString(R.string.settings_troubleshoot_test_device_settings_success)
             quickFix = null
             status = TestStatus.SUCCESS
         } else {
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_device_settings_quickfix) {
                 override fun doFix() {
-                    pushManager.setDeviceNotificationsAllowed(true)
+                    PreferencesManager.setNotificationEnabledForDevice(fragment.requireContext(), true)
                     manager?.retry()
                 }
-
             }
             description = fragment.getString(R.string.settings_troubleshoot_test_device_settings_failed)
             status = TestStatus.FAILED
         }
-        */
-        status = TestStatus.FAILED
     }
 }

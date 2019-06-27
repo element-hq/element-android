@@ -503,6 +503,10 @@ internal class DefaultSession(override val sessionParams: SessionParams) : Sessi
         return pushersService.livePushers()
     }
 
+    override fun pushers(): List<Pusher> {
+        return pushersService.pushers()
+    }
+
     override fun getPushRules(scope: String): List<PushRule> {
         return pushRuleService.getPushRules(scope)
     }

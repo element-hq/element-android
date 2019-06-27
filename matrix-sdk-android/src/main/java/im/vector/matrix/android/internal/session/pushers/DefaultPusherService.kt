@@ -97,7 +97,7 @@ internal class DefaultPusherService(
     }
 
     override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>) {
-        val params = RemovePusherTask.Params(sessionParam.credentials.userId,pushkey,appId)
+        val params = RemovePusherTask.Params(sessionParam.credentials.userId, pushkey, appId)
         removePusherTask
                 .configureWith(params)
                 .dispatchTo(callback)
@@ -110,5 +110,9 @@ internal class DefaultPusherService(
                 { realm -> PusherEntity.where(realm, sessionParam.credentials.userId) },
                 { it.asDomain() }
         )
+    }
+
+    override fun pushers(): List<Pusher> {
+        return monarchy.fetchAllCopiedSync { PusherEntity.where(it, sessionParam.credentials.userId) }.map { it.asDomain() }
     }
 }
