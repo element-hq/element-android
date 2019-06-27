@@ -66,9 +66,10 @@ class MessageActionsViewModel(initialState: MessageActionState) : VectorViewMode
             var body: CharSequence? = null
             val originTs = event?.root?.originServerTs
             return if (event != null) {
-                when (event.root.type) {
+                when (event.root.getClearType()) {
                     EventType.MESSAGE     -> {
                         val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
+                                ?: event.root.getClearContent().toModel()
                                 ?: event.root.content.toModel()
                         body = messageContent?.body
                         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
