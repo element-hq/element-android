@@ -19,6 +19,7 @@ package im.vector.riotredesign.features.settings
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
 import android.text.Editable
 import android.text.TextUtils
 import android.view.View
@@ -44,6 +45,7 @@ import im.vector.riotredesign.core.utils.copyToClipboard
 import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
+import java.lang.ref.WeakReference
 import java.util.*
 
 class VectorSettingsGeneral : VectorSettingsBaseFragment() {
@@ -89,7 +91,8 @@ class VectorSettingsGeneral : VectorSettingsBaseFragment() {
 
         // Display name
         mDisplayNamePreference.let {
-            it.summary = "TODO" // session.myUser.displayname
+            it.summary = mSession.getUser(mSession.sessionParams.credentials.userId)?.displayName ?: ""
+            it.text = it.summary.toString()
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 onDisplayNameClick(newValue?.let { (it as String).trim() })
                 false
@@ -98,7 +101,8 @@ class VectorSettingsGeneral : VectorSettingsBaseFragment() {
 
         // Password
         mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            onPasswordUpdateClick()
+            notImplemented()
+            // onPasswordUpdateClick()
             false
         }
 
@@ -114,7 +118,8 @@ class VectorSettingsGeneral : VectorSettingsBaseFragment() {
             // it.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                addEmail((newValue as String).trim())
+                notImplemented()
+                //addEmail((newValue as String).trim())
                 false
             }
         }
@@ -251,6 +256,56 @@ class VectorSettingsGeneral : VectorSettingsBaseFragment() {
             when (requestCode) {
                 REQUEST_NEW_PHONE_NUMBER  -> refreshPhoneNumbersList()
                 REQUEST_PHONEBOOK_COUNTRY -> onPhonebookCountryUpdate(data)
+                /* TODO
+                    VectorUtils.TAKE_IMAGE -> {
+                        val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, session.mediaCache)
+
+                        if (null != thumbnailUri) {
+                            displayLoadingView()
+
+                            val resource = ResourceUtils.openResource(activity, thumbnailUri, null)
+
+                            if (null != resource) {
+                                session.mediaCache.uploadContent(resource.mContentStream, null, resource.mMimeType, null, object : MXMediaUploadListener() {
+
+                                    override fun onUploadError(uploadId: String?, serverResponseCode: Int, serverErrorMessage: String?) {
+                                        activity?.runOnUiThread { onCommonDone(serverResponseCode.toString() + " : " + serverErrorMessage) }
+                                    }
+
+                                    override fun onUploadComplete(uploadId: String?, contentUri: String?) {
+                                        activity?.runOnUiThread {
+                                            session.myUser.updateAvatarUrl(contentUri, object : MatrixCallback<Unit> {
+                                                override fun onSuccess(info: Void?) {
+                                                    onCommonDone(null)
+                                                    refreshDisplay()
+                                                }
+
+                                                override fun onNetworkError(e: Exception) {
+                                                    onCommonDone(e.localizedMessage)
+                                                }
+
+                                                override fun onMatrixError(e: MatrixError) {
+                                                    if (MatrixError.M_CONSENT_NOT_GIVEN == e.errcode) {
+                                                        activity?.runOnUiThread {
+                                                            hideLoadingView()
+                                                            (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
+                                                        }
+                                                    } else {
+                                                        onCommonDone(e.localizedMessage)
+                                                    }
+                                                }
+
+                                                override fun onUnexpectedError(e: Exception) {
+                                                    onCommonDone(e.localizedMessage)
+                                                }
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                    }
+                    */
             }
         }
     }
@@ -808,6 +863,22 @@ class VectorSettingsGeneral : VectorSettingsBaseFragment() {
         */
     }
 
+    private class ClearMediaCacheAsyncTask internal constructor(
+            backgroundTask: () -> Unit,
+            onCompleteTask: () -> Unit
+    ) : AsyncTask<Unit, Unit, Unit>() {
+
+        private val backgroundTaskReference = WeakReference(backgroundTask)
+        private val onCompleteTaskReference = WeakReference(onCompleteTask)
+        override fun doInBackground(vararg params: Unit?) {
+            backgroundTaskReference.get()?.invoke()
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            super.onPostExecute(result)
+            onCompleteTaskReference.get()?.invoke()
+        }
+    }
 
     companion object {
         private const val ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY"
