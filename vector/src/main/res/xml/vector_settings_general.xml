@@ -94,6 +94,15 @@
     <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
 
     <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:title="@string/action_sign_out">
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_SIGN_OUT_KEY"
+            android:title="@string/action_sign_out" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY"
         android:title="@string/settings_deactivate_account_section">
 

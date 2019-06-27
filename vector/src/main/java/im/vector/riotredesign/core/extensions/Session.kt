@@ -29,4 +29,8 @@ fun Session.configureAndStart(pushRuleTriggerListener: PushRuleTriggerListener) 
     refreshPushers()
     pushRuleTriggerListener.startWithSession(this)
     fetchPushRules()
+
+    // TODO P1 From HomeActivity
+    // @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
+    // @Inject lateinit var keyRequestHandler: KeyRequestHandler
 }
