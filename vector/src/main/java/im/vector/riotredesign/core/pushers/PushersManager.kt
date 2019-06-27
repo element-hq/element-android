@@ -36,7 +36,7 @@ class PushersManager @Inject constructor(
     }
 
     fun unregisterPusher(pushKey: String, callback: MatrixCallback<Unit>) {
-        val currentSession = activeSessionHolder.getActiveSession()
+        val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
         currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id), callback)
     }
 }

@@ -15,8 +15,13 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
+import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
@@ -37,6 +42,7 @@ import javax.inject.Inject
 
 
 internal class DefaultPusherService @Inject constructor(
+        private val context: Context,
         private val monarchy: Monarchy,
         private val sessionParam: SessionParams,
         private val getPusherTask: GetPushersTask,
@@ -93,7 +99,7 @@ internal class DefaultPusherService @Inject constructor(
                 .setInputData(WorkerParamsFactory.toData(params))
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000L, TimeUnit.MILLISECONDS)
                 .build()
-        WorkManager.getInstance().enqueue(request)
+        WorkManager.getInstance(context).enqueue(request)
         return request.id
     }
 

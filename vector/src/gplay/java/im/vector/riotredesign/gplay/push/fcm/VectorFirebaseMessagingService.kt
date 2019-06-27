@@ -105,7 +105,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         if (refreshedToken == null) {
             Timber.w("onNewToken:received null token")
         } else {
-            if (PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
+            if (PreferencesManager.areNotificationEnabledForDevice(applicationContext) && activeSessionHolder.hasActiveSession()) {
                 pusherManager.registerPusherWithFcmKey(refreshedToken)
             }
         }
