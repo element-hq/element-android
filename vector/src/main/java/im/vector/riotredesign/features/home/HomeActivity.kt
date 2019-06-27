@@ -169,6 +169,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 BugReporter.openBugReportScreen(this, true)
                 return true
             }
+            R.id.menu_home_report_bug -> {
+                BugReporter.openBugReportScreen(this, false)
+                return true
+            }
         }
 
         return true
