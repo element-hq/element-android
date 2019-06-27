@@ -21,6 +21,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.utils.startAddGoogleAccountIntent
 import im.vector.riotredesign.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.riotredesign.features.settings.troubleshoot.TroubleshootTest
+import im.vector.riotredesign.push.fcm.FcmHelper
 import timber.log.Timber
 
 /*
@@ -58,6 +59,7 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
                                     val tok = it.substring(0, Math.min(8, it.length)) + "********************"
                                     description = fragment.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
                                     Timber.e("Retrieved FCM token success [$it].")
+                                    FcmHelper.storeFcmToken(fragment.requireContext(),tok)
                                 }
                                 status = TestStatus.SUCCESS
                             }
