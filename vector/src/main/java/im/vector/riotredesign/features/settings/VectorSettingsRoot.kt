@@ -16,22 +16,20 @@
 
 package im.vector.riotredesign.features.settings
 
-import android.os.Bundle
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.withArgs
-import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 
-class VectorSettingsPreferencesFragmentV2 : VectorPreferenceFragment() {
+class VectorSettingsRoot : VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.title_activity_settings
+    override val preferenceXmlRes = R.xml.vector_settings_root
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.vector_settings_preferences_root)
+    override fun bindPref() {
+        // Nothing to do
     }
 
-
     companion object {
-        fun newInstance() = VectorSettingsPreferencesFragmentV2()
+        fun newInstance() = VectorSettingsRoot()
                 .withArgs {
                     //putString(ARG_MATRIX_ID, matrixId)
                 }

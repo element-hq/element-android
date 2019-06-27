@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_USER_SETTINGS_PREFERENCE_KEY"
+        android:title="@string/settings_user_settings">
+
+        <im.vector.riotredesign.core.preference.UserAvatarPreference
+            android:key="SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
+            android:title="@string/settings_profile_picture" />
+
+        <im.vector.riotredesign.core.preference.VectorEditTextPreference
+            android:key="SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
+            android:summary="@string/settings_display_name"
+            android:title="@string/settings_display_name" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
+            android:summary="@string/password_hint"
+            android:title="@string/settings_password" />
+
+        <!-- Email will be added here -->
+
+        <!-- Note: inputType does not work, it is set also in code, as well as iconTint -->
+        <im.vector.riotredesign.core.preference.VectorEditTextPreference
+            android:icon="@drawable/ic_add_black"
+            android:inputType="textEmailAddress"
+            android:key="ADD_EMAIL_PREFERENCE_KEY"
+            android:order="100"
+            android:title="@string/settings_add_email_address"
+            app:iconTint="?attr/vctr_settings_icon_tint_color" />
+
+        <!-- Phone will be added here -->
+
+        <!-- Note: iconTint does not work, it is also done in code -->
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:icon="@drawable/ic_add_black"
+            android:key="ADD_PHONE_NUMBER_PREFERENCE_KEY"
+            android:order="200"
+            android:title="@string/settings_add_phone_number"
+            app:iconTint="?attr/vctr_settings_icon_tint_color" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_CONTACT_PREFERENCE_KEYS"
+        android:title="@string/settings_contact">
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="CONTACT_BOOK_ACCESS_KEY"
+            android:title="@string/settings_contacts_app_permission" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:dialogTitle="@string/settings_select_country"
+            android:key="SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY"
+            android:title="@string/settings_contacts_phonebook_country" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory android:title="@string/settings_advanced">
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
+            android:title="@string/settings_logged_in"
+            tools:summary="\@user:matrix.org" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_HOME_SERVER_PREFERENCE_KEY"
+            android:title="@string/settings_home_server"
+            tools:summary="@string/default_hs_server_url" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
+            android:title="@string/settings_identity_server"
+            tools:summary="@string/default_identity_server_url" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY"
+            android:title="@string/settings_clear_media_cache" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
+            android:title="@string/settings_clear_cache" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider />
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY"
+        android:title="@string/settings_deactivate_account_section">
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_DEACTIVATE_ACCOUNT_KEY"
+            android:title="@string/settings_deactivate_my_account" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

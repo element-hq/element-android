@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:icon="@drawable/ic_settings_root_general"
+        android:title="@string/settings_general_title"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsGeneral" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:enabled="@bool/false_not_implemented"
+        android:icon="@drawable/ic_settings_root_flair"
+        android:title="@string/settings_flair"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsFlair" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:icon="@drawable/ic_settings_root_notification"
+        android:key="SETTINGS_NOTIFICATIONS_KEY"
+        android:title="@string/settings_notifications"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsNotificationPreferenceFragment" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:icon="@drawable/ic_settings_root_preferences"
+        android:title="@string/settings_preferences"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsPreferences" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:enabled="@bool/false_not_implemented"
+        android:icon="@drawable/ic_settings_root_call"
+        android:title="@string/preference_voice_and_video"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsVoiceVideo" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:enabled="@bool/false_not_implemented"
+        android:icon="@drawable/ic_settings_root_ignored_users"
+        android:title="@string/settings_ignored_users"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsIgnoredUsers" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:icon="@drawable/ic_settings_root_security_privacy"
+        android:title="@string/settings_security_and_privacy"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsSecurityPrivacy" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:icon="@drawable/ic_settings_root_labs"
+        android:title="@string/room_settings_labs_pref_title"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsLabs" />
+
+    <im.vector.riotredesign.core.preference.VectorPreference
+        android:layout_width="match_parent"
+        android:icon="@drawable/ic_settings_root_help_about"
+        android:title="@string/preference_root_help_about"
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsHelpAbout" />
+
+</androidx.preference.PreferenceScreen>

@@ -24,6 +24,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.features.home.AvatarRenderer
 
 open class UserAvatarPreference : Preference {
 
@@ -52,11 +53,15 @@ open class UserAvatarPreference : Preference {
     }
 
     open fun refreshAvatar() {
-        if (null != mAvatarView && null != mSession) {
-            // TODO
-            // val myUser = session!!.myUser
-            // VectorUtils.loadUserAvatar(context, session, mAvatarView, myUser.avatarUrl, myUser.user_id, myUser.displayname)
+        val session = mSession ?: return
+        val view = mAvatarView ?: return
+
+        session.getUser(session.sessionParams.credentials.userId)?.let {
+            AvatarRenderer.render(it, view)
+        } ?: run {
+            AvatarRenderer.render(null, session.sessionParams.credentials.userId, null, view)
         }
+
     }
 
     fun setSession(session: Session) {
