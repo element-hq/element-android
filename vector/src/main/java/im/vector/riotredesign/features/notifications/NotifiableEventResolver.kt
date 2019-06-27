@@ -99,7 +99,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                     ?: event.root.getClearContent().toModel<MessageContent>()?.body
                     ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
-            val senderDisplayName = event.senderName
+            val senderDisplayName = event.senderName ?: event.root.senderId
 
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
@@ -118,7 +118,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                        ?: event.root.getClearContent().toModel<MessageContent>()?.body
                        ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = room.roomSummary?.displayName ?: ""
-            val senderDisplayName = event.senderName ?: ""
+            val senderDisplayName = event.senderName ?: event.root.senderId
 
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
