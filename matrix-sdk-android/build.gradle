@@ -33,7 +33,6 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "0.0.1"
-        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
