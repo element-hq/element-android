@@ -112,4 +112,8 @@ internal class DefaultPusherService @Inject constructor(
                 { it.asDomain() }
         )
     }
+
+    override fun pushers(): List<Pusher> {
+        return monarchy.fetchAllCopiedSync { PusherEntity.where(it, sessionParam.credentials.userId) }.map { it.asDomain() }
+    }
 }

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!--color name="ic_launcher_background">#FFF</color-->
-    <!-- Change color to distinguish from Riot -->
-    <color name="ic_launcher_background">#FEC6C7</color>
-</resources>

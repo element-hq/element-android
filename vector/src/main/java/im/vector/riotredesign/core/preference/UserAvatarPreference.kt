@@ -24,12 +24,16 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.extensions.vectorComponent
+import im.vector.riotredesign.features.home.AvatarRenderer
 
 open class UserAvatarPreference : Preference {
 
     internal var mAvatarView: ImageView? = null
     internal var mSession: Session? = null
     private var mLoadingProgressBar: ProgressBar? = null
+
+    private var avatarRenderer: AvatarRenderer = context.vectorComponent().avatarRenderer()
 
     constructor(context: Context) : super(context)
 
@@ -52,11 +56,14 @@ open class UserAvatarPreference : Preference {
     }
 
     open fun refreshAvatar() {
-        if (null != mAvatarView && null != mSession) {
-            // TODO
-            // val myUser = session!!.myUser
-            // VectorUtils.loadUserAvatar(context, session, mAvatarView, myUser.avatarUrl, myUser.user_id, myUser.displayname)
+        val session = mSession ?: return
+        val view = mAvatarView ?: return
+        session.getUser(session.sessionParams.credentials.userId)?.let {
+            avatarRenderer.render(it, view)
+        } ?: run {
+            avatarRenderer.render(null, session.sessionParams.credentials.userId, null, view)
         }
+
     }
 
     fun setSession(session: Session) {

@@ -512,6 +512,7 @@ class RoomDetailFragment :
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
+        composerLayout.setRoomEncrypted(state.isEncrypted)
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {

@@ -238,8 +238,11 @@ dependencies {
     kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.4.0'
 
     // gplay flavor only
-    gplayImplementation 'com.google.firebase:firebase-core:16.0.8'
-    gplayImplementation 'com.google.firebase:firebase-messaging:17.5.0'
+    gplayImplementation('com.google.firebase:firebase-messaging:19.0.1') {
+        exclude group: 'com.google.firebase', module: 'firebase-core'
+        exclude group: 'com.google.firebase', module: 'firebase-analytics'
+        exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
+    }
 
     // TESTS
     testImplementation 'junit:junit:4.12'

@@ -18,12 +18,17 @@ package im.vector.riotredesign.core.utils
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import im.vector.riotredesign.R
 import im.vector.riotredesign.features.notifications.supportNotificationChannels
@@ -44,7 +49,7 @@ import java.util.*
 fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     // no issue before Android M, battery optimisations did not exist
     return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-            || (context.getSystemService(Context.POWER_SERVICE) as PowerManager?)?.isIgnoringBatteryOptimizations(context.packageName) == true
+           || (context.getSystemService(Context.POWER_SERVICE) as PowerManager?)?.isIgnoringBatteryOptimizations(context.packageName) == true
 }
 
 /**
@@ -109,22 +114,22 @@ fun getDeviceLocale(context: Context): Locale {
  * Shows notification settings for the current app.
  * In android O will directly opens the notification settings, in lower version it will show the App settings
  */
-fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
+fun startNotificationSettingsIntent(activity: AppCompatActivity, requestCode: Int) {
     val intent = Intent()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-        intent.putExtra(Settings.EXTRA_APP_PACKAGE, fragment.context?.packageName)
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, activity.packageName)
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-        intent.putExtra("app_package", fragment.context?.packageName)
-        intent.putExtra("app_uid", fragment.context?.applicationInfo?.uid)
+        intent.putExtra("app_package", activity.packageName)
+        intent.putExtra("app_uid", activity.applicationInfo?.uid)
     } else {
         intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
         intent.addCategory(Intent.CATEGORY_DEFAULT);
-        val uri = Uri.fromParts("package", fragment.activity?.packageName, null)
+        val uri = Uri.fromParts("package", activity.packageName, null)
         intent.data = uri
     }
-    fragment.startActivityForResult(intent, requestCode)
+    activity.startActivityForResult(intent, requestCode)
 }
 
 /**
@@ -140,13 +145,13 @@ fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String
     fragment.startActivity(intent)
 }
 
-fun startAddGoogleAccountIntent(fragment: Fragment, requestCode: Int) {
+fun startAddGoogleAccountIntent(context: AppCompatActivity, requestCode: Int) {
     try {
         val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
         intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
-        fragment.startActivityForResult(intent, requestCode)
+        context.startActivityForResult(intent, requestCode)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        fragment.activity?.toast(R.string.error_no_external_application_found)
+        context.toast(R.string.error_no_external_application_found)
     }
 }
 

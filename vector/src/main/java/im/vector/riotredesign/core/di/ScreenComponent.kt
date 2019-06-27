@@ -22,6 +22,7 @@ import dagger.BindsInstance
 import dagger.Component
 import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotredesign.core.preference.UserAvatarPreference
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyFragment
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreSuccessFragment
@@ -54,6 +55,7 @@ import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerF
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
 import im.vector.riotredesign.features.settings.VectorSettingsNotificationPreferenceFragment
+import im.vector.riotredesign.features.settings.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.riotredesign.features.settings.VectorSettingsPreferencesFragment
 
 @Component(dependencies = [VectorComponent::class], modules = [ViewModelModule::class, HomeModule::class])
@@ -122,8 +124,6 @@ interface ScreenComponent {
 
     fun inject(mainActivity: MainActivity)
 
-    fun inject(vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment)
-
     fun inject(roomDirectoryActivity: RoomDirectoryActivity)
 
     fun inject(bugReportActivity: BugReportActivity)
@@ -135,6 +135,12 @@ interface ScreenComponent {
     fun inject(videoMediaViewerActivity: VideoMediaViewerActivity)
 
     fun inject(vectorSettingsNotificationPreferenceFragment: VectorSettingsNotificationPreferenceFragment)
+
+    fun inject(vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment)
+
+    fun inject(userAvatarPreference: UserAvatarPreference)
+
+    fun inject(vectorSettingsNotificationsTroubleshootFragment: VectorSettingsNotificationsTroubleshootFragment)
 
     @Component.Factory
     interface Factory {

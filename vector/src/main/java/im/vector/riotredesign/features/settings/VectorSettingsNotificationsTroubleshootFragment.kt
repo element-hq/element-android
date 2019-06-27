@@ -30,6 +30,7 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.withArgs
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.core.platform.VectorBaseFragment
@@ -56,15 +57,15 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
     // members
     @Inject lateinit var session: Session
     @Inject lateinit var bugReporter: BugReporter
+    @Inject lateinit var testManagerFactory: NotificationTroubleshootTestManagerFactory
+
 
     override fun getLayoutResId() = R.layout.fragment_settings_notifications_troubleshoot
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val appContext = activity!!.applicationContext
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,7 +75,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
         mRecyclerView.layoutManager = layoutManager
 
         val dividerItemDecoration = DividerItemDecoration(mRecyclerView.context,
-                layoutManager.orientation)
+                                                          layoutManager.orientation)
         mRecyclerView.addItemDecoration(dividerItemDecoration)
 
 
@@ -91,10 +92,8 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
     private fun startUI() {
 
         mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status,
-                0, 0)
-
-        testManager = NotificationTroubleshootTestManagerFactory.createTestManager(this, session)
-
+                                             0, 0)
+        testManager = testManagerFactory.create(this)
         testManager?.statusListener = { troubleshootTestManager ->
             if (isAdded) {
                 TransitionManager.beginDelayedTransition(mBottomView)
@@ -104,7 +103,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                         mSummaryButton.visibility = View.GONE
                         mRunButton.visibility = View.VISIBLE
                     }
-                    TroubleshootTest.TestStatus.RUNNING -> {
+                    TroubleshootTest.TestStatus.RUNNING     -> {
                         //Forces int type because it's breaking lint
                         val size: Int = troubleshootTestManager.testList.size
                         val currentTestIndex: Int = troubleshootTestManager.currentTestIndex
@@ -116,7 +115,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                         mSummaryButton.visibility = View.GONE
                         mRunButton.visibility = View.GONE
                     }
-                    TroubleshootTest.TestStatus.FAILED -> {
+                    TroubleshootTest.TestStatus.FAILED      -> {
                         //check if there are quick fixes
                         var hasQuickFix = false
                         testManager?.testList?.let {
@@ -135,7 +134,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                         mSummaryButton.visibility = View.VISIBLE
                         mRunButton.visibility = View.VISIBLE
                     }
-                    TroubleshootTest.TestStatus.SUCCESS -> {
+                    TroubleshootTest.TestStatus.SUCCESS     -> {
                         mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
                         mSummaryButton.visibility = View.VISIBLE
                         mRunButton.visibility = View.VISIBLE

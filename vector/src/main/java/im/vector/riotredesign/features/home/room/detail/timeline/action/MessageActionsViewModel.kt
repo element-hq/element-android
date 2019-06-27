@@ -89,14 +89,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         val event = session.getRoom(roomId)?.getTimeLineEvent(eventId) ?: return state
         var body: CharSequence? = null
         val originTs = event.root.originServerTs
-        when (event.root.type) {
+        when (event.root.getClearType()) {
             EventType.MESSAGE     -> {
                 val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
-                        ?: event.root.content.toModel()
+                                                      ?: event.root.getClearContent().toModel()
                 body = messageContent?.body
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                     body = eventHtmlRenderer.render(messageContent.formattedBody
-                            ?: messageContent.body)
+                                                    ?: messageContent.body)
                 }
             }
             EventType.STATE_ROOM_NAME,

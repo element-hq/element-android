@@ -42,7 +42,6 @@ import im.vector.riotredesign.core.di.DaggerVectorComponent
 import im.vector.riotredesign.core.di.HasVectorInjector
 import im.vector.riotredesign.core.di.VectorComponent
 import im.vector.riotredesign.core.extensions.configureAndStart
-import im.vector.riotredesign.core.services.AlarmSyncBroadcastReceiver
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
@@ -50,7 +49,6 @@ import im.vector.riotredesign.features.notifications.NotificationUtils
 import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.riotredesign.features.settings.PreferencesManager
 import im.vector.riotredesign.features.version.getVersion
 import im.vector.riotredesign.push.fcm.FcmHelper
 import timber.log.Timber
@@ -113,7 +111,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
 
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
-                AlarmSyncBroadcastReceiver.cancelAlarm(appContext)
+                FcmHelper.onEnterForeground(appContext)
                 activeSessionHolder.getSafeActiveSession()?.also {
                     it.stopAnyBackgroundSync()
                 }
@@ -123,19 +121,8 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
             fun entersBackground() {
                 Timber.i("App entered background") // call persistInfo
                 notificationDrawerManager.persistInfo()
-                if (FcmHelper.isPushSupported()) {
-                    //TODO FCM fallback
-                } else {
-                    //TODO check if notifications are enabled for this device
-                    //We need to use alarm in this mode
-                    val activeSession = activeSessionHolder.getSafeActiveSession()
-                    if (activeSession != null && PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
-                        AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext, activeSession.myUserId, 4_000L)
-                        Timber.i("Alarm scheduled to restart service")
-                    }
-                }
+                FcmHelper.onEnterBackground(appContext, activeSessionHolder)
             }
-
         })
     }
 

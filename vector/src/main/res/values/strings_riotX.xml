@@ -28,6 +28,10 @@
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
 
-    <string name="preference_root_legacy">Legacy</string>
+    <string name="preference_voice_and_video">Voice &amp; Video</string>
+    <string name="preference_root_help_about">Help &amp; About</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Register token</string>
 
 </resources>

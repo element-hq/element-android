@@ -16,39 +16,46 @@
 
 package im.vector.riotredesign.features.settings
 
-import android.content.Context
-import android.os.Bundle
+import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.pushrules.RuleIds
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ActiveSessionHolder
-import im.vector.riotredesign.core.di.DaggerScreenComponent
-import im.vector.riotredesign.core.platform.VectorPreferenceFragment
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.push.fcm.FcmHelper
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
-class VectorSettingsNotificationPreferenceFragment : VectorPreferenceFragment() {
-
+class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.settings_notifications
+    override val preferenceXmlRes = R.xml.vector_settings_notifications
 
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.vector_settings_notifications)
+    override fun bindPref() {
+        findPreference(PreferencesManager.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY).let { pref ->
+            val pushRuleService = session
+            val mRuleMaster = pushRuleService.getPushRules()
+                    .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
+
+            if (mRuleMaster == null) {
+                pref.isVisible = false
+                return
+            }
+
+            val areNotifEnabledAtAccountLevelt = !mRuleMaster.enabled
+            (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevelt
+        }
     }
 
-    override fun onAttach(context: Context) {
-        val screenComponent = DaggerScreenComponent.factory().create(vectorActivity.getVectorComponent(), vectorActivity)
-        super.onAttach(context)
-        screenComponent.inject(this)
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -56,28 +63,70 @@ class VectorSettingsNotificationPreferenceFragment : VectorPreferenceFragment() 
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        if (preference?.key == PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
-            val switchPref = preference as SwitchPreference
-            if (switchPref.isChecked) {
-                FcmHelper.getFcmToken(requireContext())?.let {
-                    if (PreferencesManager.areNotificationEnabledForDevice(requireContext())) {
-                        pushManager.registerPusherWithFcmKey(it)
-                    }
-                }
-            } else {
-                FcmHelper.getFcmToken(requireContext())?.let {
-                    pushManager.unregisterPusher(it, object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            super.onSuccess(data)
-                        }
 
-                        override fun onFailure(failure: Throwable) {
-                            super.onFailure(failure)
-                        }
-                    })
-                }
+        return when (preference?.key) {
+            PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> {
+                updateEnabledForDevice(preference)
+                true
+            }
+            PreferencesManager.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY   -> {
+                updateEnabledForAccount(preference)
+                true
+            }
+            else                                                          -> {
+                return super.onPreferenceTreeClick(preference)
             }
         }
-        return super.onPreferenceTreeClick(preference)
+
+    }
+
+    private fun updateEnabledForDevice(preference: Preference?) {
+        val switchPref = preference as SwitchPreference
+        if (switchPref.isChecked) {
+            FcmHelper.getFcmToken(requireContext())?.let {
+                if (PreferencesManager.areNotificationEnabledForDevice(requireContext())) {
+                    pushManager.registerPusherWithFcmKey(it)
+                }
+            }
+        } else {
+            FcmHelper.getFcmToken(requireContext())?.let {
+                pushManager.unregisterPusher(it, object : MatrixCallback<Unit> {
+                    override fun onSuccess(data: Unit) {
+                        session.refreshPushers()
+                        super.onSuccess(data)
+                    }
+
+                    override fun onFailure(failure: Throwable) {
+                        session.refreshPushers()
+                        Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+        }
+    }
+
+
+    private fun updateEnabledForAccount(preference: Preference?) {
+        val pushRuleService = session
+        val switchPref = preference as SwitchPreference
+        pushRuleService.getPushRules()
+                .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
+                ?.let {
+                    //Trick, we must enable this room to disable notifications
+                    pushRuleService.updatePushRuleEnableStatus("override", it, !switchPref.isChecked,
+                                                               object : MatrixCallback<Unit> {
+
+                                                                   override fun onSuccess(data: Unit) {
+                                                                       pushRuleService.fetchPushRules()
+                                                                   }
+
+                                                                   override fun onFailure(failure: Throwable) {
+                                                                       //revert the check box
+                                                                       switchPref.isChecked = !switchPref.isChecked
+                                                                       Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                                                                   }
+                                                               })
+                }
+
     }
 }

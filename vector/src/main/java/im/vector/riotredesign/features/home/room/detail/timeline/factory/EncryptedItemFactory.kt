@@ -64,12 +64,9 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                 // TODO This is not correct format for error, change it
 
                 val informationData = messageInformationDataFactory.create(event, nextEvent)
-                return NoticeItem_()
-                        .avatarRenderer(avatarRenderer)
-                        .noticeText(spannableStr)
-
                 return MessageTextItem_()
                         .message(spannableStr)
+                        .avatarRenderer(avatarRenderer)
                         .informationData(informationData)
                         .highlighted(highlight)
                         .avatarCallback(callback)

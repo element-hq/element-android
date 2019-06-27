@@ -116,12 +116,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:hint="@string/room_message_placeholder_not_encrypted"
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         android:padding="8dp"
         android:textColor="?vctr_message_text_color"
         android:textSize="14sp"
+        tools:hint="@string/room_message_placeholder_not_encrypted"
         tools:ignore="MissingConstraints" />
 
 </merge>

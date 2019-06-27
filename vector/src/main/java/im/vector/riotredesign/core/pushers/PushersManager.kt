@@ -1,26 +1,28 @@
 package im.vector.riotredesign.core.pushers
 
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.resources.AppNameProvider
 import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import java.util.*
 import javax.inject.Inject
 
 private const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
 class PushersManager @Inject constructor(
-        private val currentSession: Session,
+        private val activeSessionHolder: ActiveSessionHolder,
         private val localeProvider: LocaleProvider,
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider
 ) {
 
-    fun registerPusherWithFcmKey(pushKey: String) {
-        var profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + Math.abs(currentSession.sessionParams.credentials.userId.hashCode())
+    fun registerPusherWithFcmKey(pushKey: String): UUID {
+        val currentSession = activeSessionHolder.getActiveSession()
+        var profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + Math.abs(currentSession.myUserId.hashCode())
 
-        currentSession.addHttpPusher(
+        return currentSession.addHttpPusher(
                 pushKey,
                 stringProvider.getString(R.string.pusher_app_id),
                 profileTag,
@@ -34,6 +36,7 @@ class PushersManager @Inject constructor(
     }
 
     fun unregisterPusher(pushKey: String, callback: MatrixCallback<Unit>) {
-        currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id),callback)
+        val currentSession = activeSessionHolder.getActiveSession()
+        currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id), callback)
     }
 }

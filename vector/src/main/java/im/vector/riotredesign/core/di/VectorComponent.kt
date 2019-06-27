@@ -39,6 +39,7 @@ import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.RageShake
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotredesign.gplay.push.fcm.VectorFirebaseMessagingService
 import javax.inject.Singleton
 
 @Component(modules = [VectorModule::class])
@@ -48,6 +49,8 @@ interface VectorComponent {
     fun inject(vectorApplication: NotificationBroadcastReceiver)
 
     fun inject(vectorApplication: VectorApplication)
+
+    fun inject(vectorFirebaseMessagingService: VectorFirebaseMessagingService)
 
     fun matrix(): Matrix
 
@@ -60,6 +63,8 @@ interface VectorComponent {
     fun resources(): Resources
 
     fun vectorConfiguration(): VectorConfiguration
+
+    fun avatarRenderer(): AvatarRenderer
 
     fun activeSessionHolder(): ActiveSessionHolder
 

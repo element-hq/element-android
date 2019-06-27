@@ -68,15 +68,6 @@
         <service
             android:name=".core.services.CallService"
             android:exported="false" />
-        <!--<service-->
-        <!--android:name="im.vector.matrix.android.internal.session.sync.job.SyncService"-->
-        <!--android:exported="false" />-->
-
-        <service
-            android:name=".core.services.VectorSyncService"
-            android:exported="false">
-
-        </service>
 
         <!-- Receivers -->
 

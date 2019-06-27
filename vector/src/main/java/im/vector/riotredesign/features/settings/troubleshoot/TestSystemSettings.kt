@@ -15,27 +15,30 @@
  */
 package im.vector.riotredesign.features.settings.troubleshoot
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
-import androidx.fragment.app.Fragment
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.startNotificationSettingsIntent
+import javax.inject.Inject
 
 /**
  * Checks if notifications are enable in the system settings for this app.
  */
-class TestSystemSettings(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
+class TestSystemSettings @Inject constructor(private val context: AppCompatActivity,
+                                             private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
 
     override fun perform() {
-        if (NotificationManagerCompat.from(fragment.context!!).areNotificationsEnabled()) {
-            description = fragment.getString(R.string.settings_troubleshoot_test_system_settings_success)
+        if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_system_settings_success)
             quickFix = null
             status = TestStatus.SUCCESS
         } else {
-            description = fragment.getString(R.string.settings_troubleshoot_test_system_settings_failed)
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_system_settings_failed)
             quickFix = object : TroubleshootQuickFix(R.string.open_settings) {
                 override fun doFix() {
                     if (manager?.diagStatus == TestStatus.RUNNING) return //wait before all is finished
-                    startNotificationSettingsIntent(fragment, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+                    startNotificationSettingsIntent(context, NotificationTroubleshootTestManager.REQ_CODE_FIX)
                 }
 
             }

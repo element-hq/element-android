@@ -15,45 +15,48 @@
  */
 package im.vector.riotredesign.features.settings.troubleshoot
 
-import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.RuleIds
-import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
+import im.vector.riotredesign.core.resources.StringProvider
+import javax.inject.Inject
 
 /**
  * Check that the main pushRule (RULE_ID_DISABLE_ALL) is correctly setup
  */
-class TestAccountSettings(val fragment: Fragment, val session: Session)
+class TestAccountSettings @Inject constructor(private val stringProvider: StringProvider,
+                                              private val activeSessionHolder: ActiveSessionHolder)
     : TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
 
     override fun perform() {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
         val defaultRule = session.getPushRules()
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
 
         if (defaultRule != null) {
             if (!defaultRule.enabled) {
-                description = fragment.getString(R.string.settings_troubleshoot_test_account_settings_success)
+                description = stringProvider.getString(R.string.settings_troubleshoot_test_account_settings_success)
                 quickFix = null
                 status = TestStatus.SUCCESS
             } else {
-                description = fragment.getString(R.string.settings_troubleshoot_test_account_settings_failed)
+                description = stringProvider.getString(R.string.settings_troubleshoot_test_account_settings_failed)
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_account_settings_quickfix) {
                     override fun doFix() {
                         if (manager?.diagStatus == TestStatus.RUNNING) return //wait before all is finished
 
                         // TODO Use constant for kind
                         session.updatePushRuleEnableStatus("override", defaultRule, !defaultRule.enabled,
-                                object : MatrixCallback<Unit> {
+                                                           object : MatrixCallback<Unit> {
 
-                                    override fun onSuccess(data: Unit) {
-                                        manager?.retry()
-                                    }
+                                                               override fun onSuccess(data: Unit) {
+                                                                   manager?.retry()
+                                                               }
 
-                                    override fun onFailure(failure: Throwable) {
-                                        manager?.retry()
-                                    }
-                                })
+                                                               override fun onFailure(failure: Throwable) {
+                                                                   manager?.retry()
+                                                               }
+                                                           })
                     }
                 }
                 status = TestStatus.FAILED

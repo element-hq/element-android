@@ -15,33 +15,33 @@
  */
 package im.vector.riotredesign.features.settings.troubleshoot
 
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.settings.PreferencesManager
+import javax.inject.Inject
 
 /**
  * Checks if notifications are enable in the system settings for this app.
  */
-class TestDeviceSettings(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_device_settings_title) {
+class TestDeviceSettings @Inject constructor(private val context: AppCompatActivity,
+                                             private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_device_settings_title) {
 
     override fun perform() {
-        /* TODO
-        val pushManager = Matrix.getInstance(fragment.activity).pushManager
-        if (pushManager.areDeviceNotificationsAllowed()) {
-            description = fragment.getString(R.string.settings_troubleshoot_test_device_settings_success)
+
+        if (PreferencesManager.areNotificationEnabledForDevice(context)) {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_device_settings_success)
             quickFix = null
             status = TestStatus.SUCCESS
         } else {
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_device_settings_quickfix) {
                 override fun doFix() {
-                    pushManager.setDeviceNotificationsAllowed(true)
+                    PreferencesManager.setNotificationEnabledForDevice(context, true)
                     manager?.retry()
                 }
-
             }
-            description = fragment.getString(R.string.settings_troubleshoot_test_device_settings_failed)
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_device_settings_failed)
             status = TestStatus.FAILED
         }
-        */
-        status = TestStatus.FAILED
     }
 }

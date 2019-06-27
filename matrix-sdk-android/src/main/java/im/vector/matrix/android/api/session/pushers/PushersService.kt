@@ -61,4 +61,6 @@ interface PushersService {
     }
 
     fun livePushers(): LiveData<List<Pusher>>
+
+    fun pushers() : List<Pusher>
 }

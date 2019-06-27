@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ************ Cryptography section ************ -->
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
+        android:title="@string/settings_cryptography">
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"
+            android:title="@string/encryption_information_device_name" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
+            android:title="@string/encryption_information_device_id" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY"
+            android:title="@string/encryption_information_device_key" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
+            android:summary="@string/encryption_never_send_to_unverified_devices_summary"
+            android:title="@string/encryption_never_send_to_unverified_devices_title" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY" />
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
+        android:title="@string/settings_cryptography_manage_keys">
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/encryption_settings_manage_message_recovery_summary"
+            android:title="@string/encryption_message_recovery" />
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
+            android:summary="@string/encryption_export_room_keys_summary"
+            android:title="@string/encryption_export_e2e_room_keys" />
+
+        <im.vector.riotredesign.core.preference.VectorPreference
+            android:key="SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
+            android:summary="@string/encryption_import_room_keys_summary"
+            android:title="@string/encryption_import_e2e_room_keys" />
+
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY" />
+
+    <!-- devices list: device ids + device names -->
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
+        android:title="@string/settings_devices_list" />
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceDivider android:key="SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY" />
+
+    <im.vector.riotredesign.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_ANALYTICS_PREFERENCE_KEY"
+        android:title="@string/settings_analytics">
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_USE_ANALYTICS_KEY"
+            android:summary="@string/settings_opt_in_of_analytics_summary"
+            android:title="@string/settings_opt_in_of_analytics" />
+
+        <im.vector.riotredesign.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_USE_RAGE_SHAKE_KEY"
+            android:title="@string/send_bug_report_rage_shake" />
+    </im.vector.riotredesign.core.preference.VectorPreferenceCategory>
+
+</androidx.preference.PreferenceScreen>
