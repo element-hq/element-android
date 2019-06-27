@@ -8,7 +8,7 @@
 
     <application>
 
-        <receiver android:name=".receiver.OnApplicationUpgradeOrRebootReceiver">
+        <receiver android:name="im.vector.riotredesign.fdroid.receiver.OnApplicationUpgradeOrRebootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -16,8 +16,12 @@
         </receiver>
 
         <receiver
-            android:name=".core.services.AlarmSyncBroadcastReceiver"
+            android:name="im.vector.riotredesign.fdroid.receiver.AlarmSyncBroadcastReceiver"
             android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".fdroid.receiver.service.VectorSyncService"
             android:exported="false" />
 
     </application>

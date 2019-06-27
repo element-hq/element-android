@@ -25,7 +25,7 @@ import timber.log.Timber
 
 class PushRuleTriggerListener(
         private val resolver: NotifiableEventResolver,
-        private val drawerManager: NotificationDrawerManager
+        private val notificationDrawerManager: NotificationDrawerManager
 ) : PushRuleService.PushRuleListener {
 
 
@@ -39,14 +39,14 @@ class PushRuleTriggerListener(
         }
         val notificationAction = NotificationAction.extractFrom(actions)
         if (notificationAction.shouldNotify) {
-            val resolveEvent = resolver.resolveEvent(event, session!!)
-            if (resolveEvent == null) {
+            val notifiableEvent = resolver.resolveEvent(event, session!!)
+            if (notifiableEvent == null) {
                 Timber.v("## Failed to resolve event")
                 //TODO
             } else {
-                resolveEvent.noisy = !notificationAction.soundName.isNullOrBlank()
-                Timber.v("New event to notify $resolveEvent tweaks:$notificationAction")
-                drawerManager.onNotifiableEventReceived(resolveEvent)
+                notifiableEvent.noisy = !notificationAction.soundName.isNullOrBlank()
+                Timber.v("New event to notify $notifiableEvent tweaks:$notificationAction")
+                notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
             }
         } else {
             Timber.v("Matched push rule is set to not notify")
@@ -54,7 +54,7 @@ class PushRuleTriggerListener(
     }
 
     override fun batchFinish() {
-        drawerManager.refreshNotificationDrawer()
+        notificationDrawerManager.refreshNotificationDrawer()
     }
 
     fun startWithSession(session: Session) {
@@ -68,7 +68,7 @@ class PushRuleTriggerListener(
     fun stop() {
         session?.removePushRuleListener(this)
         session = null
-        drawerManager.clearAllEvents()
+        notificationDrawerManager.clearAllEvents()
     }
 
 }
