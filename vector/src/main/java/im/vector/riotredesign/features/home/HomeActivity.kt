@@ -40,6 +40,7 @@ import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
+import im.vector.riotredesign.features.disclaimer.showDisclaimerDialog
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
@@ -151,6 +152,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                     .setPositiveButton(R.string.yes) { _, _ -> BugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> BugReporter.deleteCrashFile(this) }
                     .show()
+        } else {
+            showDisclaimerDialog(this)
         }
 
         //Force remote backup state update to update the banner if needed

@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.features.disclaimer.showDisclaimerDialog
 import im.vector.riotredesign.features.home.HomeActivity
 import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import io.reactivex.Observable
@@ -55,6 +56,12 @@ class LoginActivity : VectorBaseActivity() {
         setupAuthButton()
         setupPasswordReveal()
         homeServerField.setText(DEFAULT_HOME_SERVER_URI)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        showDisclaimerDialog(this)
     }
 
     private fun authenticate() {
