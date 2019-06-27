@@ -29,7 +29,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
-import im.vector.riotredesign.core.extensions.observeEvent
+import im.vector.riotredesign.core.extensions.observeEventDebounced
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
@@ -71,7 +71,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         setupCreateRoomButton()
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
-        roomListViewModel.openRoomLiveData.observeEvent(this) {
+        roomListViewModel.openRoomLiveData.observeEventDebounced(this, 800L) {
             navigator.openRoom(requireActivity(), it)
         }
 
