@@ -22,13 +22,9 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.core.extensions.localDateTime
 
 object TimelineDisplayableEvents {
-
-    //Debug helper, to show invisible items in time line (reaction, redacts)
-    val DEBUG_HIDDEN_EVENT = BuildConfig.SHOW_HIDDEN_TIMELINE_EVENTS
 
     val DISPLAYABLE_TYPES = listOf(
             EventType.MESSAGE,
@@ -52,8 +48,10 @@ object TimelineDisplayableEvents {
     )
 }
 
-fun TimelineEvent.isDisplayable(): Boolean {
-    if (!TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.type)) {
+fun TimelineEvent.isDisplayable(showHiddenEvent: Boolean): Boolean {
+    val allowed = TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES.takeIf { showHiddenEvent }
+            ?: TimelineDisplayableEvents.DISPLAYABLE_TYPES
+    if (!allowed.contains(root.type)) {
         return false
     }
     if (root.content.isNullOrEmpty()) {
@@ -132,10 +130,10 @@ fun List<TimelineEvent>.prevSameTypeEvents(index: Int, minSize: Int): List<Timel
             .reversed()
 }
 
-fun List<TimelineEvent>.nextDisplayableEvent(index: Int): TimelineEvent? {
+fun List<TimelineEvent>.nextDisplayableEvent(index: Int, showHiddenEvent: Boolean): TimelineEvent? {
     return if (index >= size - 1) {
         null
     } else {
-        subList(index + 1, this.size).firstOrNull { it.isDisplayable() }
+        subList(index + 1, this.size).firstOrNull { it.isDisplayable(showHiddenEvent) }
     }
 }
