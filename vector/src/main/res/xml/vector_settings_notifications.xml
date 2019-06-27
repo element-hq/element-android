@@ -33,7 +33,6 @@
             app:fragment="im.vector.fragments.VectorSettingsNotificationsAdvancedFragment" />
 
         <im.vector.riotredesign.core.preference.VectorPreference
-            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
             android:title="@string/settings_notification_troubleshoot"
             app:fragment="im.vector.riotredesign.features.settings.VectorSettingsNotificationsTroubleshootFragment" />

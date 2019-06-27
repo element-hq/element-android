@@ -87,11 +87,13 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
             FcmHelper.getFcmToken(requireContext())?.let {
                 pushManager.unregisterPusher(it, object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
+                        Matrix.getInstance().currentSession?.refreshPushers()
                         super.onSuccess(data)
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        super.onFailure(failure)
+                        Matrix.getInstance().currentSession?.refreshPushers()
+                        Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
                     }
                 })
             }
@@ -116,7 +118,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
                                 override fun onFailure(failure: Throwable) {
                                     //revert the check box
                                     switchPref.isChecked = !switchPref.isChecked
-                                    Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
                                 }
                             })
                 }
