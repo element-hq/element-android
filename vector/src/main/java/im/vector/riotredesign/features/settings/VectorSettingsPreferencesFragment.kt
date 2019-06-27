@@ -35,12 +35,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckedTextView
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.preference.*
+import androidx.preference.EditTextPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
+import androidx.preference.PreferenceManager
+import androidx.preference.SwitchPreference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -68,7 +77,19 @@ import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.ProgressBarPreference
 import im.vector.riotredesign.core.preference.UserAvatarPreference
 import im.vector.riotredesign.core.preference.VectorPreference
-import im.vector.riotredesign.core.utils.*
+import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_EXPORT_KEYS
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotredesign.core.utils.allGranted
+import im.vector.riotredesign.core.utils.checkPermissions
+import im.vector.riotredesign.core.utils.copyToClipboard
+import im.vector.riotredesign.core.utils.displayInWebView
+import im.vector.riotredesign.core.utils.getCallRingtoneName
+import im.vector.riotredesign.core.utils.getCallRingtoneUri
+import im.vector.riotredesign.core.utils.openFileSelection
+import im.vector.riotredesign.core.utils.setCallRingtoneUri
+import im.vector.riotredesign.core.utils.setUseRiotDefaultRingtone
+import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keys.KeysExporter
@@ -76,7 +97,6 @@ import im.vector.riotredesign.features.crypto.keys.KeysImporter
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.themes.ThemeUtils
 import im.vector.riotredesign.features.version.getVersion
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.text.DateFormat
@@ -314,7 +334,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+                                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
             }
 
             // Unfortunately, this is not supported in lib v7
@@ -331,7 +351,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+                                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
             }
 
             it.setOnPreferenceClickListener {
@@ -713,7 +733,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
                 context?.let { context: Context ->
                     AlertDialog.Builder(context)
                             .setSingleChoiceItems(R.array.media_saving_choice,
-                                    PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
+                                                  PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
                                 PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
                                 d.cancel()
 
@@ -1773,7 +1793,7 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
             mDisplayedEmails = newEmailsList
 
             val addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)
-                    ?: return
+                              ?: return
 
             var order = addEmailBtn.order
 
@@ -2449,7 +2469,9 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
             // disable the deletion for our own device
             if (!TextUtils.equals(session.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
-                builder.setNegativeButton(R.string.delete) { _, _ -> displayDeviceDeletionDialog(aDeviceInfo) }
+                builder.setNegativeButton(R.string.delete) { _, _ ->
+                    //displayDeviceDeletionDialog(aDeviceInfo)
+                }
             }
             builder.setNeutralButton(R.string.cancel, null)
                     .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
@@ -2746,8 +2768,8 @@ class VectorSettingsPreferencesFragment : VectorPreferenceFragment(), SharedPref
 
                                         AlertDialog.Builder(thisActivity)
                                                 .setMessage(getString(R.string.encryption_import_room_keys_success,
-                                                        data.successfullyNumberOfImportedKeys,
-                                                        data.totalNumberOfKeys))
+                                                                      data.successfullyNumberOfImportedKeys,
+                                                                      data.totalNumberOfKeys))
                                                 .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
                                                 .show()
                                     }

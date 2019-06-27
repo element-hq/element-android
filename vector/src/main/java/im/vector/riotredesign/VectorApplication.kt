@@ -114,7 +114,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
                 AlarmSyncBroadcastReceiver.cancelAlarm(appContext)
-                activeSessionHolder.getActiveSession().also {
+                activeSessionHolder.getSafeActiveSession()?.also {
                     it.stopAnyBackgroundSync()
                 }
             }
@@ -128,8 +128,9 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
                 } else {
                     //TODO check if notifications are enabled for this device
                     //We need to use alarm in this mode
-                    if (PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
-                        AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext, 4_000L)
+                    val activeSession = activeSessionHolder.getSafeActiveSession()
+                    if (activeSession != null && PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
+                        AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext, activeSession.myUserId, 4_000L)
                         Timber.i("Alarm scheduled to restart service")
                     }
                 }

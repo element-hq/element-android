@@ -54,6 +54,10 @@ interface Session :
      */
     val sessionParams: SessionParams
 
+    val myUserId : String
+        get() = sessionParams.credentials.userId
+
+
     /**
      * This method allow to open a session. It does start some service on the background.
      */

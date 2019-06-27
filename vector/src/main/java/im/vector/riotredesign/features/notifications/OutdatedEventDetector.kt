@@ -15,10 +15,10 @@
  */
 package im.vector.riotredesign.features.notifications
 
-import im.vector.matrix.android.api.session.Session
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import javax.inject.Inject
 
-class OutdatedEventDetector @Inject constructor(private val session: Session) {
+class OutdatedEventDetector @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
 
     /**
      * Returns true if the given event is outdated.
@@ -29,7 +29,7 @@ class OutdatedEventDetector @Inject constructor(private val session: Session) {
         if (notifiableEvent is NotifiableMessageEvent) {
             val eventID = notifiableEvent.eventId
             val roomID = notifiableEvent.roomId
-            val room = session.getRoom(roomID) ?: return false
+            val room = activeSessionHolder.getSafeActiveSession()?.getRoom(roomID) ?: return false
             return room.isEventRead(eventID)
         }
         return false

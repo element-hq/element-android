@@ -33,7 +33,9 @@ import im.vector.riotredesign.features.home.HomeNavigator
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.navigation.Navigator
+import im.vector.riotredesign.features.notifications.NotificationBroadcastReceiver
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
+import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.RageShake
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
@@ -42,6 +44,8 @@ import javax.inject.Singleton
 @Component(modules = [VectorModule::class])
 @Singleton
 interface VectorComponent {
+
+    fun inject(vectorApplication: NotificationBroadcastReceiver)
 
     fun inject(vectorApplication: VectorApplication)
 
@@ -78,6 +82,8 @@ interface VectorComponent {
     fun bugReporter(): BugReporter
 
     fun vectorUncaughtExceptionHandler(): VectorUncaughtExceptionHandler
+
+    fun pushRuleTriggerListener(): PushRuleTriggerListener
 
     @Component.Factory
     interface Factory {

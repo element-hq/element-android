@@ -57,6 +57,7 @@ import im.vector.riotredesign.features.workers.signout.SignOutViewModel
 
 @Module
 interface ViewModelModule {
+    
 
     @Binds
     fun bindViewModelFactory(factory: VectorViewModelFactory): ViewModelProvider.Factory

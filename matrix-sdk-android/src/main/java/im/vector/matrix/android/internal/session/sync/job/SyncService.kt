@@ -19,7 +19,9 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
+import androidx.work.ListenableWorker
 import com.squareup.moshi.JsonEncodingException
+import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
@@ -31,6 +33,7 @@ import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.*
@@ -46,15 +49,15 @@ private const val BACKGROUND_LONG_POOL_TIMEOUT = 0L
  * in order to be able to perform a sync even if the app is not running.
  * The <receiver> and <service> must be declared in the Manifest or the app using the SDK
  */
-internal open class SyncService : Service() {
+open class SyncService : Service() {
 
     private var mIsSelfDestroyed: Boolean = false
     private var cancelableTask: Cancelable? = null
 
-    @Inject lateinit var syncTokenStore: SyncTokenStore
-    @Inject lateinit var syncTask: SyncTask
-    @Inject lateinit var networkConnectivityChecker: NetworkConnectivityChecker
-    @Inject lateinit var taskExecutor: TaskExecutor
+    private lateinit var syncTokenStore: SyncTokenStore
+    private lateinit var syncTask: SyncTask
+    private lateinit var networkConnectivityChecker: NetworkConnectivityChecker
+    private lateinit var taskExecutor: TaskExecutor
 
     private var localBinder = LocalBinder()
 
@@ -68,6 +71,12 @@ internal open class SyncService : Service() {
         nextBatchDelay = 60_000L
         timeout = 0
         intent?.let {
+            val userId = it.getStringExtra(EXTRA_USER_ID)
+            val sessionComponent =  Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId) ?: return@let
+            syncTokenStore = sessionComponent.syncTokenStore()
+            syncTask = sessionComponent.syncTask()
+            networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
+            taskExecutor = sessionComponent.taskExecutor()
             if (cancelableTask == null) {
                 timer.cancel()
                 timer = Timer()
@@ -191,7 +200,6 @@ internal open class SyncService : Service() {
         }
 
         internal fun notifySyncFinish() {
-
             listeners.forEach {
                 try {
                     it.onSyncFinsh()
@@ -234,6 +242,8 @@ internal open class SyncService : Service() {
     }
 
     companion object {
+
+        const val EXTRA_USER_ID = "EXTRA_USER_ID"
 
         fun startLongPool(delay: Long) {
 

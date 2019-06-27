@@ -20,12 +20,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ActiveSessionHolder
+import im.vector.riotredesign.core.di.HasVectorInjector
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -38,10 +38,14 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
+
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         Timber.v("NotificationBroadcastReceiver received : $intent")
-
+        val appContext = context.applicationContext
+        if (appContext is HasVectorInjector) {
+            appContext.injector().inject(this)
+        }
         when (intent.action) {
             NotificationUtils.SMART_REPLY_ACTION        ->
                 handleSmartReply(intent, context)
@@ -60,7 +64,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun handleMarkAsRead(context: Context, roomId: String) {
-       activeSessionHolder.getActiveSession().let { session ->
+        activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)
                     ?.markAllAsRead(object : MatrixCallback<Unit> {})
         }
@@ -95,7 +99,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 false,
                 System.currentTimeMillis(),
                 session.getUser(session.sessionParams.credentials.userId)?.displayName
-                        ?: context?.getString(R.string.notification_sender_me),
+                ?: context?.getString(R.string.notification_sender_me),
                 session.sessionParams.credentials.userId,
                 message,
                 room.roomId,

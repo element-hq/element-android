@@ -20,6 +20,7 @@ package im.vector.riotredesign.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import im.vector.riotredesign.core.di.HasVectorInjector
 import im.vector.riotredesign.core.services.AlarmSyncBroadcastReceiver
 import timber.log.Timber
 
@@ -27,6 +28,11 @@ class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Timber.v("## onReceive() ${intent.action}")
-        AlarmSyncBroadcastReceiver.scheduleAlarm(context, 10)
+        if (context is HasVectorInjector) {
+            val activeSession = context.injector().activeSessionHolder().getSafeActiveSession()
+            if (activeSession != null) {
+                AlarmSyncBroadcastReceiver.scheduleAlarm(context, activeSession.myUserId, 10)
+            }
+        }
     }
 }

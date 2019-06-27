@@ -53,6 +53,7 @@ import im.vector.riotredesign.features.roomdirectory.createroom.CreateRoomFragme
 import im.vector.riotredesign.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotredesign.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
 import im.vector.riotredesign.features.settings.VectorSettingsActivity
+import im.vector.riotredesign.features.settings.VectorSettingsNotificationPreferenceFragment
 import im.vector.riotredesign.features.settings.VectorSettingsPreferencesFragment
 
 @Component(dependencies = [VectorComponent::class], modules = [ViewModelModule::class, HomeModule::class])
@@ -132,6 +133,8 @@ interface ScreenComponent {
     fun inject(vectorInviteView: VectorInviteView)
 
     fun inject(videoMediaViewerActivity: VideoMediaViewerActivity)
+
+    fun inject(vectorSettingsNotificationPreferenceFragment: VectorSettingsNotificationPreferenceFragment)
 
     @Component.Factory
     interface Factory {

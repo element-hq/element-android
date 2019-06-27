@@ -16,32 +16,43 @@
 
 package im.vector.riotredesign.features.settings
 
+import android.content.Context
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
+import im.vector.riotredesign.core.di.DaggerScreenComponent
 import im.vector.riotredesign.core.platform.VectorPreferenceFragment
 import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.push.fcm.FcmHelper
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
 class VectorSettingsNotificationPreferenceFragment : VectorPreferenceFragment() {
 
+
     override var titleRes: Int = R.string.settings_notifications
 
-    val pushManager: PushersManager by inject()
-
+    @Inject lateinit var pushManager: PushersManager
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.vector_settings_notifications)
     }
 
+    override fun onAttach(context: Context) {
+        val screenComponent = DaggerScreenComponent.factory().create(vectorActivity.getVectorComponent(), vectorActivity)
+        super.onAttach(context)
+        screenComponent.inject(this)
+    }
+
+
     override fun onResume() {
         super.onResume()
-        Matrix.getInstance().currentSession?.refreshPushers()
+        activeSessionHolder.getSafeActiveSession()?.refreshPushers()
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {

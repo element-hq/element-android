@@ -6,10 +6,11 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.AppNameProvider
 import im.vector.riotredesign.core.resources.LocaleProvider
 import im.vector.riotredesign.core.resources.StringProvider
+import javax.inject.Inject
 
 private const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
-class PushersManager(
+class PushersManager @Inject constructor(
         private val currentSession: Session,
         private val localeProvider: LocaleProvider,
         private val stringProvider: StringProvider,

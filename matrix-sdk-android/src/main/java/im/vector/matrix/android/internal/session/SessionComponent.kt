@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.CryptoModule
 import im.vector.matrix.android.internal.di.MatrixComponent
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.cache.CacheModule
 import im.vector.matrix.android.internal.session.content.ContentModule
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
@@ -37,8 +38,11 @@ import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.session.signout.SignOutModule
 import im.vector.matrix.android.internal.session.sync.SyncModule
+import im.vector.matrix.android.internal.session.sync.SyncTask
+import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.session.user.UserModule
+import im.vector.matrix.android.internal.task.TaskExecutor
 
 @Component(dependencies = [MatrixComponent::class],
         modules = [
@@ -61,6 +65,14 @@ internal interface SessionComponent {
 
     fun session(): Session
 
+    fun syncTask(): SyncTask
+
+    fun syncTokenStore(): SyncTokenStore
+
+    fun networkConnectivityChecker(): NetworkConnectivityChecker
+
+    fun taskExecutor(): TaskExecutor
+
     fun inject(sendEventWorker: SendEventWorker)
 
     fun inject(sendEventWorker: SendRelationWorker)
@@ -77,7 +89,6 @@ internal interface SessionComponent {
 
     fun inject(addHttpPusherWorker: AddHttpPusherWorker)
 
-
     @Component.Factory
     interface Factory {
         fun create(
@@ -87,3 +98,5 @@ internal interface SessionComponent {
 
 
 }
+
+

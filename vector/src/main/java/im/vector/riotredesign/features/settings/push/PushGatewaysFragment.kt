@@ -29,14 +29,15 @@ import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.ui.list.genericFooterItem
 import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
+import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml
 class PushGatewaysFragment : VectorBaseFragment() {
 
     override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler_epoxy
 
+    @Inject lateinit var pushGatewaysViewModelFactory: PushGatewaysViewModel.Factory
     private val viewModel: PushGatewaysViewModel by fragmentViewModel(PushGatewaysViewModel::class)
-
     private val epoxyController by lazy { PushGateWayController(StringProvider(requireContext().resources)) }
 
     override fun onResume() {

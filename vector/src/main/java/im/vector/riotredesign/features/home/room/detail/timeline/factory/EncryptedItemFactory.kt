@@ -31,12 +31,13 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTex
 import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import me.gujun.android.span.span
+import javax.inject.Inject
 
 // This class handles timeline events who haven't been successfully decrypted
-class EncryptedItemFactory(private val messageInformationDataFactory: MessageInformationDataFactory,
-                           private val colorProvider: ColorProvider,
-                           private val stringProvider: StringProvider,
-                           private val avatarRenderer: AvatarRenderer) {
+class EncryptedItemFactory @Inject constructor(private val messageInformationDataFactory: MessageInformationDataFactory,
+                                               private val colorProvider: ColorProvider,
+                                               private val stringProvider: StringProvider,
+                                               private val avatarRenderer: AvatarRenderer) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -79,7 +80,7 @@ class EncryptedItemFactory(private val messageInformationDataFactory: MessageInf
                                 }))
                         .longClickListener { view ->
                             return@longClickListener callback?.onEventLongClicked(informationData, null, view)
-                                    ?: false
+                                                     ?: false
                         }
             }
             else                                             -> null
