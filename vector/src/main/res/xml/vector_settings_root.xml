@@ -35,11 +35,10 @@
         android:title="@string/preference_voice_and_video"
         app:fragment="im.vector.riotredesign.features.settings.VectorSettingsVoiceVideo" />
 
-    <!-- TODO Ignored users icon -->
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:enabled="@bool/false_not_implemented"
-        android:icon="@drawable/ic_settings_root_legacy"
+        android:icon="@drawable/ic_settings_root_ignored_users"
         android:title="@string/settings_ignored_users"
         app:fragment="im.vector.riotredesign.features.settings.VectorSettingsIgnoredUsers" />
 
