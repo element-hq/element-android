@@ -22,11 +22,21 @@ import io.realm.RealmConfiguration
 import timber.log.Timber
 import java.security.SecureRandom
 
+/**
+ * On creation a random key is generated, this key is then encrypted using the system KeyStore.
+ * The encrypted key is stored in shared preferences.
+ * When the database is opened again, the encrypted key is taken from the shared pref,
+ * then the Keystore is used to decrypt the key. The decrypted key is passed to the RealConfiguration.
+ *
+ * On android >=M, the KeyStore generates an AES key to encrypt/decrypt the database key,
+ * and the encrypted key is stored with the initialization vector in base64 in the shared pref.
+ * On android <M, the KeyStore cannot create AES keys, so a public/private key pair is generated,
+ * then we generate a random secret key. The database key is encrypted with the secret key; The secret
+ * key is encrypted with the public RSA key and stored with the encrypted key in the shared pref
+ */
+private object RealmKeysUtils {
 
-object RealmKeysUtils {
-
-
-    private val ENCRYPTED_KEY_PREFIX = "REALM_ENCR_KEY"
+    private const val ENCRYPTED_KEY_PREFIX = "REALM_ENCRYPTED_KEY"
 
     private val rng = SecureRandom()
 
@@ -69,14 +79,14 @@ object RealmKeysUtils {
      */
     fun extractKeyForDatabase(alias: String, context: Context): ByteArray {
         val sharedPreferences = getSharedPreferences(context)
-        val encrytpedB64 = sharedPreferences.getString("${ENCRYPTED_KEY_PREFIX}_$alias", null)
-        val encryptedKey = Base64.decode(encrytpedB64, Base64.NO_PADDING)
+        val encryptedB64 = sharedPreferences.getString("${ENCRYPTED_KEY_PREFIX}_$alias", null)
+        val encryptedKey = Base64.decode(encryptedB64, Base64.NO_PADDING)
         val b64 = SecretStoringUtils.loadSecureSecret(encryptedKey, alias, context)
         return Base64.decode(b64!!, Base64.NO_PADDING)
     }
 
     private fun getSharedPreferences(context: Context) =
-            context.getSharedPreferences("im.vector.riotx-sdk", Context.MODE_PRIVATE)
+            context.getSharedPreferences("im.vector.matrix.android.keys", Context.MODE_PRIVATE)
 }
 
 
