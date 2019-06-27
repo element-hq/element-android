@@ -165,12 +165,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-// TODO Remove
-//            R.id.sliding_menu_sign_out -> {
-//                SignOutUiWorker(this, notificationDrawerManager)
-//                        .perform(Matrix.getInstance().currentSession!!)
-//                return true
-//            }
+            R.id.menu_home_suggestion -> {
+                BugReporter.openBugReportScreen(this, true)
+                return true
+            }
         }
 
         return true

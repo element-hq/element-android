@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/sliding_menu_sign_out"
-        android:icon="@drawable/ic_material_exit_to_app"
-        android:title="@string/action_sign_out" />
+        android:id="@+id/menu_home_suggestion"
+        android:icon="@drawable/ic_material_bug_report"
+        android:title="@string/send_suggestion" />
 
 </menu>
