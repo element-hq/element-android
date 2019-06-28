@@ -24,6 +24,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
+import im.vector.matrix.android.internal.session.sync.job.SyncService
 import im.vector.riotredesign.fdroid.service.VectorSyncService
 import timber.log.Timber
 
@@ -39,11 +40,12 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-
+        val userId = intent.getStringExtra(SyncService.EXTRA_USER_ID)
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         Timber.d("RestartBroadcastReceiver received intent")
         Intent(context, VectorSyncService::class.java).also {
             it.action = "SLOW"
+            it.putExtra(SyncService.EXTRA_USER_ID, userId)
             context.startService(it)
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -57,7 +59,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-        scheduleAlarm(context, 30_000L)
+        scheduleAlarm(context, userId, 30_000L)
 
         Timber.i("Alarm scheduled to restart service")
     }
@@ -65,9 +67,11 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
     companion object {
         private const val REQUEST_CODE = 0
 
-        fun scheduleAlarm(context: Context, delay: Long) {
+        fun scheduleAlarm(context: Context, userId: String, delay: Long) {
             //Reschedule
-            val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java)
+            val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java).apply {
+                putExtra(SyncService.EXTRA_USER_ID, userId)
+            }
             val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val firstMillis = System.currentTimeMillis() + delay
             val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

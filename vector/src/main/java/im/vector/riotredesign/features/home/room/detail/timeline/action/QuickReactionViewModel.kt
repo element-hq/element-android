@@ -15,12 +15,15 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.core.platform.VectorViewModel
-import org.koin.android.ext.android.get
+import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 
 /**
  * Quick reactions state, it's a toggle with 3rd state
@@ -31,16 +34,50 @@ data class ToggleState(
 )
 
 data class QuickReactionState(
-        val quickStates: List<ToggleState>,
-        val eventId: String = "",
+        val roomId: String,
+        val eventId: String,
+        val informationData: MessageInformationData,
+        val quickStates: List<ToggleState> = emptyList(),
         val result: ToggleState? = null
-) : MvRxState
+        /** Pair of 'clickedOn' and current toggles state*/
+) : MvRxState {
+
+    constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
+}
 
 /**
  * Quick reaction view model
  */
-class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel<QuickReactionState>(initialState) {
+class QuickReactionViewModel @AssistedInject constructor(@Assisted initialState: QuickReactionState,
+                                                         private val session: Session) : VectorViewModel<QuickReactionState>(initialState) {
 
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: QuickReactionState): QuickReactionViewModel
+    }
+
+    companion object : MvRxViewModelFactory<QuickReactionViewModel, QuickReactionState> {
+
+        val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
+
+        override fun create(viewModelContext: ViewModelContext, state: QuickReactionState): QuickReactionViewModel? {
+            val fragment: QuickReactionFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.quickReactionViewModelFactory.create(state)
+        }
+    }
+
+    init {
+        setState { reduceState(this) }
+    }
+
+    private fun reduceState(state: QuickReactionState): QuickReactionState {
+        val event = session.getRoom(state.roomId)?.getTimeLineEvent(state.eventId) ?: return state
+        val summary = event.annotations?.reactionsSummary
+        val quickReactions = quickEmojis.map { emoji ->
+            ToggleState(emoji, summary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
+        }
+        return state.copy(quickStates = quickReactions)
+    }
 
     fun didSelect(index: Int) = withState {
         val isSelected = it.quickStates[index].isSelected
@@ -49,21 +86,4 @@ class QuickReactionViewModel(initialState: QuickReactionState) : VectorViewModel
         }
     }
 
-    companion object : MvRxViewModelFactory<QuickReactionViewModel, QuickReactionState> {
-
-        val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
-
-        override fun initialState(viewModelContext: ViewModelContext): QuickReactionState? {
-            val currentSession = viewModelContext.activity.get<Session>()
-            val parcel = viewModelContext.args as TimelineEventFragmentArgs
-            val event = currentSession.getRoom(parcel.roomId)?.getTimeLineEvent(parcel.eventId)
-                    ?: return null
-
-            val summary = event.annotations?.reactionsSummary
-            val quickReactions = quickEmojis.map { emoji ->
-                ToggleState(emoji, summary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
-            }
-            return QuickReactionState(quickReactions, event.root.eventId ?: "")
-        }
-    }
 }

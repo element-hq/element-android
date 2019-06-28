@@ -24,13 +24,14 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import javax.inject.Inject
 
 
-internal class BingRuleWatcher(monarchy: Monarchy,
-                               private val task: ProcessEventForPushTask,
-                               private val defaultPushRuleService: DefaultPushRuleService,
-                               private val sessionParams: SessionParams,
-                               private val taskExecutor: TaskExecutor) :
+internal class BingRuleWatcher @Inject constructor(monarchy: Monarchy,
+                                                   private val task: ProcessEventForPushTask,
+                                                   private val defaultPushRuleService: DefaultPushRuleService,
+                                                   private val sessionParams: SessionParams,
+                                                   private val taskExecutor: TaskExecutor) :
         RealmLiveEntityObserver<EventEntity>(monarchy) {
 
     override val query = Monarchy.Query<EventEntity> {

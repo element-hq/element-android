@@ -20,11 +20,20 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
+import im.vector.riotredesign.features.home.AvatarRenderer
 import kotlinx.android.synthetic.main.activity_video_media_viewer.*
+import javax.inject.Inject
 
 
 class VideoMediaViewerActivity : VectorBaseActivity() {
+
+    @Inject lateinit var videoContentRenderer: VideoContentRenderer
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +43,7 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
             finish()
         } else {
             configureToolbar(videoMediaViewerToolbar, mediaData)
-            VideoContentRenderer.render(mediaData, videoMediaViewerThumbnailView, videoMediaViewerVideoView)
+            videoContentRenderer.render(mediaData, videoMediaViewerThumbnailView, videoMediaViewerVideoView)
         }
     }
 

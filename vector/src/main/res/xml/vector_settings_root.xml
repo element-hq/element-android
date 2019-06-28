@@ -6,14 +6,14 @@
         android:layout_width="match_parent"
         android:icon="@drawable/ic_settings_root_general"
         android:title="@string/settings_general_title"
-        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsGeneral" />
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsGeneralFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:enabled="@bool/false_not_implemented"
         android:icon="@drawable/ic_settings_root_flair"
         android:title="@string/settings_flair"
-        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsFlair" />
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsFlairFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
@@ -26,38 +26,38 @@
         android:layout_width="match_parent"
         android:icon="@drawable/ic_settings_root_preferences"
         android:title="@string/settings_preferences"
-        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsPreferences" />
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsPreferencesFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:enabled="@bool/false_not_implemented"
         android:icon="@drawable/ic_settings_root_call"
         android:title="@string/preference_voice_and_video"
-        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsVoiceVideo" />
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsVoiceVideoFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:enabled="@bool/false_not_implemented"
         android:icon="@drawable/ic_settings_root_ignored_users"
         android:title="@string/settings_ignored_users"
-        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsIgnoredUsers" />
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsIgnoredUsersFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_settings_root_security_privacy"
         android:title="@string/settings_security_and_privacy"
-        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsSecurityPrivacy" />
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsSecurityPrivacyFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_settings_root_labs"
         android:title="@string/room_settings_labs_pref_title"
-        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsLabs" />
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsLabsFragment" />
 
     <im.vector.riotredesign.core.preference.VectorPreference
         android:layout_width="match_parent"
         android:icon="@drawable/ic_settings_root_help_about"
         android:title="@string/preference_root_help_about"
-        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsHelpAbout" />
+        app:fragment="im.vector.riotredesign.features.settings.VectorSettingsHelpAboutFragment" />
 
 </androidx.preference.PreferenceScreen>

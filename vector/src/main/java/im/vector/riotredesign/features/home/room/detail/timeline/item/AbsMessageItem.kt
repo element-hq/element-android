@@ -40,6 +40,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     abstract val informationData: MessageInformationData
 
+    abstract val avatarRenderer: AvatarRenderer
+
     @EpoxyAttribute
     var longClickListener: View.OnLongClickListener? = null
 
@@ -95,7 +97,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.timeView.visibility = View.VISIBLE
             holder.timeView.text = informationData.time
             holder.memberNameView.text = informationData.memberName
-            AvatarRenderer.render(informationData.avatarUrl, informationData.senderId, informationData.memberName?.toString(), holder.avatarImageView)
+            avatarRenderer.render(informationData.avatarUrl, informationData.senderId, informationData.memberName?.toString(), holder.avatarImageView)
             holder.view.setOnClickListener(cellClickListener)
             holder.view.setOnLongClickListener(longClickListener)
             holder.avatarImageView.setOnLongClickListener(longClickListener)

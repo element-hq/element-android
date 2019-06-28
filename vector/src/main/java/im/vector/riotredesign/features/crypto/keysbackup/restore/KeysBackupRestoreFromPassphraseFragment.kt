@@ -33,9 +33,11 @@ import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
+import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
 
 class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
 
@@ -65,12 +67,16 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
         fun newInstance() = KeysBackupRestoreFromPassphraseFragment()
     }
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(KeysBackupRestoreFromPassphraseViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreFromPassphraseViewModel::class.java)
         sharedViewModel = activity?.run {
-            ViewModelProviders.of(this).get(KeysBackupRestoreSharedViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
 

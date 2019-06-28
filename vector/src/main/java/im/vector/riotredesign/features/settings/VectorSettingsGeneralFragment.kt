@@ -48,7 +48,7 @@ import im.vector.riotredesign.features.themes.ThemeUtils
 import java.lang.ref.WeakReference
 import java.util.*
 
-class VectorSettingsGeneral : VectorSettingsBaseFragment() {
+class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
@@ -82,7 +82,7 @@ class VectorSettingsGeneral : VectorSettingsBaseFragment() {
     override fun bindPref() {
         // Avatar
         mUserAvatarPreference.let {
-            it.setSession(mSession)
+            it.setSession(session)
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 onUpdateAvatarClick()
                 false
@@ -91,7 +91,7 @@ class VectorSettingsGeneral : VectorSettingsBaseFragment() {
 
         // Display name
         mDisplayNamePreference.let {
-            it.summary = mSession.getUser(mSession.sessionParams.credentials.userId)?.displayName ?: ""
+            it.summary = session.getUser(session.sessionParams.credentials.userId)?.displayName ?: ""
             it.text = it.summary.toString()
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 onDisplayNameClick(newValue?.let { (it as String).trim() })
@@ -144,15 +144,15 @@ class VectorSettingsGeneral : VectorSettingsBaseFragment() {
 
         // user account
         findPreference(PreferencesManager.SETTINGS_LOGGED_IN_PREFERENCE_KEY)
-                .summary = mSession.sessionParams.credentials.userId
+                .summary = session.sessionParams.credentials.userId
 
         // home server
         findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
-                .summary = mSession.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
+                .summary = session.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
 
         // identity server
         findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
-                .summary = mSession.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
+                .summary = session.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
 
 
         refreshEmailsList()

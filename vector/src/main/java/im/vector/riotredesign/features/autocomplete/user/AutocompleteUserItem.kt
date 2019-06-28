@@ -29,6 +29,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 @EpoxyModelClass(layout = R.layout.item_autocomplete_user)
 abstract class AutocompleteUserItem : VectorEpoxyModel<AutocompleteUserItem.Holder>() {
 
+    @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute var name: String? = null
     @EpoxyAttribute var userId: String = ""
     @EpoxyAttribute var avatarUrl: String? = null
@@ -37,7 +38,7 @@ abstract class AutocompleteUserItem : VectorEpoxyModel<AutocompleteUserItem.Hold
     override fun bind(holder: Holder) {
         holder.view.setOnClickListener(clickListener)
         holder.nameView.text = name
-        AvatarRenderer.render(avatarUrl, userId, name, holder.avatarImageView)
+        avatarRenderer.render(avatarUrl, userId, name, holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

@@ -15,23 +15,39 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewModelStore
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import im.vector.riotredesign.core.di.DaggerScreenComponent
+import im.vector.riotredesign.core.di.ScreenComponent
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import java.util.*
 
 /**
  * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)
  */
-abstract class BaseMvRxBottomSheetDialog : BottomSheetDialogFragment(), MvRxView {
+abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment(), MvRxView {
 
     override val mvrxViewModelStore by lazy { MvRxViewModelStore(viewModelStore) }
     private lateinit var mvrxPersistedViewId: String
-
+    private lateinit var screenComponent: ScreenComponent
     final override val mvrxViewId: String by lazy { mvrxPersistedViewId }
+
+    val vectorBaseActivity: VectorBaseActivity by lazy {
+        activity as VectorBaseActivity
+    }
+
+    override fun onAttach(context: Context) {
+        screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
+        super.onAttach(context)
+        injectWith(screenComponent)
+    }
+
+    protected open fun injectWith(screenComponent: ScreenComponent) = Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mvrxViewModelStore.restoreViewModels(this, savedInstanceState)

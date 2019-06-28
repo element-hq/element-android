@@ -18,6 +18,7 @@ package im.vector.riotredesign.push.fcm
 
 import android.app.Activity
 import android.content.Context
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.fdroid.receiver.AlarmSyncBroadcastReceiver
 import im.vector.riotredesign.features.settings.PreferencesManager
@@ -62,11 +63,11 @@ object FcmHelper {
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
-    fun onEnterBackground(context: Context, hasSession: Boolean) {
+    fun onEnterBackground(context: Context, activeSessionHolder: ActiveSessionHolder) {
         //We need to use alarm in this mode
-        if (PreferencesManager.areNotificationEnabledForDevice(context)
-                && hasSession) {
-            AlarmSyncBroadcastReceiver.scheduleAlarm(context, 4_000L)
+        if (PreferencesManager.areNotificationEnabledForDevice(context) && activeSessionHolder.hasActiveSession()) {
+            val currentSession = activeSessionHolder.getActiveSession()
+            AlarmSyncBroadcastReceiver.scheduleAlarm(context, currentSession.myUserId, 4_000L)
             Timber.i("Alarm scheduled to restart service")
         }
     }

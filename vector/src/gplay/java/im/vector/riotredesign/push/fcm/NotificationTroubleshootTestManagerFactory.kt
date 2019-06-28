@@ -16,30 +16,34 @@
 package im.vector.riotredesign.push.fcm
 
 import androidx.fragment.app.Fragment
-import im.vector.matrix.android.api.session.Session
-import im.vector.riotredesign.features.settings.troubleshoot.*
+import im.vector.riotredesign.features.settings.troubleshoot.NotificationTroubleshootTestManager
+import im.vector.riotredesign.features.settings.troubleshoot.TestAccountSettings
+import im.vector.riotredesign.features.settings.troubleshoot.TestBingRulesSettings
+import im.vector.riotredesign.features.settings.troubleshoot.TestDeviceSettings
+import im.vector.riotredesign.features.settings.troubleshoot.TestSystemSettings
 import im.vector.riotredesign.gplay.features.settings.troubleshoot.TestFirebaseToken
 import im.vector.riotredesign.gplay.features.settings.troubleshoot.TestPlayServices
 import im.vector.riotredesign.gplay.features.settings.troubleshoot.TestTokenRegistration
+import javax.inject.Inject
 
-class NotificationTroubleshootTestManagerFactory {
+class NotificationTroubleshootTestManagerFactory @Inject constructor(private val testSystemSettings: TestSystemSettings,
+                                                                     private val testAccountSettings: TestAccountSettings,
+                                                                     private val testDeviceSettings: TestDeviceSettings,
+                                                                     private val testBingRulesSettings: TestBingRulesSettings,
+                                                                     private val testPlayServices: TestPlayServices,
+                                                                     private val testFirebaseToken: TestFirebaseToken,
+                                                                     private val testTokenRegistration: TestTokenRegistration) {
 
-    companion object {
-        fun createTestManager(fragment: Fragment, session: Session?): NotificationTroubleshootTestManager {
-            val mgr = NotificationTroubleshootTestManager(fragment)
-            mgr.addTest(TestSystemSettings(fragment))
-            if (session != null) {
-                mgr.addTest(TestAccountSettings(fragment, session))
-            }
-            mgr.addTest(TestDeviceSettings(fragment))
-            if (session != null) {
-                mgr.addTest(TestBingRulesSettings(fragment, session))
-            }
-            mgr.addTest(TestPlayServices(fragment))
-            mgr.addTest(TestFirebaseToken(fragment))
-            mgr.addTest(TestTokenRegistration(fragment))
-            return mgr
-        }
+    fun create(fragment: Fragment): NotificationTroubleshootTestManager {
+        val mgr = NotificationTroubleshootTestManager(fragment)
+        mgr.addTest(testSystemSettings)
+        mgr.addTest(testAccountSettings)
+        mgr.addTest(testDeviceSettings)
+        mgr.addTest(testBingRulesSettings)
+        mgr.addTest(testPlayServices)
+        mgr.addTest(testFirebaseToken)
+        mgr.addTest(testTokenRegistration)
+        return mgr
     }
 
 }

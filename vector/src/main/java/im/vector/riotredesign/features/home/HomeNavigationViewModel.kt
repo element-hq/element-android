@@ -17,5 +17,6 @@
 package im.vector.riotredesign.features.home
 
 import im.vector.riotredesign.core.mvrx.NavigationViewModel
+import javax.inject.Inject
 
-class HomeNavigationViewModel : NavigationViewModel<HomeActivity.Navigation>()
+class HomeNavigationViewModel @Inject constructor() : NavigationViewModel<HomeActivity.Navigation>()

@@ -21,9 +21,15 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 
 internal interface SessionParamsStore {
 
-    fun get(): SessionParams?
+    fun get(userId: String): SessionParams?
+
+    fun getLast(): SessionParams?
+
+    fun getAll(): List<SessionParams>
 
     fun save(sessionParams: SessionParams): Try<SessionParams>
 
-    fun delete(): Try<Unit>
+    fun delete(userId: String): Try<Unit>
+
+    fun deleteAll(): Try<Unit>
 }

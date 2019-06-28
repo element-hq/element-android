@@ -35,37 +35,42 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.jakewharton.threetenabp.AndroidThreeTen
 import im.vector.matrix.android.api.Matrix
-import im.vector.riotredesign.core.di.AppModule
+import im.vector.matrix.android.api.MatrixConfiguration
+import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.riotredesign.core.di.ActiveSessionHolder
+import im.vector.riotredesign.core.di.DaggerVectorComponent
+import im.vector.riotredesign.core.di.HasVectorInjector
+import im.vector.riotredesign.core.di.VectorComponent
+import im.vector.riotredesign.core.extensions.configureAndStart
 import im.vector.riotredesign.features.configuration.VectorConfiguration
-import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
-import im.vector.riotredesign.features.home.HomeModule
 import im.vector.riotredesign.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.notifications.NotificationUtils
 import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import im.vector.riotredesign.features.rageshake.VectorFileLogger
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import im.vector.riotredesign.features.version.getVersion
 import im.vector.riotredesign.push.fcm.FcmHelper
-import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
-import org.koin.log.EmptyLogger
-import org.koin.standalone.StandAloneContext.startKoin
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class VectorApplication : Application() {
+class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
 
 
     lateinit var appContext: Context
     //font thread handler
-    private var mFontThreadHandler: Handler? = null
+    @Inject lateinit var authenticator: Authenticator
+    @Inject lateinit var vectorConfiguration: VectorConfiguration
+    @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
+    @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var pushRuleTriggerListener: PushRuleTriggerListener
+    lateinit var vectorComponent: VectorComponent
+    private var fontThreadHandler: Handler? = null
 
-    val vectorConfiguration: VectorConfiguration by inject()
-
-    private val notificationDrawerManager by inject<NotificationDrawerManager>()
 
 //    var slowMode = false
 
@@ -73,50 +78,41 @@ class VectorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = this
-
-        logInfo()
-
-        VectorUncaughtExceptionHandler.activate(this)
-
+        vectorComponent = DaggerVectorComponent.factory().create(this)
+        vectorComponent.inject(this)
+        vectorUncaughtExceptionHandler.activate(this)
         // Log
         VectorFileLogger.init(this)
         Timber.plant(Timber.DebugTree(), VectorFileLogger)
-
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
-
+        logInfo()
         AndroidThreeTen.init(this)
         BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
         EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-        val appModule = AppModule(applicationContext).definition
-        val homeModule = HomeModule().definition
-        val roomDirectoryModule = RoomDirectoryModule().definition
-        val keysBackupModule = KeysBackupModule().definition
-        val koin = startKoin(listOf(appModule, homeModule, roomDirectoryModule, keysBackupModule), logger = EmptyLogger())
-        Matrix.getInstance().setApplicationFlavor(BuildConfig.FLAVOR_DESCRIPTION)
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks())
-
         val fontRequest = FontRequest(
                 "com.google.android.gms.fonts",
                 "com.google.android.gms",
                 "Noto Color Emoji Compat",
                 R.array.com_google_android_gms_fonts_certs
         )
-
-        FontsContractCompat.requestFont(this, fontRequest, koin.koinContext.get<EmojiCompatFontProvider>(), getFontThreadHandler())
-
+        FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
         vectorConfiguration.initConfiguration()
-
         NotificationUtils.createNotificationChannels(applicationContext)
-
+        if (authenticator.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
+            val lastAuthenticatedSession = authenticator.getLastAuthenticatedSession()!!
+            activeSessionHolder.setActiveSession(lastAuthenticatedSession)
+            lastAuthenticatedSession.configureAndStart(pushRuleTriggerListener)
+        }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
 
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
                 FcmHelper.onEnterForeground(appContext)
-                Matrix.getInstance().currentSession?.also {
+                activeSessionHolder.getSafeActiveSession()?.also {
                     it.stopAnyBackgroundSync()
                 }
             }
@@ -124,20 +120,18 @@ class VectorApplication : Application() {
             @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
             fun entersBackground() {
                 Timber.i("App entered background") // call persistInfo
-
                 notificationDrawerManager.persistInfo()
-
-                FcmHelper.onEnterBackground(appContext, Matrix.getInstance().currentSession != null)
+                FcmHelper.onEnterBackground(appContext, activeSessionHolder)
             }
         })
+    }
 
+    override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
 
-        Matrix.getInstance().currentSession?.let {
-            it.refreshPushers()
-            //bind to the sync service
-            get<PushRuleTriggerListener>().startWithSession(it)
-            it.fetchPushRules()
-        }
+    override fun getWorkManagerConfiguration() = androidx.work.Configuration.Builder().build()
+
+    override fun injector(): VectorComponent {
+        return vectorComponent
     }
 
     private fun logInfo() {
@@ -165,12 +159,15 @@ class VectorApplication : Application() {
     }
 
     private fun getFontThreadHandler(): Handler {
-        if (mFontThreadHandler == null) {
-            val handlerThread = HandlerThread("fonts")
-            handlerThread.start()
-            mFontThreadHandler = Handler(handlerThread.looper)
+        return fontThreadHandler ?: createFontThreadHandler().also {
+            fontThreadHandler = it
         }
-        return mFontThreadHandler!!
+    }
+
+    private fun createFontThreadHandler(): Handler {
+        val handlerThread = HandlerThread("fonts")
+        handlerThread.start()
+        return Handler(handlerThread.looper)
     }
 
 }

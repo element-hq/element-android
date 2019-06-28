@@ -18,20 +18,22 @@ package im.vector.matrix.android.internal.session.content
 
 import arrow.core.Try
 import arrow.core.Try.Companion.raise
+import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import okhttp3.*
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
 
 
-internal class FileUploader(private val okHttpClient: OkHttpClient,
-                            sessionParams: SessionParams) {
+internal class FileUploader @Inject constructor(@Authenticated
+                                                private val okHttpClient: OkHttpClient,
+                                                private val sessionParams: SessionParams,
+                                                private val moshi: Moshi) {
 
     private val uploadUrl = DefaultContentUrlResolver.getUploadUrl(sessionParams.homeServerConnectionConfig)
-
-    private val moshi = MoshiProvider.providesMoshi()
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
 

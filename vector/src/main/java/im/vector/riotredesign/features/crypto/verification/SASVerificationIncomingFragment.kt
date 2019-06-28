@@ -24,8 +24,10 @@ import butterknife.BindView
 import butterknife.OnClick
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.AvatarRenderer
+import javax.inject.Inject
 
 class SASVerificationIncomingFragment : VectorBaseFragment() {
 
@@ -47,13 +49,18 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_sas_verification_incoming_request
 
+    @Inject lateinit var avatarRenderer: AvatarRenderer
     private lateinit var viewModel: SasVerificationViewModel
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = activity?.run {
-            ViewModelProviders.of(this).get(SasVerificationViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory).get(SasVerificationViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         otherUserDisplayNameTextView.text = viewModel.otherUser?.displayName ?: viewModel.otherUserId
@@ -61,10 +68,10 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
         otherDeviceTextView.text = viewModel.otherDeviceId
 
         viewModel.otherUser?.let {
-            AvatarRenderer.render(it, avatarImageView)
+            avatarRenderer.render(it, avatarImageView)
         } ?: run {
             // Fallback to what we know
-            AvatarRenderer.render(null, viewModel.otherUserId ?: "", viewModel.otherUserId, avatarImageView)
+            avatarRenderer.render(null, viewModel.otherUserId ?: "", viewModel.otherUserId, avatarImageView)
         }
 
         viewModel.transactionState.observe(this, Observer {

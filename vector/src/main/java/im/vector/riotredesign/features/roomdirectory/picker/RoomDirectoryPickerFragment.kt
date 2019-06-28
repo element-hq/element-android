@@ -26,16 +26,14 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryNavigationViewModel
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryViewModel
 import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
 import timber.log.Timber
+import javax.inject.Inject
 
 // TODO Set title to R.string.select_room_directory
 // TODO Menu to add custom room directory (not done in RiotWeb so far...)
@@ -44,7 +42,9 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
-    private val roomDirectoryPickerController: RoomDirectoryPickerController by inject()
+
+    @Inject lateinit var roomDirectoryPickerViewModelFactory: RoomDirectoryPickerViewModel.Factory
+    @Inject lateinit var roomDirectoryPickerController: RoomDirectoryPickerController
 
     override fun getLayoutResId() = R.layout.fragment_room_directory_picker
 
@@ -71,12 +71,13 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
         return super.onOptionsItemSelected(item)
     }
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
-
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
-
         setupRecyclerView()
     }
 

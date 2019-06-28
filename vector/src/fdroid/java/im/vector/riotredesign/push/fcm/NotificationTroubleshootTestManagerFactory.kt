@@ -16,31 +16,27 @@
 package im.vector.riotredesign.push.fcm
 
 import androidx.fragment.app.Fragment
-import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.fdroid.features.settings.troubleshoot.TestAutoStartBoot
 import im.vector.riotredesign.fdroid.features.settings.troubleshoot.TestBackgroundRestrictions
 import im.vector.riotredesign.features.settings.troubleshoot.*
+import javax.inject.Inject
 
-class NotificationTroubleshootTestManagerFactory {
+class NotificationTroubleshootTestManagerFactory @Inject constructor(private val testSystemSettings: TestSystemSettings,
+                                                                     private val testAccountSettings: TestAccountSettings,
+                                                                     private val testDeviceSettings: TestDeviceSettings,
+                                                                     private val testBingRulesSettings: TestBingRulesSettings,
+                                                                     private val testAutoStartBoot: TestAutoStartBoot,
+                                                                     private val testBackgroundRestrictions: TestBackgroundRestrictions) {
 
-    companion object {
-        fun createTestManager(fragment: Fragment, session: Session?): NotificationTroubleshootTestManager {
-            val mgr = NotificationTroubleshootTestManager(fragment)
-            mgr.addTest(TestSystemSettings(fragment))
-            if (session != null) {
-                mgr.addTest(TestAccountSettings(fragment, session))
-            }
-            mgr.addTest(TestDeviceSettings(fragment))
-            if (session != null) {
-                mgr.addTest(TestBingRulesSettings(fragment, session))
-            }
-            // mgr.addTest(TestNotificationServiceRunning(fragment))
-            // mgr.addTest(TestServiceRestart(fragment))
-            mgr.addTest(TestAutoStartBoot(fragment))
-            mgr.addTest(TestBackgroundRestrictions(fragment))
-            // mgr.addTest(TestBatteryOptimization(fragment))
-            return mgr
-        }
+    fun create(fragment: Fragment): NotificationTroubleshootTestManager {
+        val mgr = NotificationTroubleshootTestManager(fragment)
+        mgr.addTest(testSystemSettings)
+        mgr.addTest(testAccountSettings)
+        mgr.addTest(testDeviceSettings)
+        mgr.addTest(testBingRulesSettings)
+        mgr.addTest(testAutoStartBoot)
+        mgr.addTest(testBackgroundRestrictions)
+        return mgr
     }
 
 }

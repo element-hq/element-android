@@ -31,6 +31,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.replaceFragment
@@ -47,9 +49,7 @@ import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
 import im.vector.riotredesign.features.workers.signout.SignOutViewModel
 import im.vector.riotredesign.push.fcm.FcmHelper
 import kotlinx.android.synthetic.main.activity_home.*
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
+import javax.inject.Inject
 
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
@@ -61,15 +61,17 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
-    private val homeNavigator by inject<HomeNavigator>()
-    private val pushManager by inject<PushersManager>()
 
-    private val notificationDrawerManager by inject<NotificationDrawerManager>()
-
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
+    @Inject lateinit var homeNavigator: HomeNavigator
+    @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     // TODO Move this elsewhere
-    private val incomingVerificationRequestHandler by inject<IncomingVerificationRequestHandler>()
+    @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
     // TODO Move this elsewhere
-    private val keyRequestHandler by inject<KeyRequestHandler>()
+    @Inject lateinit var keyRequestHandler: KeyRequestHandler
+    @Inject lateinit var pushManager: PushersManager
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
 
     private var progress: ProgressDialog? = null
 
@@ -81,14 +83,15 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun getLayoutRes() = R.layout.activity_home
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindScope(getOrCreateScope(HomeModule.HOME_SCOPE))
         homeNavigator.activity = this
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager)
-
         navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
-
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             val homeDrawerFragment = HomeDrawerFragment.newInstance()
@@ -115,9 +118,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
         }
 
-        incomingVerificationRequestHandler.ensureStarted()
-        keyRequestHandler.ensureStarted()
-
         if (intent.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)) {
             notificationDrawerManager.clearAllEvents()
             intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
@@ -142,14 +142,14 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onResume() {
         super.onResume()
 
-        if (VectorUncaughtExceptionHandler.didAppCrash(this)) {
-            VectorUncaughtExceptionHandler.clearAppCrashStatus(this)
+        if (vectorUncaughtExceptionHandler.didAppCrash(this)) {
+            vectorUncaughtExceptionHandler.clearAppCrashStatus(this)
 
             AlertDialog.Builder(this)
                     .setMessage(R.string.send_bug_report_app_crashed)
                     .setCancelable(false)
-                    .setPositiveButton(R.string.yes) { _, _ -> BugReporter.openBugReportScreen(this) }
-                    .setNegativeButton(R.string.no) { _, _ -> BugReporter.deleteCrashFile(this) }
+                    .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
+                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
                     .show()
         }
 
@@ -166,8 +166,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.sliding_menu_sign_out -> {
-                SignOutUiWorker(this, notificationDrawerManager)
-                        .perform(Matrix.getInstance().currentSession!!)
+                SignOutUiWorker(this, notificationDrawerManager).perform(activeSessionHolder.getActiveSession())
                 return true
             }
         }

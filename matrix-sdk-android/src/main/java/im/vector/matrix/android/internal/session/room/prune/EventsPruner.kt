@@ -23,26 +23,27 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Listens to the database for the insertion of any redaction event.
  * As it will actually delete the content, it should be called last in the list of listener.
  */
-internal class EventsPruner(monarchy: Monarchy,
-                            private val credentials: Credentials,
-                            private val pruneEventTask: PruneEventTask,
-                            private val taskExecutor: TaskExecutor) :
+internal class EventsPruner @Inject constructor(monarchy: Monarchy,
+                                                private val credentials: Credentials,
+                                                private val pruneEventTask: PruneEventTask,
+                                                private val taskExecutor: TaskExecutor) :
         RealmLiveEntityObserver<EventEntity>(monarchy) {
 
     override val query = Monarchy.Query<EventEntity> { EventEntity.where(it, type = EventType.REDACTION) }
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
         Timber.v("Event pruner called with ${inserted.size} insertions")
-        val redactionEvents = inserted
-                .mapNotNull { it.asDomain() }
+        val redactionEvents = inserted.map { it.asDomain() }
 
         val params = PruneEventTask.Params(
                 redactionEvents,

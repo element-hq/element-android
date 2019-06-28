@@ -58,7 +58,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
+class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
@@ -212,7 +212,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
                     override fun onPassphrase(passphrase: String) {
                         displayLoadingView()
 
-                        KeysExporter(mSession)
+                        KeysExporter(session)
                                 .export(requireContext(),
                                         passphrase,
                                         object : MatrixCallback<String> {
@@ -314,7 +314,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
 
                 displayLoadingView()
 
-                KeysImporter(mSession)
+                KeysImporter(session)
                         .import(requireContext(),
                                 uri,
                                 mimetype,
@@ -367,8 +367,8 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
      * @param aMyDeviceInfo the device info
      */
     private fun refreshCryptographyPreference(aMyDeviceInfo: DeviceInfo?) {
-        val userId = mSession.sessionParams.credentials.userId
-        val deviceId = mSession.sessionParams.credentials.deviceId
+        val userId = session.sessionParams.credentials.userId
+        val deviceId = session.sessionParams.credentials.deviceId
 
         // device name
         if (null != aMyDeviceInfo) {
@@ -399,7 +399,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
 
         // crypto section: device key (fingerprint)
         if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
-            val deviceInfo = mSession.getDeviceInfo(userId, deviceId)
+            val deviceInfo = session.getDeviceInfo(userId, deviceId)
 
             if (null != deviceInfo && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
                 cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
@@ -415,10 +415,10 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
 
         sendToUnverifiedDevicesPref.isChecked = false
 
-        sendToUnverifiedDevicesPref.isChecked = mSession.getGlobalBlacklistUnverifiedDevices()
+        sendToUnverifiedDevicesPref.isChecked = session.getGlobalBlacklistUnverifiedDevices()
 
         sendToUnverifiedDevicesPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            mSession.setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked)
+            session.setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked)
 
             true
         }
@@ -442,7 +442,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
      * It can be any mobile device, as any browser.
      */
     private fun refreshDevicesList() {
-        if (mSession.isCryptoEnabled() && !TextUtils.isEmpty(mSession.sessionParams.credentials.deviceId)) {
+        if (session.isCryptoEnabled() && !TextUtils.isEmpty(session.sessionParams.credentials.deviceId)) {
             // display a spinner while loading the devices list
             if (0 == mDevicesListSettingsCategory.preferenceCount) {
                 activity?.let {
@@ -451,7 +451,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
                 }
             }
 
-            mSession.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+            session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
                 override fun onSuccess(data: DevicesListResponse) {
                     if (!isAdded) {
                         return
@@ -490,7 +490,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
         var preference: VectorPreference
         var typeFaceHighlight: Int
         var isNewList = true
-        val myDeviceId = mSession.sessionParams.credentials.deviceId
+        val myDeviceId = session.sessionParams.credentials.deviceId
 
         if (aDeviceInfoList.size == mDevicesNameList.size) {
             isNewList = !mDevicesNameList.containsAll(aDeviceInfoList)
@@ -596,7 +596,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
                     .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
             // disable the deletion for our own device
-            if (!TextUtils.equals(mSession.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
+            if (!TextUtils.equals(session.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> deleteDevice(aDeviceInfo) }
             }
 
@@ -633,7 +633,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
 
                         val newName = input.text.toString()
 
-                        mSession.setDeviceName(aDeviceInfoToRename.deviceId!!, newName, object : MatrixCallback<Unit> {
+                        session.setDeviceName(aDeviceInfoToRename.deviceId!!, newName, object : MatrixCallback<Unit> {
                             override fun onSuccess(data: Unit) {
                                 hideLoadingView()
 
@@ -680,7 +680,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
         }
 
         displayLoadingView()
-        mSession.deleteDevice(deviceId, object : MatrixCallback<Unit> {
+        session.deleteDevice(deviceId, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 hideLoadingView()
                 // force settings update
@@ -752,7 +752,7 @@ class VectorSettingsSecurityPrivacy : VectorSettingsBaseFragment() {
     }
 
     private fun deleteDeviceWithPassword(deviceId: String, authSession: String?, accountPassword: String) {
-        mSession.deleteDeviceWithUserPassword(deviceId, authSession, accountPassword, object : MatrixCallback<Unit> {
+        session.deleteDeviceWithUserPassword(deviceId, authSession, accountPassword, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 hideLoadingView()
                 // force settings update

@@ -26,11 +26,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
+import im.vector.riotredesign.core.extensions.vectorComponent
 import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.features.badge.BadgeProxy
@@ -40,21 +41,30 @@ import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.notifications.SimpleNotifiableEvent
 import im.vector.riotredesign.features.settings.PreferencesManager
 import im.vector.riotredesign.push.fcm.FcmHelper
-import org.koin.android.ext.android.inject
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Class extending FirebaseMessagingService.
  */
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
-    private val notificationDrawerManager by inject<NotificationDrawerManager>()
-    private val pusherManager by inject<PushersManager>()
+    private lateinit var notificationDrawerManager: NotificationDrawerManager
+    private lateinit var notifiableEventResolver: NotifiableEventResolver
+    private lateinit var pusherManager: PushersManager
+    private lateinit var activeSessionHolder: ActiveSessionHolder
 
-    private val notifiableEventResolver by inject<NotifiableEventResolver>()
     // UI handler
     private val mUIHandler by lazy {
         Handler(Looper.getMainLooper())
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        notificationDrawerManager = vectorComponent().notificationDrawerManager()
+        notifiableEventResolver = vectorComponent().notifiableEventResolver()
+        pusherManager = vectorComponent().pusherManager()
+        activeSessionHolder = vectorComponent().activeSessionHolder()
     }
 
     /**
@@ -93,13 +103,12 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * you retrieve the token.
      */
     override fun onNewToken(refreshedToken: String?) {
-        if (Matrix.getInstance().currentSession == null) return
         Timber.i("onNewToken: FCM Token has been updated")
         FcmHelper.storeFcmToken(this, refreshedToken)
         if (refreshedToken == null) {
             Timber.w("onNewToken:received null token")
         } else {
-            if (PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
+            if (PreferencesManager.areNotificationEnabledForDevice(applicationContext) && activeSessionHolder.hasActiveSession()) {
                 pusherManager.registerPusherWithFcmKey(refreshedToken)
             }
         }
@@ -139,7 +148,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             val unreadCount = data.get("unread")?.let { Integer.parseInt(it) } ?: 0
             BadgeProxy.updateBadgeCount(applicationContext, unreadCount)
 
-            val session = safeGetCurrentSession()
+            val session = activeSessionHolder.getSafeActiveSession()
 
             if (session == null) {
                 Timber.w("## Can't sync from push, no current session")
@@ -157,21 +166,12 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    fun safeGetCurrentSession(): Session? {
-        try {
-            return Matrix.getInstance().currentSession
-        } catch (e: Throwable) {
-            Timber.e(e, "## Failed to get current session")
-            return null
-        }
-    }
-
     // check if the event was not yet received
     // a previous catchup might have already retrieved the notified event
     private fun isEventAlreadyKnown(eventId: String?, roomId: String?): Boolean {
         if (null != eventId && null != roomId) {
             try {
-                val session = safeGetCurrentSession() ?: return false
+                val session = activeSessionHolder.getSafeActiveSession() ?: return false
                 val room = session.getRoom(roomId) ?: return false
                 return room.getTimeLineEvent(eventId) != null
             } catch (e: Exception) {
@@ -231,7 +231,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 if (notifiableEvent is NotifiableMessageEvent) {
                     if (TextUtils.isEmpty(notifiableEvent.senderName)) {
                         notifiableEvent.senderName = data["sender_display_name"]
-                                ?: data["sender"] ?: ""
+                                                     ?: data["sender"] ?: ""
                     }
                     if (TextUtils.isEmpty(notifiableEvent.roomName)) {
                         notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""
@@ -277,11 +277,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
         try {
             return Event(eventId = data["event_id"],
-                    senderId = data["sender"],
-                    roomId = data["room_id"],
-                    type = data.getValue("type"),
+                         senderId = data["sender"],
+                         roomId = data["room_id"],
+                         type = data.getValue("type"),
                     // TODO content = data.getValue("content"),
-                    originServerTs = System.currentTimeMillis())
+                         originServerTs = System.currentTimeMillis())
         } catch (e: Exception) {
             Timber.e(e, "buildEvent fails ")
         }

@@ -16,42 +16,75 @@
 
 package im.vector.riotredesign.features.settings
 
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.preference.PreferenceFragmentCompat
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.platform.VectorPreferenceFragment
+import im.vector.riotredesign.core.di.DaggerScreenComponent
+import im.vector.riotredesign.core.di.HasScreenInjector
+import im.vector.riotredesign.core.di.ScreenComponent
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.core.utils.toast
-import org.koin.android.ext.android.inject
+import timber.log.Timber
 
-abstract class VectorSettingsBaseFragment : VectorPreferenceFragment() {
+abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScreenInjector {
+
+    val vectorActivity: VectorBaseActivity by lazy {
+        activity as VectorBaseActivity
+    }
 
     private var mLoadingView: View? = null
 
-
     // members
-    protected val mSession by inject<Session>()
+    protected lateinit var session: Session
+    private lateinit var screenComponent: ScreenComponent
 
     abstract val preferenceXmlRes: Int
 
     @CallSuper
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(preferenceXmlRes)
-
         bindPref()
+    }
+
+    override fun onAttach(context: Context) {
+        screenComponent = DaggerScreenComponent.factory().create(vectorActivity.getVectorComponent(), vectorActivity)
+        super.onAttach(context)
+        session = screenComponent.session()
+        injectWith(injector())
+    }
+
+    protected open fun injectWith(injector: ScreenComponent) = Unit
+
+    override fun injector(): ScreenComponent {
+        return screenComponent
     }
 
     override fun onResume() {
         super.onResume()
-
+        Timber.v("onResume Fragment ${this.javaClass.simpleName}")
+        vectorActivity.supportActionBar?.setTitle(titleRes)
         // find the view from parent activity
-        mLoadingView = activity?.findViewById(R.id.vector_settings_spinner_views)
+        mLoadingView = vectorActivity.findViewById(R.id.vector_settings_spinner_views)
     }
 
     abstract fun bindPref()
 
+    abstract var titleRes: Int
+
+    /* ==========================================================================================
+     * Protected
+     * ========================================================================================== */
+
+    protected fun notImplemented() {
+        // Snackbar cannot be display on PreferenceFragment
+        // Snackbar.make(view!!, R.string.not_implemented, Snackbar.LENGTH_SHORT)
+        activity?.toast(R.string.not_implemented)
+    }
 
     /**
      * Display the loading view.

@@ -23,7 +23,7 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import im.vector.riotredesign.R
 
-class VectorSettingsLabs : VectorSettingsBaseFragment() {
+class VectorSettingsLabsFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs
@@ -38,7 +38,7 @@ class VectorSettingsLabs : VectorSettingsBaseFragment() {
         val cryptoIsEnabledPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
 
 
-        if (mSession.isCryptoEnabled()) {
+        if (session.isCryptoEnabled()) {
             mLabsCategory.removePreference(useCryptoPref)
 
             cryptoIsEnabledPref.isEnabled = false
@@ -48,7 +48,7 @@ class VectorSettingsLabs : VectorSettingsBaseFragment() {
             useCryptoPref.isChecked = false
 
             useCryptoPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValueAsVoid ->
-                if (TextUtils.isEmpty(mSession.sessionParams.credentials.deviceId)) {
+                if (TextUtils.isEmpty(session.sessionParams.credentials.deviceId)) {
                     activity?.let { activity ->
                         AlertDialog.Builder(activity)
                                 .setMessage(R.string.room_settings_labs_end_to_end_warnings)
@@ -67,7 +67,7 @@ class VectorSettingsLabs : VectorSettingsBaseFragment() {
                 } else {
                     val newValue = newValueAsVoid as Boolean
 
-                    if (mSession.isCryptoEnabled() != newValue) {
+                    if (session.isCryptoEnabled() != newValue) {
                         notImplemented()
                         /* TODO
                         displayLoadingView()

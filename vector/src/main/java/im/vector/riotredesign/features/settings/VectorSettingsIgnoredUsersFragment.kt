@@ -27,7 +27,7 @@ import kotlin.getValue
 import kotlin.lazy
 import kotlin.let
 
-class VectorSettingsIgnoredUsers : VectorSettingsBaseFragment() {
+class VectorSettingsIgnoredUsersFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_ignored_users
     override val preferenceXmlRes = R.xml.vector_settings_ignored_users

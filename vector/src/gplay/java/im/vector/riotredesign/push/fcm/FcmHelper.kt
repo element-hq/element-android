@@ -25,6 +25,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.pushers.PushersManager
 import timber.log.Timber
 
@@ -104,7 +105,7 @@ object FcmHelper {
         // No op
     }
 
-    fun onEnterBackground(context: Context, hasSession: Boolean) {
+    fun onEnterBackground(context: Context, activeSessionHolder: ActiveSessionHolder) {
         // TODO FCM fallback
     }
 }

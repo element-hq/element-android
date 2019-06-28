@@ -33,16 +33,20 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import kotlinx.android.synthetic.main.bottom_sheet_message_actions.*
+import javax.inject.Inject
 
 /**
  * Bottom sheet fragment that shows a message preview with list of contextual actions
  * (Includes fragments for quick reactions and list of actions)
  */
-class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
+class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
+    @Inject lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
+    @Inject lateinit var avatarRenderer: AvatarRenderer
     private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
 
     private lateinit var actionHandlerModel: ActionsHandler
@@ -59,6 +63,9 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
     @BindView(R.id.bottom_sheet_message_preview_body)
     lateinit var messageBodyTextView: TextView
 
+    override fun injectWith(screenComponent: ScreenComponent) {
+        screenComponent.inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.bottom_sheet_message_actions, container, false)
@@ -122,7 +129,7 @@ class MessageActionsBottomSheet : BaseMvRxBottomSheetDialog() {
             senderNameTextView.text = it.senderName
             messageBodyTextView.text = it.messageBody
             messageTimestampText.text = it.ts
-            AvatarRenderer.render(it.senderAvatarPath, it.userId, it.senderName, senderAvatarImageView)
+            avatarRenderer.render(it.senderAvatarPath, it.userId, it.senderName, senderAvatarImageView)
         } else {
             bottom_sheet_message_preview.isVisible = false
         }

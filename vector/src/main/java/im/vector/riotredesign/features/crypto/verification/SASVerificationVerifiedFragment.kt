@@ -35,7 +35,7 @@ class SASVerificationVerifiedFragment : VectorBaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = activity?.run {
-            ViewModelProviders.of(this).get(SasVerificationViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory).get(SasVerificationViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
     }

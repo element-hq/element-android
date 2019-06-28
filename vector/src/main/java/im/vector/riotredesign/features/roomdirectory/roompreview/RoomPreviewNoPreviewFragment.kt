@@ -24,17 +24,15 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.setTextOrHide
 import im.vector.riotredesign.core.platform.ButtonStateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.roomdirectory.JoinState
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import kotlinx.android.synthetic.main.fragment_room_preview_no_preview.*
-import org.koin.android.ext.android.get
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
+import javax.inject.Inject
 
 /**
  * Note: this Fragment is also used for world readable room for the moment
@@ -47,14 +45,18 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
         }
     }
 
-    private val errorFormatter = get<ErrorFormatter>()
+    @Inject lateinit var errorFormatter: ErrorFormatter
+    @Inject lateinit var roomPreviewViewModelFactory: RoomPreviewViewModel.Factory
+    @Inject lateinit var avatarRenderer: AvatarRenderer
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
-
     private val roomPreviewData: RoomPreviewData by args()
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
         setupToolbar(roomPreviewNoPreviewToolbar)
     }
 
@@ -64,11 +66,11 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Toolbar
-        AvatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewToolbarAvatar)
+        avatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewToolbarAvatar)
         roomPreviewNoPreviewToolbarTitle.text = roomPreviewData.roomName
 
         // Screen
-        AvatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewAvatar)
+        avatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewAvatar)
         roomPreviewNoPreviewName.text = roomPreviewData.roomName
         roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
 

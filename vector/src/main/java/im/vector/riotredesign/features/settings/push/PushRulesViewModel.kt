@@ -19,23 +19,20 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.pushrules.rest.PushRule
-import im.vector.matrix.android.api.session.Session
+import im.vector.riotredesign.core.di.HasScreenInjector
 import im.vector.riotredesign.core.platform.VectorViewModel
-import org.koin.android.ext.android.get
 
 data class PushRulesViewState(
         val rules: List<PushRule> = emptyList()
 ) : MvRxState
-
 
 class PushRulesViewModel(initialState: PushRulesViewState) : VectorViewModel<PushRulesViewState>(initialState) {
 
     companion object : MvRxViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
-            val session = viewModelContext.activity.get<Session>()
+            val session = (viewModelContext.activity as HasScreenInjector).injector().session()
             val rules = session.getPushRules()
-
             return PushRulesViewState(rules)
         }
 

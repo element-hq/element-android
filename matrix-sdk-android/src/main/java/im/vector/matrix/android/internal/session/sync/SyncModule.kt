@@ -16,60 +16,28 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import im.vector.matrix.android.internal.session.DefaultSession
-import im.vector.matrix.android.internal.session.sync.job.SyncThread
-import org.koin.dsl.module.module
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.user.DefaultUpdateUserTask
+import im.vector.matrix.android.internal.session.user.UpdateUserTask
 import retrofit2.Retrofit
 
+@Module
+internal abstract class SyncModule {
 
-internal class SyncModule {
-
-    val definition = module(override = true) {
-
-        scope(DefaultSession.SCOPE) {
-            val retrofit: Retrofit = get()
-            retrofit.create(SyncAPI::class.java)
+    @Module
+    companion object {
+        @Provides
+        @JvmStatic
+        @SessionScope
+        fun providesSyncAPI(retrofit: Retrofit): SyncAPI {
+            return retrofit.create(SyncAPI::class.java)
         }
-
-        scope(DefaultSession.SCOPE) {
-            ReadReceiptHandler()
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RoomTagHandler()
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RoomSyncHandler(get(), get(), get(), get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            GroupSyncHandler(get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            CryptoSyncHandler(get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            UserAccountDataSyncHandler(get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            SyncResponseHandler(get(), get(), get(), get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultSyncTask(get(), get(), get(), get()) as SyncTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            SyncTokenStore(get("SessionRealmConfiguration"))
-        }
-
-        scope(DefaultSession.SCOPE) {
-            SyncThread(get(), get(), get(), get(), get())
-        }
-
     }
+
+    @Binds
+    abstract fun bindSyncTask(syncTask: DefaultSyncTask): SyncTask
+
 }

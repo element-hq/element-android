@@ -38,7 +38,9 @@ import im.vector.riotredesign.core.linkify.VectorLinkify
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.DebouncedClickListener
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.item.*
 import im.vector.riotredesign.features.home.room.detail.timeline.util.MessageInformationDataFactory
@@ -46,13 +48,19 @@ import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.VideoContentRenderer
 import me.gujun.android.span.span
+import javax.inject.Inject
 
-class MessageItemFactory(private val colorProvider: ColorProvider,
-                         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-                         private val htmlRenderer: EventHtmlRenderer,
-                         private val stringProvider: StringProvider,
-                         private val messageInformationDataFactory: MessageInformationDataFactory,
-                         private val emojiCompatFontProvider: EmojiCompatFontProvider) {
+class MessageItemFactory @Inject constructor(
+        private val avatarRenderer: AvatarRenderer,
+        private val colorProvider: ColorProvider,
+        private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
+        private val htmlRenderer: EventHtmlRenderer,
+        private val stringProvider: StringProvider,
+        private val emojiCompatFontProvider: EmojiCompatFontProvider,
+        private val imageContentRenderer: ImageContentRenderer,
+        private val messageInformationDataFactory: MessageInformationDataFactory,
+        private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder) {
+
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -107,6 +115,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
+                .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -133,6 +142,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
+                .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -178,6 +188,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                 rotation = messageContent.info?.rotation
         )
         return MessageImageVideoItem_()
+                .avatarRenderer(avatarRenderer)
+                .imageContentRenderer(imageContentRenderer)
+                .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .informationData(informationData)
                 .highlighted(highlight)
@@ -221,6 +234,9 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
         )
 
         return MessageImageVideoItem_()
+                .imageContentRenderer(imageContentRenderer)
+                .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
+                .avatarRenderer(avatarRenderer)
                 .playable(true)
                 .informationData(informationData)
                 .highlighted(highlight)
@@ -261,6 +277,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         message(linkifiedBody)
                     }
                 }
+                .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -326,6 +343,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
             linkifyBody(formattedBody, callback)
         }
         return MessageTextItem_()
+                .avatarRenderer(avatarRenderer)
                 .message(message)
                 .informationData(informationData)
                 .highlighted(highlight)
@@ -366,6 +384,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                         message(message)
                     }
                 }
+                .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -386,6 +405,7 @@ class MessageItemFactory(private val colorProvider: ColorProvider,
                                   highlight: Boolean,
                                   callback: TimelineEventController.Callback?): RedactedMessageItem? {
         return RedactedMessageItem_()
+                .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)

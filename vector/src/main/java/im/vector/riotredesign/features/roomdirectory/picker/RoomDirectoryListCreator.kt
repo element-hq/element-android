@@ -16,14 +16,17 @@
 
 package im.vector.riotredesign.features.roomdirectory.picker
 
-import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringArrayProvider
+import javax.inject.Inject
 
-class RoomDirectoryListCreator(private val stringArrayProvider: StringArrayProvider,
-                               private val credentials: Credentials) {
+class RoomDirectoryListCreator @Inject constructor(private val stringArrayProvider: StringArrayProvider,
+                                                   private val session: Session) {
+
+    private val credentials = session.sessionParams.credentials
 
     fun computeDirectories(thirdPartyProtocolData: Map<String, ThirdPartyProtocol>): List<RoomDirectoryData> {
         val result = ArrayList<RoomDirectoryData>()

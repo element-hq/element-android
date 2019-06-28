@@ -16,21 +16,25 @@
 
 package im.vector.matrix.android.internal.session.group
 
+import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import javax.inject.Inject
 
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
-internal class GroupSummaryUpdater(monarchy: Monarchy
-) : RealmLiveEntityObserver<GroupEntity>(monarchy) {
+internal class GroupSummaryUpdater @Inject constructor(private val context: Context,
+                                                       private val credentials: Credentials,
+                                                       monarchy: Monarchy) : RealmLiveEntityObserver<GroupEntity>(monarchy) {
 
     override val query = Monarchy.Query<GroupEntity> { GroupEntity.where(it) }
 
@@ -40,7 +44,7 @@ internal class GroupSummaryUpdater(monarchy: Monarchy
 
     override fun processChanges(inserted: List<GroupEntity>, updated: List<GroupEntity>, deleted: List<GroupEntity>) {
         val newGroupIds = inserted.map { it.groupId }
-        val getGroupDataWorkerParams = GetGroupDataWorker.Params(newGroupIds)
+        val getGroupDataWorkerParams = GetGroupDataWorker.Params(credentials.userId, newGroupIds)
         val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
 
         val sendWork = OneTimeWorkRequestBuilder<GetGroupDataWorker>()
@@ -48,7 +52,7 @@ internal class GroupSummaryUpdater(monarchy: Monarchy
                 .setConstraints(workConstraints)
                 .build()
 
-        WorkManager.getInstance()
+        WorkManager.getInstance(context)
                 .beginUniqueWork(GET_GROUP_DATA_WORKER, ExistingWorkPolicy.APPEND, sendWork)
                 .enqueue()
     }

@@ -19,8 +19,11 @@ package im.vector.riotredesign.features.home.group
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.rx.rx
@@ -28,24 +31,27 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.LiveEvent
-import org.koin.android.ext.android.get
 
 const val ALL_COMMUNITIES_GROUP_ID = "ALL_COMMUNITIES_GROUP_ID"
 
-class GroupListViewModel(initialState: GroupListViewState,
-                         private val selectedGroupHolder: SelectedGroupStore,
-                         private val session: Session,
-                         private val stringProvider: StringProvider
+class GroupListViewModel @AssistedInject constructor(@Assisted initialState: GroupListViewState,
+                                                     private val selectedGroupHolder: SelectedGroupStore,
+                                                     private val session: Session,
+                                                     private val stringProvider: StringProvider
 ) : VectorViewModel<GroupListViewState>(initialState) {
+
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: GroupListViewState): GroupListViewModel
+    }
 
     companion object : MvRxViewModelFactory<GroupListViewModel, GroupListViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: GroupListViewState): GroupListViewModel? {
-            val currentSession = viewModelContext.activity.get<Session>()
-            val selectedGroupHolder = viewModelContext.activity.get<SelectedGroupStore>()
-            val stringProvider = viewModelContext.activity.get<StringProvider>()
-            return GroupListViewModel(state, selectedGroupHolder, currentSession, stringProvider)
+            val groupListFragment: GroupListFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return groupListFragment.groupListViewModelFactory.create(state)
         }
     }
 

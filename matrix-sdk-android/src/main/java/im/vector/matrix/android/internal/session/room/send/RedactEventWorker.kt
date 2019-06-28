@@ -17,32 +17,35 @@ package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.inject
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.getSessionComponent
+import javax.inject.Inject
 
-internal class RedactEventWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params), MatrixKoinComponent {
+internal class RedactEventWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            override val userId: String,
             val txID: String,
             val roomId: String,
             val eventId: String,
             val reason: String?
-    )
+    ) : SessionWorkerParams
 
-    private val roomAPI by inject<RoomAPI>()
+    @Inject lateinit var roomAPI: RoomAPI
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
+
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        sessionComponent.inject(this)
 
         val eventId = params.eventId
         val result = executeRequest<SendResponse> {
@@ -56,7 +59,7 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters)
         return result.fold({
             when (it) {
                 is Failure.NetworkConnection -> Result.retry()
-                else -> {
+                else                         -> {
                     //TODO mark as failed to send?
                     //always return success, or the chain will be stuck for ever!
                     Result.success()

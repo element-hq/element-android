@@ -39,16 +39,8 @@ import org.koin.test.KoinTest
 @RunWith(AndroidJUnit4::class)
 internal class AuthenticatorTest : InstrumentedTest, KoinTest {
 
-    init {
-        Monarchy.init(context())
-        val matrixModule = MatrixModule(context()).definition
-        val networkModule = NetworkModule().definition
-        val authModule = AuthModule().definition
-        loadKoinModules(listOf(matrixModule, networkModule, authModule))
-    }
-
-    private val authenticator: Authenticator by inject()
-    private val okReplayInterceptor: OkReplayInterceptor by inject()
+    lateinit var authenticator: Authenticator
+    lateinit var okReplayInterceptor: OkReplayInterceptor
 
     private val okReplayConfig = OkReplayConfig.Builder()
             .tapeRoot(AndroidTapeRoot(

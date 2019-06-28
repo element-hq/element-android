@@ -59,15 +59,13 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.*
-import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
-import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
-import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
@@ -81,6 +79,7 @@ import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
 /**
@@ -93,7 +92,10 @@ import kotlin.coroutines.EmptyCoroutineContext
  * CryptoService maintains all necessary keys and their sharing with other devices required for the crypto.
  * Specially, it tracks all room membership changes events in order to do keys updates.
  */
-internal class CryptoManager(
+@SessionScope
+internal class CryptoManager @Inject constructor(
+        // Olm Manager
+        private val olmManager: OlmManager,
         // The credentials,
         private val credentials: Credentials,
         private val myDeviceInfoHolder: MyDeviceInfoHolder,
@@ -119,8 +121,6 @@ internal class CryptoManager(
         private val incomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
         //
         private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
-        // Olm Manager
-        private val olmManager: OlmManager,
         // Actions
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val megolmSessionDataImporter: MegolmSessionDataImporter,
@@ -135,7 +135,7 @@ internal class CryptoManager(
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val clearCryptoDataTask: ClearCacheTask,
+        @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
         private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor

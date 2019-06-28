@@ -16,38 +16,50 @@
 
 package im.vector.riotredesign.features.settings.push
 
-import androidx.lifecycle.Observer
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.pushers.Pusher
+import im.vector.matrix.rx.RxSession
 import im.vector.riotredesign.core.platform.VectorViewModel
-import org.koin.android.ext.android.get
 
 
 data class PushGatewayViewState(
         val pushGateways: Async<List<Pusher>> = Uninitialized
 ) : MvRxState
 
-class PushGatewaysViewModel(initialState: PushGatewayViewState) : VectorViewModel<PushGatewayViewState>(initialState) {
+class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: PushGatewayViewState,
+                                                        private val session: Session) : VectorViewModel<PushGatewayViewState>(initialState) {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: PushGatewayViewState): PushGatewaysViewModel
+    }
 
     companion object : MvRxViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: PushGatewayViewState): PushGatewaysViewModel? {
-            val session = viewModelContext.activity.get<Session>()
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment
-
-            val livePushers = session.livePushers()
-
-            val viewModel = PushGatewaysViewModel(state)
-
-            livePushers.observe(fragment, Observer {
-                viewModel.setState {
-                    PushGatewayViewState(Success(it))
-                }
-            })
-            return viewModel
+            val fragment: PushGatewaysFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.pushGatewaysViewModelFactory.create(state)
         }
+    }
 
+    init {
+        observePushers()
+    }
+
+    private fun observePushers() {
+        RxSession(session)
+                .livePushers()
+                .execute {
+                    copy(pushGateways = it)
+                }
     }
 
 }

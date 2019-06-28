@@ -21,17 +21,15 @@ import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.features.crypto.keysbackup.KeysBackupModule
 import im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import kotlinx.android.synthetic.main.fragment_keys_backup_settings.*
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
+import javax.inject.Inject
 
 class KeysBackupSettingsFragment : VectorBaseFragment(),
-        KeysBackupSettingsRecyclerViewController.Listener {
+                                   KeysBackupSettingsRecyclerViewController.Listener {
 
     companion object {
         fun newInstance() = KeysBackupSettingsFragment()
@@ -39,14 +37,11 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_settings
 
-    private val keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController by inject()
-
+    @Inject lateinit var keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController
     private val viewModel: KeysBackupSettingsViewModel by activityViewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        bindScope(getOrCreateScope(KeysBackupModule.KEYS_BACKUP_SCOPE))
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

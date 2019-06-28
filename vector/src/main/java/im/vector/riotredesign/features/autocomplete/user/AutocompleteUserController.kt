@@ -19,8 +19,9 @@ package im.vector.riotredesign.features.autocomplete.user
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.features.autocomplete.AutocompleteClickListener
+import javax.inject.Inject
 
-class AutocompleteUserController : TypedEpoxyController<List<User>>() {
+class AutocompleteUserController @Inject constructor(): TypedEpoxyController<List<User>>() {
 
     var listener: AutocompleteClickListener<User>? = null
 

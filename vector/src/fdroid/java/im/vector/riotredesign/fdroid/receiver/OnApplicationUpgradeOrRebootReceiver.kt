@@ -20,12 +20,19 @@ package im.vector.riotredesign.fdroid.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import im.vector.riotredesign.core.di.HasVectorInjector
 import timber.log.Timber
 
 class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Timber.v("## onReceive() ${intent.action}")
-        AlarmSyncBroadcastReceiver.scheduleAlarm(context, 10)
+        val appContext = context.applicationContext
+        if (appContext is HasVectorInjector) {
+            val activeSession = appContext.injector().activeSessionHolder().getSafeActiveSession()
+            if (activeSession != null) {
+                AlarmSyncBroadcastReceiver.scheduleAlarm(context, activeSession.myUserId, 10)
+            }
+        }
     }
 }

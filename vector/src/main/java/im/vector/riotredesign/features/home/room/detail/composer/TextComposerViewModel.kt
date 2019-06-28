@@ -17,35 +17,44 @@
 package im.vector.riotredesign.features.home.room.detail.composer
 
 import arrow.core.Option
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
+import im.vector.riotredesign.features.home.room.detail.RoomDetailFragment
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import org.koin.android.ext.android.get
 import java.util.concurrent.TimeUnit
 
 typealias AutocompleteUserQuery = CharSequence
 
-class TextComposerViewModel(initialState: TextComposerViewState,
-                            private val session: Session
+class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: TextComposerViewState,
+                                                        private val session: Session
 ) : VectorViewModel<TextComposerViewState>(initialState) {
+
 
     private val room = session.getRoom(initialState.roomId)!!
     private val roomId = initialState.roomId
 
     private val usersQueryObservable = BehaviorRelay.create<Option<AutocompleteUserQuery>>()
 
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: TextComposerViewState): TextComposerViewModel
+    }
+
     companion object : MvRxViewModelFactory<TextComposerViewModel, TextComposerViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: TextComposerViewState): TextComposerViewModel? {
-            val currentSession = viewModelContext.activity.get<Session>()
-            return TextComposerViewModel(state, currentSession)
+            val fragment : RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.textComposerViewModelFactory.create(state)
         }
     }
 
@@ -80,7 +89,7 @@ class TextComposerViewModel(initialState: TextComposerViewState,
                     } else {
                         users.filter {
                             it.displayName?.startsWith(prefix = filter, ignoreCase = true)
-                                    ?: false
+                            ?: false
                         }
                     }
                 }

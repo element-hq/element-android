@@ -19,11 +19,12 @@ import arrow.core.Try
 import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 
 internal interface GetPushRulesTask : Task<Unit, GetPushRulesResponse>
 
-internal class DefaultGetPushRulesTask(private val pushRulesApi: PushRulesApi) : GetPushRulesTask {
+internal class DefaultGetPushRulesTask @Inject constructor(private val pushRulesApi: PushRulesApi) : GetPushRulesTask {
 
     override suspend fun execute(params: Unit): Try<GetPushRulesResponse> {
         return executeRequest {

@@ -30,6 +30,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 @EpoxyModelClass(layout = R.layout.item_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
+    @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var roomName: CharSequence
     @EpoxyAttribute lateinit var roomId: String
     @EpoxyAttribute lateinit var lastFormattedEvent: CharSequence
@@ -47,7 +48,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadCount, showHighlighted))
-        AvatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
+        avatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

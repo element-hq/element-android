@@ -14,24 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.matrix.android.internal.worker
 
-import org.koin.core.Koin
-import org.koin.core.KoinContext
-import org.koin.standalone.KoinComponent
+import androidx.work.ListenableWorker
+import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.internal.session.SessionComponent
 
-internal object MatrixKoinHolder {
-
-    val instance: Koin by lazy {
-        Koin.create()
-    }
-
-}
-
-internal interface MatrixKoinComponent : KoinComponent {
-
-    override fun getKoin(): KoinContext {
-        return MatrixKoinHolder.instance.koinContext
-    }
-
+internal fun ListenableWorker.getSessionComponent(userId: String): SessionComponent? {
+    return Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId)
 }

@@ -17,25 +17,32 @@
 package im.vector.riotredesign.features.roomdirectory.picker
 
 import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.riotredesign.core.platform.VectorViewModel
-import org.koin.android.ext.android.get
 
-class RoomDirectoryPickerViewModel(initialState: RoomDirectoryPickerViewState,
-                                   private val session: Session) : VectorViewModel<RoomDirectoryPickerViewState>(initialState) {
+class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initialState: RoomDirectoryPickerViewState,
+                                                               private val session: Session) : VectorViewModel<RoomDirectoryPickerViewState>(initialState) {
+
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: RoomDirectoryPickerViewState): RoomDirectoryPickerViewModel
+    }
 
     companion object : MvRxViewModelFactory<RoomDirectoryPickerViewModel, RoomDirectoryPickerViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDirectoryPickerViewState): RoomDirectoryPickerViewModel? {
-            val currentSession = viewModelContext.activity.get<Session>()
-
-            return RoomDirectoryPickerViewModel(state, currentSession)
+            val fragment: RoomDirectoryPickerFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.roomDirectoryPickerViewModelFactory.create(state)
         }
     }
 

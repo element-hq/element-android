@@ -19,9 +19,12 @@ package im.vector.riotredesign.features.home.room.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -29,26 +32,27 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
-import org.koin.android.ext.android.get
 
 typealias RoomListFilterName = CharSequence
 
-class RoomListViewModel(initialState: RoomListViewState,
-                        private val session: Session,
-                        private val homeRoomListObservableSource: HomeRoomListObservableStore,
-                        private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
-                        private val chronologicalRoomComparator: ChronologicalRoomComparator)
+class RoomListViewModel @AssistedInject constructor(@Assisted initialState: RoomListViewState,
+                                                    private val session: Session,
+                                                    private val homeRoomListObservableSource: HomeRoomListObservableStore,
+                                                    private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
+                                                    private val chronologicalRoomComparator: ChronologicalRoomComparator)
     : VectorViewModel<RoomListViewState>(initialState) {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: RoomListViewState): RoomListViewModel
+    }
 
     companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
-            val currentSession = viewModelContext.activity.get<Session>()
-            val homeRoomListObservableSource = viewModelContext.activity.get<HomeRoomListObservableStore>()
-            val chronologicalRoomComparator = viewModelContext.activity.get<ChronologicalRoomComparator>()
-            val alphabeticalRoomComparator = viewModelContext.activity.get<AlphabeticalRoomComparator>()
-            return RoomListViewModel(state, currentSession, homeRoomListObservableSource, alphabeticalRoomComparator, chronologicalRoomComparator)
+            val fragment: RoomListFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.roomListViewModelFactory.create(state)
         }
     }
 

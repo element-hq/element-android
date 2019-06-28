@@ -18,35 +18,39 @@ package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.inject
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.getSessionComponent
+import javax.inject.Inject
 
-internal class SendEventWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params), MatrixKoinComponent {
 
+internal class SendEventWorker constructor(context: Context, params: WorkerParameters)
+    : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            override val userId: String,
             val roomId: String,
             val event: Event
-    )
+    ) : SessionWorkerParams
 
-    private val roomAPI by inject<RoomAPI>()
-    private val localEchoUpdater by inject<LocalEchoUpdater>()
+    @Inject lateinit var localEchoUpdater: LocalEchoUpdater
+    @Inject lateinit var roomAPI: RoomAPI
 
     override suspend fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
+
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        sessionComponent.inject(this)
 
         val event = params.event
         if (event.eventId == null) {
@@ -73,4 +77,5 @@ internal class SendEventWorker(context: Context, params: WorkerParameters)
             }
         }, { Result.success() })
     }
+
 }

@@ -24,21 +24,25 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.utils.SecretStoringUtils
 import im.vector.riotredesign.features.settings.PreferencesManager
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * The NotificationDrawerManager receives notification events as they arrived (from event stream or fcm) and
  * organise them in order to display them in the notification drawer.
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
-class NotificationDrawerManager(val context: Context,
-                                private val outdatedDetector: OutdatedEventDetector?) {
-
+@Singleton
+class NotificationDrawerManager @Inject constructor(private val context: Context,
+                                                    private val activeSessionHolder: ActiveSessionHolder,
+                                                    private val outdatedDetector: OutdatedEventDetector?) {
 
     //The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
@@ -167,8 +171,7 @@ class NotificationDrawerManager(val context: Context,
 
 
     fun refreshNotificationDrawer() {
-
-        val session = Matrix.getInstance().currentSession ?: return
+        val session = activeSessionHolder.getActiveSession()
         val user = session.getUser(session.sessionParams.credentials.userId)
         val myUserDisplayName = user?.displayName ?: ""
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)

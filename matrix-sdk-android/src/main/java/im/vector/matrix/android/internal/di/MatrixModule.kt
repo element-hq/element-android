@@ -17,47 +17,44 @@
 package im.vector.matrix.android.internal.di
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Handler
 import android.os.HandlerThread
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
+import dagger.Module
+import dagger.Provides
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import im.vector.matrix.android.internal.util.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.asCoroutineDispatcher
-import org.koin.dsl.module.module
+import org.matrix.olm.OlmManager
 
+@Module
+internal object MatrixModule {
 
-class MatrixModule(private val context: Context) {
+    @JvmStatic
+    @Provides
+    fun providesMatrixCoroutineDispatchers(): MatrixCoroutineDispatchers {
+        val THREAD_CRYPTO_NAME = "Crypto_Thread"
+        val handlerThread = HandlerThread(THREAD_CRYPTO_NAME)
+        handlerThread.start()
 
-    val definition = module {
-
-        single {
-            context
-        }
-
-        single {
-            val THREAD_CRYPTO_NAME = "Crypto_Thread"
-            val handlerThread = HandlerThread(THREAD_CRYPTO_NAME)
-            handlerThread.start()
-
-            MatrixCoroutineDispatchers(io = Dispatchers.IO,
-                    computation = Dispatchers.IO,
-                    main = Dispatchers.Main,
-                    crypto = Handler(handlerThread.looper).asCoroutineDispatcher("crypto")
-            )
-        }
-
-        single {
-            TaskExecutor(get())
-        }
-        single {
-            StringProvider(context.resources)
-        }
-
-        single {
-            BackgroundDetectionObserver()
-        }
-
+        return MatrixCoroutineDispatchers(io = Dispatchers.IO,
+                computation = Dispatchers.IO,
+                main = Dispatchers.Main,
+                crypto = Handler(handlerThread.looper).asCoroutineDispatcher("crypto")
+        )
     }
+
+    @JvmStatic
+    @Provides
+    fun providesResources(context: Context): Resources {
+        return context.resources
+    }
+
+    @JvmStatic
+    @Provides
+    @MatrixScope
+    fun providesOlmManager(): OlmManager {
+        return OlmManager()
+    }
+
 }

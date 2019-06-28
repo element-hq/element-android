@@ -10,6 +10,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
+import javax.inject.Inject
 
 internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
     data class Params(val userId: String,
@@ -17,7 +18,7 @@ internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
                       val pushAppId: String)
 }
 
-internal class DefaultRemovePusherTask(
+internal class DefaultRemovePusherTask @Inject constructor(
         private val pushersAPI: PushersAPI,
         private val monarchy: Monarchy
 ) : RemovePusherTask {

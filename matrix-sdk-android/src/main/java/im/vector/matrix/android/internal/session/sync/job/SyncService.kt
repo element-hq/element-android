@@ -19,12 +19,13 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
+import androidx.work.ListenableWorker
 import com.squareup.moshi.JsonEncodingException
+import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
@@ -32,10 +33,11 @@ import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
-import org.koin.standalone.inject
+import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 private const val DEFAULT_LONG_POOL_TIMEOUT = 10_000L
@@ -47,15 +49,15 @@ private const val BACKGROUND_LONG_POOL_TIMEOUT = 0L
  * in order to be able to perform a sync even if the app is not running.
  * The <receiver> and <service> must be declared in the Manifest or the app using the SDK
  */
-open class SyncService : Service(), MatrixKoinComponent {
+open class SyncService : Service() {
 
     private var mIsSelfDestroyed: Boolean = false
     private var cancelableTask: Cancelable? = null
-    private val syncTokenStore: SyncTokenStore by inject()
 
-    private val syncTask: SyncTask by inject()
-    private val networkConnectivityChecker: NetworkConnectivityChecker by inject()
-    private val taskExecutor: TaskExecutor by inject()
+    private lateinit var syncTokenStore: SyncTokenStore
+    private lateinit var syncTask: SyncTask
+    private lateinit var networkConnectivityChecker: NetworkConnectivityChecker
+    private lateinit var taskExecutor: TaskExecutor
 
     private var localBinder = LocalBinder()
 
@@ -66,9 +68,15 @@ open class SyncService : Service(), MatrixKoinComponent {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.i("onStartCommand ${intent}")
-        nextBatchDelay  = 60_000L
+        nextBatchDelay = 60_000L
         timeout = 0
         intent?.let {
+            val userId = it.getStringExtra(EXTRA_USER_ID)
+            val sessionComponent =  Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId) ?: return@let
+            syncTokenStore = sessionComponent.syncTokenStore()
+            syncTask = sessionComponent.syncTask()
+            networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
+            taskExecutor = sessionComponent.taskExecutor()
             if (cancelableTask == null) {
                 timer.cancel()
                 timer = Timer()
@@ -192,7 +200,6 @@ open class SyncService : Service(), MatrixKoinComponent {
         }
 
         internal fun notifySyncFinish() {
-
             listeners.forEach {
                 try {
                     it.onSyncFinsh()
@@ -235,6 +242,8 @@ open class SyncService : Service(), MatrixKoinComponent {
     }
 
     companion object {
+
+        const val EXTRA_USER_ID = "EXTRA_USER_ID"
 
         fun startLongPool(delay: Long) {
 

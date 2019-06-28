@@ -2,9 +2,10 @@ package im.vector.riotredesign.core.resources
 
 import android.content.Context
 import timber.log.Timber
+import javax.inject.Inject
 
 
-class AppNameProvider(private val context: Context) {
+class AppNameProvider @Inject constructor(private val context: Context) {
 
     fun getAppName(): String {
         try {

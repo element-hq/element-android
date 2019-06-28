@@ -17,38 +17,44 @@
 package im.vector.matrix.android.internal.auth
 
 import android.content.Context
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
-import im.vector.matrix.android.internal.auth.db.SessionParamsMapper
+import im.vector.matrix.android.internal.di.AuthDatabase
+import im.vector.matrix.android.internal.di.MatrixScope
 import io.realm.RealmConfiguration
-import org.koin.dsl.module.module
 import java.io.File
 
-class AuthModule {
+@Module
+internal abstract class AuthModule {
 
-    val definition = module {
-
-        single {
-            DefaultAuthenticator(get(), get(), get()) as Authenticator
-        }
-
-        single {
-            val context: Context = get()
+    @Module
+    companion object {
+        @JvmStatic
+        @Provides
+        @AuthDatabase
+        fun providesRealmConfiguration(context: Context): RealmConfiguration {
             val old = File(context.filesDir, "matrix-sdk-auth")
-
             if (old.exists()) {
                 old.renameTo(File(context.filesDir, "matrix-sdk-auth.realm"))
             }
-
-            val mapper = SessionParamsMapper((get()))
-            val realmConfiguration = RealmConfiguration.Builder()
+            return RealmConfiguration.Builder()
                     .name("matrix-sdk-auth.realm")
                     .modules(AuthRealmModule())
                     .deleteRealmIfMigrationNeeded()
                     .build()
-            RealmSessionParamsStore(mapper, realmConfiguration) as SessionParamsStore
         }
-
     }
+
+
+
+    @Binds
+    abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
+
+    @Binds
+    abstract fun bindAuthenticator(authenticator: DefaultAuthenticator): Authenticator
+
 }

@@ -20,8 +20,9 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import im.vector.riotredesign.features.popup.PopupAlertManager
+import javax.inject.Inject
 
-class VectorActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
+class VectorActivityLifecycleCallbacks @Inject constructor() : Application.ActivityLifecycleCallbacks {
     override fun onActivityPaused(activity: Activity) {
     }
 

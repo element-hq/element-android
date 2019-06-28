@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.features.home.room.detail.timeline.helper
+package im.vector.matrix.android.internal.di;
 
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.RoomMember
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
 
-object RoomMemberEventHelper {
+import javax.inject.Scope;
 
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-}
+@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface MatrixScope {}

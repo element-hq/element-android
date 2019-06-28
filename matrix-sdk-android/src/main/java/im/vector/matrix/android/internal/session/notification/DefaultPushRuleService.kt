@@ -27,14 +27,16 @@ import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
 import im.vector.matrix.android.internal.database.model.PusherEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
 import im.vector.matrix.android.internal.session.pushers.UpdatePushRuleEnableStatusTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
+import javax.inject.Inject
 
-
-internal class DefaultPushRuleService(
+@SessionScope
+internal class DefaultPushRuleService @Inject constructor(
         private val sessionParams: SessionParams,
         private val pushRulesTask: GetPushRulesTask,
         private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
@@ -42,9 +44,7 @@ internal class DefaultPushRuleService(
         private val monarchy: Monarchy
 ) : PushRuleService {
 
-
     private var listeners = ArrayList<PushRuleService.PushRuleListener>()
-
 
     override fun fetchPushRules(scope: String) {
         pushRulesTask

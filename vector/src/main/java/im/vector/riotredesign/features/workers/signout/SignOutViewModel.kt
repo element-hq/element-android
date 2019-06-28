@@ -21,8 +21,9 @@ import androidx.lifecycle.ViewModel
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
+import javax.inject.Inject
 
-class SignOutViewModel : ViewModel(), KeysBackupStateListener {
+class SignOutViewModel @Inject constructor() : ViewModel(), KeysBackupStateListener {
     // Keys exported manually
     var keysExportedToFile = MutableLiveData<Boolean>()
 
@@ -47,9 +48,9 @@ class SignOutViewModel : ViewModel(), KeysBackupStateListener {
      */
     fun getCurrentBackupVersion(): String {
         return mxSession
-                ?.getKeysBackupService()
-                ?.currentBackupVersion
-                ?: ""
+                       ?.getKeysBackupService()
+                       ?.currentBackupVersion
+               ?: ""
     }
 
     /**
@@ -57,8 +58,8 @@ class SignOutViewModel : ViewModel(), KeysBackupStateListener {
      */
     fun getNumberOfKeysToBackup(): Int {
         return mxSession
-                ?.inboundGroupSessionsCount(false)
-                ?: 0
+                       ?.inboundGroupSessionsCount(false)
+               ?: 0
     }
 
     /**
@@ -93,11 +94,11 @@ class SignOutViewModel : ViewModel(), KeysBackupStateListener {
          */
         fun doYouNeedToBeDisplayed(session: Session?): Boolean {
             return session
-                    ?.inboundGroupSessionsCount(false)
-                    ?: 0 > 0
-                    && session
-                    ?.getKeysBackupService()
-                    ?.state != KeysBackupState.ReadyToBackUp
+                           ?.inboundGroupSessionsCount(false)
+                   ?: 0 > 0
+                   && session
+                           ?.getKeysBackupService()
+                           ?.state != KeysBackupState.ReadyToBackUp
         }
     }
 }

@@ -26,10 +26,11 @@ import im.vector.riotredesign.core.epoxy.errorWithRetryItem
 import im.vector.riotredesign.core.epoxy.loadingItem
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.StringProvider
+import javax.inject.Inject
 
-class RoomDirectoryPickerController(private val stringProvider: StringProvider,
-                                    private val errorFormatter: ErrorFormatter,
-                                    private val roomDirectoryListCreator: RoomDirectoryListCreator
+class RoomDirectoryPickerController @Inject constructor(private val stringProvider: StringProvider,
+                                                        private val errorFormatter: ErrorFormatter,
+                                                        private val roomDirectoryListCreator: RoomDirectoryListCreator
 ) : TypedEpoxyController<RoomDirectoryPickerViewState>() {
 
     var callback: Callback? = null

@@ -22,13 +22,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import java.io.File
+import javax.inject.Inject
 
-object ContentUploadStateTrackerBinder {
+class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
 
     private val updateListeners = mutableMapOf<String, ContentUploadStateTracker.UpdateListener>()
 
@@ -36,7 +37,7 @@ object ContentUploadStateTrackerBinder {
              mediaData: ImageContentRenderer.Data,
              progressLayout: ViewGroup) {
 
-        Matrix.getInstance().currentSession?.also { session ->
+        activeSessionHolder.getActiveSession().also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
             val updateListener = ContentMediaProgressUpdater(progressLayout, mediaData)
             updateListeners[eventId] = updateListener
@@ -45,7 +46,7 @@ object ContentUploadStateTrackerBinder {
     }
 
     fun unbind(eventId: String) {
-        Matrix.getInstance().currentSession?.also { session ->
+        activeSessionHolder.getActiveSession().also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
             updateListeners[eventId]?.also {
                 uploadStateTracker.untrack(eventId, it)

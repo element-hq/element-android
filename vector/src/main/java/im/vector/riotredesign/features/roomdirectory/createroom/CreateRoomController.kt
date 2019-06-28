@@ -28,8 +28,9 @@ import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.form.formEditTextItem
 import im.vector.riotredesign.features.form.formSwitchItem
+import javax.inject.Inject
 
-class CreateRoomController(private val stringProvider: StringProvider,
+class CreateRoomController @Inject constructor(private val stringProvider: StringProvider,
                            private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<CreateRoomViewState>() {
 

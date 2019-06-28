@@ -19,15 +19,12 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.*
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.RoomService
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
-import org.koin.standalone.inject
 import timber.log.Timber
 
-internal class DefaultConditionResolver(val event: Event) : ConditionResolver, MatrixKoinComponent {
+internal class DefaultConditionResolver(private val event: Event,
+                                        private val roomService: RoomService,
+                                        private val sessionParams: SessionParams) : ConditionResolver {
 
-    private val roomService by inject<RoomService>()
-
-    private val sessionParams by inject<SessionParams>()
 
     override fun resolveEventMatchCondition(eventMatchCondition: EventMatchCondition): Boolean {
         return eventMatchCondition.isSatisfied(event)

@@ -20,8 +20,9 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.autocomplete.AutocompleteClickListener
 import im.vector.riotredesign.features.command.Command
+import javax.inject.Inject
 
-class AutocompleteCommandController(private val stringProvider: StringProvider) : TypedEpoxyController<List<Command>>() {
+class AutocompleteCommandController @Inject constructor(private val stringProvider: StringProvider) : TypedEpoxyController<List<Command>>() {
 
     var listener: AutocompleteClickListener<Command>? = null
 

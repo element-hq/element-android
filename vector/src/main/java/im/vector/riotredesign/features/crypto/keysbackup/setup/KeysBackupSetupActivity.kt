@@ -44,7 +44,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     .commitNow()
         }
 
-        viewModel = ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
         viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT, false)
         viewModel.initSession(session)
 

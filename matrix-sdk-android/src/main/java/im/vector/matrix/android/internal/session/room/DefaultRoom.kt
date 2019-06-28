@@ -34,17 +34,17 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.fetchCopied
+import javax.inject.Inject
 
-internal class DefaultRoom(
-        override val roomId: String,
-        private val monarchy: Monarchy,
-        private val timelineService: TimelineService,
-        private val sendService: SendService,
-        private val stateService: StateService,
-        private val readService: ReadService,
-        private val cryptoService: CryptoService,
-        private val relationService: RelationService,
-        private val roomMembersService: MembershipService
+internal class DefaultRoom @Inject constructor(override val roomId: String,
+                                               private val monarchy: Monarchy,
+                                               private val timelineService: TimelineService,
+                                               private val sendService: SendService,
+                                               private val stateService: StateService,
+                                               private val readService: ReadService,
+                                               private val cryptoService: CryptoService,
+                                               private val relationService: RelationService,
+                                               private val roomMembersService: MembershipService
 ) : Room,
         TimelineService by timelineService,
         SendService by sendService,

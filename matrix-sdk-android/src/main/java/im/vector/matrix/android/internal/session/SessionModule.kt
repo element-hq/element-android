@@ -18,64 +18,60 @@ package im.vector.matrix.android.internal.session
 
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.multibindings.IntoSet
+import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.api.pushrules.PushRuleService
-import im.vector.matrix.android.api.session.cache.CacheService
-import im.vector.matrix.android.api.session.group.GroupService
-import im.vector.matrix.android.api.session.pushers.PushersService
-import im.vector.matrix.android.api.session.room.RoomDirectoryService
-import im.vector.matrix.android.api.session.room.RoomService
-import im.vector.matrix.android.api.session.signout.SignOutService
-import im.vector.matrix.android.api.session.sync.FilterService
-import im.vector.matrix.android.api.session.user.UserService
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
-import im.vector.matrix.android.internal.session.cache.ClearCacheTask
-import im.vector.matrix.android.internal.session.cache.RealmCacheService
-import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
-import im.vector.matrix.android.internal.session.filter.*
-import im.vector.matrix.android.internal.session.group.DefaultGroupService
+import im.vector.matrix.android.internal.di.Authenticated
+import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.network.AccessTokenInterceptor
+import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.notification.BingRuleWatcher
-import im.vector.matrix.android.internal.session.notification.DefaultProcessEventForPushTask
-import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
-import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
-import im.vector.matrix.android.internal.session.pushers.*
-import im.vector.matrix.android.internal.session.room.*
-import im.vector.matrix.android.internal.session.room.directory.DefaultGetPublicRoomTask
-import im.vector.matrix.android.internal.session.room.directory.DefaultGetThirdPartyProtocolsTask
-import im.vector.matrix.android.internal.session.room.directory.GetPublicRoomTask
-import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyProtocolsTask
-import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
-import im.vector.matrix.android.internal.session.room.membership.RoomMemberDisplayNameResolver
+import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
-import im.vector.matrix.android.internal.session.signout.DefaultSignOutService
-import im.vector.matrix.android.internal.session.user.DefaultUserService
 import im.vector.matrix.android.internal.session.user.UserEntityUpdater
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
-import org.koin.dsl.module.module
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.io.File
 
-internal class SessionModule(private val sessionParams: SessionParams) {
+@Module
+internal abstract class SessionModule {
 
-    val definition = module(override = true) {
+    @Module
+    companion object {
 
-        scope(DefaultSession.SCOPE) {
-            sessionParams
+        @JvmStatic
+        @Provides
+        fun providesHomeServerConnectionConfig(sessionParams: SessionParams): HomeServerConnectionConfig {
+            return sessionParams.homeServerConnectionConfig
         }
 
-        scope(DefaultSession.SCOPE) {
-            sessionParams.credentials
+
+        @JvmStatic
+        @Provides
+        fun providesCredentials(sessionParams: SessionParams): Credentials {
+            return sessionParams.credentials
         }
 
-        scope(DefaultSession.SCOPE, name = "SessionRealmConfiguration") {
-            val context = get<Context>()
+        @JvmStatic
+        @Provides
+        @SessionDatabase
+        @SessionScope
+        fun providesRealmConfiguration(sessionParams: SessionParams, context: Context): RealmConfiguration {
             val childPath = sessionParams.credentials.userId.md5()
             val directory = File(context.filesDir, childPath)
 
-            RealmConfiguration.Builder()
+            return RealmConfiguration.Builder()
                     .directory(directory)
                     .name("disk_store.realm")
                     .modules(SessionRealmModule())
@@ -83,147 +79,60 @@ internal class SessionModule(private val sessionParams: SessionParams) {
                     .build()
         }
 
-        scope(DefaultSession.SCOPE) {
-            Monarchy.Builder()
-                    .setRealmConfiguration(get("SessionRealmConfiguration"))
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesMonarchy(@SessionDatabase
+                             realmConfiguration: RealmConfiguration): Monarchy {
+            return Monarchy.Builder()
+                    .setRealmConfiguration(realmConfiguration)
                     .build()
         }
 
-        scope(DefaultSession.SCOPE) {
-            val retrofitBuilder = get<Retrofit.Builder>()
-            retrofitBuilder
-                    .baseUrl(sessionParams.homeServerConnectionConfig.homeServerUri.toString())
+        @JvmStatic
+        @Provides
+        @SessionScope
+        @Authenticated
+        fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
+                                 accessTokenInterceptor: AccessTokenInterceptor): OkHttpClient {
+            return okHttpClient.newBuilder()
+                    .addInterceptor(accessTokenInterceptor)
                     .build()
         }
 
-        scope(DefaultSession.SCOPE) {
-            RoomMemberDisplayNameResolver()
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesRetrofit(@Authenticated okHttpClient: OkHttpClient,
+                             sessionParams: SessionParams,
+                             retrofitFactory: RetrofitFactory): Retrofit {
+            return retrofitFactory
+                    .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUri.toString())
         }
-
-        scope(DefaultSession.SCOPE) {
-            RoomDisplayNameResolver(get(), get(), get(), sessionParams.credentials)
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RoomAvatarResolver(get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RoomSummaryUpdater(get(), get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultRoomService(get(), get(), get(), get()) as RoomService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGetPublicRoomTask(get()) as GetPublicRoomTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGetThirdPartyProtocolsTask(get()) as GetThirdPartyProtocolsTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultRoomDirectoryService(get(), get(), get(), get()) as RoomDirectoryService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGroupService(get()) as GroupService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultSignOutService(get(), get()) as SignOutService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            RealmCacheService(get("ClearTaskMainCache"), get()) as CacheService
-        }
-
-        // Give a name, because we have a clear task for crypto store as well
-        scope(DefaultSession.SCOPE, name = "ClearTaskMainCache") {
-            RealmClearCacheTask(get("SessionRealmConfiguration")) as ClearCacheTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultUserService(get()) as UserService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            SessionListeners()
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultFilterRepository(get("SessionRealmConfiguration")) as FilterRepository
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultSaveFilterTask(get(), get(), get()) as SaveFilterTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultFilterService(get(), get(), get()) as FilterService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            val retrofit: Retrofit = get()
-            retrofit.create(FilterApi::class.java)
-        }
-
-        scope(DefaultSession.SCOPE) {
-            val retrofit: Retrofit = get()
-            retrofit.create(PushRulesApi::class.java)
-        }
-
-        scope(DefaultSession.SCOPE) {
-            get<DefaultPushRuleService>() as PushRuleService
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultPushRuleService(get(), get(), get(), get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGetPushRulesTask(get()) as GetPushRulesTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultUpdatePushRuleEnableStatusTask(get()) as UpdatePushRuleEnableStatusTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultProcessEventForPushTask(get()) as ProcessEventForPushTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            BingRuleWatcher(get(), get(), get(), get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            val groupSummaryUpdater = GroupSummaryUpdater(get())
-            val userEntityUpdater = UserEntityUpdater(get(), get(), get())
-            val aggregationUpdater = EventRelationsAggregationUpdater(get(), get(), get(), get())
-            //Event pruner must be the last one, because it will clear contents
-            val eventsPruner = EventsPruner(get(), get(), get(), get())
-            listOf<LiveEntityObserver>(groupSummaryUpdater, userEntityUpdater, aggregationUpdater, eventsPruner)
-        }
-
-        scope(DefaultSession.SCOPE) {
-            get<Retrofit>().create(PushersAPI::class.java)
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGetPusherTask(get()) as GetPushersTask
-        }
-        scope(DefaultSession.SCOPE) {
-            DefaultRemovePusherTask(get(), get()) as RemovePusherTask
-        }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultPusherService(get(), get(), get(), get(), get()) as PushersService
-        }
-
     }
 
+
+    @Binds
+    abstract fun bindSession(session: DefaultSession): Session
+
+    @Binds
+    @IntoSet
+    abstract fun bindGroupSummaryUpdater(groupSummaryUpdater: GroupSummaryUpdater): LiveEntityObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindEventsPruner(eventsPruner: EventsPruner): LiveEntityObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindEventRelationsAggregationUpdater(groupSummaryUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindBingRuleWatcher(bingRuleWatcher: BingRuleWatcher): LiveEntityObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindUserEntityUpdater(groupSummaryUpdater: UserEntityUpdater): LiveEntityObserver
 
 }

@@ -20,36 +20,38 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.AnyThread
-import androidx.annotation.ColorRes
 import androidx.annotation.UiThread
 import androidx.core.content.ContextCompat
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.glide.GlideRequest
 import im.vector.riotredesign.core.glide.GlideRequests
+import javax.inject.Inject
 
 /**
  * This helper centralise ways to retrieve avatar into ImageView or even generic Target<Drawable>
  */
 
-object AvatarRenderer {
+class AvatarRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder){
 
-    private const val THUMBNAIL_SIZE = 250
+    companion object {
+        private const val THUMBNAIL_SIZE = 250
 
-    private val AVATAR_COLOR_LIST = listOf(
-            R.color.riotx_avatar_fill_1,
-            R.color.riotx_avatar_fill_2,
-            R.color.riotx_avatar_fill_3
-    )
+        private val AVATAR_COLOR_LIST = listOf(
+                R.color.riotx_avatar_fill_1,
+                R.color.riotx_avatar_fill_2,
+                R.color.riotx_avatar_fill_3
+        )
+    }
 
     @UiThread
     fun render(roomSummary: RoomSummary, imageView: ImageView) {
@@ -117,7 +119,7 @@ object AvatarRenderer {
 //    }
 
     private fun buildGlideRequest(glideRequest: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
-        val resolvedUrl = Matrix.getInstance().currentSession!!.contentUrlResolver()
+        val resolvedUrl = activeSessionHolder.getActiveSession().contentUrlResolver()
                 .resolveThumbnail(avatarUrl, THUMBNAIL_SIZE, THUMBNAIL_SIZE, ContentUrlResolver.ThumbnailMethod.SCALE)
 
         return glideRequest

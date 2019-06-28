@@ -28,7 +28,7 @@ import im.vector.riotredesign.core.utils.getCallRingtoneUri
 import im.vector.riotredesign.core.utils.setCallRingtoneUri
 import im.vector.riotredesign.core.utils.setUseRiotDefaultRingtone
 
-class VectorSettingsVoiceVideo : VectorSettingsBaseFragment() {
+class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.preference_voice_and_video
     override val preferenceXmlRes = R.xml.vector_settings_voice_video

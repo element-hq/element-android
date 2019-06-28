@@ -24,11 +24,13 @@ import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
+import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
-internal class EnsureOlmSessionsForDevicesAction(private val olmDevice: MXOlmDevice,
-                                                 private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
+internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val olmDevice: MXOlmDevice,
+                                                                     private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
 
 
     suspend fun handle(devicesByUser: Map<String, List<MXDeviceInfo>>): Try<MXUsersDevicesMap<MXOlmSessionResult>> {

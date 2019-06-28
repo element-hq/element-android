@@ -15,6 +15,7 @@
  */
 package im.vector.riotredesign.core.platform
 
+import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -23,9 +24,10 @@ import androidx.core.view.isVisible
 import butterknife.BindView
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity.*
-import org.koin.android.ext.android.get
+import javax.inject.Inject
 
 /**
  * Simple activity with a toolbar, a waiting overlay, and a fragment container and a session.
@@ -43,7 +45,11 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
     @BindView(R.id.waiting_view_status_horizontal_progress)
     lateinit var waitingHorizontalProgress: ProgressBar
 
-    protected val session = get<Session>()
+    @Inject lateinit var session: Session
+
+    override fun injectWith(injector: ScreenComponent) {
+        session = injector.session()
+    }
 
     override fun initUiAndData() {
         configureToolbar(toolbar)

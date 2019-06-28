@@ -34,13 +34,9 @@ import im.vector.riotredesign.core.preference.BingRule
 import im.vector.riotredesign.core.preference.BingRulePreference
 import im.vector.riotredesign.features.notifications.NotificationUtils
 import im.vector.riotredesign.features.notifications.supportNotificationChannels
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
-class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFragment() {
-
-    // members
-    private val mSession by inject<Session>()
-    private var mLoadingView: View? = null
+class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseFragment() {
 
     // events listener
     /* TODO
@@ -53,10 +49,9 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
 
     override var titleRes: Int = R.string.settings_notification_advanced
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        // define the layout
-        addPreferencesFromResource(R.xml.vector_settings_notification_advanced_preferences)
+    override val preferenceXmlRes = R.xml.vector_settings_notification_advanced_preferences
 
+    override fun bindPref() {
         val callNotificationsSystemOptions = findPreference(PreferencesManager.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)
         if (supportNotificationChannels()) {
             callNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -177,33 +172,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        // find the view from parent activity
-        mLoadingView = activity!!.findViewById(R.id.vector_settings_spinner_views)
-
-        /* TODO
-        if (session.isAlive) {
-
-            session.dataHandler.addListener(mEventsListener)
-
-            // refresh anything else
-            refreshPreferences()
-            refreshDisplay()
-        }
-        */
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        /* TODO
-        if (session.isAlive) {
-            session.dataHandler.removeListener(mEventsListener)
-        }
-        */
-    }
-
     /**
      * Refresh the known information about the account
      */
@@ -245,30 +213,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorPreferenceFra
             */
         }
     }
-
-
-    //==============================================================================================================
-    // Display methods
-    //==============================================================================================================
-
-    /**
-     * Display the loading view.
-     */
-    private fun displayLoadingView() {
-        if (null != mLoadingView) {
-            mLoadingView!!.visibility = View.VISIBLE
-        }
-    }
-
-    /**
-     * Hide the loading view.
-     */
-    private fun hideLoadingView() {
-        if (null != mLoadingView) {
-            mLoadingView!!.visibility = View.GONE
-        }
-    }
-
 
     /* ==========================================================================================
      * Companion

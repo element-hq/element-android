@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.ui.views.KeysBackupBanner
@@ -41,7 +42,7 @@ import im.vector.riotredesign.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotredesign.features.workers.signout.SignOutViewModel
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_home_detail.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 
 @Parcelize
@@ -67,16 +68,22 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
 
-    private val session by inject<Session>()
+    @Inject lateinit var session: Session
+    @Inject lateinit var homeDetailViewModelFactory: HomeDetailViewModel.Factory
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
     }
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         currentDisplayMode = savedInstanceState?.getSerializable(CURRENT_DISPLAY_MODE) as? RoomListFragment.DisplayMode
-                ?: RoomListFragment.DisplayMode.HOME
+                             ?: RoomListFragment.DisplayMode.HOME
 
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
 
@@ -89,7 +96,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     private fun setupKeysBackupBanner() {
         // Keys backup banner
         // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
-        val model = ViewModelProviders.of(this).get(SignOutViewModel::class.java)
+        val model = ViewModelProviders.of(this, viewModelFactory).get(SignOutViewModel::class.java)
 
         model.init(session)
 
@@ -132,7 +139,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
             parentActivity.configure(groupToolbar)
         }
         groupToolbar.title = ""
-        AvatarRenderer.render(
+        avatarRenderer.render(
                 params.groupAvatar,
                 params.groupId,
                 params.groupName,

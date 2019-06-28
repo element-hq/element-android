@@ -16,28 +16,34 @@
 
 package im.vector.riotredesign.features.home
 
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
-import org.koin.android.ext.android.get
 
 /**
  * View model used to update the home bottom bar notification counts
  */
-class HomeDetailViewModel(initialState: HomeDetailViewState,
-                          private val session: Session,
-                          private val homeRoomListStore: HomeRoomListObservableStore)
+class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
+                                                      private val session: Session,
+                                                      private val homeRoomListStore: HomeRoomListObservableStore)
     : VectorViewModel<HomeDetailViewState>(initialState) {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: HomeDetailViewState): HomeDetailViewModel
+    }
 
     companion object : MvRxViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeDetailViewState): HomeDetailViewModel? {
-            val homeRoomListStore = viewModelContext.activity.get<HomeRoomListObservableStore>()
-            val session = viewModelContext.activity.get<Session>()
-            return HomeDetailViewModel(state, session, homeRoomListStore)
+            val fragment: HomeDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.homeDetailViewModelFactory.create(state)
         }
     }
 
@@ -65,21 +71,21 @@ class HomeDetailViewModel(initialState: HomeDetailViewState,
                 .subscribe { list ->
                     list.let { summaries ->
                         val peopleNotifications = summaries
-                                .filter { it.isDirect }
-                                .map { it.notificationCount }
-                                .takeIf { it.isNotEmpty() }
-                                ?.sumBy { i -> i }
-                                ?: 0
+                                                          .filter { it.isDirect }
+                                                          .map { it.notificationCount }
+                                                          .takeIf { it.isNotEmpty() }
+                                                          ?.sumBy { i -> i }
+                                                  ?: 0
                         val peopleHasHighlight = summaries
                                 .filter { it.isDirect }
                                 .any { it.highlightCount > 0 }
 
                         val roomsNotifications = summaries
-                                .filter { !it.isDirect }
-                                .map { it.notificationCount }
-                                .takeIf { it.isNotEmpty() }
-                                ?.sumBy { i -> i }
-                                ?: 0
+                                                         .filter { !it.isDirect }
+                                                         .map { it.notificationCount }
+                                                         .takeIf { it.isNotEmpty() }
+                                                         ?.sumBy { i -> i }
+                                                 ?: 0
                         val roomsHasHighlight = summaries
                                 .filter { !it.isDirect }
                                 .any { it.highlightCount > 0 }

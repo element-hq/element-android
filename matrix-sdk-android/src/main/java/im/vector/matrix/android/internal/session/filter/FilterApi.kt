@@ -42,5 +42,6 @@ internal interface FilterApi {
      * @return Filter
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/filter/{filterId}")
-    fun getFilterById(@Path("userId") userId: String, @Path("filterId") filterId: String): Call<FilterBody>
+    fun getFilterById(@Path("userId") userId: String, @Path("filterId")
+    filterId: String): Call<FilterBody>
 }

@@ -25,14 +25,13 @@ import im.vector.matrix.android.api.session.pushers.PusherState
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.inject
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.getSessionComponent
+import javax.inject.Inject
 
-class AddHttpPusherWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params), MatrixKoinComponent {
-
+internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
+    : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -40,13 +39,16 @@ class AddHttpPusherWorker(context: Context, params: WorkerParameters)
             val userId: String
     )
 
-    private val pushersAPI by inject<PushersAPI>()
-    private val monarchy by inject<Monarchy>()
+    @Inject lateinit var pushersAPI: PushersAPI
+    @Inject lateinit var monarchy: Monarchy
 
     override suspend fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
+
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        sessionComponent.inject(this)
 
         val pusher = params.pusher
 

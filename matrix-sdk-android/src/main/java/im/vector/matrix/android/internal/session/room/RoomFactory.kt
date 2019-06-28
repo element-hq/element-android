@@ -16,8 +16,9 @@
 
 package im.vector.matrix.android.internal.session.room
 
+import android.content.Context
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
@@ -30,6 +31,7 @@ import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.relation.DefaultRelationService
 import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.state.DefaultStateService
@@ -39,32 +41,35 @@ import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEvent
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
+import javax.inject.Inject
 
-internal class RoomFactory(private val monarchy: Monarchy,
-                           private val eventFactory: LocalEchoEventFactory,
-                           private val taskExecutor: TaskExecutor,
-                           private val loadRoomMembersTask: LoadRoomMembersTask,
-                           private val inviteTask: InviteTask,
-                           private val sendStateTask: SendStateTask,
-                           private val paginationTask: PaginationTask,
-                           private val contextOfEventTask: GetContextOfEventTask,
-                           private val setReadMarkersTask: SetReadMarkersTask,
-                           private val cryptoService: CryptoService,
-                           private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-                           private val joinRoomTask: JoinRoomTask,
-                           private val leaveRoomTask: LeaveRoomTask,
-                           private val sessionParams: SessionParams) {
+internal class RoomFactory @Inject constructor(private val context: Context,
+                                               private val credentials: Credentials,
+                                               private val monarchy: Monarchy,
+                                               private val eventFactory: LocalEchoEventFactory,
+                                               private val taskExecutor: TaskExecutor,
+                                               private val loadRoomMembersTask: LoadRoomMembersTask,
+                                               private val inviteTask: InviteTask,
+                                               private val sendStateTask: SendStateTask,
+                                               private val paginationTask: PaginationTask,
+                                               private val contextOfEventTask: GetContextOfEventTask,
+                                               private val setReadMarkersTask: SetReadMarkersTask,
+                                               private val cryptoService: CryptoService,
+                                               private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
+                                               private val updateQuickReactionTask: UpdateQuickReactionTask,
+                                               private val joinRoomTask: JoinRoomTask,
+                                               private val leaveRoomTask: LeaveRoomTask) {
 
-    fun instantiate(roomId: String): Room {
+    fun create(roomId: String): Room {
         val roomMemberExtractor = SenderRoomMemberExtractor(roomId)
         val relationExtractor = EventRelationExtractor()
         val timelineEventFactory = TimelineEventFactory(roomMemberExtractor, relationExtractor, cryptoService)
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, timelineEventFactory, contextOfEventTask, paginationTask)
-        val sendService = DefaultSendService(roomId, eventFactory, cryptoService, monarchy)
+        val sendService = DefaultSendService(context, credentials, roomId, eventFactory, cryptoService, monarchy)
         val stateService = DefaultStateService(roomId, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
-        val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, sessionParams)
-        val reactionService = DefaultRelationService(roomId, eventFactory, findReactionEventForUndoTask, monarchy, taskExecutor)
+        val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, credentials)
+        val relationService = DefaultRelationService(context, credentials, roomId, eventFactory, findReactionEventForUndoTask, monarchy, taskExecutor)
 
         return DefaultRoom(
                 roomId,
@@ -74,7 +79,7 @@ internal class RoomFactory(private val monarchy: Monarchy,
                 stateService,
                 readService,
                 cryptoService,
-                reactionService,
+                relationService,
                 roomMembersService
         )
     }

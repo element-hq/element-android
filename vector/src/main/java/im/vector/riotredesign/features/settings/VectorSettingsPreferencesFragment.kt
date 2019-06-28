@@ -26,11 +26,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.themes.ThemeUtils
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
-class VectorSettingsPreferences : VectorSettingsBaseFragment() {
+class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_preferences
     override val preferenceXmlRes = R.xml.vector_settings_preferences
@@ -42,7 +43,12 @@ class VectorSettingsPreferences : VectorSettingsBaseFragment() {
         findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY)
     }
 
-    private val vectorConfiguration by inject<VectorConfiguration>()
+    @Inject lateinit var vectorConfiguration: VectorConfiguration
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
 
     override fun bindPref() {
         // user interface preferences
@@ -113,7 +119,7 @@ class VectorSettingsPreferences : VectorSettingsBaseFragment() {
                 context?.let { context: Context ->
                     AlertDialog.Builder(context)
                             .setSingleChoiceItems(R.array.media_saving_choice,
-                                    PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
+                                                  PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
                                 PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
                                 d.cancel()
 

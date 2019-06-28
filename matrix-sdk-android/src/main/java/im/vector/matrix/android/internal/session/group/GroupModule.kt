@@ -16,22 +16,29 @@
 
 package im.vector.matrix.android.internal.session.group
 
-import im.vector.matrix.android.internal.session.DefaultSession
-import org.koin.dsl.module.module
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.internal.session.SessionScope
 import retrofit2.Retrofit
 
-class GroupModule {
+@Module
+internal abstract class GroupModule {
 
-    val definition = module(override = true) {
-
-        scope(DefaultSession.SCOPE) {
-            val retrofit: Retrofit = get()
-            retrofit.create(GroupAPI::class.java)
+    @Module
+    companion object {
+        @Provides
+        @JvmStatic
+        @SessionScope
+        fun providesGroupAPI(retrofit: Retrofit): GroupAPI {
+            return retrofit.create(GroupAPI::class.java)
         }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultGetGroupDataTask(get(), get()) as GetGroupDataTask
-        }
-
     }
+
+    @Binds
+    abstract fun bindGetGroupDataTask(getGroupDataTask: DefaultGetGroupDataTask): GetGroupDataTask
+
+    @Binds
+    abstract fun bindGroupService(groupService: DefaultGroupService): GroupService
 }

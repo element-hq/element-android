@@ -16,27 +16,33 @@
 
 package im.vector.riotredesign.features.roomdirectory.roompreview
 
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.features.roomdirectory.JoinState
-import org.koin.android.ext.android.get
 import timber.log.Timber
 
-class RoomPreviewViewModel(initialState: RoomPreviewViewState,
-                           private val session: Session) : VectorViewModel<RoomPreviewViewState>(initialState) {
+class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: RoomPreviewViewState,
+                                                       private val session: Session) : VectorViewModel<RoomPreviewViewState>(initialState) {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: RoomPreviewViewState): RoomPreviewViewModel
+    }
 
     companion object : MvRxViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomPreviewViewState): RoomPreviewViewModel? {
-            val currentSession = viewModelContext.activity.get<Session>()
-
-            return RoomPreviewViewModel(state, currentSession)
+            val fragment: RoomPreviewNoPreviewFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.roomPreviewViewModelFactory.create(state)
         }
     }
 

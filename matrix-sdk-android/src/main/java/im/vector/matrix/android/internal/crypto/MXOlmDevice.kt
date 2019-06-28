@@ -26,15 +26,23 @@ import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrap
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.convertFromUTF8
 import im.vector.matrix.android.internal.util.convertToUTF8
-import org.matrix.olm.*
+import org.matrix.olm.OlmAccount
+import org.matrix.olm.OlmInboundGroupSession
+import org.matrix.olm.OlmMessage
+import org.matrix.olm.OlmOutboundGroupSession
+import org.matrix.olm.OlmSession
+import org.matrix.olm.OlmUtility
 import timber.log.Timber
 import java.net.URLEncoder
 import java.util.*
+import javax.inject.Inject
 
 // The libolm wrapper.
-internal class MXOlmDevice(
+@SessionScope
+internal class MXOlmDevice @Inject constructor(
         /**
          * The store where crypto data is saved.
          */
@@ -670,7 +678,7 @@ internal class MXOlmDevice(
                             val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
                             Timber.e("## decryptGroupMessage() : $reason")
                             throw MXDecryptionException(MXCryptoError(MXCryptoError.DUPLICATED_MESSAGE_INDEX_ERROR_CODE,
-                                    MXCryptoError.UNABLE_TO_DECRYPT, reason))
+                                                                      MXCryptoError.UNABLE_TO_DECRYPT, reason))
                         }
 
                         inboundGroupSessionMessageIndexes[timeline]!!.put(messageIndexKey, true)
@@ -703,7 +711,7 @@ internal class MXOlmDevice(
                 val reason = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, session.roomId)
                 Timber.e("## decryptGroupMessage() : $reason")
                 throw MXDecryptionException(MXCryptoError(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_ERROR_CODE,
-                        MXCryptoError.UNABLE_TO_DECRYPT, reason))
+                                                          MXCryptoError.UNABLE_TO_DECRYPT, reason))
             }
         } else {
             Timber.e("## decryptGroupMessage() : Cannot retrieve inbound group session $sessionId")

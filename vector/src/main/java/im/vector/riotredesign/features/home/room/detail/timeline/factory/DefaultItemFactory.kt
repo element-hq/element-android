@@ -19,8 +19,9 @@ package im.vector.riotredesign.features.home.room.detail.timeline.factory
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DefaultItem_
+import javax.inject.Inject
 
-class DefaultItemFactory {
+class DefaultItemFactory @Inject constructor(){
 
     fun create(event: TimelineEvent, highlight: Boolean, exception: Exception? = null): DefaultItem? {
         val text = if (exception == null) {

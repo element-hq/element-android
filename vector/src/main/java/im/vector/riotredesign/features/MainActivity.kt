@@ -21,10 +21,14 @@ import android.content.Intent
 import android.os.Bundle
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.riotredesign.core.di.ActiveSessionHolder
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.features.home.HomeActivity
 import im.vector.riotredesign.features.login.LoginActivity
 import timber.log.Timber
+import javax.inject.Inject
 
 
 class MainActivity : VectorBaseActivity() {
@@ -44,46 +48,39 @@ class MainActivity : VectorBaseActivity() {
         }
     }
 
-    private val authenticator = Matrix.getInstance().authenticator()
+    @Inject lateinit var matrix: Matrix
+    @Inject lateinit var authenticator: Authenticator
+    @Inject lateinit var sessionHolder: ActiveSessionHolder
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val session = Matrix.getInstance().currentSession
-
         val clearCache = intent.getBooleanExtra(EXTRA_CLEAR_CACHE, false)
         val clearCredentials = intent.getBooleanExtra(EXTRA_CLEAR_CREDENTIALS, false)
+        // Handle some wanted cleanup
+        when {
+            clearCredentials -> sessionHolder.getActiveSession().signOut(object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    Timber.w("SIGN_OUT: success, start app")
+                    sessionHolder.clearActiveSession()
+                    start()
+                }
+            })
+            clearCache       -> sessionHolder.getActiveSession().clearCache(object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    start()
+                }
+            })
+            else             -> start()
 
-        if (session == null) {
-            start()
-        } else {
-            // Handle some wanted cleanup
-            when {
-                clearCredentials -> {
-                    session.signOut(object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            Timber.w("SIGN_OUT: success, start app")
-                            //TODO stop sync service
-                            start()
-                        }
-                    })
-                }
-                clearCache       -> {
-                    //TODO stop sync service
-                    session.clearCache(object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            //TODO start sync service
-                            start()
-                        }
-                    })
-                }
-                else             -> start()
-            }
         }
     }
 
     private fun start() {
-        val intent = if (authenticator.hasActiveSessions()) {
+        val intent = if (sessionHolder.hasActiveSession()) {
             HomeActivity.newIntent(this)
         } else {
             LoginActivity.newIntent(this)

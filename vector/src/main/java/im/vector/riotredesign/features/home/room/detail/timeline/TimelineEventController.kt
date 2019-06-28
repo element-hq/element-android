@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.LoadingItem_
 import im.vector.riotredesign.core.extensions.localDateTime
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.*
 import im.vector.riotredesign.features.home.room.detail.timeline.item.DaySeparatorItem
@@ -39,11 +40,14 @@ import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInf
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import im.vector.riotredesign.features.media.VideoContentRenderer
 import org.threeten.bp.LocalDateTime
+import javax.inject.Inject
 
-class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
-                              private val timelineItemFactory: TimelineItemFactory,
-                              private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-                              private val backgroundHandler: Handler = TimelineAsyncHelper.getBackgroundHandler()
+class TimelineEventController @Inject constructor(private val dateFormatter: TimelineDateFormatter,
+                                                  private val timelineItemFactory: TimelineItemFactory,
+                                                  private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
+                                                  private val avatarRenderer: AvatarRenderer,
+                                                  @TimelineEventControllerHandler
+                                                  private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
     interface Callback : ReactionPillCallback, AvatarCallback, BaseCallback, UrlClickCallback {
@@ -291,7 +295,7 @@ class TimelineEventController(private val dateFormatter: TimelineDateFormatter,
                     collapsedEventIds.removeAll(mergedEventIds)
                 }
                 val mergeId = mergedEventIds.joinToString(separator = "_") { it }
-                MergedHeaderItem(isCollapsed, mergeId, mergedData) {
+                MergedHeaderItem(isCollapsed, mergeId, mergedData, avatarRenderer) {
                     mergeItemCollapseStates[event.localId] = it
                     requestModelBuild()
                 }

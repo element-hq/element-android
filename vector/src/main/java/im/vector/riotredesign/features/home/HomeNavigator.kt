@@ -22,10 +22,14 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.replaceFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HomeNavigator {
+@Singleton
+class HomeNavigator @Inject constructor() {
 
     var activity: HomeActivity? = null
+    private var rootRoomId: String? = null
 
     fun openSelectedGroup(groupSummary: GroupSummary) {
         Timber.v("Open selected group ${groupSummary.groupId}")

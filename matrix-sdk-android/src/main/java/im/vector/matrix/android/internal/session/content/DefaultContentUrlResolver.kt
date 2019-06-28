@@ -18,12 +18,13 @@ package im.vector.matrix.android.internal.session.content
 
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import javax.inject.Inject
 
 
 private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
 private const val URI_PREFIX_CONTENT_API = "_matrix/media/v1/"
 
-internal class DefaultContentUrlResolver(private val homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
+internal class DefaultContentUrlResolver @Inject constructor(private val homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
 
     companion object {
         fun getUploadUrl(homeServerConnectionConfig: HomeServerConnectionConfig): String {

@@ -33,14 +33,15 @@ import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRo
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
+import javax.inject.Inject
 
-internal class DefaultMembershipService(private val roomId: String,
-                                        private val monarchy: Monarchy,
-                                        private val taskExecutor: TaskExecutor,
-                                        private val loadRoomMembersTask: LoadRoomMembersTask,
-                                        private val inviteTask: InviteTask,
-                                        private val joinTask: JoinRoomTask,
-                                        private val leaveRoomTask: LeaveRoomTask
+internal class DefaultMembershipService @Inject constructor(private val roomId: String,
+                                                            private val monarchy: Monarchy,
+                                                            private val taskExecutor: TaskExecutor,
+                                                            private val loadRoomMembersTask: LoadRoomMembersTask,
+                                                            private val inviteTask: InviteTask,
+                                                            private val joinTask: JoinRoomTask,
+                                                            private val leaveRoomTask: LeaveRoomTask
 ) : MembershipService {
 
     override fun loadRoomMembersIfNeeded(): Cancelable {

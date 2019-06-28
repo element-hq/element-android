@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.OnBackPressed
@@ -36,7 +37,7 @@ import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.room.list.widget.FabMenuView
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 @Parcelize
 data class RoomListParams(
@@ -61,10 +62,15 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
     }
 
     private val roomListParams: RoomListParams by args()
-    private val roomController by inject<RoomSummaryController>()
+    @Inject lateinit var roomController: RoomSummaryController
+    @Inject lateinit var roomListViewModelFactory: RoomListViewModel.Factory
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

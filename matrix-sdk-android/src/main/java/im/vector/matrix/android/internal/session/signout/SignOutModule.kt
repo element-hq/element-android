@@ -16,22 +16,30 @@
 
 package im.vector.matrix.android.internal.session.signout
 
-import im.vector.matrix.android.internal.session.DefaultSession
-import org.koin.dsl.module.module
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import im.vector.matrix.android.api.session.signout.SignOutService
+import im.vector.matrix.android.internal.session.SessionScope
 import retrofit2.Retrofit
 
-class SignOutModule {
+@Module
+internal abstract class SignOutModule {
 
-    val definition = module(override = true) {
-
-        scope(DefaultSession.SCOPE) {
-            val retrofit: Retrofit = get()
-            retrofit.create(SignOutAPI::class.java)
+    @Module
+    companion object {
+        @Provides
+        @JvmStatic
+        @SessionScope
+        fun providesSignOutAPI(retrofit: Retrofit): SignOutAPI {
+            return retrofit.create(SignOutAPI::class.java)
         }
-
-        scope(DefaultSession.SCOPE) {
-            DefaultSignOutTask(get(), get()) as SignOutTask
-        }
-
     }
+
+    @Binds
+    abstract fun bindSignOutTask(signOutTask: DefaultSignOutTask): SignOutTask
+
+    @Binds
+    abstract fun bindSignOutService(signOutService: DefaultSignOutService): SignOutService
+
 }

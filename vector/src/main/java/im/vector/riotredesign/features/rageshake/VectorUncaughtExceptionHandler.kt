@@ -16,7 +16,6 @@
 
 package im.vector.riotredesign.features.rageshake
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.core.content.edit
@@ -27,12 +26,16 @@ import im.vector.riotredesign.features.version.getVersion
 import timber.log.Timber
 import java.io.PrintWriter
 import java.io.StringWriter
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@SuppressLint("StaticFieldLeak")
-object VectorUncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
+@Singleton
+class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter: BugReporter) : Thread.UncaughtExceptionHandler {
 
     // key to save the crash status
-    private const val PREFS_CRASH_KEY = "PREFS_CRASH_KEY"
+    companion object {
+        private const val PREFS_CRASH_KEY = "PREFS_CRASH_KEY"
+    }
 
     private val vectorVersion = getVersion(longFormat = true, useBuildNumber = true)
     private val matrixSdkVersion = Matrix.getSdkVersion()
@@ -46,9 +49,7 @@ object VectorUncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
      */
     fun activate(context: Context) {
         this.context = context
-
         previousHandler = Thread.getDefaultUncaughtExceptionHandler()
-
         Thread.setDefaultUncaughtExceptionHandler(this)
     }
 
@@ -60,15 +61,10 @@ object VectorUncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
      * @return the exception description
      */
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
-        if (context == null) {
-            previousHandler?.uncaughtException(thread, throwable)
-            return
-        }
-
+        Timber.v("Uncaught exception: $throwable")
         PreferenceManager.getDefaultSharedPreferences(context).edit {
             putBoolean(PREFS_CRASH_KEY, true)
         }
-
         val b = StringBuilder()
         val appName = "RiotX" // TODO Matrix.getApplicationName()
 
@@ -116,7 +112,7 @@ object VectorUncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
 
         val bugDescription = b.toString()
 
-        BugReporter.saveCrashReport(context, bugDescription)
+        bugReporter.saveCrashReport(context, bugDescription)
 
         // Show the classical system popup
         previousHandler?.uncaughtException(thread, throwable)

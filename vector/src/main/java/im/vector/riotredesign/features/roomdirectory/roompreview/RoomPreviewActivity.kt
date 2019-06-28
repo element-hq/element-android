@@ -18,7 +18,6 @@ package im.vector.riotredesign.features.roomdirectory.roompreview
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.os.Parcelable
 import androidx.appcompat.widget.Toolbar
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
@@ -26,10 +25,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.addFragment
 import im.vector.riotredesign.core.platform.ToolbarConfigurable
 import im.vector.riotredesign.core.platform.VectorBaseActivity
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import kotlinx.android.parcel.Parcelize
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
 
 @Parcelize
 data class RoomPreviewData(
@@ -63,12 +59,6 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
     }
 
     override fun initUiAndData() {

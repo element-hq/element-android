@@ -21,9 +21,12 @@ import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class PushRuleTriggerListener(
+@Singleton
+class PushRuleTriggerListener @Inject constructor(
         private val resolver: NotifiableEventResolver,
         private val notificationDrawerManager: NotificationDrawerManager
 ) : PushRuleService.PushRuleListener {

@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.session.group.model.GroupUsers
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
+import javax.inject.Inject
 
 internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 
@@ -37,8 +38,7 @@ internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 
 }
 
-
-internal class DefaultGetGroupDataTask(
+internal class DefaultGetGroupDataTask @Inject constructor(
         private val groupAPI: GroupAPI,
         private val monarchy: Monarchy
 ) : GetGroupDataTask {

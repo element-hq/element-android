@@ -24,22 +24,29 @@ import androidx.core.view.isVisible
 import butterknife.OnCheckedChanged
 import butterknife.OnTextChanged
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_bug_report.*
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Form to send a bug report
  */
 class BugReportActivity : VectorBaseActivity() {
 
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun getLayoutRes() = R.layout.activity_bug_report
 
     override fun initUiAndData() {
         configureToolbar(bugReportToolbar)
 
-        if (BugReporter.screenshot != null) {
-            bug_report_screenshot_preview.setImageBitmap(BugReporter.screenshot)
+        if (bugReporter.screenshot != null) {
+            bug_report_screenshot_preview.setImageBitmap(bugReporter.screenshot)
         } else {
             bug_report_screenshot_preview.isVisible = false
             bug_report_button_include_screenshot.isChecked = false
@@ -87,7 +94,7 @@ class BugReportActivity : VectorBaseActivity() {
         bug_report_progress_view.isVisible = true
         bug_report_progress_view.progress = 0
 
-        BugReporter.sendBugReport(this,
+        bugReporter.sendBugReport(this,
                 bug_report_button_include_logs.isChecked,
                 bug_report_button_include_crash_logs.isChecked,
                 bug_report_button_include_screenshot.isChecked,
@@ -149,12 +156,12 @@ class BugReportActivity : VectorBaseActivity() {
 
     @OnCheckedChanged(R.id.bug_report_button_include_screenshot)
     internal fun onSendScreenshotChanged() {
-        bug_report_screenshot_preview.isVisible = bug_report_button_include_screenshot.isChecked && BugReporter.screenshot != null
+        bug_report_screenshot_preview.isVisible = bug_report_button_include_screenshot.isChecked && bugReporter.screenshot != null
     }
 
     override fun onBackPressed() {
         // Ensure there is no crash status remaining, which will be sent later on by mistake
-        BugReporter.deleteCrashFile(this)
+        bugReporter.deleteCrashFile(this)
 
         super.onBackPressed()
     }

@@ -18,8 +18,9 @@ package im.vector.riotredesign.features.autocomplete.command
 
 import android.text.Spannable
 import com.otaliastudios.autocomplete.AutocompletePolicy
+import javax.inject.Inject
 
-class CommandAutocompletePolicy : AutocompletePolicy {
+class CommandAutocompletePolicy @Inject constructor() : AutocompletePolicy {
 
     var enabled: Boolean = true
 
@@ -37,7 +38,7 @@ class CommandAutocompletePolicy : AutocompletePolicy {
     // Only if text which starts with '/' and without space
     override fun shouldShowPopup(text: Spannable?, cursorPos: Int): Boolean {
         return enabled && text?.startsWith("/") == true
-                && !text.contains(" ")
+               && !text.contains(" ")
     }
 
     override fun shouldDismissPopup(text: Spannable?, cursorPos: Int): Boolean {

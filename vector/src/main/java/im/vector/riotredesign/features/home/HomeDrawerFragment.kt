@@ -19,12 +19,13 @@ package im.vector.riotredesign.features.home
 import android.os.Bundle
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.observeK
 import im.vector.riotredesign.core.extensions.replaceChildFragment
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.group.GroupListFragment
 import kotlinx.android.synthetic.main.fragment_home_drawer.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 class HomeDrawerFragment : VectorBaseFragment() {
 
@@ -35,9 +36,14 @@ class HomeDrawerFragment : VectorBaseFragment() {
         }
     }
 
-    val session by inject<Session>()
+    @Inject lateinit var session: Session
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override fun getLayoutResId() = R.layout.fragment_home_drawer
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -48,7 +54,7 @@ class HomeDrawerFragment : VectorBaseFragment() {
 
         session.observeUser(session.sessionParams.credentials.userId).observeK(this) { user ->
             if (user != null) {
-                AvatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)
+                avatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)
                 homeDrawerUsernameView.text = user.displayName
                 homeDrawerUserIdView.text = user.userId
             }

@@ -27,8 +27,9 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
 import timber.log.Timber
+import javax.inject.Inject
 
-class NoticeEventFormatter(private val stringProvider: StringProvider) {
+class NoticeEventFormatter @Inject constructor(private val stringProvider: StringProvider) {
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {

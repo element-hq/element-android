@@ -18,7 +18,15 @@ package im.vector.riotredesign.features.roomdirectory
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.appendAt
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -31,21 +39,24 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
-import org.koin.android.ext.android.get
 import timber.log.Timber
 
 private const val PUBLIC_ROOMS_LIMIT = 20
 
-class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
-                             private val session: Session) : VectorViewModel<PublicRoomsViewState>(initialState) {
+class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState: PublicRoomsViewState,
+                                                         private val session: Session) : VectorViewModel<PublicRoomsViewState>(initialState) {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
+    }
 
     companion object : MvRxViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: PublicRoomsViewState): RoomDirectoryViewModel? {
-            val currentSession = viewModelContext.activity.get<Session>()
-
-            return RoomDirectoryViewModel(state, currentSession)
+            val activity: RoomDirectoryActivity = (viewModelContext as ActivityViewModelContext).activity()
+            return activity.roomDirectoryViewModelFactory.create(state)
         }
     }
 
@@ -84,11 +95,11 @@ class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
                 .liveRoomSummaries()
                 .subscribe { list ->
                     val joinedRoomIds = list
-                            // Keep only joined room
-                            ?.filter { it.membership == Membership.JOIN }
-                            ?.map { it.roomId }
-                            ?.toList()
-                            ?: emptyList()
+                                                // Keep only joined room
+                                                ?.filter { it.membership == Membership.JOIN }
+                                                ?.map { it.roomId }
+                                                ?.toList()
+                                        ?: emptyList()
 
                     setState {
                         copy(
@@ -155,39 +166,39 @@ class RoomDirectoryViewModel(initialState: PublicRoomsViewState,
 
     private fun load() {
         currentTask = session.getPublicRooms(roomDirectoryData.homeServer,
-                PublicRoomsParams(
-                        limit = PUBLIC_ROOMS_LIMIT,
-                        filter = PublicRoomsFilter(searchTerm = currentFilter),
-                        includeAllNetworks = roomDirectoryData.includeAllNetworks,
-                        since = since,
-                        thirdPartyInstanceId = roomDirectoryData.thirdPartyInstanceId
-                ),
-                object : MatrixCallback<PublicRoomsResponse> {
-                    override fun onSuccess(data: PublicRoomsResponse) {
-                        currentTask = null
+                                             PublicRoomsParams(
+                                                     limit = PUBLIC_ROOMS_LIMIT,
+                                                     filter = PublicRoomsFilter(searchTerm = currentFilter),
+                                                     includeAllNetworks = roomDirectoryData.includeAllNetworks,
+                                                     since = since,
+                                                     thirdPartyInstanceId = roomDirectoryData.thirdPartyInstanceId
+                                             ),
+                                             object : MatrixCallback<PublicRoomsResponse> {
+                                                 override fun onSuccess(data: PublicRoomsResponse) {
+                                                     currentTask = null
 
-                        since = data.nextBatch
+                                                     since = data.nextBatch
 
-                        setState {
-                            copy(
-                                    asyncPublicRoomsRequest = Success(data.chunk!!),
-                                    // It's ok to append at the end of the list, so I use publicRooms.size()
-                                    publicRooms = publicRooms.appendAt(data.chunk!!, publicRooms.size),
-                                    hasMore = since != null
-                            )
-                        }
-                    }
+                                                     setState {
+                                                         copy(
+                                                                 asyncPublicRoomsRequest = Success(data.chunk!!),
+                                                                 // It's ok to append at the end of the list, so I use publicRooms.size()
+                                                                 publicRooms = publicRooms.appendAt(data.chunk!!, publicRooms.size),
+                                                                 hasMore = since != null
+                                                         )
+                                                     }
+                                                 }
 
-                    override fun onFailure(failure: Throwable) {
-                        currentTask = null
+                                                 override fun onFailure(failure: Throwable) {
+                                                     currentTask = null
 
-                        setState {
-                            copy(
-                                    asyncPublicRoomsRequest = Fail(failure)
-                            )
-                        }
-                    }
-                })
+                                                     setState {
+                                                         copy(
+                                                                 asyncPublicRoomsRequest = Fail(failure)
+                                                         )
+                                                     }
+                                                 }
+                                             })
     }
 
     fun joinRoom(publicRoom: PublicRoom) = withState { state ->

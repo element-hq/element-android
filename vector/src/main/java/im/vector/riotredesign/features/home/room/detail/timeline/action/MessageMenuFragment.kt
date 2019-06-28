@@ -23,23 +23,30 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
+import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.themes.ThemeUtils
+import javax.inject.Inject
 
 /**
  * Fragment showing the list of available contextual action for a given message.
  */
-class MessageMenuFragment : BaseMvRxFragment() {
+class MessageMenuFragment : VectorBaseFragment() {
 
+    @Inject lateinit var messageMenuViewModelFactory: MessageMenuViewModel.Factory
     private val viewModel: MessageMenuViewModel by fragmentViewModel(MessageMenuViewModel::class)
-
     private var addSeparators = false
-
     var interactionListener: InteractionListener? = null
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
+    override fun getLayoutResId() = R.layout.fragment_message_menu
 
     override fun invalidate() = withState(viewModel) { state ->
 
@@ -67,14 +74,6 @@ class MessageMenuFragment : BaseMvRxFragment() {
 
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        //we just create programmatically
-        val contentView = LinearLayout(context)
-        contentView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        contentView.orientation = LinearLayout.VERTICAL
-        return contentView
-    }
 
     private fun inflateActionView(action: SimpleAction, inflater: LayoutInflater, container: ViewGroup?): View? {
         return inflater.inflate(R.layout.adapter_item_action, container, false)?.apply {

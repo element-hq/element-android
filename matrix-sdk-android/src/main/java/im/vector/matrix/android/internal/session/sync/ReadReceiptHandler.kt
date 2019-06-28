@@ -17,8 +17,10 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
+import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
 import timber.log.Timber
+import javax.inject.Inject
 
 
 // the receipts dictionnaries
@@ -28,7 +30,7 @@ import timber.log.Timber
 //                    dict value ts value
 typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
 
-internal class ReadReceiptHandler {
+internal class ReadReceiptHandler @Inject constructor() {
 
     fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?) {
         if (content == null) {

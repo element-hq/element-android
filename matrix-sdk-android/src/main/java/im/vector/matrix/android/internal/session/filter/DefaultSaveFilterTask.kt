@@ -20,6 +20,7 @@ import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 
 /**
@@ -33,9 +34,9 @@ internal interface SaveFilterTask : Task<SaveFilterTask.Params, Unit> {
 
 }
 
-internal class DefaultSaveFilterTask(private val sessionParams: SessionParams,
-                                     private val filterAPI: FilterApi,
-                                     private val filterRepository: FilterRepository
+internal class DefaultSaveFilterTask @Inject constructor(private val sessionParams: SessionParams,
+                                                         private val filterAPI: FilterApi,
+                                                         private val filterRepository: FilterRepository
 ) : SaveFilterTask {
 
     override suspend fun execute(params: SaveFilterTask.Params): Try<Unit> {

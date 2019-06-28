@@ -20,7 +20,7 @@ import androidx.preference.PreferenceCategory
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.preference.ProgressBarPreference
 
-class VectorSettingsFlair : VectorSettingsBaseFragment() {
+class VectorSettingsFlairFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_flair
     override val preferenceXmlRes = R.xml.vector_settings_flair

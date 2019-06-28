@@ -19,9 +19,12 @@ package im.vector.matrix.android.internal.network
 import android.content.Context
 import android.text.TextUtils
 import im.vector.matrix.android.BuildConfig
+import im.vector.matrix.android.internal.di.MatrixScope
 import timber.log.Timber
+import javax.inject.Inject
 
-internal class UserAgentHolder(val context: Context) {
+@MatrixScope
+internal class UserAgentHolder @Inject constructor(val context: Context) {
 
     var userAgent: String = ""
         private set

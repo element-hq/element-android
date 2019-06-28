@@ -19,8 +19,9 @@ package im.vector.riotredesign.core.resources
 import android.content.res.Resources
 import androidx.annotation.ArrayRes
 import androidx.annotation.NonNull
+import javax.inject.Inject
 
-class StringArrayProvider(private val resources: Resources) {
+class StringArrayProvider @Inject constructor(private val resources: Resources) {
 
     /**
      * Returns a localized string array from the application's package's

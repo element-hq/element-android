@@ -37,6 +37,7 @@ import java.lang.ref.WeakReference
  * It's needed to call [bind] method to start requesting avatar, otherwise only the placeholder icon will be displayed if not already cached.
  */
 class PillImageSpan(private val glideRequests: GlideRequests,
+                    private val avatarRenderer: AvatarRenderer,
                     private val context: Context,
                     private val userId: String,
                     private val user: User?) : ReplacementSpan() {
@@ -52,7 +53,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
     @UiThread
     fun bind(textView: TextView) {
         tv = WeakReference(textView)
-        AvatarRenderer.render(context, glideRequests, user?.avatarUrl, userId, displayName, target)
+        avatarRenderer.render(context, glideRequests, user?.avatarUrl, userId, displayName, target)
     }
 
     // ReplacementSpan *****************************************************************************
@@ -105,7 +106,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
             textStartPadding = textPadding
             setChipMinHeightResource(R.dimen.pill_min_height)
             setChipIconSizeResource(R.dimen.pill_avatar_size)
-            chipIcon = AvatarRenderer.getPlaceholderDrawable(context, userId, displayName)
+            chipIcon = avatarRenderer.getPlaceholderDrawable(context, userId, displayName)
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
     }

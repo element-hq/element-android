@@ -28,8 +28,11 @@ import im.vector.riotredesign.core.epoxy.loadingItem
 import im.vector.riotredesign.core.epoxy.noResultItem
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.features.home.AvatarRenderer
+import javax.inject.Inject
 
-class PublicRoomsController(private val stringProvider: StringProvider,
+class PublicRoomsController @Inject constructor(private val stringProvider: StringProvider,
+                                                private val avatarRenderer: AvatarRenderer,
                             private val errorFormatter: ErrorFormatter) : TypedEpoxyController<PublicRoomsViewState>() {
 
     var callback: Callback? = null
@@ -78,6 +81,7 @@ class PublicRoomsController(private val stringProvider: StringProvider,
 
     private fun buildPublicRoom(publicRoom: PublicRoom, viewState: PublicRoomsViewState) {
         publicRoomItem {
+            avatarRenderer(avatarRenderer)
             id(publicRoom.roomId)
             roomId(publicRoom.roomId)
             avatarUrl(publicRoom.avatarUrl)

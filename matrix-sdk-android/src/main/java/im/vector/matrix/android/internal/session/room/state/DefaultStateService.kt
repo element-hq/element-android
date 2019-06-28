@@ -21,10 +21,11 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import javax.inject.Inject
 
-internal class DefaultStateService(private val roomId: String,
-                                   private val taskExecutor: TaskExecutor,
-                                   private val sendStateTask: SendStateTask) : StateService {
+internal class DefaultStateService @Inject constructor(private val roomId: String,
+                                                       private val taskExecutor: TaskExecutor,
+                                                       private val sendStateTask: SendStateTask) : StateService {
 
     override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
         val params = SendStateTask.Params(roomId,

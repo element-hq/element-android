@@ -1,11 +1,14 @@
 package im.vector.matrix.android.internal.session.notification
 
 import arrow.core.Try
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.session.pushers.DefaultConditionResolver
 import im.vector.matrix.android.internal.task.Task
 import timber.log.Timber
+import javax.inject.Inject
 
 internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params, Unit> {
     data class Params(
@@ -14,8 +17,10 @@ internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params
     )
 }
 
-internal class DefaultProcessEventForPushTask(
-        private val defaultPushRuleService: DefaultPushRuleService
+internal class DefaultProcessEventForPushTask @Inject constructor(
+        private val defaultPushRuleService: DefaultPushRuleService,
+        private val roomService: RoomService,
+        private val sessionParams: SessionParams
 ) : ProcessEventForPushTask {
 
 
@@ -32,20 +37,19 @@ internal class DefaultProcessEventForPushTask(
     }
 
     private fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule? {
-        val conditionResolver = DefaultConditionResolver(event)
-        rules.filter { it.enabled }
-                .forEach { rule ->
-                    val isFullfilled = rule.conditions?.map {
-                        it.asExecutableCondition()?.isSatisfied(conditionResolver) ?: false
-                    }?.fold(true/*A rule with no conditions always matches*/, { acc, next ->
-                        //All conditions must hold true for an event in order to apply the action for the event.
-                        acc && next
-                    }) ?: false
+        val conditionResolver = DefaultConditionResolver(event, roomService, sessionParams)
+        rules.filter { it.enabled }.forEach { rule ->
+            val isFullfilled = rule.conditions?.map {
+                it.asExecutableCondition()?.isSatisfied(conditionResolver) ?: false
+            }?.fold(true/*A rule with no conditions always matches*/, { acc, next ->
+                //All conditions must hold true for an event in order to apply the action for the event.
+                acc && next
+            }) ?: false
 
-                    if (isFullfilled) {
-                        return rule
-                    }
-                }
+            if (isFullfilled) {
+                return rule
+            }
+        }
         return null
     }
 

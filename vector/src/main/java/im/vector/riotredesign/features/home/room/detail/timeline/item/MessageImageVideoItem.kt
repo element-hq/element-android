@@ -22,6 +22,7 @@ import android.widget.ImageView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotredesign.R
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotredesign.features.media.ImageContentRenderer
 
@@ -33,14 +34,20 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     @EpoxyAttribute
     override lateinit var informationData: MessageInformationData
     @EpoxyAttribute
+    override lateinit var avatarRenderer: AvatarRenderer
+    @EpoxyAttribute
     var playable: Boolean = false
     @EpoxyAttribute
     var clickListener: View.OnClickListener? = null
+    @EpoxyAttribute
+    lateinit var imageContentRenderer: ImageContentRenderer
+    @EpoxyAttribute
+    lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        ImageContentRenderer.render(mediaData, ImageContentRenderer.Mode.THUMBNAIL, holder.imageView)
-        ContentUploadStateTrackerBinder.bind(informationData.eventId, mediaData, holder.progressLayout)
+        imageContentRenderer.render(mediaData, ImageContentRenderer.Mode.THUMBNAIL, holder.imageView)
+        contentUploadStateTrackerBinder.bind(informationData.eventId, mediaData, holder.progressLayout)
         holder.imageView.setOnClickListener(clickListener)
         holder.imageView.setOnLongClickListener(longClickListener)
         holder.mediaContentView.setOnClickListener(cellClickListener)
@@ -50,7 +57,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     }
 
     override fun unbind(holder: Holder) {
-        ContentUploadStateTrackerBinder.unbind(informationData.eventId)
+        contentUploadStateTrackerBinder.unbind(informationData.eventId)
         super.unbind(holder)
     }
 

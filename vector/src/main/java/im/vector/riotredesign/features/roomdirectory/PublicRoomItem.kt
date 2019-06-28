@@ -32,6 +32,9 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
     @EpoxyAttribute
+    lateinit var avatarRenderer: AvatarRenderer
+
+    @EpoxyAttribute
     var avatarUrl: String? = null
 
     @EpoxyAttribute
@@ -61,7 +64,7 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
     override fun bind(holder: Holder) {
         holder.rootView.setOnClickListener { globalListener?.invoke() }
 
-        AvatarRenderer.render(avatarUrl, roomId!!, roomName, holder.avatarView)
+        avatarRenderer.render(avatarUrl, roomId!!, roomName, holder.avatarView)
         holder.nameView.text = roomName
         holder.aliasView.setTextOrHide(roomAlias)
         holder.topicView.setTextOrHide(roomTopic)

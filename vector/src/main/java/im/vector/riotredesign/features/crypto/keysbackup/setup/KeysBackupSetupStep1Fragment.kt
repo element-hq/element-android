@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.core.utils.LiveEvent
 
@@ -45,12 +46,16 @@ class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
     @BindView(R.id.keys_backup_setup_step1_manualExport)
     lateinit var manualExportButton: Button
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = activity?.run {
-            ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         viewModel.showManualExport.observe(this, Observer {

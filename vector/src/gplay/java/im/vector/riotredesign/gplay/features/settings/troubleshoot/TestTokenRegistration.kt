@@ -15,45 +15,46 @@
  */
 package im.vector.riotredesign.gplay.features.settings.troubleshoot
 
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.pushers.PusherState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.pushers.PushersManager
+import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.settings.troubleshoot.TroubleshootTest
 import im.vector.riotredesign.push.fcm.FcmHelper
-import org.koin.android.ext.android.get
+import javax.inject.Inject
 
 /**
  * Force registration of the token to HomeServer
  */
-class TestTokenRegistration(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
+class TestTokenRegistration @Inject constructor(private val context: AppCompatActivity,
+                                                private val stringProvider: StringProvider,
+                                                private val pushersManager: PushersManager,
+                                                private val activeSessionHolder: ActiveSessionHolder) : TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
 
     override fun perform() {
         //Check if we have a registered pusher for this token
-        val fcmToken = FcmHelper.getFcmToken(fragment.requireContext()) ?: run {
+        val fcmToken = FcmHelper.getFcmToken(context) ?: run {
             status = TestStatus.FAILED
             return
         }
-
-        val session = Matrix.getInstance().currentSession ?: run {
+        val session = activeSessionHolder.getSafeActiveSession() ?: run {
             status = TestStatus.FAILED
             return
         }
-
         val pusher = session.pushers().filter {
             it.pushKey == fcmToken && it.state == PusherState.REGISTERED
         }
-
-        if (pusher == null) {
-            description = fragment.getString(R.string.settings_troubleshoot_test_token_registration_failed, null)
+        if (pusher.isEmpty()) {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_failed, null)
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_token_registration_quick_fix) {
                 override fun doFix() {
-                    val workId = fragment.get<PushersManager>().registerPusherWithFcmKey(fcmToken)
-                    WorkManager.getInstance().getWorkInfoByIdLiveData(workId).observe(fragment, Observer { workInfo ->
+                    val workId = pushersManager.registerPusherWithFcmKey(fcmToken)
+                    WorkManager.getInstance().getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->
                         if (workInfo != null) {
                             if (workInfo.state == WorkInfo.State.SUCCEEDED) {
                                 manager?.retry()
@@ -69,7 +70,7 @@ class TestTokenRegistration(val fragment: Fragment) : TroubleshootTest(R.string.
             status = TestStatus.FAILED
 
         } else {
-            description = fragment.getString(R.string.settings_troubleshoot_test_token_registration_success)
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_success)
             status = TestStatus.SUCCESS
         }
 

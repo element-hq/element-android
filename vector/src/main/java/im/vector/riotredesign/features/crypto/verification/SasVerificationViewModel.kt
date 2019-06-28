@@ -25,10 +25,11 @@ import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransactio
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.core.utils.LiveEvent
+import javax.inject.Inject
 
 
-class SasVerificationViewModel : ViewModel(),
-        SasVerificationService.SasVerificationListener {
+class SasVerificationViewModel @Inject constructor() : ViewModel(),
+                                                       SasVerificationService.SasVerificationListener {
 
 
     companion object {

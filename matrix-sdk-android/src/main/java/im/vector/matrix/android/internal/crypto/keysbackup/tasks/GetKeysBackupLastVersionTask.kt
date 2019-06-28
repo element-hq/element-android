@@ -21,11 +21,11 @@ import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface GetKeysBackupLastVersionTask : Task<Unit, KeysVersionResult>
 
-
-internal class DefaultGetKeysBackupLastVersionTask(private val roomKeysApi: RoomKeysApi)
+internal class DefaultGetKeysBackupLastVersionTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : GetKeysBackupLastVersionTask {
 
 

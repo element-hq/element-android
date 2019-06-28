@@ -28,15 +28,17 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchManaged
+import javax.inject.Inject
 
-internal class DefaultRoomService(private val monarchy: Monarchy,
-                                  private val createRoomTask: CreateRoomTask,
-                                  private val roomFactory: RoomFactory,
-                                  private val taskExecutor: TaskExecutor) : RoomService {
+internal class DefaultRoomService @Inject constructor(private val monarchy: Monarchy,
+                                                      private val createRoomTask: CreateRoomTask,
+                                                      private val roomFactory: RoomFactory,
+                                                      private val taskExecutor: TaskExecutor) : RoomService {
 
     override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>) {
         createRoomTask
@@ -47,7 +49,7 @@ internal class DefaultRoomService(private val monarchy: Monarchy,
 
     override fun getRoom(roomId: String): Room? {
         monarchy.fetchManaged { RoomEntity.where(it, roomId).findFirst() } ?: return null
-        return roomFactory.instantiate(roomId)
+        return roomFactory.create(roomId)
     }
 
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {

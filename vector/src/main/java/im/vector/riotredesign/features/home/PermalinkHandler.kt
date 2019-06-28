@@ -22,9 +22,10 @@ import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.features.navigation.Navigator
+import javax.inject.Inject
 
-class PermalinkHandler(private val session: Session,
-                       private val navigator: Navigator) {
+class PermalinkHandler @Inject constructor(private val session: Session,
+                                           private val navigator: Navigator) {
 
     fun launch(context: Context, deepLink: String?, navigateToRoomInterceptor: NavigateToRoomInterceptor? = null): Boolean {
         val uri = deepLink?.let { Uri.parse(it) }

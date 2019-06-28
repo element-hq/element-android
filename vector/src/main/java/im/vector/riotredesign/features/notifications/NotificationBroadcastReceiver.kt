@@ -20,28 +20,29 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.riotredesign.R
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import im.vector.riotredesign.core.di.ActiveSessionHolder
+import im.vector.riotredesign.core.extensions.vectorComponent
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)
  */
-class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
+class NotificationBroadcastReceiver : BroadcastReceiver() {
 
-    private val notificationDrawerManager by inject<NotificationDrawerManager>()
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
-
         Timber.v("NotificationBroadcastReceiver received : $intent")
-
+        context.vectorComponent().inject(this)
         when (intent.action) {
             NotificationUtils.SMART_REPLY_ACTION        ->
                 handleSmartReply(intent, context)
@@ -60,7 +61,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
     }
 
     private fun handleMarkAsRead(context: Context, roomId: String) {
-        Matrix.getInstance().currentSession?.let { session ->
+        activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)
                     ?.markAllAsRead(object : MatrixCallback<Unit> {})
         }
@@ -76,7 +77,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
             return
         }
         val matrixId = intent.getStringExtra(EXTRA_MATRIX_ID)
-        Matrix.getInstance().currentSession?.let { session ->
+        activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)?.let { room ->
                 sendMatrixEvent(message, session, room, context)
             }
@@ -95,7 +96,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
                 false,
                 System.currentTimeMillis(),
                 session.getUser(session.sessionParams.credentials.userId)?.displayName
-                        ?: context?.getString(R.string.notification_sender_me),
+                ?: context?.getString(R.string.notification_sender_me),
                 session.sessionParams.credentials.userId,
                 message,
                 room.roomId,

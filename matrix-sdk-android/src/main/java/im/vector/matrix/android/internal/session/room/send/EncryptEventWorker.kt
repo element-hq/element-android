@@ -26,28 +26,32 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.inject
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.getSessionComponent
 import java.util.concurrent.CountDownLatch
+import javax.inject.Inject
 
 internal class EncryptEventWorker(context: Context, params: WorkerParameters)
-    : Worker(context, params), MatrixKoinComponent {
-
+    : Worker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            override val userId: String,
             val roomId: String,
             val event: Event
-    )
+    ) : SessionWorkerParams
 
-    private val crypto by inject<CryptoService>()
-    private val localEchoUpdater by inject<LocalEchoUpdater>()
+    @Inject lateinit var crypto: CryptoService
+    @Inject lateinit var localEchoUpdater: LocalEchoUpdater
 
     override fun doWork(): Result {
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
+
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        sessionComponent.inject(this)
 
         val localEvent = params.event
         if (localEvent.eventId == null) {
@@ -85,7 +89,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                     type = safeResult.eventType,
                     content = safeResult.eventContent
             )
-            val nextWorkerParams = SendEventWorker.Params(params.roomId, encryptedEvent)
+            val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, encryptedEvent)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         }
         val safeError = error

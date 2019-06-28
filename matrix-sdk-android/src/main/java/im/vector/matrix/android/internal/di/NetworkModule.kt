@@ -17,85 +17,80 @@
 package im.vector.matrix.android.internal.di
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.squareup.moshi.Moshi
+import dagger.Module
+import dagger.Provides
 import im.vector.matrix.android.BuildConfig
-import im.vector.matrix.android.internal.network.*
+import im.vector.matrix.android.internal.network.AccessTokenInterceptor
+import im.vector.matrix.android.internal.network.UnitConverterFactory
+import im.vector.matrix.android.internal.network.UserAgentInterceptor
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.network.interceptors.FormattedJsonHttpLogger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okreplay.OkReplayInterceptor
-import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-class NetworkModule {
+@Module
+internal object NetworkModule {
 
-    val definition = module {
+    @Provides
+    @JvmStatic
+    fun providesHttpLogingInterceptor(): HttpLoggingInterceptor {
+        val logger = FormattedJsonHttpLogger()
+        val interceptor = HttpLoggingInterceptor(logger)
+        interceptor.level = BuildConfig.OKHTTP_LOGGING_LEVEL
+        return interceptor
+    }
 
-        single {
-            UserAgentHolder(get())
-        }
+    @Provides
+    @JvmStatic
+    fun providesOkReplayInterceptor(): OkReplayInterceptor {
+        return OkReplayInterceptor()
+    }
 
-        single {
-            UserAgentInterceptor(get())
-        }
+    @Provides
+    @JvmStatic
+    fun providesStethoInterceptor(): StethoInterceptor {
+        return StethoInterceptor()
+    }
 
-        single {
-            AccessTokenInterceptor(get())
-        }
+    @Provides
+    @JvmStatic
+    fun providesCurlLoggingInterceptor(): CurlLoggingInterceptor {
+        return CurlLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
+    }
 
-        single {
-            val logger = FormattedJsonHttpLogger()
-            val interceptor = HttpLoggingInterceptor(logger)
-            interceptor.level = BuildConfig.OKHTTP_LOGGING_LEVEL
-            interceptor
-        }
-
-        single {
-            CurlLoggingInterceptor()
-        }
-
-        single {
-            OkReplayInterceptor()
-        }
-
-        single {
-            StethoInterceptor()
-        }
-
-        single {
-            OkHttpClient.Builder()
-                    .connectTimeout(1, TimeUnit.MINUTES)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
-                    .addNetworkInterceptor(get<StethoInterceptor>())
-                    .addInterceptor(get<UserAgentInterceptor>())
-                    .addInterceptor(get<AccessTokenInterceptor>())
-                    .addInterceptor(get<HttpLoggingInterceptor>())
-                    .apply {
-                        if (BuildConfig.LOG_PRIVATE_DATA) {
-                            addInterceptor(get<CurlLoggingInterceptor>())
-                        }
+    @MatrixScope
+    @Provides
+    @JvmStatic
+    @Unauthenticated
+    fun providesOkHttpClient(stethoInterceptor: StethoInterceptor,
+                             userAgentInterceptor: UserAgentInterceptor,
+                             httpLoggingInterceptor: HttpLoggingInterceptor,
+                             curlLoggingInterceptor: CurlLoggingInterceptor,
+                             okReplayInterceptor: OkReplayInterceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .addNetworkInterceptor(stethoInterceptor)
+                .addInterceptor(userAgentInterceptor)
+                .addInterceptor(httpLoggingInterceptor)
+                .apply {
+                    if (BuildConfig.LOG_PRIVATE_DATA) {
+                        addInterceptor(curlLoggingInterceptor)
                     }
-                    .addInterceptor(get<OkReplayInterceptor>())
-                    .build()
-        }
+                }
+                .addInterceptor(okReplayInterceptor)
+                .build()
+    }
 
-        single {
-            MoshiProvider.providesMoshi()
-        }
-
-        single {
-            NetworkConnectivityChecker(get())
-        }
-
-        factory {
-            Retrofit.Builder()
-                    .client(get())
-                    .addConverterFactory(UnitConverterFactory)
-                    .addConverterFactory(MoshiConverterFactory.create(get()))
-        }
-
+    @Provides
+    @JvmStatic
+    fun providesMoshi(): Moshi {
+        return MoshiProvider.providesMoshi()
     }
 }

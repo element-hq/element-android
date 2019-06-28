@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.sync
 import arrow.core.Try
 import arrow.core.failure
 import arrow.core.recoverWith
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.auth.SessionParamsStore
@@ -26,6 +27,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
@@ -33,10 +35,11 @@ internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
 }
 
-internal class DefaultSyncTask(private val syncAPI: SyncAPI,
-                               private val filterRepository: FilterRepository,
-                               private val syncResponseHandler: SyncResponseHandler,
-                               private val sessionParamsStore: SessionParamsStore
+internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
+                                                   private val credentials: Credentials,
+                                                   private val filterRepository: FilterRepository,
+                                                   private val syncResponseHandler: SyncResponseHandler,
+                                                   private val sessionParamsStore: SessionParamsStore
 ) : SyncTask {
 
 
@@ -56,7 +59,7 @@ internal class DefaultSyncTask(private val syncAPI: SyncAPI,
             // Intercept 401
             if (throwable is Failure.ServerError
                     && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
-                sessionParamsStore.delete()
+                sessionParamsStore.delete(credentials.userId)
             }
 
             // Transmit the throwable

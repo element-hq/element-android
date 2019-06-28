@@ -21,7 +21,7 @@ import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
 import kotlin.random.Random
 
-internal class FakePaginationTask(private val tokenChunkEventPersistor: TokenChunkEventPersistor) : PaginationTask {
+internal class FakePaginationTask @Inject constructor(private val tokenChunkEventPersistor: TokenChunkEventPersistor) : PaginationTask {
 
     override suspend fun execute(params: PaginationTask.Params): Try<TokenChunkEventPersistor.Result> {
         val fakeEvents = RoomDataHelper.createFakeListOfEvents(30)

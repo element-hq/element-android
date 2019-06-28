@@ -24,36 +24,34 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryActivity
-import im.vector.riotredesign.features.roomdirectory.RoomDirectoryModule
 import im.vector.riotredesign.features.roomdirectory.RoomDirectoryNavigationViewModel
 import kotlinx.android.synthetic.main.fragment_create_room.*
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
 import timber.log.Timber
+import javax.inject.Inject
 
 class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
 
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
     private val viewModel: CreateRoomViewModel by fragmentViewModel()
-    private val createRoomController: CreateRoomController by inject()
+    @Inject lateinit var createRoomController: CreateRoomController
+    @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
 
     override fun getLayoutResId() = R.layout.fragment_create_room
 
     override fun getMenuRes() = R.menu.vector_room_creation
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
-
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
-
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
-
         setupRecyclerView()
-
         createRoomClose.setOnClickListener {
             navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Back)
         }

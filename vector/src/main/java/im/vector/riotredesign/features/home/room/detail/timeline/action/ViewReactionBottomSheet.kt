@@ -15,23 +15,29 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import kotlinx.android.synthetic.main.bottom_sheet_display_reactions.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 /**
  * Bottom sheet displaying list of reactions for a given event ordered by timestamp
  */
-class ViewReactionBottomSheet : BaseMvRxBottomSheetDialog() {
+class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     private val viewModel: ViewReactionViewModel by fragmentViewModel(ViewReactionViewModel::class)
 
-    private val emojiCompatFontProvider by inject<EmojiCompatFontProvider>()
+    @Inject lateinit var viewReactionViewModelFactory: ViewReactionViewModel.Factory
+    @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
 
     @BindView(R.id.bottom_sheet_display_reactions_list)
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
 
     private val epoxyController by lazy { ViewReactionsEpoxyController(emojiCompatFontProvider.typeface) }
+
+    override fun injectWith(screenComponent: ScreenComponent) {
+        screenComponent.inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.bottom_sheet_display_reactions, container, false)

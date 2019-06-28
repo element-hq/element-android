@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
-import im.vector.fragments.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.SimpleFragmentActivity
@@ -43,9 +42,8 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     override fun initUiAndData() {
         super.initUiAndData()
-        viewModel = ViewModelProviders.of(this).get(KeysBackupRestoreSharedViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
         viewModel.initSession(session)
-
         viewModel.keyVersionResult.observe(this, Observer { keyVersion ->
 
             if (keyVersion != null && supportFragmentManager.fragments.isEmpty()) {

@@ -16,7 +16,6 @@
 
 package im.vector.riotredesign.features.rageshake
 
-import android.app.Activity
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
@@ -26,8 +25,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
 import im.vector.riotredesign.R
+import javax.inject.Inject
 
-class RageShake(val activity: Activity) : ShakeDetector.Listener {
+class RageShake @Inject constructor(private val activity: AppCompatActivity,
+                                    private val bugReporter: BugReporter) : ShakeDetector.Listener {
 
     private var shakeDetector: ShakeDetector? = null
 
@@ -94,7 +95,7 @@ class RageShake(val activity: Activity) : ShakeDetector.Listener {
     }
 
     private fun openBugReportScreen() {
-        BugReporter.openBugReportScreen(activity)
+        bugReporter.openBugReportScreen(activity)
     }
 
     companion object {

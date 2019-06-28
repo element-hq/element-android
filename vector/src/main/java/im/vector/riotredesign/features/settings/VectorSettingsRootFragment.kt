@@ -19,7 +19,7 @@ package im.vector.riotredesign.features.settings
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.withArgs
 
-class VectorSettingsRoot : VectorSettingsBaseFragment() {
+class VectorSettingsRootFragment : VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.title_activity_settings
     override val preferenceXmlRes = R.xml.vector_settings_root
@@ -29,7 +29,7 @@ class VectorSettingsRoot : VectorSettingsBaseFragment() {
     }
 
     companion object {
-        fun newInstance() = VectorSettingsRoot()
+        fun newInstance() = VectorSettingsRootFragment()
                 .withArgs {
                     //putString(ARG_MATRIX_ID, matrixId)
                 }

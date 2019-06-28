@@ -19,6 +19,7 @@ import arrow.core.Try
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 
 internal interface UpdatePushRuleEnableStatusTask : Task<UpdatePushRuleEnableStatusTask.Params, Unit> {
@@ -27,7 +28,8 @@ internal interface UpdatePushRuleEnableStatusTask : Task<UpdatePushRuleEnableSta
                       val enabled: Boolean)
 }
 
-internal class DefaultUpdatePushRuleEnableStatusTask(private val pushRulesApi: PushRulesApi) : UpdatePushRuleEnableStatusTask {
+internal class DefaultUpdatePushRuleEnableStatusTask @Inject constructor(private val pushRulesApi: PushRulesApi)
+    : UpdatePushRuleEnableStatusTask {
 
     override suspend fun execute(params: UpdatePushRuleEnableStatusTask.Params): Try<Unit> {
         return executeRequest {

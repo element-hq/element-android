@@ -24,11 +24,19 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator
 import com.github.piasy.biv.view.GlideImageViewFactory
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_image_media_viewer.*
+import javax.inject.Inject
 
 
 class ImageMediaViewerActivity : VectorBaseActivity() {
+
+    @Inject lateinit var imageContentRenderer: ImageContentRenderer
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +48,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
             configureToolbar(imageMediaViewerToolbar, mediaData)
             imageMediaViewerImageView.setImageViewFactory(GlideImageViewFactory())
             imageMediaViewerImageView.setProgressIndicator(ProgressPieIndicator())
-            ImageContentRenderer.render(mediaData, imageMediaViewerImageView)
+            imageContentRenderer.render(mediaData, imageMediaViewerImageView)
         }
     }
 

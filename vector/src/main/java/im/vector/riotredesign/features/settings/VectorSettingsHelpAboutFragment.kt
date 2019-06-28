@@ -27,7 +27,7 @@ import im.vector.riotredesign.core.utils.copyToClipboard
 import im.vector.riotredesign.core.utils.displayInWebView
 import im.vector.riotredesign.features.version.getVersion
 
-class VectorSettingsHelpAbout : VectorSettingsBaseFragment() {
+class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.preference_root_help_about
     override val preferenceXmlRes = R.xml.vector_settings_help_about
@@ -74,7 +74,7 @@ class VectorSettingsHelpAbout : VectorSettingsBaseFragment() {
 
         // olm version
         findPreference(PreferencesManager.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
-                .summary = mSession.getCryptoVersion(requireContext(), false)
+                .summary = session.getCryptoVersion(requireContext(), false)
 
         // copyright
         findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY)

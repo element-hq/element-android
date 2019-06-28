@@ -19,11 +19,15 @@ package im.vector.matrix.android.internal.session.filter
 import im.vector.matrix.android.internal.database.model.FilterEntity
 import im.vector.matrix.android.internal.database.model.FilterEntityFields
 import im.vector.matrix.android.internal.database.query.getFilter
+import im.vector.matrix.android.internal.di.SessionDatabase
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
+import javax.inject.Inject
 
-internal class DefaultFilterRepository(val realmConfiguration: RealmConfiguration) : FilterRepository {
+internal class DefaultFilterRepository @Inject constructor(
+        @SessionDatabase private val realmConfiguration: RealmConfiguration
+) : FilterRepository {
 
     override fun storeFilter(filterBody: FilterBody, roomEventFilter: RoomEventFilter): Boolean {
         val result: Boolean

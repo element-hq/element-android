@@ -19,36 +19,47 @@ package im.vector.matrix.android.internal.auth
 import android.util.Patterns
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
+import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.extensions.foldToCallback
+import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.DefaultSession
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
+import okhttp3.OkHttpClient
+import javax.inject.Inject
 
-internal class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builder,
-                           private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                           private val sessionParamsStore: SessionParamsStore) : Authenticator {
+internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
+                                                        private val okHttpClient: OkHttpClient,
+                                                        private val retrofitFactory: RetrofitFactory,
+                                                        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                        private val sessionParamsStore: SessionParamsStore,
+                                                        private val sessionManager: SessionManager
+) : Authenticator {
 
-    override fun hasActiveSessions(): Boolean {
-        return sessionParamsStore.get() != null
+    override fun hasAuthenticatedSessions(): Boolean {
+        return sessionParamsStore.getLast() != null
     }
 
-    override fun getLastActiveSession(): Session? {
-        val sessionParams = sessionParamsStore.get()
+    override fun getLastAuthenticatedSession(): Session? {
+        val sessionParams = sessionParamsStore.getLast()
         return sessionParams?.let {
-            DefaultSession(it)
+            sessionManager.getOrCreateSession(it)
         }
+    }
+
+    override fun getSession(sessionParams: SessionParams): Session? {
+        return sessionManager.getOrCreateSession(sessionParams)
     }
 
     override fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
@@ -81,13 +92,13 @@ internal class DefaultAuthenticator(private val retrofitBuilder: Retrofit.Builde
             sessionParamsStore.save(sessionParams)
             sessionParams
         }.map {
-            DefaultSession(it)
+            sessionManager.getOrCreateSession(it)
         }
 
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
-        val retrofit = retrofitBuilder.baseUrl(homeServerConnectionConfig.homeServerUri.toString()).build()
+        val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
     }
 

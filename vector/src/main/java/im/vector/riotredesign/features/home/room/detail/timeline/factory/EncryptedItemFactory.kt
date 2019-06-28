@@ -25,15 +25,19 @@ import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.core.utils.DebouncedClickListener
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 import im.vector.riotredesign.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import me.gujun.android.span.span
+import javax.inject.Inject
 
 // This class handles timeline events who haven't been successfully decrypted
-class EncryptedItemFactory(private val messageInformationDataFactory: MessageInformationDataFactory,
-                           private val colorProvider: ColorProvider,
-                           private val stringProvider: StringProvider) {
+class EncryptedItemFactory @Inject constructor(private val messageInformationDataFactory: MessageInformationDataFactory,
+                                               private val colorProvider: ColorProvider,
+                                               private val stringProvider: StringProvider,
+                                               private val avatarRenderer: AvatarRenderer) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -58,10 +62,11 @@ class EncryptedItemFactory(private val messageInformationDataFactory: MessageInf
                 }
 
                 // TODO This is not correct format for error, change it
-                val informationData = messageInformationDataFactory.create(event, nextEvent)
 
+                val informationData = messageInformationDataFactory.create(event, nextEvent)
                 return MessageTextItem_()
                         .message(spannableStr)
+                        .avatarRenderer(avatarRenderer)
                         .informationData(informationData)
                         .highlighted(highlight)
                         .avatarCallback(callback)
@@ -72,7 +77,7 @@ class EncryptedItemFactory(private val messageInformationDataFactory: MessageInf
                                 }))
                         .longClickListener { view ->
                             return@longClickListener callback?.onEventLongClicked(informationData, null, view)
-                                    ?: false
+                                                     ?: false
                         }
             }
             else                                             -> null

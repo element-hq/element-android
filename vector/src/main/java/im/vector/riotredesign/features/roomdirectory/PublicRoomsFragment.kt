@@ -28,17 +28,16 @@ import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.widget.RxTextView
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.error.ErrorFormatter
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.themes.ThemeUtils
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 /**
@@ -49,12 +48,17 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
-    private val publicRoomsController: PublicRoomsController by inject()
-    private val errorFormatter: ErrorFormatter by inject()
+
+    @Inject lateinit var publicRoomsController: PublicRoomsController
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun getLayoutResId() = R.layout.fragment_public_rooms
 
     override fun getMenuRes() = R.menu.menu_room_directory
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -98,10 +102,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindScope(getOrCreateScope(RoomDirectoryModule.ROOM_DIRECTORY_SCOPE))
-
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
-
         setupRecyclerView()
     }
 

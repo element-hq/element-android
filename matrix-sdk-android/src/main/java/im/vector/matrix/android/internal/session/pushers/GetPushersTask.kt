@@ -18,10 +18,11 @@ package im.vector.matrix.android.internal.session.pushers
 import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import javax.inject.Inject
 
 internal interface GetPushersTask : Task<Unit, GetPushersResponse>
 
-internal class DefaultGetPusherTask(private val pushersAPI: PushersAPI) : GetPushersTask {
+internal class DefaultGetPusherTask @Inject constructor(private val pushersAPI: PushersAPI) : GetPushersTask {
 
     override suspend fun execute(params: Unit): Try<GetPushersResponse> {
         return executeRequest {

@@ -16,34 +16,17 @@
 
 package im.vector.matrix.android.internal.session.content
 
-import im.vector.matrix.android.api.auth.data.SessionParams
+import dagger.Binds
+import dagger.Module
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.internal.session.DefaultSession
-import org.koin.dsl.module.module
 
-internal class ContentModule {
+@Module
+internal abstract class ContentModule {
 
-    val definition = module(override = true) {
+    @Binds
+    abstract fun bindContentUploadStateTracker(contentUploadStateTracker: DefaultContentUploadStateTracker): ContentUploadStateTracker
 
-        scope(DefaultSession.SCOPE) {
-            DefaultContentUploadStateTracker()
-        }
-
-        scope(DefaultSession.SCOPE) {
-            get<DefaultContentUploadStateTracker>() as ContentUploadStateTracker
-        }
-
-        scope(DefaultSession.SCOPE) {
-            FileUploader(get(), get())
-        }
-
-        scope(DefaultSession.SCOPE) {
-            val sessionParams = get<SessionParams>()
-            DefaultContentUrlResolver(sessionParams.homeServerConnectionConfig) as ContentUrlResolver
-        }
-
-    }
-
-
+    @Binds
+    abstract fun bindContentUrlResolver(contentUrlResolver: DefaultContentUrlResolver): ContentUrlResolver
 }

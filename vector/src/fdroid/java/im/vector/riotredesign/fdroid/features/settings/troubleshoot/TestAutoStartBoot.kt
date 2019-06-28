@@ -15,26 +15,29 @@
  */
 package im.vector.riotredesign.fdroid.features.settings.troubleshoot
 
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.settings.PreferencesManager
 import im.vector.riotredesign.features.settings.troubleshoot.TroubleshootTest
+import javax.inject.Inject
 
 /**
  * Test that the application is started on boot
  */
-class TestAutoStartBoot(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_service_boot_title) {
+class TestAutoStartBoot @Inject constructor(private val context: AppCompatActivity,
+                                            private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_service_boot_title) {
 
     override fun perform() {
-        if (PreferencesManager.autoStartOnBoot(fragment.context)) {
-            description = fragment.getString(R.string.settings_troubleshoot_test_service_boot_success)
+        if (PreferencesManager.autoStartOnBoot(context)) {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_service_boot_success)
             status = TestStatus.SUCCESS
             quickFix = null
         } else {
-            description = fragment.getString(R.string.settings_troubleshoot_test_service_boot_failed)
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_service_boot_failed)
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_service_boot_quickfix) {
                 override fun doFix() {
-                    PreferencesManager.setAutoStartOnBoot(fragment.context, true)
+                    PreferencesManager.setAutoStartOnBoot(context, true)
                     manager?.retry()
                 }
             }

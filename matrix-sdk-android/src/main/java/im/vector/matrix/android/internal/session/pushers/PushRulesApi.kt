@@ -15,8 +15,8 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
-import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
+import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.*

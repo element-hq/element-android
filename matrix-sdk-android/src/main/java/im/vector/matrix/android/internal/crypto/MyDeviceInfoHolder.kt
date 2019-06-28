@@ -20,9 +20,12 @@ import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.session.SessionScope
 import java.util.*
+import javax.inject.Inject
 
-internal class MyDeviceInfoHolder(
+@SessionScope
+internal class MyDeviceInfoHolder @Inject constructor(
         // The credentials,
         credentials: Credentials,
         // the crypto store

@@ -28,12 +28,13 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.Timeline
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
 import timber.log.Timber
+import javax.inject.Inject
 
-class TimelineItemFactory(private val messageItemFactory: MessageItemFactory,
-                          private val encryptionItemFactory: EncryptionItemFactory,
-                          private val encryptedItemFactory: EncryptedItemFactory,
-                          private val noticeItemFactory: NoticeItemFactory,
-                          private val defaultItemFactory: DefaultItemFactory) {
+class TimelineItemFactory @Inject constructor(private val messageItemFactory: MessageItemFactory,
+                                              private val encryptionItemFactory: EncryptionItemFactory,
+                                              private val encryptedItemFactory: EncryptedItemFactory,
+                                              private val noticeItemFactory: NoticeItemFactory,
+                                              private val defaultItemFactory: DefaultItemFactory) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,

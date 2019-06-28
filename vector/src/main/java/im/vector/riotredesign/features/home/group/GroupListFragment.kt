@@ -16,18 +16,20 @@
 
 package im.vector.riotredesign.features.home.group
 
+import android.content.Context
 import android.os.Bundle
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.platform.StateView
 import im.vector.riotredesign.core.platform.VectorBaseFragment
 import im.vector.riotredesign.features.home.HomeNavigator
 import kotlinx.android.synthetic.main.fragment_group_list.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback {
 
@@ -38,10 +40,16 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
     }
 
     private val viewModel: GroupListViewModel by fragmentViewModel()
-    private val homeNavigator by inject<HomeNavigator>()
-    private val groupController by inject<GroupSummaryController>()
+
+    @Inject lateinit var groupListViewModelFactory: GroupListViewModel.Factory
+    @Inject lateinit var homeNavigator: HomeNavigator
+    @Inject lateinit var groupController: GroupSummaryController
 
     override fun getLayoutResId() = R.layout.fragment_group_list
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

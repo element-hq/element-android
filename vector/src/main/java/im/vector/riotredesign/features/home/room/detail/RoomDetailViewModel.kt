@@ -19,10 +19,13 @@ package im.vector.riotredesign.features.home.room.detail
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
@@ -41,15 +44,14 @@ import im.vector.riotredesign.features.home.room.detail.timeline.helper.Timeline
 import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
-import org.koin.android.ext.android.get
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class RoomDetailViewModel(initialState: RoomDetailViewState,
-                          private val session: Session
+class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
+                                                      private val session: Session
 ) : VectorViewModel<RoomDetailViewState>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -63,14 +65,24 @@ class RoomDetailViewModel(initialState: RoomDetailViewState,
     }
     private var timeline = room.createTimeline(eventId, allowedTypes)
 
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: RoomDetailViewState): RoomDetailViewModel
+    }
+
     companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 
         const val PAGINATION_COUNT = 50
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
-            val currentSession = viewModelContext.activity.get<Session>()
-            return RoomDetailViewModel(state, currentSession)
+            val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.roomDetailViewModelFactory.create(state)
+        }
+
+        override fun initialState(viewModelContext: ViewModelContext): RoomDetailViewState? {
+
+            return super.initialState(viewModelContext)
         }
     }
 

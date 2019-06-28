@@ -30,6 +30,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.
@@ -37,8 +38,8 @@ import timber.log.Timber
  * The NotifiableEventResolver is the only aware of session/store, the NotificationDrawerManager has no knowledge of that,
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
-class NotifiableEventResolver(private val stringProvider: StringProvider,
-                              private val noticeEventFormatter: NoticeEventFormatter) {
+class NotifiableEventResolver @Inject constructor(private val stringProvider: StringProvider,
+                                                  private val noticeEventFormatter: NoticeEventFormatter) {
 
     //private val eventDisplay = RiotEventDisplay(context)
 
@@ -95,8 +96,8 @@ class NotifiableEventResolver(private val stringProvider: StringProvider,
             // Ok room is not known in store, but we can still display something
             val body =
                     event.annotations?.editSummary?.aggregatedContent?.toModel<MessageContent>()?.body
-                            ?: event.root.getClearContent().toModel<MessageContent>()?.body
-                            ?: stringProvider.getString(R.string.notification_unknown_new_event)
+                    ?: event.root.getClearContent().toModel<MessageContent>()?.body
+                    ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.senderName ?: event.root.senderId
 
@@ -114,8 +115,8 @@ class NotifiableEventResolver(private val stringProvider: StringProvider,
             return notifiableEvent
         } else {
             val body = event.annotations?.editSummary?.aggregatedContent?.toModel<MessageContent>()?.body
-                    ?: event.root.getClearContent().toModel<MessageContent>()?.body
-                    ?: stringProvider.getString(R.string.notification_unknown_new_event)
+                       ?: event.root.getClearContent().toModel<MessageContent>()?.body
+                       ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = room.roomSummary?.displayName ?: ""
             val senderDisplayName = event.senderName ?: event.root.senderId
 
@@ -137,15 +138,15 @@ class NotifiableEventResolver(private val stringProvider: StringProvider,
             // TODO They will be not displayed the first time (known limitation)
             notifiableEvent.roomAvatarPath = session.contentUrlResolver()
                     .resolveThumbnail(room.roomSummary?.avatarUrl,
-                            250,
-                            250,
-                            ContentUrlResolver.ThumbnailMethod.SCALE)
+                                      250,
+                                      250,
+                                      ContentUrlResolver.ThumbnailMethod.SCALE)
 
             notifiableEvent.senderAvatarPath = session.contentUrlResolver()
                     .resolveThumbnail(event.senderAvatar,
-                            250,
-                            250,
-                            ContentUrlResolver.ThumbnailMethod.SCALE)
+                                      250,
+                                      250,
+                                      ContentUrlResolver.ThumbnailMethod.SCALE)
 
             return notifiableEvent
         }
@@ -158,7 +159,7 @@ class NotifiableEventResolver(private val stringProvider: StringProvider,
         val dName = event.senderId?.let { session.getUser(it)?.displayName }
         if (Membership.INVITE == content.membership) {
             val body = noticeEventFormatter.format(event, dName)
-                    ?: stringProvider.getString(R.string.notification_new_invitation)
+                       ?: stringProvider.getString(R.string.notification_new_invitation)
             return InviteNotifiableEvent(
                     session.sessionParams.credentials.userId,
                     eventId = event.eventId!!,

@@ -25,31 +25,35 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.*
-import im.vector.matrix.android.internal.di.MatrixKoinComponent
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
-import im.vector.matrix.android.internal.util.WorkerParamsFactory
-import org.koin.standalone.inject
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.io.File
+import javax.inject.Inject
 
 
-internal class UploadContentWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params), MatrixKoinComponent {
-
-    private val fileUploader by inject<FileUploader>()
-    private val contentUploadProgressTracker by inject<DefaultContentUploadStateTracker>()
+internal class UploadContentWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            override val userId: String,
             val roomId: String,
             val event: Event,
             val attachment: ContentAttachmentData
-    )
+    ) : SessionWorkerParams
+
+    @Inject lateinit var fileUploader: FileUploader
+    @Inject lateinit var contentUploadStateTracker: DefaultContentUploadStateTracker
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                     ?: return Result.success()
+                ?: return Result.success()
+
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        sessionComponent.inject(this)
 
         val eventId = params.event.eventId ?: return Result.success()
         val attachment = params.attachment
@@ -69,7 +73,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters)
 
         val progressListener = object : ProgressRequestBody.Listener {
             override fun onProgress(current: Long, total: Long) {
-                contentUploadProgressTracker.setProgress(eventId, current, total)
+                contentUploadStateTracker.setProgress(eventId, current, total)
             }
         }
         return fileUploader
@@ -90,16 +94,16 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters)
     }
 
     private fun handleFailure(params: Params): Result {
-        contentUploadProgressTracker.setFailure(params.event.eventId!!)
+        contentUploadStateTracker.setFailure(params.event.eventId!!)
         return Result.success()
     }
 
     private fun handleSuccess(params: Params,
                               attachmentUrl: String,
                               thumbnailUrl: String?): Result {
-        contentUploadProgressTracker.setFailure(params.event.eventId!!)
+        contentUploadStateTracker.setSuccess(params.event.eventId!!)
         val event = updateEvent(params.event, attachmentUrl, thumbnailUrl)
-        val sendParams = SendEventWorker.Params(params.roomId, event)
+        val sendParams = SendEventWorker.Params(params.userId, params.roomId, event)
         return Result.success(WorkerParamsFactory.toData(sendParams))
     }
 
@@ -130,7 +134,6 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters)
     private fun MessageAudioContent.update(url: String): MessageAudioContent {
         return copy(url = url)
     }
-
 
 }
 

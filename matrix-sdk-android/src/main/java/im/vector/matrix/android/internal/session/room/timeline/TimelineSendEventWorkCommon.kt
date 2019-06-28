@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.session.room.timeline
 
+import android.content.Context
 import androidx.work.*
 import java.util.concurrent.TimeUnit
 
@@ -35,13 +36,13 @@ private val WORK_CONSTRAINTS = Constraints.Builder()
  */
 internal object TimelineSendEventWorkCommon {
 
-    fun postSequentialWorks(roomId: String, vararg workRequests: OneTimeWorkRequest) {
+    fun postSequentialWorks(context: Context, roomId: String, vararg workRequests: OneTimeWorkRequest) {
         when {
             workRequests.isEmpty() -> return
-            workRequests.size == 1 -> postWork(roomId, workRequests.first())
+            workRequests.size == 1 -> postWork(context, roomId, workRequests.first())
             else                   -> {
                 val firstWork = workRequests.first()
-                var continuation = WorkManager.getInstance()
+                var continuation = WorkManager.getInstance(context)
                         .beginUniqueWork(buildWorkIdentifier(roomId), ExistingWorkPolicy.APPEND, firstWork)
                 for (i in 1 until workRequests.size) {
                     val workRequest = workRequests[i]
@@ -52,8 +53,8 @@ internal object TimelineSendEventWorkCommon {
         }
     }
 
-    fun postWork(roomId: String, workRequest: OneTimeWorkRequest) {
-        WorkManager.getInstance()
+    fun postWork(context: Context, roomId: String, workRequest: OneTimeWorkRequest) {
+        WorkManager.getInstance(context)
                 .beginUniqueWork(buildWorkIdentifier(roomId), ExistingWorkPolicy.APPEND, workRequest)
                 .enqueue()
     }

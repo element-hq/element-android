@@ -19,8 +19,10 @@ package im.vector.riotredesign.features.home.room.detail.timeline.helper
 import im.vector.riotredesign.core.resources.LocaleProvider
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import javax.inject.Inject
 
-class TimelineDateFormatter(private val localeProvider: LocaleProvider) {
+
+class TimelineDateFormatter @Inject constructor (private val localeProvider: LocaleProvider) {
 
     private val messageHourFormatter by lazy {
         DateTimeFormatter.ofPattern("H:mm", localeProvider.current())

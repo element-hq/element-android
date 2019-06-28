@@ -40,6 +40,8 @@ import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -50,20 +52,19 @@ import kotlin.collections.HashMap
  * If several requests come from same user/device, a single alert is displayed (this alert will accept/reject all request
  * depending on user action)
  */
-class KeyRequestHandler(val context: Context,
-                        val session: Session)
+
+@Singleton
+class KeyRequestHandler @Inject constructor(val context: Context,
+                                            val session: Session)
     : RoomKeysRequestListener,
-        SasVerificationService.SasVerificationListener {
+      SasVerificationService.SasVerificationListener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
 
     init {
         session.getSasVerificationService().addListener(this)
-
         session.addRoomKeysRequestListener(this)
     }
-
-    fun ensureStarted() = Unit
 
     /**
      * Handle incoming key request.
@@ -194,8 +195,8 @@ class KeyRequestHandler(val context: Context,
                 Runnable {
                     alert.weakCurrentActivity?.get()?.let {
                         val intent = SASVerificationActivity.outgoingIntent(it,
-                                session.sessionParams.credentials.userId,
-                                userId, deviceId)
+                                                                            session.sessionParams.credentials.userId,
+                                                                            userId, deviceId)
                         it.startActivity(intent)
                     }
                 },
@@ -246,8 +247,8 @@ class KeyRequestHandler(val context: Context,
         val alertMgrUniqueKey = alertManagerId(deviceId!!, userId!!)
         alertsToRequests[alertMgrUniqueKey]?.removeAll {
             it.deviceId == request.deviceId
-                    && it.userId == request.userId
-                    && it.requestId == request.requestId
+            && it.userId == request.userId
+            && it.requestId == request.requestId
         }
         if (alertsToRequests[alertMgrUniqueKey]?.isEmpty() == true) {
             PopupAlertManager.cancelAlert(alertMgrUniqueKey)

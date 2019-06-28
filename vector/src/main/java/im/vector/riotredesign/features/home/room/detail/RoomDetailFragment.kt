@@ -61,6 +61,7 @@ import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.dialogs.DialogListItem
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotredesign.core.extensions.hideKeyboard
@@ -68,7 +69,14 @@ import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.setTextOrHide
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.VectorBaseFragment
-import im.vector.riotredesign.core.utils.*
+import im.vector.riotredesign.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
+import im.vector.riotredesign.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
+import im.vector.riotredesign.core.utils.checkPermissions
+import im.vector.riotredesign.core.utils.copyToClipboard
+import im.vector.riotredesign.core.utils.openCamera
+import im.vector.riotredesign.core.utils.shareMedia
 import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
@@ -98,14 +106,11 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 import org.commonmark.parser.Parser
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
-import org.koin.core.parameter.parametersOf
 import ru.noties.markwon.Markwon
 import ru.noties.markwon.html.HtmlPlugin
 import timber.log.Timber
 import java.io.File
+import javax.inject.Inject
 
 
 @Parcelize
@@ -155,23 +160,26 @@ class RoomDetailFragment :
     }
 
     private val roomDetailArgs: RoomDetailArgs by args()
-    private val session by inject<Session>()
     private val glideRequests by lazy {
         GlideApp.with(this)
     }
 
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
     private val textComposerViewModel: TextComposerViewModel by fragmentViewModel()
-    private val timelineEventController: TimelineEventController by inject { parametersOf(this) }
-    private val commandAutocompletePolicy = CommandAutocompletePolicy()
-    private val autocompleteCommandPresenter: AutocompleteCommandPresenter by inject { parametersOf(this) }
-    private val autocompleteUserPresenter: AutocompleteUserPresenter by inject { parametersOf(this) }
-    private val permalinkHandler: PermalinkHandler by inject()
 
-    private val notificationDrawerManager by inject<NotificationDrawerManager>()
-
+    @Inject lateinit var session: Session
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var timelineEventController: TimelineEventController
+    @Inject lateinit var commandAutocompletePolicy: CommandAutocompletePolicy
+    @Inject lateinit var autocompleteCommandPresenter: AutocompleteCommandPresenter
+    @Inject lateinit var autocompleteUserPresenter: AutocompleteUserPresenter
+    @Inject lateinit var permalinkHandler: PermalinkHandler
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var roomDetailViewModelFactory: RoomDetailViewModel.Factory
+    @Inject lateinit var textComposerViewModelFactory: TextComposerViewModel.Factory
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
+
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
 
@@ -180,10 +188,13 @@ class RoomDetailFragment :
     @BindView(R.id.composerLayout)
     lateinit var composerLayout: TextComposerView
 
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
-        bindScope(getOrCreateScope(HomeModule.ROOM_DETAIL_SCOPE))
         setupToolbar(roomToolbar)
         setupRecyclerView()
         setupComposer()
@@ -215,7 +226,7 @@ class RoomDetailFragment :
                     commandAutocompletePolicy.enabled = true
                     val uid = session.sessionParams.credentials.userId
                     val meMember = session.getRoom(roomId)?.getRoomMember(uid)
-                    AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
+                    avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
                     composerLayout.collapse()
                 }
                 SendMode.EDIT,
@@ -262,7 +273,7 @@ class RoomDetailFragment :
                         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_reply))
                     }
 
-                    AvatarRenderer.render(event.senderAvatar, event.root.senderId
+                    avatarRenderer.render(event.senderAvatar, event.root.senderId
                             ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
                     composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
@@ -384,7 +395,7 @@ class RoomDetailFragment :
 
                         // Add the span
                         val user = session.getUser(item.userId)
-                        val span = PillImageSpan(glideRequests, context!!, item.userId, user)
+                        val span = PillImageSpan(glideRequests, avatarRenderer, requireContext(), item.userId, user)
                         span.bind(composerLayout.composerEditText)
 
                         editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -493,7 +504,7 @@ class RoomDetailFragment :
 
             val uid = session.sessionParams.credentials.userId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
-            AvatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
+            avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
 
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
@@ -507,7 +518,7 @@ class RoomDetailFragment :
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let {
             roomToolbarTitleView.text = it.displayName
-            AvatarRenderer.render(it, roomToolbarAvatarImageView)
+            avatarRenderer.render(it, roomToolbarAvatarImageView)
             roomToolbarSubtitleView.setTextOrHide(it.topic)
         }
     }

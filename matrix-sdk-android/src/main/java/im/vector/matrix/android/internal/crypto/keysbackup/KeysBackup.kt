@@ -51,6 +51,7 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
@@ -66,13 +67,16 @@ import org.matrix.olm.OlmPkMessage
 import timber.log.Timber
 import java.security.InvalidParameterException
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.HashMap
 
 /**
  * A KeysBackup class instance manage incremental backup of e2e keys (megolm keys)
  * to the user's homeserver.
  */
-internal class KeysBackup(
+
+@SessionScope
+internal class KeysBackup @Inject constructor(
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
         private val olmDevice: MXOlmDevice,
@@ -448,7 +452,8 @@ internal class KeysBackup(
                     val myUserId = credentials.userId
 
                     // Get current signatures, or create an empty set
-                    val myUserSignatures = (authData.signatures!![myUserId]?.toMutableMap() ?: HashMap())
+                    val myUserSignatures = (authData.signatures!![myUserId]?.toMutableMap()
+                            ?: HashMap())
 
                     if (trust) {
                         // Add current device signature
@@ -1309,7 +1314,8 @@ internal class KeysBackup(
                 "algorithm" to sessionData!!.algorithm,
                 "sender_key" to sessionData.senderKey,
                 "sender_claimed_keys" to sessionData.senderClaimedKeys,
-                "forwarding_curve25519_key_chain" to (sessionData.forwardingCurve25519KeyChain ?: ArrayList<Any>()),
+                "forwarding_curve25519_key_chain" to (sessionData.forwardingCurve25519KeyChain
+                        ?: ArrayList<Any>()),
                 "session_key" to sessionData.sessionKey)
 
         var encryptedSessionBackupData: OlmPkMessage? = null

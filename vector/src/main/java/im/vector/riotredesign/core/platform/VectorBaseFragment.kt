@@ -16,26 +16,33 @@
 
 package im.vector.riotredesign.core.platform
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
+import im.vector.riotredesign.core.di.DaggerScreenComponent
+import im.vector.riotredesign.core.di.HasScreenInjector
+import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.features.navigation.Navigator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
+abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed, HasScreenInjector {
 
     // Butterknife unbinder
     private var mUnBinder: Unbinder? = null
@@ -48,16 +55,27 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
      * Navigator
      * ========================================================================================== */
 
-    protected val navigator: Navigator  by inject { parametersOf(this) }
+    protected lateinit var viewModelFactory: ViewModelProvider.Factory
+    protected lateinit var navigator: Navigator
+    private lateinit var screenComponent: ScreenComponent
 
     /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
 
+    override fun onAttach(context: Context) {
+        screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
+        super.onAttach(context)
+        navigator = vectorBaseActivity.getVectorComponent().navigator()
+        viewModelFactory = screenComponent.viewModelFactory()
+        injectWith(injector())
+    }
+
+    protected open fun injectWith(injector: ScreenComponent) = Unit
+
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         if (getMenuRes() != -1) {
             setHasOptionsMenu(true)
         }
@@ -73,7 +91,6 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
     @CallSuper
     override fun onResume() {
         super.onResume()
-
         Timber.v("onResume Fragment ${this.javaClass.simpleName}")
     }
 
@@ -92,8 +109,11 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed {
 
     override fun onDestroy() {
         super.onDestroy()
-
         uiDisposables.dispose()
+    }
+
+    override fun injector(): ScreenComponent {
+        return screenComponent
     }
 
     /* ==========================================================================================

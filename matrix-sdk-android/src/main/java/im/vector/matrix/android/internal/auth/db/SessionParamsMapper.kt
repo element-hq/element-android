@@ -17,11 +17,13 @@
 package im.vector.matrix.android.internal.auth.db
 
 import com.squareup.moshi.Moshi
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.internal.di.MatrixScope
+import javax.inject.Inject
 
-internal class SessionParamsMapper(moshi: Moshi) {
+internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
 
     private val credentialsAdapter = moshi.adapter(Credentials::class.java)
     private val homeServerConnectionConfigAdapter = moshi.adapter(HomeServerConnectionConfig::class.java)
@@ -47,7 +49,7 @@ internal class SessionParamsMapper(moshi: Moshi) {
         if (credentialsJson == null || homeServerConnectionConfigJson == null) {
             return null
         }
-        return SessionParamsEntity(credentialsJson, homeServerConnectionConfigJson)
+        return SessionParamsEntity(sessionParams.credentials.userId, credentialsJson, homeServerConnectionConfigJson)
     }
 
 

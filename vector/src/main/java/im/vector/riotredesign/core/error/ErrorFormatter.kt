@@ -19,8 +19,9 @@ package im.vector.riotredesign.core.error
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.resources.StringProvider
+import javax.inject.Inject
 
-class ErrorFormatter(val stringProvider: StringProvider) {
+class ErrorFormatter @Inject constructor(val stringProvider: StringProvider) {
 
 
     fun toHumanReadable(failure: Failure): String {
