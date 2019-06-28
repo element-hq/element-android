@@ -56,6 +56,14 @@ internal class JsonCanonicalizerTest : InstrumentedTest {
                 JsonCanonicalizer.canonicalize("""{"algorithms":["m.megolm.v1.aes-sha2","m.olm.v1.curve25519-aes-sha2"],"device_id":"VSCUNFSOUI","user_id":"@benoitx:matrix.org","keys":{"curve25519:VSCUNFSOUI":"utyOjnhiQ73qNhi9HlN0OgWIowe5gthTS8r0r9TcJ3o","ed25519:VSCUNFSOUI":"qNhEt+Yggaajet0hX/FjTRLfySgs65ldYyomm7PIx6U"}}"""))
     }
 
+    @Test
+    fun doubleQuoteTest() {
+        assertEquals("{\"a\":\"\\\"\"}",
+                JsonCanonicalizer.canonicalize("{\"a\":\"\\\"\"}"))
+    }
+
+
+
     /* ==========================================================================================
      * Test from https://matrix.org/docs/spec/appendices.html#examples
      * ========================================================================================== */

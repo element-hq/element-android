@@ -19,11 +19,10 @@ package im.vector.matrix.android.session.room.timeline
 import arrow.core.Try
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
-import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEvent
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
 import kotlin.random.Random
 
-internal class FakeGetContextOfEventTask @Inject constructor(private val tokenChunkEventPersistor: TokenChunkEventPersistor) : GetContextOfEventTask {
+internal class FakeGetContextOfEventTask constructor(private val tokenChunkEventPersistor: TokenChunkEventPersistor) : GetContextOfEventTask {
 
     override suspend fun execute(params: GetContextOfEventTask.Params): Try<TokenChunkEventPersistor.Result> {
         val fakeEvents = RoomDataHelper.createFakeListOfEvents(30)

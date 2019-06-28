@@ -19,6 +19,7 @@ package im.vector.matrix.android.session.room.timeline
 import arrow.core.Try
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
+import javax.inject.Inject
 import kotlin.random.Random
 
 internal class FakePaginationTask @Inject constructor(private val tokenChunkEventPersistor: TokenChunkEventPersistor) : PaginationTask {
