@@ -8,6 +8,7 @@ import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
 import im.vector.matrix.rx.RxRoom
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.platform.VectorViewModel
+import im.vector.riotredesign.core.utils.isSingleEmoji
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -69,7 +70,9 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
                 .flatMapSingle { summaries ->
                     Observable
                             .fromIterable(summaries)
-                            .flatMapIterable {it.reactionsSummary}
+                            .flatMapIterable { it.reactionsSummary
+                                    .filter { reactionAggregatedSummary ->  isSingleEmoji(reactionAggregatedSummary.key) }
+                                }
                             .toReactionInfoList()
                 }
                 .execute {

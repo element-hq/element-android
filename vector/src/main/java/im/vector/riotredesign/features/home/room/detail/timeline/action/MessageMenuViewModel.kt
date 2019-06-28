@@ -36,6 +36,9 @@ import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import org.json.JSONObject
 
+import im.vector.riotredesign.core.utils.isSingleEmoji
+
+
 data class SimpleAction(val uid: String, val titleRes: Int, val iconResId: Int?, val data: Any? = null)
 
 data class MessageMenuState(
@@ -92,7 +95,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         val event = session.getRoom(state.roomId)?.getTimeLineEvent(state.eventId) ?: return state
 
         val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
-                                              ?: event.root.content.toModel()
+                ?: event.root.content.toModel()
         val type = messageContent?.type
 
         val actions = if (!event.sendState.isSent()) {
@@ -143,8 +146,8 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                     if (messageContent is MessageImageContent) {
                         this.add(
                                 SimpleAction(ACTION_SHARE,
-                                             R.string.share, R.drawable.ic_share,
-                                             session.contentUrlResolver().resolveFullSize(messageContent.url))
+                                        R.string.share, R.drawable.ic_share,
+                                        session.contentUrlResolver().resolveFullSize(messageContent.url))
                         )
                     }
                     //TODO
@@ -212,31 +215,31 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         }
     }
 
-        private fun canRedact(event: TimelineEvent, myUserId: String): Boolean {
-            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.getClearType() != EventType.MESSAGE) return false
-            //TODO if user is admin or moderator
-            return event.root.senderId == myUserId
-        }
+    private fun canRedact(event: TimelineEvent, myUserId: String): Boolean {
+        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+        if (event.root.getClearType() != EventType.MESSAGE) return false
+        //TODO if user is admin or moderator
+        return event.root.senderId == myUserId
+    }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
         //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
         //TODO if user is admin or moderator
-        return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
+        return event.annotations?.reactionsSummary?.any { isSingleEmoji(it.key) } ?: false
     }
 
 
-        private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
-            //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-            if (event.root.getClearType() != EventType.MESSAGE) return false
-            //TODO if user is admin or moderator
-            val messageContent = event.root.content.toModel<MessageContent>()
-            return event.root.senderId == myUserId && (
-                    messageContent?.type == MessageType.MSGTYPE_TEXT
-                            || messageContent?.type == MessageType.MSGTYPE_EMOTE
-                    )
-        }
+    private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
+        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+        if (event.root.getClearType() != EventType.MESSAGE) return false
+        //TODO if user is admin or moderator
+        val messageContent = event.root.content.toModel<MessageContent>()
+        return event.root.senderId == myUserId && (
+                messageContent?.type == MessageType.MSGTYPE_TEXT
+                        || messageContent?.type == MessageType.MSGTYPE_EMOTE
+                )
+    }
 
 
     private fun canCopy(type: String?): Boolean {

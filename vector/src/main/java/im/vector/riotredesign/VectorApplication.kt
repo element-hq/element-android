@@ -54,6 +54,7 @@ import im.vector.riotredesign.push.fcm.FcmHelper
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import im.vector.riotredesign.core.utils.initKnownEmojiHashSet
 import javax.inject.Inject
 
 class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
@@ -124,6 +125,8 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
                 FcmHelper.onEnterBackground(appContext, activeSessionHolder)
             }
         })
+        //This should be done as early as possible
+        initKnownEmojiHashSet(appContext)
     }
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
