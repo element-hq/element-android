@@ -75,7 +75,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="38dp"
         android:alpha="0"
-        android:tint="?android:attr/textColorTertiary"
+        android:tint="?riotx_text_primary"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
         tools:ignore="MissingConstraints"

@@ -80,7 +80,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginBottom="38dp"
         android:alpha="1"
-        android:tint="?android:attr/textColorTertiary"
+        android:tint="?riotx_text_primary"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/composer_related_message_avatar_view"
         app:layout_constraintStart_toStartOf="@id/composer_related_message_avatar_view"

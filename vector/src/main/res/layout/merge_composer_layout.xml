@@ -63,7 +63,7 @@
         android:id="@+id/composer_related_message_action_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:tint="?android:attr/textColorTertiary"
+        android:tint="?riotx_text_primary"
         tools:ignore="MissingConstraints" />
 
     <ImageButton
