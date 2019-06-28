@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2011 Google Inc.
  * Copyright 2018 New Vector Ltd
  *

@@ -1,5 +1,3 @@
-package im.vector.matrix.android.api.pushrules
-
 /*
  * Copyright 2019 New Vector Ltd
  *
@@ -15,6 +13,8 @@ package im.vector.matrix.android.api.pushrules
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.api.pushrules
+
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.PowerLevels
 
