@@ -152,6 +152,8 @@ data class Event(
                     mClaimedEd25519Key = decryptionResult.claimedEd25519Key
                     mForwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain
 
+                    // For encrypted events with relation, the m.relates_to is kept in clear, so we need to put it back
+                    // in the clear event
                     try {
                         content?.get("m.relates_to")?.let { clearRelates ->
                             mClearEvent = mClearEvent?.copy(

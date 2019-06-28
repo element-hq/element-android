@@ -15,8 +15,10 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
@@ -77,6 +79,11 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         const val ACTION_FLAG = "ACTION_FLAG"
         const val ACTION_QUICK_REACT = "ACTION_QUICK_REACT"
         const val ACTION_VIEW_REACTIONS = "ACTION_VIEW_REACTIONS"
+
+        override fun create(viewModelContext: ViewModelContext, state: MessageMenuState): MessageMenuViewModel? {
+            val fragment: MessageMenuFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.messageMenuViewModelFactory.create(state)
+        }
     }
 
     init {

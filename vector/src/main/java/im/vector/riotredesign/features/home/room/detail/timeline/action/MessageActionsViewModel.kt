@@ -27,6 +27,8 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotredesign.core.di.HasScreenInjector
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
@@ -35,21 +37,45 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
+
 data class MessageActionState(
         val roomId: String,
         val eventId: String,
         val informationData: MessageInformationData,
-        val userId: String = "",
-        val senderName: String = "",
-        val messageBody: CharSequence? = null,
-        val ts: String? = null,
-        val showPreview: Boolean = false,
-        val canReact: Boolean = false,
-        val senderAvatarPath: String? = null)
-    : MvRxState {
+        val timelineEvent: TimelineEvent?
+) : MvRxState {
 
-    constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
+    fun senderName(): String = informationData.memberName?.toString() ?: ""
 
+    fun time(): String? = dateFormat.format(Date(timelineEvent?.root?.originServerTs ?: 0))
+
+    fun canReact(): Boolean = timelineEvent?.root?.type == EventType.MESSAGE && timelineEvent.sendState.isSent()
+
+    fun messageBody(eventHtmlRenderer: EventHtmlRenderer?, noticeEventFormatter: NoticeEventFormatter?): CharSequence? {
+        return when (timelineEvent?.root?.getClearType()) {
+            EventType.MESSAGE     -> {
+                val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent?.toModel()
+                        ?: timelineEvent.root.getClearContent().toModel()
+                if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
+                    eventHtmlRenderer?.render(messageContent.formattedBody
+                            ?: messageContent.body)
+                } else {
+                    messageContent?.body
+                }
+            }
+            EventType.STATE_ROOM_NAME,
+            EventType.STATE_ROOM_TOPIC,
+            EventType.STATE_ROOM_MEMBER,
+            EventType.STATE_HISTORY_VISIBILITY,
+            EventType.CALL_INVITE,
+            EventType.CALL_HANGUP,
+            EventType.CALL_ANSWER -> {
+                noticeEventFormatter?.format(timelineEvent)
+            }
+            else                  -> null
+        }
+    }
 }
 
 /**
@@ -62,10 +88,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val noticeEventFormatter: NoticeEventFormatter
 ) : VectorViewModel<MessageActionState>(initialState) {
 
-    private val roomId = initialState.roomId
-    private val eventId = initialState.eventId
-    private val informationData = initialState.informationData
-
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: MessageActionState): MessageActionsViewModel
@@ -77,47 +99,23 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.messageActionViewModelFactory.create(state)
         }
-    }
 
-
-    init {
-        setState { reduceState(this) }
-    }
-
-    private fun reduceState(state: MessageActionState): MessageActionState {
-        val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
-        val event = session.getRoom(roomId)?.getTimeLineEvent(eventId) ?: return state
-        var body: CharSequence? = null
-        val originTs = event.root.originServerTs
-        when (event.root.getClearType()) {
-            EventType.MESSAGE     -> {
-                val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
-                                                      ?: event.root.getClearContent().toModel()
-                body = messageContent?.body
-                if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
-                    body = eventHtmlRenderer.render(messageContent.formattedBody
-                                                    ?: messageContent.body)
-                }
-            }
-            EventType.STATE_ROOM_NAME,
-            EventType.STATE_ROOM_TOPIC,
-            EventType.STATE_ROOM_MEMBER,
-            EventType.STATE_HISTORY_VISIBILITY,
-            EventType.CALL_INVITE,
-            EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER -> {
-                body = noticeEventFormatter.format(event)
-            }
+        override fun initialState(viewModelContext: ViewModelContext): MessageActionState? {
+            val session = (viewModelContext.activity as HasScreenInjector).injector().session()
+            val args: TimelineEventFragmentArgs = viewModelContext.args()
+            val event = session.getRoom(args.roomId)?.getTimeLineEvent(args.eventId)
+            return MessageActionState(
+                    args.roomId,
+                    args.eventId,
+                    args.informationData,
+                    event
+            )
         }
-        return state.copy(
-                userId = event.root.senderId ?: "",
-                senderName = informationData.memberName?.toString() ?: "",
-                messageBody = body,
-                ts = dateFormat.format(Date(originTs ?: 0)),
-                showPreview = body != null,
-                canReact = event.root.type == EventType.MESSAGE && event.sendState.isSent(),
-                senderAvatarPath = informationData.avatarUrl
-        )
+
+    }
+
+    fun resolveBody(state: MessageActionState): CharSequence? {
+        return state.messageBody(eventHtmlRenderer, noticeEventFormatter)
     }
 
 }
