@@ -100,7 +100,7 @@ object JsonCanonicalizer {
 
                 return result.toString()
             }
-            is String     -> return "\"" + src.toString() + "\""
+            is String     -> return JSONObject.quote(src)
             else          -> return src.toString()
         }
     }

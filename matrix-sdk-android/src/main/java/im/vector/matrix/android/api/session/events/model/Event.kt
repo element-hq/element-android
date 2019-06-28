@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
 import timber.log.Timber
 import java.util.*
+import kotlin.collections.HashMap
 
 typealias Content = JsonDict
 
@@ -146,21 +147,27 @@ data class Event(
                 val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
                 mClearEvent = adapter.fromJsonValue(decryptionResult.clearEvent)
 
-            }
-            mClearEvent?.apply {
-                mSenderCurve25519Key = decryptionResult.senderCurve25519Key
-                mClaimedEd25519Key = decryptionResult.claimedEd25519Key
-                mForwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain
-                try {
-                    // Add "m.relates_to" data from e2e event to the unencrypted event
-                    // TODO
-                    //if (getWireContent().getAsJsonObject().has("m.relates_to")) {
-                    //    clearEvent!!.getContentAsJsonObject()
-                    //            .add("m.relates_to", getWireContent().getAsJsonObject().get("m.relates_to"))
-                    //}
-                } catch (e: Exception) {
-                    Timber.e(e, "Unable to restore 'm.relates_to' the clear event")
+                if (mClearEvent != null) {
+                    mSenderCurve25519Key = decryptionResult.senderCurve25519Key
+                    mClaimedEd25519Key = decryptionResult.claimedEd25519Key
+                    mForwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain
+
+                    // For encrypted events with relation, the m.relates_to is kept in clear, so we need to put it back
+                    // in the clear event
+                    try {
+                        content?.get("m.relates_to")?.let { clearRelates ->
+                            mClearEvent = mClearEvent?.copy(
+                                    content = HashMap(mClearEvent!!.content).apply {
+                                        this["m.relates_to"] = clearRelates
+                                    }
+                            )
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Unable to restore 'm.relates_to' the clear event")
+                    }
                 }
+
+
             }
         }
         mCryptoError = null

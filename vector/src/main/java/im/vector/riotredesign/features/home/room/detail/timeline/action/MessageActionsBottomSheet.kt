@@ -45,8 +45,10 @@ import javax.inject.Inject
  */
 class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
-    @Inject lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
-    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject
+    lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
+    @Inject
+    lateinit var avatarRenderer: AvatarRenderer
     private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
 
     private lateinit var actionHandlerModel: ActionsHandler
@@ -124,17 +126,18 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     override fun invalidate() = withState(viewModel) {
-        if (it.showPreview) {
+        val body = viewModel.resolveBody(it)
+        if (body != null) {
             bottom_sheet_message_preview.isVisible = true
-            senderNameTextView.text = it.senderName
-            messageBodyTextView.text = it.messageBody
-            messageTimestampText.text = it.ts
-            avatarRenderer.render(it.senderAvatarPath, it.userId, it.senderName, senderAvatarImageView)
+            senderNameTextView.text = it.senderName()
+            messageBodyTextView.text = body
+            messageTimestampText.text = it.time()
+            avatarRenderer.render(it.informationData.avatarUrl, it.informationData.senderId, it.senderName(), senderAvatarImageView)
         } else {
             bottom_sheet_message_preview.isVisible = false
         }
-        quickReactBottomDivider.isVisible = it.canReact
-        bottom_sheet_quick_reaction_container.isVisible = it.canReact
+        quickReactBottomDivider.isVisible = it.canReact()
+        bottom_sheet_quick_reaction_container.isVisible = it.canReact()
         return@withState
     }
 

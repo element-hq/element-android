@@ -21,6 +21,7 @@ import androidx.work.OneTimeWorkRequest
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageType
@@ -33,6 +34,7 @@ import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryE
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
@@ -49,11 +51,11 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                                                           private val credentials: Credentials,
                                                           private val roomId: String,
                                                           private val eventFactory: LocalEchoEventFactory,
+                                                          private val cryptoService: CryptoService,
                                                           private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
                                                           private val monarchy: Monarchy,
                                                           private val taskExecutor: TaskExecutor)
     : RelationService {
-
 
     override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
         val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
@@ -65,13 +67,8 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         return CancelableWork(context, sendRelationWork.id)
     }
 
-
     private fun createSendRelationWork(event: Event): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
-        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-
-        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
-
+        return createSendEventWork(event)
     }
 
     override fun undoReaction(reaction: String, targetEventId: String, myUserId: String)/*: Cancelable*/ {
@@ -119,31 +116,44 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         val event = eventFactory.createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, MessageType.MSGTYPE_TEXT, compatibilityBodyText).also {
             saveLocalEcho(it)
         }
-        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
-        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-
-        //TODO use relation API?
-
-        val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
+        val workRequest = createSendEventWork(event)
         TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
         return CancelableWork(context, workRequest.id)
 
     }
-
 
     override fun replyToMessage(eventReplied: Event, replyText: String): Cancelable? {
         val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText)?.also {
             saveLocalEcho(it)
         } ?: return null
-        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
-        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
+            return CancelableWork(context, encryptWork.id)
 
-        val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
-        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-        return CancelableWork(context, workRequest.id)
+        } else {
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+            return CancelableWork(context, workRequest.id)
+        }
+
     }
 
+    private fun createEncryptEventWork(event: Event, keepKeys: List<String>?): OneTimeWorkRequest {
+        // Same parameter
+        val params = EncryptEventWorker.Params(credentials.userId, roomId, event, keepKeys)
+        val sendWorkData = WorkerParamsFactory.toData(params)
+        return TimelineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData)
+    }
+
+    private fun createSendEventWork(event: Event): OneTimeWorkRequest {
+        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
+        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+        val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
+        return workRequest
+    }
 
     override fun getEventSummaryLive(eventId: String): LiveData<List<EventAnnotationsSummary>> {
         return monarchy.findAllMappedWithChanges(

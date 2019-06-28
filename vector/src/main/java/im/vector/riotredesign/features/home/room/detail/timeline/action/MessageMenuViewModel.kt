@@ -33,10 +33,9 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.resources.StringProvider
+import im.vector.riotredesign.core.utils.isSingleEmoji
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 import org.json.JSONObject
-
-import im.vector.riotredesign.core.utils.isSingleEmoji
 
 
 data class SimpleAction(val uid: String, val titleRes: Int, val iconResId: Int?, val data: Any? = null)
@@ -95,7 +94,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         val event = session.getRoom(state.roomId)?.getTimeLineEvent(state.eventId) ?: return state
 
         val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
-                ?: event.root.content.toModel()
+                ?: event.root.getClearContent().toModel()
         val type = messageContent?.type
 
         val actions = if (!event.sendState.isSent()) {
