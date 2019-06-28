@@ -11,10 +11,10 @@ This document aims to describe how Riot X android displays notifications to the 
     * [Background processing limitations](#background-processing-limitations)
 2. [RiotX Notification implementations](#riotx-notification-implementations)
     * [Requirements](#requirements) 
-    * [Foreground sync mode (Gplay & Fdroid)](#foreground-sync-mode-gplay-fdroid)
+    * [Foreground sync mode (Gplay & F-Droid)](#foreground-sync-mode-gplay-f-droid)
     * [Push (FCM) received in background](#push-fcm-received-in-background)
     * [FCM Fallback mode](#fcm-fallback-mode)
-    * [f-droid background Mode](#f-droid-background-mode)
+    * [F-Droid background Mode](#f-droid-background-mode)
 3. [Application Settings](#application-settings)
 
 
@@ -29,15 +29,15 @@ In order to get messages from a home server, a matrix client need to perform a `
 `To read events, the intended flow of operation is for clients to first call the /sync API without a since parameter. This returns the most recent message events for each room, as well as the state of the room at the start of the returned timeline. `
 
 The client need to call the `sync`API periodically in order to get incremental updates of the server state (new messages).
-This mechanism is known as **HTTP long pooling**.
+This mechanism is known as **HTTP long Polling**.
 
-Using the **HTTP Long pooling** mechanism  a client polls a server requesting new information.
+Using the **HTTP Long Polling** mechanism  a client polls a server requesting new information.
 The server *holds the request open until new data is available*.
 Once available, the server responds and sends the new information.
 When the client receives the new information, it immediately sends another request, and the operation is repeated.
 This effectively emulates a server push feature.
 
-The HTTP long pooling can be fine tuned in the **SDK** using two parameters:
+The HTTP long Polling can be fine tuned in the **SDK** using two parameters:
 * timout (Sync request timeout)
 * delay (Delay between each sync)
 
@@ -158,7 +158,7 @@ In a nutshell, apps can't do much in background now.
 
 If the devices is not plugged and stays IDLE for a certain amount of time, radio (mobile connectivity) and CPU can/will be turned off.
 
-For an application like riot X, where users can receive important information at anytime, the best option is to rely on a push system (Google's Firebase Message a.k.a FCM). FCM high priority push can wake up the device and whitelist an application to perform background task (for a limited but unspecified amount of time). 
+For an application like RiotX, where users can receive important information at anytime, the best option is to rely on a push system (Google's Firebase Message a.k.a FCM). FCM high priority push can wake up the device and whitelist an application to perform background task (for a limited but unspecified amount of time). 
 
 Notice that this is still evolving, and in future versions application that has been 'background restricted' by users won't be able to wake up even when a high priority push is received. Also high priority notifications could be rate limited (not defined anywhere)
 
@@ -172,36 +172,36 @@ It is getting more and more complex to have reliable notifications when FCM is n
 ## Requirements
 
 RiotX Android must work with and without FCM.
-* The riotX android app published on fdroid do not rely on FCM (all related dependencies are not present)
+* The RiotX android app published on F-Droid do not rely on FCM (all related dependencies are not present)
 * The RiotX android app published on google play rely on FCM, with a fallback mode when FCM registration has failed (e.g outdated or missing Google Play Services)
 
-## Foreground sync mode (Gplay & Fdroid)
+## Foreground sync mode (Gplay & F-Droid)
 
-When in foreground, riotX performs sync continuously with a timeout value set to 10 seconds (see HttpPooling).
+When in foreground, RiotX performs sync continuously with a timeout value set to 10 seconds (see HttpPooling).
 
-As this mode does not need to live beyond the scope of the application, and as per Google recommendation, riotX uses the internal app resources (Thread and Timers) to perform the syncs. 
+As this mode does not need to live beyond the scope of the application, and as per Google recommendation, RiotX uses the internal app resources (Thread and Timers) to perform the syncs. 
 
 This mode is turned on when the app enters foreground, and off when enters background.
 
-In background, and depending on wether push is available or not, riotX will use different methods to perform the syncs (Workers / Alarms / Service)
+In background, and depending on wether push is available or not, RiotX will use different methods to perform the syncs (Workers / Alarms / Service)
 
 ## Push (FCM) received in background 
 
-In order to enable Push, riotX must first get a push token from the firebase SDK, then register a pusher with this token on the HomeServer.
+In order to enable Push, RiotX must first get a push token from the firebase SDK, then register a pusher with this token on the HomeServer.
 
-When a message should be notified to a user,  the user's homeserver notifies the registered `push gateway` for riotX, that is [sygnal](https://github.com/matrix-org/sygnal) _- The reference implementation for push gateways -_ hosted by matrix.org. 
+When a message should be notified to a user,  the user's homeserver notifies the registered `push gateway` for RiotX, that is [sygnal](https://github.com/matrix-org/sygnal) _- The reference implementation for push gateways -_ hosted by matrix.org. 
 
 This sygnal instance is configured with the required FCM API authentication token, and will then use the FCM API in order to notify the user's device running riotX.
 
 ```
-Homeserver ----> Sygnal (configured for riotX) ----> FCM ----> RiotX
+Homeserver ----> Sygnal (configured for RiotX) ----> FCM ----> RiotX
 ```
 
 The push gateway is configured to only send  `(eventId,roomId)` in the push payload (for better [privacy](#push-vs-privacy-and-mitigation)).
 
 RiotX needs then to synchronise with the user's HomeServer, in order to resolve the event and create a notification.
 
-As per [Google recommendation](https://android-developers.googleblog.com/2018/09/notifying-your-users-with-fcm.html), riotX will then use the WorkManager API in order to trigger a background sync. 
+As per [Google recommendation](https://android-developers.googleblog.com/2018/09/notifying-your-users-with-fcm.html), RiotX will then use the WorkManager API in order to trigger a background sync. 
 
 **Google recommendations:** 
 >  We recommend using FCM messages in combination with the WorkManager 1 or JobScheduler API
@@ -227,14 +227,14 @@ Riot X implements several strategies in these cases (TODO document)
 
 ## FCM Fallback mode
 
-It is possible that riotX is not able to get a FCM push token.
+It is possible that RiotX is not able to get a FCM push token.
 Common errors (amoung several others) that can cause that:
 * Google Play Services is outdated
 * Google Play Service fails in someways with FCM servers (infamous `SERVICE_NOT_AVAILABLE`)
 
-If riotX is able to detect one of this cases, it will notifies it to the users and when possible help him fix it via a dedicated troubleshoot screen.
+If RiotX is able to detect one of this cases, it will notifies it to the users and when possible help him fix it via a dedicated troubleshoot screen.
 
-Meanwhile, in order to offer a minimal service, and as per Google's recommendation for background activities, riotX will launch periodic background sync in order to stays in sync with servers.
+Meanwhile, in order to offer a minimal service, and as per Google's recommendation for background activities, RiotX will launch periodic background sync in order to stays in sync with servers.
 
 The fallback mode is impacted by all the battery life saving mechanism implemented by android. Meaning that if the app is not used for a certain amount of time (`App-Standby`), or the device stays still and unplugged (`Light Doze`) , the sync will become less frequent.
 
@@ -246,9 +246,9 @@ Usually in this mode, what happen is when you take back your phone in your hand,
 
 The fallback mode is supposed to be a temporary state waiting for the user to fix issues for FCM, or for App Developers that has done a fork to correctly configure their FCM settings.
 
-## f-droid background Mode
+## F-Droid background Mode
 
-The f-droid riotX flavor has no dependencies to FCM, therefore cannot relies on Push.
+The F-Droid RiotX flavor has no dependencies to FCM, therefore cannot relies on Push.
 
 Also Google's recommended background processing method cannot be applied. This is because all of these methods are affected by IDLE modes, and will result on the user not being notified at all when the app is in a Doze mode (only in maintenance windows that could happens only after hours).
 
@@ -258,11 +258,11 @@ Notice that these alarms, due to their potential impact on battery life, can sti
 
 These restrictions can be relaxed by requirering the app to be white listed from battery optimization.
 
-F-droid version will schedule alarms that will then trigger a Broadcast Receiver, that in turn will launch a Service (in the classic android way), and the reschedule an alarm for next time.
+F-Droid version will schedule alarms that will then trigger a Broadcast Receiver, that in turn will launch a Service (in the classic android way), and the reschedule an alarm for next time.
 
 Depending on the system status (or device make),  it is still possible that the app is not given enough time to launch the service, or that the radio is still turned off thus preventing the sync to success (that's why Alarms are not recommended for network related tasks).
 
-That is why on riotX Fdroid, the broadcast receiver will acquire a temporary WAKE_LOCK for several seconds (thus securing cpu/network), and launch the service in foreground. The service performs the sync.
+That is why on RiotX F-Droid, the broadcast receiver will acquire a temporary WAKE_LOCK for several seconds (thus securing cpu/network), and launch the service in foreground. The service performs the sync.
 
 Note that foreground services require to put a notification informing the user that the app is doing something even if not launched).
 
