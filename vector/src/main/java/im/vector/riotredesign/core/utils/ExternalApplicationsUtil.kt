@@ -258,6 +258,20 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
         sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri)
 
         context.startActivity(sendIntent)
+    }
+}
 
+/**
+ * Open the play store to the provided application Id, default to this app
+ */
+fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID) {
+    try {
+        activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appId")))
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        try {
+            activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appId")))
+        } catch (activityNotFoundException: ActivityNotFoundException) {
+            activity.toast(R.string.error_no_external_application_found)
+        }
     }
 }
