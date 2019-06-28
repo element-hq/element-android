@@ -22,7 +22,8 @@
 
     <!-- RTL -->
     <issue id="RtlEnabled" severity="error" />
-    <issue id="RtlHardcoded" severity="error" />
+    <!-- Now with min API set to 19, we do not need Left and Right attribute, Start and End is enougth. For the moment, just reduce the severity -->
+    <issue id="RtlHardcoded" severity="warning" />
     <issue id="RtlSymmetry" severity="error" />
 
     <!-- Code -->
