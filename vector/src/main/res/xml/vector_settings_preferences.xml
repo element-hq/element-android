@@ -13,6 +13,7 @@
             android:title="@string/settings_interface_language" />
 
         <im.vector.riotredesign.core.preference.VectorListPreference
+            android:defaultValue="light"
             android:entries="@array/theme_entries"
             android:entryValues="@array/theme_values"
             android:key="APPLICATION_THEME_KEY"
