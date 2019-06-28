@@ -166,11 +166,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_home_suggestion -> {
-                BugReporter.openBugReportScreen(this, true)
+                bugReporter.openBugReportScreen(this, true)
                 return true
             }
             R.id.menu_home_report_bug -> {
-                BugReporter.openBugReportScreen(this, false)
+                bugReporter.openBugReportScreen(this, false)
                 return true
             }
         }
