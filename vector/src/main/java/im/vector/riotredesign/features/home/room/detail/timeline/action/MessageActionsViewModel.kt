@@ -48,7 +48,8 @@ data class MessageActionState(
 
     fun senderName(): String = informationData.memberName?.toString() ?: ""
 
-    fun time(): String? = dateFormat.format(Date(timelineEvent?.root?.originServerTs ?: 0))
+    fun time(): String? = timelineEvent?.root?.originServerTs?.let { dateFormat.format(Date(it)) }
+            ?: ""
 
     fun canReact(): Boolean = timelineEvent?.root?.type == EventType.MESSAGE && timelineEvent.sendState.isSent()
 

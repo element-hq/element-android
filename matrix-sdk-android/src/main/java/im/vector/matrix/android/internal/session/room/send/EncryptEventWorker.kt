@@ -44,10 +44,8 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             val keepKeys: List<String>? = null
     ) : SessionWorkerParams
 
-    @Inject
-    lateinit var crypto: CryptoService
-    @Inject
-    lateinit var localEchoUpdater: LocalEchoUpdater
+    @Inject lateinit var crypto: CryptoService
+    @Inject lateinit var localEchoUpdater: LocalEchoUpdater
 
     override fun doWork(): Result {
 
