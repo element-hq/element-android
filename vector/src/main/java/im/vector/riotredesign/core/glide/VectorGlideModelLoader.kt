@@ -24,14 +24,22 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
+import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
+import im.vector.riotredesign.features.media.ImageContentRenderer
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import timber.log.Timber
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 import java.io.InputStream
 import com.bumptech.glide.load.engine.Resource as Resource1
 
-class VectorGlideModelLoaderFactory : ModelLoaderFactory<InputStream, InputStream> {
 
-    override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<InputStream, InputStream> {
+class VectorGlideModelLoaderFactory : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
+
+    override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<ImageContentRenderer.Data, InputStream> {
         return VectorGlideModelLoader()
     }
 
@@ -41,25 +49,31 @@ class VectorGlideModelLoaderFactory : ModelLoaderFactory<InputStream, InputStrea
 
 }
 
-class VectorGlideModelLoader : ModelLoader<InputStream, InputStream> {
-    override fun handles(model: InputStream): Boolean {
+class VectorGlideModelLoader : ModelLoader<ImageContentRenderer.Data, InputStream> {
+    override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
         return true
     }
 
-    override fun buildLoadData(model: InputStream, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
-        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(model, options.get(ELEMENT_TO_DECRYPT)))
+    override fun buildLoadData(model: ImageContentRenderer.Data, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
+        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(model, width, height))
     }
 }
 
-class VectorGlideDataFetcher(private val inputStream: InputStream,
-                             private val elementToDecrypt: ElementToDecrypt?) : DataFetcher<InputStream> {
+class VectorGlideDataFetcher(private val data: ImageContentRenderer.Data,
+                             private val width: Int,
+                             private val height: Int) : DataFetcher<InputStream> {
+
+    val client = OkHttpClient()
+
     override fun getDataClass(): Class<InputStream> {
         return InputStream::class.java
     }
 
+    private var stream: InputStream? = null
+
     override fun cleanup() {
-        // ?
+        cancel()
     }
 
     override fun getDataSource(): DataSource {
@@ -68,16 +82,43 @@ class VectorGlideDataFetcher(private val inputStream: InputStream,
     }
 
     override fun cancel() {
-        // ?
+        if (stream != null) {
+            try {
+                stream?.close() // interrupts decode if any
+                stream = null
+            } catch (ignore: IOException) {
+                Timber.e(ignore)
+            }
+        }
     }
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
-        if (elementToDecrypt?.k?.isNotBlank() == true) {
-            // Encrypted stream
-            callback.onDataReady(MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt))
-        } else {
-            // Not encrypted stream
-            callback.onDataReady(inputStream)
+        Timber.v("Load data: $data")
+        if (data.isLocalFile()) {
+            val initialFile = File(data.url)
+            callback.onDataReady(FileInputStream(initialFile))
+            return
         }
+        val contentUrlResolver = Matrix.getInstance().currentSession?.contentUrlResolver() ?: return
+        val url = contentUrlResolver.resolveFullSize(data.url)
+                ?: return
+
+        val request = Request.Builder()
+                .url(url)
+                .build()
+
+        val response = client.newCall(request).execute()
+        val inputStream = response.body()?.byteStream()
+        Timber.v("Response size ${response.body()?.contentLength()} - Stream available: ${inputStream?.available()}")
+        if (!response.isSuccessful) {
+            callback.onLoadFailed(IOException("Unexpected code $response"))
+            return
+        }
+        stream = if (data.elementToDecrypt != null && data.elementToDecrypt.k.isNotBlank()) {
+            MXEncryptedAttachments.decryptAttachment(inputStream, data.elementToDecrypt)
+        } else {
+            inputStream
+        }
+        callback.onDataReady(stream)
     }
 }

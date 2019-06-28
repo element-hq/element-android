@@ -166,15 +166,6 @@ object MXEncryptedAttachments {
             return null
         }
 
-        // detect if there is no data to decrypt
-        try {
-            if (0 == attachmentStream.available()) {
-                return ByteArrayInputStream(ByteArray(0))
-            }
-        } catch (e: Exception) {
-            Timber.e(e, "Fail to retrieve the file size")
-        }
-
         val t0 = System.currentTimeMillis()
 
         val outStream = ByteArrayOutputStream()

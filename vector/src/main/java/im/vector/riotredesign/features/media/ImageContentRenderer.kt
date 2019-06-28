@@ -20,13 +20,11 @@ import android.net.Uri
 import android.os.Parcelable
 import android.widget.ImageView
 import androidx.exifinterface.media.ExifInterface
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.github.piasy.biv.view.BigImageView
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.riotredesign.core.di.ActiveSessionHolder
-import im.vector.riotredesign.core.glide.ELEMENT_TO_DECRYPT
 import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.utils.DimensionUtils.dpToPx
 import kotlinx.android.parcel.Parcelize
@@ -62,26 +60,9 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         val (width, height) = processSize(data, mode)
         imageView.layoutParams.height = height
         imageView.layoutParams.width = width
-        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
-        val resolvedUrl = when (mode) {
-            Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
-            Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-        }
-        //Fallback to base url
-                ?: data.url
-
         GlideApp
                 .with(imageView)
-                .load(resolvedUrl)
-                .apply {
-                    // Give element to decrypt to Glide
-                    if (data.elementToDecrypt != null) {
-                        set(ELEMENT_TO_DECRYPT, data.elementToDecrypt)
-                                // And disable cache
-                                .skipMemoryCache(true)
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    }
-                }
+                .load(data)
                 .dontAnimate()
                 .transform(RoundedCorners(dpToPx(8, imageView.context)))
                 .thumbnail(0.3f)
