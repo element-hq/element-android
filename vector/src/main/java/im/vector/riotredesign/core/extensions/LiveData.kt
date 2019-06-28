@@ -19,8 +19,9 @@ package im.vector.riotredesign.core.extensions
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import im.vector.riotredesign.core.utils.LiveEvent
+import im.vector.riotredesign.core.utils.Debouncer
 import im.vector.riotredesign.core.utils.EventObserver
+import im.vector.riotredesign.core.utils.LiveEvent
 
 inline fun <T> LiveData<T>.observeK(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {
     this.observe(owner, Observer { observer(it) })
@@ -32,4 +33,14 @@ inline fun <T> LiveData<T>.observeNotNull(owner: LifecycleOwner, crossinline obs
 
 inline fun <T> LiveData<LiveEvent<T>>.observeEvent(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
     this.observe(owner, EventObserver { it.run(observer) })
+}
+
+inline fun <T> LiveData<LiveEvent<T>>.observeEventDebounced(owner: LifecycleOwner, minimumInterval: Long, crossinline observer: (T) -> Unit) {
+    val debouncer = Debouncer(minimumInterval)
+
+    this.observe(owner, EventObserver {
+        if (debouncer.canHandle()) {
+            it.run(observer)
+        }
+    })
 }
