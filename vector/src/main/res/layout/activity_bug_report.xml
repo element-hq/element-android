@@ -61,6 +61,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/bug_report_first_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -71,6 +72,7 @@
                     android:textColor="?riotx_text_primary" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/bug_report_text_input_layout"
                     style="@style/VectorTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -79,13 +81,13 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
+                    android:hint="@string/send_bug_report_placeholder"
                     android:textColorHint="?attr/vctr_default_text_hint_color">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/bug_report_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/send_bug_report_placeholder"
                         android:minHeight="40dp"
                         android:textColor="?riotx_text_primary" />
 
@@ -103,6 +105,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/bug_report_logs_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"

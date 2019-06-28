@@ -40,4 +40,10 @@
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Register token</string>
 
+    <string name="send_suggestion">Propose a suggestion</string>
+    <string name="send_suggestion_content">Please write your suggestion below.</string>
+    <string name="send_suggestion_report_placeholder">Describe your suggestion here</string>
+    <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
+    <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
+
 </resources>

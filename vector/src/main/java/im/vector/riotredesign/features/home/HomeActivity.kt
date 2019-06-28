@@ -29,7 +29,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
-import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.di.ScreenComponent
@@ -44,9 +43,7 @@ import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotredesign.features.disclaimer.showDisclaimerDialog
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
-import im.vector.riotredesign.features.rageshake.BugReporter
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
 import im.vector.riotredesign.features.workers.signout.SignOutViewModel
 import im.vector.riotredesign.push.fcm.FcmHelper
 import kotlinx.android.synthetic.main.activity_home.*
@@ -168,8 +165,12 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.sliding_menu_sign_out -> {
-                SignOutUiWorker(this, notificationDrawerManager).perform(activeSessionHolder.getActiveSession())
+            R.id.menu_home_suggestion -> {
+                bugReporter.openBugReportScreen(this, true)
+                return true
+            }
+            R.id.menu_home_report_bug -> {
+                bugReporter.openBugReportScreen(this, false)
                 return true
             }
         }

@@ -28,7 +28,6 @@ import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_bug_report.*
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Form to send a bug report
@@ -42,6 +41,8 @@ class BugReportActivity : VectorBaseActivity() {
 
     override fun getLayoutRes() = R.layout.activity_bug_report
 
+    private var forSuggestion: Boolean = false
+
     override fun initUiAndData() {
         configureToolbar(bugReportToolbar)
 
@@ -51,6 +52,26 @@ class BugReportActivity : VectorBaseActivity() {
             bug_report_screenshot_preview.isVisible = false
             bug_report_button_include_screenshot.isChecked = false
             bug_report_button_include_screenshot.isEnabled = false
+        }
+
+        forSuggestion = intent.getBooleanExtra("FOR_SUGGESTION", false)
+
+        // Default screen is for bug report, so modify it for suggestion
+        if (forSuggestion) {
+            supportActionBar?.setTitle(R.string.send_suggestion)
+
+            bug_report_first_text.setText(R.string.send_suggestion_content)
+            bug_report_text_input_layout.hint = getString(R.string.send_suggestion_report_placeholder)
+
+            bug_report_logs_description.isVisible = false
+
+            bug_report_button_include_logs.isChecked = false
+            bug_report_button_include_logs.isVisible = false
+
+            bug_report_button_include_crash_logs.isChecked = false
+            bug_report_button_include_crash_logs.isVisible = false
+
+            // Keep the screenshot
         }
     }
 
@@ -95,6 +116,7 @@ class BugReportActivity : VectorBaseActivity() {
         bug_report_progress_view.progress = 0
 
         bugReporter.sendBugReport(this,
+                forSuggestion,
                 bug_report_button_include_logs.isChecked,
                 bug_report_button_include_crash_logs.isChecked,
                 bug_report_button_include_screenshot.isChecked,
@@ -103,8 +125,13 @@ class BugReportActivity : VectorBaseActivity() {
                     override fun onUploadFailed(reason: String?) {
                         try {
                             if (!TextUtils.isEmpty(reason)) {
-                                Toast.makeText(this@BugReportActivity,
-                                        getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show()
+                                if (forSuggestion) {
+                                    Toast.makeText(this@BugReportActivity,
+                                            getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG).show()
+                                } else {
+                                    Toast.makeText(this@BugReportActivity,
+                                            getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show()
+                                }
                             }
                         } catch (e: Exception) {
                             Timber.e(e, "## onUploadFailed() : failed to display the toast " + e.message)
@@ -131,7 +158,11 @@ class BugReportActivity : VectorBaseActivity() {
 
                     override fun onUploadSucceed() {
                         try {
-                            Toast.makeText(this@BugReportActivity, R.string.send_bug_report_sent, Toast.LENGTH_LONG).show()
+                            if (forSuggestion) {
+                                Toast.makeText(this@BugReportActivity, R.string.send_suggestion_sent, Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(this@BugReportActivity, R.string.send_bug_report_sent, Toast.LENGTH_LONG).show()
+                            }
                         } catch (e: Exception) {
                             Timber.e(e, "## onUploadSucceed() : failed to dismiss the toast " + e.message)
                         }
