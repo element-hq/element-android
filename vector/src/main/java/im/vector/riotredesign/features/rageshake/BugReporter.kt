@@ -433,7 +433,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     /**
      * Send a bug report either with email or with Vector.
      */
-    fun openBugReportScreen(activity: Activity, forSuggestion: Boolean = true) {
+    fun openBugReportScreen(activity: Activity, forSuggestion: Boolean = false) {
         screenshot = takeScreenshot(activity)
 
         val intent = Intent(activity, BugReportActivity::class.java)
