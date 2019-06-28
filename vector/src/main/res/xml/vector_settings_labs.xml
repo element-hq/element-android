@@ -26,15 +26,15 @@
             <!--android:summary="@string/settings_data_save_mode_summary"-->
             <!--android:title="@string/settings_data_save_mode" />-->
 
-        <im.vector.riotredesign.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
-            android:key="SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"
-            android:title="@string/settings_labs_create_conference_with_jitsi" />
+        <!--<im.vector.riotredesign.core.preference.VectorSwitchPreference-->
+            <!--android:defaultValue="true"-->
+            <!--android:key="SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"-->
+            <!--android:title="@string/settings_labs_create_conference_with_jitsi" />-->
 
-        <im.vector.riotredesign.core.preference.VectorSwitchPreference
-            android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
-            android:summary="@string/settings_labs_enable_send_voice_summary"
-            android:title="@string/settings_labs_enable_send_voice" />
+        <!--<im.vector.riotredesign.core.preference.VectorSwitchPreference-->
+            <!--android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"-->
+            <!--android:summary="@string/settings_labs_enable_send_voice_summary"-->
+            <!--android:title="@string/settings_labs_enable_send_voice" />-->
 
         <im.vector.riotredesign.core.preference.VectorSwitchPreference
             android:key="SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
