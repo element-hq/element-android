@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.VectorApplication
+import im.vector.riotredesign.core.pushers.PushersManager
 import im.vector.riotredesign.features.configuration.VectorConfiguration
 import im.vector.riotredesign.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotredesign.features.crypto.verification.IncomingVerificationRequestHandler
@@ -33,13 +34,12 @@ import im.vector.riotredesign.features.home.HomeNavigator
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
 import im.vector.riotredesign.features.navigation.Navigator
+import im.vector.riotredesign.features.notifications.NotifiableEventResolver
 import im.vector.riotredesign.features.notifications.NotificationBroadcastReceiver
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.notifications.PushRuleTriggerListener
 import im.vector.riotredesign.features.rageshake.BugReporter
-import im.vector.riotredesign.features.rageshake.RageShake
 import im.vector.riotredesign.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.riotredesign.gplay.push.fcm.VectorFirebaseMessagingService
 import javax.inject.Singleton
 
 @Component(modules = [VectorModule::class])
@@ -49,8 +49,6 @@ interface VectorComponent {
     fun inject(vectorApplication: NotificationBroadcastReceiver)
 
     fun inject(vectorApplication: VectorApplication)
-
-    fun inject(vectorFirebaseMessagingService: VectorFirebaseMessagingService)
 
     fun matrix(): Matrix
 
@@ -89,6 +87,10 @@ interface VectorComponent {
     fun vectorUncaughtExceptionHandler(): VectorUncaughtExceptionHandler
 
     fun pushRuleTriggerListener(): PushRuleTriggerListener
+
+    fun pusherManager(): PushersManager
+
+    fun notifiableEventResolver(): NotifiableEventResolver
 
     @Component.Factory
     interface Factory {

@@ -4,11 +4,13 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
 import im.vector.matrix.rx.RxRoom
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import io.reactivex.Observable
+import io.reactivex.Single
 
 
 data class DisplayReactionsViewState(
@@ -46,18 +48,16 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: DisplayReactionsViewState): ViewReactionViewModel
+    }
 
-        companion object : MvRxViewModelFactory<ViewReactionViewModel, DisplayReactionsViewState> {
+    companion object : MvRxViewModelFactory<ViewReactionViewModel, DisplayReactionsViewState> {
 
-            override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionViewModel? {
-                val fragment: ViewReactionBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-                return fragment.viewReactionViewModelFactory.create(state)
-            }
-
+        override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionViewModel? {
+            val fragment: ViewReactionBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.viewReactionViewModelFactory.create(state)
         }
 
     }
-
 
     init {
         observeEventAnnotationSummaries()
@@ -69,23 +69,31 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
                 .flatMapSingle { summaries ->
                     Observable
                             .fromIterable(summaries)
-                            .flatMapIterable { it.reactionsSummary }
-                            .map {
-                                val event = room.getTimeLineEvent(eventId)
-                                        ?: throw RuntimeException("Your eventId is not valid")
-                                val localDate = event.root.localDateTime()
-                                ReactionInfo(
-                                        event.root.eventId!!,
-                                        it.key,
-                                        event.root.senderId ?: "",
-                                        event.senderName,
-                                        timelineDateFormatter.formatMessageHour(localDate)
-                                )
-                            }
-                            .toList()
+                            .flatMapIterable {it.reactionsSummary}
+                            .toReactionInfoList()
                 }
                 .execute {
                     copy(mapReactionKeyToMemberList = it)
                 }
+    }
+
+    private fun Observable<ReactionAggregatedSummary>.toReactionInfoList(): Single<List<ReactionInfo>> {
+        return flatMap { summary ->
+            Observable
+                    .fromIterable(summary.sourceEvents)
+                    .map {
+                        val event = room.getTimeLineEvent(it)
+                                ?: throw RuntimeException("Your eventId is not valid")
+                        val localDate = event.root.localDateTime()
+                        ReactionInfo(
+                                event.root.eventId!!,
+                                summary.key,
+                                event.root.senderId ?: "",
+                                event.getDisambiguatedDisplayName(),
+                                timelineDateFormatter.formatMessageHour(localDate)
+                        )
+                    }
+        }
+                .toList()
     }
 }

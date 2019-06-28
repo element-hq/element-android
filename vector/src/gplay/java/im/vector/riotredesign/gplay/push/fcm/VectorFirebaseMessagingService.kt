@@ -49,10 +49,10 @@ import javax.inject.Inject
  */
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
-    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
-    @Inject lateinit var notifiableEventResolver: NotifiableEventResolver
-    @Inject lateinit var pusherManager: PushersManager
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    private lateinit var notificationDrawerManager: NotificationDrawerManager
+    private lateinit var notifiableEventResolver: NotifiableEventResolver
+    private lateinit var pusherManager: PushersManager
+    private lateinit var activeSessionHolder: ActiveSessionHolder
 
     // UI handler
     private val mUIHandler by lazy {
@@ -61,7 +61,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onCreate() {
         super.onCreate()
-        vectorComponent().inject(this)
+        notificationDrawerManager = vectorComponent().notificationDrawerManager()
+        notifiableEventResolver = vectorComponent().notifiableEventResolver()
+        pusherManager = vectorComponent().pusherManager()
+        activeSessionHolder = vectorComponent().activeSessionHolder()
     }
 
     /**
