@@ -125,7 +125,7 @@ internal class DefaultTimeline(
             }
 
             var hasChanged = false
-            changeSet.changes.forEach {index ->
+            changeSet.changes.forEach { index ->
                 val eventEntity = results[index]
                 eventEntity?.eventId?.let { eventId ->
                     builtEventsIdMap[eventId]?.let { builtIndex ->
@@ -289,10 +289,12 @@ internal class DefaultTimeline(
     private fun buildSendingEvents(): List<TimelineEvent> {
         val sendingEvents = ArrayList<TimelineEvent>()
         if (hasReachedEnd(Timeline.Direction.FORWARDS)) {
-            roomEntity?.sendingTimelineEvents?.forEach {
-                val timelineEvent = timelineEventFactory.create(it)
-                sendingEvents.add(timelineEvent)
-            }
+            roomEntity?.sendingTimelineEvents
+                    ?.filter { allowedTypes?.contains(it.type) ?: false }
+                    ?.forEach {
+                        val timelineEvent = timelineEventFactory.create(it)
+                        sendingEvents.add(timelineEvent)
+                    }
         }
         return sendingEvents
     }
@@ -303,14 +305,14 @@ internal class DefaultTimeline(
 
     private fun getPaginationState(direction: Timeline.Direction): PaginationState {
         return when (direction) {
-            Timeline.Direction.FORWARDS -> forwardsPaginationState.get()
+            Timeline.Direction.FORWARDS  -> forwardsPaginationState.get()
             Timeline.Direction.BACKWARDS -> backwardsPaginationState.get()
         }
     }
 
     private fun updatePaginationState(direction: Timeline.Direction, update: (PaginationState) -> PaginationState) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS -> forwardsPaginationState
+            Timeline.Direction.FORWARDS  -> forwardsPaginationState
             Timeline.Direction.BACKWARDS -> backwardsPaginationState
         }
         val currentValue = stateReference.get()

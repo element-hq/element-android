@@ -17,16 +17,14 @@
 package im.vector.riotredesign.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageDefaultContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.EmptyItem_
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
+import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderAvatar
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.riotredesign.features.home.room.detail.timeline.item.NoticeItem_
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,7 +32,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val encryptionItemFactory: EncryptionItemFactory,
                                               private val encryptedItemFactory: EncryptedItemFactory,
                                               private val noticeItemFactory: NoticeItemFactory,
-                                              private val defaultItemFactory: DefaultItemFactory) {
+                                              private val defaultItemFactory: DefaultItemFactory,
+                                              private val avatarRenderer: AvatarRenderer) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -65,30 +64,21 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
 
                 else                        -> {
                     //These are just for debug to display hidden event, they should be filtered out in normal mode
-                    if (TimelineDisplayableEvents.DEBUG_HIDDEN_EVENT) {
-                        val informationData = MessageInformationData(eventId = event.root.eventId
-                                ?: "?",
-                                senderId = event.root.senderId ?: "",
-                                sendState = event.sendState,
-                                time = "",
-                                avatarUrl = null,
-                                memberName = "",
-                                showInformation = false
-                        )
-                        val messageContent = event.root.content.toModel<MessageContent>()
-                                ?: MessageDefaultContent("", "", null, null)
-                        MessageTextItem_()
-                                .informationData(informationData)
-                                .message("{ \"type\": ${event.root.type} }")
-                                .highlighted(highlight)
-                                .longClickListener { view ->
-                                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                                            ?: false
-                                }
-                    } else {
-                        Timber.w("Ignored event (type: ${event.root.type}")
-                        null
-                    }
+                    val informationData = MessageInformationData(
+                            eventId = event.root.eventId ?: "?",
+                            senderId = event.root.senderId ?: "",
+                            sendState = event.sendState,
+                            time = "",
+                            avatarUrl = event.senderAvatar(),
+                            memberName = "",
+                            showInformation = false
+                    )
+                    NoticeItem_()
+                            .avatarRenderer(avatarRenderer)
+                            .informationData(informationData)
+                            .noticeText("{ \"type\": ${event.root.type} }")
+                            .highlighted(highlight)
+                            .baseCallback(callback)
                 }
             }
         } catch (e: Exception) {

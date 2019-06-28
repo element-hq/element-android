@@ -46,4 +46,6 @@
     <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
     <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
+    <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
+
 </resources>

@@ -37,6 +37,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorViewModel
+import im.vector.riotredesign.core.resources.UserPreferencesProvider
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.command.CommandParser
 import im.vector.riotredesign.features.command.ParsedCommand
@@ -51,6 +52,7 @@ import java.util.concurrent.TimeUnit
 
 
 class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
+                                                      userPreferencesProvider: UserPreferencesProvider,
                                                       private val session: Session
 ) : VectorViewModel<RoomDetailViewState>(initialState) {
 
@@ -58,7 +60,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
     private val displayedEventsObservable = BehaviorRelay.create<RoomDetailActions.EventDisplayed>()
-    private val allowedTypes = if (TimelineDisplayableEvents.DEBUG_HIDDEN_EVENT) {
+    private val allowedTypes = if (userPreferencesProvider.shouldShowHiddenEvents()) {
         TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES
     } else {
         TimelineDisplayableEvents.DISPLAYABLE_TYPES
@@ -77,12 +79,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
             val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
+
             return fragment.roomDetailViewModelFactory.create(state)
-        }
-
-        override fun initialState(viewModelContext: ViewModelContext): RoomDetailViewState? {
-
-            return super.initialState(viewModelContext)
         }
     }
 

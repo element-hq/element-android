@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.epoxy.LoadingItem_
 import im.vector.riotredesign.core.extensions.localDateTime
+import im.vector.riotredesign.core.resources.UserPreferencesProvider
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.*
@@ -47,7 +48,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val avatarRenderer: AvatarRenderer,
                                                   @TimelineEventControllerHandler
-                                                  private val backgroundHandler: Handler
+                                                  private val backgroundHandler: Handler,
+                                                  userPreferencesProvider: UserPreferencesProvider
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
     interface Callback : ReactionPillCallback, AvatarCallback, BaseCallback, UrlClickCallback {
@@ -131,6 +133,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
             }
         }
     }
+
+    private val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
 
     init {
         requestModelBuild()
@@ -234,7 +238,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
 
     private fun buildItemModels(currentPosition: Int, items: List<TimelineEvent>): CacheItemData {
         val event = items[currentPosition]
-        val nextEvent = items.nextDisplayableEvent(currentPosition)
+        val nextEvent = items.nextDisplayableEvent(currentPosition, showHiddenEvents)
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
