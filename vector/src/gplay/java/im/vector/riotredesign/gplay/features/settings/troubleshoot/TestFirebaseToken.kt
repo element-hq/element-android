@@ -56,11 +56,12 @@ class TestFirebaseToken @Inject constructor(private val context: AppCompatActivi
                             }
                             status = TestStatus.FAILED
                         } else {
-                            task.result?.token?.let {
-                                val tok = it.substring(0, Math.min(8, it.length)) + "********************"
+                            task.result?.token?.let {token ->
+                                val tok = token.substring(0, Math.min(8, token.length)) + "********************"
                                 description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
-                                Timber.e("Retrieved FCM token success [$it].")
-                                FcmHelper.storeFcmToken(context, tok)
+                                Timber.e("Retrieved FCM token success [$tok].")
+                                // Ensure it is well store in our local storage
+                                FcmHelper.storeFcmToken(context, token)
                             }
                             status = TestStatus.SUCCESS
                         }

@@ -50,7 +50,8 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
             it.pushKey == fcmToken && it.state == PusherState.REGISTERED
         }
         if (pusher.isEmpty()) {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_failed, null)
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_failed,
+                    stringProvider.getString(R.string.sas_error_unknown))
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_token_registration_quick_fix) {
                 override fun doFix() {
                     val workId = pushersManager.registerPusherWithFcmKey(fcmToken)
