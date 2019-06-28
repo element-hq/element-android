@@ -90,7 +90,7 @@
             android:layout_marginRight="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/backup_keys"
-            android:tint="?android:attr/textColorTertiary" />
+            android:tint="?riotx_text_primary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
             android:layout_marginRight="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/backup_keys"
-            android:tint="?android:attr/textColorTertiary" />
+            android:tint="?riotx_text_primary" />
 
         <TextView
             android:layout_width="wrap_content"
