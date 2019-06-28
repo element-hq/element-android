@@ -17,6 +17,7 @@ package im.vector.matrix.android.internal.session.room.relation
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.work.OneTimeWorkRequest
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
@@ -27,6 +28,7 @@ import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -155,15 +157,13 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         return workRequest
     }
 
-    override fun getEventSummaryLive(eventId: String): LiveData<List<EventAnnotationsSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { realm ->
-                    EventAnnotationsSummaryEntity.where(realm, eventId)
-                },
-                {
-                    it.asDomain()
-                }
-        )
+    override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {
+        val liveEntity = RealmLiveData(monarchy.realmConfiguration) { realm ->
+            EventAnnotationsSummaryEntity.where(realm, eventId)
+        }
+        return Transformations.map(liveEntity) { realmResults ->
+            realmResults.firstOrNull()?.asDomain() ?: EventAnnotationsSummary(eventId, emptyList(), null)
+        }
     }
 
     /**

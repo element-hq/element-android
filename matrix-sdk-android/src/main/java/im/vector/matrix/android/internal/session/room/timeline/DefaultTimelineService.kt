@@ -16,10 +16,14 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
+import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -47,5 +51,27 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
                 })
     }
 
+    override fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent> {
+        val liveEventEntity = RealmLiveData(monarchy.realmConfiguration) { realm ->
+            EventEntity.where(realm, eventId = eventId)
+        }
+        val liveAnnotationsEntity = RealmLiveData(monarchy.realmConfiguration) { realm ->
+            EventAnnotationsSummaryEntity.where(realm, eventId = eventId)
+        }
+        val result = MediatorLiveData<TimelineEvent>()
+        result.addSource(liveEventEntity) { realmResults ->
+            result.value = realmResults.firstOrNull()?.let { timelineEventFactory.create(it) }
+        }
+
+        result.addSource(liveAnnotationsEntity) {
+            liveEventEntity.value?.let {
+                result.value = liveEventEntity.value?.let { realmResults ->
+                    //recreate the timeline event
+                    realmResults.firstOrNull()?.let { timelineEventFactory.create(it) }
+                }
+            }
+        }
+        return result
+    }
 
 }

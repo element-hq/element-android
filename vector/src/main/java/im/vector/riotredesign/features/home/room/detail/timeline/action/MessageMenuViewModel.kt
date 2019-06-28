@@ -15,10 +15,7 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
@@ -30,6 +27,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageImageConte
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.rx.RxRoom
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.resources.StringProvider
@@ -44,7 +42,7 @@ data class MessageMenuState(
         val roomId: String,
         val eventId: String,
         val informationData: MessageInformationData,
-        val actions: List<SimpleAction> = emptyList()
+        val actions: Async<List<SimpleAction>> = Uninitialized
 ) : MvRxState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
@@ -62,6 +60,12 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
     interface Factory {
         fun create(initialState: MessageMenuState): MessageMenuViewModel
     }
+
+    private val room = session.getRoom(initialState.roomId)
+            ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
+
+    private val eventId = initialState.eventId
+    private val informationData: MessageInformationData = initialState.informationData
 
     companion object : MvRxViewModelFactory<MessageMenuViewModel, MessageMenuState> {
 
@@ -87,13 +91,23 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
     }
 
     init {
-        setState { reduceState(this) }
+        observeEvent()
     }
 
-    private fun reduceState(state: MessageMenuState): MessageMenuState {
-        val event = session.getRoom(state.roomId)?.getTimeLineEvent(state.eventId) ?: return state
+    private fun observeEvent() {
+        RxRoom(room)
+                .liveTimelineEvent(eventId)
+                ?.map {
+                    actionsForEvent(it)
+                }
+                ?.execute {
+                    copy(actions = it)
+                }
+    }
 
-        val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent?.toModel()
+    private fun actionsForEvent(event: TimelineEvent): List<SimpleAction> {
+
+        val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent.toModel()
                 ?: event.root.getClearContent().toModel()
         val type = messageContent?.type
 
@@ -114,7 +128,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 //TODO is downloading attachement?
 
                 if (canReact(event, messageContent)) {
-                    this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, event.root.eventId))
+                    this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, eventId))
                 }
                 if (canCopy(type)) {
                     //TODO copy images? html? see ClipBoard
@@ -122,23 +136,23 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 }
 
                 if (canReply(event, messageContent)) {
-                    this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, event.root.eventId))
+                    this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, eventId))
                 }
 
                 if (canEdit(event, session.sessionParams.credentials.userId)) {
-                    this.add(SimpleAction(ACTION_EDIT, R.string.edit, R.drawable.ic_edit, event.root.eventId))
+                    this.add(SimpleAction(ACTION_EDIT, R.string.edit, R.drawable.ic_edit, eventId))
                 }
 
                 if (canRedact(event, session.sessionParams.credentials.userId)) {
-                    this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId))
+                    this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, eventId))
                 }
 
                 if (canQuote(event, messageContent)) {
-                    this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, state.eventId))
+                    this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, eventId))
                 }
 
                 if (canViewReactions(event)) {
-                    this.add(SimpleAction(ACTION_VIEW_REACTIONS, R.string.message_view_reaction, R.drawable.ic_view_reactions, state.informationData))
+                    this.add(SimpleAction(ACTION_VIEW_REACTIONS, R.string.message_view_reaction, R.drawable.ic_view_reactions, informationData))
                 }
 
                 if (canShare(type)) {
@@ -160,22 +174,22 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                     //TODO sent by me or sufficient power level
                 }
 
-                this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, JSONObject(event.root.toContent()).toString(4)))
+                this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, JSONObject(event.root.content.toContent()).toString(4)))
                 if (event.isEncrypted()) {
-                    val decryptedContent = event.root.mClearEvent?.toContent()?.let {
+                    val decryptedContent = event.root.mClearEvent?.content?.toContent().let {
                         JSONObject(it).toString(4)
                     } ?: stringProvider.getString(R.string.encryption_information_decryption_error)
                     this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, decryptedContent))
                 }
-                this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, state.eventId))
+                this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, event.root.eventId))
 
                 if (session.sessionParams.credentials.userId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
                     //not sent by me
-                    this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, state.eventId))
+                    this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, event.root.eventId))
                 }
             }
         }
-        return state.copy(actions = actions)
+        return actions
     }
 
 

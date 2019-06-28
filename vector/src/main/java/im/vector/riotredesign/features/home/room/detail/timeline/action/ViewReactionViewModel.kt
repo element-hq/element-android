@@ -85,10 +85,8 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
                 .liveAnnotationSummary(eventId)
                 .flatMapSingle { summaries ->
                     Observable
-                            .fromIterable(summaries)
-                            .flatMapIterable { it.reactionsSummary
-                                    .filter { reactionAggregatedSummary ->  isSingleEmoji(reactionAggregatedSummary.key) }
-                                }
+                            .fromIterable(summaries.reactionsSummary)
+                            .filter { reactionAggregatedSummary -> isSingleEmoji(reactionAggregatedSummary.key) }
                             .toReactionInfoList()
                 }
                 .execute {
@@ -112,7 +110,6 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
                                 timelineDateFormatter.formatMessageHour(localDate)
                         )
                     }
-        }
-                .toList()
+        }.toList()
     }
 }

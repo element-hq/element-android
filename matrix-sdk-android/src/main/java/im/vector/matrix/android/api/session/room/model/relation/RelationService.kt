@@ -80,5 +80,5 @@ interface RelationService {
      */
     fun replyToMessage(eventReplied: Event, replyText: String): Cancelable?
 
-    fun getEventSummaryLive(eventId: String): LiveData<List<EventAnnotationsSummary>>
+    fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary>
 }
