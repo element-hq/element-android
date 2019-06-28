@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
+import im.vector.riotredesign.core.utils.isSingleEmoji
 import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
@@ -68,9 +69,11 @@ class MessageInformationDataFactory @Inject constructor(private val timelineDate
                 avatarUrl = avatarUrl,
                 memberName = formattedMemberName,
                 showInformation = showInformation,
-                orderedReactionList = event.annotations?.reactionsSummary?.map {
-                    ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
-                },
+                orderedReactionList = event.annotations?.reactionsSummary
+                        ?.filter { isSingleEmoji(it.key) }
+                        ?.map {
+                            ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
+                        },
                 hasBeenEdited = hasBeenEdited
         )
     }
