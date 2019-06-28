@@ -39,11 +39,15 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     internal data class Params(
             override val userId: String,
             val roomId: String,
-            val event: Event
+            val event: Event,
+            /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
+            val keepKeys: List<String>? = null
     ) : SessionWorkerParams
 
-    @Inject lateinit var crypto: CryptoService
-    @Inject lateinit var localEchoUpdater: LocalEchoUpdater
+    @Inject
+    lateinit var crypto: CryptoService
+    @Inject
+    lateinit var localEchoUpdater: LocalEchoUpdater
 
     override fun doWork(): Result {
 
@@ -65,8 +69,13 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         var result: MXEncryptEventContentResult? = null
         var error: Throwable? = null
 
+        val localMutableContent = HashMap(localEvent.content)
+        params.keepKeys?.forEach {
+            localMutableContent.remove(it)
+        }
+
         try {
-            crypto.encryptEventContent(localEvent.content!!, localEvent.type, params.roomId, object : MatrixCallback<MXEncryptEventContentResult> {
+            crypto.encryptEventContent(localMutableContent, localEvent.type, params.roomId, object : MatrixCallback<MXEncryptEventContentResult> {
                 override fun onSuccess(data: MXEncryptEventContentResult) {
                     result = data
                     latch.countDown()
@@ -83,15 +92,24 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         }
         latch.await()
 
-        val safeResult = result
-        if (safeResult != null) {
+        if (result != null) {
+            var modifiedContent = HashMap(result?.eventContent)
+            params.keepKeys?.forEach { toKeep ->
+                localEvent.content?.get(toKeep)?.let {
+                    //put it back in the encrypted thing
+                    modifiedContent[toKeep] = it
+                }
+            }
+            val safeResult = result!!.copy(eventContent = modifiedContent)
             val encryptedEvent = localEvent.copy(
                     type = safeResult.eventType,
                     content = safeResult.eventContent
             )
             val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, encryptedEvent)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
+
         }
+
         val safeError = error
         val sendState = when (safeError) {
             is Failure.CryptoError -> SendState.FAILED_UNKNOWN_DEVICES

@@ -247,7 +247,7 @@ class RoomDetailFragment :
                     //TODO this is used at several places, find way to refactor?
                     val messageContent: MessageContent? =
                             event.annotations?.editSummary?.aggregatedContent?.toModel()
-                                    ?: event.root.content.toModel()
+                                    ?: event.root.getClearContent().toModel()
                     val nonFormattedBody = messageContent?.body ?: ""
                     var formattedBody: CharSequence? = null
                     if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
