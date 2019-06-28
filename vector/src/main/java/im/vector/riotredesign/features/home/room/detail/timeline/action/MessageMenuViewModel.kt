@@ -103,7 +103,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
 //                                SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId)
             )
         } else {
-            ArrayList<SimpleAction>().apply {
+            arrayListOf<SimpleAction>().apply {
 
                 if (event.sendState == SendState.SENDING) {
                     //TODO add cancel?

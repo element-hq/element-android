@@ -50,7 +50,7 @@ internal class RoomDecryptorProvider @Inject constructor(
             Timber.e("## getRoomDecryptor() : null algorithm")
             return null
         }
-        if(roomId != null && roomId.isNotEmpty()) {
+        if (roomId != null && roomId.isNotEmpty()) {
             synchronized(roomDecryptors) {
                 if (!roomDecryptors.containsKey(roomId)) {
                     roomDecryptors[roomId] = HashMap()

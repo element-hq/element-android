@@ -24,7 +24,8 @@ import im.vector.riotredesign.features.notifications.NotificationAction
 import javax.inject.Inject
 
 class TestBingRulesSettings @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_bing_settings_title) {
+                                                private val stringProvider: StringProvider)
+    : TroubleshootTest(R.string.settings_troubleshoot_test_bing_settings_title) {
 
     private val testedRules =
             listOf(RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,

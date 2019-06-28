@@ -46,7 +46,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
     var callback: Callback? = null
 
     init {
-        if(context is HasScreenInjector){
+        if (context is HasScreenInjector){
             context.injector().inject(this)
         }
         View.inflate(context, R.layout.vector_invite_view, this)
