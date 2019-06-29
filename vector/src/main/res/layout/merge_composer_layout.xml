@@ -73,6 +73,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/action_close"
         android:src="@drawable/ic_close_round"
+        android:contentDescription="@string/action_close"
         android:tint="@color/riotx_notice"
         tools:ignore="MissingConstraints" />
 
@@ -91,6 +92,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/send_attachment"
         android:src="@drawable/ic_attachment"
+        android:contentDescription="@string/option_send_files"
         android:tint="?attr/colorAccent"
         tools:ignore="MissingConstraints" />
 
@@ -111,6 +113,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/send"
         android:src="@drawable/ic_send"
+        android:contentDescription="@string/send"
         android:tint="?attr/colorAccent"
         tools:ignore="MissingConstraints" />
 
