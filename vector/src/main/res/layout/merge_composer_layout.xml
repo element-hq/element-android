@@ -73,7 +73,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/action_close"
         android:src="@drawable/ic_close_round"
-        android:contentDescription="@string/action_close"
+        android:contentDescription="@string/cancel"
         android:tint="@color/riotx_notice"
         tools:ignore="MissingConstraints" />
 
