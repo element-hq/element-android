@@ -54,12 +54,10 @@ internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
     }
 }
 
-internal fun RoomEntity.addSendingEvent(event: Event,
-                                        stateIndex: Int) {
+internal fun RoomEntity.addSendingEvent(event: Event) {
     assertIsManaged()
     val eventEntity = event.toEntity(roomId).apply {
         this.sendState = SendState.UNSENT
-        this.stateIndex = stateIndex
     }
     sendingTimelineEvents.add(0, eventEntity)
 }

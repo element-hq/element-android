@@ -33,7 +33,6 @@ import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.util.StringProvider
 import im.vector.matrix.android.internal.util.tryTransactionAsync
@@ -346,10 +345,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         monarchy.tryTransactionAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = event.roomId!!).findFirst()
                     ?: return@tryTransactionAsync
-            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = event.roomId)
-                    ?: return@tryTransactionAsync
-
-            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
+            roomEntity.addSendingEvent(event)
         }
     }
 

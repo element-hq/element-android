@@ -176,10 +176,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         monarchy.tryTransactionAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
                     ?: return@tryTransactionAsync
-            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId = roomId)
-                    ?: return@tryTransactionAsync
-
-            roomEntity.addSendingEvent(event, liveChunk.forwardsStateIndex ?: 0)
+            roomEntity.addSendingEvent(event)
         }
     }
 }

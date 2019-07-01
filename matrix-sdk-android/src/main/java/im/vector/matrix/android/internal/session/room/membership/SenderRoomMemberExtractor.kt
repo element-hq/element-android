@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room.membership
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -31,7 +32,6 @@ import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
-import timber.log.Timber
 import javax.inject.Inject
 
 internal class SenderRoomMemberExtractor @Inject constructor(private val roomId: String) {
@@ -41,16 +41,21 @@ internal class SenderRoomMemberExtractor @Inject constructor(private val roomId:
         // If the event is unlinked we want to fetch unlinked state events
         val unlinked = event.isUnlinked
         val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return null
-        val chunkEntity = ChunkEntity.findIncludingEvent(realm, event.eventId)
-        val content = when {
-            chunkEntity == null   -> null
-            event.stateIndex <= 0 -> baseQuery(chunkEntity.events, sender, unlinked).next(from = event.stateIndex)?.prevContent
-            else                  -> baseQuery(chunkEntity.events, sender, unlinked).prev(since = event.stateIndex)?.content
-        }
-        val fallbackContent = content
-                ?: baseQuery(roomEntity.untimelinedStateEvents, sender, unlinked).prev(since = event.stateIndex)?.content
 
-        return ContentMapper.map(fallbackContent).toModel()
+        // When not synced, we should grab the live RoomMember event
+        return if (event.sendState != SendState.SYNCED) {
+            RoomMembers(realm, roomId).get(sender)
+        } else {
+            val chunkEntity = ChunkEntity.findIncludingEvent(realm, event.eventId)
+            val content = when {
+                chunkEntity == null   -> null
+                event.stateIndex <= 0 -> baseQuery(chunkEntity.events, sender, unlinked).next(from = event.stateIndex)?.prevContent
+                else                  -> baseQuery(chunkEntity.events, sender, unlinked).prev(since = event.stateIndex)?.content
+            }
+            val fallbackContent = content
+                                  ?: baseQuery(roomEntity.untimelinedStateEvents, sender, unlinked).prev(since = event.stateIndex)?.content
+            ContentMapper.map(fallbackContent).toModel()
+        }
     }
 
     private fun baseQuery(list: RealmList<EventEntity>,
