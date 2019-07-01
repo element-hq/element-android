@@ -24,6 +24,7 @@ import im.vector.riotredesign.R
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.DateProvider
+import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.senderName
@@ -32,7 +33,8 @@ import javax.inject.Inject
 
 class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatter: NoticeEventFormatter,
                                                  private val timelineDateFormatter: TimelineDateFormatter,
-                                                 private val colorProvider: ColorProvider) {
+                                                 private val colorProvider: ColorProvider,
+                                                 private val avatarRenderer: AvatarRenderer) {
 
     fun create(roomSummary: RoomSummary, onRoomSelected: (RoomSummary) -> Unit): RoomSummaryItem {
         val unreadCount = roomSummary.notificationCount
@@ -74,6 +76,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
         }
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
+                .avatarRenderer(avatarRenderer)
                 .roomId(roomSummary.roomId)
                 .lastEventTime(latestEventTime)
                 .lastFormattedEvent(latestFormattedEvent)
