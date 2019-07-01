@@ -20,13 +20,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.riotredesign.BuildConfig
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.utils.SecretStoringUtils
 import im.vector.riotredesign.features.settings.PreferencesManager
+import me.gujun.android.span.span
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -275,9 +275,32 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 }
 
                 try {
-                    val summaryLine = context.resources.getQuantityString(
-                            R.plurals.notification_compat_summary_line_for_room, events.size, roomName, events.size)
-                    summaryInboxStyle.addLine(summaryLine)
+                    if (events.size == 1) {
+                        val event = events[0]
+                        if (roomEventGroupInfo.isDirect) {
+                            val line = span {
+                                span {
+                                    textStyle = "bold"
+                                    +String.format("%s: ", event.senderName)
+                                }
+                                +(event.description ?: "")
+                            }
+                            summaryInboxStyle.addLine(line)
+                        } else {
+                            val line = span {
+                                span {
+                                    textStyle = "bold"
+                                    +String.format("%s: %s ", roomName, event.senderName)
+                                }
+                                +(event.description ?: "")
+                            }
+                            summaryInboxStyle.addLine(line)
+                        }
+                    } else {
+                        val summaryLine = context.resources.getQuantityString(
+                                R.plurals.notification_compat_summary_line_for_room, events.size, roomName, events.size)
+                        summaryInboxStyle.addLine(summaryLine)
+                    }
                 } catch (e: Throwable) {
                     //String not found or bad format
                     Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
@@ -343,6 +366,11 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 val sumTitle = context.resources.getQuantityString(
                         R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
                 summaryInboxStyle.setBigContentTitle(sumTitle)
+                        //TODO get latest event?
+                        .setSummaryText(
+                                context.resources
+                                        .getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
+
                 NotificationUtils.buildSummaryListNotification(
                         context,
                         summaryInboxStyle,
