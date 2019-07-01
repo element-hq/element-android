@@ -60,14 +60,14 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
         }
         val result = MediatorLiveData<TimelineEvent>()
         result.addSource(liveEventEntity) { realmResults ->
-            result.value = realmResults.firstOrNull()?.let { timelineEventFactory.create(it) }
+            result.value = realmResults.firstOrNull()?.let { timelineEventFactory.create(it, it.realm) }
         }
 
         result.addSource(liveAnnotationsEntity) {
             liveEventEntity.value?.let {
                 result.value = liveEventEntity.value?.let { realmResults ->
                     //recreate the timeline event
-                    realmResults.firstOrNull()?.let { timelineEventFactory.create(it) }
+                    realmResults.firstOrNull()?.let { timelineEventFactory.create(it, it.realm) }
                 }
             }
         }

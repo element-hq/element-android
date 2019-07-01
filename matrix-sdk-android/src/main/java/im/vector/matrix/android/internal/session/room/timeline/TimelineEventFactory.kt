@@ -34,7 +34,7 @@ import java.util.*
 import javax.inject.Inject
 
 internal interface TimelineEventFactory {
-    fun create(eventEntity: EventEntity, realm: Realm = eventEntity.realm): TimelineEvent
+    fun create(eventEntity: EventEntity, realm: Realm): TimelineEvent
 }
 
 internal interface CacheableTimelineEventFactory : TimelineEventFactory {

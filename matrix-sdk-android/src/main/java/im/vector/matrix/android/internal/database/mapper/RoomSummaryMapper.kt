@@ -16,21 +16,29 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFactory
 import javax.inject.Inject
 
 
-internal class RoomSummaryMapper @Inject constructor(private val timelineEventFactory: TimelineEventFactory) {
+internal class RoomSummaryMapper @Inject constructor(
+        private val timelineEventFactory: TimelineEventFactory,
+        private val monarchy: Monarchy) {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
         val tags = roomSummaryEntity.tags.map {
             RoomTag(it.tagName, it.tagOrder)
         }
         val latestEvent = roomSummaryEntity.latestEvent?.let {
-            timelineEventFactory.create(it)
+            var ev: TimelineEvent? = null
+            monarchy.doWithRealm { realm ->
+                ev = timelineEventFactory.create(it, realm)
+            }
+            ev
         }
         return RoomSummary(
                 roomId = roomSummaryEntity.roomId,
