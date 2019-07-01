@@ -19,13 +19,18 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFactory
+import javax.inject.Inject
 
 
-internal object RoomSummaryMapper {
+internal class RoomSummaryMapper @Inject constructor(private val timelineEventFactory: TimelineEventFactory) {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
         val tags = roomSummaryEntity.tags.map {
             RoomTag(it.tagName, it.tagOrder)
+        }
+        val latestEvent = roomSummaryEntity.latestEvent?.let {
+            timelineEventFactory.create(it)
         }
         return RoomSummary(
                 roomId = roomSummaryEntity.roomId,
@@ -33,7 +38,7 @@ internal object RoomSummaryMapper {
                 topic = roomSummaryEntity.topic ?: "",
                 avatarUrl = roomSummaryEntity.avatarUrl ?: "",
                 isDirect = roomSummaryEntity.isDirect,
-                lastMessage = roomSummaryEntity.lastMessage?.asDomain(),
+                latestEvent = latestEvent,
                 otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
                 highlightCount = roomSummaryEntity.highlightCount,
                 notificationCount = roomSummaryEntity.notificationCount,
@@ -41,8 +46,4 @@ internal object RoomSummaryMapper {
                 membership = roomSummaryEntity.membership
         )
     }
-}
-
-internal fun RoomSummaryEntity.asDomain(): RoomSummary {
-    return RoomSummaryMapper.map(this)
 }

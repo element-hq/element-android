@@ -33,7 +33,7 @@ import javax.inject.Inject
 internal class DefaultTimelineService @Inject constructor(private val roomId: String,
                                                           private val monarchy: Monarchy,
                                                           private val taskExecutor: TaskExecutor,
-                                                          private val timelineEventFactory: TimelineEventFactory,
+                                                          private val timelineEventFactory: CacheableTimelineEventFactory,
                                                           private val contextOfEventTask: GetContextOfEventTask,
                                                           private val paginationTask: PaginationTask
 ) : TimelineService {

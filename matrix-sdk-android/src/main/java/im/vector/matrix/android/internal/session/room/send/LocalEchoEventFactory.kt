@@ -34,6 +34,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
+import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.util.StringProvider
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import org.commonmark.parser.Parser
@@ -50,8 +51,9 @@ import javax.inject.Inject
  *
  * The transactionID is used as loc
  */
-
-internal class LocalEchoEventFactory @Inject constructor(private val credentials: Credentials, private val stringProvider: StringProvider) {
+internal class LocalEchoEventFactory @Inject constructor(private val credentials: Credentials,
+                                                         private val stringProvider: StringProvider,
+                                                         private val roomSummaryUpdater: RoomSummaryUpdater) {
 
     fun createTextEvent(roomId: String, msgType: String, text: String, autoMarkdown: Boolean): Event {
         if (autoMarkdown && msgType == MessageType.MSGTYPE_TEXT) {
@@ -342,10 +344,12 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
     }
 
     fun saveLocalEcho(monarchy: Monarchy, event: Event) {
+        if (event.roomId == null) throw IllegalStateException("Your event should have a roomId")
         monarchy.tryTransactionAsync { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = event.roomId!!).findFirst()
+            val roomEntity = RoomEntity.where(realm, roomId = event.roomId).findFirst()
                     ?: return@tryTransactionAsync
             roomEntity.addSendingEvent(event)
+            roomSummaryUpdater.update(realm, event.roomId)
         }
     }
 

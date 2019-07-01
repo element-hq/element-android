@@ -33,20 +33,46 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
+internal interface TimelineEventFactory {
+    fun create(eventEntity: EventEntity, realm: Realm = eventEntity.realm): TimelineEvent
+}
+
+internal interface CacheableTimelineEventFactory : TimelineEventFactory {
+    fun clear()
+}
+
 /**
  * This class is responsible for building [TimelineEvent] returned by a [Timeline] through [TimelineService]
  * It handles decryption, extracting additional data around an event as sender data and relation.
  */
-internal class TimelineEventFactory @Inject constructor(
-        private val roomMemberExtractor: SenderRoomMemberExtractor,
-        private val relationExtractor: EventRelationExtractor,
-        private val cryptoService: CryptoService) {
+internal class SimpleTimelineEventFactory @Inject constructor(private val roomMemberExtractor: SenderRoomMemberExtractor,
+                                                              private val relationExtractor: EventRelationExtractor
+) : TimelineEventFactory {
+    override fun create(eventEntity: EventEntity, realm: Realm): TimelineEvent {
+        val senderRoomMember = roomMemberExtractor.extractFrom(eventEntity, realm)
+        val relations = relationExtractor.extractFrom(eventEntity, realm)
+        return TimelineEvent(
+                eventEntity.asDomain(),
+                eventEntity.localId,
+                eventEntity.displayIndex,
+                senderRoomMember?.displayName,
+                /* TODO Rebase */ true,
+                senderRoomMember?.avatarUrl,
+                eventEntity.sendState,
+                relations
+        )
+    }
+}
+
+internal class InMemoryTimelineEventFactory @Inject constructor(private val roomMemberExtractor: SenderRoomMemberExtractor,
+                                                                private val relationExtractor: EventRelationExtractor,
+                                                                private val cryptoService: CryptoService) : CacheableTimelineEventFactory {
 
     private val timelineId = UUID.randomUUID().toString()
     private val senderCache = mutableMapOf<String, SenderData>()
     private val decryptionCache = mutableMapOf<String, MXEventDecryptionResult>()
 
-    fun create(eventEntity: EventEntity, realm: Realm = eventEntity.realm): TimelineEvent {
+    override fun create(eventEntity: EventEntity, realm: Realm): TimelineEvent {
         val sender = eventEntity.sender
         val cacheKey = sender + eventEntity.localId
         val senderData = senderCache.getOrPut(cacheKey) {
@@ -97,7 +123,7 @@ internal class TimelineEventFactory @Inject constructor(
         }
     }
 
-    fun clear() {
+    override fun clear() {
         senderCache.clear()
     }
 

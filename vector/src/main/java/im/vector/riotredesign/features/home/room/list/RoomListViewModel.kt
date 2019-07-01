@@ -18,14 +18,11 @@ package im.vector.riotredesign.features.home.room.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import arrow.core.Option
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
@@ -33,10 +30,7 @@ import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 
-typealias RoomListFilterName = CharSequence
-
 class RoomListViewModel @AssistedInject constructor(@Assisted initialState: RoomListViewState,
-                                                    private val session: Session,
                                                     private val homeRoomListObservableSource: HomeRoomListObservableStore,
                                                     private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
                                                     private val chronologicalRoomComparator: ChronologicalRoomComparator)
@@ -57,8 +51,6 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
     }
 
     private val displayMode = initialState.displayMode
-    private val roomListDisplayModeFilter = RoomListDisplayModeFilter(displayMode)
-    private val roomListFilter = BehaviorRelay.createDefault<Option<RoomListFilterName>>(Option.empty())
 
     private val _openRoomLiveData = MutableLiveData<LiveEvent<String>>()
     val openRoomLiveData: LiveData<LiveEvent<String>>
@@ -71,7 +63,6 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
     fun accept(action: RoomListActions) {
         when (action) {
             is RoomListActions.SelectRoom     -> handleSelectRoom(action)
-            is RoomListActions.FilterRooms    -> handleFilterRooms(action)
             is RoomListActions.ToggleCategory -> handleToggleCategory(action)
         }
     }
@@ -80,11 +71,6 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
     private fun handleSelectRoom(action: RoomListActions.SelectRoom) {
         _openRoomLiveData.postValue(LiveEvent(action.roomSummary.roomId))
-    }
-
-    private fun handleFilterRooms(action: RoomListActions.FilterRooms) {
-        val optionalFilter = Option.fromNullable(action.roomName)
-        roomListFilter.accept(optionalFilter)
     }
 
     private fun handleToggleCategory(action: RoomListActions.ToggleCategory) = setState {

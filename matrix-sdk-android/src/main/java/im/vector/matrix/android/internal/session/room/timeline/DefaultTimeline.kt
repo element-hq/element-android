@@ -54,7 +54,7 @@ internal class DefaultTimeline(
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
-        private val timelineEventFactory: TimelineEventFactory,
+        private val timelineEventFactory: CacheableTimelineEventFactory,
         private val paginationTask: PaginationTask,
         private val allowedTypes: List<String>?
 ) : Timeline {

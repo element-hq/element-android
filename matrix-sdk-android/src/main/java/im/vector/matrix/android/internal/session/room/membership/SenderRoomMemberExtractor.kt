@@ -34,9 +34,10 @@ import io.realm.RealmList
 import io.realm.RealmQuery
 import javax.inject.Inject
 
-internal class SenderRoomMemberExtractor @Inject constructor(private val roomId: String) {
+internal class SenderRoomMemberExtractor @Inject constructor() {
 
     fun extractFrom(event: EventEntity, realm: Realm = event.realm): RoomMember? {
+        val roomId = event.roomId
         val sender = event.sender ?: return null
         // If the event is unlinked we want to fetch unlinked state events
         val unlinked = event.isUnlinked

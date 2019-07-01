@@ -22,8 +22,6 @@ sealed class RoomListActions {
 
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListActions()
 
-    data class FilterRooms(val roomName: CharSequence? = null) : RoomListActions()
-
     data class ToggleCategory(val category: RoomCategory) : RoomListActions()
 
 }
