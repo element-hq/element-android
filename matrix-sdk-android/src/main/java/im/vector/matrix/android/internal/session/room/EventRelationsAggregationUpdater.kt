@@ -17,9 +17,11 @@ package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -40,11 +42,11 @@ internal class EventRelationsAggregationUpdater @Inject constructor(monarchy: Mo
         RealmLiveEntityObserver<EventEntity>(monarchy) {
 
     override val query = Monarchy.Query<EventEntity> {
-        EventEntity.where(it)
-        //mmm why is this query not working?
-//        EventEntity.byTypes(it, listOf(
-//                EventType.REDACTION, EventType.MESSAGE, EventType.REDACTION)
-//        )
+        EventEntity.types(it, listOf(
+                EventType.MESSAGE,
+                EventType.REDACTION,
+                EventType.ENCRYPTED)
+        )
     }
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
