@@ -77,23 +77,29 @@
         app:layout_constraintTop_toBottomOf="@+id/roomInvitationSubTitle"
         tools:layout_marginStart="120dp" />
 
-    <com.google.android.material.button.MaterialButton
+    <im.vector.riotredesign.core.platform.ButtonStateView
         android:id="@+id/roomInvitationAccept"
-        style="@style/VectorButtonStyle"
-        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:minWidth="122dp"
-        android:text="@string/accept"
+        app:bsv_button_text="@string/accept"
+        app:bsv_loaded_image_src="@drawable/ic_tick"
+        app:bsv_use_flat_button="false"
         app:layout_constraintEnd_toEndOf="@+id/roomInvitationNameView"
         app:layout_constraintTop_toBottomOf="@+id/roomLastEventBottomSpace" />
 
-    <com.google.android.material.button.MaterialButton
+    <im.vector.riotredesign.core.platform.ButtonStateView
         android:id="@+id/roomInvitationReject"
-        style="@style/VectorButtonStyleOutlined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/layout_vertical_margin"
         android:minWidth="122dp"
-        android:text="@string/reject"
-        android:textAllCaps="true"
-        android:textColor="?riotx_text_primary"
+        app:bsv_button_text="@string/reject"
+        app:bsv_loaded_image_src="@drawable/ic_tick"
+        app:bsv_use_flat_button="true"
         app:layout_constraintEnd_toStartOf="@+id/roomInvitationAccept"
         app:layout_constraintTop_toTopOf="@+id/roomInvitationAccept" />
 

@@ -24,12 +24,15 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.*
+import com.google.android.material.snackbar.Snackbar
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
+import im.vector.riotredesign.core.error.ErrorFormatter
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.observeEventDebounced
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.StateView
@@ -64,6 +67,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     private val roomListParams: RoomListParams by args()
     @Inject lateinit var roomController: RoomSummaryController
     @Inject lateinit var roomListViewModelFactory: RoomListViewModel.Factory
+    @Inject lateinit var errorFormatter: ErrorFormatter
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
@@ -82,6 +86,13 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         }
 
         createChatFabMenu.listener = this
+
+        roomListViewModel.invitationAnswerErrorLiveData.observeEvent(this) { throwable ->
+            vectorBaseActivity.coordinatorLayout?.let {
+                Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
+                        .show()
+            }
+        }
     }
 
     private fun setupCreateRoomButton() {
@@ -234,11 +245,11 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     }
 
     override fun onAcceptRoomInvitation(room: RoomSummary) {
-        vectorBaseActivity.notImplemented("Accept room invitation")
+        roomListViewModel.accept(RoomListActions.AcceptInvitation(room))
     }
 
     override fun onRejectRoomInvitation(room: RoomSummary) {
-        vectorBaseActivity.notImplemented("Reject room invitation")
+        roomListViewModel.accept(RoomListActions.RejectInvitation(room))
     }
 
     override fun onToggleRoomCategory(roomCategory: RoomCategory) {

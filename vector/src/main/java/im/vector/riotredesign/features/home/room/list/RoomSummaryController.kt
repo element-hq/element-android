@@ -39,7 +39,11 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                     listener?.onToggleRoomCategory(category)
                 }
                 if (isExpanded) {
-                    buildRoomModels(summaries)
+                    buildRoomModels(summaries,
+                            viewState.joiningRoomsIds,
+                            viewState.joiningErrorRoomsIds,
+                            viewState.rejectingRoomsIds,
+                            viewState.rejectingErrorRoomsIds)
                 }
             }
         }
@@ -73,10 +77,14 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         }
     }
 
-    private fun buildRoomModels(summaries: List<RoomSummary>) {
+    private fun buildRoomModels(summaries: List<RoomSummary>,
+                                joiningRoomsIds: Set<String>,
+                                joiningErrorRoomsIds: Set<String>,
+                                rejectingRoomsIds: Set<String>,
+                                rejectingErrorRoomsIds: Set<String>) {
         summaries.forEach { roomSummary ->
             roomSummaryItemFactory
-                    .create(roomSummary, listener)
+                    .create(roomSummary, joiningRoomsIds, joiningErrorRoomsIds, rejectingRoomsIds, rejectingErrorRoomsIds, listener)
                     .addTo(this)
         }
     }

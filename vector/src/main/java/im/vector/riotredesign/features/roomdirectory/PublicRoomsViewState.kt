@@ -28,11 +28,11 @@ data class PublicRoomsViewState(
         val asyncPublicRoomsRequest: Async<List<PublicRoom>> = Uninitialized,
         // True if more result are available server side
         val hasMore: Boolean = false,
-        // List of roomIds that the user wants to join
-        val joiningRoomsIds: List<String> = emptyList(),
-        // List of roomIds that the user wants to join, but an error occurred
-        val joiningErrorRoomsIds: List<String> = emptyList(),
-        // List of joined roomId,
-        val joinedRoomsIds: List<String> = emptyList(),
+        // Set of roomIds that the user wants to join
+        val joiningRoomsIds: Set<String> = emptySet(),
+        // Set of roomIds that the user wants to join, but an error occurred
+        val joiningErrorRoomsIds: Set<String> = emptySet(),
+        // Set of joined roomId,
+        val joinedRoomsIds: Set<String> = emptySet(),
         val roomDirectoryDisplayName: String? = null
 ) : MvRxState

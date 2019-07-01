@@ -40,15 +40,24 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                                                  private val stringProvider: StringProvider,
                                                  private val avatarRenderer: AvatarRenderer) {
 
-    fun create(roomSummary: RoomSummary, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+    fun create(roomSummary: RoomSummary,
+               joiningRoomsIds: Set<String>,
+               joiningErrorRoomsIds: Set<String>,
+               rejectingRoomsIds: Set<String>,
+               rejectingErrorRoomsIds: Set<String>,
+               listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
-            Membership.INVITE -> createInvitationItem(roomSummary, listener)
+            Membership.INVITE -> createInvitationItem(roomSummary, joiningRoomsIds, joiningErrorRoomsIds, rejectingRoomsIds, rejectingErrorRoomsIds, listener)
             else              -> createRoomItem(roomSummary, listener)
-
         }
     }
 
-    private fun createInvitationItem(roomSummary: RoomSummary, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+    private fun createInvitationItem(roomSummary: RoomSummary,
+                                     joiningRoomsIds: Set<String>,
+                                     joiningErrorRoomsIds: Set<String>,
+                                     rejectingRoomsIds: Set<String>,
+                                     rejectingErrorRoomsIds: Set<String>,
+                                     listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.latestEvent?.root?.senderId
         } else {
@@ -62,6 +71,10 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 .avatarRenderer(avatarRenderer)
                 .roomId(roomSummary.roomId)
                 .secondLine(secondLine)
+                .invitationAcceptInProgress(joiningRoomsIds.contains(roomSummary.roomId))
+                .invitationAcceptInError(joiningErrorRoomsIds.contains(roomSummary.roomId))
+                .invitationRejectInProgress(rejectingRoomsIds.contains(roomSummary.roomId))
+                .invitationRejectInError(rejectingErrorRoomsIds.contains(roomSummary.roomId))
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
                 .roomName(roomSummary.displayName)

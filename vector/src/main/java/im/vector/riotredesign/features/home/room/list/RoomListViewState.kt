@@ -27,6 +27,14 @@ data class RoomListViewState(
         val displayMode: RoomListFragment.DisplayMode,
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
         val asyncFilteredRooms: Async<RoomSummaries> = Uninitialized,
+        // List of roomIds that the user wants to join
+        val joiningRoomsIds: Set<String> = emptySet(),
+        // List of roomIds that the user wants to join, but an error occurred
+        val joiningErrorRoomsIds: Set<String> = emptySet(),
+        // List of roomIds that the user wants to join
+        val rejectingRoomsIds: Set<String> = emptySet(),
+        // List of roomIds that the user wants to reject, but an error occurred
+        val rejectingErrorRoomsIds: Set<String> = emptySet(),
         val isInviteExpanded: Boolean = true,
         val isFavouriteRoomsExpanded: Boolean = true,
         val isDirectRoomsExpanded: Boolean = true,

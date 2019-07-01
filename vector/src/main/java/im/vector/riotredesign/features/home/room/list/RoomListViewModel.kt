@@ -23,14 +23,18 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.utils.LiveEvent
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
+import timber.log.Timber
 
 class RoomListViewModel @AssistedInject constructor(@Assisted initialState: RoomListViewState,
+                                                    private val session: Session,
                                                     private val homeRoomListObservableSource: HomeRoomListObservableStore,
                                                     private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
                                                     private val chronologicalRoomComparator: ChronologicalRoomComparator)
@@ -56,14 +60,20 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
     val openRoomLiveData: LiveData<LiveEvent<String>>
         get() = _openRoomLiveData
 
+    private val _invitationAnswerErrorLiveData = MutableLiveData<LiveEvent<Throwable>>()
+    val invitationAnswerErrorLiveData: LiveData<LiveEvent<Throwable>>
+        get() = _invitationAnswerErrorLiveData
+
     init {
         observeRoomSummaries()
     }
 
     fun accept(action: RoomListActions) {
         when (action) {
-            is RoomListActions.SelectRoom     -> handleSelectRoom(action)
-            is RoomListActions.ToggleCategory -> handleToggleCategory(action)
+            is RoomListActions.SelectRoom       -> handleSelectRoom(action)
+            is RoomListActions.ToggleCategory   -> handleToggleCategory(action)
+            is RoomListActions.AcceptInvitation -> handleAcceptInvitation(action)
+            is RoomListActions.RejectInvitation -> handleRejectInvitation(action)
         }
     }
 
@@ -90,6 +100,78 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                 .execute { async ->
                     copy(asyncFilteredRooms = async)
                 }
+    }
+
+    private fun handleAcceptInvitation(action: RoomListActions.AcceptInvitation) = withState { state ->
+        val roomId = action.roomSummary.roomId
+
+        if (state.joiningRoomsIds.contains(roomId) || state.rejectingRoomsIds.contains(roomId)) {
+            // Request already sent, should not happen
+            Timber.w("Try to join an already joining room. Should not happen")
+            return@withState
+        }
+
+        setState {
+            copy(
+                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(roomId) },
+                    rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { remove(roomId) }
+            )
+        }
+
+        session.getRoom(roomId)?.join(object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
+                // Instead, we wait for the room to be joined
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // Notify the user
+                _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
+
+                setState {
+                    copy(
+                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(roomId) },
+                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                    )
+                }
+            }
+        })
+    }
+
+    private fun handleRejectInvitation(action: RoomListActions.RejectInvitation) = withState { state ->
+        val roomId = action.roomSummary.roomId
+
+        if (state.joiningRoomsIds.contains(roomId) || state.rejectingRoomsIds.contains(roomId)) {
+            // Request already sent, should not happen
+            Timber.w("Try to reject an already rejecting room. Should not happen")
+            return@withState
+        }
+
+        setState {
+            copy(
+                    rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { add(roomId) },
+                    joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { remove(roomId) }
+            )
+        }
+
+        session.getRoom(roomId)?.leave(object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
+                // Instead, we wait for the room to be joined
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // Notify the user
+                _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
+
+                setState {
+                    copy(
+                            rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { remove(roomId) },
+                            rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                    )
+                }
+            }
+        })
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {

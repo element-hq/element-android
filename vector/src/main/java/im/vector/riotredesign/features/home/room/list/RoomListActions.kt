@@ -24,4 +24,8 @@ sealed class RoomListActions {
 
     data class ToggleCategory(val category: RoomCategory) : RoomListActions()
 
+    data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListActions()
+
+    data class RejectInvitation(val roomSummary: RoomSummary) : RoomListActions()
+
 }
