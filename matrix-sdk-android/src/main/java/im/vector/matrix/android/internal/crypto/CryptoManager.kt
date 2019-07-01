@@ -25,6 +25,7 @@ import android.text.TextUtils
 import arrow.core.Try
 import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
+import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.failure.Failure
@@ -98,7 +99,7 @@ internal class CryptoManager @Inject constructor(
         private val olmManager: OlmManager,
         // The credentials,
         private val credentials: Credentials,
-        private val myDeviceInfoHolder: MyDeviceInfoHolder,
+        private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
         // Olm device
@@ -190,7 +191,7 @@ internal class CryptoManager @Inject constructor(
     }
 
     override fun getMyDevice(): MXDeviceInfo {
-        return myDeviceInfoHolder.myDevice
+        return myDeviceInfoHolder.get().myDevice
     }
 
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {

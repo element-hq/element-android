@@ -48,58 +48,7 @@ internal class DefaultPushRuleService @Inject constructor(
 
     override fun fetchPushRules(scope: String) {
         pushRulesTask
-                .configureWith(Unit)
-                .dispatchTo(object : MatrixCallback<GetPushRulesResponse> {
-                    override fun onSuccess(data: GetPushRulesResponse) {
-                        monarchy.runTransactionSync { realm ->
-                            //clear existings?
-                            //TODO
-                            realm.where(PushRulesEntity::class.java)
-                                    .equalTo(PusherEntityFields.USER_ID, sessionParams.credentials.userId)
-                                    .findAll().deleteAllFromRealm()
-
-                            val content = PushRulesEntity(sessionParams.credentials.userId, scope, "content")
-                            data.global.content?.forEach { rule ->
-                                PushRulesMapper.map(rule).also {
-                                    content.pushRules.add(it)
-                                }
-                            }
-                            realm.insertOrUpdate(content)
-
-                            val override = PushRulesEntity(sessionParams.credentials.userId, scope, "override")
-                            data.global.override?.forEach { rule ->
-                                PushRulesMapper.map(rule).also {
-                                    override.pushRules.add(it)
-                                }
-                            }
-                            realm.insertOrUpdate(override)
-
-                            val rooms = PushRulesEntity(sessionParams.credentials.userId, scope, "room")
-                            data.global.room?.forEach { rule ->
-                                PushRulesMapper.map(rule).also {
-                                    rooms.pushRules.add(it)
-                                }
-                            }
-                            realm.insertOrUpdate(rooms)
-
-                            val senders = PushRulesEntity(sessionParams.credentials.userId, scope, "sender")
-                            data.global.sender?.forEach { rule ->
-                                PushRulesMapper.map(rule).also {
-                                    senders.pushRules.add(it)
-                                }
-                            }
-                            realm.insertOrUpdate(senders)
-
-                            val underrides = PushRulesEntity(sessionParams.credentials.userId, scope, "underride")
-                            data.global.underride?.forEach { rule ->
-                                PushRulesMapper.map(rule).also {
-                                    underrides.pushRules.add(it)
-                                }
-                            }
-                            realm.insertOrUpdate(underrides)
-                        }
-                    }
-                })
+                .configureWith(GetPushRulesTask.Params(scope))
                 .executeBy(taskExecutor)
     }
 

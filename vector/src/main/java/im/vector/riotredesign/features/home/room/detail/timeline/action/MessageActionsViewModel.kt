@@ -18,6 +18,7 @@ package im.vector.riotredesign.features.home.room.detail.timeline.action
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import dagger.Lazy
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -84,7 +85,7 @@ data class MessageActionState(
  */
 class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           initialState: MessageActionState,
-                                                          private val eventHtmlRenderer: EventHtmlRenderer,
+                                                          private val eventHtmlRenderer: Lazy<EventHtmlRenderer>,
                                                           session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter
 ) : VectorViewModel<MessageActionState>(initialState) {
@@ -121,7 +122,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     fun resolveBody(state: MessageActionState): CharSequence? {
-        return state.messageBody(eventHtmlRenderer, noticeEventFormatter)
+        return state.messageBody(eventHtmlRenderer.get(), noticeEventFormatter)
     }
 
 }

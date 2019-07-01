@@ -24,6 +24,7 @@ import android.text.TextUtils
 import android.util.Pair
 import androidx.core.content.edit
 import im.vector.riotredesign.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -75,7 +76,7 @@ object VectorLocale {
         }
 
         // init the known locales in background, using kotlin coroutines
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
             initApplicationLocales(context)
         }
     }
