@@ -93,6 +93,7 @@
         android:id="@+id/inviteView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="?riotx_background"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -81,7 +81,10 @@ import im.vector.riotredesign.features.autocomplete.command.AutocompleteCommandP
 import im.vector.riotredesign.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotredesign.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotredesign.features.command.Command
-import im.vector.riotredesign.features.home.*
+import im.vector.riotredesign.features.home.AvatarRenderer
+import im.vector.riotredesign.features.home.NavigateToRoomInterceptor
+import im.vector.riotredesign.features.home.PermalinkHandler
+import im.vector.riotredesign.features.home.getColorFromUserId
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerActions
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
 import im.vector.riotredesign.features.home.room.detail.composer.TextComposerViewModel
@@ -509,6 +512,9 @@ class RoomDetailFragment :
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
+
+            // Intercept click event
+            inviteView.setOnClickListener { }
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
