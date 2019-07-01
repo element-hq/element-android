@@ -21,7 +21,7 @@
             android:exported="false" />
 
         <service
-            android:name=".fdroid.receiver.service.VectorSyncService"
+            android:name=".fdroid.service.VectorSyncService"
             android:exported="false" />
 
     </application>

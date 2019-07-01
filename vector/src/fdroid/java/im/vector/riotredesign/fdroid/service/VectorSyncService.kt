@@ -27,13 +27,7 @@ import timber.log.Timber
 
 class VectorSyncService : SyncService() {
 
-    override fun onCreate() {
-        Timber.v("VectorSyncService - onCreate")
-        super.onCreate()
-    }
-
     override fun onDestroy() {
-        Timber.v("VectorSyncService - onDestroy")
         removeForegroundNotif()
         super.onDestroy()
     }
@@ -56,17 +50,4 @@ class VectorSyncService : SyncService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    /**
-     * If the service is bounded and the service was previously started we can remove foreground notification
-     */
-    override fun onBind(intent: Intent?): IBinder {
-        Timber.v("VectorSyncService - onBind ")
-        stopForeground(true)
-        return super.onBind(intent)
-    }
-
-    override fun onUnbind(intent: Intent?): Boolean {
-        Timber.v("VectorSyncService - onUnbind ")
-        return super.onUnbind(intent)
-    }
 }

@@ -17,9 +17,7 @@ package im.vector.matrix.android.internal.session.sync.job
 
 import android.app.Service
 import android.content.Intent
-import android.os.Binder
 import android.os.IBinder
-import androidx.work.ListenableWorker
 import com.squareup.moshi.JsonEncodingException
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
@@ -33,12 +31,9 @@ import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.*
-import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 private const val DEFAULT_LONG_POOL_TIMEOUT = 10_000L
 private const val BACKGROUND_LONG_POOL_TIMEOUT = 0L
@@ -59,7 +54,6 @@ open class SyncService : Service() {
     private lateinit var networkConnectivityChecker: NetworkConnectivityChecker
     private lateinit var taskExecutor: TaskExecutor
 
-    private var localBinder = LocalBinder()
 
     var timer = Timer()
 
@@ -72,7 +66,8 @@ open class SyncService : Service() {
         timeout = 0
         intent?.let {
             val userId = it.getStringExtra(EXTRA_USER_ID)
-            val sessionComponent =  Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId) ?: return@let
+            val sessionComponent = Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId)
+                    ?: return@let
             syncTokenStore = sessionComponent.syncTokenStore()
             syncTask = sessionComponent.syncTask()
             networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
@@ -130,7 +125,6 @@ open class SyncService : Service() {
                             cancelableTask = null
                             nextBatch = data.nextBatch
                             syncTokenStore.saveToken(nextBatch)
-                            localBinder.notifySyncFinish()
                             if (!once) {
                                 timer.schedule(object : TimerTask() {
                                     override fun run() {
@@ -146,7 +140,6 @@ open class SyncService : Service() {
                         override fun onFailure(failure: Throwable) {
                             Timber.e(failure)
                             cancelableTask = null
-                            localBinder.notifyFailure(failure)
                             if (failure is Failure.NetworkConnection
                                     && failure.cause is SocketTimeoutException) {
                                 // Timeout are not critical
@@ -181,72 +174,12 @@ open class SyncService : Service() {
         }
     }
 
-    override fun onBind(intent: Intent?): IBinder {
-        return localBinder
-    }
-
-    inner class LocalBinder : Binder() {
-
-        private var listeners = ArrayList<SyncListener>()
-
-        fun addListener(listener: SyncListener) {
-            if (!listeners.contains(listener)) {
-                listeners.add(listener)
-            }
-        }
-
-        fun removeListener(listener: SyncListener) {
-            listeners.remove(listener)
-        }
-
-        internal fun notifySyncFinish() {
-            listeners.forEach {
-                try {
-                    it.onSyncFinsh()
-                } catch (t: Throwable) {
-                    Timber.e("Failed to notify listener $it")
-                }
-            }
-        }
-
-        internal fun notifyNetworkNotAvailable() {
-            listeners.forEach {
-                try {
-                    it.networkNotAvailable()
-                } catch (t: Throwable) {
-                    Timber.e("Failed to notify listener $it")
-                }
-            }
-        }
-
-        internal fun notifyFailure(throwable: Throwable) {
-
-            listeners.forEach {
-                try {
-                    it.onFailed(throwable)
-                } catch (t: Throwable) {
-                    Timber.e("Failed to notify listener $it")
-                }
-            }
-
-        }
-
-        fun getService(): SyncService = this@SyncService
-
-    }
-
-    interface SyncListener {
-        fun onSyncFinsh()
-        fun networkNotAvailable()
-        fun onFailed(throwable: Throwable)
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
     }
 
     companion object {
-
         const val EXTRA_USER_ID = "EXTRA_USER_ID"
-
-        fun startLongPool(delay: Long) {
-
-        }
     }
+
 }

@@ -44,14 +44,12 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         Timber.d("RestartBroadcastReceiver received intent")
         Intent(context, VectorSyncService::class.java).also {
-            it.action = "SLOW"
             it.putExtra(SyncService.EXTRA_USER_ID, userId)
-            context.startService(it)
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    ContextCompat.startForegroundService(context, intent)
+                    ContextCompat.startForegroundService(context, it)
                 } else {
-                    context.startService(intent)
+                    context.startService(it)
                 }
             } catch (ex: Throwable) {
                 //TODO
