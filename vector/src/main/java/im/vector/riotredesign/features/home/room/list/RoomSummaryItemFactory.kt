@@ -45,11 +45,11 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
         val latestEvent = roomSummary.latestEvent
         if (latestEvent != null) {
             val date = latestEvent.root.localDateTime()
-            val currentData = DateProvider.currentLocalDateTime()
-            val isSameDay = date.toLocalDate() == currentData.toLocalDate()
-            latestFormattedEvent = if (latestEvent.root.type == EventType.MESSAGE) {
+            val currentDate = DateProvider.currentLocalDateTime()
+            val isSameDay = date.toLocalDate() == currentDate.toLocalDate()
+            latestFormattedEvent = if (latestEvent.root.getClearType() == EventType.MESSAGE) {
                 val senderName = latestEvent.senderName() ?: latestEvent.root.senderId
-                val content = latestEvent.root.content?.toModel<MessageContent>()
+                val content = latestEvent.root.getClearContent()?.toModel<MessageContent>()
                 val message = content?.body ?: ""
                 if (roomSummary.isDirect.not() && senderName != null) {
                     span {

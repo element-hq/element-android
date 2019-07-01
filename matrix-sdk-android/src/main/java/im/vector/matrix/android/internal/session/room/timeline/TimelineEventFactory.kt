@@ -46,21 +46,44 @@ internal interface CacheableTimelineEventFactory : TimelineEventFactory {
  * It handles decryption, extracting additional data around an event as sender data and relation.
  */
 internal class SimpleTimelineEventFactory @Inject constructor(private val roomMemberExtractor: SenderRoomMemberExtractor,
-                                                              private val relationExtractor: EventRelationExtractor
+                                                              private val relationExtractor: EventRelationExtractor,
+                                                              private val cryptoService: CryptoService
 ) : TimelineEventFactory {
+
     override fun create(eventEntity: EventEntity, realm: Realm): TimelineEvent {
         val senderRoomMember = roomMemberExtractor.extractFrom(eventEntity, realm)
         val relations = relationExtractor.extractFrom(eventEntity, realm)
+
+        val event = eventEntity.asDomain()
+        if (event.getClearType() == EventType.ENCRYPTED) {
+            handleEncryptedEvent(event)
+        }
+
+        val isUniqueDisplayName = RoomMembers(realm, eventEntity.roomId).isUniqueDisplayName(senderRoomMember?.displayName)
+
         return TimelineEvent(
-                eventEntity.asDomain(),
+                event,
                 eventEntity.localId,
                 eventEntity.displayIndex,
                 senderRoomMember?.displayName,
-                /* TODO Rebase */ true,
+                isUniqueDisplayName,
                 senderRoomMember?.avatarUrl,
                 eventEntity.sendState,
                 relations
         )
+    }
+
+    private fun handleEncryptedEvent(event: Event) {
+        Timber.v("Encrypted event: try to decrypt ${event.eventId}")
+        try {
+            val result = cryptoService.decryptEvent(event, UUID.randomUUID().toString())
+            event.setClearData(result)
+        } catch (failure: Throwable) {
+            Timber.e(failure, "Encrypted event: decryption failed")
+            if (failure is MXDecryptionException) {
+                event.setCryptoError(failure.cryptoError)
+            }
+        }
     }
 }
 
@@ -125,6 +148,7 @@ internal class InMemoryTimelineEventFactory @Inject constructor(private val room
 
     override fun clear() {
         senderCache.clear()
+        decryptionCache.clear()
     }
 
     private data class SenderData(
