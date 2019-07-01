@@ -606,7 +606,7 @@ object NotificationUtils {
      * Build the summary notification
      */
     fun buildSummaryListNotification(context: Context,
-                                     style: NotificationCompat.Style,
+                                     style: NotificationCompat.InboxStyle,
                                      compatSummary: String,
                                      noisy: Boolean,
                                      lastMessageTimestamp: Long): Notification? {
