@@ -34,9 +34,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import im.vector.matrix.android.api.Matrix
 import im.vector.riotredesign.R
-import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.core.extensions.showPassword
 import im.vector.riotredesign.core.platform.SimpleTextWatcher
 import im.vector.riotredesign.core.preference.UserAvatarPreference
@@ -46,20 +44,16 @@ import im.vector.riotredesign.core.utils.allGranted
 import im.vector.riotredesign.core.utils.copyToClipboard
 import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.MainActivity
-import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 import im.vector.riotredesign.features.themes.ThemeUtils
 import im.vector.riotredesign.features.workers.signout.SignOutUiWorker
 import java.lang.ref.WeakReference
 import java.util.*
-import javax.inject.Inject
 
 class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
 
     private var mDisplayedEmails = ArrayList<String>()
     private var mDisplayedPhoneNumber = ArrayList<String>()
@@ -239,8 +233,8 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference("SETTINGS_SIGN_OUT_KEY")
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
-                SignOutUiWorker(requireActivity(), notificationDrawerManager)
-                        .perform(activeSessionHolder.getActiveSession())
+                SignOutUiWorker(requireActivity())
+                        .perform(requireContext())
             }
 
             false

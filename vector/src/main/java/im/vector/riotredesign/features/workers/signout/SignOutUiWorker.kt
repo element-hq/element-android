@@ -16,17 +16,24 @@
 
 package im.vector.riotredesign.features.workers.signout
 
+import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
-import im.vector.matrix.android.api.session.Session
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.ActiveSessionHolder
+import im.vector.riotredesign.core.extensions.vectorComponent
 import im.vector.riotredesign.features.MainActivity
 import im.vector.riotredesign.features.notifications.NotificationDrawerManager
 
-class SignOutUiWorker(private val activity: FragmentActivity,
-                      private val notificationDrawerManager: NotificationDrawerManager) {
+class SignOutUiWorker(private val activity: FragmentActivity) {
 
-    fun perform(session: Session) {
+    lateinit var notificationDrawerManager: NotificationDrawerManager
+    lateinit var activeSessionHolder: ActiveSessionHolder
+
+    fun perform(context: Context) {
+        notificationDrawerManager = context.vectorComponent().notificationDrawerManager()
+        activeSessionHolder = context.vectorComponent().activeSessionHolder()
+        val session = activeSessionHolder.getActiveSession()
         if (SignOutViewModel.doYouNeedToBeDisplayed(session)) {
             val signOutDialog = SignOutBottomSheetDialogFragment.newInstance(session.sessionParams.credentials.userId)
             signOutDialog.onSignOut = Runnable {
