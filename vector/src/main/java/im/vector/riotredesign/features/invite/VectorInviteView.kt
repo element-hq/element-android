@@ -17,7 +17,6 @@
 package im.vector.riotredesign.features.invite
 
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -46,11 +45,10 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
     var callback: Callback? = null
 
     init {
-        if (context is HasScreenInjector){
+        if (context is HasScreenInjector) {
             context.injector().inject(this)
         }
         View.inflate(context, R.layout.vector_invite_view, this)
-        setBackgroundColor(Color.WHITE)
         inviteRejectView.setOnClickListener { callback?.onRejectInvite() }
         inviteAcceptView.setOnClickListener { callback?.onAcceptInvite() }
     }
