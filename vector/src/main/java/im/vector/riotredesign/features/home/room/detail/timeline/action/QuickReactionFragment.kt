@@ -47,7 +47,7 @@ class QuickReactionFragment : VectorBaseFragment() {
         injector.inject(this)
     }
 
-    lateinit var textViews: List<TextView>
+    private lateinit var textViews: List<TextView>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,7 +63,8 @@ class QuickReactionFragment : VectorBaseFragment() {
     }
 
     override fun invalidate() = withState(viewModel) {
-        it.quickStates.forEachIndexed { index, qs ->
+        val quickReactionsStates = it.quickStates() ?: return@withState
+        quickReactionsStates.forEachIndexed { index, qs ->
             textViews[index].text = qs.reaction
             textViews[index].alpha = if (qs.isSelected) 0.2f else 1f
         }

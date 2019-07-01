@@ -15,10 +15,7 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
@@ -28,7 +25,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotredesign.core.di.HasScreenInjector
+import im.vector.matrix.rx.RxRoom
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
@@ -37,27 +34,30 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
-
 data class MessageActionState(
         val roomId: String,
         val eventId: String,
         val informationData: MessageInformationData,
-        val timelineEvent: TimelineEvent?
+        val timelineEvent: Async<TimelineEvent> = Uninitialized
 ) : MvRxState {
+
+    constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
+
+
+    private val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
 
     fun senderName(): String = informationData.memberName?.toString() ?: ""
 
-    fun time(): String? = timelineEvent?.root?.originServerTs?.let { dateFormat.format(Date(it)) }
+    fun time(): String? = timelineEvent()?.root?.originServerTs?.let { dateFormat.format(Date(it)) }
             ?: ""
 
-    fun canReact(): Boolean = timelineEvent?.root?.type == EventType.MESSAGE && timelineEvent.sendState.isSent()
+    fun canReact(): Boolean = timelineEvent()?.root?.type == EventType.MESSAGE && timelineEvent()?.sendState?.isSent() == true
 
     fun messageBody(eventHtmlRenderer: EventHtmlRenderer?, noticeEventFormatter: NoticeEventFormatter?): CharSequence? {
-        return when (timelineEvent?.root?.getClearType()) {
+        return when (timelineEvent()?.root?.getClearType()) {
             EventType.MESSAGE     -> {
-                val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent?.toModel()
-                        ?: timelineEvent.root.getClearContent().toModel()
+                val messageContent: MessageContent? = timelineEvent()?.annotations?.editSummary?.aggregatedContent?.toModel()
+                        ?: timelineEvent()?.root?.getClearContent().toModel()
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                     eventHtmlRenderer?.render(messageContent.formattedBody
                             ?: messageContent.body)
@@ -72,7 +72,7 @@ data class MessageActionState(
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER -> {
-                noticeEventFormatter?.format(timelineEvent)
+                timelineEvent()?.let { noticeEventFormatter?.format(it) }
             }
             else                  -> null
         }
@@ -85,9 +85,13 @@ data class MessageActionState(
 class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           initialState: MessageActionState,
                                                           private val eventHtmlRenderer: EventHtmlRenderer,
-                                                          private val session: Session,
+                                                          session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter
 ) : VectorViewModel<MessageActionState>(initialState) {
+
+
+    private val eventId = initialState.eventId
+    private val room = session.getRoom(initialState.roomId)
 
     @AssistedInject.Factory
     interface Factory {
@@ -101,18 +105,19 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             return fragment.messageActionViewModelFactory.create(state)
         }
 
-        override fun initialState(viewModelContext: ViewModelContext): MessageActionState? {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().session()
-            val args: TimelineEventFragmentArgs = viewModelContext.args()
-            val event = session.getRoom(args.roomId)?.getTimeLineEvent(args.eventId)
-            return MessageActionState(
-                    args.roomId,
-                    args.eventId,
-                    args.informationData,
-                    event
-            )
-        }
+    }
 
+    init {
+        observeEvent()
+    }
+
+    private fun observeEvent() {
+        if (room == null) return
+        RxRoom(room)
+                .liveTimelineEvent(eventId)
+                .execute {
+                    copy(timelineEvent = it)
+                }
     }
 
     fun resolveBody(state: MessageActionState): CharSequence? {

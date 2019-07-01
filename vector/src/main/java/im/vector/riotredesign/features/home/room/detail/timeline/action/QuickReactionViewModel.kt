@@ -15,13 +15,11 @@
  */
 package im.vector.riotredesign.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.rx.RxRoom
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.features.home.room.detail.timeline.item.MessageInformationData
 
@@ -37,7 +35,7 @@ data class QuickReactionState(
         val roomId: String,
         val eventId: String,
         val informationData: MessageInformationData,
-        val quickStates: List<ToggleState> = emptyList(),
+        val quickStates: Async<List<ToggleState>> = Uninitialized,
         val result: ToggleState? = null
         /** Pair of 'clickedOn' and current toggles state*/
 ) : MvRxState {
@@ -56,6 +54,9 @@ class QuickReactionViewModel @AssistedInject constructor(@Assisted initialState:
         fun create(initialState: QuickReactionState): QuickReactionViewModel
     }
 
+    private val room = session.getRoom(initialState.roomId)
+    private val eventId = initialState.eventId
+
     companion object : MvRxViewModelFactory<QuickReactionViewModel, QuickReactionState> {
 
         val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
@@ -67,22 +68,30 @@ class QuickReactionViewModel @AssistedInject constructor(@Assisted initialState:
     }
 
     init {
-        setState { reduceState(this) }
+        observeReactions()
     }
 
-    private fun reduceState(state: QuickReactionState): QuickReactionState {
-        val event = session.getRoom(state.roomId)?.getTimeLineEvent(state.eventId) ?: return state
-        val summary = event.annotations?.reactionsSummary
-        val quickReactions = quickEmojis.map { emoji ->
-            ToggleState(emoji, summary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
-        }
-        return state.copy(quickStates = quickReactions)
+    private fun observeReactions() {
+        if (room == null) return
+        RxRoom(room)
+                .liveAnnotationSummary(eventId)
+                .map { annotations ->
+                    quickEmojis.map { emoji ->
+                        ToggleState(emoji, annotations.reactionsSummary.firstOrNull { it.key == emoji }?.addedByMe
+                                ?: false)
+                    }
+                }
+                .execute {
+                    copy(quickStates = it)
+                }
     }
+
 
     fun didSelect(index: Int) = withState {
-        val isSelected = it.quickStates[index].isSelected
+        val selectedReaction = it.quickStates()?.get(index) ?: return@withState
+        val isSelected = selectedReaction.isSelected
         setState {
-            copy(result = ToggleState(it.quickStates[index].reaction, !isSelected))
+            copy(result = ToggleState(selectedReaction.reaction, !isSelected))
         }
     }
 

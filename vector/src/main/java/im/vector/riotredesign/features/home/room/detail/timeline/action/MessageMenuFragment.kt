@@ -55,7 +55,8 @@ class MessageMenuFragment : VectorBaseFragment() {
             val inflater = LayoutInflater.from(linearLayout.context)
             linearLayout.removeAllViews()
             var insertIndex = 0
-            state.actions.forEachIndexed { index, action ->
+            val actions = state.actions()
+            actions?.forEachIndexed { index, action ->
                 inflateActionView(action, inflater, linearLayout)?.let {
                     it.setOnClickListener {
                         interactionListener?.didSelectMenuAction(action)
@@ -63,7 +64,7 @@ class MessageMenuFragment : VectorBaseFragment() {
                     linearLayout.addView(it, insertIndex)
                     insertIndex++
                     if (addSeparators) {
-                        if (index < state.actions.size - 1) {
+                        if (index < actions.size - 1) {
                             linearLayout.addView(inflateSeparatorView(), insertIndex)
                             insertIndex++
                         }
