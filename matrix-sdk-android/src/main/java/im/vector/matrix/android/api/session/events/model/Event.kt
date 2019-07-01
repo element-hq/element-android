@@ -177,11 +177,7 @@ data class Event(
      * @return The curve25519 key that sent this event.
      */
     fun getSenderKey(): String? {
-        return if (null != mClearEvent) {
-            mClearEvent!!.mSenderCurve25519Key
-        } else {
-            mSenderCurve25519Key
-        }
+        return mClearEvent?.mSenderCurve25519Key ?: mSenderCurve25519Key
     }
 
     /**
