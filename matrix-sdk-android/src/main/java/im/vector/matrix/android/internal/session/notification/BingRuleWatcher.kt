@@ -22,6 +22,7 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.types
+import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
@@ -31,6 +32,7 @@ internal class BingRuleWatcher @Inject constructor(monarchy: Monarchy,
                                                    private val task: ProcessEventForPushTask,
                                                    private val defaultPushRuleService: DefaultPushRuleService,
                                                    private val sessionParams: SessionParams,
+                                                   private val tokenStore: SyncTokenStore,
                                                    private val taskExecutor: TaskExecutor) :
         RealmLiveEntityObserver<EventEntity>(monarchy) {
 
@@ -45,6 +47,7 @@ internal class BingRuleWatcher @Inject constructor(monarchy: Monarchy,
     }
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
+        if (tokenStore.getLastToken() == null) return //no notif on initial sync
         // TODO Use const for "global"
         val rules = defaultPushRuleService.getPushRules("global")
         inserted.map { it.asDomain() }
