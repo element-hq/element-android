@@ -26,7 +26,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                                                 private val roomSummaryItemFactory: RoomSummaryItemFactory
 ) : TypedEpoxyController<RoomListViewState>() {
 
-    var callback: Callback? = null
+    var listener: Listener? = null
 
     override fun buildModels(viewState: RoomListViewState) {
         val roomSummaries = viewState.asyncFilteredRooms()
@@ -36,7 +36,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             } else {
                 val isExpanded = viewState.isCategoryExpanded(category)
                 buildRoomCategory(viewState, summaries, category.titleRes, viewState.isCategoryExpanded(category)) {
-                    callback?.onToggleRoomCategory(category)
+                    listener?.onToggleRoomCategory(category)
                 }
                 if (isExpanded) {
                     buildRoomModels(summaries)
@@ -76,14 +76,16 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
     private fun buildRoomModels(summaries: List<RoomSummary>) {
         summaries.forEach { roomSummary ->
             roomSummaryItemFactory
-                    .create(roomSummary) { callback?.onRoomSelected(it) }
+                    .create(roomSummary, listener)
                     .addTo(this)
         }
     }
 
-    interface Callback {
+    interface Listener {
         fun onToggleRoomCategory(roomCategory: RoomCategory)
         fun onRoomSelected(room: RoomSummary)
+        fun onRejectRoomInvitation(room: RoomSummary)
+        fun onAcceptRoomInvitation(room: RoomSummary)
     }
 
 }

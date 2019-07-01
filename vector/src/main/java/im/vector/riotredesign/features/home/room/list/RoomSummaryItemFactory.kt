@@ -18,12 +18,15 @@ package im.vector.riotredesign.features.home.room.list
 
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
 import im.vector.riotredesign.core.extensions.localDateTime
 import im.vector.riotredesign.core.resources.ColorProvider
 import im.vector.riotredesign.core.resources.DateProvider
+import im.vector.riotredesign.core.resources.StringProvider
 import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotredesign.features.home.room.detail.timeline.helper.TimelineDateFormatter
@@ -34,9 +37,39 @@ import javax.inject.Inject
 class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatter: NoticeEventFormatter,
                                                  private val timelineDateFormatter: TimelineDateFormatter,
                                                  private val colorProvider: ColorProvider,
+                                                 private val stringProvider: StringProvider,
                                                  private val avatarRenderer: AvatarRenderer) {
 
-    fun create(roomSummary: RoomSummary, onRoomSelected: (RoomSummary) -> Unit): RoomSummaryItem {
+    fun create(roomSummary: RoomSummary, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+        return when (roomSummary.membership) {
+            Membership.INVITE -> createInvitationItem(roomSummary, listener)
+            else              -> createRoomItem(roomSummary, listener)
+
+        }
+    }
+
+    private fun createInvitationItem(roomSummary: RoomSummary, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+        val secondLine = if (roomSummary.isDirect) {
+            roomSummary.latestEvent?.root?.senderId
+        } else {
+            roomSummary.latestEvent?.root?.senderId?.let {
+                stringProvider.getString(R.string.invited_by, it)
+            }
+        }
+
+        return RoomInvitationItem_()
+                .id(roomSummary.roomId)
+                .avatarRenderer(avatarRenderer)
+                .roomId(roomSummary.roomId)
+                .secondLine(secondLine)
+                .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
+                .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
+                .roomName(roomSummary.displayName)
+                .avatarUrl(roomSummary.avatarUrl)
+                .listener { listener?.onRoomSelected(roomSummary) }
+    }
+
+    private fun createRoomItem(roomSummary: RoomSummary, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val unreadCount = roomSummary.notificationCount
         val showHighlighted = roomSummary.highlightCount > 0
 
@@ -84,6 +117,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 .avatarUrl(roomSummary.avatarUrl)
                 .showHighlighted(showHighlighted)
                 .unreadCount(unreadCount)
-                .listener { onRoomSelected(roomSummary) }
+                .listener { listener?.onRoomSelected(roomSummary) }
     }
+
 }

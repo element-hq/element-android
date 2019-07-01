@@ -45,7 +45,7 @@ data class RoomListParams(
 ) : Parcelable
 
 
-class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, OnBackPressed, FabMenuView.Listener {
+class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
     enum class DisplayMode(@StringRes val titleRes: Int) {
         HOME(R.string.bottom_action_home),
@@ -135,7 +135,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         epoxyRecyclerView.layoutManager = layoutManager
         epoxyRecyclerView.itemAnimator = RoomListAnimator()
-        roomController.callback = this
+        roomController.listener = this
         roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
@@ -231,6 +231,14 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
 
     override fun onRoomSelected(room: RoomSummary) {
         roomListViewModel.accept(RoomListActions.SelectRoom(room))
+    }
+
+    override fun onAcceptRoomInvitation(room: RoomSummary) {
+        vectorBaseActivity.notImplemented("Accept room invitation")
+    }
+
+    override fun onRejectRoomInvitation(room: RoomSummary) {
+        vectorBaseActivity.notImplemented("Reject room invitation")
     }
 
     override fun onToggleRoomCategory(roomCategory: RoomCategory) {
