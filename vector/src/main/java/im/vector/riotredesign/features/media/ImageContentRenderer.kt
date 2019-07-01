@@ -60,9 +60,28 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         val (width, height) = processSize(data, mode)
         imageView.layoutParams.height = height
         imageView.layoutParams.width = width
-        GlideApp
-                .with(imageView)
-                .load(data)
+
+        val glideRequest = if (data.elementToDecrypt != null) {
+            // Encrypted image
+            GlideApp
+                    .with(imageView)
+                    .load(data)
+        } else {
+            // Clear image
+            val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+            val resolvedUrl = when (mode) {
+                Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
+                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+            }
+            //Fallback to base url
+                    ?: data.url
+
+            GlideApp
+                    .with(imageView)
+                    .load(resolvedUrl)
+        }
+
+        glideRequest
                 .dontAnimate()
                 .transform(RoundedCorners(dpToPx(8, imageView.context)))
                 .thumbnail(0.3f)

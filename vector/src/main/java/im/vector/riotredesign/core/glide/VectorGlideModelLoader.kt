@@ -24,8 +24,8 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
+import im.vector.riotredesign.core.di.ActiveSessionHolder
 import im.vector.riotredesign.features.media.ImageContentRenderer
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -37,10 +37,11 @@ import java.io.InputStream
 import com.bumptech.glide.load.engine.Resource as Resource1
 
 
-class VectorGlideModelLoaderFactory : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
+class VectorGlideModelLoaderFactory(private val activeSessionHolder: ActiveSessionHolder)
+    : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
 
     override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<ImageContentRenderer.Data, InputStream> {
-        return VectorGlideModelLoader()
+        return VectorGlideModelLoader(activeSessionHolder)
     }
 
     override fun teardown() {
@@ -49,20 +50,23 @@ class VectorGlideModelLoaderFactory : ModelLoaderFactory<ImageContentRenderer.Da
 
 }
 
-class VectorGlideModelLoader : ModelLoader<ImageContentRenderer.Data, InputStream> {
+class VectorGlideModelLoader(private val activeSessionHolder: ActiveSessionHolder)
+    : ModelLoader<ImageContentRenderer.Data, InputStream> {
     override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
         return true
     }
 
     override fun buildLoadData(model: ImageContentRenderer.Data, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
-        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(model, width, height))
+        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(activeSessionHolder, model, width, height))
     }
 }
 
-class VectorGlideDataFetcher(private val data: ImageContentRenderer.Data,
+class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolder,
+                             private val data: ImageContentRenderer.Data,
                              private val width: Int,
-                             private val height: Int) : DataFetcher<InputStream> {
+                             private val height: Int)
+    : DataFetcher<InputStream> {
 
     val client = OkHttpClient()
 
@@ -99,7 +103,7 @@ class VectorGlideDataFetcher(private val data: ImageContentRenderer.Data,
             callback.onDataReady(FileInputStream(initialFile))
             return
         }
-        val contentUrlResolver = Matrix.getInstance().currentSession?.contentUrlResolver() ?: return
+        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
         val url = contentUrlResolver.resolveFullSize(data.url)
                 ?: return
 

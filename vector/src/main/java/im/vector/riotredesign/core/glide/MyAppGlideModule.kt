@@ -24,6 +24,8 @@ import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
+import im.vector.riotredesign.core.extensions.vectorComponent
+import im.vector.riotredesign.features.media.ImageContentRenderer
 import java.io.InputStream
 
 @GlideModule
@@ -34,7 +36,8 @@ class MyAppGlideModule : AppGlideModule() {
     }
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        // FIXME This does not work
-        registry.append(InputStream::class.java, InputStream::class.java, VectorGlideModelLoaderFactory())
+        registry.append(ImageContentRenderer.Data::class.java,
+                InputStream::class.java,
+                VectorGlideModelLoaderFactory(context.vectorComponent().activeSessionHolder()))
     }
 }
