@@ -117,11 +117,11 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         screenComponent = DaggerScreenComponent.factory().create(getVectorComponent(), this)
-        super.onCreate(savedInstanceState)
         val timeForInjection = measureTimeMillis {
             injectWith(screenComponent)
         }
         Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
+        super.onCreate(savedInstanceState)
         viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfigurationViewModel::class.java)
         bugReporter = screenComponent.bugReporter()
