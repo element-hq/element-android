@@ -152,7 +152,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
 
     private fun buildMembershipNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
         val senderDisplayName = senderName ?: event.senderId
-        val targetDisplayName = eventContent?.displayName ?: event.senderId
+        val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: ""
         return when {
             Membership.INVITE == eventContent?.membership -> {
                 // TODO get userId
