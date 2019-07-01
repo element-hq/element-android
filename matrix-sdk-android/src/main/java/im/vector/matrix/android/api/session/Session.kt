@@ -81,13 +81,11 @@ interface Session :
     /**
      * This method start the sync thread.
      */
-    @MainThread
     fun startSync()
 
     /**
      * This method stop the sync thread.
      */
-    @MainThread
     fun stopSync()
 
     /**
@@ -99,7 +97,6 @@ interface Session :
     /**
      * This method allow to close a session. It does stop some services.
      */
-    @MainThread
     fun close()
 
     /**

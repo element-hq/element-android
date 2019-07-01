@@ -19,6 +19,7 @@ package im.vector.riotredesign.features
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.work.WorkManager
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
@@ -66,6 +67,10 @@ class MainActivity : VectorBaseActivity() {
                 override fun onSuccess(data: Unit) {
                     Timber.w("SIGN_OUT: success, start app")
                     sessionHolder.clearActiveSession()
+                    WorkManager.getInstance(applicationContext).also {
+                        it.cancelAllWork()
+                        it.pruneWork()
+                    }
                     start()
                 }
             })

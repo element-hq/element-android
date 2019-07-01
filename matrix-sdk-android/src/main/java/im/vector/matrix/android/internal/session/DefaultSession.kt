@@ -102,7 +102,6 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         SyncWorker.stopAnyBackgroundSync(context)
     }
 
-    @MainThread
     override fun startSync() {
         assert(isOpen)
         if (!syncThread.isAlive) {
@@ -113,16 +112,14 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         }
     }
 
-    @MainThread
     override fun stopSync() {
         assert(isOpen)
         syncThread.kill()
     }
 
-    @MainThread
     override fun close() {
-        assertMainThread()
         assert(isOpen)
+        stopSync()
         liveEntityObservers.forEach { it.dispose() }
         cryptoService.close()
         if (monarchy.isMonarchyThreadOpen) {
