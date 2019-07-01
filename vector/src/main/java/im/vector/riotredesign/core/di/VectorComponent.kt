@@ -33,6 +33,7 @@ import im.vector.riotredesign.features.home.AvatarRenderer
 import im.vector.riotredesign.features.home.HomeNavigator
 import im.vector.riotredesign.features.home.HomeRoomListObservableStore
 import im.vector.riotredesign.features.home.group.SelectedGroupStore
+import im.vector.riotredesign.features.html.EventHtmlRenderer
 import im.vector.riotredesign.features.navigation.Navigator
 import im.vector.riotredesign.features.notifications.NotifiableEventResolver
 import im.vector.riotredesign.features.notifications.NotificationBroadcastReceiver
@@ -67,6 +68,8 @@ interface VectorComponent {
     fun activeSessionHolder(): ActiveSessionHolder
 
     fun emojiCompatFontProvider(): EmojiCompatFontProvider
+
+    fun eventHtmlRenderer(): EventHtmlRenderer
 
     fun navigator(): Navigator
 
