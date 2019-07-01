@@ -25,14 +25,14 @@ class ChronologicalRoomComparator @Inject constructor() : Comparator<RoomSummary
         var rightTimestamp = 0L
         var leftTimestamp = 0L
         if (null != leftRoomSummary) {
-            leftTimestamp = leftRoomSummary.lastMessage?.originServerTs ?: 0
+            leftTimestamp = leftRoomSummary.latestEvent?.root?.originServerTs ?: 0
         }
         if (null != rightRoomSummary) {
-            rightTimestamp = rightRoomSummary.lastMessage?.originServerTs ?: 0
+            rightTimestamp = rightRoomSummary.latestEvent?.root?.originServerTs ?: 0
         }
-        return if (rightRoomSummary?.lastMessage == null) {
+        return if (rightRoomSummary?.latestEvent?.root == null) {
             -1
-        } else if (leftRoomSummary?.lastMessage == null) {
+        } else if (leftRoomSummary?.latestEvent?.root == null) {
             1
         } else {
             val deltaTimestamp = rightTimestamp - leftTimestamp

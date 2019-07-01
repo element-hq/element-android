@@ -24,12 +24,15 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.*
+import com.google.android.material.snackbar.Snackbar
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.di.ScreenComponent
 import im.vector.riotredesign.core.epoxy.LayoutManagerStateRestorer
+import im.vector.riotredesign.core.error.ErrorFormatter
+import im.vector.riotredesign.core.extensions.observeEvent
 import im.vector.riotredesign.core.extensions.observeEventDebounced
 import im.vector.riotredesign.core.platform.OnBackPressed
 import im.vector.riotredesign.core.platform.StateView
@@ -45,7 +48,7 @@ data class RoomListParams(
 ) : Parcelable
 
 
-class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, OnBackPressed, FabMenuView.Listener {
+class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
     enum class DisplayMode(@StringRes val titleRes: Int) {
         HOME(R.string.bottom_action_home),
@@ -64,6 +67,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
     private val roomListParams: RoomListParams by args()
     @Inject lateinit var roomController: RoomSummaryController
     @Inject lateinit var roomListViewModelFactory: RoomListViewModel.Factory
+    @Inject lateinit var errorFormatter: ErrorFormatter
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
@@ -82,6 +86,13 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         }
 
         createChatFabMenu.listener = this
+
+        roomListViewModel.invitationAnswerErrorLiveData.observeEvent(this) { throwable ->
+            vectorBaseActivity.coordinatorLayout?.let {
+                Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
+                        .show()
+            }
+        }
     }
 
     private fun setupCreateRoomButton() {
@@ -135,7 +146,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         epoxyRecyclerView.layoutManager = layoutManager
         epoxyRecyclerView.itemAnimator = RoomListAnimator()
-        roomController.callback = this
+        roomController.listener = this
         roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
         stateView.contentView = epoxyRecyclerView
         epoxyRecyclerView.setController(roomController)
@@ -231,6 +242,14 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Callback, O
 
     override fun onRoomSelected(room: RoomSummary) {
         roomListViewModel.accept(RoomListActions.SelectRoom(room))
+    }
+
+    override fun onAcceptRoomInvitation(room: RoomSummary) {
+        roomListViewModel.accept(RoomListActions.AcceptInvitation(room))
+    }
+
+    override fun onRejectRoomInvitation(room: RoomSummary) {
+        roomListViewModel.accept(RoomListActions.RejectInvitation(room))
     }
 
     override fun onToggleRoomCategory(roomCategory: RoomCategory) {

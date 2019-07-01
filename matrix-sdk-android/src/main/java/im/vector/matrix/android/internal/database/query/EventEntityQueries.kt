@@ -16,10 +16,12 @@
 
 package im.vector.matrix.android.internal.database.query
 
+import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
 import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.RoomEntity
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
@@ -65,7 +67,14 @@ internal fun EventEntity.Companion.latestEvent(realm: Realm,
                                                roomId: String,
                                                includedTypes: List<String> = emptyList(),
                                                excludedTypes: List<String> = emptyList()): EventEntity? {
-    val query = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.events?.where()
+
+    val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
+    val eventList = if (roomEntity.sendingTimelineEvents.isNotEmpty()) {
+        roomEntity.sendingTimelineEvents
+    } else {
+        ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.events
+    }
+    val query = eventList?.where()
     if (includedTypes.isNotEmpty()) {
         query?.`in`(EventEntityFields.TYPE, includedTypes.toTypedArray())
     } else if (excludedTypes.isNotEmpty()) {

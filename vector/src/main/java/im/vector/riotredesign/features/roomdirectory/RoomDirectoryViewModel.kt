@@ -18,13 +18,7 @@ package im.vector.riotredesign.features.roomdirectory
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
-import com.airbnb.mvrx.appendAt
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -95,19 +89,19 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                 .liveRoomSummaries()
                 .subscribe { list ->
                     val joinedRoomIds = list
-                                                // Keep only joined room
-                                                ?.filter { it.membership == Membership.JOIN }
-                                                ?.map { it.roomId }
-                                                ?.toList()
-                                        ?: emptyList()
+                            // Keep only joined room
+                            ?.filter { it.membership == Membership.JOIN }
+                            ?.map { it.roomId }
+                            ?.toSet()
+                            ?: emptySet()
 
                     setState {
                         copy(
                                 joinedRoomsIds = joinedRoomIds,
                                 // Remove (newly) joined room id from the joining room list
-                                joiningRoomsIds = joiningRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) },
+                                joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { removeAll(joinedRoomIds) },
                                 // Remove (newly) joined room id from the joining room list in error
-                                joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableList().apply { removeAll(joinedRoomIds) }
+                                joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { removeAll(joinedRoomIds) }
                         )
                     }
                 }
@@ -166,39 +160,39 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
     private fun load() {
         currentTask = session.getPublicRooms(roomDirectoryData.homeServer,
-                                             PublicRoomsParams(
-                                                     limit = PUBLIC_ROOMS_LIMIT,
-                                                     filter = PublicRoomsFilter(searchTerm = currentFilter),
-                                                     includeAllNetworks = roomDirectoryData.includeAllNetworks,
-                                                     since = since,
-                                                     thirdPartyInstanceId = roomDirectoryData.thirdPartyInstanceId
-                                             ),
-                                             object : MatrixCallback<PublicRoomsResponse> {
-                                                 override fun onSuccess(data: PublicRoomsResponse) {
-                                                     currentTask = null
+                PublicRoomsParams(
+                        limit = PUBLIC_ROOMS_LIMIT,
+                        filter = PublicRoomsFilter(searchTerm = currentFilter),
+                        includeAllNetworks = roomDirectoryData.includeAllNetworks,
+                        since = since,
+                        thirdPartyInstanceId = roomDirectoryData.thirdPartyInstanceId
+                ),
+                object : MatrixCallback<PublicRoomsResponse> {
+                    override fun onSuccess(data: PublicRoomsResponse) {
+                        currentTask = null
 
-                                                     since = data.nextBatch
+                        since = data.nextBatch
 
-                                                     setState {
-                                                         copy(
-                                                                 asyncPublicRoomsRequest = Success(data.chunk!!),
-                                                                 // It's ok to append at the end of the list, so I use publicRooms.size()
-                                                                 publicRooms = publicRooms.appendAt(data.chunk!!, publicRooms.size),
-                                                                 hasMore = since != null
-                                                         )
-                                                     }
-                                                 }
+                        setState {
+                            copy(
+                                    asyncPublicRoomsRequest = Success(data.chunk!!),
+                                    // It's ok to append at the end of the list, so I use publicRooms.size()
+                                    publicRooms = publicRooms.appendAt(data.chunk!!, publicRooms.size),
+                                    hasMore = since != null
+                            )
+                        }
+                    }
 
-                                                 override fun onFailure(failure: Throwable) {
-                                                     currentTask = null
+                    override fun onFailure(failure: Throwable) {
+                        currentTask = null
 
-                                                     setState {
-                                                         copy(
-                                                                 asyncPublicRoomsRequest = Fail(failure)
-                                                         )
-                                                     }
-                                                 }
-                                             })
+                        setState {
+                            copy(
+                                    asyncPublicRoomsRequest = Fail(failure)
+                            )
+                        }
+                    }
+                })
     }
 
     fun joinRoom(publicRoom: PublicRoom) = withState { state ->
@@ -210,7 +204,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
         setState {
             copy(
-                    joiningRoomsIds = joiningRoomsIds.toMutableList().apply { add(publicRoom.roomId) }
+                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(publicRoom.roomId) }
             )
         }
 
@@ -226,8 +220,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
                 setState {
                     copy(
-                            joiningRoomsIds = joiningRoomsIds.toMutableList().apply { remove(publicRoom.roomId) },
-                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableList().apply { add(publicRoom.roomId) }
+                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(publicRoom.roomId) },
+                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(publicRoom.roomId) }
                     )
                 }
             }

@@ -33,7 +33,7 @@ import javax.inject.Inject
 internal class DefaultTimelineService @Inject constructor(private val roomId: String,
                                                           private val monarchy: Monarchy,
                                                           private val taskExecutor: TaskExecutor,
-                                                          private val timelineEventFactory: TimelineEventFactory,
+                                                          private val timelineEventFactory: CacheableTimelineEventFactory,
                                                           private val contextOfEventTask: GetContextOfEventTask,
                                                           private val paginationTask: PaginationTask
 ) : TimelineService {
@@ -60,14 +60,14 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
         }
         val result = MediatorLiveData<TimelineEvent>()
         result.addSource(liveEventEntity) { realmResults ->
-            result.value = realmResults.firstOrNull()?.let { timelineEventFactory.create(it) }
+            result.value = realmResults.firstOrNull()?.let { timelineEventFactory.create(it, it.realm) }
         }
 
         result.addSource(liveAnnotationsEntity) {
             liveEventEntity.value?.let {
                 result.value = liveEventEntity.value?.let { realmResults ->
                     //recreate the timeline event
-                    realmResults.firstOrNull()?.let { timelineEventFactory.create(it) }
+                    realmResults.firstOrNull()?.let { timelineEventFactory.create(it, it.realm) }
                 }
             }
         }
