@@ -45,6 +45,7 @@ internal class EventRelationsAggregationUpdater @Inject constructor(monarchy: Mo
         EventEntity.types(it, listOf(
                 EventType.MESSAGE,
                 EventType.REDACTION,
+                EventType.REACTION,
                 EventType.ENCRYPTED)
         )
     }
