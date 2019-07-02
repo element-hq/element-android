@@ -19,7 +19,6 @@ package im.vector.riotx.features.settings
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
 import android.text.Editable
 import android.text.TextUtils
 import android.view.View
@@ -33,6 +32,7 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.riotx.R
@@ -40,10 +40,7 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.core.preference.VectorPreference
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.riotx.core.utils.allGranted
-import im.vector.riotx.core.utils.copyToClipboard
-import im.vector.riotx.core.utils.toast
+import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.workers.signout.SignOutUiWorker
@@ -51,7 +48,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.ref.WeakReference
+import java.io.File
 import java.util.*
 
 class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
@@ -189,58 +186,32 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         // clear medias cache
         findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
-            /*
-            TODO
-            MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-                override fun onSuccess(size: Long) {
-                    if (null != activity) {
-                        it.summary = android.text.format.Formatter.formatFileSize(activity, size)
-                    }
-                }
-            })
-            */
+            val size = getSizeOfFiles(requireContext(),
+                    File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
+
+            it.summary = android.text.format.Formatter.formatFileSize(activity, size.toLong())
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                notImplemented()
-
-                // TODO DECRYPT_FILE Quick implementation of clear cache, finish this
                 GlobalScope.launch(Dispatchers.Main) {
                     // On UI Thread
+                    displayLoadingView()
+
                     Glide.get(requireContext()).clearMemory()
+
+                    var newSize = 0
 
                     withContext(Dispatchers.IO) {
                         // On BG thread
                         Glide.get(requireContext()).clearDiskCache()
+
+                        newSize = getSizeOfFiles(requireContext(),
+                                File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
                     }
-                }
 
-                /* TODO
-                displayLoadingView()
+                    it.summary = android.text.format.Formatter.formatFileSize(activity, newSize.toLong())
 
-                val task = ClearMediaCacheAsyncTask(
-                        backgroundTask = {
-                            session.mediaCache.clear()
-                            activity?.let { it -> Glide.get(it).clearDiskCache() }
-                        },
-                        onCompleteTask = {
-                            hideLoadingView()
-
-                            MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-                                override fun onSuccess(size: Long) {
-                                    it.summary = Formatter.formatFileSize(activity, size)
-                                }
-                            })
-                        }
-                )
-
-                try {
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                } catch (e: Exception) {
-                    Timber.e(e, "## session.getMediaCache().clear() failed " + e.message)
-                    task.cancel(true)
                     hideLoadingView()
                 }
-            */
 
                 false
             }
@@ -892,23 +863,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             })
         }
         */
-    }
-
-    private class ClearMediaCacheAsyncTask internal constructor(
-            backgroundTask: () -> Unit,
-            onCompleteTask: () -> Unit
-    ) : AsyncTask<Unit, Unit, Unit>() {
-
-        private val backgroundTaskReference = WeakReference(backgroundTask)
-        private val onCompleteTaskReference = WeakReference(onCompleteTask)
-        override fun doInBackground(vararg params: Unit?) {
-            backgroundTaskReference.get()?.invoke()
-        }
-
-        override fun onPostExecute(result: Unit?) {
-            super.onPostExecute(result)
-            onCompleteTaskReference.get()?.invoke()
-        }
     }
 
     companion object {

@@ -28,12 +28,9 @@ typealias ActionOnFile = (file: File) -> Boolean
  * Delete
  * ========================================================================================== */
 
-fun deleteAllFiles(context: Context) {
-    Timber.v("Delete cache dir:")
-    recursiveActionOnFile(context.cacheDir, ::deleteAction)
-
-    Timber.v("Delete files dir:")
-    recursiveActionOnFile(context.filesDir, ::deleteAction)
+fun deleteAllFiles(root: File) {
+    Timber.v("Delete ${root.absolutePath}")
+    recursiveActionOnFile(root, ::deleteAction)
 }
 
 private fun deleteAction(file: File): Boolean {
@@ -130,4 +127,21 @@ fun getFileExtension(fileUri: String): String? {
     }
 
     return null
+}
+
+/* ==========================================================================================
+ * Size
+ * ========================================================================================== */
+
+fun getSizeOfFiles(context: Context, root: File): Int {
+    Timber.v("Get size of " + root.absolutePath)
+    return if (root.isDirectory) {
+        root.list()
+                .map {
+                    getSizeOfFiles(context, File(root, it))
+                }
+                .fold(0, { acc, other -> acc + other })
+    } else {
+        root.length().toInt()
+    }
 }
