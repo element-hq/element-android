@@ -101,13 +101,26 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val event = localEchoEventFactory.createMediaEvent(roomId, attachment).also {
             saveLocalEcho(it)
         }
-        val uploadWork = createUploadMediaWork(event, attachment, cryptoService.isRoomEncrypted(roomId))
+
+        val isRoomEncrypted = cryptoService.isRoomEncrypted(roomId)
+
+        val uploadWork = createUploadMediaWork(event, attachment, isRoomEncrypted)
         val sendWork = createSendEventWork(event)
 
-        WorkManager.getInstance(context)
-                .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
-                .then(sendWork)
-                .enqueue()
+        if (isRoomEncrypted) {
+            val encryptWork = createEncryptEventWork(event)
+
+            WorkManager.getInstance(context)
+                    .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .then(encryptWork)
+                    .then(sendWork)
+                    .enqueue()
+        } else {
+            WorkManager.getInstance(context)
+                    .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .then(sendWork)
+                    .enqueue()
+        }
 
         return CancelableWork(context, sendWork.id)
     }

@@ -54,7 +54,6 @@ internal class FileUploader @Inject constructor(@Authenticated
 
         val uploadBody = RequestBody.create(MediaType.parse(mimeType), byteArray)
         return upload(uploadBody, filename, progressListener)
-
     }
 
 

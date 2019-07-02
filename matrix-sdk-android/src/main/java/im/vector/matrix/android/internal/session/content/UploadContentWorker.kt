@@ -72,7 +72,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
 
         if (thumbnailData != null) {
-            if (isRoomEncrypted) {
+            val contentUploadResponse = if (isRoomEncrypted) {
                 Timber.v("Encrypt thumbnail")
                 val encryptionResult = MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
                         ?: return Result.failure()
@@ -85,11 +85,12 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                 fileUploader
                         .uploadByteArray(thumbnailData.bytes, "thumb_${attachment.name}", thumbnailData.mimeType)
             }
+
+            contentUploadResponse
                     .fold(
                             { Timber.e(it) },
                             { uploadedThumbnailUrl = it.contentUri }
                     )
-
         }
 
         val progressListener = object : ProgressRequestBody.Listener {
@@ -100,7 +101,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
 
         var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
-        return if (isRoomEncrypted) {
+        val contentUploadResponse = if (isRoomEncrypted) {
             Timber.v("Encrypt file")
 
             val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
@@ -114,11 +115,12 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
             fileUploader
                     .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
         }
+
+        return contentUploadResponse
                 .fold(
                         { handleFailure(params) },
                         { handleSuccess(params, it.contentUri, uploadedFileEncryptedFileInfo, uploadedThumbnailUrl, uploadedThumbnailEncryptedFileInfo) }
                 )
-
     }
 
     private fun createAttachmentFile(attachment: ContentAttachmentData): File? {
@@ -165,8 +167,8 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
     private fun MessageImageContent.update(url: String,
                                            encryptedFileInfo: EncryptedFileInfo?): MessageImageContent {
         return copy(
-                url = url,
-                encryptedFileInfo = encryptedFileInfo
+                url = if (encryptedFileInfo == null) url else null,
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url)
         )
     }
 
@@ -175,11 +177,10 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                                            thumbnailUrl: String?,
                                            thumbnailEncryptedFileInfo: EncryptedFileInfo?): MessageVideoContent {
         return copy(
-                url = url,
-                encryptedFileInfo = encryptedFileInfo,
+                url = if (encryptedFileInfo == null) url else null,
                 videoInfo = videoInfo?.copy(
-                        thumbnailUrl = thumbnailUrl,
-                        thumbnailFile = thumbnailEncryptedFileInfo
+                        thumbnailUrl = if (thumbnailEncryptedFileInfo == null) thumbnailUrl else null,
+                        thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = url)
                 )
         )
     }
@@ -187,16 +188,16 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
     private fun MessageFileContent.update(url: String,
                                           encryptedFileInfo: EncryptedFileInfo?): MessageFileContent {
         return copy(
-                url = url,
-                encryptedFileInfo = encryptedFileInfo
+                url = if (encryptedFileInfo == null) url else null,
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url)
         )
     }
 
     private fun MessageAudioContent.update(url: String,
                                            encryptedFileInfo: EncryptedFileInfo?): MessageAudioContent {
         return copy(
-                url = url,
-                encryptedFileInfo = encryptedFileInfo
+                url = if (encryptedFileInfo == null) url else null,
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url)
         )
     }
 
