@@ -19,11 +19,14 @@ package im.vector.riotredesign.features.autocomplete.user
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotredesign.features.autocomplete.AutocompleteClickListener
+import im.vector.riotredesign.features.home.AvatarRenderer
 import javax.inject.Inject
 
 class AutocompleteUserController @Inject constructor(): TypedEpoxyController<List<User>>() {
 
     var listener: AutocompleteClickListener<User>? = null
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override fun buildModels(data: List<User>?) {
         if (data.isNullOrEmpty()) {
@@ -35,6 +38,7 @@ class AutocompleteUserController @Inject constructor(): TypedEpoxyController<Lis
                 userId(user.userId)
                 name(user.displayName)
                 avatarUrl(user.avatarUrl)
+                avatarRenderer(avatarRenderer)
                 clickListener { _ ->
                     listener?.onItemClick(user)
                 }
