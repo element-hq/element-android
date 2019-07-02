@@ -20,13 +20,12 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
-import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
@@ -36,7 +35,7 @@ import javax.inject.Inject
 internal interface EventRelationsAggregationTask : Task<EventRelationsAggregationTask.Params, Unit> {
 
     data class Params(
-            val events: List<Pair<Event, SendState>>,
+            val events: List<Event>,
             val userId: String
     )
 }
@@ -59,17 +58,15 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(private 
         }
     }
 
-    private fun update(realm: Realm, events: List<Pair<Event, SendState>>, userId: String) {
-        events.forEach { pair ->
+    private fun update(realm: Realm, events: List<Event>, userId: String) {
+        events.forEach { event ->
             try { //Temporary catch, should be removed
-                val roomId = pair.first.roomId
+                val roomId = event.roomId
                 if (roomId == null) {
-                    Timber.w("Event has no room id ${pair.first.eventId}")
+                    Timber.w("Event has no room id ${event.eventId}")
                     return@forEach
                 }
-                val event = pair.first
-                val sendState = pair.second
-                val isLocalEcho = sendState == SendState.UNSENT
+                val isLocalEcho = LocalEchoEventFactory.isLocalEchoId(event.eventId ?: "")
                 when (event.type) {
                     EventType.REACTION  -> {
                         //we got a reaction!!
@@ -96,8 +93,8 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(private 
                         when (eventToPrune.type) {
                             EventType.MESSAGE  -> {
                                 Timber.d("REDACTION for message ${eventToPrune.eventId}")
-                                val unsignedData = EventMapper.map(eventToPrune).unsignedData
-                                        ?: UnsignedData(null, null)
+//                                val unsignedData = EventMapper.map(eventToPrune).unsignedData
+//                                        ?: UnsignedData(null, null)
 
                                 //was this event a m.replace
                                 val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
@@ -128,7 +125,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(private 
         //ok, this is a replace
         var existing = EventAnnotationsSummaryEntity.where(realm, targetEventId).findFirst()
         if (existing == null) {
-            Timber.v("###REPLACE creating new relation summary for ${targetEventId}")
+            Timber.v("###REPLACE creating new relation summary for $targetEventId")
             existing = EventAnnotationsSummaryEntity.create(realm, targetEventId)
             existing.roomId = roomId
         }
@@ -168,7 +165,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(private 
                 existingSummary.sourceEvents.add(eventId)
             } else {
                 //ignore this event for the summary
-                Timber.v("###REPLACE ignoring event for summary, it's to old ${eventId}")
+                Timber.v("###REPLACE ignoring event for summary, it's to old $eventId")
             }
         }
 
