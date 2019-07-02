@@ -31,4 +31,6 @@ The roadmap has 3 phases:
 
 ## Contributing
 
-Please refer to [CONTRIBUTING.md](https://github.com/vector-im/riotX-android/blob/develop/CONTRIBUTING.md) if you want to contribute the Matrix on Android projects!
+Please refer to [CONTRIBUTING.md](https://github.com/vector-im/riotX-android/blob/develop/CONTRIBUTING.md) if you want to contribute on Matrix Android projects!
+
+Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#riotx:matrix.org).
