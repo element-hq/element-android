@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import android.os.Handler
 import android.os.Looper
+import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
@@ -55,7 +56,7 @@ import kotlin.collections.HashMap
 @SessionScope
 internal class DefaultSasVerificationService @Inject constructor(private val credentials: Credentials,
                                                                  private val cryptoStore: IMXCryptoStore,
-                                                                 private val myDeviceInfoHolder: MyDeviceInfoHolder,
+                                                                 private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
                                                                  private val deviceListManager: DeviceListManager,
                                                                  private val setDeviceVerificationAction: SetDeviceVerificationAction,
                                                                  private val sendToDeviceTask: SendToDeviceTask,
@@ -197,7 +198,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                                     cryptoStore,
                                     sendToDeviceTask,
                                     taskExecutor,
-                                    myDeviceInfoHolder.myDevice.fingerprint()!!,
+                                    myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                                     startReq.transactionID!!,
                                     otherUserId)
                             addTransaction(tx)
@@ -366,7 +367,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                     cryptoStore,
                     sendToDeviceTask,
                     taskExecutor,
-                    myDeviceInfoHolder.myDevice.fingerprint()!!,
+                    myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     txID,
                     userId,
                     deviceID)

@@ -24,8 +24,8 @@ import io.reactivex.Observable
 
 class RxRoom(private val room: Room) {
 
-    fun liveRoomSummary(): Observable<RoomSummary> {
-        return room.liveRoomSummary.asObservable()
+    fun liveRoomSummary(fetchLastEvent: Boolean): Observable<RoomSummary> {
+        return room.liveRoomSummary(fetchLastEvent).asObservable()
     }
 
     fun liveRoomMemberIds(): Observable<List<String>> {

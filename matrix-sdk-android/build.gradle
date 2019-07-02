@@ -86,7 +86,7 @@ static def gitRevisionDate() {
 dependencies {
 
     def arrow_version = "0.8.0"
-    def support_version = '1.1.0-alpha03'
+    def support_version = '1.1.0-beta01'
     def moshi_version = '1.8.0'
     def lifecycle_version = '2.0.0'
     def coroutines_version = "1.0.1"
@@ -98,8 +98,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    implementation "androidx.appcompat:appcompat:$support_version"
-    implementation "androidx.recyclerview:recyclerview:$support_version"
+    implementation "androidx.appcompat:appcompat:1.1.0-beta01"
+    implementation "androidx.recyclerview:recyclerview:1.1.0-alpha06"
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
@@ -107,7 +107,7 @@ dependencies {
     // Network
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.4.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.novoda:merlin:1.1.6'
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
@@ -120,7 +120,7 @@ dependencies {
     kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
 
     // Work
-    implementation "androidx.work:work-runtime-ktx:2.1.0-beta01"
+    implementation "androidx.work:work-runtime-ktx:2.1.0-rc01"
 
     // FP
     implementation "io.arrow-kt:arrow-core:$arrow_version"
@@ -155,11 +155,11 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     androidTestImplementation "org.koin:koin-test:$koin_version"
-    androidTestImplementation 'androidx.test:core:1.1.0'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:core:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
     androidTestImplementation "io.mockk:mockk-android:1.8.13.kotlin13"
     androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"

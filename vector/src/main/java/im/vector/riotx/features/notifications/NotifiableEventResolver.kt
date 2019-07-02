@@ -117,7 +117,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             val body = event.annotations?.editSummary?.aggregatedContent?.toModel<MessageContent>()?.body
                        ?: event.root.getClearContent().toModel<MessageContent>()?.body
                        ?: stringProvider.getString(R.string.notification_unknown_new_event)
-            val roomName = room.roomSummary?.displayName ?: ""
+            val roomName = room.roomSummary()?.displayName ?: ""
             val senderDisplayName = event.senderName ?: event.root.senderId
 
             val notifiableEvent = NotifiableMessageEvent(
@@ -129,7 +129,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                     body = body,
                     roomId = event.root.roomId!!,
                     roomName = roomName,
-                    roomIsDirect = room.roomSummary?.isDirect ?: false)
+                    roomIsDirect = room.roomSummary()?.isDirect ?: false)
 
             notifiableEvent.matrixID = session.sessionParams.credentials.userId
             notifiableEvent.soundName = null
@@ -137,7 +137,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             // Get the avatars URL
             // TODO They will be not displayed the first time (known limitation)
             notifiableEvent.roomAvatarPath = session.contentUrlResolver()
-                    .resolveThumbnail(room.roomSummary?.avatarUrl,
+                    .resolveThumbnail(room.roomSummary()?.avatarUrl,
                                       250,
                                       250,
                                       ContentUrlResolver.ThumbnailMethod.SCALE)

@@ -86,9 +86,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
             try {
                 pref?.fragment?.let {
                     oFragment = supportFragmentManager.fragmentFactory
-                            .instantiate(
-                                    classLoader,
-                                    it, pref.extras)
+                            .instantiate(classLoader, it)
                 }
             } catch (e: Throwable) {
                 showSnackbar(getString(R.string.not_implemented))

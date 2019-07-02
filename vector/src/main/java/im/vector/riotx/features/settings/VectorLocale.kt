@@ -23,6 +23,7 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Pair
 import androidx.core.content.edit
+import kotlinx.coroutines.Dispatchers
 import im.vector.riotx.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -75,7 +76,7 @@ object VectorLocale {
         }
 
         // init the known locales in background, using kotlin coroutines
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
             initApplicationLocales(context)
         }
     }

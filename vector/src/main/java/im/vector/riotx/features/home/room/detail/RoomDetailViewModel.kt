@@ -498,7 +498,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.rx().liveRoomSummary(false)
                 .execute { async ->
                     copy(
                             asyncRoomSummary = async,

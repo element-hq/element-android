@@ -23,12 +23,20 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.view.View
+import dagger.Lazy
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
@@ -55,7 +63,7 @@ class MessageItemFactory @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-        private val htmlRenderer: EventHtmlRenderer,
+        private val htmlRenderer: Lazy<EventHtmlRenderer>,
         private val stringProvider: StringProvider,
         private val emojiCompatFontProvider: EmojiCompatFontProvider,
         private val imageContentRenderer: ImageContentRenderer,
@@ -79,9 +87,9 @@ class MessageItemFactory @Inject constructor(
 
         val messageContent: MessageContent =
                 event.annotations?.editSummary?.aggregatedContent?.toModel()
-                        ?: event.root.getClearContent().toModel()
-                        ?: //Malformed content, we should echo something on screen
-                        return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
+                ?: event.root.getClearContent().toModel()
+                ?: //Malformed content, we should echo something on screen
+                return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 
         if (messageContent.relatesTo?.type == RelationType.REPLACE) {
             // ignore replace event, the targeted id is already edited
@@ -91,16 +99,16 @@ class MessageItemFactory @Inject constructor(
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
-                    informationData,
-                    event.annotations?.editSummary,
-                    highlight,
-                    callback)
+                                                             informationData,
+                                                             event.annotations?.editSummary,
+                                                             highlight,
+                                                             callback)
             is MessageTextContent   -> buildTextMessageItem(event.sendState,
-                    messageContent,
-                    informationData,
-                    event.annotations?.editSummary,
-                    highlight,
-                    callback
+                                                            messageContent,
+                                                            informationData,
+                                                            event.annotations?.editSummary,
+                                                            highlight,
+                                                            callback
             )
             is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback)
@@ -134,7 +142,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -157,7 +165,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { _ ->
@@ -210,7 +218,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -254,7 +262,7 @@ class MessageItemFactory @Inject constructor(
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -266,7 +274,7 @@ class MessageItemFactory @Inject constructor(
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
         val bodyToUse = messageContent.formattedBody?.let {
-            htmlRenderer.render(it.trim())
+            htmlRenderer.get().render(it.trim())
         } ?: messageContent.body
 
         val linkifiedBody = linkifyBody(bodyToUse, callback)
@@ -294,7 +302,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -326,9 +334,9 @@ class MessageItemFactory @Inject constructor(
                 //nop
             }
         },
-                editStart,
-                editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                          editStart,
+                          editEnd,
+                          Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         return spannable
     }
 
@@ -364,7 +372,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -400,7 +408,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 

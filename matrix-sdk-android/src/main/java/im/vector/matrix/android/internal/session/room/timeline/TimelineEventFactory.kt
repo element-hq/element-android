@@ -80,7 +80,7 @@ internal class SimpleTimelineEventFactory @Inject constructor(private val roomMe
             val result = cryptoService.decryptEvent(event, UUID.randomUUID().toString())
             event.setClearData(result)
         } catch (failure: Throwable) {
-            Timber.e(failure, "Encrypted event: decryption failed")
+            Timber.e("Encrypted event: decryption failed")
             if (failure is MXDecryptionException) {
                 event.setCryptoError(failure.cryptoError)
             }

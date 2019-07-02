@@ -47,8 +47,8 @@ interface Room :
      * A live [RoomSummary] associated with the room
      * You can observe this summary to get dynamic data from this room.
      */
-    val liveRoomSummary: LiveData<RoomSummary>
+    fun liveRoomSummary(fetchLastEvent: Boolean = false): LiveData<RoomSummary>
 
-    val roomSummary: RoomSummary?
+    fun roomSummary(fetchLastEvent: Boolean = false): RoomSummary?
 
 }

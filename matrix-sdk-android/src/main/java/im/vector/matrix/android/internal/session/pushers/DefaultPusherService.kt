@@ -54,22 +54,6 @@ internal class DefaultPusherService @Inject constructor(
     override fun refreshPushers() {
         getPusherTask
                 .configureWith(Unit)
-                .dispatchTo(object : MatrixCallback<GetPushersResponse> {
-                    override fun onSuccess(data: GetPushersResponse) {
-                        monarchy.runTransactionSync { realm ->
-                            //clear existings?
-                            realm.where(PusherEntity::class.java)
-                                    .equalTo(PusherEntityFields.USER_ID, sessionParam.credentials.userId)
-                                    .findAll().deleteAllFromRealm()
-                            data.pushers?.forEach { jsonPusher ->
-                                jsonPusher.toEntity(sessionParam.credentials.userId).also {
-                                    it.state = PusherState.REGISTERED
-                                    realm.insertOrUpdate(it)
-                                }
-                            }
-                        }
-                    }
-                })
                 .executeBy(taskExecutor)
     }
 

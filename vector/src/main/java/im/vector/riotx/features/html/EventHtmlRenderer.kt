@@ -18,10 +18,9 @@ package im.vector.riotx.features.html
 
 import android.content.Context
 import android.text.style.URLSpan
-import androidx.appcompat.app.AppCompatActivity
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
-import im.vector.matrix.android.api.session.Session
+import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequests
 import im.vector.riotx.features.home.AvatarRenderer
@@ -37,12 +36,14 @@ import ru.noties.markwon.html.TagHandler
 import ru.noties.markwon.html.tag.*
 import java.util.Arrays.asList
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class EventHtmlRenderer @Inject constructor(context: AppCompatActivity,
+@Singleton
+class EventHtmlRenderer @Inject constructor(context: Context,
                                             val avatarRenderer: AvatarRenderer,
-                                            session: Session) {
+                                            sessionHolder: ActiveSessionHolder) {
     private val markwon = Markwon.builder(context)
-            .usePlugin(MatrixPlugin.create(GlideApp.with(context), context, avatarRenderer, session))
+            .usePlugin(MatrixPlugin.create(GlideApp.with(context), context, avatarRenderer, sessionHolder))
             .build()
 
     fun render(text: String): CharSequence {
@@ -54,7 +55,7 @@ class EventHtmlRenderer @Inject constructor(context: AppCompatActivity,
 private class MatrixPlugin private constructor(private val glideRequests: GlideRequests,
                                                private val context: Context,
                                                private val avatarRenderer: AvatarRenderer,
-                                               private val session: Session) : AbstractMarkwonPlugin() {
+                                               private val session: ActiveSessionHolder) : AbstractMarkwonPlugin() {
 
     override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
         builder.htmlParser(MarkwonHtmlParserImpl.create())
@@ -99,7 +100,7 @@ private class MatrixPlugin private constructor(private val glideRequests: GlideR
                         asList<String>("h1", "h2", "h3", "h4", "h5", "h6"),
                         HeadingHandler())
                 .setHandler("mx-reply",
-                        MxReplyTagHandler())
+                            MxReplyTagHandler())
 
     }
 
@@ -122,7 +123,7 @@ private class MatrixPlugin private constructor(private val glideRequests: GlideR
 
     companion object {
 
-        fun create(glideRequests: GlideRequests, context: Context, avatarRenderer: AvatarRenderer, session: Session): MatrixPlugin {
+        fun create(glideRequests: GlideRequests, context: Context, avatarRenderer: AvatarRenderer, session: ActiveSessionHolder): MatrixPlugin {
             return MatrixPlugin(glideRequests, context, avatarRenderer, session)
         }
     }
@@ -131,7 +132,7 @@ private class MatrixPlugin private constructor(private val glideRequests: GlideR
 private class MxLinkHandler(private val glideRequests: GlideRequests,
                             private val context: Context,
                             private val avatarRenderer: AvatarRenderer,
-                            private val session: Session) : TagHandler() {
+                            private val sessionHolder: ActiveSessionHolder) : TagHandler() {
 
     private val linkHandler = LinkHandler()
 
@@ -141,7 +142,7 @@ private class MxLinkHandler(private val glideRequests: GlideRequests,
             val permalinkData = PermalinkParser.parse(link)
             when (permalinkData) {
                 is PermalinkData.UserLink -> {
-                    val user = session.getUser(permalinkData.userId)
+                    val user = sessionHolder.getSafeActiveSession()?.getUser(permalinkData.userId)
                     val span = PillImageSpan(glideRequests, avatarRenderer, context, permalinkData.userId, user)
                     SpannableBuilder.setSpans(
                             visitor.builder(),

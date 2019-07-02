@@ -30,7 +30,12 @@ import im.vector.matrix.android.api.util.addTo
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.ChunkEntityFields
+import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
@@ -38,7 +43,13 @@ import im.vector.matrix.android.internal.database.query.whereInRoom
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
-import io.realm.*
+import io.realm.OrderedCollectionChangeSet
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import io.realm.Sort
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -50,7 +61,6 @@ import kotlin.collections.HashMap
 private const val INITIAL_LOAD_SIZE = 20
 private const val MIN_FETCHING_COUNT = 30
 private const val DISPLAY_INDEX_UNKNOWN = Int.MIN_VALUE
-private const val THREAD_NAME = "TIMELINE_DB_THREAD"
 
 internal class DefaultTimeline(
         private val roomId: String,
@@ -64,18 +74,22 @@ internal class DefaultTimeline(
         private val allowedTypes: List<String>?
 ) : Timeline {
 
+    private companion object {
+        val BACKGROUND_HANDLER = Handler(
+                HandlerThread("TIMELINE_DB_THREAD").apply { start() }.looper
+        )
+    }
+
     override var listener: Timeline.Listener? = null
         set(value) {
             field = value
-            backgroundHandler.get()?.post {
+            BACKGROUND_HANDLER.post {
                 postSnapshot()
             }
         }
 
     private val isStarted = AtomicBoolean(false)
     private val isReady = AtomicBoolean(false)
-    private val backgroundHandlerThread = AtomicReference<HandlerThread>()
-    private val backgroundHandler = AtomicReference<Handler>()
     private val mainHandler = Handler(Looper.getMainLooper())
     private val backgroundRealm = AtomicReference<Realm>()
     private val cancelableBag = CancelableBag()
@@ -168,14 +182,14 @@ internal class DefaultTimeline(
         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
             if (roomId == this@DefaultTimeline.roomId) {
                 Timber.v("New session id detected for this room")
-                backgroundHandler.get()?.post {
+                BACKGROUND_HANDLER.post {
                     val realm = backgroundRealm.get()
                     var hasChange = false
                     builtEvents.forEachIndexed { index, timelineEvent ->
                         if (timelineEvent.isEncrypted()) {
                             val eventContent = timelineEvent.root.content.toModel<EncryptedEventContent>()
                             if (eventContent?.sessionId == sessionId
-                                    && (timelineEvent.root.mClearEvent == null || timelineEvent.root.mCryptoError != null)) {
+                                && (timelineEvent.root.mClearEvent == null || timelineEvent.root.mCryptoError != null)) {
                                 //we need to rebuild this event
                                 EventEntity.where(realm, eventId = timelineEvent.root.eventId!!).findFirst()?.let {
                                     builtEvents[index] = timelineEventFactory.create(it, realm)
@@ -194,7 +208,7 @@ internal class DefaultTimeline(
 // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
-        backgroundHandler.get()?.post {
+        BACKGROUND_HANDLER.post {
             if (!canPaginate(direction)) {
                 return@post
             }
@@ -211,13 +225,8 @@ internal class DefaultTimeline(
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
-            val handlerThread = HandlerThread(THREAD_NAME + hashCode())
-            handlerThread.start()
-            val handler = Handler(handlerThread.looper)
-            this.backgroundHandlerThread.set(handlerThread)
-            this.backgroundHandler.set(handler)
             cryptoService.addNewSessionListener(newSessionListener)
-            handler.post {
+            BACKGROUND_HANDLER.post {
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
                 clearUnlinkedEvents(realm)
@@ -246,14 +255,12 @@ internal class DefaultTimeline(
         if (isStarted.compareAndSet(true, false)) {
             cryptoService.removeSessionListener(newSessionListener)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
-            backgroundHandler.get()?.post {
+            BACKGROUND_HANDLER.post {
                 cancelableBag.cancel()
                 liveEvents.removeAllChangeListeners()
                 backgroundRealm.getAndSet(null).also {
                     it.close()
                 }
-                backgroundHandler.set(null)
-                backgroundHandlerThread.getAndSet(null)?.quit()
             }
         }
     }
@@ -387,9 +394,9 @@ internal class DefaultTimeline(
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
         val token = getTokenLive(direction) ?: return
         val params = PaginationTask.Params(roomId = roomId,
-                from = token,
-                direction = direction.toPaginationDirection(),
-                limit = limit)
+                                           from = token,
+                                           direction = direction.toPaginationDirection(),
+                                           limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         paginationTask.configureWith(params)
@@ -400,7 +407,7 @@ internal class DefaultTimeline(
                             Timber.v("Success fetching $limit items $direction from pagination request")
                         } else {
                             // Database won't be updated, so we force pagination request
-                            backgroundHandler.get()?.post {
+                            BACKGROUND_HANDLER.post {
                                 executePaginationTask(direction, limit)
                             }
                         }
@@ -441,6 +448,7 @@ internal class DefaultTimeline(
         if (count < 1) {
             return 0
         }
+        val start = System.currentTimeMillis()
         val offsetResults = getOffsetResults(startDisplayIndex, direction, count)
         if (offsetResults.isEmpty()) {
             return 0
@@ -459,7 +467,8 @@ internal class DefaultTimeline(
             builtEventsIdMap.entries.filter { it.value >= position }.forEach { it.setValue(it.value + 1) }
             builtEventsIdMap[eventEntity.eventId] = position
         }
-        Timber.v("Built ${offsetResults.size} items from db")
+        val time = System.currentTimeMillis() - start
+        Timber.v("Built ${offsetResults.size} items from db in $time ms")
         return offsetResults.size
     }
 

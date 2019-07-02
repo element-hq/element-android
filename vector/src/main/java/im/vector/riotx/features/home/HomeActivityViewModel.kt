@@ -73,7 +73,7 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun observeRoomAndGroup() {
         Observable
                 .combineLatest<List<RoomSummary>, Option<GroupSummary>, List<RoomSummary>>(
-                        session.rx().liveRoomSummaries().throttleLast(300, TimeUnit.MILLISECONDS),
+                        session.rx().liveRoomSummaries(fetchLastEvents = true).throttleLast(300, TimeUnit.MILLISECONDS),
                         selectedGroupStore.observe(),
                         BiFunction { rooms, selectedGroupOption ->
                             val selectedGroup = selectedGroupOption.orNull()
