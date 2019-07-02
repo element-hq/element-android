@@ -49,6 +49,7 @@ internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
         val eventEntity = event.toEntity(roomId).apply {
             this.stateIndex = stateIndex
             this.isUnlinked = isUnlinked
+            this.sendState = SendState.SYNCED
         }
         untimelinedStateEvents.add(0, eventEntity)
     }
