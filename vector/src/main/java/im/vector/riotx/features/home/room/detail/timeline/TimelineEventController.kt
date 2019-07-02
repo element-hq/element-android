@@ -299,10 +299,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                     collapsedEventIds.removeAll(mergedEventIds)
                 }
                 val mergeId = mergedEventIds.joinToString(separator = "_") { it }
-                (MergedHeaderItem(isCollapsed, mergeId, mergedData, avatarRenderer) {
+                MergedHeaderItem(isCollapsed, mergeId, mergedData, avatarRenderer) {
                     mergeItemCollapseStates[event.localId] = it
                     requestModelBuild()
-                }).also {
+                }.also {
                     it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
                 }
             }
