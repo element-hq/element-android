@@ -23,7 +23,7 @@ import im.vector.riotx.features.command.Command
 import javax.inject.Inject
 
 class AutocompleteCommandPresenter @Inject constructor(context: Context,
-                                               private val controller: AutocompleteCommandController) :
+                                                       private val controller: AutocompleteCommandController) :
         EpoxyAutocompletePresenter<Command>(context) {
 
     init {

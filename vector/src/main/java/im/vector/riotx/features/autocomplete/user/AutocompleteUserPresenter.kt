@@ -25,7 +25,7 @@ import im.vector.riotx.features.autocomplete.EpoxyAutocompletePresenter
 import javax.inject.Inject
 
 class AutocompleteUserPresenter @Inject constructor(context: Context,
-                                            private val controller: AutocompleteUserController
+                                                    private val controller: AutocompleteUserController
 ) : EpoxyAutocompletePresenter<User>(context) {
 
     var callback: Callback? = null

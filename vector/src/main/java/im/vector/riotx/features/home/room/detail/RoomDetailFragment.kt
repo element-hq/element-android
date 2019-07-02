@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -105,6 +104,7 @@ import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.PreferencesManager
+import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
@@ -350,7 +350,7 @@ class RoomDetailFragment :
 
     private fun setupComposer() {
         val elevation = 6f
-        val backgroundDrawable = ColorDrawable(Color.WHITE)
+        val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(requireContext(), R.attr.riotx_background))
         Autocomplete.on<Command>(composerLayout.composerEditText)
                 .with(commandAutocompletePolicy)
                 .with(autocompleteCommandPresenter)
