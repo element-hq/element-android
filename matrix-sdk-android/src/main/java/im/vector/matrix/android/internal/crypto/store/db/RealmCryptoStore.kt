@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.crypto.store.db
 import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
@@ -56,6 +57,17 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
 
     // Cache for InboundGroupSession, to release them properly
     private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper>()
+
+
+    private val newSessionListeners = ArrayList<NewSessionListener>()
+
+    override fun addNewSessionListener(listener: NewSessionListener) {
+        if (!newSessionListeners.contains(listener)) newSessionListeners.add(listener)
+    }
+
+    override fun removeSessionListener(listener: NewSessionListener) {
+        newSessionListeners.remove(listener)
+    }
 
     /* ==========================================================================================
      * Other data
@@ -718,4 +730,5 @@ internal class RealmCryptoStore(private val enableFileEncryption: Boolean = fals
                 }
                 .toMutableList()
     }
+
 }

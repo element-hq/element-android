@@ -69,6 +69,7 @@ internal class SimpleTimelineEventFactory @Inject constructor(private val roomMe
                 isUniqueDisplayName,
                 senderRoomMember?.avatarUrl,
                 eventEntity.sendState,
+                event.mClearEvent != null,
                 relations
         )
     }
@@ -120,6 +121,7 @@ internal class InMemoryTimelineEventFactory @Inject constructor(private val room
                 senderData.isUniqueDisplayName,
                 senderData.senderAvatar,
                 eventEntity.sendState,
+                event.mClearEvent != null,
                 relations
         )
     }
@@ -138,7 +140,7 @@ internal class InMemoryTimelineEventFactory @Inject constructor(private val room
                 }
                 event.setClearData(result)
             } catch (failure: Throwable) {
-                Timber.e(failure, "Encrypted event: decryption failed")
+                Timber.e("Encrypted event: decryption failed ${failure.localizedMessage}")
                 if (failure is MXDecryptionException) {
                     event.setCryptoError(failure.cryptoError)
                 } else {

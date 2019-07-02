@@ -18,6 +18,7 @@
 package im.vector.matrix.android.internal.crypto.store
 
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
@@ -376,4 +377,8 @@ internal interface IMXCryptoStore {
      * @return an IncomingRoomKeyRequest if it exists, else null
      */
     fun getIncomingRoomKeyRequest(userId: String, deviceId: String, requestId: String): IncomingRoomKeyRequest?
+
+    fun addNewSessionListener(listener: NewSessionListener)
+
+    fun removeSessionListener(listener: NewSessionListener)
 }

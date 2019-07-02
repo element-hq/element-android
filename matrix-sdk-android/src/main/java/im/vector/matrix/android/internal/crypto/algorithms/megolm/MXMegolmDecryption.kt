@@ -55,6 +55,8 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                   private val coroutineDispatchers: MatrixCoroutineDispatchers)
     : IMXDecrypting {
 
+    var newSessionListener: NewSessionListener? = null
+
     /**
      * Events which we couldn't decrypt due to unknown sessions / indexes: map from
      * senderKey|sessionId to timelines to list of MatrixEvents.
@@ -203,7 +205,8 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
         if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
             Timber.v("## onRoomKeyEvent(), forward adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
                     + " sessionKey " + roomKeyContent.sessionKey) // from " + event);
-            val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return
+            val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>()
+                    ?: return
             forwardingCurve25519KeyChain = if (forwardedRoomKeyContent.forwardingCurve25519KeyChain == null) {
                 ArrayList()
             } else {
@@ -275,43 +278,8 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
      * @param sessionId the session id
      */
     override fun onNewSession(senderKey: String, sessionId: String) {
-        //TODO see how to handle this
         Timber.v("ON NEW SESSION $sessionId - $senderKey")
-        /*val k = "$senderKey|$sessionId"
-
-        val pending = pendingEvents[k]
-
-        if (null != pending) {
-            // Have another go at decrypting events sent with this session.
-            pendingEvents.remove(k)
-
-            val timelineIds = pending.keys
-
-            for (timelineId in timelineIds) {
-                val events = pending[timelineId]
-
-                for (event in events!!) {
-                    var result: MXEventDecryptionResult? = null
-
-                    try {
-                        result = decryptEvent(event, timelineId)
-                    } catch (e: MXDecryptionException) {
-                        Timber.e(e, "## onNewSession() : Still can't decrypt " + event.eventId + ". Error")
-                        event.setCryptoError(e.cryptoError)
-                    }
-
-                    if (null != result) {
-                        val fResut = result
-                        CryptoAsyncHelper.getUiHandler().post {
-                            event.setClearData(fResut)
-                            //mSession!!.onEventDecrypted(event)
-                        }
-                        Timber.v("## onNewSession() : successful re-decryption of " + event.eventId)
-                    }
-                }
-            }
-        }
-        */
+        newSessionListener?.onNewSession(null, senderKey, sessionId)
     }
 
     override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {
