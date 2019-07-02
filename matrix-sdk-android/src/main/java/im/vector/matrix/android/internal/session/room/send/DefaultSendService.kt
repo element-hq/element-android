@@ -101,13 +101,26 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val event = localEchoEventFactory.createMediaEvent(roomId, attachment).also {
             saveLocalEcho(it)
         }
-        val uploadWork = createUploadMediaWork(event, attachment)
+
+        val isRoomEncrypted = cryptoService.isRoomEncrypted(roomId)
+
+        val uploadWork = createUploadMediaWork(event, attachment, isRoomEncrypted)
         val sendWork = createSendEventWork(event)
 
-        WorkManager.getInstance(context)
-                .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
-                .then(sendWork)
-                .enqueue()
+        if (isRoomEncrypted) {
+            val encryptWork = createEncryptEventWork(event)
+
+            WorkManager.getInstance(context)
+                    .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .then(encryptWork)
+                    .then(sendWork)
+                    .enqueue()
+        } else {
+            WorkManager.getInstance(context)
+                    .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .then(sendWork)
+                    .enqueue()
+        }
 
         return CancelableWork(context, sendWork.id)
     }
@@ -148,8 +161,8 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
 
-    private fun createUploadMediaWork(event: Event, attachment: ContentAttachmentData): OneTimeWorkRequest {
-        val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment)
+    private fun createUploadMediaWork(event: Event, attachment: ContentAttachmentData, isRoomEncrypted: Boolean): OneTimeWorkRequest {
+        val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment, isRoomEncrypted)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return OneTimeWorkRequestBuilder<UploadContentWorker>()

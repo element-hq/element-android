@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
@@ -35,11 +36,20 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
                                                           private val taskExecutor: TaskExecutor,
                                                           private val timelineEventFactory: CacheableTimelineEventFactory,
                                                           private val contextOfEventTask: GetContextOfEventTask,
+                                                          private val cryptoService: CryptoService,
                                                           private val paginationTask: PaginationTask
 ) : TimelineService {
 
     override fun createTimeline(eventId: String?, allowedTypes: List<String>?): Timeline {
-        return DefaultTimeline(roomId, eventId, monarchy.realmConfiguration, taskExecutor, contextOfEventTask, timelineEventFactory, paginationTask, allowedTypes)
+        return DefaultTimeline(roomId,
+                eventId,
+                monarchy.realmConfiguration,
+                taskExecutor,
+                contextOfEventTask,
+                timelineEventFactory,
+                paginationTask,
+                cryptoService,
+                allowedTypes)
     }
 
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {

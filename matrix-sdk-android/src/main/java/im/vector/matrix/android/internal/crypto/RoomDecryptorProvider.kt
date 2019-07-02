@@ -34,6 +34,16 @@ internal class RoomDecryptorProvider @Inject constructor(
     // A map from algorithm to MXDecrypting instance, for each room
     private val roomDecryptors: MutableMap<String /* room id */, MutableMap<String /* algorithm */, IMXDecrypting>> = HashMap()
 
+    private val newSessionListeners = ArrayList<NewSessionListener>()
+
+    fun addNewSessionListener(listener: NewSessionListener) {
+        if (!newSessionListeners.contains(listener)) newSessionListeners.add(listener)
+    }
+
+    fun removeSessionListener(listener: NewSessionListener) {
+        newSessionListeners.remove(listener)
+    }
+
     /**
      * Get a decryptor for a given room and algorithm.
      * If we already have a decryptor for the given room and algorithm, return
@@ -64,7 +74,19 @@ internal class RoomDecryptorProvider @Inject constructor(
         val decryptingClass = MXCryptoAlgorithms.hasDecryptorClassForAlgorithm(algorithm)
         if (decryptingClass) {
             val alg = when (algorithm) {
-                MXCRYPTO_ALGORITHM_MEGOLM -> megolmDecryptionFactory.create()
+                MXCRYPTO_ALGORITHM_MEGOLM -> megolmDecryptionFactory.create().apply {
+                    this.newSessionListener = object : NewSessionListener {
+                        override fun onNewSession(rid: String?, senderKey: String, sessionId: String) {
+                            newSessionListeners.forEach {
+                                try {
+                                    it.onNewSession(roomId, senderKey, sessionId)
+                                } catch (e: Throwable) {
+
+                                }
+                            }
+                        }
+                    }
+                }
                 else                      -> olmDecryptionFactory.create()
             }
             if (roomId != null && !TextUtils.isEmpty(roomId)) {

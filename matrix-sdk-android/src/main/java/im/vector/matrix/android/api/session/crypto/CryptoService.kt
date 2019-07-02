@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
@@ -106,5 +107,9 @@ interface CryptoService {
     fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>)
 
     fun clearCryptoCache(callback: MatrixCallback<Unit>)
+
+    fun addNewSessionListener(newSessionListener: NewSessionListener)
+
+    fun removeSessionListener(listener: NewSessionListener)
 
 }

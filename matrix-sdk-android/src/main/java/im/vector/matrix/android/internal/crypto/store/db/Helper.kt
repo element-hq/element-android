@@ -25,26 +25,8 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
-import java.security.MessageDigest
 import java.util.zip.GZIPInputStream
 
-
-/**
- * Compute a Hash of a String, using md5 algorithm
- */
-fun String.hash() = try {
-    val digest = MessageDigest.getInstance("md5")
-    digest.update(toByteArray())
-    val bytes = digest.digest()
-    val sb = StringBuilder()
-    for (i in bytes.indices) {
-        sb.append(String.format("%02X", bytes[i]))
-    }
-    sb.toString().toLowerCase()
-} catch (exc: Exception) {
-    // Should not happen, but just in case
-    hashCode().toString()
-}
 
 /**
  * Get realm, invoke the action, close realm, and return the result of the action

@@ -128,6 +128,7 @@ class CreateRoomParams {
             contentMap["algorithm"] = algorithm
 
             val algoEvent = Event(type = EventType.ENCRYPTION,
+                    stateKey = "",
                     content = contentMap.toContent()
             )
 
@@ -161,6 +162,7 @@ class CreateRoomParams {
             contentMap["history_visibility"] = historyVisibility
 
             val historyVisibilityEvent = Event(type = EventType.STATE_HISTORY_VISIBILITY,
+                    stateKey = "",
                     content = contentMap.toContent())
 
             if (null == initialStates) {

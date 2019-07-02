@@ -25,13 +25,17 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
+import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
+import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.FileInputStream
 import javax.inject.Inject
 
 
@@ -42,7 +46,9 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
             override val userId: String,
             val roomId: String,
             val event: Event,
-            val attachment: ContentAttachmentData
+            val attachment: ContentAttachmentData,
+            val isRoomEncrypted: Boolean,
+            override var lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var fileUploader: FileUploader
@@ -52,19 +58,41 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
 
+        if (params.lastFailureMessage != null) {
+            // Transmit the error
+            return Result.success(inputData)
+        }
+
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)
 
         val eventId = params.event.eventId ?: return Result.success()
         val attachment = params.attachment
 
+        val isRoomEncrypted = params.isRoomEncrypted
+
+
         val thumbnailData = ThumbnailExtractor.extractThumbnail(params.attachment)
         val attachmentFile = createAttachmentFile(attachment) ?: return Result.failure()
         var uploadedThumbnailUrl: String? = null
+        var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
 
         if (thumbnailData != null) {
-            fileUploader
-                    .uploadByteArray(thumbnailData.bytes, "thumb_${attachment.name}", thumbnailData.mimeType)
+            val contentUploadResponse = if (isRoomEncrypted) {
+                Timber.v("Encrypt thumbnail")
+                val encryptionResult = MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
+                        ?: return Result.failure()
+
+                uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
+
+                fileUploader
+                        .uploadByteArray(encryptionResult.encryptedByteArray, "thumb_${attachment.name}", thumbnailData.mimeType)
+            } else {
+                fileUploader
+                        .uploadByteArray(thumbnailData.bytes, "thumb_${attachment.name}", thumbnailData.mimeType)
+            }
+
+            contentUploadResponse
                     .fold(
                             { Timber.e(it) },
                             { uploadedThumbnailUrl = it.contentUri }
@@ -76,11 +104,28 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                 contentUploadStateTracker.setProgress(eventId, current, total)
             }
         }
-        return fileUploader
-                .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
+
+        var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
+
+        val contentUploadResponse = if (isRoomEncrypted) {
+            Timber.v("Encrypt file")
+
+            val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
+                    ?: return Result.failure()
+
+            uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
+
+            fileUploader
+                    .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
+        } else {
+            fileUploader
+                    .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
+        }
+
+        return contentUploadResponse
                 .fold(
-                        { handleFailure(params) },
-                        { handleSuccess(params, it.contentUri, uploadedThumbnailUrl) }
+                        { handleFailure(params, it) },
+                        { handleSuccess(params, it.contentUri, uploadedFileEncryptedFileInfo, uploadedThumbnailUrl, uploadedThumbnailEncryptedFileInfo) }
                 )
     }
 
@@ -93,46 +138,79 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         }
     }
 
-    private fun handleFailure(params: Params): Result {
+    private fun handleFailure(params: Params, failure: Throwable): Result {
         contentUploadStateTracker.setFailure(params.event.eventId!!)
-        return Result.success()
+        return Result.success(
+                WorkerParamsFactory.toData(
+                        params.copy(
+                                lastFailureMessage = failure.localizedMessage
+                        )
+                )
+        )
     }
 
     private fun handleSuccess(params: Params,
                               attachmentUrl: String,
-                              thumbnailUrl: String?): Result {
+                              encryptedFileInfo: EncryptedFileInfo?,
+                              thumbnailUrl: String?,
+                              thumbnailEncryptedFileInfo: EncryptedFileInfo?): Result {
         contentUploadStateTracker.setSuccess(params.event.eventId!!)
-        val event = updateEvent(params.event, attachmentUrl, thumbnailUrl)
+        val event = updateEvent(params.event, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
         val sendParams = SendEventWorker.Params(params.userId, params.roomId, event)
         return Result.success(WorkerParamsFactory.toData(sendParams))
     }
 
-    private fun updateEvent(event: Event, url: String, thumbnailUrl: String? = null): Event {
+    private fun updateEvent(event: Event,
+                            url: String,
+                            encryptedFileInfo: EncryptedFileInfo?,
+                            thumbnailUrl: String? = null,
+                            thumbnailEncryptedFileInfo: EncryptedFileInfo?): Event {
         val messageContent: MessageContent = event.content.toModel() ?: return event
         val updatedContent = when (messageContent) {
-            is MessageImageContent -> messageContent.update(url)
-            is MessageVideoContent -> messageContent.update(url, thumbnailUrl)
-            is MessageFileContent  -> messageContent.update(url)
-            is MessageAudioContent -> messageContent.update(url)
+            is MessageImageContent -> messageContent.update(url, encryptedFileInfo)
+            is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
+            is MessageFileContent  -> messageContent.update(url, encryptedFileInfo)
+            is MessageAudioContent -> messageContent.update(url, encryptedFileInfo)
             else                   -> messageContent
         }
         return event.copy(content = updatedContent.toContent())
     }
 
-    private fun MessageImageContent.update(url: String): MessageImageContent {
-        return copy(url = url)
+    private fun MessageImageContent.update(url: String,
+                                           encryptedFileInfo: EncryptedFileInfo?): MessageImageContent {
+        return copy(
+                url = if (encryptedFileInfo == null) url else null,
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url)
+        )
     }
 
-    private fun MessageVideoContent.update(url: String, thumbnailUrl: String?): MessageVideoContent {
-        return copy(url = url, info = info?.copy(thumbnailUrl = thumbnailUrl))
+    private fun MessageVideoContent.update(url: String,
+                                           encryptedFileInfo: EncryptedFileInfo?,
+                                           thumbnailUrl: String?,
+                                           thumbnailEncryptedFileInfo: EncryptedFileInfo?): MessageVideoContent {
+        return copy(
+                url = if (encryptedFileInfo == null) url else null,
+                videoInfo = videoInfo?.copy(
+                        thumbnailUrl = if (thumbnailEncryptedFileInfo == null) thumbnailUrl else null,
+                        thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = url)
+                )
+        )
     }
 
-    private fun MessageFileContent.update(url: String): MessageFileContent {
-        return copy(url = url)
+    private fun MessageFileContent.update(url: String,
+                                          encryptedFileInfo: EncryptedFileInfo?): MessageFileContent {
+        return copy(
+                url = if (encryptedFileInfo == null) url else null,
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url)
+        )
     }
 
-    private fun MessageAudioContent.update(url: String): MessageAudioContent {
-        return copy(url = url)
+    private fun MessageAudioContent.update(url: String,
+                                           encryptedFileInfo: EncryptedFileInfo?): MessageAudioContent {
+        return copy(
+                url = if (encryptedFileInfo == null) url else null,
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url)
+        )
     }
 
 }

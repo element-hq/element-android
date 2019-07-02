@@ -21,9 +21,9 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.OpenableColumns
 
-fun getFilenameFromUri(context: Context, uri: Uri): String? {
+fun getFilenameFromUri(context: Context?, uri: Uri): String? {
     var result: String? = null
-    if (uri.scheme == "content") {
+    if (context != null && uri.scheme == "content") {
         val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
         try {
             if (cursor != null && cursor.moveToFirst()) {

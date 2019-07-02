@@ -18,6 +18,7 @@ package im.vector.riotredesign.features.workers.signout
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -41,16 +42,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.di.DaggerScreenComponent
+import im.vector.riotredesign.core.platform.VectorBaseActivity
 import im.vector.riotredesign.core.utils.toast
 import im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity
-import javax.inject.Inject
 
 
 class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
-    @Inject lateinit var session: Session
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var session: Session
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
 
     @BindView(R.id.bottom_sheet_signout_warning_text)
@@ -98,6 +100,14 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     private lateinit var viewModel: SignOutViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val vectorBaseActivity = activity as VectorBaseActivity
+        val screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
+        viewModelFactory = screenComponent.viewModelFactory()
+        session = screenComponent.session()
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

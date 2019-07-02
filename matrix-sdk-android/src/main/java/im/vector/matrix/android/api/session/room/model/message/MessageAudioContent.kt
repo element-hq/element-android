@@ -20,13 +20,35 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
+import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
 data class MessageAudioContent(
+        /**
+         * Not documented
+         */
         @Json(name = "msgtype") override val type: String,
+
+        /**
+         * Required. A description of the audio e.g. 'Bee Gees - Stayin' Alive', or some kind of content description for accessibility e.g. 'audio attachment'.
+         */
         @Json(name = "body") override val body: String,
-        @Json(name = "info") val info: AudioInfo? = null,
+
+        /**
+         * Metadata for the audio clip referred to in url.
+         */
+        @Json(name = "info") val audioInfo: AudioInfo? = null,
+
+        /**
+         * Required. Required if the file is not encrypted. The URL (typically MXC URI) to the audio clip.
+         */
         @Json(name = "url") val url: String? = null,
+
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
-        @Json(name = "m.new_content") override val newContent: Content? = null
-) : MessageContent
+        @Json(name = "m.new_content") override val newContent: Content? = null,
+
+        /**
+         * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
+         */
+        @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
+) : MessageEncyptedContent

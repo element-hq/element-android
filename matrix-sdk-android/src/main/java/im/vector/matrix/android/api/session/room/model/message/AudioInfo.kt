@@ -21,7 +21,18 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class AudioInfo(
+        /**
+         * The mimetype of the audio e.g. "audio/aac".
+         */
         @Json(name = "mimetype") val mimeType: String,
+
+        /**
+         * The size of the audio clip in bytes.
+         */
         @Json(name = "size") val size: Long = 0,
+
+        /**
+         * The duration of the audio in milliseconds.
+         */
         @Json(name = "duration") val duration: Int = 0
 )

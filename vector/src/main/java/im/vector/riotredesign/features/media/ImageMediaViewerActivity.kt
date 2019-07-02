@@ -20,9 +20,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator
 import com.github.piasy.biv.view.GlideImageViewFactory
 import im.vector.riotredesign.core.di.ScreenComponent
+import im.vector.riotredesign.core.glide.GlideApp
 import im.vector.riotredesign.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_image_media_viewer.*
 import javax.inject.Inject
@@ -44,9 +46,26 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
             finish()
         } else {
             configureToolbar(imageMediaViewerToolbar, mediaData)
-            imageMediaViewerImageView.setImageViewFactory(GlideImageViewFactory())
-            imageMediaViewerImageView.setProgressIndicator(ProgressPieIndicator())
-            imageContentRenderer.render(mediaData, imageMediaViewerImageView)
+
+            if (mediaData.elementToDecrypt != null) {
+                // Encrypted image
+                imageMediaViewerImageView.isVisible = false
+                encryptedImageView.isVisible = true
+
+                GlideApp
+                        .with(this)
+                        .load(mediaData)
+                        .dontAnimate()
+                        .into(encryptedImageView)
+            } else {
+                // Clear image
+                imageMediaViewerImageView.isVisible = true
+                encryptedImageView.isVisible = false
+
+                imageMediaViewerImageView.setImageViewFactory(GlideImageViewFactory())
+                imageMediaViewerImageView.setProgressIndicator(ProgressPieIndicator())
+                imageContentRenderer.render(mediaData, imageMediaViewerImageView)
+            }
         }
     }
 

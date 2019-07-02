@@ -39,6 +39,7 @@ internal class DefaultReadService @Inject constructor(private val roomId: String
                                                       private val credentials: Credentials) : ReadService {
 
     override fun markAllAsRead(callback: MatrixCallback<Unit>) {
+        //TODO shouldn't it be latest synced event?
         val latestEvent = getLatestEvent()
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = latestEvent?.eventId, readReceiptEventId = latestEvent?.eventId)
         setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)

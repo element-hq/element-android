@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotredesign.core.glide;
+package im.vector.matrix.android.api.session.room.model.message
 
-import android.content.Context;
-import android.util.Log;
+import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 
-import com.bumptech.glide.GlideBuilder;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
 
-@GlideModule
-public final class MyAppGlideModule extends AppGlideModule {
-
-    @Override
-    public void applyOptions(Context context, GlideBuilder builder) {
-        builder.setLogLevel(Log.ERROR);
-    }
-
+/**
+ * Interface for message which can contains encrypted data
+ */
+interface MessageEncyptedContent : MessageContent {
+    val encryptedFileInfo: EncryptedFileInfo?
 }

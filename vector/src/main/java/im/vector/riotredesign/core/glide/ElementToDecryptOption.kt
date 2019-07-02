@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.worker
+package im.vector.riotredesign.core.glide
 
-interface SessionWorkerParams {
-    val userId: String
+import com.bumptech.glide.load.Option
+import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 
-    // Null is no error occurs. When chaining Workers, first step is to check that there is no lastFailureMessage from the previous workers
-    var lastFailureMessage: String?
-}
+const val ElementToDecryptOptionKey = "im.vector.riotx.core.glide.ElementToDecrypt"
+
+
+val ELEMENT_TO_DECRYPT = Option.memory(
+        ElementToDecryptOptionKey, ElementToDecrypt("", "", ""))
+

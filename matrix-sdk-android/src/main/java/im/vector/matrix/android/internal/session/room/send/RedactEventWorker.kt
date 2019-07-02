@@ -35,7 +35,8 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
             val txID: String,
             val roomId: String,
             val eventId: String,
-            val reason: String?
+            val reason: String?,
+            override var lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
@@ -43,6 +44,11 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
+
+        if (params.lastFailureMessage != null) {
+            // Transmit the error
+            return Result.success(inputData)
+        }
 
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)
@@ -62,7 +68,9 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
                 else                         -> {
                     //TODO mark as failed to send?
                     //always return success, or the chain will be stuck for ever!
-                    Result.success()
+                    Result.success(WorkerParamsFactory.toData(params.copy(
+                            lastFailureMessage = it.localizedMessage
+                    )))
                 }
             }
         }, {
