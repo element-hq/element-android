@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.vector.riotredesign">
+    package="im.vector.riotx">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -8,7 +8,7 @@
 
     <application>
 
-        <receiver android:name="im.vector.riotredesign.fdroid.receiver.OnApplicationUpgradeOrRebootReceiver">
+        <receiver android:name=".fdroid.receiver.OnApplicationUpgradeOrRebootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -16,7 +16,7 @@
         </receiver>
 
         <receiver
-            android:name="im.vector.riotredesign.fdroid.receiver.AlarmSyncBroadcastReceiver"
+            android:name=".fdroid.receiver.AlarmSyncBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
 

@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="im.vector.riotredesign.features.reactions.EmojiReactionPickerActivity">
+    tools:context="im.vector.riotx.features.reactions.EmojiReactionPickerActivity">
 
     <fragment
         android:id="@+id/fragment"
-        android:name="im.vector.riotredesign.features.reactions.EmojiChooserFragment"
+        android:name="im.vector.riotx.features.reactions.EmojiChooserFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

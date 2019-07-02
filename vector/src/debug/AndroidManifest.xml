@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="im.vector.riotx">
 
     <application>
-        <activity android:name="im.vector.riotredesign.features.debug.TestLinkifyActivity" />
+        <activity android:name=".features.debug.TestLinkifyActivity" />
         <activity
-            android:name="im.vector.riotredesign.features.debug.DebugMaterialThemeLightActivity"
+            android:name=".features.debug.DebugMaterialThemeLightActivity"
             android:theme="@style/VectorMaterialThemeDebugLight" />
         <activity
-            android:name="im.vector.riotredesign.features.debug.DebugMaterialThemeDarkActivity"
+            android:name=".features.debug.DebugMaterialThemeDarkActivity"
             android:theme="@style/VectorMaterialThemeDebugDark" />
     </application>
 
