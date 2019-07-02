@@ -19,14 +19,20 @@ package im.vector.riotx.features
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import com.bumptech.glide.Glide
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.LoginActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -60,7 +66,22 @@ class MainActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
         val clearCache = intent.getBooleanExtra(EXTRA_CLEAR_CACHE, false)
         val clearCredentials = intent.getBooleanExtra(EXTRA_CLEAR_CREDENTIALS, false)
+
         // Handle some wanted cleanup
+        if (clearCache || clearCredentials) {
+            GlobalScope.launch(Dispatchers.Main) {
+                // On UI Thread
+                Glide.get(this@MainActivity).clearMemory()
+                withContext(Dispatchers.IO) {
+                    // On BG thread
+                    Glide.get(this@MainActivity).clearDiskCache()
+
+                    // Also clear cache (Logs, etc...)
+                    deleteAllFiles(this@MainActivity.cacheDir)
+                }
+            }
+        }
+
         when {
             clearCredentials -> sessionHolder.getActiveSession().signOut(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
