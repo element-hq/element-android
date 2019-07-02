@@ -156,9 +156,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-    implementation 'androidx.core:core-ktx:1.0.1'
+    implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+    implementation 'androidx.core:core-ktx:1.0.2'
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
@@ -185,7 +185,7 @@ dependencies {
     implementation 'com.airbnb.android:mvrx:1.0.1'
 
     // Work
-    implementation "androidx.work:work-runtime-ktx:2.1.0-beta01"
+    implementation "androidx.work:work-runtime-ktx:2.1.0-rc01"
 
     // Functional Programming
     implementation "io.arrow-kt:arrow-core:$arrow_version"
@@ -195,7 +195,7 @@ dependencies {
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.material:material:1.1.0-alpha04'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
     implementation 'me.gujun.android:span:1.7'
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"
@@ -246,8 +246,8 @@ dependencies {
 
     // TESTS
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
 if (!getGradle().getStartParameter().getTaskRequests().toString().contains("Fdroid")) {
