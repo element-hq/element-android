@@ -376,7 +376,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
-        displayedEventsObservable.accept(action)
+        if (action.event.sendState.isSent()) { //ignore pending/local events
+            displayedEventsObservable.accept(action)
+        }
         //We need to update this with the related m.replace also (to move read receipt)
         action.event.annotations?.editSummary?.sourceEvents?.forEach {
             room.getTimeLineEvent(it)?.let { event ->

@@ -32,3 +32,18 @@ class TimelineEventVisibilityStateChangedListener(private val callback: Timeline
     }
 
 }
+
+
+class MergedTimelineEventVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?,
+                                                        private val events: List<TimelineEvent>)
+    : VectorEpoxyModel.OnVisibilityStateChangedListener {
+
+    override fun onVisibilityStateChanged(visibilityState: Int) {
+        if (visibilityState == VisibilityState.VISIBLE) {
+            events.forEach {
+                callback?.onEventVisible(it)
+            }
+        }
+    }
+
+}

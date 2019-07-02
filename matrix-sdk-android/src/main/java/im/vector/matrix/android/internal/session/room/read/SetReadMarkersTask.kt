@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.room.read
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -29,10 +28,11 @@ import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoo
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
+import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionAsync
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface SetReadMarkersTask : Task<SetReadMarkersTask.Params, Unit> {
@@ -48,21 +48,28 @@ private const val READ_MARKER = "m.fully_read"
 private const val READ_RECEIPT = "m.read"
 
 internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI: RoomAPI,
-                                         private val credentials: Credentials,
-                                         private val monarchy: Monarchy
+                                                             private val credentials: Credentials,
+                                                             private val monarchy: Monarchy
 ) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params): Try<Unit> {
         val markers = HashMap<String, String>()
-        if (params.fullyReadEventId != null && MatrixPatterns.isEventId(params.fullyReadEventId)) {
-            markers[READ_MARKER] = params.fullyReadEventId
+        if (params.fullyReadEventId != null) {
+            if (LocalEchoEventFactory.isLocalEchoId(params.fullyReadEventId)) {
+                Timber.w("Can't set read marker for local event ${params.fullyReadEventId}")
+            } else {
+                markers[READ_MARKER] = params.fullyReadEventId
+            }
         }
         if (params.readReceiptEventId != null
-                && MatrixPatterns.isEventId(params.readReceiptEventId)
                 && !isEventRead(params.roomId, params.readReceiptEventId)) {
 
-            updateNotificationCountIfNecessary(params.roomId, params.readReceiptEventId)
-            markers[READ_RECEIPT] = params.readReceiptEventId
+            if (LocalEchoEventFactory.isLocalEchoId(params.readReceiptEventId)) {
+                Timber.w("Can't set read marker for local event ${params.fullyReadEventId}")
+            } else {
+                updateNotificationCountIfNecessary(params.roomId, params.readReceiptEventId)
+                markers[READ_RECEIPT] = params.readReceiptEventId
+            }
         }
         return if (markers.isEmpty()) {
             Try.just(Unit)
