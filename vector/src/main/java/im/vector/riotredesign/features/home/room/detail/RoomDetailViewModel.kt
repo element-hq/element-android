@@ -16,6 +16,7 @@
 
 package im.vector.riotredesign.features.home.room.detail
 
+import android.net.Uri
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -36,6 +37,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.rx.rx
 import im.vector.riotredesign.R
+import im.vector.riotredesign.core.intent.getFilenameFromUri
 import im.vector.riotredesign.core.platform.VectorViewModel
 import im.vector.riotredesign.core.resources.UserPreferencesProvider
 import im.vector.riotredesign.core.utils.LiveEvent
@@ -360,13 +362,15 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
         val attachments = action.mediaFiles.map {
+            val nameWithExtension = getFilenameFromUri(null, Uri.parse(it.path))
+
             ContentAttachmentData(
                     size = it.size,
                     duration = it.duration,
                     date = it.date,
                     height = it.height,
                     width = it.width,
-                    name = it.name,
+                    name = nameWithExtension ?: it.name,
                     path = it.path,
                     mimeType = it.mimeType,
                     type = ContentAttachmentData.Type.values()[it.mediaType]
