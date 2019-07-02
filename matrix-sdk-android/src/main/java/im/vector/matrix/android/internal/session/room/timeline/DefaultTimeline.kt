@@ -20,11 +20,15 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.api.util.addTo
+import im.vector.matrix.android.internal.crypto.NewSessionListener
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.findIncludingEvent
@@ -56,6 +60,7 @@ internal class DefaultTimeline(
         private val contextOfEventTask: GetContextOfEventTask,
         private val timelineEventFactory: CacheableTimelineEventFactory,
         private val paginationTask: PaginationTask,
+        private val cryptoService: CryptoService,
         private val allowedTypes: List<String>?
 ) : Timeline {
 
@@ -159,6 +164,33 @@ internal class DefaultTimeline(
             postSnapshot()
     }
 
+    private val newSessionListener = object : NewSessionListener {
+        override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
+            if (roomId == this@DefaultTimeline.roomId) {
+                Timber.v("New session id detected for this room")
+                backgroundHandler.get()?.post {
+                    val realm = backgroundRealm.get()
+                    var hasChange = false
+                    builtEvents.forEachIndexed { index, timelineEvent ->
+                        if (timelineEvent.isEncrypted()) {
+                            val eventContent = timelineEvent.root.content.toModel<EncryptedEventContent>()
+                            if (eventContent?.sessionId == sessionId
+                                    && (timelineEvent.root.mClearEvent == null || timelineEvent.root.mCryptoError != null)) {
+                                //we need to rebuild this event
+                                EventEntity.where(realm, eventId = timelineEvent.root.eventId!!).findFirst()?.let {
+                                    builtEvents[index] = timelineEventFactory.create(it, realm)
+                                    hasChange = true
+                                }
+                            }
+                        }
+                    }
+                    if (hasChange) postSnapshot()
+                }
+            }
+        }
+
+    }
+
 // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
@@ -184,6 +216,7 @@ internal class DefaultTimeline(
             val handler = Handler(handlerThread.looper)
             this.backgroundHandlerThread.set(handlerThread)
             this.backgroundHandler.set(handler)
+            cryptoService.addNewSessionListener(newSessionListener)
             handler.post {
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
@@ -211,6 +244,7 @@ internal class DefaultTimeline(
 
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
+            cryptoService.removeSessionListener(newSessionListener)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             backgroundHandler.get()?.post {
                 cancelableBag.cancel()

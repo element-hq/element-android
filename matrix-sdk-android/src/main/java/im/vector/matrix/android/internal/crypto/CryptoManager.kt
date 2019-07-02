@@ -1063,6 +1063,13 @@ internal class CryptoManager @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
+    override fun addNewSessionListener(newSessionListener: NewSessionListener) {
+        roomDecryptorProvider.addNewSessionListener(newSessionListener)
+    }
+
+    override fun removeSessionListener(listener: NewSessionListener) {
+        roomDecryptorProvider.removeSessionListener(listener)
+    }
     /* ==========================================================================================
      * DEBUG INFO
      * ========================================================================================== */
