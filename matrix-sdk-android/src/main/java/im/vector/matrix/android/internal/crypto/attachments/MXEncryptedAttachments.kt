@@ -42,7 +42,7 @@ object MXEncryptedAttachments {
      */
     data class EncryptionResult(
             var encryptedFileInfo: EncryptedFileInfo,
-            var encryptedStream: InputStream
+            var encryptedByteArray: ByteArray
     )
 
     /***
@@ -112,7 +112,7 @@ object MXEncryptedAttachments {
                             hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))!!),
                             v = "v2"
                     ),
-                    encryptedStream = ByteArrayInputStream(outStream.toByteArray())
+                    encryptedByteArray = outStream.toByteArray()
             )
 
             outStream.close()

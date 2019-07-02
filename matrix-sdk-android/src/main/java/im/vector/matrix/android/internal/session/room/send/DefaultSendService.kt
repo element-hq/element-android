@@ -101,7 +101,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val event = localEchoEventFactory.createMediaEvent(roomId, attachment).also {
             saveLocalEcho(it)
         }
-        val uploadWork = createUploadMediaWork(event, attachment)
+        val uploadWork = createUploadMediaWork(event, attachment, cryptoService.isRoomEncrypted(roomId))
         val sendWork = createSendEventWork(event)
 
         WorkManager.getInstance(context)
@@ -148,8 +148,8 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
 
-    private fun createUploadMediaWork(event: Event, attachment: ContentAttachmentData): OneTimeWorkRequest {
-        val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment)
+    private fun createUploadMediaWork(event: Event, attachment: ContentAttachmentData, isRoomEncrypted: Boolean): OneTimeWorkRequest {
+        val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment, isRoomEncrypted)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return OneTimeWorkRequestBuilder<UploadContentWorker>()
