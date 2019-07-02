@@ -7,7 +7,7 @@
     android:addStatesFromChildren="true"
     android:background="?attr/selectableItemBackground">
 
-    <im.vector.riotredesign.core.platform.CheckableView
+    <im.vector.riotx.core.platform.CheckableView
         android:id="@+id/messageSelectedBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"

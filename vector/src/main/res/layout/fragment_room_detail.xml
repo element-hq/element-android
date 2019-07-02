@@ -81,7 +81,7 @@
         tools:listitem="@layout/item_timeline_event_base" />
 
 
-    <im.vector.riotredesign.features.home.room.detail.composer.TextComposerView
+    <im.vector.riotx.features.home.room.detail.composer.TextComposerView
         android:id="@+id/composerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <im.vector.riotredesign.features.invite.VectorInviteView
+    <im.vector.riotx.features.invite.VectorInviteView
         android:id="@+id/inviteView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
