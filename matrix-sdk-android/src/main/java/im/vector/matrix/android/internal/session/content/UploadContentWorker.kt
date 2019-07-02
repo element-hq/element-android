@@ -47,7 +47,8 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
             val roomId: String,
             val event: Event,
             val attachment: ContentAttachmentData,
-            val isRoomEncrypted: Boolean
+            val isRoomEncrypted: Boolean,
+            override var lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var fileUploader: FileUploader
@@ -56,6 +57,11 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
+
+        if (params.lastFailureMessage != null) {
+            // Transmit the error
+            return Result.success(inputData)
+        }
 
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)
@@ -110,7 +116,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
             uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
             fileUploader
-                    .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, attachment.mimeType, progressListener)
+                    .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
         } else {
             fileUploader
                     .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
@@ -118,7 +124,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
 
         return contentUploadResponse
                 .fold(
-                        { handleFailure(params) },
+                        { handleFailure(params, it) },
                         { handleSuccess(params, it.contentUri, uploadedFileEncryptedFileInfo, uploadedThumbnailUrl, uploadedThumbnailEncryptedFileInfo) }
                 )
     }
@@ -132,9 +138,15 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         }
     }
 
-    private fun handleFailure(params: Params): Result {
+    private fun handleFailure(params: Params, failure: Throwable): Result {
         contentUploadStateTracker.setFailure(params.event.eventId!!)
-        return Result.success()
+        return Result.success(
+                WorkerParamsFactory.toData(
+                        params.copy(
+                                lastFailureMessage = failure.localizedMessage
+                        )
+                )
+        )
     }
 
     private fun handleSuccess(params: Params,

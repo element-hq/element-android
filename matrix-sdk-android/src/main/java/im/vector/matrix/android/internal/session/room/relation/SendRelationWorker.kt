@@ -39,7 +39,8 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
             override val userId: String,
             val roomId: String,
             val event: Event,
-            val relationType: String? = null
+            val relationType: String? = null,
+            override var lastFailureMessage: String?
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
@@ -47,6 +48,11 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
+
+        if (params.lastFailureMessage != null) {
+            // Transmit the error
+            return Result.success(inputData)
+        }
 
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)

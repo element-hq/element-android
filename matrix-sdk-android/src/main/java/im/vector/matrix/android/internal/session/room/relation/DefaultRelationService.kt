@@ -31,10 +31,8 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
@@ -107,9 +105,12 @@ internal class DefaultRelationService @Inject constructor(private val context: C
 
     //TODO duplicate with send service?
     private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
-
-        val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId, localEvent.eventId!!,
-                roomId, eventId, reason)
+        val sendContentWorkerParams = RedactEventWorker.Params(
+                credentials.userId,
+                localEvent.eventId!!,
+                roomId,
+                eventId,
+                reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }

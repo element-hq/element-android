@@ -38,14 +38,14 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
     internal data class Params(
             override val userId: String,
             val roomId: String,
-            val event: Event
+            val event: Event,
+            override var lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater
     @Inject lateinit var roomAPI: RoomAPI
 
     override suspend fun doWork(): Result {
-
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
 
@@ -55,6 +55,13 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
         val event = params.event
         if (event.eventId == null) {
             return Result.success()
+        }
+
+        if (params.lastFailureMessage != null) {
+            localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
+
+            // Transmit the error
+            return Result.success(inputData)
         }
 
         localEchoUpdater.updateSendState(event.eventId, SendState.SENDING)
