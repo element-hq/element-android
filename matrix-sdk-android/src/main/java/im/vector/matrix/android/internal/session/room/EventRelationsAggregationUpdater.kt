@@ -22,8 +22,6 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.types
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
@@ -53,7 +51,7 @@ internal class EventRelationsAggregationUpdater @Inject constructor(monarchy: Mo
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
         Timber.v("EventRelationsAggregationUpdater called with ${inserted.size} insertions")
         val domainInserted = inserted
-                .map { it.asDomain() to it.sendState }
+                .map { it.asDomain() }
 
         val params = EventRelationsAggregationTask.Params(
                 domainInserted,
