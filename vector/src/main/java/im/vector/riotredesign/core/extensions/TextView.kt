@@ -29,7 +29,7 @@ import im.vector.riotredesign.features.themes.ThemeUtils
 /**
  * Set a text in the TextView, or set visibility to GONE if the text is null
  */
-fun TextView.setTextOrHide(newText: String?, hideWhenBlank: Boolean = true) {
+fun TextView.setTextOrHide(newText: CharSequence?, hideWhenBlank: Boolean = true) {
     if (newText == null
             || (newText.isBlank() && hideWhenBlank)) {
         isVisible = false

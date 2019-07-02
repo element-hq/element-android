@@ -29,7 +29,7 @@ import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.database.RealmLiveData
-import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
@@ -38,6 +38,7 @@ import javax.inject.Inject
 
 internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val monarchy: Monarchy,
+                                               private val roomSummaryMapper: RoomSummaryMapper,
                                                private val timelineService: TimelineService,
                                                private val sendService: SendService,
                                                private val stateService: StateService,
@@ -58,7 +59,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
             RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
         }
         Transformations.map(liveRealmData) { results ->
-            val roomSummaries = results.map { it.asDomain() }
+            val roomSummaries = results.map { roomSummaryMapper.map(it) }
 
             if (roomSummaries.isEmpty()) {
                 // Create a dummy RoomSummary to avoid Crash during Sign Out or clear cache
@@ -72,7 +73,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
     override val roomSummary: RoomSummary?
         get() {
             var sum: RoomSummaryEntity? = monarchy.fetchCopied { RoomSummaryEntity.where(it, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME).findFirst() }
-            return sum?.asDomain()
+            return sum?.let { roomSummaryMapper.map(it) }
         }
 
     override fun isEncrypted(): Boolean {

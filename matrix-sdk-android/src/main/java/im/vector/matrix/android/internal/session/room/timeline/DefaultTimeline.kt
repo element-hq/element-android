@@ -54,7 +54,7 @@ internal class DefaultTimeline(
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
-        private val timelineEventFactory: TimelineEventFactory,
+        private val timelineEventFactory: CacheableTimelineEventFactory,
         private val paginationTask: PaginationTask,
         private val allowedTypes: List<String>?
 ) : Timeline {
@@ -129,7 +129,7 @@ internal class DefaultTimeline(
                     builtEventsIdMap[eventId]?.let { builtIndex ->
                         //Update the relation of existing event
                         builtEvents[builtIndex]?.let { te ->
-                            builtEvents[builtIndex] = timelineEventFactory.create(eventEntity)
+                            builtEvents[builtIndex] = timelineEventFactory.create(eventEntity, eventEntity.realm)
                             hasChanged = true
                         }
                     }
@@ -290,7 +290,7 @@ internal class DefaultTimeline(
             roomEntity?.sendingTimelineEvents
                     ?.filter { allowedTypes?.contains(it.type) ?: false }
                     ?.forEach {
-                        val timelineEvent = timelineEventFactory.create(it)
+                        val timelineEvent = timelineEventFactory.create(it, it.realm)
                         sendingEvents.add(timelineEvent)
                     }
         }
@@ -418,7 +418,7 @@ internal class DefaultTimeline(
             nextDisplayIndex = offsetIndex + 1
         }
         offsetResults.forEach { eventEntity ->
-            val timelineEvent = timelineEventFactory.create(eventEntity)
+            val timelineEvent = timelineEventFactory.create(eventEntity, eventEntity.realm)
             val position = if (direction == Timeline.Direction.FORWARDS) 0 else builtEvents.size
             builtEvents.add(position, timelineEvent)
             //Need to shift :/

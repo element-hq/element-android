@@ -16,8 +16,8 @@
 
 package im.vector.matrix.android.api.session.room.model
 
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 /**
  * This class holds some data of a room.
@@ -29,7 +29,7 @@ data class RoomSummary(
         val topic: String = "",
         val avatarUrl: String = "",
         val isDirect: Boolean = false,
-        val lastMessage: Event? = null,
+        val latestEvent: TimelineEvent? = null,
         val otherMemberIds: List<String> = emptyList(),
         val notificationCount: Int = 0,
         val highlightCount: Int = 0,

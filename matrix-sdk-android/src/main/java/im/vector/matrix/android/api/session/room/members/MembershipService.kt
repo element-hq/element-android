@@ -47,7 +47,7 @@ interface MembershipService {
      */
     fun getRoomMemberIdsLive(): LiveData<List<String>>
 
-    fun getNumberOfJoinedMembers() : Int
+    fun getNumberOfJoinedMembers(): Int
 
     /**
      * Invite a user in the room
@@ -55,13 +55,12 @@ interface MembershipService {
     fun invite(userId: String, callback: MatrixCallback<Unit>)
 
     /**
-     * Join the room
+     * Join the room, or accept an invitation.
      */
     fun join(callback: MatrixCallback<Unit>)
 
     /**
-     * Leave the room.
-     *
+     * Leave the room, or reject an invitation.
      */
     fun leave(callback: MatrixCallback<Unit>)
 

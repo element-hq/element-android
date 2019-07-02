@@ -203,7 +203,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                 var userId = "undefined"
                 var olmVersion = "undefined"
 
-                activeSessionHolder.getActiveSession().let { session ->
+                activeSessionHolder.getSafeActiveSession()?.let { session ->
                     userId = session.sessionParams.credentials.userId
                     deviceId = session.sessionParams.credentials.deviceId ?: "undefined"
                     olmVersion = session.getCryptoVersion(context, true)
