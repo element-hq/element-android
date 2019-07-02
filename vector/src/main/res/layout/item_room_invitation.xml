@@ -82,8 +82,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:minWidth="122dp"
         app:bsv_button_text="@string/accept"
         app:bsv_loaded_image_src="@drawable/ic_tick"
