@@ -97,6 +97,14 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/authenticateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
+                android:text="@string/auth_login" />
+
         </LinearLayout>
     </ScrollView>
 
@@ -107,18 +115,9 @@
         android:layout_centerInParent="true"
         android:layout_margin="8dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/authenticateButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/authenticateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/auth_login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
