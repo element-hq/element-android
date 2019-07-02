@@ -616,11 +616,11 @@ class RoomDetailFragment :
     }
 
     override fun onFileMessageClicked(messageFileContent: MessageFileContent) {
-        vectorBaseActivity.notImplemented()
+        vectorBaseActivity.notImplemented("open file")
     }
 
     override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {
-        vectorBaseActivity.notImplemented()
+        vectorBaseActivity.notImplemented("open audio file")
     }
 
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
