@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.database.LiveEntityObserver
+import im.vector.matrix.android.internal.database.configureEncryption
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.SessionDatabase
@@ -74,6 +75,7 @@ internal abstract class SessionModule {
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .name("disk_store.realm")
+                    .configureEncryption("session_db_$childPath", context)
                     .modules(SessionRealmModule())
                     .deleteRealmIfMigrationNeeded()
                     .build()

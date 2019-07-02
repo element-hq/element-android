@@ -18,6 +18,9 @@ package im.vector.matrix.android.internal.util
 
 import java.security.MessageDigest
 
+/**
+ * Compute a Hash of a String, using md5 algorithm
+ */
 fun String.md5() = try {
     val digest = MessageDigest.getInstance("md5")
     digest.update(toByteArray())

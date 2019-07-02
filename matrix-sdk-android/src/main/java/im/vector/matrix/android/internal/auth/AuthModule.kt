@@ -23,8 +23,8 @@ import dagger.Provides
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
+import im.vector.matrix.android.internal.database.configureEncryption
 import im.vector.matrix.android.internal.di.AuthDatabase
-import im.vector.matrix.android.internal.di.MatrixScope
 import io.realm.RealmConfiguration
 import java.io.File
 
@@ -42,13 +42,13 @@ internal abstract class AuthModule {
                 old.renameTo(File(context.filesDir, "matrix-sdk-auth.realm"))
             }
             return RealmConfiguration.Builder()
+                    .configureEncryption("matrix-sdk-auth", context)
                     .name("matrix-sdk-auth.realm")
                     .modules(AuthRealmModule())
                     .deleteRealmIfMigrationNeeded()
                     .build()
         }
     }
-
 
 
     @Binds
