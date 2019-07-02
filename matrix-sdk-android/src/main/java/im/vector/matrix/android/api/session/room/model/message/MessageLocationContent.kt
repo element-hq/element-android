@@ -23,10 +23,26 @@ import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultC
 
 @JsonClass(generateAdapter = true)
 data class MessageLocationContent(
+        /**
+         * Not documented
+         */
         @Json(name = "msgtype") override val type: String,
+
+        /**
+         * Required. A description of the location e.g. 'Big Ben, London, UK', or some kind of content description for accessibility e.g. 'location attachment'.
+         */
         @Json(name = "body") override val body: String,
+
+        /**
+         * Required. A geo URI representing this location.
+         */
         @Json(name = "geo_uri") val geoUri: String,
-        @Json(name = "info") val info: LocationInfo? = null,
+
+        /**
+         *
+         */
+        @Json(name = "info") val locationInfo: LocationInfo? = null,
+
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null
 ) : MessageContent

@@ -119,7 +119,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
                 context?.let { context: Context ->
                     AlertDialog.Builder(context)
                             .setSingleChoiceItems(R.array.media_saving_choice,
-                                                  PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
+                                    PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
                                 PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
                                 d.cancel()
 

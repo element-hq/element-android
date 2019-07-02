@@ -18,9 +18,22 @@ package im.vector.matrix.android.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
 data class LocationInfo(
+        /**
+         * The URL to the thumbnail of the file. Only present if the thumbnail is unencrypted.
+         */
         @Json(name = "thumbnail_url") val thumbnailUrl: String? = null,
-        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null
+
+        /**
+         * Metadata about the image referred to in thumbnail_url.
+         */
+        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,
+
+        /**
+         * Information on the encrypted thumbnail file, as specified in End-to-end encryption. Only present if the thumbnail is encrypted.
+         */
+        @Json(name = "thumbnail_file") val thumbnailFile: EncryptedFileInfo? = null
 )

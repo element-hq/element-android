@@ -41,7 +41,8 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             val roomId: String,
             val event: Event,
             /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
-            val keepKeys: List<String>? = null
+            val keepKeys: List<String>? = null,
+            override var lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var crypto: CryptoService
@@ -51,6 +52,11 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
+
+        if (params.lastFailureMessage != null) {
+            // Transmit the error
+            return Result.success(inputData)
+        }
 
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)
@@ -105,16 +111,15 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             )
             val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, encryptedEvent)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
-
+        } else {
+            val sendState = when (error) {
+                is Failure.CryptoError -> SendState.FAILED_UNKNOWN_DEVICES
+                else                   -> SendState.UNDELIVERED
+            }
+            localEchoUpdater.updateSendState(localEvent.eventId, sendState)
+            //always return success, or the chain will be stuck for ever!
+            val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, localEvent, error?.localizedMessage ?: "Error")
+            return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         }
-
-        val safeError = error
-        val sendState = when (safeError) {
-            is Failure.CryptoError -> SendState.FAILED_UNKNOWN_DEVICES
-            else                   -> SendState.UNDELIVERED
-        }
-        localEchoUpdater.updateSendState(localEvent.eventId, sendState)
-        //always return success, or the chain will be stuck for ever!
-        return Result.success()
     }
 }

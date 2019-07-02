@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto
+package im.vector.matrix.android.internal.crypto.attachments
 
 import android.text.TextUtils
 import android.util.Base64
@@ -42,7 +42,7 @@ object MXEncryptedAttachments {
      */
     data class EncryptionResult(
             var encryptedFileInfo: EncryptedFileInfo,
-            var encryptedStream: InputStream
+            var encryptedByteArray: ByteArray
     )
 
     /***
@@ -112,7 +112,7 @@ object MXEncryptedAttachments {
                             hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))!!),
                             v = "v2"
                     ),
-                    encryptedStream = ByteArrayInputStream(outStream.toByteArray())
+                    encryptedByteArray = outStream.toByteArray()
             )
 
             outStream.close()
@@ -142,34 +142,28 @@ object MXEncryptedAttachments {
      * @return the decrypted attachment stream
      */
     fun decryptAttachment(attachmentStream: InputStream?, encryptedFileInfo: EncryptedFileInfo?): InputStream? {
+        if (encryptedFileInfo?.isValid() != true) {
+            Timber.e("## decryptAttachment() : some fields are not defined, or invalid key fields")
+            return null
+        }
+
+        val elementToDecrypt = encryptedFileInfo.toElementToDecrypt()
+
+        return decryptAttachment(attachmentStream, elementToDecrypt)
+    }
+
+    /**
+     * Decrypt an attachment
+     *
+     * @param attachmentStream  the attachment stream
+     * @param elementToDecrypt the elementToDecrypt info
+     * @return the decrypted attachment stream
+     */
+    fun decryptAttachment(attachmentStream: InputStream?, elementToDecrypt: ElementToDecrypt?): InputStream? {
         // sanity checks
-        if (null == attachmentStream || null == encryptedFileInfo) {
-            Timber.e("## decryptAttachment() : null parameters")
+        if (null == attachmentStream || elementToDecrypt == null) {
+            Timber.e("## decryptAttachment() : null stream")
             return null
-        }
-
-        if (TextUtils.isEmpty(encryptedFileInfo.iv)
-                || null == encryptedFileInfo.key
-                || null == encryptedFileInfo.hashes
-                || !encryptedFileInfo.hashes.containsKey("sha256")) {
-            Timber.e("## decryptAttachment() : some fields are not defined")
-            return null
-        }
-
-        if (!TextUtils.equals(encryptedFileInfo.key!!.alg, "A256CTR")
-                || !TextUtils.equals(encryptedFileInfo.key!!.kty, "oct")
-                || TextUtils.isEmpty(encryptedFileInfo.key!!.k)) {
-            Timber.e("## decryptAttachment() : invalid key fields")
-            return null
-        }
-
-        // detect if there is no data to decrypt
-        try {
-            if (0 == attachmentStream.available()) {
-                return ByteArrayInputStream(ByteArray(0))
-            }
-        } catch (e: Exception) {
-            Timber.e(e, "Fail to retrieve the file size")
         }
 
         val t0 = System.currentTimeMillis()
@@ -177,8 +171,8 @@ object MXEncryptedAttachments {
         val outStream = ByteArrayOutputStream()
 
         try {
-            val key = Base64.decode(base64UrlToBase64(encryptedFileInfo.key!!.k), Base64.DEFAULT)
-            val initVectorBytes = Base64.decode(encryptedFileInfo.iv, Base64.DEFAULT)
+            val key = Base64.decode(base64UrlToBase64(elementToDecrypt.k), Base64.DEFAULT)
+            val initVectorBytes = Base64.decode(elementToDecrypt.iv, Base64.DEFAULT)
 
             val decryptCipher = Cipher.getInstance(CIPHER_ALGORITHM)
             val secretKeySpec = SecretKeySpec(key, SECRET_KEY_SPEC_ALGORITHM)
@@ -205,7 +199,7 @@ object MXEncryptedAttachments {
 
             val currentDigestValue = base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))
 
-            if (!TextUtils.equals(encryptedFileInfo.hashes["sha256"], currentDigestValue)) {
+            if (!TextUtils.equals(elementToDecrypt.sha256, currentDigestValue)) {
                 Timber.e("## decryptAttachment() :  Digest value mismatch")
                 outStream.close()
                 return null

@@ -26,6 +26,7 @@ import javax.inject.Inject
 
 class VideoContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder){
 
+    // TODO DECRYPT_FILE Encrypted data
     @Parcelize
     data class Data(
             val filename: String,

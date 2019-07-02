@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotredesign.EmojiCompatFontProvider
 import im.vector.riotredesign.R
 import im.vector.riotredesign.core.epoxy.VectorEpoxyModel
@@ -71,7 +72,7 @@ class MessageItemFactory @Inject constructor(
 
         val informationData = messageInformationDataFactory.create(event, nextEvent)
 
-        if (event.root.unsignedData?.redactedEvent != null) {
+        if (event.root.isRedacted()) {
             //message is redacted
             return buildRedactedItem(informationData, highlight, callback)
         }
@@ -179,7 +180,8 @@ class MessageItemFactory @Inject constructor(
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val data = ImageContentRenderer.Data(
                 filename = messageContent.body,
-                url = messageContent.url,
+                url = messageContent.encryptedFileInfo?.url ?: messageContent.url,
+                elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                 height = messageContent.info?.height,
                 maxHeight = maxHeight,
                 width = messageContent.info?.width,
@@ -220,10 +222,11 @@ class MessageItemFactory @Inject constructor(
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
-                url = messageContent.info?.thumbnailUrl,
-                height = messageContent.info?.height,
+                url = messageContent.videoInfo?.thumbnailFile?.url ?: messageContent.videoInfo?.thumbnailUrl,
+                elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
+                height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
-                width = messageContent.info?.width,
+                width = messageContent.videoInfo?.width,
                 maxWidth = maxWidth
         )
 
