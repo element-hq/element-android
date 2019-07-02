@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="im.vector.riotredesign">
+    package="im.vector.riotx">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -46,13 +46,13 @@
             android:name=".features.crypto.verification.SASVerificationActivity"
             android:label="@string/title_activity_verify_device" />
         <activity
-            android:name="im.vector.riotredesign.features.crypto.keysbackup.restore.KeysBackupRestoreActivity"
+            android:name=".features.crypto.keysbackup.restore.KeysBackupRestoreActivity"
             android:label="@string/title_activity_keys_backup_setup" />
         <activity
-            android:name="im.vector.riotredesign.features.crypto.keysbackup.setup.KeysBackupSetupActivity"
+            android:name=".features.crypto.keysbackup.setup.KeysBackupSetupActivity"
             android:label="@string/title_activity_keys_backup_restore" />
         <activity
-            android:name="im.vector.riotredesign.features.crypto.keysbackup.settings.KeysBackupManageActivity"
+            android:name=".features.crypto.keysbackup.settings.KeysBackupManageActivity"
             android:label="@string/encryption_message_recovery" />
 
         <activity

@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@id/groupToolbar"
         tools:visibility="visible" />
 
-    <im.vector.riotredesign.core.ui.views.KeysBackupBanner
+    <im.vector.riotx.core.ui.views.KeysBackupBanner
         android:id="@+id/homeKeysBackupBanner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
