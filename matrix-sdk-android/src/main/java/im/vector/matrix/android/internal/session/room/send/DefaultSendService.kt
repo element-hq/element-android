@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.CancelableBag
-import im.vector.matrix.android.api.util.addTo
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.util.CancelableWork
@@ -82,11 +81,9 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     }
 
     override fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable {
-        val cancelableBag = CancelableBag()
-        attachments.forEach {
-            sendMedia(it).addTo(cancelableBag)
+        return attachments.mapTo(CancelableBag()) {
+            sendMedia(it)
         }
-        return cancelableBag
     }
 
     override fun redactEvent(event: Event, reason: String?): Cancelable {

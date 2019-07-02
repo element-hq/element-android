@@ -16,20 +16,8 @@
 
 package im.vector.matrix.android.api.util
 
-class CancelableBag : Cancelable {
-
-    private val cancelableList = ArrayList<Cancelable>()
-
-    fun add(cancelable: Cancelable) {
-        cancelableList.add(cancelable)
-    }
-
+class CancelableBag : Cancelable, MutableList<Cancelable> by ArrayList() {
     override fun cancel() {
-        cancelableList.forEach { it.cancel() }
+        forEach { it.cancel() }
     }
-
-}
-
-fun Cancelable.addTo(cancelables: CancelableBag) {
-    cancelables.add(this)
 }
