@@ -70,7 +70,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
     }
 
     private fun isFormattedTextPertinent(text: String, htmlText: String?) =
-            text != htmlText && htmlText != "<p>$text</p>\n"
+            text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
     fun createFormattedTextEvent(roomId: String, text: String, formattedText: String): Event {
         val content = MessageTextContent(
