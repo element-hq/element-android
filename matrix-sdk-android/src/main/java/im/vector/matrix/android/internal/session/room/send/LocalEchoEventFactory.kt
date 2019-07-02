@@ -29,9 +29,7 @@ import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
-import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
@@ -238,7 +236,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
     }
 
     private fun dummyEventId(roomId: String): String {
-        return "m.${UUID.randomUUID()}"
+        return "$LOCAL_ID_PREFIX${UUID.randomUUID()}"
     }
 
     fun createReplyTextEvent(roomId: String, eventReplied: Event, replyText: String): Event? {
@@ -353,4 +351,9 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         }
     }
 
+    companion object {
+        const val LOCAL_ID_PREFIX = "local."
+
+        fun isLocalEchoId(eventId: String): Boolean = eventId.startsWith(LOCAL_ID_PREFIX)
+    }
 }
