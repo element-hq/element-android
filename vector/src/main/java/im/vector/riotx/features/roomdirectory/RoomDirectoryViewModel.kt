@@ -86,7 +86,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     private fun observeJoinedRooms() {
         session
                 .rx()
-                .liveRoomSummaries()
+                .liveRoomSummaries(fetchLastEvents = false)
                 .subscribe { list ->
                     val joinedRoomIds = list
                             // Keep only joined room

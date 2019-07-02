@@ -25,8 +25,8 @@ import io.reactivex.Observable
 
 class RxSession(private val session: Session) {
 
-    fun liveRoomSummaries(): Observable<List<RoomSummary>> {
-        return session.liveRoomSummaries().asObservable()
+    fun liveRoomSummaries(fetchLastEvents: Boolean): Observable<List<RoomSummary>> {
+        return session.liveRoomSummaries(fetchLastEvents).asObservable()
     }
 
     fun liveGroupSummaries(): Observable<List<GroupSummary>> {

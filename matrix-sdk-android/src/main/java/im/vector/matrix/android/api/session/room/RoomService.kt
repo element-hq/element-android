@@ -43,6 +43,6 @@ interface RoomService {
      * Get a live list of room summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of [RoomSummary]
      */
-    fun liveRoomSummaries(): LiveData<List<RoomSummary>>
+    fun liveRoomSummaries(fetchLastEvents: Boolean = true): LiveData<List<RoomSummary>>
 
 }

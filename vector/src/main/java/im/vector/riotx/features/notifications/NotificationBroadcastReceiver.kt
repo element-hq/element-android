@@ -100,8 +100,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 session.sessionParams.credentials.userId,
                 message,
                 room.roomId,
-                room.roomSummary?.displayName ?: room.roomId,
-                room.roomSummary?.isDirect == true
+                room.roomSummary()?.displayName ?: room.roomId,
+                room.roomSummary()?.isDirect == true
         )
         notifiableMessageEvent.outGoingMessage = true
 

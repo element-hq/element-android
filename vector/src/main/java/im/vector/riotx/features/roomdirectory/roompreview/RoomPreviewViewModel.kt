@@ -54,7 +54,7 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
     private fun observeJoinedRooms() {
         session
                 .rx()
-                .liveRoomSummaries()
+                .liveRoomSummaries(fetchLastEvents = false)
                 .subscribe { list ->
                     withState { state ->
                         val isRoomJoined = list

@@ -34,6 +34,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.fetchCopied
+import im.vector.matrix.android.internal.util.fetchCopyMap
 import javax.inject.Inject
 
 internal class DefaultRoom @Inject constructor(override val roomId: String,
@@ -47,19 +48,19 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val relationService: RelationService,
                                                private val roomMembersService: MembershipService
 ) : Room,
-        TimelineService by timelineService,
-        SendService by sendService,
-        StateService by stateService,
-        ReadService by readService,
-        RelationService by relationService,
-        MembershipService by roomMembersService {
+    TimelineService by timelineService,
+    SendService by sendService,
+    StateService by stateService,
+    ReadService by readService,
+    RelationService by relationService,
+    MembershipService by roomMembersService {
 
-    override val liveRoomSummary: LiveData<RoomSummary> by lazy {
+    override fun liveRoomSummary(fetchLastEvent: Boolean): LiveData<RoomSummary> {
         val liveRealmData = RealmLiveData<RoomSummaryEntity>(monarchy.realmConfiguration) { realm ->
             RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
         }
-        Transformations.map(liveRealmData) { results ->
-            val roomSummaries = results.map { roomSummaryMapper.map(it) }
+        return Transformations.map(liveRealmData) { results ->
+            val roomSummaries = results.map { roomSummaryMapper.map(it, fetchLastEvent) }
 
             if (roomSummaries.isEmpty()) {
                 // Create a dummy RoomSummary to avoid Crash during Sign Out or clear cache
@@ -70,11 +71,12 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         }
     }
 
-    override val roomSummary: RoomSummary?
-        get() {
-            var sum: RoomSummaryEntity? = monarchy.fetchCopied { RoomSummaryEntity.where(it, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME).findFirst() }
-            return sum?.let { roomSummaryMapper.map(it) }
-        }
+    override fun roomSummary(fetchLastEvent: Boolean): RoomSummary? {
+        return monarchy.fetchAllMappedSync(
+                { realm -> RoomSummaryEntity.where(realm).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
+                { roomSummaryMapper.map(it, fetchLastEvent) }
+        ).firstOrNull()
+    }
 
     override fun isEncrypted(): Boolean {
         return cryptoService.isRoomEncrypted(roomId)
