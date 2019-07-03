@@ -33,6 +33,11 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
     fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
         return Try {
             Timber.v("Start handling sync")
+            val isInitialSync = fromToken == null
+            if (!cryptoManager.isStarted()) {
+                Timber.v("Should start cryptoManager")
+                cryptoManager.start(isInitialSync)
+            }
             val measure = measureTimeMillis {
                 // Handle the to device events before the room ones
                 // to ensure to decrypt them properly
@@ -54,11 +59,6 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
                 }
                 Timber.v("On sync completed")
                 cryptoSyncHandler.onSyncCompleted(syncResponse)
-            }
-            val isInitialSync = fromToken == null
-            if (!cryptoManager.isStarted()) {
-                Timber.v("Should start cryptoManager")
-                cryptoManager.start(isInitialSync)
             }
             Timber.v("Finish handling sync in $measure ms")
             syncResponse

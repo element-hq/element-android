@@ -242,16 +242,16 @@ internal class CryptoManager @Inject constructor(
      * @param isInitialSync true if it starts from an initial sync
      */
     fun start(isInitialSync: Boolean) {
+        if (isStarted.get() || isStarting.get()) {
+            return
+        }
+        isStarting.set(true)
         CoroutineScope(coroutineDispatchers.crypto).launch {
             internalStart(isInitialSync)
         }
     }
 
     private suspend fun internalStart(isInitialSync: Boolean) {
-        if (isStarted.get() || isStarting.get()) {
-            return
-        }
-        isStarting.set(true)
         // Open the store
         cryptoStore.open()
         uploadDeviceKeys()
