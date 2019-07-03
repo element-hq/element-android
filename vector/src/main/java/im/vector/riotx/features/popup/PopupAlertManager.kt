@@ -45,7 +45,9 @@ object PopupAlertManager {
         synchronized(alertFiFo) {
             alertFiFo.add(alert)
         }
-        displayNextIfPossible()
+        weakCurrentActivity?.get()?.runOnUiThread {
+            displayNextIfPossible()
+        }
     }
 
     fun cancelAlert(uid: String) {
@@ -62,8 +64,10 @@ object PopupAlertManager {
 
         //it could also be the current one
         if (currentAlerter?.uid == uid) {
-            Alerter.hide()
-            currentIsDismissed()
+            weakCurrentActivity?.get()?.runOnUiThread {
+                Alerter.hide()
+                currentIsDismissed()
+            }
         }
     }
 
