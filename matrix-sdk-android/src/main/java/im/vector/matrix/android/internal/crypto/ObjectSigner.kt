@@ -44,7 +44,9 @@ internal class ObjectSigner @Inject constructor(private val credentials: Credent
 
         val content = HashMap<String, String>()
 
-        content["ed25519:" + credentials.deviceId] = olmDevice.signMessage(strToSign)!!
+
+        content["ed25519:" + credentials.deviceId] = olmDevice.signMessage(strToSign)
+                ?: "" //null reported by rageshake if happens during logout
 
         result[credentials.userId] = content
 
