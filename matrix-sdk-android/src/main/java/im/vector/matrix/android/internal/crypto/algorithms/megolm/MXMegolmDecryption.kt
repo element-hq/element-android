@@ -77,7 +77,6 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_FIELDS_REASON))
         }
 
-        val eventDecryptionResult: MXEventDecryptionResult?
         var cryptoError: MXCryptoError? = null
         var decryptGroupMessageResult: MXDecryptionResult? = null
 
@@ -88,7 +87,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
         }
         // the decryption succeeds
         if (decryptGroupMessageResult?.payload != null) {
-            eventDecryptionResult = MXEventDecryptionResult()
+            val eventDecryptionResult = MXEventDecryptionResult()
 
             eventDecryptionResult.clearEvent = decryptGroupMessageResult.payload
             eventDecryptionResult.senderCurve25519Key = decryptGroupMessageResult.senderKey
@@ -215,11 +214,6 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
             forwardedRoomKeyContent.forwardingCurve25519KeyChain?.let {
                 forwardingCurve25519KeyChain.addAll(it)
             }
-//            forwardingCurve25519KeyChain = if (forwardedRoomKeyContent.forwardingCurve25519KeyChain == null) {
-//                ArrayList()
-//            } else {
-//                ArrayList(forwardedRoomKeyContent.forwardingCurve25519KeyChain)
-//            }
 
             if (senderKey == null) {
                 Timber.e("## onRoomKeyEvent() : event is missing sender_key field")

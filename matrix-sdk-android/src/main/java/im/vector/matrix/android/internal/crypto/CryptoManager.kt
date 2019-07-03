@@ -840,7 +840,7 @@ internal class CryptoManager @Inject constructor(
                     val roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
                     val t1 = System.currentTimeMillis()
 
-                    Timber.v("""## importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms""")
+                    Timber.v("## importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms")
 
                     val importedSessions = MoshiProvider.providesMoshi()
                             .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
@@ -848,7 +848,7 @@ internal class CryptoManager @Inject constructor(
 
                     val t2 = System.currentTimeMillis()
 
-                    Timber.v("""## importRoomKeys : JSON parsing ${t2 - t1} ms""")
+                    Timber.v("## importRoomKeys : JSON parsing ${t2 - t1} ms")
 
                     if (importedSessions == null) {
                         throw Exception("Error")
@@ -1000,9 +1000,9 @@ internal class CryptoManager @Inject constructor(
         val requestBody = RoomKeyRequestBody()
 
         requestBody.roomId = event.roomId
-        requestBody.algorithm = wireContent["algorithm"].toString()
-        requestBody.senderKey = wireContent["sender_key"].toString()
-        requestBody.sessionId = wireContent["session_id"].toString()
+        requestBody.algorithm = wireContent["algorithm"]?.toString()
+        requestBody.senderKey = wireContent["sender_key"]?.toString()
+        requestBody.sessionId = wireContent["session_id"]?.toString()
 
         outgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
     }

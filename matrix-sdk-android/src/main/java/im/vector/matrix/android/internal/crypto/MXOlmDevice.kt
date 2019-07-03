@@ -114,7 +114,7 @@ internal class MXOlmDevice @Inject constructor(
         try {
             deviceCurve25519Key = olmAccount!!.identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY]
         } catch (e: Exception) {
-            Timber.e(e, """## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_IDENTITY_KEY} with error""")
+            Timber.e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_IDENTITY_KEY} with error")
         }
 
         try {
