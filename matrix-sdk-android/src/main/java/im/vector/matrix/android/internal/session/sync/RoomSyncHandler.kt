@@ -32,13 +32,13 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
+import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
-import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
-import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
+import im.vector.matrix.android.internal.session.sync.model.*
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import timber.log.Timber
@@ -48,7 +48,11 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                                    private val readReceiptHandler: ReadReceiptHandler,
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
                                                    private val roomTagHandler: RoomTagHandler,
-                                                   private val cryptoManager: CryptoManager) {
+                                                   private val cryptoManager: CryptoManager,
+                                                   private val tokenStore: SyncTokenStore,
+                                                   private val pushRuleService: DefaultPushRuleService,
+                                                   private val processForPushTask: ProcessEventForPushTask,
+                                                   private val taskExecutor: TaskExecutor) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -62,6 +66,23 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite))
             handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave))
         }
+
+        //handle event for bing rule checks
+        checkPushRules(roomsSyncResponse)
+
+    }
+
+    private fun checkPushRules(roomsSyncResponse: RoomsSyncResponse) {
+        Timber.v("[PushRules] --> checkPushRules")
+        if (tokenStore.getLastToken() == null) {
+            Timber.v("[PushRules] <-- No push tule check on initial sync")
+            return
+        } //nothing on initial sync
+
+        val rules = pushRuleService.getPushRules("global")
+        processForPushTask.configureWith(ProcessEventForPushTask.Params(roomsSyncResponse, rules))
+                .executeBy(taskExecutor)
+        Timber.v("[PushRules] <-- Push task scheduled")
     }
 
     // PRIVATE METHODS *****************************************************************************
@@ -82,7 +103,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         Timber.v("Handle join sync for room $roomId")
 
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+                ?: realm.createObject(roomId)
 
         if (roomEntity.membership == Membership.INVITE) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -153,7 +174,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                   InvitedRoomSync): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+                ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
             val chunkEntity = handleTimelineEvents(realm, roomId, roomSync.inviteState.events)
@@ -167,7 +188,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                roomId: String,
                                roomSync: RoomSync): RoomEntity {
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+                ?: realm.createObject(roomId)
 
         roomEntity.membership = Membership.LEAVE
         roomEntity.chunks.deleteAllFromRealm()
