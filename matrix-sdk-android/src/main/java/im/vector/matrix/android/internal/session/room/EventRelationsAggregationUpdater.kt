@@ -22,8 +22,10 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.types
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import io.realm.RealmConfiguration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,11 +35,11 @@ import javax.inject.Inject
  * The summaries can then be extracted and added (as a decoration) to a TimelineEvent for final display.
  */
 
-internal class EventRelationsAggregationUpdater @Inject constructor(monarchy: Monarchy,
+internal class EventRelationsAggregationUpdater @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
                                                                     private val credentials: Credentials,
                                                                     private val task: EventRelationsAggregationTask,
                                                                     private val taskExecutor: TaskExecutor) :
-        RealmLiveEntityObserver<EventEntity>(monarchy) {
+        RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> {
         EventEntity.types(it, listOf(

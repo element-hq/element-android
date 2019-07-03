@@ -27,14 +27,16 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
 internal class GroupSummaryUpdater @Inject constructor(private val context: Context,
                                                        private val credentials: Credentials,
-                                                       monarchy: Monarchy) : RealmLiveEntityObserver<GroupEntity>(monarchy) {
+                                                       @SessionDatabase realmConfiguration: RealmConfiguration) : RealmLiveEntityObserver<GroupEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<GroupEntity> { GroupEntity.where(it) }
 
