@@ -175,16 +175,12 @@ public class MXUsersDevicesMap<E> implements Serializable {
         }
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return mMap.isEmpty();
     }
 
     @Override
     public String toString() {
-        if (null != mMap) {
-            return "MXUsersDevicesMap " + mMap.toString();
-        } else {
-            return "MXDeviceInfo : null map";
-        }
+        return "MXUsersDevicesMap " + mMap.toString();
     }
 }
