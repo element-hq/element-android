@@ -67,7 +67,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
         val oneTimeKeyAlgorithm = MXKey.KEY_SIGNED_CURVE_25519_TYPE
 
         for (device in devicesWithoutSession) {
-            usersDevicesToClaim.setObject(oneTimeKeyAlgorithm, device.userId, device.deviceId)
+            usersDevicesToClaim.setObject(device.userId, device.deviceId, oneTimeKeyAlgorithm)
         }
 
         // TODO: this has a race condition - if we try to send another message
