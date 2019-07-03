@@ -73,7 +73,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
 
     override fun roomSummary(fetchLastEvent: Boolean): RoomSummary? {
         return monarchy.fetchAllMappedSync(
-                { realm -> RoomSummaryEntity.where(realm).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
+                { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
                 { roomSummaryMapper.map(it, fetchLastEvent) }
         ).firstOrNull()
     }

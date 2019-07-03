@@ -20,15 +20,17 @@ import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.session.pushers.DefaultConditionResolver
+import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import im.vector.matrix.android.internal.task.Task
 import timber.log.Timber
 import javax.inject.Inject
 
 internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params, Unit> {
     data class Params(
-            val events: List<Event>,
+            val syncResponse: RoomsSyncResponse,
             val rules: List<PushRule>
     )
 }
@@ -42,9 +44,35 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 
     override suspend fun execute(params: ProcessEventForPushTask.Params): Try<Unit> {
         return Try {
-            params.events.forEach { event ->
+            val newJoinEvents = params.syncResponse.join
+                    .map { entries ->
+                        entries.value.timeline?.events?.map { it.copy(roomId = entries.key) }
+                    }
+                    .fold(emptyList<Event>(), { acc, next ->
+                        acc + (next ?: emptyList())
+                    })
+            val inviteEvents = params.syncResponse.invite
+                    .map { entries ->
+                        entries.value.inviteState?.events?.map { it.copy(roomId = entries.key) }
+                    }
+                    .fold(emptyList<Event>(), { acc, next ->
+                        acc + (next ?: emptyList())
+                    })
+            val allEvents = (newJoinEvents + inviteEvents).filter { event ->
+                when (event.type) {
+                    EventType.MESSAGE,
+                    EventType.REDACTION,
+                    EventType.ENCRYPTED,
+                    EventType.STATE_ROOM_MEMBER -> true
+                    else                        -> false
+                }
+            }.filter {
+                it.senderId != sessionParams.credentials.userId
+            }
+            Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size} to check for push rules with ${params.rules.size} rules")
+            allEvents.forEach { event ->
                 fulfilledBingRule(event, params.rules)?.let {
-                    Timber.v("Rule $it match for event ${event.eventId}")
+                    Timber.v("[PushRules] Rule $it match for event ${event.eventId}")
                     defaultPushRuleService.dispatchBing(event, it)
                 }
             }

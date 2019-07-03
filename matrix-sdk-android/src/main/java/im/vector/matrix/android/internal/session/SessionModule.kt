@@ -35,7 +35,6 @@ import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
-import im.vector.matrix.android.internal.session.notification.BingRuleWatcher
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.user.UserEntityUpdater
@@ -128,10 +127,6 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindEventRelationsAggregationUpdater(groupSummaryUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
-
-    @Binds
-    @IntoSet
-    abstract fun bindBingRuleWatcher(bingRuleWatcher: BingRuleWatcher): LiveEntityObserver
 
     @Binds
     @IntoSet
