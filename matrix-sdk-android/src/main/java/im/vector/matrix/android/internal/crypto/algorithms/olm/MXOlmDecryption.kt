@@ -43,7 +43,7 @@ internal class MXOlmDecryption(
     : IMXDecrypting {
 
     @Throws(MXDecryptionException::class)
-    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
+    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         val olmEventContent = event.content.toModel<OlmEventContent>()!!
 
         if (null == olmEventContent.ciphertext) {
