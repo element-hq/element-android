@@ -223,7 +223,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                 .fold(
                         { error() },
                         {
-                            if (it.getUserDeviceIds(otherUserId).contains(startReq.fromDevice)) {
+                            if (it.getUserDeviceIds(otherUserId)?.contains(startReq.fromDevice) == true) {
                                 success(it)
                             } else {
                                 error()
@@ -410,7 +410,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
     fun cancelTransaction(transactionId: String, userId: String, userDevice: String, code: CancelCode) {
         val cancelMessage = KeyVerificationCancel.create(transactionId, code)
         val contentMap = MXUsersDevicesMap<Any>()
-        contentMap.setObject(cancelMessage, userId, userDevice)
+        contentMap.setObject(userId, userDevice, cancelMessage)
 
         sendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId))
                 .dispatchTo(object : MatrixCallback<Unit> {

@@ -1039,10 +1039,10 @@ internal class CryptoManager @Inject constructor(
         for (userId in userIds) {
             val deviceIds = devicesInRoom.getUserDeviceIds(userId)
             for (deviceId in deviceIds!!) {
-                val deviceInfo = devicesInRoom.getObject(deviceId, userId)
+                val deviceInfo = devicesInRoom.getObject(userId, deviceId)
 
-                if (deviceInfo!!.isUnknown) {
-                    unknownDevices.setObject(deviceInfo, userId, deviceId)
+                if (deviceInfo?.isUnknown == true) {
+                    unknownDevices.setObject(userId, deviceId, deviceInfo)
                 }
             }
         }

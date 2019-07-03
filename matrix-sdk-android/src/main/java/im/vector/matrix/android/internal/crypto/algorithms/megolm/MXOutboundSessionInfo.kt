@@ -64,7 +64,7 @@ internal class MXOutboundSessionInfo(
             val deviceIds = sharedWithDevices.getUserDeviceIds(userId)
 
             for (deviceId in deviceIds!!) {
-                if (null == devicesInRoom.getObject(deviceId, userId)) {
+                if (null == devicesInRoom.getObject(userId, deviceId)) {
                     Timber.v("## sharedWithTooManyDevices() : Starting new session because we shared with $userId:$deviceId")
                     return true
                 }

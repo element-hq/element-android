@@ -221,7 +221,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                     Timber.v("Device list for $userId now up to date")
                 }
                 // And the response result
-                usersDevicesInfoMap.setObjects(devices, userId)
+                usersDevicesInfoMap.setObjects(userId, devices)
             }
         }
         cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
@@ -239,7 +239,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      */
     suspend fun downloadKeys(userIds: List<String>?, forceDownload: Boolean): Try<MXUsersDevicesMap<MXDeviceInfo>> {
         Timber.v("## downloadKeys() : forceDownload $forceDownload : $userIds")
-        // Map from userid -> deviceid -> DeviceInfo
+        // Map from userId -> deviceId -> MXDeviceInfo
         val stored = MXUsersDevicesMap<MXDeviceInfo>()
 
         // List of user ids we need to download keys for
@@ -258,7 +258,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                         val devices = cryptoStore.getUserDevices(userId)
                         // should always be true
                         if (devices != null) {
-                            stored.setObjects(devices, userId)
+                            stored.setObjects(userId, devices)
                         } else {
                             downloadUsers.add(userId)
                         }

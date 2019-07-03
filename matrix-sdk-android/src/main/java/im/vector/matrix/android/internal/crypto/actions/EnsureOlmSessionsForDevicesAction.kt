@@ -53,7 +53,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
                 }
 
                 val olmSessionResult = MXOlmSessionResult(deviceInfo, sessionId)
-                results.setObject(olmSessionResult, userId, deviceId)
+                results.setObject(userId, deviceId, olmSessionResult)
             }
         }
 
@@ -90,12 +90,12 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
                             val deviceIds = it.getUserDeviceIds(userId)
                             if (null != deviceIds) {
                                 for (deviceId in deviceIds) {
-                                    val olmSessionResult = results.getObject(deviceId, userId)
+                                    val olmSessionResult = results.getObject(userId, deviceId)
                                     if (olmSessionResult!!.sessionId != null) {
                                         // We already have a result for this device
                                         continue
                                     }
-                                    val key = it.getObject(deviceId, userId)
+                                    val key = it.getObject(userId, deviceId)
                                     if (key?.type == oneTimeKeyAlgorithm) {
                                         oneTimeKey = key
                                     }
