@@ -42,6 +42,10 @@ task clean(type: Delete) {
 
 apply plugin: 'org.sonarqube'
 
+// To run a sonar analysis:
+// Run './gradlew sonarqube -Dsonar.login=<REPLACE_WITH_SONAR_KEY>'
+// The SONAR_KEY is stored in passbolt
+
 sonarqube {
     properties {
         property "sonar.projectName", "RiotX-Android"
@@ -67,3 +71,23 @@ project(":vector") {
         }
     }
 }
+
+//project(":matrix-sdk-android") {
+//    sonarqube {
+//        properties {
+//            property "sonar.sources", project(":matrix-sdk-android").android.sourceSets.main.java.srcDirs
+//            // exclude source code from analyses separated by a colon (:)
+//            // property "sonar.exclusions", "**/*.*"
+//        }
+//    }
+//}
+//
+//project(":matrix-sdk-android-rx") {
+//    sonarqube {
+//        properties {
+//            property "sonar.sources", project(":matrix-sdk-android-rx").android.sourceSets.main.java.srcDirs
+//            // exclude source code from analyses separated by a colon (:)
+//            // property "sonar.exclusions", "**/*.*"
+//        }
+//    }
+//}
