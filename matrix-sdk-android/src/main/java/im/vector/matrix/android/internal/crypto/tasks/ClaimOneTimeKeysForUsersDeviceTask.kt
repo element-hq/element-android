@@ -23,7 +23,6 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimResponse
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import timber.log.Timber
 import java.util.*
@@ -55,12 +54,13 @@ internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(private
                         val keysMap = HashMap<String, MXKey>()
 
                         for (deviceId in mapByUserId!!.keys) {
-                            try {
-                                keysMap[deviceId] = MXKey(mapByUserId[deviceId])
-                            } catch (e: Exception) {
-                                Timber.e(e, "## claimOneTimeKeysForUsersDevices : fail to create a MXKey ")
-                            }
+                            val mxKey = MXKey.from(mapByUserId[deviceId])
 
+                            if (mxKey != null) {
+                                keysMap[deviceId] = mxKey
+                            } else {
+                                Timber.e("## claimOneTimeKeysForUsersDevices : fail to create a MXKey")
+                            }
                         }
 
                         if (keysMap.size != 0) {

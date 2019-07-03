@@ -24,7 +24,6 @@ import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
-import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -126,11 +125,13 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
             var isVerified = false
             var errorMessage: String? = null
 
-            try {
-                olmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
-                isVerified = true
-            } catch (e: Exception) {
-                errorMessage = e.message
+            if (signature != null) {
+                try {
+                    olmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
+                    isVerified = true
+                } catch (e: Exception) {
+                    errorMessage = e.message
+                }
             }
 
             // Check one-time key signature
