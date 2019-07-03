@@ -23,6 +23,9 @@ import io.reactivex.functions.Predicate
 class RoomListDisplayModeFilter(private val displayMode: RoomListFragment.DisplayMode) : Predicate<RoomSummary> {
 
     override fun test(roomSummary: RoomSummary): Boolean {
+        if (roomSummary.membership.isLeft()) {
+            return false
+        }
         return when (displayMode) {
             RoomListFragment.DisplayMode.HOME   -> roomSummary.notificationCount > 0 || roomSummary.membership == Membership.INVITE
             RoomListFragment.DisplayMode.PEOPLE -> roomSummary.isDirect && roomSummary.membership == Membership.JOIN

@@ -24,6 +24,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
+import io.reactivex.schedulers.Schedulers
 
 /**
  * View model used to update the home bottom bar notification counts
@@ -68,6 +69,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     private fun observeRoomSummaries() {
         homeRoomListStore
                 .observe()
+                .observeOn(Schedulers.computation())
                 .subscribe { list ->
                     list.let { summaries ->
                         val peopleNotifications = summaries

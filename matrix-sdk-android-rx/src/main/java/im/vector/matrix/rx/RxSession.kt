@@ -22,23 +22,24 @@ import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.sync.SyncState
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 
 class RxSession(private val session: Session) {
 
     fun liveRoomSummaries(fetchLastEvents: Boolean): Observable<List<RoomSummary>> {
-        return session.liveRoomSummaries(fetchLastEvents).asObservable()
+        return session.liveRoomSummaries(fetchLastEvents).asObservable().observeOn(Schedulers.computation())
     }
 
     fun liveGroupSummaries(): Observable<List<GroupSummary>> {
-        return session.liveGroupSummaries().asObservable()
+        return session.liveGroupSummaries().asObservable().observeOn(Schedulers.computation())
     }
 
     fun liveSyncState(): Observable<SyncState> {
-        return session.syncState().asObservable()
+        return session.syncState().asObservable().observeOn(Schedulers.computation())
     }
 
     fun livePushers(): Observable<List<Pusher>> {
-        return session.livePushers().asObservable()
+        return session.livePushers().asObservable().observeOn(Schedulers.computation())
     }
 
 }
