@@ -16,11 +16,11 @@
 package im.vector.riotx.features.crypto.verification
 
 import android.content.Context
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.features.popup.PopupAlertManager
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,12 +29,18 @@ import javax.inject.Singleton
  * Listens to the VerificationManager and add a new notification when an incoming request is detected.
  */
 @Singleton
-class IncomingVerificationRequestHandler @Inject constructor(val context: Context,
-                                                             private val activeSessionHolder: ActiveSessionHolder
-) : SasVerificationService.SasVerificationListener {
+class IncomingVerificationRequestHandler @Inject constructor(val context: Context) : SasVerificationService.SasVerificationListener {
 
-    init {
-        activeSessionHolder.getActiveSession().getSasVerificationService().addListener(this)
+    private var session: Session? = null
+
+    fun start(session: Session) {
+        this.session = session
+        session.getSasVerificationService().addListener(this)
+    }
+
+    fun stop() {
+        session?.getSasVerificationService()?.removeListener(this)
+        this.session = null
     }
 
     override fun transactionCreated(tx: SasVerificationTransaction) {}
@@ -43,9 +49,8 @@ class IncomingVerificationRequestHandler @Inject constructor(val context: Contex
         when (tx.state) {
             SasVerificationTxState.OnStarted -> {
                 //Add a notification for every incoming request
-                val session = activeSessionHolder.getActiveSession()
-                val name = session.getUser(tx.otherUserId)?.displayName
-                           ?: tx.otherUserId
+                val name = session?.getUser(tx.otherUserId)?.displayName
+                        ?: tx.otherUserId
 
                 val alert = PopupAlertManager.VectorAlert(
                         "kvr_${tx.transactionId}",
@@ -55,9 +60,9 @@ class IncomingVerificationRequestHandler @Inject constructor(val context: Contex
                         .apply {
                             contentAction = Runnable {
                                 val intent = SASVerificationActivity.incomingIntent(context,
-                                                                                    session.sessionParams.credentials.userId,
-                                                                                    tx.otherUserId,
-                                                                                    tx.transactionId)
+                                        session?.sessionParams?.credentials?.userId ?: "",
+                                        tx.otherUserId,
+                                        tx.transactionId)
                                 weakCurrentActivity?.get()?.startActivity(intent)
                             }
                             dismissedAction = Runnable {
@@ -73,9 +78,9 @@ class IncomingVerificationRequestHandler @Inject constructor(val context: Contex
                                     context.getString(R.string.action_open),
                                     Runnable {
                                         val intent = SASVerificationActivity.incomingIntent(context,
-                                                                                            session.sessionParams.credentials.userId,
-                                                                                            tx.otherUserId,
-                                                                                            tx.transactionId)
+                                                session?.sessionParams?.credentials?.userId ?: "",
+                                                tx.otherUserId,
+                                                tx.transactionId)
                                         weakCurrentActivity?.get()?.startActivity(intent)
                                     }
                             )

@@ -85,6 +85,8 @@ interface CryptoService {
 
     fun addRoomKeysRequestListener(listener: RoomKeysRequestListener)
 
+    fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener)
+
     fun getDevicesList(callback: MatrixCallback<DevicesListResponse>)
 
     fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
