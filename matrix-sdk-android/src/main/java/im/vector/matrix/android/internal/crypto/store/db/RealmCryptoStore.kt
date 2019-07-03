@@ -39,10 +39,8 @@ import org.matrix.olm.OlmException
 import timber.log.Timber
 import kotlin.collections.set
 
-// enableFileEncryption is used to migrate the previous store
 @SessionScope
-internal class RealmCryptoStore(private val enableFileEncryption: Boolean = false,
-                                private val realmConfiguration: RealmConfiguration,
+internal class RealmCryptoStore(private val realmConfiguration: RealmConfiguration,
                                 private val credentials: Credentials) : IMXCryptoStore {
 
     /* ==========================================================================================

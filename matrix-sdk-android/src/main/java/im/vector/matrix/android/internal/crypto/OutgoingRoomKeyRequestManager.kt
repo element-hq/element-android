@@ -121,8 +121,8 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      */
     private fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody, andResend: Boolean) {
         val req = cryptoStore.getOutgoingRoomKeyRequest(requestBody)
-                  ?: // no request was made for this key
-                  return
+                ?: // no request was made for this key
+                return
 
         Timber.v("cancelRoomKeyRequest: requestId: " + req.requestId + " state: " + req.state + " andResend: " + andResend)
 
@@ -285,7 +285,8 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         val contentMap = MXUsersDevicesMap<Any>()
 
         for (recipient in recipients) {
-            contentMap.setObject(message, recipient["userId"], recipient["deviceId"]) // TODO Change this two hard coded key to something better
+            // TODO Change this two hard coded key to something better
+            contentMap.setObject(message, recipient["userId"], recipient["deviceId"])
         }
 
         sendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ROOM_KEY_REQUEST, contentMap, transactionId))

@@ -76,7 +76,7 @@ internal abstract class CryptoModule {
         @Provides
         fun providesCryptoStore(@CryptoDatabase
                                 realmConfiguration: RealmConfiguration, credentials: Credentials): IMXCryptoStore {
-            return RealmCryptoStore(false /* TODO*/,
+            return RealmCryptoStore(
                     realmConfiguration,
                     credentials)
         }

@@ -25,8 +25,6 @@ import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.task.TaskExecutor
 import javax.inject.Inject
 
 internal class MXMegolmEncryptionFactory @Inject constructor(
@@ -37,8 +35,6 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         private val credentials: Credentials,
         private val sendToDeviceTask: SendToDeviceTask,
-        // FIXME Why taskExecutor is not used?
-        private val taskExecutor: TaskExecutor,
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository) {
 

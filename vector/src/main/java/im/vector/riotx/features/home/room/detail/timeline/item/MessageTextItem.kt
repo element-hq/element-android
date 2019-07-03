@@ -45,7 +45,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     @EpoxyAttribute
     var urlClickCallback: TimelineEventController.UrlClickCallback? = null
 
-    // TODO Move this instantiation somewhere else?
     private val mvmtMethod = BetterLinkMovementMethod.newInstance().also {
         it.setOnLinkClickListener { _, url ->
             //Return false to let android manage the click on the link, or true if the link is handled by the application

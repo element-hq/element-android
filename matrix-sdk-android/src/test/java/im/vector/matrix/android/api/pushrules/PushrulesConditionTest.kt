@@ -166,6 +166,7 @@ class PushrulesConditionTest {
 
 
     class MockRoomService() : RoomService {
+
         override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>) {
 
         }
@@ -178,24 +179,28 @@ class PushrulesConditionTest {
             }
         }
 
-        override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
+        override fun liveRoomSummaries(fetchLastEvents: Boolean): LiveData<List<RoomSummary>> {
             return MutableLiveData()
         }
-
     }
 
     class MockRoom(override val roomId: String, val _numberOfJoinedMembers: Int) : Room {
+        override fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent> {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
 
 
         override fun getNumberOfJoinedMembers(): Int {
             return _numberOfJoinedMembers
         }
 
-        override val liveRoomSummary: LiveData<RoomSummary>
-            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        override fun liveRoomSummary(fetchLastEvent: Boolean): LiveData<RoomSummary> {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
 
-        override val roomSummary: RoomSummary?
-            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        override fun roomSummary(fetchLastEvent: Boolean): RoomSummary? {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
 
         override fun createTimeline(eventId: String?, allowedTypes: List<String>?): Timeline {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -277,10 +282,6 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun updateQuickReaction(reaction: String, oppositeReaction: String, targetEventId: String, myUserId: String) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
         override fun editTextMessage(targetEventId: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String): Cancelable {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
@@ -289,7 +290,7 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun getEventSummaryLive(eventId: String): LiveData<List<EventAnnotationsSummary>> {
+        override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

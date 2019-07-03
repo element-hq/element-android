@@ -36,17 +36,15 @@ interface Authenticator {
      */
     fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig, login: String, password: String, callback: MatrixCallback<Session>): Cancelable
 
-    //TODO remove this method. Shouldn't be managed like that.
     /**
-     * Check if there is an active [Session].
+     * Check if there is an authenticated [Session].
      * @return true if there is at least one active session.
      */
     fun hasAuthenticatedSessions(): Boolean
 
-    //TODO remove this method. Shouldn't be managed like that.
     /**
-     * Get the last active [Session], if there is an active session.
-     * @return the lastActive session if any, or null
+     * Get the last authenticated [Session], if there is an active session.
+     * @return the last active session if any, or null
      */
     fun getLastAuthenticatedSession(): Session?
 
@@ -58,7 +56,4 @@ interface Authenticator {
      * @return the associated session if any, or null
      */
     fun getSession(sessionParams: SessionParams): Session?
-
-
-
 }

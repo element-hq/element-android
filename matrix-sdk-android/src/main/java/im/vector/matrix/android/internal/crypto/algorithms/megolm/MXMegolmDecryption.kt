@@ -139,7 +139,8 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
         val recipients = ArrayList<Map<String, String>>()
 
         val selfMap = HashMap<String, String>()
-        selfMap["userId"] = credentials.userId // TODO Replace this hard coded keys (see OutgoingRoomKeyRequestManager)
+        // TODO Replace this hard coded keys (see OutgoingRoomKeyRequestManager)
+        selfMap["userId"] = credentials.userId
         selfMap["deviceId"] = "*"
         recipients.add(selfMap)
 

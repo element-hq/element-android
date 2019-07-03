@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
 import java.util.regex.Pattern
 
@@ -35,16 +34,16 @@ class ContainsDisplayNameCondition : Condition(Kind.contains_display_name) {
     }
 
     fun isSatisfied(event: Event, displayName: String): Boolean {
-        //TODO the spec says:
-        // Matches any message whose content is unencrypted and contains the user's current display name
         var message = when (event.type) {
-            EventType.MESSAGE   -> {
+            EventType.MESSAGE -> {
                 event.content.toModel<MessageContent>()
             }
-//            EventType.ENCRYPTED -> {
-//                event.root.getClearContent()?.toModel<MessageContent>()
-//            }
-            else                -> null
+            //TODO the spec says:
+            // Matches any message whose content is unencrypted and contains the user's current display name
+            // EventType.ENCRYPTED -> {
+            //     event.root.getClearContent()?.toModel<MessageContent>()
+            // }
+            else              -> null
         } ?: return false
 
         return caseInsensitiveFind(displayName, message.body)

@@ -84,7 +84,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                 Timber.e("## processReceivedRoomKeyRequests() : Ignoring room key request from other user for now")
                 return
             }
-            // todo: should we queue up requests we don't yet have keys for, in case they turn up later?
+            // TODO: should we queue up requests we don't yet have keys for, in case they turn up later?
             // if we don't have a decryptor for this room/alg, we don't have
             // the keys for the requested events, and can drop the requests.
             val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, alg)

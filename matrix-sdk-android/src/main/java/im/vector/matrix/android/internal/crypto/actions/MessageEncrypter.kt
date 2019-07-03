@@ -81,9 +81,6 @@ internal class MessageEncrypter @Inject constructor(private val credentials: Cre
                 recipientsKeysMap["ed25519"] = deviceInfo.fingerprint()!!
                 payloadJson["recipient_keys"] = recipientsKeysMap
 
-                // FIXME We have to canonicalize the JSON
-                //JsonUtility.canonicalize(JsonUtility.getGson(false).toJsonTree(payloadJson)).toString()
-
                 val payloadString = convertToUTF8(MoshiProvider.getCanonicalJson(Map::class.java, payloadJson))
                 ciphertext[deviceKey] = olmDevice.encryptMessage(deviceKey, sessionId!!, payloadString!!)!!
             }

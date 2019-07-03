@@ -105,8 +105,7 @@ fi
 echo
 echo "Search for long files..."
 
-# TODO Reduce this once VectorSettingsPreferencesFragment.kt has been reworked
-${checkLongFilesScript} 3500 \
+${checkLongFilesScript} 2000 \
     ./vector/src/main/java \
     ./vector/src/main/res/layout \
     ./vector/src/main/res/values \
