@@ -23,6 +23,7 @@ import android.os.HandlerThread
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.createBackgroundHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import org.matrix.olm.OlmManager
@@ -32,15 +33,12 @@ internal object MatrixModule {
 
     @JvmStatic
     @Provides
+    @MatrixScope
     fun providesMatrixCoroutineDispatchers(): MatrixCoroutineDispatchers {
-        val THREAD_CRYPTO_NAME = "Crypto_Thread"
-        val handlerThread = HandlerThread(THREAD_CRYPTO_NAME)
-        handlerThread.start()
-
         return MatrixCoroutineDispatchers(io = Dispatchers.IO,
-                computation = Dispatchers.IO,
-                main = Dispatchers.Main,
-                crypto = Handler(handlerThread.looper).asCoroutineDispatcher("crypto")
+                                          computation = Dispatchers.IO,
+                                          main = Dispatchers.Main,
+                                          crypto = createBackgroundHandler("Crypto_Thread").asCoroutineDispatcher()
         )
     }
 
