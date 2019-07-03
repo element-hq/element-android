@@ -286,7 +286,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
 
         for (recipient in recipients) {
             // TODO Change this two hard coded key to something better
-            contentMap.setObject(message, recipient["userId"], recipient["deviceId"])
+            contentMap.setObject(recipient["userId"], recipient["deviceId"], message)
         }
 
         sendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ROOM_KEY_REQUEST, contentMap, transactionId))

@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This class represents the response to /keys/query request made by claimOneTimeKeysForUsersDevices.
+ * This class represents the response to /keys/claim request made by claimOneTimeKeysForUsersDevices.
  */
 @JsonClass(generateAdapter = true)
 data class KeysClaimResponse(

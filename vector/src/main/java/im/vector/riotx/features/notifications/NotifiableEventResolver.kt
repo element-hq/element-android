@@ -63,6 +63,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             else                        -> {
 
                 //If the event can be displayed, display it as is
+                Timber.w("NotifiableEventResolver Received an unsupported event matching a bing rule")
                 //TODO Better event text display
                 val bodyPreview = event.type
 
@@ -75,11 +76,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                         title = stringProvider.getString(R.string.notification_unknown_new_event),
                         soundName = null,
                         type = event.type)
-
-
-                //Unsupported event
-                Timber.w("NotifiableEventResolver Received an unsupported event matching a bing rule")
-                return null
             }
         }
     }
@@ -96,8 +92,8 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             // Ok room is not known in store, but we can still display something
             val body =
                     event.annotations?.editSummary?.aggregatedContent?.toModel<MessageContent>()?.body
-                    ?: event.root.getClearContent().toModel<MessageContent>()?.body
-                    ?: stringProvider.getString(R.string.notification_unknown_new_event)
+                            ?: event.root.getClearContent().toModel<MessageContent>()?.body
+                            ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.senderName ?: event.root.senderId
 
@@ -115,8 +111,8 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             return notifiableEvent
         } else {
             val body = event.annotations?.editSummary?.aggregatedContent?.toModel<MessageContent>()?.body
-                       ?: event.root.getClearContent().toModel<MessageContent>()?.body
-                       ?: stringProvider.getString(R.string.notification_unknown_new_event)
+                    ?: event.root.getClearContent().toModel<MessageContent>()?.body
+                    ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = room.roomSummary()?.displayName ?: ""
             val senderDisplayName = event.senderName ?: event.root.senderId
 
@@ -138,15 +134,15 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             // TODO They will be not displayed the first time (known limitation)
             notifiableEvent.roomAvatarPath = session.contentUrlResolver()
                     .resolveThumbnail(room.roomSummary()?.avatarUrl,
-                                      250,
-                                      250,
-                                      ContentUrlResolver.ThumbnailMethod.SCALE)
+                            250,
+                            250,
+                            ContentUrlResolver.ThumbnailMethod.SCALE)
 
             notifiableEvent.senderAvatarPath = session.contentUrlResolver()
                     .resolveThumbnail(event.senderAvatar,
-                                      250,
-                                      250,
-                                      ContentUrlResolver.ThumbnailMethod.SCALE)
+                            250,
+                            250,
+                            ContentUrlResolver.ThumbnailMethod.SCALE)
 
             return notifiableEvent
         }
@@ -159,7 +155,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
         val dName = event.senderId?.let { session.getUser(it)?.displayName }
         if (Membership.INVITE == content.membership) {
             val body = noticeEventFormatter.format(event, dName)
-                       ?: stringProvider.getString(R.string.notification_new_invitation)
+                    ?: stringProvider.getString(R.string.notification_new_invitation)
             return InviteNotifiableEvent(
                     session.sessionParams.credentials.userId,
                     eventId = event.eventId!!,

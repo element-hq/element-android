@@ -118,8 +118,8 @@ internal class MXMegolmEncryption(
         for (userId in userIds) {
             val deviceIds = devicesInRoom.getUserDeviceIds(userId)
             for (deviceId in deviceIds!!) {
-                val deviceInfo = devicesInRoom.getObject(deviceId, userId)
-                if (null == safeSession.sharedWithDevices.getObject(deviceId, userId)) {
+                val deviceInfo = devicesInRoom.getObject(userId, deviceId)
+                if (deviceInfo != null && null == safeSession.sharedWithDevices.getObject(userId, deviceId)) {
                     if (!shareMap.containsKey(userId)) {
                         shareMap[userId] = ArrayList()
                     }
@@ -201,7 +201,7 @@ internal class MXMegolmEncryption(
                     for (userId in userIds) {
                         val devicesToShareWith = devicesByUser[userId]
                         for ((deviceID) in devicesToShareWith!!) {
-                            val sessionResult = it.getObject(deviceID, userId)
+                            val sessionResult = it.getObject(userId, deviceID)
                             if (sessionResult?.sessionId == null) {
                                 // no session with this device, probably because there
                                 // were no one-time keys.
@@ -218,7 +218,7 @@ internal class MXMegolmEncryption(
                             }
                             Timber.v("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
                             //noinspection ArraysAsListWithZeroOrOneArgument,ArraysAsListWithZeroOrOneArgument
-                            contentMap.setObject(messageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.deviceInfo)), userId, deviceID)
+                            contentMap.setObject(userId, deviceID, messageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.deviceInfo)))
                             haveTargets = true
                         }
                     }
@@ -239,7 +239,7 @@ internal class MXMegolmEncryption(
                                     for (userId in devicesByUser.keys) {
                                         val devicesToShareWith = devicesByUser[userId]
                                         for ((deviceId) in devicesToShareWith!!) {
-                                            session.sharedWithDevices.setObject(chainIndex, userId, deviceId)
+                                            session.sharedWithDevices.setObject(userId, deviceId, chainIndex)
                                         }
                                     }
                                     Unit
@@ -303,10 +303,10 @@ internal class MXMegolmEncryption(
                     for (userId in it.userIds) {
                         val deviceIds = it.getUserDeviceIds(userId) ?: continue
                         for (deviceId in deviceIds) {
-                            val deviceInfo = it.getObject(deviceId, userId) ?: continue
+                            val deviceInfo = it.getObject(userId, deviceId) ?: continue
                             if (warnOnUnknownDevicesRepository.warnOnUnknownDevices() && deviceInfo.isUnknown) {
                                 // The device is not yet known by the user
-                                unknownDevices.setObject(deviceInfo, userId, deviceId)
+                                unknownDevices.setObject(userId, deviceId, deviceInfo)
                                 continue
                             }
                             if (deviceInfo.isBlocked) {
@@ -322,7 +322,7 @@ internal class MXMegolmEncryption(
                                 // Don't bother sending to ourself
                                 continue
                             }
-                            devicesInRoom.setObject(deviceInfo, userId, deviceId)
+                            devicesInRoom.setObject(userId, deviceId, deviceInfo)
                         }
                     }
                     if (unknownDevices.isEmpty) {

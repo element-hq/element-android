@@ -20,11 +20,14 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This class represents the response to /keys/query request made by claimOneTimeKeysForUsersDevices.
+ * This class represents the response to /keys/claim request made by claimOneTimeKeysForUsersDevices.
  */
 @JsonClass(generateAdapter = true)
 data class KeysClaimBody(
 
+        /**
+         * The time (in milliseconds) to wait when downloading keys from remote servers. 10 seconds is the recommended default.
+         */
         @Json(name = "timeout")
         var timeout: Int? = null,
 

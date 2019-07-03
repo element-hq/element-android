@@ -309,7 +309,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                     .handle(devicesByUser)
                                     .flatMap {
                                         val body = request.requestBody
-                                        val olmSessionResult = it.getObject(deviceId, userId)
+                                        val olmSessionResult = it.getObject(userId, deviceId)
                                         if (olmSessionResult?.sessionId == null) {
                                             // no session with this device, probably because there
                                             // were no one-time keys.
@@ -325,7 +325,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
 
                                         val encodedPayload = messageEncrypter.encryptMessage(payloadJson, Arrays.asList(deviceInfo))
                                         val sendToDeviceMap = MXUsersDevicesMap<Any>()
-                                        sendToDeviceMap.setObject(encodedPayload, userId, deviceId)
+                                        sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
                                         Timber.v("## shareKeysWithDevice() : sending to $userId:$deviceId")
                                         val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
                                         sendToDeviceTask.execute(sendToDeviceParams)

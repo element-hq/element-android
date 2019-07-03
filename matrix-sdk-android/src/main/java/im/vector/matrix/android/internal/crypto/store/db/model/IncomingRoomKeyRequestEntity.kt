@@ -16,9 +16,9 @@
 
 package im.vector.matrix.android.internal.crypto.store.db.model
 
-import io.realm.RealmObject
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+import io.realm.RealmObject
 
 internal open class IncomingRoomKeyRequestEntity(
         var requestId: String? = null,
@@ -32,11 +32,11 @@ internal open class IncomingRoomKeyRequestEntity(
 ) : RealmObject() {
 
     fun toIncomingRoomKeyRequest(): IncomingRoomKeyRequest {
-        return IncomingRoomKeyRequest().apply {
-            requestId = requestId
-            userId = userId
-            deviceId = deviceId
-            requestBody = RoomKeyRequestBody().apply {
+        return IncomingRoomKeyRequest().also {
+            it.requestId = requestId
+            it.userId = userId
+            it.deviceId = deviceId
+            it.requestBody = RoomKeyRequestBody().apply {
                 algorithm = requestBodyAlgorithm
                 roomId = requestBodyRoomId
                 senderKey = requestBodySenderKey

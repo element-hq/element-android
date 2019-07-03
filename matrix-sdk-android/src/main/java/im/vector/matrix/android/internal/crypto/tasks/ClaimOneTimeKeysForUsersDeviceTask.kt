@@ -23,10 +23,8 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimResponse
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 internal interface ClaimOneTimeKeysForUsersDeviceTask : Task<ClaimOneTimeKeysForUsersDeviceTask.Params, MXUsersDevicesMap<MXKey>> {
@@ -46,30 +44,25 @@ internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(private
             apiCall = cryptoApi.claimOneTimeKeysForUsersDevices(body)
         }.flatMap { keysClaimResponse ->
             Try {
-                val map = HashMap<String, Map<String, MXKey>>()
+                val map = MXUsersDevicesMap<MXKey>()
 
                 if (null != keysClaimResponse.oneTimeKeys) {
                     for (userId in keysClaimResponse.oneTimeKeys!!.keys) {
                         val mapByUserId = keysClaimResponse.oneTimeKeys!![userId]
 
-                        val keysMap = HashMap<String, MXKey>()
-
                         for (deviceId in mapByUserId!!.keys) {
-                            try {
-                                keysMap[deviceId] = MXKey(mapByUserId[deviceId])
-                            } catch (e: Exception) {
-                                Timber.e(e, "## claimOneTimeKeysForUsersDevices : fail to create a MXKey ")
+                            val mxKey = MXKey.from(mapByUserId[deviceId])
+
+                            if (mxKey != null) {
+                                map.setObject(userId, deviceId, mxKey)
+                            } else {
+                                Timber.e("## claimOneTimeKeysForUsersDevices : fail to create a MXKey")
                             }
-
-                        }
-
-                        if (keysMap.size != 0) {
-                            map[userId] = keysMap
                         }
                     }
                 }
 
-                MXUsersDevicesMap(map)
+                map
             }
         }
     }

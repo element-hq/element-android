@@ -19,25 +19,18 @@ package im.vector.matrix.android.auth
 import androidx.test.annotation.UiThreadTest
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.OkReplayRuleChainNoActivity
 import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.internal.auth.AuthModule
-import im.vector.matrix.android.internal.di.MatrixModule
-import im.vector.matrix.android.internal.di.NetworkModule
 import okreplay.*
 import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.standalone.StandAloneContext.loadKoinModules
-import org.koin.standalone.inject
-import org.koin.test.KoinTest
 
 
 @RunWith(AndroidJUnit4::class)
-internal class AuthenticatorTest : InstrumentedTest, KoinTest {
+internal class AuthenticatorTest : InstrumentedTest {
 
     lateinit var authenticator: Authenticator
     lateinit var okReplayInterceptor: OkReplayInterceptor

@@ -285,7 +285,7 @@ internal abstract class SASVerificationTransaction(
                               onErrorReason: CancelCode,
                               onDone: (() -> Unit)?) {
         val contentMap = MXUsersDevicesMap<Any>()
-        contentMap.setObject(keyToDevice, otherUserId, otherDeviceId)
+        contentMap.setObject(otherUserId, otherDeviceId, keyToDevice)
 
         sendToDeviceTask.configureWith(SendToDeviceTask.Params(type, contentMap, transactionId))
                 .dispatchTo(object : MatrixCallback<Unit> {

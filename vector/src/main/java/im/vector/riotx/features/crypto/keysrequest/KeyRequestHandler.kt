@@ -103,7 +103,7 @@ class KeyRequestHandler @Inject constructor(val context: Context)
         //Add a notification for every incoming request
         session?.downloadKeys(Arrays.asList(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                val deviceInfo = data.getObject(deviceId, userId)
+                val deviceInfo = data.getObject(userId, deviceId)
 
                 if (null == deviceInfo) {
                     Timber.e("## displayKeyShareDialog() : No details found for device $userId:$deviceId")

@@ -21,12 +21,11 @@ import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRe
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -61,22 +60,22 @@ internal class OutgoingSASVerificationRequest(
     override val uxState: OutgoingSasVerificationRequest.UxState
         get() {
             return when (state) {
-                SasVerificationTxState.None -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_START
+                SasVerificationTxState.None           -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_START
                 SasVerificationTxState.SendingStart,
                 SasVerificationTxState.Started,
                 SasVerificationTxState.OnAccepted,
                 SasVerificationTxState.SendingKey,
                 SasVerificationTxState.KeySent,
-                SasVerificationTxState.OnKeyReceived -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_KEY_AGREEMENT
+                SasVerificationTxState.OnKeyReceived  -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_KEY_AGREEMENT
                 SasVerificationTxState.ShortCodeReady -> OutgoingSasVerificationRequest.UxState.SHOW_SAS
                 SasVerificationTxState.ShortCodeAccepted,
                 SasVerificationTxState.SendingMac,
                 SasVerificationTxState.MacSent,
-                SasVerificationTxState.Verifying -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_VERIFICATION
-                SasVerificationTxState.Verified -> OutgoingSasVerificationRequest.UxState.VERIFIED
-                SasVerificationTxState.OnCancelled -> OutgoingSasVerificationRequest.UxState.CANCELLED_BY_ME
-                SasVerificationTxState.Cancelled -> OutgoingSasVerificationRequest.UxState.CANCELLED_BY_OTHER
-                else -> OutgoingSasVerificationRequest.UxState.UNKNOWN
+                SasVerificationTxState.Verifying      -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_VERIFICATION
+                SasVerificationTxState.Verified       -> OutgoingSasVerificationRequest.UxState.VERIFIED
+                SasVerificationTxState.OnCancelled    -> OutgoingSasVerificationRequest.UxState.CANCELLED_BY_ME
+                SasVerificationTxState.Cancelled      -> OutgoingSasVerificationRequest.UxState.CANCELLED_BY_OTHER
+                else                                  -> OutgoingSasVerificationRequest.UxState.UNKNOWN
             }
         }
 
@@ -102,8 +101,6 @@ internal class OutgoingSASVerificationRequest(
         startMessage.shortAuthenticationStrings = KNOWN_SHORT_CODES
 
         startReq = startMessage
-        val contentMap = MXUsersDevicesMap<Any>()
-        contentMap.setObject(startMessage, otherUserId, otherDeviceId)
         state = SasVerificationTxState.SendingStart
 
         sendToOther(

@@ -24,7 +24,6 @@ import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
-import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -54,7 +53,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
                 }
 
                 val olmSessionResult = MXOlmSessionResult(deviceInfo, sessionId)
-                results.setObject(olmSessionResult, userId, deviceId)
+                results.setObject(userId, deviceId, olmSessionResult)
             }
         }
 
@@ -68,7 +67,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
         val oneTimeKeyAlgorithm = MXKey.KEY_SIGNED_CURVE_25519_TYPE
 
         for (device in devicesWithoutSession) {
-            usersDevicesToClaim.setObject(oneTimeKeyAlgorithm, device.userId, device.deviceId)
+            usersDevicesToClaim.setObject(device.userId, device.deviceId, oneTimeKeyAlgorithm)
         }
 
         // TODO: this has a race condition - if we try to send another message
@@ -91,12 +90,12 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
                             val deviceIds = it.getUserDeviceIds(userId)
                             if (null != deviceIds) {
                                 for (deviceId in deviceIds) {
-                                    val olmSessionResult = results.getObject(deviceId, userId)
+                                    val olmSessionResult = results.getObject(userId, deviceId)
                                     if (olmSessionResult!!.sessionId != null) {
                                         // We already have a result for this device
                                         continue
                                     }
-                                    val key = it.getObject(deviceId, userId)
+                                    val key = it.getObject(userId, deviceId)
                                     if (key?.type == oneTimeKeyAlgorithm) {
                                         oneTimeKey = key
                                     }
@@ -126,11 +125,13 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
             var isVerified = false
             var errorMessage: String? = null
 
-            try {
-                olmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
-                isVerified = true
-            } catch (e: Exception) {
-                errorMessage = e.message
+            if (signature != null) {
+                try {
+                    olmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
+                    isVerified = true
+                } catch (e: Exception) {
+                    errorMessage = e.message
+                }
             }
 
             // Check one-time key signature

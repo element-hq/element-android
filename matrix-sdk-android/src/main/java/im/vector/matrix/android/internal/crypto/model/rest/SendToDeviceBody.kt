@@ -18,8 +18,9 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 class SendToDeviceBody {
 
-    // `Any` should implement SendToDeviceObject, but we cannot use interface here because of Gson serialization
     /**
+     * `Any` should implement [SendToDeviceObject], but we cannot use interface here because of Json serialization
+     *
      * The messages to send. A map from user ID, to a map from device ID to message body.
      * The device ID may also be *, meaning all known devices for the user.
      */
