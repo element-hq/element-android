@@ -81,6 +81,7 @@ class MXCryptoError(var code: String,
         /**
          * Error codes
          */
+        const val UNKNOWN_ERROR_CODE = "UNKNOWN_ERROR_CODE"
         const val ENCRYPTING_NOT_ENABLED_ERROR_CODE = "ENCRYPTING_NOT_ENABLED"
         const val UNABLE_TO_ENCRYPT_ERROR_CODE = "UNABLE_TO_ENCRYPT"
         const val UNABLE_TO_DECRYPT_ERROR_CODE = "UNABLE_TO_DECRYPT"

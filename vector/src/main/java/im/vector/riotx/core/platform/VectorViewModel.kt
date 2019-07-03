@@ -21,4 +21,4 @@ import com.airbnb.mvrx.MvRxState
 import im.vector.riotx.BuildConfig
 
 abstract class VectorViewModel<S : MvRxState>(initialState: S)
-    : BaseMvRxViewModel<S>(initialState, debugMode = BuildConfig.DEBUG)
+    : BaseMvRxViewModel<S>(initialState, false)

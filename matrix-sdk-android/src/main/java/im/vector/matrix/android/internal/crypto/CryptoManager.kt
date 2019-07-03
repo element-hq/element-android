@@ -388,12 +388,12 @@ internal class CryptoManager @Inject constructor(
                 var isUpdated = false
                 val deviceIds = devicesIdListByUserId[userId]
 
-                for (deviceId in deviceIds!!) {
+                deviceIds?.forEach { deviceId ->
                     val device = storedDeviceIDs[deviceId]
 
                     // assume if the device is either verified or blocked
                     // it means that the device is known
-                    if (null != device && device.isUnknown) {
+                    if (device?.isUnknown == true) {
                         device.verified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
                         isUpdated = true
                     }
@@ -445,7 +445,7 @@ internal class CryptoManager @Inject constructor(
         val encryptingClass = MXCryptoAlgorithms.hasEncryptorClassForAlgorithm(algorithm)
 
         if (!encryptingClass) {
-            Timber.e("## setEncryptionInRoom() : Unable to encrypt with " + algorithm!!)
+            Timber.e("## setEncryptionInRoom() : Unable to encrypt room ${roomId} with $algorithm")
             return false
         }
 
@@ -560,7 +560,7 @@ internal class CryptoManager @Inject constructor(
                         .fold(
                                 { callback.onFailure(it) },
                                 {
-                                    Timber.v("## encryptEventContent() : succeeds after " + (System.currentTimeMillis() - t0) + " ms")
+                                    Timber.v("## encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                                     callback.onSuccess(MXEncryptEventContentResult(it, EventType.ENCRYPTED))
                                 }
                         )
@@ -615,16 +615,17 @@ internal class CryptoManager @Inject constructor(
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or null in case of error wrapped into [Try]
      */
-    private suspend fun internalDecryptEvent(event: Event, timeline: String): Try<MXEventDecryptionResult?> {
+    private suspend fun internalDecryptEvent(event: Event, timeline: String): Try<MXEventDecryptionResult> {
         return Try {
             val eventContent = event.content
             if (eventContent == null) {
                 Timber.e("## decryptEvent : empty event content")
-                return@Try null
+                throw MXDecryptionException(MXCryptoError(MXCryptoError.UNKNOWN_ERROR_CODE, MXCryptoError.UNKNOWN_ERROR_CODE))
             }
-            val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, eventContent["algorithm"] as String)
+            val algorithm = eventContent["algorithm"]?.toString()
+            val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, algorithm)
             if (alg == null) {
-                val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, eventContent["algorithm"] as String)
+                val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, algorithm)
                 Timber.e("## decryptEvent() : $reason")
                 throw MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE, MXCryptoError.UNABLE_TO_DECRYPT, reason))
             } else {
@@ -676,7 +677,7 @@ internal class CryptoManager @Inject constructor(
         }
         val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(roomKeyContent.roomId, roomKeyContent.algorithm)
         if (alg == null) {
-            Timber.e("## onRoomKeyEvent() : Unable to handle keys for " + roomKeyContent.algorithm)
+            Timber.e("## onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
             return
         }
         alg.onRoomKeyEvent(event, keysBackup)
@@ -692,9 +693,9 @@ internal class CryptoManager @Inject constructor(
             val params = LoadRoomMembersTask.Params(roomId)
             loadRoomMembersTask
                     .execute(params)
-                    .map { allLoaded ->
+                    .map { _ ->
                         val userIds = getRoomUserIds(roomId)
-                        setEncryptionInRoom(roomId, event.content!!["algorithm"] as String, true, userIds)
+                        setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
                     }
         }
     }
@@ -839,7 +840,7 @@ internal class CryptoManager @Inject constructor(
                     val roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
                     val t1 = System.currentTimeMillis()
 
-                    Timber.v("## importRoomKeys : decryptMegolmKeyFile done in " + (t1 - t0) + " ms")
+                    Timber.v("""## importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms""")
 
                     val importedSessions = MoshiProvider.providesMoshi()
                             .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
@@ -847,7 +848,7 @@ internal class CryptoManager @Inject constructor(
 
                     val t2 = System.currentTimeMillis()
 
-                    Timber.v("## importRoomKeys : JSON parsing " + (t2 - t1) + " ms")
+                    Timber.v("""## importRoomKeys : JSON parsing ${t2 - t1} ms""")
 
                     if (importedSessions == null) {
                         throw Exception("Error")
@@ -931,11 +932,8 @@ internal class CryptoManager @Inject constructor(
      */
 // TODO add this info in CryptoRoomEntity?
     override fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean {
-        return if (null != roomId) {
-            cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
-        } else {
-            false
-        }
+        return roomId?.let { cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(it) }
+                ?: false
     }
 
     /**
@@ -993,18 +991,18 @@ internal class CryptoManager @Inject constructor(
      * @param event the event to decrypt again.
      */
     override fun reRequestRoomKeyForEvent(event: Event) {
-        val wireContent = event.content!!
-
-        val algorithm = wireContent["algorithm"].toString()
-        val senderKey = wireContent["sender_key"].toString()
-        val sessionId = wireContent["session_id"].toString()
+        val wireContent = event.content
+        if (wireContent == null) {
+            Timber.e("## reRequestRoomKeyForEvent Failed to re-request key, null content")
+            return
+        }
 
         val requestBody = RoomKeyRequestBody()
 
         requestBody.roomId = event.roomId
-        requestBody.algorithm = algorithm
-        requestBody.senderKey = senderKey
-        requestBody.sessionId = sessionId
+        requestBody.algorithm = wireContent["algorithm"].toString()
+        requestBody.senderKey = wireContent["sender_key"].toString()
+        requestBody.sessionId = wireContent["session_id"].toString()
 
         outgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
     }
@@ -1038,12 +1036,12 @@ internal class CryptoManager @Inject constructor(
         val userIds = devicesInRoom.userIds
         for (userId in userIds) {
             val deviceIds = devicesInRoom.getUserDeviceIds(userId)
-            for (deviceId in deviceIds!!) {
-                val deviceInfo = devicesInRoom.getObject(userId, deviceId)
-
-                if (deviceInfo?.isUnknown == true) {
-                    unknownDevices.setObject(userId, deviceId, deviceInfo)
-                }
+            deviceIds?.forEach { deviceId ->
+                devicesInRoom.getObject(userId, deviceId)
+                        ?.takeIf { it.isUnknown }
+                        ?.let {
+                            unknownDevices.setObject(userId, deviceId, it)
+                        }
             }
         }
 

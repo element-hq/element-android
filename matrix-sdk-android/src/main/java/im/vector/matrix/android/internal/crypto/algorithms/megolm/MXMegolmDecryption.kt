@@ -43,6 +43,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
+import kotlin.collections.HashMap
 
 internal class MXMegolmDecryption(private val credentials: Credentials,
                                   private val olmDevice: MXOlmDevice,
@@ -64,19 +65,19 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
     private var pendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>> = HashMap()
 
     @Throws(MXDecryptionException::class)
-    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
+    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return decryptEvent(event, timeline, true)
     }
 
     @Throws(MXDecryptionException::class)
-    private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult? {
+    private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()!!
         if (TextUtils.isEmpty(encryptedEventContent.senderKey) || TextUtils.isEmpty(encryptedEventContent.sessionId) || TextUtils.isEmpty(encryptedEventContent.ciphertext)) {
             throw MXDecryptionException(MXCryptoError(MXCryptoError.MISSING_FIELDS_ERROR_CODE,
                     MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_FIELDS_REASON))
         }
 
-        var eventDecryptionResult: MXEventDecryptionResult? = null
+        val eventDecryptionResult: MXEventDecryptionResult?
         var cryptoError: MXCryptoError? = null
         var decryptGroupMessageResult: MXDecryptionResult? = null
 
@@ -86,17 +87,19 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
             cryptoError = e.cryptoError
         }
         // the decryption succeeds
-        if (decryptGroupMessageResult?.payload != null && cryptoError == null) {
+        if (decryptGroupMessageResult?.payload != null) {
             eventDecryptionResult = MXEventDecryptionResult()
 
             eventDecryptionResult.clearEvent = decryptGroupMessageResult.payload
             eventDecryptionResult.senderCurve25519Key = decryptGroupMessageResult.senderKey
 
             if (null != decryptGroupMessageResult.keysClaimed) {
-                eventDecryptionResult.claimedEd25519Key = decryptGroupMessageResult.keysClaimed!!["ed25519"]
+                eventDecryptionResult.claimedEd25519Key = decryptGroupMessageResult.keysClaimed?.get("ed25519")
             }
 
-            eventDecryptionResult.forwardingCurve25519KeyChain = decryptGroupMessageResult.forwardingCurve25519KeyChain!!
+            eventDecryptionResult.forwardingCurve25519KeyChain = decryptGroupMessageResult.forwardingCurve25519KeyChain
+                    ?: emptyList()
+            return eventDecryptionResult
         } else if (cryptoError != null) {
             if (cryptoError.isOlmError) {
                 if (MXCryptoError.UNKNOWN_MESSAGE_INDEX == cryptoError.message) {
@@ -118,12 +121,12 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                 if (requestKeysOnFail) {
                     requestKeysForEvent(event)
                 }
+                throw MXDecryptionException(cryptoError)
             }
-            throw MXDecryptionException(cryptoError)
         }
-
-        return eventDecryptionResult
+        throw MXDecryptionException(MXCryptoError(MXCryptoError.UNKNOWN_ERROR_CODE, MXCryptoError.UNKNOWN_ERROR_CODE))
     }
+
 
     /**
      * Helper for the real decryptEvent and for _retryDecryption. If
@@ -172,6 +175,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>() ?: return
         val pendingEventsKey = "${encryptedEventContent.senderKey}|${encryptedEventContent.sessionId}"
 
+
         if (!pendingEvents.containsKey(pendingEventsKey)) {
             pendingEvents[pendingEventsKey] = HashMap()
         }
@@ -197,22 +201,25 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
 
         var senderKey: String? = event.getSenderKey()
         var keysClaimed: MutableMap<String, String> = HashMap()
-        var forwardingCurve25519KeyChain: MutableList<String> = ArrayList()
+        val forwardingCurve25519KeyChain: MutableList<String> = ArrayList()
 
         if (TextUtils.isEmpty(roomKeyContent.roomId) || TextUtils.isEmpty(roomKeyContent.sessionId) || TextUtils.isEmpty(roomKeyContent.sessionKey)) {
             Timber.e("## onRoomKeyEvent() :  Key event is missing fields")
             return
         }
         if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
-            Timber.v("## onRoomKeyEvent(), forward adding key : roomId " + roomKeyContent.roomId + " sessionId " + roomKeyContent.sessionId
-                    + " sessionKey " + roomKeyContent.sessionKey) // from " + event);
+            Timber.v("## onRoomKeyEvent(), forward adding key : roomId ${roomKeyContent.roomId} sessionId ${roomKeyContent.sessionId} sessionKey ${roomKeyContent.sessionKey}") // from " + event);
             val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>()
                     ?: return
-            forwardingCurve25519KeyChain = if (forwardedRoomKeyContent.forwardingCurve25519KeyChain == null) {
-                ArrayList()
-            } else {
-                ArrayList(forwardedRoomKeyContent.forwardingCurve25519KeyChain)
+
+            forwardedRoomKeyContent.forwardingCurve25519KeyChain?.let {
+                forwardingCurve25519KeyChain.addAll(it)
             }
+//            forwardingCurve25519KeyChain = if (forwardedRoomKeyContent.forwardingCurve25519KeyChain == null) {
+//                ArrayList()
+//            } else {
+//                ArrayList(forwardedRoomKeyContent.forwardingCurve25519KeyChain)
+//            }
 
             if (senderKey == null) {
                 Timber.e("## onRoomKeyEvent() : event is missing sender_key field")
@@ -284,8 +291,10 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
     }
 
     override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {
-        return (null != request.requestBody
-                && olmDevice.hasInboundSessionKeys(request.requestBody!!.roomId!!, request.requestBody!!.senderKey!!, request.requestBody!!.sessionId!!))
+        val roomId = request.requestBody?.roomId ?: return false
+        val senderKey = request.requestBody?.senderKey ?: return false
+        val sessionId = request.requestBody?.sessionId ?: return false
+        return olmDevice.hasInboundSessionKeys(roomId, senderKey, sessionId)
     }
 
     override fun shareKeysWithDevice(request: IncomingRoomKeyRequest) {
@@ -293,13 +302,13 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
         if (request.requestBody == null) {
             return
         }
-        val userId = request.userId!!
+        val userId = request.userId ?: return
         CoroutineScope(coroutineDispatchers.crypto).launch {
             deviceListManager
                     .downloadKeys(listOf(userId), false)
                     .flatMap {
                         val deviceId = request.deviceId
-                        val deviceInfo = cryptoStore.getUserDevice(deviceId!!, userId)
+                        val deviceInfo = cryptoStore.getUserDevice(deviceId ?: "", userId)
                         if (deviceInfo == null) {
                             throw RuntimeException()
                         } else {
@@ -315,9 +324,8 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                             // were no one-time keys.
                                             Try.just(Unit)
                                         }
-                                        Timber.v("## shareKeysWithDevice() : sharing keys for session " + body!!.senderKey + "|" + body.sessionId
-                                                + " with device " + userId + ":" + deviceId)
-                                        val inboundGroupSession = olmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId)
+                                        Timber.v("""## shareKeysWithDevice() : sharing keys for session ${body?.senderKey}|${body?.sessionId} with device $userId:$deviceId""")
+                                        val inboundGroupSession = olmDevice.getInboundGroupSession(body?.sessionId, body?.senderKey, body?.roomId)
 
                                         val payloadJson = HashMap<String, Any>()
                                         payloadJson["type"] = EventType.FORWARDED_ROOM_KEY
