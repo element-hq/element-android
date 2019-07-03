@@ -18,6 +18,7 @@ package im.vector.riotx.core.utils
 
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 
 open class RxStore<T>(defaultValue: T? = null) {
 
@@ -28,7 +29,7 @@ open class RxStore<T>(defaultValue: T? = null) {
     }
 
     fun observe(): Observable<T> {
-        return storeSubject.hide().distinctUntilChanged()
+        return storeSubject.hide().observeOn(Schedulers.computation())
     }
 
     fun post(value: T) {

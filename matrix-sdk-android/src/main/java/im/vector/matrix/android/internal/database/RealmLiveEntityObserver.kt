@@ -17,7 +17,10 @@
 package im.vector.matrix.android.internal.database
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.internal.util.createBackgroundHandler
 import io.realm.OrderedCollectionChangeSet
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.RealmObject
 import io.realm.RealmResults
 import java.util.concurrent.atomic.AtomicBoolean
@@ -29,17 +32,24 @@ internal interface LiveEntityObserver {
     fun isStarted(): Boolean
 }
 
-internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val monarchy: Monarchy)
+internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val realmConfiguration: RealmConfiguration)
     : LiveEntityObserver {
+
+    private companion object {
+        val BACKGROUND_HANDLER = createBackgroundHandler("LIVE_ENTITY_BACKGROUND")
+    }
 
     protected abstract val query: Monarchy.Query<T>
     private val isStarted = AtomicBoolean(false)
+    private val backgroundRealm = AtomicReference<Realm>()
     private lateinit var results: AtomicReference<RealmResults<T>>
 
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
-            monarchy.postToMonarchyThread {
-                val queryResults = query.createQuery(it).findAll()
+            BACKGROUND_HANDLER.post {
+                val realm = Realm.getInstance(realmConfiguration)
+                backgroundRealm.set(realm)
+                val queryResults = query.createQuery(realm).findAll()
                 queryResults.addChangeListener { t, changeSet ->
                     onChanged(t, changeSet)
                 }
@@ -50,8 +60,11 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val m
 
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
-            monarchy.postToMonarchyThread {
+            BACKGROUND_HANDLER.post {
                 results.getAndSet(null).removeAllChangeListeners()
+                backgroundRealm.getAndSet(null).also {
+                    it.close()
+                }
             }
         }
     }

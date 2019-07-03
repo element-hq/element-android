@@ -50,7 +50,6 @@ import javax.inject.Inject
 internal class DefaultSession @Inject constructor(override val sessionParams: SessionParams,
                                                   private val context: Context,
                                                   private val liveEntityObservers: Set<@JvmSuppressWildcards LiveEntityObserver>,
-                                                  private val monarchy: Monarchy,
                                                   private val sessionListeners: SessionListeners,
                                                   private val roomService: RoomService,
                                                   private val roomDirectoryService: RoomDirectoryService,
@@ -66,16 +65,16 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val contentUrlResolver: ContentUrlResolver,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker)
     : Session,
-        RoomService by roomService,
-        RoomDirectoryService by roomDirectoryService,
-        GroupService by groupService,
-        UserService by userService,
-        CryptoService by cryptoService,
-        CacheService by cacheService,
-        SignOutService by signOutService,
-        FilterService by filterService,
-        PushRuleService by pushRuleService,
-        PushersService by pushersService {
+      RoomService by roomService,
+      RoomDirectoryService by roomDirectoryService,
+      GroupService by groupService,
+      UserService by userService,
+      CryptoService by cryptoService,
+      CacheService by cacheService,
+      SignOutService by signOutService,
+      FilterService by filterService,
+      PushRuleService by pushRuleService,
+      PushersService by pushersService {
 
     private var isOpen = false
 
@@ -85,9 +84,6 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         assertMainThread()
         assert(!isOpen)
         isOpen = true
-        if (!monarchy.isMonarchyThreadOpen) {
-            monarchy.openManually()
-        }
         liveEntityObservers.forEach { it.start() }
     }
 
@@ -123,9 +119,6 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         stopSync()
         liveEntityObservers.forEach { it.dispose() }
         cryptoService.close()
-        if (monarchy.isMonarchyThreadOpen) {
-            monarchy.closeManually()
-        }
         isOpen = false
     }
 

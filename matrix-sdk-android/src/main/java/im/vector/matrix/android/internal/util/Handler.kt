@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.matrix.android.internal.util
 
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.riotx.core.utils.RxStore
-import im.vector.riotx.features.home.room.list.RoomListDisplayModeFilter
-import im.vector.riotx.features.home.room.list.RoomListFragment
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
-import javax.inject.Singleton
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
 
-@Singleton
-class HomeRoomListObservableStore @Inject constructor() : RxStore<List<RoomSummary>>()
+fun createBackgroundHandler(name: String): Handler = Handler(
+        HandlerThread(name).apply { start() }.looper
+)
+
+fun createUIHandler(): Handler = Handler(
+        Looper.getMainLooper()
+)

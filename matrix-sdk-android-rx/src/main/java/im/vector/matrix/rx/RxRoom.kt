@@ -21,23 +21,24 @@ import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 
 class RxRoom(private val room: Room) {
 
     fun liveRoomSummary(fetchLastEvent: Boolean): Observable<RoomSummary> {
-        return room.liveRoomSummary(fetchLastEvent).asObservable()
+        return room.liveRoomSummary(fetchLastEvent).asObservable().observeOn(Schedulers.computation())
     }
 
     fun liveRoomMemberIds(): Observable<List<String>> {
-        return room.getRoomMemberIdsLive().asObservable()
+        return room.getRoomMemberIdsLive().asObservable().observeOn(Schedulers.computation())
     }
 
     fun liveAnnotationSummary(eventId: String): Observable<EventAnnotationsSummary> {
-        return room.getEventSummaryLive(eventId).asObservable()
+        return room.getEventSummaryLive(eventId).asObservable().observeOn(Schedulers.computation())
     }
 
     fun liveTimelineEvent(eventId: String): Observable<TimelineEvent> {
-        return room.liveTimeLineEvent(eventId).asObservable()
+        return room.liveTimeLineEvent(eventId).asObservable().observeOn(Schedulers.computation())
     }
 
 }

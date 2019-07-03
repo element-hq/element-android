@@ -61,9 +61,8 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
                membership: Membership? = null,
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null) {
-
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                                ?: realm.createObject(roomId)
 
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -77,12 +76,9 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
                 roomSummaryEntity.joinedMembersCount = roomSummary.joinedMembersCount
             }
         }
-        if (unreadNotifications?.highlightCount != null) {
-            roomSummaryEntity.highlightCount = unreadNotifications.highlightCount
-        }
-        if (unreadNotifications?.notificationCount != null) {
-            roomSummaryEntity.notificationCount = unreadNotifications.notificationCount
-        }
+        roomSummaryEntity.highlightCount = unreadNotifications?.highlightCount ?: 0
+        roomSummaryEntity.notificationCount = unreadNotifications?.notificationCount ?:0
+
         if (membership != null) {
             roomSummaryEntity.membership = membership
         }

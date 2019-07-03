@@ -16,9 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Looper
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -43,6 +40,8 @@ import im.vector.matrix.android.internal.database.query.whereInRoom
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
+import im.vector.matrix.android.internal.util.createBackgroundHandler
+import im.vector.matrix.android.internal.util.createUIHandler
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
@@ -75,9 +74,7 @@ internal class DefaultTimeline(
 ) : Timeline {
 
     private companion object {
-        val BACKGROUND_HANDLER = Handler(
-                HandlerThread("TIMELINE_DB_THREAD").apply { start() }.looper
-        )
+        val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
     }
 
     override var listener: Timeline.Listener? = null
@@ -90,7 +87,7 @@ internal class DefaultTimeline(
 
     private val isStarted = AtomicBoolean(false)
     private val isReady = AtomicBoolean(false)
-    private val mainHandler = Handler(Looper.getMainLooper())
+    private val mainHandler = createUIHandler()
     private val backgroundRealm = AtomicReference<Realm>()
     private val cancelableBag = CancelableBag()
     private val debouncer = Debouncer(mainHandler)

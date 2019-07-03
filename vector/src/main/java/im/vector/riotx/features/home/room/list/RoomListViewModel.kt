@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.home.HomeRoomListObservableStore
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 class RoomListViewModel @AssistedInject constructor(@Assisted initialState: RoomListViewState,
@@ -55,6 +56,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
     }
 
     private val displayMode = initialState.displayMode
+    private val roomListDisplayModeFilter = RoomListDisplayModeFilter(displayMode)
 
     private val _openRoomLiveData = MutableLiveData<LiveEvent<String>>()
     val openRoomLiveData: LiveData<LiveEvent<String>>
@@ -95,7 +97,9 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                     copy(asyncRooms = asyncRooms)
                 }
 
-        homeRoomListObservableSource.observeFilteredBy(displayMode)
+        homeRoomListObservableSource
+                .observe()
+                .observeOn(Schedulers.computation())
                 .map { buildRoomSummaries(it) }
                 .execute { async ->
                     copy(asyncFilteredRooms = async)
@@ -182,23 +186,24 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
         val lowPriorities = ArrayList<RoomSummary>()
         val serverNotices = ArrayList<RoomSummary>()
 
-        for (room in rooms) {
-            if (room.membership.isLeft()) continue
-            val tags = room.tags.map { it.name }
-            when {
-                room.membership == Membership.INVITE          -> invites.add(room)
-                tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
-                tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
-                tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
-                room.isDirect                                 -> directChats.add(room)
-                else                                          -> groupRooms.add(room)
-            }
-        }
+        rooms
+                .filter { roomListDisplayModeFilter.test(it) }
+                .forEach { room ->
+                    val tags = room.tags.map { it.name }
+                    when {
+                        room.membership == Membership.INVITE          -> invites.add(room)
+                        tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
+                        tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
+                        tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
+                        room.isDirect                                 -> directChats.add(room)
+                        else                                          -> groupRooms.add(room)
+                    }
+                }
 
         val roomComparator = when (displayMode) {
             RoomListFragment.DisplayMode.HOME   -> chronologicalRoomComparator
             RoomListFragment.DisplayMode.PEOPLE -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.ROOMS  -> alphabeticalRoomComparator
+            RoomListFragment.DisplayMode.ROOMS  -> chronologicalRoomComparator
         }
 
         return RoomSummaries().apply {
@@ -210,6 +215,4 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             put(RoomCategory.SERVER_NOTICE, serverNotices.sortedWith(roomComparator))
         }
     }
-
-
 }

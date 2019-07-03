@@ -23,9 +23,11 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import io.realm.RealmConfiguration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,11 +35,11 @@ import javax.inject.Inject
  * Listens to the database for the insertion of any redaction event.
  * As it will actually delete the content, it should be called last in the list of listener.
  */
-internal class EventsPruner @Inject constructor(monarchy: Monarchy,
+internal class EventsPruner @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
                                                 private val credentials: Credentials,
                                                 private val pruneEventTask: PruneEventTask,
                                                 private val taskExecutor: TaskExecutor) :
-        RealmLiveEntityObserver<EventEntity>(monarchy) {
+        RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> { EventEntity.where(it, type = EventType.REDACTION) }
 
