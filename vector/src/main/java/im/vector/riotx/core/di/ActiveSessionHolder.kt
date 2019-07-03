@@ -17,24 +17,31 @@
 package im.vector.riotx.core.di
 
 import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
-import java.lang.IllegalStateException
+import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
+import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ActiveSessionHolder @Inject constructor(private val authenticator: Authenticator) {
+class ActiveSessionHolder @Inject constructor(private val authenticator: Authenticator,
+                                              private val keyRequestHandler: KeyRequestHandler,
+                                              private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler
+) {
 
     private var activeSession: AtomicReference<Session?> = AtomicReference()
 
-    fun setActiveSession(session: Session){
+    fun setActiveSession(session: Session) {
         activeSession.set(session)
+        keyRequestHandler.start(session)
+        incomingVerificationRequestHandler.start(session)
     }
 
-    fun clearActiveSession(){
+    fun clearActiveSession() {
         activeSession.set(null)
+        keyRequestHandler.stop()
+        incomingVerificationRequestHandler.stop()
     }
 
     fun hasActiveSession(): Boolean {
@@ -46,13 +53,14 @@ class ActiveSessionHolder @Inject constructor(private val authenticator: Authent
     }
 
     fun getActiveSession(): Session {
-        return activeSession.get() ?: throw IllegalStateException("You should authenticate before using this")
+        return activeSession.get()
+                ?: throw IllegalStateException("You should authenticate before using this")
     }
 
     //TODO: Stop sync ?
-    fun switchToSession(sessionParams: SessionParams) {
-        val newActiveSession = authenticator.getSession(sessionParams)
-        activeSession.set(newActiveSession)
-    }
+//    fun switchToSession(sessionParams: SessionParams) {
+//        val newActiveSession = authenticator.getSession(sessionParams)
+//        activeSession.set(newActiveSession)
+//    }
 
 }

@@ -39,8 +39,6 @@ import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
-import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
-import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
@@ -64,10 +62,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
     @Inject lateinit var homeNavigator: HomeNavigator
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
-    // TODO Move this elsewhere
-    @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
-    // TODO Move this elsewhere
-    @Inject lateinit var keyRequestHandler: KeyRequestHandler
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
 

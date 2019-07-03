@@ -1023,7 +1023,7 @@ internal class CryptoManager @Inject constructor(
      *
      * @param listener listener
      */
-    fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener) {
+    override fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener) {
         incomingRoomKeyRequestManager.removeRoomKeysRequestListener(listener)
     }
 

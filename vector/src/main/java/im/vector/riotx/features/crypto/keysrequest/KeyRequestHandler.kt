@@ -54,16 +54,25 @@ import kotlin.collections.HashMap
  */
 
 @Singleton
-class KeyRequestHandler @Inject constructor(val context: Context,
-                                            val session: Session)
+class KeyRequestHandler @Inject constructor(val context: Context)
     : RoomKeysRequestListener,
-      SasVerificationService.SasVerificationListener {
+        SasVerificationService.SasVerificationListener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
 
-    init {
+    var session: Session? = null
+
+
+    fun start(session: Session) {
+        this.session = session
         session.getSasVerificationService().addListener(this)
         session.addRoomKeysRequestListener(this)
+    }
+
+    fun stop() {
+        session?.getSasVerificationService()?.removeListener(this)
+        session?.removeRoomKeysRequestListener(this)
+        session = null
     }
 
     /**
@@ -92,7 +101,7 @@ class KeyRequestHandler @Inject constructor(val context: Context,
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
         //Add a notification for every incoming request
-        session.downloadKeys(Arrays.asList(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
+        session?.downloadKeys(Arrays.asList(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
                 val deviceInfo = data.getObject(deviceId, userId)
 
@@ -103,12 +112,12 @@ class KeyRequestHandler @Inject constructor(val context: Context,
                 }
 
                 if (deviceInfo.isUnknown) {
-                    session.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceId, userId)
+                    session?.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceId, userId)
 
                     deviceInfo.verified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
 
                     //can we get more info on this device?
-                    session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+                    session?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
                         override fun onSuccess(data: DevicesListResponse) {
                             data.devices?.find { it.deviceId == deviceId }?.let {
                                 postAlert(context, userId, deviceId, true, deviceInfo, it)
@@ -195,8 +204,8 @@ class KeyRequestHandler @Inject constructor(val context: Context,
                 Runnable {
                     alert.weakCurrentActivity?.get()?.let {
                         val intent = SASVerificationActivity.outgoingIntent(it,
-                                                                            session.sessionParams.credentials.userId,
-                                                                            userId, deviceId)
+                                session?.sessionParams?.credentials?.userId ?: "",
+                                userId, deviceId)
                         it.startActivity(intent)
                     }
                 },
@@ -247,8 +256,8 @@ class KeyRequestHandler @Inject constructor(val context: Context,
         val alertMgrUniqueKey = alertManagerId(deviceId!!, userId!!)
         alertsToRequests[alertMgrUniqueKey]?.removeAll {
             it.deviceId == request.deviceId
-            && it.userId == request.userId
-            && it.requestId == request.requestId
+                    && it.userId == request.userId
+                    && it.requestId == request.requestId
         }
         if (alertsToRequests[alertMgrUniqueKey]?.isEmpty() == true) {
             PopupAlertManager.cancelAlert(alertMgrUniqueKey)
