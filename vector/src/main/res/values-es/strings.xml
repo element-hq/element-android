@@ -1083,7 +1083,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_call_category">Llamadas</string>
     <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Riot para llamadas entrantes</string>
     <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
-    <string name="settings_call_ringtone_dialog_title">Eligir sonido de llamadas:</string>
+    <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
 
     <string name="video_call_in_progress">Llamada de video en proceso…</string>
 
@@ -1106,7 +1106,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">No quiero mis mensajes cifrados</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Creando copia de seguridad de las claves…</string>
     <string name="keys_backup_activate">Usar copia de seguridad de la clave</string>
-    <string name="are_you_sure">¿Esta seguro\?</string>
+    <string name="are_you_sure">¿Estás seguro\?</string>
     <string name="backup">Copia de seguridad</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perderá el acceso a sus mensajes cifrados si cierra sesión sin hacer una copia de seguridad de sus claves.</string>
 
@@ -1448,5 +1448,124 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 \nSi no ha establecido un nuevo método de recuperación, alguien podría estar intentando acceder a su cuenta. Cambie su contraseña y establezca un nuevo método de recuperación inmediatamente en ajustes.</string>
     <string name="autodiscover_invalid_response">Respuesta inválida del descubrimiento del servidor doméstico</string>
     <string name="settings_play_shutter_sound">Reproducir sonido de cámara</string>
+
+    <string name="title_activity_verify_device">Verificar dispositivo</string>
+
+    <string name="encryption_information_unknown_ip">ip desconocida</string>
+    <string name="you_added_a_new_device_with_info">Un nuevo dispositivo solicita claves de cifrado.
+\nDispositivo: %1$s
+\nVisto por última vez: %2$s
+\nSi no inicias sesión en otros dispositivos ignora esta solicitud.</string>
+    <string name="your_unverified_device_requesting_with_info">Un dispositivo no verificado solicita claves de cifrado.
+\nDispositivo: %1$s
+\nVisto por última vez: %2$s
+\nSi no inicias sesión en otros dispositivos ignora esta solicitud.</string>
+
+    <string name="start_verification_short_label">Verificar</string>
+    <string name="share_without_verifying_short_label">Compartir</string>
+    <string name="key_share_request">Petición de compartición de clave</string>
+    <string name="ignore_request_short_label">Ignorar</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Ya existe una copia de respaldo en tu servidor</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Parece que ya habías configurado una clave para copias de respaldo en otro dispositivo. ¿Quieres reemplazarla por la nueva que has creado\?</string>
+    <string name="keys_backup_setup_override_replace">Reemplazar</string>
+    <string name="keys_backup_setup_override_stop">Parar</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Comprobando copias de respaldo</string>
+    <string name="invalid_or_expired_credentials">Tu sesión ha terminado por credenciales caducadas o inválidas.</string>
+
+    <string name="sas_verify_title">Verificar comparando un texto corto.</string>
+    <string name="sas_security_advise">Para más seguridad, te recomendamos que hagas esto en persona o por otros medios confiables.</string>
+    <string name="sas_verify_start_button_title">Empezar verificación</string>
+    <string name="sas_incoming_request_title">Solicitud de verificación</string>
+    <string name="sas_incoming_request_description">Verifica este dispositivo para marcarlo como confiable. Confiar en dispositivos de otros te da aún más tranquilidad cuando usas cifrado punto a punto de mensajes.</string>
+    <string name="sas_incoming_request_description_2">Verificar este dispositivo lo marcará como confiable, y también marcará como confiable tu dispositivo para la contraparte.</string>
+
+    <string name="sas_emoji_description">Verifica este dispositivo confirmando el emoji que aparece en la pantalla de la contraparte.</string>
+    <string name="sas_decimal_description">Verifica este dispositivo confirmando que los siguietes números aparecen en la pantalla de la contraparte</string>
+
+    <string name="sas_incoming_verification_request_dialog">Se ha recibido una solicitud de verificación.</string>
+    <string name="sas_view_request_action">Ver solicitud</string>
+    <string name="sas_waiting_for_partner">Esperando confirmación de la contraparte…</string>
+
+    <string name="sas_verified">¡Verificado!</string>
+    <string name="sas_verified_successful">Has verificado correctamente este dispositivo.</string>
+    <string name="sas_verified_successful_description">Los mensajes con este usuario están cifrados punto a punto y no son legible por terceros.</string>
+    <string name="sas_got_it">Ok</string>
+
+    <string name="sas_verifying_keys">¿No aparece nada\? No todas las aplicaciones cliente soportan verificación interactiva. Usa la verificación clásica.</string>
+    <string name="sas_legacy_verification_button_title">Usar verificación clásica</string>
+
+    <string name="sas_verification_request_notification_channel_title">Verificación de clave</string>
+    <string name="sas_cancelled_dialog_title">Solicitud cancelada</string>
+    <string name="sas_cancelled_by_other">La contraparte canceló la verificación.
+\n%s</string>
+    <string name="sas_cancelled_by_me">La verificación ha sido cancelada.
+\nRazón: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Verificación de dispositivo interactiva</string>
+    <string name="sas_incoming_request_notif_title">Solicitud de verificación</string>
+    <string name="sas_incoming_request_notif_content">%s quiere verificar tu dispositivo</string>
+
+    <string name="sas_error_m_user">El usuario canceló la verificación</string>
+    <string name="sas_error_m_timeout">La verificación ha superado el límite de espera</string>
+    <string name="sas_error_m_unexpected_message">El dispositivo recibió un mensaje inesperado</string>
+    <string name="sas_error_m_invalid_message">Se ha recibido un mensaje inválido</string>
+    <string name="sas_error_m_key_mismatch">Error en clave</string>
+    <string name="sas_error_m_user_error">Error en usuario</string>
+    <string name="sas_error_unknown">Error desconocido</string>
+
+
+    <string name="edit">Editar</string>
+    <string name="reply">Responder</string>
+
+    <string name="global_retry">Reintentar</string>
+    <string name="room_list_empty">Unirse a una sala y empezar a usar la app.</string>
+    <string name="send_you_invite">Alguien te envió una invitación</string>
+    <string name="invited_by">Invitado por %s</string>
+
+    <string name="room_list_catchup_empty_body">No tienes más mensajes sin leer</string>
+    <string name="room_list_catchup_welcome_title">¡Bienvenido!</string>
+    <string name="room_list_people_empty_title">Conversaciones</string>
+    <string name="room_list_people_empty_body">Tus conversaciones 1 a 1 se mostrarán aquí</string>
+    <string name="room_list_rooms_empty_title">Salas</string>
+    <string name="room_list_rooms_empty_body">Tus salas se mostrarán aquí</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reacciones</string>
+    <string name="reactions_agree">De acuerdo</string>
+    <string name="reactions_like">Me gusta</string>
+    <string name="message_add_reaction">Añadir reacción</string>
+    <string name="message_view_reaction">Ver reacciones</string>
+    <string name="reactions">Reacciones</string>
+
+    <string name="event_redacted_by_user_reason">Evento borrado por el usuario</string>
+    <string name="event_redacted_by_admin_reason">Evento moderado por el administrador de la sala</string>
+    <string name="last_edited_info_message">Última edición por %s on %s</string>
+
+
+    <string name="malformed_message">Evento con error, no se puede mostrar</string>
+    <string name="create_new_room">Crear sala</string>
+    <string name="error_no_network">No hay red, por favor comprueba tu conexión a internet.</string>
+    <string name="action_change">Cambiar</string>
+    <string name="change_room_directory_network">Cambiar red</string>
+    <string name="please_wait">Espere por favor…</string>
+    <string name="group_all_communities">Todas la comunidades</string>
+
+    <string name="room_preview_no_preview">Esta sala no se puede previsualizar</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">La previsualización de salas públicas no es posible todavía con RiotX</string>
+
+    <string name="fab_menu_create_room">Salas</string>
+    <string name="fab_menu_create_chat">Mensajes directos</string>
+
+    <string name="create_room_title">Nueva sala</string>
+    <string name="create_room_action_create">CREAR</string>
+    <string name="create_room_name_hint">Nombre de la sala</string>
+    <string name="create_room_public_title">Público</string>
+    <string name="create_room_public_description">Cualquiera puede unirse a esta sala</string>
+    <string name="create_room_directory_title">Directorio de salas</string>
+    <string name="create_room_directory_description">Publicar esta sala en el directorio de salas</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Error obteniendo información de confiabilidad</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Error obteniendo claves para copias de respaldo</string>
 
 </resources>

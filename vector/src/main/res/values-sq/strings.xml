@@ -863,12 +863,10 @@
     <string name="permissions_rationale_msg_camera_and_audio">Për të kryer thirrje video, Riot-i lyp leje të përdorë kamerën dhe mikrofonin tuaj.
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluskat pasuese, që të jetë në gjendje të bëjë thirrjen.</string>
-    <string name="permissions_rationale_msg_contacts">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Riot-i lyp leje të përdorë kontaktet e librit tuaj të adresave.
-\n
-\nJu lutemi, lejoni përdorimin, që nga flluska pasuese, që të zbulohen te libri i adresave përdorues të kapshëm që nga Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Riot-i lyp leje të përdorë kontakte nga libri juaj i adresave.
-\n
-\nTë lejohet Riot-i të hyjë në kontaktet tuaja\?</string>
+    <string name="permissions_rationale_msg_contacts">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Riot-i mund të kërkojë në librin tuaj të adresave. Nëse jeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim, ju lutemi, lejojeni hyrjen gjatë flluskës pasuese.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Riot-i mund të kërkojë në librin tuaj të adresave. 
+\n 
+\nJeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Na ndjeni. Veprimi nuk u krye, për shkak lejesh që mungojnë</string>
 
@@ -1387,10 +1385,10 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="sas_incoming_request_description">Që t’i vihet shenjë si e besuar, verifikojeni këtë pajisje. Besimi i pajisjeve të partnerëve ju jep ca qetësi më tepër kur përdoren mesazhe të fshehtëzuar skaj-më-skaj.</string>
     <string name="sas_incoming_request_description_2">Verifikimi i kësaj pajisje do ta shënojë atë të besuar, dhe tuajën si të besuar te partneri.</string>
 
-    <string name="sas_emoji_description">Verifikojeni këtë pajisje duke ripohuar shfaqjen e emoji-t vijues në skenën e partnerit.</string>
+    <string name="sas_emoji_description">Verifikojeni këtë pajisje duke ripohuar shfaqjen e emoji-t vijues në skenën e partnerit</string>
     <string name="sas_decimal_description">Verifikojeni këtë pajisje duke ripohuar se numri vijues shfaqet në ekranin e partnerit</string>
 
-    <string name="sas_incoming_verification_request_dialog">Morët një kërkesë verifikimi të ardhur</string>
+    <string name="sas_incoming_verification_request_dialog">Morët një kërkesë verifikimi të ardhur.</string>
     <string name="sas_view_request_action">Shihni kërkesën</string>
     <string name="sas_waiting_for_partner">Po pritet ripohimi nga partneri…</string>
 
@@ -1423,5 +1421,67 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="sas_error_m_key_mismatch">Mospërputhje kyçesh</string>
     <string name="sas_error_m_user_error">Mospërputhje përdoruesish</string>
     <string name="sas_error_unknown">Gabim i Panjohur</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Ka tashmë një kopjeruajtje te Shërbyesi juaj Home</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Duket sikur keni tashmë kopjeruajtje kyçesh nga një pajisje tjetër. Doni të zëvendësohet me atë që po krijoni\?</string>
+    <string name="keys_backup_setup_override_replace">Zëvendësoje</string>
+    <string name="keys_backup_setup_override_stop">Ndale</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Po kontrollohet gjendje kopjeruajtje</string>
+    <string name="invalid_or_expired_credentials">Jeni nxjerrë nga llogari për shkak kredencialesh të pavlefshme ose të skaduara.</string>
+
+    <string name="edit">Përpunoni</string>
+    <string name="reply">Përgjigjuni</string>
+
+    <string name="global_retry">Riprovo</string>
+    <string name="room_list_empty">Që të filloni të përdorni aplikacionin, merrni pjesë në një dhomë.</string>
+    <string name="send_you_invite">Ju dërgoi një ftesë</string>
+    <string name="invited_by">Ftuar nga %s</string>
+
+    <string name="room_list_catchup_empty_title">S’keni më!</string>
+    <string name="room_list_catchup_empty_body">S’keni më mesazhe të palexuar</string>
+    <string name="room_list_catchup_welcome_title">Mirë se vini në vatër!</string>
+    <string name="room_list_catchup_welcome_body">Mbaroni punë me mesazhet e palexuara</string>
+    <string name="room_list_people_empty_title">Biseda</string>
+    <string name="room_list_people_empty_body">Biseda përmes mesazhesh të drejtpërdrejta do të shfaqet këtu</string>
+    <string name="room_list_rooms_empty_title">Dhoma</string>
+    <string name="room_list_rooms_empty_body">Dhomat tuaja do të shfaqen këtu</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reagime</string>
+    <string name="reactions_agree">Pajtohem</string>
+    <string name="reactions_like">E pëlqej</string>
+    <string name="message_add_reaction">Shtoni Reagim</string>
+    <string name="message_view_reaction">Shihni Reagime</string>
+    <string name="reactions">Reagime</string>
+
+    <string name="event_redacted_by_user_reason">Veprimtari e fshirë nga përdorues</string>
+    <string name="event_redacted_by_admin_reason">Veprimtari e moderuar nga përgjegjës dhome</string>
+    <string name="last_edited_info_message">Përpunuar së fundi nga %s më %s</string>
+
+
+    <string name="malformed_message">Veprimtari e keqformuar, s’mund të shfaqet</string>
+    <string name="create_new_room">Krijoni Dhomë të Re</string>
+    <string name="error_no_network">S’ka rrjet. Ju lutemi, kontrolloni lidhjen tuaj në Internet.</string>
+    <string name="action_change">Ndryshoje</string>
+    <string name="change_room_directory_network">Ndryshoni rrjetin</string>
+    <string name="please_wait">Ju lutemi, pritni…</string>
+    <string name="group_all_communities">Krejt Bashkësitë</string>
+
+    <string name="room_preview_no_preview">Kjo dhomë s’mund të parashihet</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Paraparja e dhomave të lexueshme nga bota nuk mbulohet ende në RiotX</string>
+
+    <string name="fab_menu_create_room">Dhoma</string>
+    <string name="fab_menu_create_chat">Mesazhe të Drejtpërdrejtë</string>
+
+    <string name="create_room_title">Dhomë e Re</string>
+    <string name="create_room_action_create">KRIJOJE</string>
+    <string name="create_room_name_hint">Emër dhome</string>
+    <string name="create_room_public_title">Publike</string>
+    <string name="create_room_public_description">Kushdo do të jetë në gjendje të marrë pjesë në këtë dhomë</string>
+    <string name="create_room_directory_title">Drejtori Dhomash</string>
+    <string name="create_room_directory_description">Bëje publike këtë dhomë te drejtoria e dhomave</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Ndodhi një gabim gjatë marrjes së të dhënave të besueshmërisë</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Ndodhi një gabim teksa merreshin të dhëna kopjeruajtjeje kyçesh</string>
 
 </resources>

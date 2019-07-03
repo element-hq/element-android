@@ -107,7 +107,7 @@
     <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
     <string name="send_bug_report_failed">El reporte de error no se pudo enviar (%s)</string>
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
-    <string name="send_bug_report_app_crashed">La aplicación se suspenió en la ultima sesión. ¿Te gustaría enviar un informe de fallas?</string>
+    <string name="send_bug_report_app_crashed">La aplicación se suspendió en la ultima sesión. ¿Te gustaría enviar un informe de fallas\?</string>
 
     <string name="send_files_in">Enviar a</string>
     <string name="read_receipt">Leer</string>
@@ -116,7 +116,7 @@
     <string name="username">Nombre</string>
     <string name="create_account">Registrar</string>
     <string name="login">Iniciar sesión</string>
-    <string name="logout">Salir</string>
+    <string name="logout">Cerrar sesión</string>
     <string name="hs_url">Enlace de el Servidor</string>
     <string name="identity_url">Enlace del Servidor Entidad</string>
     <string name="search">Buscar</string>
@@ -130,7 +130,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Iniciar sesión</string>
-    <string name="auth_register">Registrar</string>
+    <string name="auth_register">Crear cuenta</string>
     <string name="auth_submit">Entregar</string>
     <string name="auth_skip">Omitir</string>
     <string name="auth_send_reset_email">Enviar Correo Electrónico de Reinicio</string>
@@ -263,7 +263,7 @@ Disculpe por la inconveniencia.</string>
     <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
     <string name="media_slider_saved_message">Guardar en Descargas</string>
-    <string name="yes">SI</string>
+    <string name="yes">SÍ</string>
     <string name="no">NO</string>
     <string name="_continue">Continuar</string>
 
@@ -331,7 +331,7 @@ Disculpe por la inconveniencia.</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Buscar</string>
-    <string name="room_one_user_is_typing">%s esta escribiendo…</string>
+    <string name="room_one_user_is_typing">%s está escribiendo…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s están escribiendo…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; otros están escribiendo…</string>
     <string name="room_message_placeholder_encrypted">Enviar mensaje cifrado…</string>
@@ -756,7 +756,7 @@ Dispositivos desconocidos:</string>
 
     <string name="dialog_title_error">Error</string>
 
-    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
+    <string name="home_filter_placeholder_groups">Filtrar nombres de comunidades</string>
 
     <string name="system_alerts_header">Alertas de Sistema</string>
 
@@ -771,4 +771,15 @@ Dispositivos desconocidos:</string>
     <string name="settings_containing_my_display_name">Mensajes que contienen mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contienen mi nombre de usuario</string>
     <string name="call_anyway">Llamar de todos modos</string>
+    <string name="title_activity_verify_device">Verificar dispositivo</string>
+
+    <string name="settings_call_category">Llamadas</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Riot para llamadas entrantes</string>
+    <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
+    <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
+
+    <string name="reason_hint">Razón</string>
+
+    <string name="room_message_placeholder_reply_to_encrypted">Enviar una respuesta cifrada…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Enviar una respuesta (sin cifrar)…</string>
 </resources>

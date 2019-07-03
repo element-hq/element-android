@@ -689,12 +689,12 @@
     <string name="permissions_rationale_msg_camera_and_audio">Riot иска разшерение за достъп до микрофона и камерата Ви, за да извърши видео разговор.
 
 Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
-    <string name="permissions_rationale_msg_contacts">Riot иска разшерение за достъп до контактите Ви, за да намери други Matrix потребители по имейл или телефонен номер.
-
-Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да намирате потребители на Riot от Вашите контакти.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot иска разрешение за достъп до контактите Ви, за да намери други Matrix потребители по имейл или телефонен номер.
-
-Позволяване на достъп до контактите Ви?</string>
+    <string name="permissions_rationale_msg_contacts">Riot може да провери контактите ви, за да намери други Matrix потребители по имейл или телефонен номер.
+\n
+\nАко сте съгласни да споделите списъка с контактите си за тази цел, моля разрешете достъп при предстоящото запитване.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot може да провери контактите ви, за да намери други Matrix потребители по имейл и телефонен номер.
+\n
+\nРазрешавате ли да се сподели списъка с контакти за тази цел\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Извинете. Операцията не е извършена поради липсващи разрешения за достъп</string>
 
@@ -1452,5 +1452,67 @@
     <string name="sas_error_m_key_mismatch">Несъответствие в ключовете</string>
     <string name="sas_error_m_user_error">Несъответствие в потребителя</string>
     <string name="sas_error_unknown">Неизвестна грешка</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Вече съществува резервно копие на сървъра</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Изглежда вече сте настройли резервно копие от друго устройство. Искате ли да го замените с това, което създавате сега\?</string>
+    <string name="keys_backup_setup_override_replace">Замени</string>
+    <string name="keys_backup_setup_override_stop">Спри</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Проверка на състоянието на резервното копие</string>
+    <string name="invalid_or_expired_credentials">Бяхте изхвърлени от профила поради невалидни или изтекли данни за достъп.</string>
+
+    <string name="edit">Редактирай</string>
+    <string name="reply">Отговори</string>
+
+    <string name="global_retry">Опитай пак</string>
+    <string name="room_list_empty">Влезте в стая за да започнете да използвате приложението.</string>
+    <string name="send_you_invite">Ви изпрати покана</string>
+    <string name="invited_by">Покана от %s</string>
+
+    <string name="room_list_catchup_empty_title">Наваксали сте с всичко!</string>
+    <string name="room_list_catchup_empty_body">Няма повече непрочетени съобщения</string>
+    <string name="room_list_catchup_welcome_title">Добре дошли вкъщи!</string>
+    <string name="room_list_catchup_welcome_body">Наваксайте с непрочетените съобщения тук</string>
+    <string name="room_list_people_empty_title">Кореспонденции</string>
+    <string name="room_list_people_empty_body">Вашите директни кореспонденции се показват тук</string>
+    <string name="room_list_rooms_empty_title">Стаи</string>
+    <string name="room_list_rooms_empty_body">Вашите стаи се показват тук</string>
+
+    <string name="title_activity_emoji_reaction_picker">Реакции</string>
+    <string name="reactions_agree">Съгласен съм</string>
+    <string name="reactions_like">Харесвам</string>
+    <string name="message_add_reaction">Добави реакция</string>
+    <string name="message_view_reaction">Виж реакциите</string>
+    <string name="reactions">Реакции</string>
+
+    <string name="event_redacted_by_user_reason">Събитие изтрито от потребителя</string>
+    <string name="event_redacted_by_admin_reason">Събитие модерирано от администратор на стаята</string>
+    <string name="last_edited_info_message">Последно редактирано от %s на %s</string>
+
+
+    <string name="malformed_message">Повредено събитие, не може да се покаже</string>
+    <string name="create_new_room">Създай нова стая</string>
+    <string name="error_no_network">Няма мрежа. Проверете интернет връзката си.</string>
+    <string name="action_change">Промени</string>
+    <string name="change_room_directory_network">Промени мрежата</string>
+    <string name="please_wait">Изчакайте…</string>
+    <string name="group_all_communities">Всички общности</string>
+
+    <string name="room_preview_no_preview">Тази стая не може да бъде прегледана</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Прегледа на стаи четими от цял свят все още не се поддържа от RiotX</string>
+
+    <string name="fab_menu_create_room">Стаи</string>
+    <string name="fab_menu_create_chat">Директни съобщения</string>
+
+    <string name="create_room_title">Нова стая</string>
+    <string name="create_room_action_create">СЪЗДАЙ</string>
+    <string name="create_room_name_hint">Име на стая</string>
+    <string name="create_room_public_title">Публична</string>
+    <string name="create_room_public_description">Всеки ще може да се присъедини към стаята</string>
+    <string name="create_room_directory_title">Директория със стаи</string>
+    <string name="create_room_directory_description">Публикувай стаята в директорията със стаи</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Случи се грешка при извличане на информацията за довереността</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Случи се грешка при извличане на резервните данни за ключовете</string>
 
 </resources>

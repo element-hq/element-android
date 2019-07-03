@@ -246,12 +246,10 @@ Elnézést a kellemetlenségért.</string>
     <string name="permissions_rationale_msg_camera_and_audio">"A Riot-nak engedély szükséges a mikrofonod  és kamerád eléréséhez, hogy tudj videóhívást kezdeményezni.
 
 Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni."</string>
-    <string name="permissions_rationale_msg_contacts">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni e-mail és telefonszám alapján.
-
-Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj címjegyzék-kapcsolatok találni a Riot-tal.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni e-mail és telefonszám alapján.
-
-Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
+    <string name="permissions_rationale_msg_contacts">A Riot a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar. Ha egyetértesz a névjegyek ilyen célú megosztásával, kérlek engedélyezd a hozzáférést a következő felugró üzenetben.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">A Riot a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar. 
+\n
+\nEgyetértesz a névjegyek ilyen célú megosztásával\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">"Elnézést.  A művelet nem lett végre hajtva hiányzó engedélyek miatt"</string>
 
@@ -1465,5 +1463,67 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="sas_error_m_key_mismatch">Kulcsok nem egyeznek</string>
     <string name="sas_error_m_user_error">A felhasználó nem egyezik</string>
     <string name="sas_error_unknown">Ismeretlen Hiba</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Mentés már létezik a Matrix szervereden</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Úgy látszik már rendelkezel kulcs mentéssel egy másik eszközön. Lecseréled azzal amit most készítesz\?</string>
+    <string name="keys_backup_setup_override_replace">Csere</string>
+    <string name="keys_backup_setup_override_stop">Állj</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Mentés állapot ellenőrzése</string>
+    <string name="invalid_or_expired_credentials">Érvénytelen vagy lejárt jelszó miatt kiléptél.</string>
+
+    <string name="edit">Szerkeszt</string>
+    <string name="reply">Válasz</string>
+
+    <string name="global_retry">Újra</string>
+    <string name="room_list_empty">Lépj be egy szobába, hogy kezd el használni az alkalmazást.</string>
+    <string name="send_you_invite">Meghívód elküldve</string>
+    <string name="invited_by">Meghívta: %s</string>
+
+    <string name="room_list_catchup_empty_title">Minden megvan!</string>
+    <string name="room_list_catchup_empty_body">Nincs olvasatlan üzeneted</string>
+    <string name="room_list_catchup_welcome_title">Üdvözöllek itthon!</string>
+    <string name="room_list_catchup_welcome_body">Olvasd el az olvasatlan üzeneteket itt</string>
+    <string name="room_list_people_empty_title">Beszélgetések</string>
+    <string name="room_list_people_empty_body">A közvetlen beszélgetéseidet itt láthatod</string>
+    <string name="room_list_rooms_empty_title">Szobák</string>
+    <string name="room_list_rooms_empty_body">A szobáidat itt láthatod</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reakciók</string>
+    <string name="reactions_agree">Egyetértek</string>
+    <string name="reactions_like">Kedvelem</string>
+    <string name="message_add_reaction">Reakció hozzáadása</string>
+    <string name="message_view_reaction">Reakciók megjelenítése</string>
+    <string name="reactions">Reakciók</string>
+
+    <string name="event_redacted_by_user_reason">Az eseményt a felhasználó törölte</string>
+    <string name="event_redacted_by_admin_reason">Az eseményt a szoba adminisztrátora moderálta</string>
+    <string name="last_edited_info_message">Utoljára szerkesztette: %s ekkor: %s</string>
+
+
+    <string name="malformed_message">Hibás esemény, nem lehet megjeleníteni</string>
+    <string name="create_new_room">Új szoba készítése</string>
+    <string name="error_no_network">Nincs hálózat. Ellenőrizd az Internet kapcsolatodat.</string>
+    <string name="action_change">Változtat</string>
+    <string name="change_room_directory_network">Hálózat megváltoztatása</string>
+    <string name="please_wait">Kérlek várj…</string>
+    <string name="group_all_communities">Minden közösség</string>
+
+    <string name="room_preview_no_preview">Ennek a szobának nincs előnézete</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">A RiotX-ben a nyilvános szoba előnézete egyenlőre nem támogatott</string>
+
+    <string name="fab_menu_create_room">Szobák</string>
+    <string name="fab_menu_create_chat">Közvetlen üzenetek</string>
+
+    <string name="create_room_title">Új szoba</string>
+    <string name="create_room_action_create">KÉSZÍT</string>
+    <string name="create_room_name_hint">Szoba neve</string>
+    <string name="create_room_public_title">Nyilvános</string>
+    <string name="create_room_public_description">Bárki csatlakozhat ehhez a szobához</string>
+    <string name="create_room_directory_title">Szobák listája</string>
+    <string name="create_room_directory_description">A szoba közzététele a szobák listájában</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">A megbízhatósági információ beszerzésekor hiba történt</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">A kulcs mentés adatainak beszerzésekor hiba történt</string>
 
 </resources>

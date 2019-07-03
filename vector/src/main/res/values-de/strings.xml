@@ -263,12 +263,9 @@ Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</str
     <string name="permissions_rationale_msg_camera_and_audio">Riot benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe durchführen zu können.
 
 Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
-    <string name="permissions_rationale_msg_contacts">Riot benötigt die Berechtigung, auf deine Kontakte im Adressbuch zugreifen zu können, um andere Matrix-Benutzer mit Hilfe ihrer E-Mail-Adresse oder Telefonnummer zu finden.
-
-Bitte erlaube den Zugriff im nächsten Dialog, um Kontakte im Adressbuch zu finden, die über Riot erreichbar sind.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot benötigt die Berechtigung, auf deine Adressbuch-Kontakte zugreifen zu dürfen, um andere Matrix-Benutzer mit Hilfe ihrer E-Mail-Adresse und/oder ihrer Telefonnummer finden zu können.
-
-Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
+    <string name="permissions_rationale_msg_contacts">Riot kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden.
+\nStimmst du der Nutzung deines Adressbuchs zu diesem Zweck zu\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Entschuldige. Die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
 
@@ -1454,5 +1451,104 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="notification_inline_reply_failed">** Fehler beim Senden - bitte Raum öffnen</string>
 
     <string name="error_jitsi_not_supported_on_old_device">Entschuldige, doch Konferenzgespräche mittels Jitsi wird auf alten Geräten nicht unterstützt (älter als Android 5.0)</string>
+
+    <string name="title_activity_verify_device">Gerät verifizieren</string>
+
+    <string name="encryption_information_unknown_ip">Unbekannte IP-Adresse</string>
+    <string name="you_added_a_new_device_with_info">Ein neues Gerät fordert Verschlüsselungs-Schlüssel an.
+\nGerätename: %1$s
+\nZuletzt gesehen: %2$s
+\nWenn du dich nicht auf einem anderen Gerät angemeldet hast, ignoriere diese Anfrage.</string>
+    <string name="your_unverified_device_requesting_with_info">Ein unverifiziertes Gerät fordert Verschlüsselungs-Schlüssel an.
+\nGerätename: %1$s
+\nZuletzt gesehen: %2$s
+\nWenn du dich nicht auf einem anderen Gerät angemeldet hast, ignoriere diese Anfrage.</string>
+
+    <string name="start_verification_short_label">Verifizieren</string>
+    <string name="share_without_verifying_short_label">Teilen</string>
+    <string name="ignore_request_short_label">Ignorieren</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Auf deinem HomeServer existiert bereits eine Sicherung</string>
+    <string name="keys_backup_setup_override_replace">Ersetzen</string>
+    <string name="keys_backup_setup_override_stop">Stopp</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Überprüfe Sicherungsstatus</string>
+    <string name="invalid_or_expired_credentials">Du wurdest abgemeldet, da deine Anmeldedaten falsch oder abgelaufen sind.</string>
+
+    <string name="sas_verify_title">Verifizieren durch Vergleichen eines kurzen Satzes.</string>
+    <string name="sas_verify_start_button_title">Starte Verifizierung</string>
+    <string name="sas_incoming_request_title">Eingehende Verifizierungsanfrage</string>
+    <string name="sas_incoming_verification_request_dialog">Du hast eine eingehende Verifikationsanfrage erhalten.</string>
+    <string name="sas_view_request_action">Anfragen ansehen</string>
+    <string name="sas_waiting_for_partner">Warte auf Bestätigung des Partners…</string>
+
+    <string name="sas_verified">Verifiziert!</string>
+    <string name="sas_verified_successful">Du hast dieses Gerät erfolgreich verifiziert.</string>
+    <string name="sas_verified_successful_description">Sichere Nachrichten mit diesem Benutzer sind Ende-zu-Ende-verschlüsselt und können nicht von Dritten mitgelesen werden.</string>
+    <string name="sas_got_it">Verstanden</string>
+
+    <string name="sas_verification_request_notification_channel_title">Schlüsselverifikation</string>
+    <string name="sas_cancelled_dialog_title">Anfrage abgebrochen</string>
+    <string name="sas_cancelled_by_me">Die Verifizierung ist abgebrochen.
+\nGrund: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Interaktive Geräteverifizierung</string>
+    <string name="sas_incoming_request_notif_title">Verifikationsanfrage</string>
+    <string name="sas_incoming_request_notif_content">%s möchte dein Gerät verifizieren</string>
+
+    <string name="sas_error_m_user">Der Benutzer hat die Verifizierung abgebrochen</string>
+    <string name="sas_error_m_timeout">Der Verifizierungsprozess ist abgelaufen</string>
+    <string name="sas_error_m_unexpected_message">Das Gerät hat eine unerwartete Nachricht erhalten</string>
+    <string name="sas_error_m_invalid_message">Eine ungültige Nachricht wurde empfangen</string>
+    <string name="sas_error_unknown">Unbekannter Fehler</string>
+
+
+    <string name="edit">Bearbeiten</string>
+    <string name="reply">Antworten</string>
+
+    <string name="global_retry">Wiederholen</string>
+    <string name="room_list_empty">Trete einem Raum bei um die App zu benutzen.</string>
+    <string name="send_you_invite">Hat dir eine Einladung gesendet</string>
+    <string name="invited_by">Eingeladen von %s</string>
+
+    <string name="room_list_catchup_empty_title">Du bist auf dem neuesten Stand!</string>
+    <string name="room_list_catchup_empty_body">Du hast keine weiteren, ungelesenen Nachrichten</string>
+    <string name="room_list_catchup_welcome_title">Willkommen zu Hause!</string>
+    <string name="room_list_people_empty_title">Unterhaltungen</string>
+    <string name="room_list_rooms_empty_title">Räume</string>
+    <string name="room_list_rooms_empty_body">Deine Räume werden hier angezeigt</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reaktionen</string>
+    <string name="reactions_agree">Zustimmen</string>
+    <string name="reactions_like">Mag ich</string>
+    <string name="message_add_reaction">Reaktion hinzufügen</string>
+    <string name="message_view_reaction">Reaktionen ansehen</string>
+    <string name="reactions">Reaktionen</string>
+
+    <string name="event_redacted_by_user_reason">Ereignis von Benutzer gelöscht</string>
+    <string name="event_redacted_by_admin_reason">Ereignis moderiert durch Raum-Administrator</string>
+    <string name="last_edited_info_message">Zuletzt bearbeitet von %s am %s</string>
+
+
+    <string name="create_new_room">Neuen Raum erstellen</string>
+    <string name="error_no_network">Kein Netzwerk. Bitte überprüfe deine Internetverbindung.</string>
+    <string name="action_change">Ändern</string>
+    <string name="change_room_directory_network">Netzwerk wechseln</string>
+    <string name="please_wait">Bitte warten…</string>
+    <string name="group_all_communities">Alle Gemeinschaften</string>
+
+    <string name="room_preview_no_preview">Für diesen Raum kann keine Vorschau angezeigt werden</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Die Vorschau von öffentlichen Räumen wird von RiotX noch nicht unterstützt</string>
+
+    <string name="fab_menu_create_room">Räume</string>
+    <string name="fab_menu_create_chat">Direktnachrichten</string>
+
+    <string name="create_room_title">Neuer Raum</string>
+    <string name="create_room_action_create">ERSTELLEN</string>
+    <string name="create_room_name_hint">Raumname</string>
+    <string name="create_room_public_title">Öffentlich</string>
+    <string name="create_room_public_description">Jeder wird diesem Raum beitreten können</string>
+    <string name="create_room_directory_title">Raumverzeichnis</string>
+    <string name="create_room_directory_description">Veröffentliche diesen Raum ins Raumverzeichnis</string>
 
 </resources>

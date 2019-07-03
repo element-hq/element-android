@@ -273,12 +273,10 @@ Per favore dai l\'autorizzazione nella prossima finestra al fine di effettuare l
     <string name="permissions_rationale_msg_camera_and_audio">Riot necessita del permesso di accedere alla fotocamera ed al microfono per eseguire videochiamate.
 
 Per favore consenti l\'accesso nella prossima finestra per potere effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_contacts">Riot necessita del permesso di accedere alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
-
-Per favore consenti l\'accesso nella prossima finestra in modo da scoprire i contatti in rubrica raggiungibili da Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot necessita del permesso di accedere alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
-
-Consentire a Riot di accedere ai tuoi contatti?</string>
+    <string name="permissions_rationale_msg_contacts">Riot può accedere alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono. Se sei d\'accordo sulla condivisione della tua rubrica a questo scopo, consenti l\'accesso nella prossima finestra.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot può accedere alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
+\n
+\nSei d\'accordo sulla condivisione della tua rubrica a questo scopo\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Spiacente. Azione non eseguita a causa di mancate autorizzazioni</string>
 
@@ -1510,5 +1508,66 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="sas_error_m_key_mismatch">Chiave non corrispondente</string>
     <string name="sas_error_m_user_error">Utente non corrispondente</string>
     <string name="sas_error_unknown">Errore sconosciuto</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Esiste già un backup sul tuo HomeServer</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Sembra che tu abbia già impostato un backup chiavi da un altro dispositivo. Vuoi sostituirlo con quello che stai creando\?</string>
+    <string name="keys_backup_setup_override_replace">Sostituisci</string>
+    <string name="keys_backup_setup_override_stop">Ferma</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Controllo stato del backup</string>
+    <string name="invalid_or_expired_credentials">Sei stato disconnesso a causa di credenziali non valide o scadute.</string>
+
+    <string name="edit">Modifica</string>
+    <string name="reply">Rispondi</string>
+
+    <string name="global_retry">Riprova</string>
+    <string name="room_list_empty">Entra in una stanza per iniziare a usare l\'app.</string>
+    <string name="send_you_invite">Ti ha inviato un invito</string>
+    <string name="invited_by">Invitato da %s</string>
+
+    <string name="room_list_catchup_empty_body">Non hai più messaggi non letti</string>
+    <string name="room_list_catchup_welcome_title">Benvenuti a casa!</string>
+    <string name="room_list_catchup_welcome_body">Recupera i messaggi non letti qui</string>
+    <string name="room_list_people_empty_title">Conversazioni</string>
+    <string name="room_list_people_empty_body">La tua conversazione diretta verrà mostrata qui</string>
+    <string name="room_list_rooms_empty_title">Stanze</string>
+    <string name="room_list_rooms_empty_body">Le tue stanze verranno mostrate qui</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reazioni</string>
+    <string name="reactions_agree">D\'accordo</string>
+    <string name="reactions_like">Piace</string>
+    <string name="message_add_reaction">Aggiungi reazione</string>
+    <string name="message_view_reaction">Vedi le reazioni</string>
+    <string name="reactions">Reazioni</string>
+
+    <string name="event_redacted_by_user_reason">Evento eliminato dall\'utente</string>
+    <string name="event_redacted_by_admin_reason">Evento moderato da un admin della stanza</string>
+    <string name="last_edited_info_message">Ultima modifica di %s il %s</string>
+
+
+    <string name="malformed_message">Evento malformato, impossibile visualizzarlo</string>
+    <string name="create_new_room">Crea nuova stanza</string>
+    <string name="error_no_network">Nessuna rete. Controlla la tua connessione internet.</string>
+    <string name="action_change">Cambia</string>
+    <string name="change_room_directory_network">Cambia rete</string>
+    <string name="please_wait">Attendere prego…</string>
+    <string name="group_all_communities">Tutte le comunità</string>
+
+    <string name="room_preview_no_preview">Anteprima non disponibile per questa stanza</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">L\'anteprima di stanze leggibili da tutti non è ancora supportata in RiotX</string>
+
+    <string name="fab_menu_create_room">Stanze</string>
+    <string name="fab_menu_create_chat">Messaggi diretti</string>
+
+    <string name="create_room_title">Nuova stanza</string>
+    <string name="create_room_action_create">CREA</string>
+    <string name="create_room_name_hint">Nome stanza</string>
+    <string name="create_room_public_title">Pubblica</string>
+    <string name="create_room_public_description">Tutti potranno entrare in questa stanza</string>
+    <string name="create_room_directory_title">Elenco stanze</string>
+    <string name="create_room_directory_description">Pubblica questa stanza nell\'elenco stanze</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Si è verificato un errore nell\'ottenere informazioni sulla fiducia</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Si è verificato un errore nell\'ottenere i dati del backup chiavi</string>
 
 </resources>

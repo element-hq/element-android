@@ -1312,4 +1312,6 @@ Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
 
     <string name="notification_silent">Tiché</string>
     <string name="error_empty_field_enter_user_name">Prosím zadajte meno používateľa.</string>
+    <string name="title_activity_verify_device">Overiť zariadenie</string>
+
 </resources>

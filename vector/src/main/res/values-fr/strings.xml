@@ -502,12 +502,10 @@ Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvo
     <string name="permissions_rationale_msg_camera_and_audio">Riot a besoin d’accéder à votre appareil photo et à votre microphone pour passer des appels vidéo.
 
 Veuillez autoriser l’accès dans les prochaines fenêtres contextuelles pour pouvoir effectuer l’appel.</string>
-    <string name="permissions_rationale_msg_contacts">Riot a besoin d’accéder aux contacts de votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur numéro de téléphone et leur adresse e-mail.
-
-Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour découvrir les utilisateurs du carnet d’adresses joignables avec Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot a besoin d’accéder aux contacts de votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur numéro de téléphone et leur adresse e-mail.
-
-Autorisez-vous Riot à accéder à vos contacts ?</string>
+    <string name="permissions_rationale_msg_contacts">Riot peut accéder à votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur numéro de téléphone et leur adresse e-mail. Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour découvrir les utilisateurs du carnet d’adresses joignables via Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot peut accéder à votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur leur adresse e-mail et leur numéro de téléphone.
+\n
+\nAutorisez-vous Riot à accéder à vos contacts \?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Désolé. L’action n’a pas été réalisée, faute d’autorisations</string>
 
@@ -1466,5 +1464,67 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="sas_error_m_key_mismatch">Non-concordance de clé</string>
     <string name="sas_error_m_user_error">Non-concordance d’utilisateur</string>
     <string name="sas_error_unknown">Erreur inconnue</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Une sauvegarde est déjà disponible sur votre serveur d’accueil</string>
+    <string name="keys_backup_setup_override_replace">Remplacer</string>
+    <string name="keys_backup_setup_override_stop">Arrêter</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Vérification de l’état de la sauvegarde</string>
+    <string name="invalid_or_expired_credentials">Vous avez été déconnecté(e) car vos identifiants sont incorrects ou ont expiré.</string>
+
+    <string name="edit">Éditer</string>
+    <string name="reply">Répondre</string>
+
+    <string name="global_retry">Réessayer</string>
+    <string name="send_you_invite">Vous a envoyé une invitation</string>
+    <string name="invited_by">Invité(e) par %s</string>
+
+    <string name="room_list_catchup_empty_title">Vous êtes à jour !</string>
+    <string name="room_list_catchup_empty_body">Vous n’avez plus de messages non lus</string>
+    <string name="room_list_people_empty_title">Discussions</string>
+    <string name="change_room_directory_network">Changer de réseau</string>
+    <string name="please_wait">Veuillez patienter…</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">On dirait que vous avez déjà configuré une sauvegarde de clé depuis un autre appareil. Voulez-vous la remplacer par celle que vous êtes en train de créer \?</string>
+    <string name="room_list_empty">Rejoignez un salon pour commencer à utiliser l’application.</string>
+    <string name="room_list_catchup_welcome_title">Bienvenue chez vous !</string>
+    <string name="room_list_catchup_welcome_body">Rattrapez votre retard sur vos messages non lus ici</string>
+    <string name="room_list_people_empty_body">Vos conversations directes seront affichées ici</string>
+    <string name="room_list_rooms_empty_title">Salons</string>
+    <string name="room_list_rooms_empty_body">Vos salons seront affichés ici</string>
+
+    <string name="title_activity_emoji_reaction_picker">Réactions</string>
+    <string name="reactions_agree">D’accord</string>
+    <string name="reactions_like">J’aime</string>
+    <string name="message_add_reaction">Ajouter une réaction</string>
+    <string name="message_view_reaction">Voir les réactions</string>
+    <string name="reactions">Réactions</string>
+
+    <string name="event_redacted_by_user_reason">Évènement supprimé par l’utilisateur</string>
+    <string name="event_redacted_by_admin_reason">Évènement modéré par l’administrateur du salon</string>
+    <string name="last_edited_info_message">Dernière édition par %s le %s</string>
+
+
+    <string name="malformed_message">Évènement malformé, affichage impossible</string>
+    <string name="create_new_room">Créer un nouveau salon</string>
+    <string name="error_no_network">Aucun réseau. Vérifiez votre connexion Internet.</string>
+    <string name="action_change">Changer</string>
+    <string name="group_all_communities">Toutes les communautés</string>
+
+    <string name="room_preview_no_preview">Impossible d’avoir un aperçu de ce salon</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">L’aperçu des salons visibles par tout le monde n’est pas encore pris en charge par RiotX</string>
+
+    <string name="fab_menu_create_room">Salons</string>
+    <string name="fab_menu_create_chat">Messages directs</string>
+
+    <string name="create_room_title">Nouveau salon</string>
+    <string name="create_room_action_create">CRÉER</string>
+    <string name="create_room_name_hint">Nom du salon</string>
+    <string name="create_room_public_title">Public</string>
+    <string name="create_room_public_description">Tout le monde pourra rejoindre ce salon</string>
+    <string name="create_room_directory_title">Annuaire des salons</string>
+    <string name="create_room_directory_description">Publier ce salon dans l’annuaire des salons</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Une erreur est survenue lors de la récupération des informations de confiance</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Une erreur est survenue lors de la récupération des données de sauvegarde de clés</string>
 
 </resources>

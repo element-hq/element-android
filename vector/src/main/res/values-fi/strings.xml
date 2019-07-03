@@ -187,7 +187,7 @@
     <string name="auth_reset_password_missing_email">Anna tilisi sähköpostiosoite.</string>
     <string name="auth_reset_password_missing_password">Anna uusi salasana.</string>
     <string name="auth_reset_password_email_validation_message">Osoitteeseen %s on lähetetty sähköposti. Kun olet avannut siinä olevan linkin, paina alla olevaa nappia.</string> <!-- ???? -->
-    <string name="auth_reset_password_error_unauthorized">Sähköpostiosoitteesi vahvistaminen epäonnistui. Varmista, että klikkasit sähköpostissa olevaa linkkiä.</string>
+    <string name="auth_reset_password_error_unauthorized">Sähköpostiosoitteesi vahvistaminen epäonnistui. Varmista, että klikkasit sähköpostissa olevaa linkkiä</string>
     <string name="auth_reset_password_success_message">Salasanasi on vaihdettu.\n\nSinut on kirjauduttu ulos kaikista laitteistasi, etkä enää saa viesti-ilmoituksia. Ottaaksesi käyttöön ilmoitukset uudelleen, kirjaudu sisään uudelleen kaikilla laitteillasi.</string>
 
     <!-- Login Screen -->
@@ -265,18 +265,17 @@
     <string name="permissions_rationale_msg_camera">Riot tarvitsee käyttöluvan kameraan ottaakseen kuvia ja suorittakseen videopuheluita.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nSalli kameran käyttö seuraavalla näytöllä aloittaaksesi tämän puhelun."</string>
+\nSalli kameran käyttö seuraavassa ponnahdusikkunassa soittaaksesi puhelun."</string>
     <string name="permissions_rationale_msg_record_audio">Riot tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
-\nSalli mikrofonin käyttö seuraavalla näytöllä aloittaaksesi tämän puhelun."</string>
+\nSalli mikrofonin käyttö seuraavassa ponnahdusikkunassa soittaaksesi puhelun."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
 \n
 \nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämän puhelun.</string>
-    <string name="permissions_rationale_msg_contacts">Riot tarvitsee luvan käyttää yhteystietojasi löytääkseen muita Matrix-käyttäjiä sähköpostiosoitteiden ja puhelinnumeroiden perusteella.
-
-Salli yhteystietojen käyttö seuraavalla näytöllä löytääksesi Matrix-tilit.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot tarvitsee käyttöluvan yhteystietoihin löytääkseen muita Matrix-käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden avulla. Salli Riotin käyttää yhteystietojasi\?</string>
+    <string name="permissions_rationale_msg_contacts">Riot voi tarkistaa yhteystietosi löytääkseen muita Matrixin käyttäjiä sähköpostiosoitteiden ja puhelinnumeroiden perusteella. Jos suostut jakamaan yhteystietosi tätä tarkoitusta varten, salli yhteystietojen käyttö seuraavassa ponnahdusikkunassa.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot voi tarkistaa yhteystietosi löytääkseen muita Matrixin käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden perusteella.
+\nAnnatko Riotin käyttää yhteystietojasi tätä varten\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Toimenpide epäonnistui puuttuvien käyttölupien takia</string>
 
@@ -1465,5 +1464,60 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="sas_error_m_key_mismatch">Avain ei täsmää</string>
     <string name="sas_error_m_user_error">Käyttäjä ei täsmää</string>
     <string name="sas_error_unknown">Tuntematon virhe</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Kotipalvelimellasi on jo varmuuskopio</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Näyttää, että olet jo asettanut avainten varmuuskopioinnin toiselta laitteelta. Halutatko korvata sen tällä\?</string>
+    <string name="keys_backup_setup_override_replace">Korvaa</string>
+    <string name="keys_backup_setup_override_stop">Seis</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Tarkistetaan varmuuskopion tilaa</string>
+    <string name="sas_waiting_for_partner">Odotetaan vastapuolen varmistusta…</string>
+
+    <string name="sas_error_m_unknown_transaction">Laite ei ole tietoinen kyseisestä transaktiosta</string>
+    <string name="sas_error_m_mismatched_sas">SAS ei täsmännyt</string>
+    <string name="edit">Muokkaa</string>
+    <string name="reply">Vastaa</string>
+
+    <string name="global_retry">Yritä uudelleen</string>
+    <string name="room_list_empty">Aloita sovelluksen käyttö liittymällä huoneeseen.</string>
+    <string name="send_you_invite">Lähetti sinulle kutsun</string>
+    <string name="invited_by">%s kutsui</string>
+
+    <string name="room_list_catchup_empty_body">Sinulla ei ole enempää lukemattomia viestejä</string>
+    <string name="room_list_catchup_welcome_title">Tervetuloa kotiin!</string>
+    <string name="room_list_catchup_welcome_body">Löydät täältä lukemattomat viestit</string>
+    <string name="room_list_people_empty_title">Keskustelut</string>
+    <string name="room_list_people_empty_body">Yksityiset keskustelusi näytetään tässä</string>
+    <string name="room_list_rooms_empty_title">Huoneet</string>
+    <string name="room_list_rooms_empty_body">Huoneesi näytetään tässä</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reaktiot</string>
+    <string name="reactions_agree">Samaa mieltä</string>
+    <string name="reactions_like">Tykkää</string>
+    <string name="message_add_reaction">Lisää reaktio</string>
+    <string name="message_view_reaction">Näytä reaktiot</string>
+    <string name="reactions">Reaktiot</string>
+
+    <string name="event_redacted_by_user_reason">Käyttäjä poisti tapahtuman</string>
+    <string name="event_redacted_by_admin_reason">Huoneen ylläpitäjä moderoi tapahtuman</string>
+    <string name="malformed_message">Epämuotoinen tapahtuma, ei voida näyttää</string>
+    <string name="create_new_room">Luo uusi huone</string>
+    <string name="error_no_network">Ei verkkoa. Tarkista internet-yhteytesi.</string>
+    <string name="please_wait">Odota…</string>
+    <string name="group_all_communities">Kaikki yhteisöt</string>
+
+    <string name="room_preview_no_preview">Tätä huonetta ei voi esikatsella</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">RiotX ei vielä tue täysin julkisen huoneen esikatselua</string>
+
+    <string name="fab_menu_create_room">Huoneet</string>
+    <string name="fab_menu_create_chat">Yksityisviestit</string>
+
+    <string name="create_room_title">Uusi huone</string>
+    <string name="create_room_action_create">LUO</string>
+    <string name="create_room_name_hint">Huoneen nimi</string>
+    <string name="create_room_public_title">Julkinen</string>
+    <string name="create_room_public_description">Kuka tahansa voi liittyä tähän huoneeseen</string>
+    <string name="keys_backup_unable_to_get_trust_info">Luottamustietoa haettaessa tapahtui virhe</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Avainten varmuuskopioinnin tietoja haettaessa tapahtui virhe</string>
 
 </resources>

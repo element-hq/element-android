@@ -280,12 +280,10 @@
     <string name="permissions_rationale_msg_camera_and_audio">Riot 需要權限來存取相機及麥克風來撥打視訊通話。
 
 為了要通話，請在下個彈跳視窗中允許存取。</string>
-    <string name="permissions_rationale_msg_contacts">Riot 需要權限來存取您的聯絡簿，以利用電子郵件及電話號碼來尋找 Matrix 使用者。
-
-為了尋找聯絡簿中的 Riot.im 的好友，請在下個彈跳視窗允許存取。</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot 需要權限來存取您的通訊錄，以利用電子郵件及電話號碼來尋找 Matrix 使用者。
-
-是否允許 Riot 存取聯絡人？</string>
+    <string name="permissions_rationale_msg_contacts">Riot 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。如果您同意為此用途分享您的電話簿，請在下一個彈出式視窗中允許存取權限。</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。
+\n
+\n您同意為此用途分享您的電話簿嗎？</string>
 
     <string name="permissions_action_not_performed_missing_permissions">抱歉。由於缺少權限，所以無法執行動作</string>
 
@@ -1418,5 +1416,67 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="sas_error_m_key_mismatch">金鑰不符合</string>
     <string name="sas_error_m_user_error">使用者不符合</string>
     <string name="sas_error_unknown">未知錯誤</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">您的家伺服器上已有備份</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">看起來您已經從其他裝置設定金鑰備份了。您想要用您正在建立的這個來取代它嗎？</string>
+    <string name="keys_backup_setup_override_replace">取代</string>
+    <string name="keys_backup_setup_override_stop">停止</string>
+
+    <string name="keys_backup_settings_checking_backup_state">正在檢查備份狀態</string>
+    <string name="invalid_or_expired_credentials">您已經因為無效或過期的憑證而登出。</string>
+
+    <string name="edit">編輯</string>
+    <string name="reply">回覆</string>
+
+    <string name="global_retry">重試</string>
+    <string name="room_list_empty">加入聊天室以開始使用應用程式。</string>
+    <string name="send_you_invite">傳送給您邀請</string>
+    <string name="invited_by">由 %s 邀請</string>
+
+    <string name="room_list_catchup_empty_title">您都看完了！</string>
+    <string name="room_list_catchup_empty_body">您已經沒有未讀的訊息了</string>
+    <string name="room_list_catchup_welcome_title">歡迎回家！</string>
+    <string name="room_list_catchup_welcome_body">來這裡看未讀訊息</string>
+    <string name="room_list_people_empty_title">對話</string>
+    <string name="room_list_people_empty_body">您的直接訊息對話將會在此顯示</string>
+    <string name="room_list_rooms_empty_title">聊天室</string>
+    <string name="room_list_rooms_empty_body">您的聊天室將會在此顯示</string>
+
+    <string name="title_activity_emoji_reaction_picker">反應</string>
+    <string name="reactions_agree">同意</string>
+    <string name="reactions_like">喜歡</string>
+    <string name="message_add_reaction">新增反應</string>
+    <string name="message_view_reaction">檢視反應</string>
+    <string name="reactions">反應</string>
+
+    <string name="event_redacted_by_user_reason">由使用者刪除的活動</string>
+    <string name="event_redacted_by_admin_reason">由聊天室管理員審核的活動</string>
+    <string name="last_edited_info_message">最後編輯由 %s 於 %s</string>
+
+
+    <string name="malformed_message">活動格式錯誤，無法顯示</string>
+    <string name="create_new_room">建立新聊天室</string>
+    <string name="error_no_network">沒有網路。請檢查您的網路連線。</string>
+    <string name="action_change">變更</string>
+    <string name="change_room_directory_network">變更網路</string>
+    <string name="please_wait">請稍候……</string>
+    <string name="group_all_communities">所有社群</string>
+
+    <string name="room_preview_no_preview">無法預覽此聊天室</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">RiotX 尚不支援預覽所有人皆可讀的聊天室</string>
+
+    <string name="fab_menu_create_room">聊天室</string>
+    <string name="fab_menu_create_chat">直接訊息</string>
+
+    <string name="create_room_title">新聊天室</string>
+    <string name="create_room_action_create">建立</string>
+    <string name="create_room_name_hint">聊天室名稱</string>
+    <string name="create_room_public_title">公開</string>
+    <string name="create_room_public_description">任何人都可以加入此聊天室</string>
+    <string name="create_room_directory_title">聊天室目錄</string>
+    <string name="create_room_directory_description">將此聊天室公開於聊天室目錄中</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">取得信任資訊時發生錯誤</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">取得金鑰備份資料時發生錯誤</string>
 
 </resources>

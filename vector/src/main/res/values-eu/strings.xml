@@ -94,7 +94,7 @@
     <string name="send_bug_report_placeholder">Azaldu zure arazoa hemen</string>
     <string name="send_bug_report_logs_description">Akatsak aztertzeari begira, bezero honen egunkariak arazte-txosten honekin batera bidaliko dira. Arazte-txosten hau, egunkariak eta pantaila-argazkia barne, ez dira publikoki ikusgai egongo. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
     <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Arazte-txostena ireki nahi duzu?</string>
-    <string name="send_bug_report_app_crashed">Azken aldian aplikazioa kraskatu da. Kraskatze-txostena ireki nahi duzu?</string>
+    <string name="send_bug_report_app_crashed">Aurrekoan aplikazioa kraskatu da. Kraskatze-txostena ireki nahi duzu\?</string>
 
     <string name="send_bug_report_sent">Arazte-txostena ongi bidali da</string>
     <string name="send_bug_report_failed">Huts egin du arazte-txostenaren bidalketak (%s)</string>
@@ -262,12 +262,10 @@ Barkatu eragozpenak.</string>
     <string name="permissions_rationale_msg_storage">Riotek zure argazki eta bideoen liburutegia atzitzeko baimena behar du eranskinak gorde ahal izateko.
 
 Baimendu sarbidea hurrengo laster-leihoan zure telefonotik fitxategiak bidali ahal izateko.</string>
-    <string name="permissions_rationale_msg_contacts">Riotek zure helbide-liburua atzitzeko baimen behar du beste Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko.
-
-Baimendu sarbidea hurrengo laster-leihoan Riot bitartez kontaktatu ditzakezun erabiltzaileak aurkitzeko.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riotek zure helbide-liburua atzitzeko baimen behar du beste Matrix erabiltzaileak bere e-mail helbide eta telefono zenbakiaren bidez aurkitzeko.
-
-Baimendu Riotek zure kontaktuak atzitzea?</string>
+    <string name="permissions_rationale_msg_contacts">Riot-ek zure helbide-liburua egiaztatu dezake Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko. Honetarako zure helbide-liburua partekatzea onartzen baduzu, sakatu onartu hurrengo laster-leihoan.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot-ek zure helbide-liburua egiaztatu dezake Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko. 
+\n
+\nHonetarako zure helbide-liburua partekatzea onartzen duzu\?</string>
 
     <string name="room_preview_unlinked_email_warning">Zure gonbidapena bidali da %s helbidera, hau ez dago kontu honetara lotuta. Beste kontu batekin hasi dezakezu saioa, edo e-mail hau zure kontura gehitu.</string>
     <string name="room_preview_try_join_an_unknown_room">%s taldera sartzen saiatzen ari zara. Elkartu taldera elkarrizketan parte hartzeko?</string>
@@ -1461,5 +1459,67 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="sas_error_m_key_mismatch">Gakoa ez dator bat</string>
     <string name="sas_error_m_user_error">Erabiltzailea ez dator bat</string>
     <string name="sas_error_unknown">Errore ezezaguna</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Badago babes-kopia bat zure hasiera-zerbitzarian</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Badirudi gakoen babes-kopia ezarri duzula beste gailu betetik. Orain sortzen ari zarenarekin ordeztu nahi duzu\?</string>
+    <string name="keys_backup_setup_override_replace">Ordeztu</string>
+    <string name="keys_backup_setup_override_stop">Gelditu</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Babes-kopiaren egoera egiaztatzen</string>
+    <string name="invalid_or_expired_credentials">Zure saioa amaitu da baliogabeko edo iraungitako kredentzialak direla eta.</string>
+
+    <string name="edit">Editatu</string>
+    <string name="reply">Erantzun</string>
+
+    <string name="global_retry">Saiatu berriro</string>
+    <string name="room_list_empty">Elkartu gelaren batetara aplikazioa erabiltzen hasteko.</string>
+    <string name="send_you_invite">Gonbidapen bat bidali dizu</string>
+    <string name="invited_by">%s erabiltzaileak gonbidatuta</string>
+
+    <string name="room_list_catchup_empty_title">Arrapatu zaituztete!</string>
+    <string name="room_list_catchup_empty_body">Ez duzu irakurri gabeko mezu gehiagorik</string>
+    <string name="room_list_catchup_welcome_title">Ongi etorri etxera!</string>
+    <string name="room_list_catchup_welcome_body">Jarri egunean hemengo irakurri gabeko mezuekin</string>
+    <string name="room_list_people_empty_title">Elkarrizketak</string>
+    <string name="room_list_people_empty_body">Zure mezu zuzenetako elkarrizketak hemen bistaratuko dira</string>
+    <string name="room_list_rooms_empty_title">Gelak</string>
+    <string name="room_list_rooms_empty_body">Zure gelak hemen bistaratuko dira</string>
+
+    <string name="title_activity_emoji_reaction_picker">Erreakzioak</string>
+    <string name="reactions_agree">Ados</string>
+    <string name="reactions_like">Gogokoa</string>
+    <string name="message_add_reaction">Gehitu erreakzioa</string>
+    <string name="message_view_reaction">Ikusi errekzioak</string>
+    <string name="reactions">Erreakzioak</string>
+
+    <string name="event_redacted_by_user_reason">Gertaera ezabatu du erabiltzaileak</string>
+    <string name="event_redacted_by_admin_reason">Gertaera moderatu du gelako administratzaileak</string>
+    <string name="last_edited_info_message">%s erabiltzaileak editatuta, azkenekoz: %s</string>
+
+
+    <string name="malformed_message">Gaizki formatutako gertaera, ezin da bistaratu</string>
+    <string name="create_new_room">Sortu gela berria</string>
+    <string name="error_no_network">Sarerik ez. Egiaztatu zure internet konexioa.</string>
+    <string name="action_change">Aldatu</string>
+    <string name="change_room_directory_network">Aldatu sarea</string>
+    <string name="please_wait">Itxaron mesedez…</string>
+    <string name="group_all_communities">Komunitate guztiak</string>
+
+    <string name="room_preview_no_preview">Gela hau ezin da aurreikusi</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Munduak irakurtzeko moduko gelaren aurrebista ez da oraindik onartzen RiotX bezeroan</string>
+
+    <string name="fab_menu_create_room">Gelak</string>
+    <string name="fab_menu_create_chat">Mezu zuzenak</string>
+
+    <string name="create_room_title">Gela berria</string>
+    <string name="create_room_action_create">SORTU</string>
+    <string name="create_room_name_hint">Gelaren izena</string>
+    <string name="create_room_public_title">Publikoa</string>
+    <string name="create_room_public_description">Edonor elkartu daiteke gela honetara</string>
+    <string name="create_room_directory_title">Gelen direktorioa</string>
+    <string name="create_room_directory_description">Argitaratu gela hau gelen direktorioan</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Errore bat gertatu da konfiantzazko informazioa jasotzean</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Errore bat gertatu da gakoen babes-kopiaren datuak jasotzean</string>
 
 </resources>
