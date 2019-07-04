@@ -149,6 +149,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:hint="@string/room_message_placeholder_not_encrypted"
+        android:inputType="textCapSentences|textMultiLine"
         android:maxHeight="200dp"
         android:minHeight="48dp"
         android:nextFocusLeft="@id/composerEditText"
