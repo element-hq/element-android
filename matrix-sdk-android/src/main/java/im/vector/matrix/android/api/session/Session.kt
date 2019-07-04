@@ -49,14 +49,15 @@ interface Session :
         FilterService,
         FileService,
         PushRuleService,
-        PushersService {
+        PushersService,
+        InitialSyncProgressService {
 
     /**
      * The params associated to the session
      */
     val sessionParams: SessionParams
 
-    val myUserId : String
+    val myUserId: String
         get() = sessionParams.credentials.userId
 
 

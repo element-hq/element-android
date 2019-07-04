@@ -26,6 +26,8 @@ import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
+import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
@@ -35,8 +37,10 @@ import javax.inject.Inject
 internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: CryptoManager,
                                                      private val sasVerificationService: DefaultSasVerificationService) {
 
-    fun handleToDevice(toDevice: ToDeviceSyncResponse) {
-        toDevice.events?.forEach { event ->
+    fun handleToDevice(toDevice: ToDeviceSyncResponse, initialSyncProgressService: DefaultInitialSyncProgressService? = null) {
+        val total = toDevice.events?.size ?: 0
+        toDevice.events?.forEachIndexed { index, event ->
+            initialSyncProgressService?.reportProgress(((index / total.toFloat()) * 100).toInt())
             // Decrypt event if necessary
             decryptEvent(event, null)
             if (TextUtils.equals(event.getClearType(), EventType.MESSAGE)

@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.CryptoModule
 import im.vector.matrix.android.internal.di.MatrixComponent

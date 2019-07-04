@@ -19,14 +19,18 @@ package im.vector.matrix.android.internal.session.sync
 import arrow.core.Try
 import arrow.core.failure
 import arrow.core.recoverWith
+import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.R
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.tryTransactionAsync
 import javax.inject.Inject
 
 internal interface SyncTask : Task<SyncTask.Params, Unit> {
@@ -40,7 +44,9 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
                                                    private val filterRepository: FilterRepository,
                                                    private val syncResponseHandler: SyncResponseHandler,
                                                    private val sessionParamsStore: SessionParamsStore,
-                                                   private val syncTokenStore: SyncTokenStore
+                                                   private val initialSyncProgressService: DefaultInitialSyncProgressService,
+                                                   private val syncTokenStore: SyncTokenStore,
+                                                   private val monarchy: Monarchy
 ) : SyncTask {
 
 
@@ -55,6 +61,10 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
         requestParams["timeout"] = timeout.toString()
         requestParams["filter"] = filterRepository.getFilter()
 
+        val isInitialSync = token == null
+        if (isInitialSync) {
+            initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100)
+        }
         return executeRequest<SyncResponse> {
             apiCall = syncAPI.sync(requestParams)
         }.recoverWith { throwable ->
@@ -67,7 +77,13 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             // Transmit the throwable
             throwable.failure()
         }.flatMap { syncResponse ->
-            syncResponseHandler.handleResponse(syncResponse, token, false)
+            syncResponseHandler.handleResponse(syncResponse, token, false).also {
+                if (isInitialSync) {
+                    monarchy.tryTransactionAsync {
+                        initialSyncProgressService.endAll()
+                    }
+                }
+            }
         }.map {
             syncTokenStore.saveToken(it.nextBatch)
         }

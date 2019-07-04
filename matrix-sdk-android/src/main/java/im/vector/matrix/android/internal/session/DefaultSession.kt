@@ -24,6 +24,7 @@ import androidx.work.WorkManager
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.PushRuleService
+import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
@@ -64,7 +65,8 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val fileService: FileService,
                                                   private val syncThread: SyncThread,
                                                   private val contentUrlResolver: ContentUrlResolver,
-                                                  private val contentUploadProgressTracker: ContentUploadStateTracker)
+                                                  private val contentUploadProgressTracker: ContentUploadStateTracker,
+                                                  private val initialSyncProgressService: InitialSyncProgressService)
     : Session,
         RoomService by roomService,
         RoomDirectoryService by roomDirectoryService,
@@ -74,9 +76,10 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         CacheService by cacheService,
         SignOutService by signOutService,
         FilterService by filterService,
-        FileService by fileService,
         PushRuleService by pushRuleService,
-        PushersService by pushersService {
+        PushersService by pushersService,
+        FileService by fileService,
+        InitialSyncProgressService by initialSyncProgressService {
 
     private var isOpen = false
 

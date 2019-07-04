@@ -17,7 +17,10 @@
 package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
+import im.vector.matrix.android.R
 import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
+import im.vector.matrix.android.internal.session.reportSubtask
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import timber.log.Timber
 import javax.inject.Inject
@@ -27,12 +30,15 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
                                                        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
                                                        private val groupSyncHandler: GroupSyncHandler,
                                                        private val cryptoSyncHandler: CryptoSyncHandler,
-                                                       private val cryptoManager: CryptoManager) {
+                                                       private val cryptoManager: CryptoManager,
+                                                       private val initialSyncProgressService: DefaultInitialSyncProgressService) {
 
     fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
         return Try {
-            Timber.v("Start handling sync")
             val isInitialSync = fromToken == null
+            Timber.v("Start handling sync, is InitialSync: ${isInitialSync}")
+            val reporter = initialSyncProgressService.takeIf { isInitialSync }
+
             if (!cryptoManager.isStarted()) {
                 Timber.v("Should start cryptoManager")
                 cryptoManager.start(isInitialSync)
@@ -41,23 +47,36 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
                 // Handle the to device events before the room ones
                 // to ensure to decrypt them properly
                 Timber.v("Handle toDevice")
-                if (syncResponse.toDevice != null) {
-                    cryptoSyncHandler.handleToDevice(syncResponse.toDevice)
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_crypto, 100, 0.2f) {
+                    if (syncResponse.toDevice != null) {
+                        cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
+                    }
                 }
                 Timber.v("Handle rooms")
-                if (syncResponse.rooms != null) {
-                    roomSyncHandler.handle(syncResponse.rooms)
+
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 100, 0.5f) {
+                    if (syncResponse.rooms != null) {
+                        roomSyncHandler.handle(syncResponse.rooms, reporter)
+                    }
                 }
-                Timber.v("Handle groups")
-                if (syncResponse.groups != null) {
-                    groupSyncHandler.handle(syncResponse.groups)
+
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_groups, 100, 0.2f) {
+                    Timber.v("Handle groups")
+                    if (syncResponse.groups != null) {
+                        groupSyncHandler.handle(syncResponse.groups, reporter)
+                    }
                 }
-                Timber.v("Handle accoundData")
-                if (syncResponse.accountData != null) {
-                    userAccountDataSyncHandler.handle(syncResponse.accountData)
+
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
+                    Timber.v("Handle accoundData")
+                    if (syncResponse.accountData != null) {
+                        userAccountDataSyncHandler.handle(syncResponse.accountData)
+                    }
                 }
+
                 Timber.v("On sync completed")
                 cryptoSyncHandler.onSyncCompleted(syncResponse)
+
             }
             Timber.v("Finish handling sync in $measure ms")
             syncResponse

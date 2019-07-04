@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -32,6 +33,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
@@ -60,11 +62,11 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(roomsSyncResponse: RoomsSyncResponse) {
+    fun handle(roomsSyncResponse: RoomsSyncResponse, reporter: DefaultInitialSyncProgressService? = null) {
         monarchy.runTransactionSync { realm ->
-            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join))
-            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite))
-            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave))
+            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
+            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
+            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
         }
 
         //handle event for bing rule checks
@@ -87,11 +89,37 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy) {
+    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: DefaultInitialSyncProgressService?) {
+
         val rooms = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
-            is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
-            is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(realm, it.key, it.value) }
+            is HandlingStrategy.JOINED  -> {
+                val total = handlingStrategy.data.size
+                reporter?.startTask(R.string.initial_sync_start_importing_account_joined_rooms, total, 0.6f)
+                var current = 0
+                handlingStrategy.data.map {
+                    reporter?.reportProgress((current / total.toFloat() * 100).toInt())
+                    current++
+                    handleJoinedRoom(realm, it.key, it.value).also {
+                        reporter?.endTask(R.string.initial_sync_start_importing_account_joined_rooms)
+                    }
+                }
+
+            }
+            is HandlingStrategy.INVITED -> {
+                val total = handlingStrategy.data.size
+                reporter?.startTask(R.string.initial_sync_start_importing_account_invited_rooms, total, 0.4f)
+                var current = 0
+                handlingStrategy.data.map {
+                    reporter?.reportProgress((current / total.toFloat() * 100).toInt())
+                    current++
+                    handleInvitedRoom(realm, it.key, it.value)
+                }.also {
+                    reporter?.endTask(R.string.initial_sync_start_importing_account_invited_rooms)
+                }
+            }
+            is HandlingStrategy.LEFT    -> {
+                handlingStrategy.data.map { handleLeftRoom(realm, it.key, it.value) }
+            }
         }
         realm.insertOrUpdate(rooms)
     }

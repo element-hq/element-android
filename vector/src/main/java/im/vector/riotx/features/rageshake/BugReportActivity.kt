@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.activity_bug_report.*
 import timber.log.Timber
 
 /**
- * Form to send a bug report
+ * Form to send a bug reportSubtask
  */
 class BugReportActivity : VectorBaseActivity() {
 
@@ -56,7 +56,7 @@ class BugReportActivity : VectorBaseActivity() {
 
         forSuggestion = intent.getBooleanExtra("FOR_SUGGESTION", false)
 
-        // Default screen is for bug report, so modify it for suggestion
+        // Default screen is for bug reportSubtask, so modify it for suggestion
         if (forSuggestion) {
             supportActionBar?.setTitle(R.string.send_suggestion)
 
@@ -101,7 +101,7 @@ class BugReportActivity : VectorBaseActivity() {
 
 
     /**
-     * Send the bug report
+     * Send the bug reportSubtask
      */
     private fun sendBugReport() {
         bug_report_scrollview.alpha = 0.3f
