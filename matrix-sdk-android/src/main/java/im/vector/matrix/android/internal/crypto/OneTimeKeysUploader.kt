@@ -150,7 +150,7 @@ internal class OneTimeKeysUploader @Inject constructor(
         val oneTimeKeys = olmDevice.getOneTimeKeys()
         val oneTimeJson = HashMap<String, Any>()
 
-        val curve25519Map = oneTimeKeys!![OlmAccount.JSON_KEY_ONE_TIME_KEY]
+        val curve25519Map = oneTimeKeys?.get(OlmAccount.JSON_KEY_ONE_TIME_KEY)
 
         if (null != curve25519Map) {
             for (key_id in curve25519Map.keys) {

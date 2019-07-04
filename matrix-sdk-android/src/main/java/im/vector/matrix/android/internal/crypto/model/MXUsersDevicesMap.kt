@@ -54,7 +54,7 @@ class MXUsersDevicesMap<E> {
      */
     fun getObject(userId: String?, deviceId: String?): E? {
         return if (userId?.isNotBlank() == true && deviceId?.isNotBlank() == true && map.containsKey(userId)) {
-            map[userId]!![deviceId]
+            map[userId]?.get(deviceId)
         } else null
     }
 
@@ -71,7 +71,7 @@ class MXUsersDevicesMap<E> {
                 map[userId] = HashMap()
             }
 
-            map[userId]!![deviceId] = o
+            map[userId]?.put(deviceId, o)
         }
     }
 

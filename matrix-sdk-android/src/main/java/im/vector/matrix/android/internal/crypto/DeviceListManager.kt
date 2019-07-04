@@ -21,11 +21,11 @@ import android.text.TextUtils
 import arrow.core.Try
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.internal.extensions.onError
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
+import im.vector.matrix.android.internal.extensions.onError
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import timber.log.Timber
@@ -380,14 +380,14 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
 
         val signKeyId = "ed25519:" + deviceKeys.deviceId
-        val signKey = deviceKeys.keys!![signKeyId]
+        val signKey = deviceKeys.keys?.get(signKeyId)
 
         if (null == signKey) {
             Timber.e("## validateDeviceKeys() : Device " + userId + ":" + deviceKeys.deviceId + " has no ed25519 key")
             return false
         }
 
-        val signatureMap = deviceKeys.signatures!![userId]
+        val signatureMap = deviceKeys.signatures?.get(userId)
 
         if (null == signatureMap) {
             Timber.e("## validateDeviceKeys() : Device " + userId + ":" + deviceKeys.deviceId + " has no map for " + userId)
@@ -413,7 +413,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
 
         if (!isVerified) {
             Timber.e("## validateDeviceKeys() : Unable to verify signature on device " + userId + ":"
-                     + deviceKeys.deviceId + " with error " + errorMessage)
+                    + deviceKeys.deviceId + " with error " + errorMessage)
             return false
         }
 
@@ -424,8 +424,8 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                 //
                 // Should we warn the user about it somehow?
                 Timber.e("## validateDeviceKeys() : WARNING:Ed25519 key for device " + userId + ":"
-                         + deviceKeys.deviceId + " has changed : "
-                         + previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
+                        + deviceKeys.deviceId + " has changed : "
+                        + previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
 
                 Timber.e("## validateDeviceKeys() : $previouslyStoredDeviceKeys -> $deviceKeys")
                 Timber.e("## validateDeviceKeys() : " + previouslyStoredDeviceKeys.keys + " -> " + deviceKeys.keys)

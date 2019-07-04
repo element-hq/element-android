@@ -53,8 +53,8 @@ data class OlmPayloadContent(
     }
 
     companion object {
-        fun fromJsonString(str: String): OlmPayloadContent {
-            return MoshiProvider.providesMoshi().adapter(OlmPayloadContent::class.java).fromJson(str)!!
+        fun fromJsonString(str: String): OlmPayloadContent? {
+            return MoshiProvider.providesMoshi().adapter(OlmPayloadContent::class.java).fromJson(str)
         }
     }
 }

@@ -210,13 +210,7 @@ class CreateRoomParams {
      * @return the first invited user id
      */
     fun getFirstInvitedUserId(): String? {
-        if (0 != getInviteCount()) {
-            return invitedUserIds!![0]
-        }
-
-        return if (0 != getInvite3PidCount()) {
-            invite3pids!![0].address
-        } else null
+        return invitedUserIds?.firstOrNull() ?: invite3pids?.firstOrNull()?.address
     }
 
     /**

@@ -18,7 +18,6 @@
 
 package im.vector.matrix.android.internal.crypto.model
 
-import android.text.TextUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.util.JsonDict
@@ -107,30 +106,25 @@ data class MXDeviceInfo(
      * @return the fingerprint
      */
     fun fingerprint(): String? {
-        return if (null != keys && !TextUtils.isEmpty(deviceId)) {
-            keys!!["ed25519:$deviceId"]
-        } else null
-
+        return keys
+                ?.takeIf { !deviceId.isBlank() }
+                ?.get("ed25519:$deviceId")
     }
 
     /**
      * @return the identity key
      */
     fun identityKey(): String? {
-        return if (null != keys && !TextUtils.isEmpty(deviceId)) {
-            keys!!["curve25519:$deviceId"]
-        } else null
-
+        return keys
+                ?.takeIf { !deviceId.isBlank() }
+                ?.get("curve25519:$deviceId")
     }
 
     /**
      * @return the display name
      */
     fun displayName(): String? {
-        return if (null != unsigned) {
-            unsigned!!["device_display_name"] as String?
-        } else null
-
+        return unsigned?.get("device_display_name") as? String
     }
 
     /**
@@ -141,9 +135,7 @@ data class MXDeviceInfo(
 
         map["device_id"] = deviceId
 
-        if (null != userId) {
-            map["user_id"] = userId!!
-        }
+        map["user_id"] = userId
 
         if (null != algorithms) {
             map["algorithms"] = algorithms!!

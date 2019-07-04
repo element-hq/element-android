@@ -78,6 +78,8 @@ class MXCryptoError(var code: String,
 
     companion object {
 
+        // TODO Create sealed class
+
         /**
          * Error codes
          */
@@ -88,7 +90,10 @@ class MXCryptoError(var code: String,
         const val UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE = "UNKNOWN_INBOUND_SESSION_ID"
         const val INBOUND_SESSION_MISMATCH_ROOM_ID_ERROR_CODE = "INBOUND_SESSION_MISMATCH_ROOM_ID"
         const val MISSING_FIELDS_ERROR_CODE = "MISSING_FIELDS"
+        const val BAD_EVENT_FORMAT_ERROR_CODE = "BAD_EVENT_FORMAT_ERROR_CODE"
+        const val MISSING_SENDER_KEY_ERROR_CODE = "MISSING_SENDER_KEY_ERROR_CODE"
         const val MISSING_CIPHER_TEXT_ERROR_CODE = "MISSING_CIPHER_TEXT"
+        const val BAD_DECRYPTED_FORMAT_ERROR_CODE = "BAD_DECRYPTED_FORMAT_ERROR_CODE"
         const val NOT_INCLUDE_IN_RECIPIENTS_ERROR_CODE = "NOT_INCLUDE_IN_RECIPIENTS"
         const val BAD_RECIPIENT_ERROR_CODE = "BAD_RECIPIENT"
         const val BAD_RECIPIENT_KEY_ERROR_CODE = "BAD_RECIPIENT_KEY"
@@ -118,7 +123,10 @@ class MXCryptoError(var code: String,
         const val UNKNOWN_INBOUND_SESSION_ID_REASON = "Unknown inbound session id"
         const val INBOUND_SESSION_MISMATCH_ROOM_ID_REASON = "Mismatched room_id for inbound group session (expected %1\$s, was %2\$s)"
         const val MISSING_FIELDS_REASON = "Missing fields in input"
+        const val BAD_EVENT_FORMAT_TEXT_REASON = "Bad event format"
+        const val MISSING_SENDER_KEY_TEXT_REASON = "Missing senderKey"
         const val MISSING_CIPHER_TEXT_REASON = "Missing ciphertext"
+        const val BAD_DECRYPTED_FORMAT_TEXT_REASON = "Bad decrypted event format"
         const val NOT_INCLUDED_IN_RECIPIENT_REASON = "Not included in recipients"
         const val BAD_RECIPIENT_REASON = "Message was intended for %1\$s"
         const val BAD_RECIPIENT_KEY_REASON = "Message not intended for this device"

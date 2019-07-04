@@ -47,7 +47,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         viewModel.keyVersionResult.observe(this, Observer { keyVersion ->
 
             if (keyVersion != null && supportFragmentManager.fragments.isEmpty()) {
-                val isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData().privateKeySalt != null
+                val isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
                 if (isBackupCreatedFromPassphrase) {
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupRestoreFromPassphraseFragment.newInstance())

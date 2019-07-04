@@ -45,7 +45,6 @@ import im.vector.matrix.android.internal.crypto.keysbackup.tasks.*
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
 import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
@@ -388,8 +387,8 @@ internal class KeysBackup @Inject constructor(
             return keysBackupVersionTrust
         }
 
-        val mySigs: Map<String, *> = authData.signatures!![myUserId] as Map<String, *>
-        if (mySigs.isEmpty()) {
+        val mySigs = authData.signatures?.get(myUserId)
+        if (mySigs.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Ignoring key backup because it lacks any signatures from this user")
             return keysBackupVersionTrust
         }
@@ -402,20 +401,21 @@ internal class KeysBackup @Inject constructor(
                 deviceId = components[1]
             }
 
-            var device: MXDeviceInfo? = null
             if (deviceId != null) {
-                device = cryptoStore.getUserDevice(deviceId, myUserId)
-
+                val device = cryptoStore.getUserDevice(deviceId, myUserId)
                 var isSignatureValid = false
 
                 if (device == null) {
                     Timber.v("getKeysBackupTrust: Signature from unknown device $deviceId")
                 } else {
-                    try {
-                        olmDevice.verifySignature(device.fingerprint()!!, authData.signalableJSONDictionary(), mySigs[keyId] as String)
-                        isSignatureValid = true
-                    } catch (e: OlmException) {
-                        Timber.v("getKeysBackupTrust: Bad signature from device " + device.deviceId + " " + e.localizedMessage)
+                    val fingerprint = device.fingerprint()
+                    if (fingerprint != null) {
+                        try {
+                            olmDevice.verifySignature(fingerprint, authData.signalableJSONDictionary(), mySigs[keyId] as String)
+                            isSignatureValid = true
+                        } catch (e: OlmException) {
+                            Timber.v("getKeysBackupTrust: Bad signature from device " + device.deviceId + " " + e.localizedMessage)
+                        }
                     }
 
                     if (isSignatureValid && device.isVerified) {
@@ -452,8 +452,7 @@ internal class KeysBackup @Inject constructor(
                     val myUserId = credentials.userId
 
                     // Get current signatures, or create an empty set
-                    val myUserSignatures = (authData.signatures!![myUserId]?.toMutableMap()
-                            ?: HashMap())
+                    val myUserSignatures = authData.signatures?.get(myUserId)?.toMutableMap() ?: HashMap()
 
                     if (trust) {
                         // Add current device signature
@@ -1027,8 +1026,7 @@ internal class KeysBackup @Inject constructor(
 
         val authData = keysBackupData.getAuthDataAsMegolmBackupAuthData()
 
-        if (authData.signatures == null
-                || authData.publicKey.isBlank()) {
+        if (authData?.signatures == null || authData.publicKey.isBlank()) {
             return null
         }
 
