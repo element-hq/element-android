@@ -57,6 +57,7 @@ import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFragment
 import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
+import im.vector.riotx.features.settings.push.PushGatewaysFragment
 
 @Component(dependencies = [VectorComponent::class], modules = [ViewModelModule::class, HomeModule::class])
 @ScreenScope
@@ -141,6 +142,8 @@ interface ScreenComponent {
     fun inject(userAvatarPreference: UserAvatarPreference)
 
     fun inject(vectorSettingsNotificationsTroubleshootFragment: VectorSettingsNotificationsTroubleshootFragment)
+
+    fun inject(pushGatewaysFragment: PushGatewaysFragment)
 
     @Component.Factory
     interface Factory {

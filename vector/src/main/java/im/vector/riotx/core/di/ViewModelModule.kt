@@ -53,6 +53,8 @@ import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerViewMode
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerViewModel_AssistedFactory
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewViewModel
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewViewModel_AssistedFactory
+import im.vector.riotx.features.settings.push.PushGatewaysViewModel
+import im.vector.riotx.features.settings.push.PushGatewaysViewModel_AssistedFactory
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 
 @Module
@@ -156,5 +158,8 @@ interface ViewModelModule {
 
     @Binds
     fun bindCreateRoomViewModelFactory(factory: CreateRoomViewModel_AssistedFactory): CreateRoomViewModel.Factory
+
+    @Binds
+    fun bindPushGatewaysViewModelFactory(factory: PushGatewaysViewModel_AssistedFactory): PushGatewaysViewModel.Factory
 
 }
