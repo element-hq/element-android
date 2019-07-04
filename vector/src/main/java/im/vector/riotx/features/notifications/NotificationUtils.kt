@@ -69,8 +69,8 @@ object NotificationUtils {
      * IDs for actions
      * ========================================================================================== */
 
-    private const val JOIN_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.JOIN_ACTION"
-    private const val REJECT_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.REJECT_ACTION"
+    const val JOIN_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.JOIN_ACTION"
+    const val REJECT_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.REJECT_ACTION"
     private const val QUICK_LAUNCH_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.QUICK_LAUNCH_ACTION"
     const val MARK_ROOM_READ_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.MARK_ROOM_READ_ACTION"
     const val SMART_REPLY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.SMART_REPLY_ACTION"
@@ -492,31 +492,31 @@ object NotificationUtils {
                 .setColor(accentColor)
                 .apply {
                     if (simpleNotifiableEvent is InviteNotifiableEvent) {
-                        /*
-                        TODO
                         val roomId = simpleNotifiableEvent.roomId
                         // offer to type a quick reject button
-                        val rejectIntent = JoinRoomActivity.getRejectRoomIntent(context, roomId, matrixId)
-
-                        // the action must be unique else the parameters are ignored
+                        val rejectIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                         rejectIntent.action = REJECT_ACTION
                         rejectIntent.data = Uri.parse("foobar://$roomId&$matrixId")
+                        rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
+                        val rejectIntentPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), rejectIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT)
+
                         addAction(
                                 R.drawable.vector_notification_reject_invitation,
                                 context.getString(R.string.reject),
-                                PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), rejectIntent, 0))
+                                rejectIntentPendingIntent)
 
                         // offer to type a quick accept button
-                        val joinIntent = JoinRoomActivity.getJoinRoomIntent(context, roomId, matrixId)
-
-                        // the action must be unique else the parameters are ignored
+                        val joinIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                         joinIntent.action = JOIN_ACTION
                         joinIntent.data = Uri.parse("foobar://$roomId&$matrixId")
+                        rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
+                        val joinIntentPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), joinIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT)
                         addAction(
                                 R.drawable.vector_notification_accept_invitation,
                                 context.getString(R.string.join),
-                                PendingIntent.getActivity(context, 0, joinIntent, 0))
-                        */
+                                joinIntentPendingIntent)
                     } else {
                         setAutoCancel(true)
                     }

@@ -55,12 +55,38 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             NotificationUtils.MARK_ROOM_READ_ACTION     ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let {
                     notificationDrawerManager.clearMessageEventOfRoom(it)
-                    handleMarkAsRead(context, it)
+                    handleMarkAsRead(it)
                 }
+            NotificationUtils.JOIN_ACTION               -> {
+                intent.getStringExtra(KEY_ROOM_ID)?.let {
+                    notificationDrawerManager.clearMemberShipNotificationForRoom(it)
+                    handleJoinRoom(it)
+                }
+            }
+            NotificationUtils.REJECT_ACTION             -> {
+                intent.getStringExtra(KEY_ROOM_ID)?.let {
+                    notificationDrawerManager.clearMemberShipNotificationForRoom(it)
+                    handleRejectRoom(it)
+                }
+            }
         }
     }
 
-    private fun handleMarkAsRead(context: Context, roomId: String) {
+    private fun handleJoinRoom(roomId: String) {
+        activeSessionHolder.getSafeActiveSession()?.let { session ->
+            session.getRoom(roomId)
+                    ?.join(object : MatrixCallback<Unit> {})
+        }
+    }
+
+    private fun handleRejectRoom(roomId: String) {
+        activeSessionHolder.getSafeActiveSession()?.let { session ->
+            session.getRoom(roomId)
+                    ?.leave(object : MatrixCallback<Unit> {})
+        }
+    }
+
+    private fun handleMarkAsRead(roomId: String) {
         activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)
                     ?.markAllAsRead(object : MatrixCallback<Unit> {})
@@ -96,7 +122,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 false,
                 System.currentTimeMillis(),
                 session.getUser(session.sessionParams.credentials.userId)?.displayName
-                ?: context?.getString(R.string.notification_sender_me),
+                        ?: context?.getString(R.string.notification_sender_me),
                 session.sessionParams.credentials.userId,
                 message,
                 room.roomId,
@@ -165,7 +191,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     private fun getReplyMessage(intent: Intent?): String? {
         if (intent != null) {
-            val remoteInput = RemoteInput.getResultsFromIntent(intent);
+            val remoteInput = RemoteInput.getResultsFromIntent(intent)
             if (remoteInput != null) {
                 return remoteInput.getCharSequence(KEY_TEXT_REPLY)?.toString()
             }
