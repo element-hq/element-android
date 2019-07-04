@@ -168,6 +168,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
             is Success    -> renderSuccess(state)
             is Fail       -> renderFailure(state.asyncFilteredRooms.error)
         }
+        roomController.setData(state)
     }
 
     private fun renderSuccess(state: RoomListViewState) {
@@ -178,7 +179,6 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         } else {
             stateView.state = StateView.State.Content
         }
-        roomController.setData(state)
     }
 
     private fun renderEmptyState(allRooms: List<RoomSummary>?) {

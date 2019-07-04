@@ -63,18 +63,10 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
 
     private fun renderState(state: GroupListViewState) {
         when (state.asyncGroups) {
-            is Incomplete -> renderLoading()
-            is Success    -> renderSuccess(state)
+            is Incomplete -> stateView.state = StateView.State.Loading
+            is Success    -> stateView.state = StateView.State.Content
         }
-    }
-
-    private fun renderSuccess(state: GroupListViewState) {
-        stateView.state = StateView.State.Content
         groupController.setData(state)
-    }
-
-    private fun renderLoading() {
-        stateView.state = StateView.State.Loading
     }
 
     override fun onGroupSelected(groupSummary: GroupSummary) {

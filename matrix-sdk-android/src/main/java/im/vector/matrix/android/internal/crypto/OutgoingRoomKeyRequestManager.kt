@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import android.os.Handler
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -28,9 +27,12 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.createBackgroundHandler
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @SessionScope
@@ -47,7 +49,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
 
     // sanity check to ensure that we don't end up with two concurrent runs
     // of sendOutgoingRoomKeyRequestsTimer
-    private var sendOutgoingRoomKeyRequestsRunning: Boolean = false
+    private val sendOutgoingRoomKeyRequestsRunning = AtomicBoolean(false)
 
     /**
      * Called when the client is started. Sets background processes running.
@@ -101,7 +103,9 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      * @param requestBody requestBody
      */
     fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        cancelRoomKeyRequest(requestBody, false)
+        BACKGROUND_HANDLER.post {
+            cancelRoomKeyRequest(requestBody, false)
+        }
     }
 
     /**
@@ -110,7 +114,9 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      * @param requestBody requestBody
      */
     fun resendRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        cancelRoomKeyRequest(requestBody, true)
+        BACKGROUND_HANDLER.post {
+            cancelRoomKeyRequest(requestBody, true)
+        }
     }
 
     /**
@@ -148,16 +154,16 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      * Start the background timer to send queued requests, if the timer isn't already running.
      */
     private fun startTimer() {
-        if (sendOutgoingRoomKeyRequestsRunning) {
+        if (sendOutgoingRoomKeyRequestsRunning.get()) {
             return
         }
-        Handler().postDelayed(Runnable {
-            if (sendOutgoingRoomKeyRequestsRunning) {
+        BACKGROUND_HANDLER.postDelayed(Runnable {
+            if (sendOutgoingRoomKeyRequestsRunning.get()) {
                 Timber.v("## startTimer() : RoomKeyRequestSend already in progress!")
                 return@Runnable
             }
 
-            sendOutgoingRoomKeyRequestsRunning = true
+            sendOutgoingRoomKeyRequestsRunning.set(true)
             sendOutgoingRoomKeyRequests()
         }, SEND_KEY_REQUESTS_DELAY_MS.toLong())
     }
@@ -167,7 +173,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
     // timer will be restarted before the promise resolves).
     private fun sendOutgoingRoomKeyRequests() {
         if (!isClientRunning) {
-            sendOutgoingRoomKeyRequestsRunning = false
+            sendOutgoingRoomKeyRequestsRunning.set(false)
             return
         }
 
@@ -179,7 +185,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
 
         if (null == outgoingRoomKeyRequest) {
             Timber.e("## sendOutgoingRoomKeyRequests() : No more outgoing room key requests")
-            sendOutgoingRoomKeyRequestsRunning = false
+            sendOutgoingRoomKeyRequestsRunning.set(false)
             return
         }
 
@@ -213,7 +219,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
                     cryptoStore.updateOutgoingRoomKeyRequest(request)
                 }
 
-                sendOutgoingRoomKeyRequestsRunning = false
+                sendOutgoingRoomKeyRequestsRunning.set(false)
                 startTimer()
             }
 
@@ -246,7 +252,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         sendMessageToDevices(roomKeyShareCancellation, request.recipients, request.cancellationTxnId, object : MatrixCallback<Unit> {
             private fun onDone() {
                 cryptoStore.deleteOutgoingRoomKeyRequest(request.requestId)
-                sendOutgoingRoomKeyRequestsRunning = false
+                sendOutgoingRoomKeyRequestsRunning.set(false)
                 startTimer()
             }
 
@@ -288,13 +294,17 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
             // TODO Change this two hard coded key to something better
             contentMap.setObject(recipient["userId"], recipient["deviceId"], message)
         }
-
         sendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ROOM_KEY_REQUEST, contentMap, transactionId))
                 .dispatchTo(callback)
+                .executeOn(TaskThread.CALLER)
+                .callbackOn(TaskThread.CALLER)
                 .executeBy(taskExecutor)
     }
 
     companion object {
         private const val SEND_KEY_REQUESTS_DELAY_MS = 500
+
+        private val BACKGROUND_HANDLER = createBackgroundHandler("OutgoingRoomKeyRequest")
+
     }
 }
