@@ -54,6 +54,19 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val event = localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown).also {
             saveLocalEcho(it)
         }
+
+        return sendEvent(event)
+    }
+
+    override fun sendFormattedTextMessage(text: String, formattedText: String): Cancelable {
+        val event = localEchoEventFactory.createFormattedTextEvent(roomId, text, formattedText).also {
+            saveLocalEcho(it)
+        }
+
+        return sendEvent(event)
+    }
+
+    private fun sendEvent(event: Event): Cancelable {
         // Encrypted room handling
         return if (cryptoService.isRoomEncrypted(roomId)) {
             Timber.v("Send event in encrypted room")
@@ -62,23 +75,10 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, sendWork)
             CancelableWork(context, encryptWork.id)
         } else {
-            sendEvent(event)
+            val sendWork = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, sendWork)
+            CancelableWork(context, sendWork.id)
         }
-    }
-
-    private fun sendEvent(event: Event): Cancelable {
-        val sendWork = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(context, roomId, sendWork)
-        return CancelableWork(context, sendWork.id)
-    }
-
-    override fun sendFormattedTextMessage(text: String, formattedText: String): Cancelable {
-        val event = localEchoEventFactory.createFormattedTextEvent(roomId, text, formattedText).also {
-            saveLocalEcho(it)
-        }
-        val sendWork = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(context, roomId, sendWork)
-        return CancelableWork(context, sendWork.id)
     }
 
     override fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable {

@@ -42,7 +42,7 @@ interface SendService {
      * @param formattedText The formatted body using MessageType#FORMAT_MATRIX_HTML
      * @return a [Cancelable]
      */
-    fun sendFormattedTextMessage(text: String,formattedText: String): Cancelable
+    fun sendFormattedTextMessage(text: String, formattedText: String): Cancelable
 
     /**
      * Method to send a media asynchronously.

@@ -233,7 +233,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 SendMode.QUOTE   -> {
                     val messageContent: MessageContent? =
                             state.selectedEvent?.annotations?.editSummary?.aggregatedContent?.toModel()
-                                    ?: state.selectedEvent?.root?.content.toModel()
+                                    ?: state.selectedEvent?.root?.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)
