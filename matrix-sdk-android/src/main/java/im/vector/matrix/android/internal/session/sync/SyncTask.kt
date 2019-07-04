@@ -29,9 +29,9 @@ import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
-internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
+internal interface SyncTask : Task<SyncTask.Params, Unit> {
 
-    data class Params(val token: String?, var timeout: Long = 30_000L)
+    data class Params(var timeout: Long = 30_000L)
 
 }
 
@@ -39,15 +39,17 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
                                                    private val credentials: Credentials,
                                                    private val filterRepository: FilterRepository,
                                                    private val syncResponseHandler: SyncResponseHandler,
-                                                   private val sessionParamsStore: SessionParamsStore
+                                                   private val sessionParamsStore: SessionParamsStore,
+                                                   private val syncTokenStore: SyncTokenStore
 ) : SyncTask {
 
 
-    override suspend fun execute(params: SyncTask.Params): Try<SyncResponse> {
+    override suspend fun execute(params: SyncTask.Params): Try<Unit> {
         val requestParams = HashMap<String, String>()
         var timeout = 0L
-        if (params.token != null) {
-            requestParams["since"] = params.token
+        val token = syncTokenStore.getLastToken()
+        if (token != null) {
+            requestParams["since"] = token
             timeout = params.timeout
         }
         requestParams["timeout"] = timeout.toString()
@@ -65,9 +67,9 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             // Transmit the throwable
             throwable.failure()
         }.flatMap { syncResponse ->
-            syncResponseHandler.handleResponse(syncResponse, params.token, false)
+            syncResponseHandler.handleResponse(syncResponse, token, false)
+        }.map {
+            syncTokenStore.saveToken(it.nextBatch)
         }
     }
-
-
 }

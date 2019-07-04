@@ -25,10 +25,7 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.SyncTask
-import im.vector.matrix.android.internal.session.sync.SyncTokenStore
-import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
@@ -44,7 +41,6 @@ private const val DEFAULT_LONG_POOL_DELAY = 0L
 
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
-                                              private val syncTokenStore: SyncTokenStore,
                                               private val backgroundDetectionObserver: BackgroundDetectionObserver,
                                               private val taskExecutor: TaskExecutor
 ) : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
@@ -52,7 +48,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     private var state: SyncState = SyncState.IDLE
     private var liveState = MutableLiveData<SyncState>()
     private val lock = Object()
-    private var nextBatch = syncTokenStore.getLastToken()
     private var cancelableTask: Cancelable? = null
 
     init {
@@ -62,8 +57,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     fun restart() = synchronized(lock) {
         if (state is SyncState.PAUSED) {
             Timber.v("Resume sync...")
-            // Retrieve the last token, it may have been deleted in case of a clear cache
-            nextBatch = syncTokenStore.getLastToken()
             updateStateTo(SyncState.RUNNING(catchingUp = true))
             lock.notify()
         }
@@ -100,22 +93,20 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                     lock.wait()
                 }
             } else {
-                Timber.v("Execute sync request with token $nextBatch and timeout $DEFAULT_LONG_POOL_TIMEOUT")
+                Timber.v("Execute sync request with timeout $DEFAULT_LONG_POOL_TIMEOUT")
                 val latch = CountDownLatch(1)
-                val params = SyncTask.Params(nextBatch, DEFAULT_LONG_POOL_TIMEOUT)
+                val params = SyncTask.Params(DEFAULT_LONG_POOL_TIMEOUT)
                 cancelableTask = syncTask.configureWith(params)
                         .callbackOn(TaskThread.CALLER)
                         .executeOn(TaskThread.CALLER)
-                        .dispatchTo(object : MatrixCallback<SyncResponse> {
-                            override fun onSuccess(data: SyncResponse) {
-                                nextBatch = data.nextBatch
-                                syncTokenStore.saveToken(nextBatch)
+                        .dispatchTo(object : MatrixCallback<Unit> {
+                            override fun onSuccess(data: Unit) {
                                 latch.countDown()
                             }
 
                             override fun onFailure(failure: Throwable) {
                                 if (failure is Failure.NetworkConnection
-                                    && failure.cause is SocketTimeoutException) {
+                                        && failure.cause is SocketTimeoutException) {
                                     // Timeout are not critical
                                     Timber.v("Timeout")
                                 } else {
@@ -123,13 +114,13 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                 }
 
                                 if (failure !is Failure.NetworkConnection
-                                    || failure.cause is JsonEncodingException) {
+                                        || failure.cause is JsonEncodingException) {
                                     // Wait 10s before retrying
                                     sleep(RETRY_WAIT_TIME_MS)
                                 }
 
                                 if (failure is Failure.ServerError
-                                    && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                                        && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
                                     // No token or invalid token, stop the thread
                                     updateStateTo(SyncState.KILLING)
                                 }
@@ -140,7 +131,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                         })
                         .executeBy(taskExecutor)
 
-                 latch.await()
+                latch.await()
                 if (state is SyncState.RUNNING) {
                     updateStateTo(SyncState.RUNNING(catchingUp = false))
                 }

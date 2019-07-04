@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.CryptoManager
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import timber.log.Timber
 import javax.inject.Inject
