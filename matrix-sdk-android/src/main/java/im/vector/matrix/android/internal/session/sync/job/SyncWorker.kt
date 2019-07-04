@@ -21,8 +21,6 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.session.sync.SyncTask
-import im.vector.matrix.android.internal.session.sync.SyncTokenStore
-import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
@@ -48,8 +46,6 @@ internal class SyncWorker(context: Context,
     )
 
     @Inject
-    lateinit var syncTokenStore: SyncTokenStore
-    @Inject
     lateinit var syncTask: SyncTask
     @Inject
     lateinit var taskExecutor: TaskExecutor
@@ -62,15 +58,12 @@ internal class SyncWorker(context: Context,
 
 
         val latch = CountDownLatch(1)
-        val nextBatch = syncTokenStore.getLastToken()
-        Timber.i("Sync work last token $nextBatch")
-        val taskParams = SyncTask.Params(nextBatch, 0)
+        val taskParams = SyncTask.Params(0)
         cancelableTask = syncTask.configureWith(taskParams)
                 .callbackOn(TaskThread.CALLER)
                 .executeOn(TaskThread.CALLER)
-                .dispatchTo(object : MatrixCallback<SyncResponse> {
-                    override fun onSuccess(data: SyncResponse) {
-                        syncTokenStore.saveToken(nextBatch)
+                .dispatchTo(object : MatrixCallback<Unit> {
+                    override fun onSuccess(data: Unit) {
                         latch.countDown()
                     }
 

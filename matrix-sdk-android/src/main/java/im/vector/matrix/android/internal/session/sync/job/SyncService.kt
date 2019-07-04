@@ -26,17 +26,12 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
-import im.vector.matrix.android.internal.session.sync.SyncTokenStore
-import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.*
-
-private const val DEFAULT_LONG_POOL_TIMEOUT = 10_000L
-private const val BACKGROUND_LONG_POOL_TIMEOUT = 0L
 
 /**
  * Can execute periodic sync task.
@@ -49,7 +44,6 @@ open class SyncService : Service() {
     private var mIsSelfDestroyed: Boolean = false
     private var cancelableTask: Cancelable? = null
 
-    private lateinit var syncTokenStore: SyncTokenStore
     private lateinit var syncTask: SyncTask
     private lateinit var networkConnectivityChecker: NetworkConnectivityChecker
     private lateinit var taskExecutor: TaskExecutor
@@ -57,18 +51,12 @@ open class SyncService : Service() {
 
     var timer = Timer()
 
-    var nextBatchDelay = 0L
-    var timeout = 10_000L
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.i("onStartCommand ${intent}")
-        nextBatchDelay = 60_000L
-        timeout = 0
         intent?.let {
             val userId = it.getStringExtra(EXTRA_USER_ID)
             val sessionComponent = Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId)
                     ?: return@let
-            syncTokenStore = sessionComponent.syncTokenStore()
             syncTask = sessionComponent.syncTask()
             networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
             taskExecutor = sessionComponent.taskExecutor()
@@ -105,7 +93,6 @@ open class SyncService : Service() {
     }
 
     fun doSync(once: Boolean = false) {
-        var nextBatch = syncTokenStore.getLastToken()
         if (!networkConnectivityChecker.isConnected()) {
             Timber.v("Sync is Paused. Waiting...")
             //TODO Retry in ?
@@ -113,24 +100,22 @@ open class SyncService : Service() {
                 override fun run() {
                     doSync()
                 }
-            }, 5_000L)
+            }, NO_NETWORK_DELAY)
         } else {
-            Timber.v("Execute sync request with token $nextBatch and timeout $timeout")
-            val params = SyncTask.Params(nextBatch, timeout)
+            Timber.v("Execute sync request with timeout 0")
+            val params = SyncTask.Params(TIME_OUT)
             cancelableTask = syncTask.configureWith(params)
                     .callbackOn(TaskThread.CALLER)
                     .executeOn(TaskThread.CALLER)
-                    .dispatchTo(object : MatrixCallback<SyncResponse> {
-                        override fun onSuccess(data: SyncResponse) {
+                    .dispatchTo(object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
                             cancelableTask = null
-                            nextBatch = data.nextBatch
-                            syncTokenStore.saveToken(nextBatch)
                             if (!once) {
                                 timer.schedule(object : TimerTask() {
                                     override fun run() {
                                         doSync()
                                     }
-                                }, nextBatchDelay)
+                                }, NEXT_BATCH_DELAY)
                             } else {
                                 //stop
                                 stopMe()
@@ -180,6 +165,10 @@ open class SyncService : Service() {
 
     companion object {
         const val EXTRA_USER_ID = "EXTRA_USER_ID"
+
+        const val TIME_OUT = 0L
+        const val NEXT_BATCH_DELAY = 60_000L
+        const val NO_NETWORK_DELAY = 5_000L
     }
 
 }
