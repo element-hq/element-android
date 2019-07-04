@@ -44,6 +44,8 @@ import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
@@ -499,6 +501,16 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun observeRoomSummary() {
         room.rx().liveRoomSummary(false)
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap {
+                    if (it.membership != Membership.INVITE || it.latestEvent != null) {
+                        // Not an invitation, or already fetching last event
+                        Observable.just(it)
+                    } else {
+                        // We need the last event
+                        room.rx().liveRoomSummary(true)
+                    }
+                }
                 .execute { async ->
                     copy(
                             asyncRoomSummary = async,
