@@ -24,10 +24,11 @@ import kotlinx.android.parcel.Parcelize
 fun EncryptedFileInfo.toElementToDecrypt(): ElementToDecrypt? {
     // Check the validity of some fields
     if (isValid()) {
+        // It's valid so the data are here
         return ElementToDecrypt(
-                iv = this.iv!!,
-                k = this.key!!.k!!,
-                sha256 = this.hashes!!["sha256"] ?: error("")
+                iv = this.iv ?: "",
+                k = this.key?.k ?: "",
+                sha256 = this.hashes?.get("sha256") ?: ""
         )
     }
 

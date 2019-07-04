@@ -388,8 +388,8 @@ internal class KeysBackup @Inject constructor(
             return keysBackupVersionTrust
         }
 
-        val mySigs: Map<String, *> = authData.signatures!![myUserId] as Map<String, *>
-        if (mySigs.isEmpty()) {
+        val mySigs = authData.signatures?.get(myUserId)
+        if (mySigs == null || mySigs.isEmpty()) {
             Timber.v("getKeysBackupTrust: Ignoring key backup because it lacks any signatures from this user")
             return keysBackupVersionTrust
         }
@@ -402,9 +402,8 @@ internal class KeysBackup @Inject constructor(
                 deviceId = components[1]
             }
 
-            var device: MXDeviceInfo? = null
             if (deviceId != null) {
-                device = cryptoStore.getUserDevice(deviceId, myUserId)
+                var device = cryptoStore.getUserDevice(deviceId, myUserId)
 
                 var isSignatureValid = false
 
@@ -452,8 +451,7 @@ internal class KeysBackup @Inject constructor(
                     val myUserId = credentials.userId
 
                     // Get current signatures, or create an empty set
-                    val myUserSignatures = (authData.signatures!![myUserId]?.toMutableMap()
-                            ?: HashMap())
+                    val myUserSignatures = authData.signatures?.get(myUserId)?.toMutableMap() ?: HashMap()
 
                     if (trust) {
                         // Add current device signature
@@ -1027,8 +1025,7 @@ internal class KeysBackup @Inject constructor(
 
         val authData = keysBackupData.getAuthDataAsMegolmBackupAuthData()
 
-        if (authData.signatures == null
-                || authData.publicKey.isBlank()) {
+        if (authData?.signatures == null || authData.publicKey.isBlank()) {
             return null
         }
 

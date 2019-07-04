@@ -54,9 +54,9 @@ open class KeysAlgorithmAndData {
     /**
      * Facility method to convert authData to a MegolmBackupAuthData object
      */
-    fun getAuthDataAsMegolmBackupAuthData(): MegolmBackupAuthData {
+    fun getAuthDataAsMegolmBackupAuthData(): MegolmBackupAuthData? {
         return MoshiProvider.providesMoshi()
                 .adapter(MegolmBackupAuthData::class.java)
-                .fromJsonValue(authData)!!
+                .fromJsonValue(authData)
     }
 }

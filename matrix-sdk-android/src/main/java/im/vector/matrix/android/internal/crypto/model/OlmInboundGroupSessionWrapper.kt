@@ -111,27 +111,29 @@ class OlmInboundGroupSessionWrapper : Serializable {
      * @return the inbound group session as MegolmSessionData if the operation succeeds
      */
     fun exportKeys(): MegolmSessionData? {
-        var megolmSessionData: MegolmSessionData? = MegolmSessionData()
-
-        try {
+        return try {
             if (null == forwardingCurve25519KeyChain) {
                 forwardingCurve25519KeyChain = ArrayList()
             }
 
-            megolmSessionData!!.senderClaimedEd25519Key = keysClaimed!!["ed25519"]
-            megolmSessionData.forwardingCurve25519KeyChain = ArrayList(forwardingCurve25519KeyChain!!)
-            megolmSessionData.senderKey = senderKey
-            megolmSessionData.senderClaimedKeys = keysClaimed
-            megolmSessionData.roomId = roomId
-            megolmSessionData.sessionId = olmInboundGroupSession!!.sessionIdentifier()
-            megolmSessionData.sessionKey = olmInboundGroupSession!!.export(olmInboundGroupSession!!.firstKnownIndex)
-            megolmSessionData.algorithm = MXCRYPTO_ALGORITHM_MEGOLM
-        } catch (e: Exception) {
-            megolmSessionData = null
-            Timber.e(e, "## export() : senderKey " + senderKey + " failed")
-        }
+            if (keysClaimed == null) {
+                return null
+            }
 
-        return megolmSessionData
+            MegolmSessionData().also {
+                it.senderClaimedEd25519Key = keysClaimed?.get("ed25519")
+                it.forwardingCurve25519KeyChain = ArrayList(forwardingCurve25519KeyChain!!)
+                it.senderKey = senderKey
+                it.senderClaimedKeys = keysClaimed
+                it.roomId = roomId
+                it.sessionId = olmInboundGroupSession!!.sessionIdentifier()
+                it.sessionKey = olmInboundGroupSession!!.export(olmInboundGroupSession!!.firstKnownIndex)
+                it.algorithm = MXCRYPTO_ALGORITHM_MEGOLM
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "## export() : senderKey $senderKey failed")
+            null
+        }
     }
 
     /**

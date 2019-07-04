@@ -667,7 +667,7 @@ internal class MXOlmDevice @Inject constructor(
 
                         val messageIndexKey = senderKey + "|" + sessionId + "|" + decryptResult.mIndex
 
-                        if (null != inboundGroupSessionMessageIndexes[timeline]!![messageIndexKey]) {
+                        if (inboundGroupSessionMessageIndexes[timeline]?.get(messageIndexKey) != null) {
                             val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
                             Timber.e("## decryptGroupMessage() : $reason")
                             throw MXDecryptionException(MXCryptoError(MXCryptoError.DUPLICATED_MESSAGE_INDEX_ERROR_CODE,

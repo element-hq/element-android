@@ -179,13 +179,13 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
             pendingEvents[pendingEventsKey] = HashMap()
         }
 
-        if (!pendingEvents[pendingEventsKey]!!.containsKey(timelineId)) {
-            pendingEvents[pendingEventsKey]!![timelineId] = ArrayList()
+        if (pendingEvents[pendingEventsKey]?.containsKey(timelineId) == false) {
+            pendingEvents[pendingEventsKey]?.put(timelineId, ArrayList())
         }
 
-        if (pendingEvents[pendingEventsKey]!![timelineId]!!.indexOf(event) < 0) {
+        if (pendingEvents[pendingEventsKey]?.get(timelineId)?.contains(event) == false) {
             Timber.v("## addEventToPendingList() : add Event " + event.eventId + " in room id " + event.roomId)
-            pendingEvents[pendingEventsKey]!![timelineId]!!.add(event)
+            pendingEvents[pendingEventsKey]?.get(timelineId)?.add(event)
         }
     }
 
