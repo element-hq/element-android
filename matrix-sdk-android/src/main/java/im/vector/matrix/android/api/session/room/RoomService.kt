@@ -17,7 +17,6 @@
 package im.vector.matrix.android.api.session.room
 
 import androidx.lifecycle.LiveData
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 
@@ -29,8 +28,7 @@ interface RoomService {
     /**
      * Create a room
      */
-    fun createRoom(createRoomParams: CreateRoomParams,
-                   callback: MatrixCallback<String>)
+    suspend fun createRoom(createRoomParams: CreateRoomParams): String
 
     /**
      * Get a room from a roomId

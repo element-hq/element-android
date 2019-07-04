@@ -17,9 +17,9 @@
 package im.vector.matrix.android.internal.session.room.read
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.read.ReadService
+import im.vector.matrix.android.api.util.suspendCallback
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
@@ -38,21 +38,27 @@ internal class DefaultReadService @Inject constructor(private val roomId: String
                                                       private val setReadMarkersTask: SetReadMarkersTask,
                                                       private val credentials: Credentials) : ReadService {
 
-    override fun markAllAsRead(callback: MatrixCallback<Unit>) {
+    override suspend fun markAllAsRead() {
         //TODO shouldn't it be latest synced event?
         val latestEvent = getLatestEvent()
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = latestEvent?.eventId, readReceiptEventId = latestEvent?.eventId)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        suspendCallback<Unit> {
+            setReadMarkersTask.configureWith(params).dispatchTo(it).executeBy(taskExecutor)
+        }
     }
 
-    override fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun setReadReceipt(eventId: String) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = null, readReceiptEventId = eventId)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        suspendCallback<Unit> {
+            setReadMarkersTask.configureWith(params).dispatchTo(it).executeBy(taskExecutor)
+        }
     }
 
-    override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun setReadMarker(fullyReadEventId: String) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = fullyReadEventId, readReceiptEventId = null)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        suspendCallback<Unit> {
+            setReadMarkersTask.configureWith(params).dispatchTo(it).executeBy(taskExecutor)
+        }
     }
 
     private fun getLatestEvent(): EventEntity? {

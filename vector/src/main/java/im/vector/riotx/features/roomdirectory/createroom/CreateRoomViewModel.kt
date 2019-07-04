@@ -19,12 +19,14 @@ package im.vector.riotx.features.roomdirectory.createroom
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomPreset
 import im.vector.riotx.core.platform.VectorViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
                                                       private val session: Session
@@ -69,19 +71,18 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
         }
 
-        session.createRoom(createRoomParams, object : MatrixCallback<String> {
-            override fun onSuccess(data: String) {
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                val data = session.createRoom(createRoomParams)
                 setState {
                     copy(asyncCreateRoomRequest = Success(data))
                 }
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 setState {
                     copy(asyncCreateRoomRequest = Fail(failure))
                 }
             }
-        })
+        }
     }
 
 }

@@ -16,13 +16,11 @@
 
 package im.vector.matrix.android.api.session.room.state
 
-import im.vector.matrix.android.api.MatrixCallback
-
 interface StateService {
 
     /**
      * Update the topic of the room
      */
-    fun updateTopic(topic: String, callback: MatrixCallback<Unit>)
+    suspend fun updateTopic(topic: String)
 
 }

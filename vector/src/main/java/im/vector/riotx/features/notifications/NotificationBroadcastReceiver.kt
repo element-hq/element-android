@@ -20,12 +20,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.vectorComponent
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -74,22 +75,33 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     private fun handleJoinRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
-            session.getRoom(roomId)
-                    ?.join(object : MatrixCallback<Unit> {})
+            val room = session.getRoom(roomId)
+            if (room != null) {
+                GlobalScope.launch {
+                    room.join()
+                }
+            }
         }
     }
 
     private fun handleRejectRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
-            session.getRoom(roomId)
-                    ?.leave(object : MatrixCallback<Unit> {})
+            val room = session.getRoom(roomId)
+            if (room != null) {
+                GlobalScope.launch {
+                    room.leave()
+                }
+            }
         }
     }
 
     private fun handleMarkAsRead(roomId: String) {
-        activeSessionHolder.getActiveSession().let { session ->
-            session.getRoom(roomId)
-                    ?.markAllAsRead(object : MatrixCallback<Unit> {})
+        val session = activeSessionHolder.getActiveSession()
+        val room = session.getRoom(roomId)
+        if (room != null) {
+            GlobalScope.launch {
+                room.markAllAsRead()
+            }
         }
     }
 

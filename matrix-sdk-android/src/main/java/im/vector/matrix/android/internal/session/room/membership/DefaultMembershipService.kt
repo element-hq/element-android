@@ -18,12 +18,12 @@ package im.vector.matrix.android.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.suspendCallback
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
@@ -73,24 +73,30 @@ internal class DefaultMembershipService @Inject constructor(private val roomId: 
         return result
     }
 
-    override fun invite(userId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun invite(userId: String) {
         val params = InviteTask.Params(roomId, userId)
-        inviteTask.configureWith(params)
-                .dispatchTo(callback)
-                .executeBy(taskExecutor)
+        suspendCallback<Unit> {
+            inviteTask.configureWith(params)
+                    .dispatchTo(it)
+                    .executeBy(taskExecutor)
+        }
     }
 
-    override fun join(callback: MatrixCallback<Unit>) {
+    override suspend fun join() {
         val params = JoinRoomTask.Params(roomId)
-        joinTask.configureWith(params)
-                .dispatchTo(callback)
-                .executeBy(taskExecutor)
+        suspendCallback<Unit> {
+            joinTask.configureWith(params)
+                    .dispatchTo(it)
+                    .executeBy(taskExecutor)
+        }
     }
 
-    override fun leave(callback: MatrixCallback<Unit>) {
+    override suspend fun leave() {
         val params = LeaveRoomTask.Params(roomId)
-        leaveRoomTask.configureWith(params)
-                .dispatchTo(callback)
-                .executeBy(taskExecutor)
+        suspendCallback<Unit> {
+            leaveRoomTask.configureWith(params)
+                    .dispatchTo(it)
+                    .executeBy(taskExecutor)
+        }
     }
 }
