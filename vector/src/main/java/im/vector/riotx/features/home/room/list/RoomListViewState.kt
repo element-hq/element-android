@@ -73,7 +73,7 @@ typealias RoomSummaries = LinkedHashMap<RoomCategory, List<RoomSummary>>
 enum class RoomCategory(@StringRes val titleRes: Int) {
     INVITE(R.string.invitations_header),
     FAVOURITE(R.string.bottom_action_favourites),
-    DIRECT(R.string.bottom_action_people),
+    DIRECT(R.string.bottom_action_people_x),
     GROUP(R.string.bottom_action_rooms),
     LOW_PRIORITY(R.string.low_priority_header),
     SERVER_NOTICE(R.string.system_alerts_header)

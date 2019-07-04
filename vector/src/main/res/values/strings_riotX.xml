@@ -3,5 +3,7 @@
 
     <!-- Strings not defined in Riot -->
 
+    <string name="bottom_action_people_x">Direct Messages</string>
+
 
 </resources>

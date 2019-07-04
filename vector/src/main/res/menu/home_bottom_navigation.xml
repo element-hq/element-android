@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/bottom_action_people"
-        android:contentDescription="@string/bottom_action_people"
+        android:contentDescription="@string/bottom_action_people_x"
         android:enabled="true"
         android:icon="@drawable/ic_home_bottom_chat"
         android:title="" />
