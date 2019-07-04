@@ -124,7 +124,7 @@ data class MXDeviceInfo(
      * @return the display name
      */
     fun displayName(): String? {
-        return unsigned?.get("device_display_name") as String?
+        return unsigned?.get("device_display_name") as? String
     }
 
     /**

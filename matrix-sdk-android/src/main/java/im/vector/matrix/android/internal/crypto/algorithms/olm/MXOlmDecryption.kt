@@ -176,7 +176,7 @@ internal class MXOlmDecryption(
             sessionIds = ArrayList(sessionIdsSet)
         }
 
-        val messageBody = message["body"] as String?
+        val messageBody = message["body"] as? String
         var messageType: Int? = null
 
         val typeAsVoid = message["type"]
