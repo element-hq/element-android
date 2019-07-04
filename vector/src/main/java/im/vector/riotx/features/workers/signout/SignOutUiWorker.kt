@@ -56,6 +56,7 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
     private fun doSignOut() {
         // Dismiss all notifications
         notificationDrawerManager.clearAllEvents()
+        notificationDrawerManager.persistInfo()
 
         MainActivity.restartApp(activity, clearCache = true, clearCredentials = true)
     }
