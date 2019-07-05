@@ -68,17 +68,20 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
     }
 
     private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): Try<MXEventDecryptionResult> {
-        val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-                ?: return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
-
-        if (TextUtils.isEmpty(encryptedEventContent.senderKey)
-                || TextUtils.isEmpty(encryptedEventContent.sessionId)
-                || TextUtils.isEmpty(encryptedEventContent.ciphertext)) {
+        if (event.roomId.isNullOrBlank()) {
             return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
         }
 
-        // TODO Why AS says this code is unreachable?
-        return olmDevice.decryptGroupMessage(encryptedEventContent.ciphertext!!, event.roomId!!, timeline, encryptedEventContent.sessionId!!, encryptedEventContent.senderKey!!)
+        val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
+                ?: return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
+
+        if (encryptedEventContent.senderKey.isNullOrBlank()
+                || encryptedEventContent.sessionId.isNullOrBlank()
+                || encryptedEventContent.ciphertext.isNullOrBlank()) {
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
+        }
+
+        return olmDevice.decryptGroupMessage(encryptedEventContent.ciphertext, event.roomId, timeline, encryptedEventContent.sessionId, encryptedEventContent.senderKey)
                 .fold(
                         { throwable ->
                             if (throwable is MXCryptoError.OlmError) {
@@ -93,7 +96,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                 val reason = String.format(MXCryptoError.OLM_REASON, throwable.olmException.message)
                                 val detailedReason = String.format(MXCryptoError.DETAILED_OLM_REASON, encryptedEventContent.ciphertext, reason)
 
-                                return Try.Failure(MXCryptoError.Base(
+                                Try.Failure(MXCryptoError.Base(
                                         MXCryptoError.ErrorType.OLM,
                                         reason,
                                         detailedReason))
@@ -107,17 +110,17 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                 }
                             }
 
-                            return Try.Failure(throwable)
+                            Try.Failure(throwable)
                         },
-                        { decryptionResult ->
+                        { olmDecryptionResult ->
                             // the decryption succeeds
-                            return if (decryptionResult.payload != null) {
+                            if (olmDecryptionResult.payload != null) {
                                 Try.just(
                                         MXEventDecryptionResult(
-                                                clearEvent = decryptionResult.payload,
-                                                senderCurve25519Key = decryptionResult.senderKey,
-                                                claimedEd25519Key = decryptionResult.keysClaimed?.get("ed25519"),
-                                                forwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain ?: emptyList()
+                                                clearEvent = olmDecryptionResult.payload,
+                                                senderCurve25519Key = olmDecryptionResult.senderKey,
+                                                claimedEd25519Key = olmDecryptionResult.keysClaimed?.get("ed25519"),
+                                                forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain ?: emptyList()
                                         )
                                 )
                             } else {
