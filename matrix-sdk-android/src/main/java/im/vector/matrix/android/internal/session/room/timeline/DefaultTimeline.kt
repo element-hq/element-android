@@ -430,7 +430,7 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it access realm live results
      */
     private fun getLiveChunk(): ChunkEntity? {
-        return null //return liveEvents.firstOrNull()?.chunk?.firstOrNull()
+        return liveEvents.firstOrNull()?.chunk?.firstOrNull()
     }
 
     /**
