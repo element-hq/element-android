@@ -69,12 +69,12 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
 
     private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): Try<MXEventDecryptionResult> {
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-                ?: return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS_ERROR_CODE, MXCryptoError.MISSING_FIELDS_REASON))
+                ?: return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
 
         if (TextUtils.isEmpty(encryptedEventContent.senderKey)
                 || TextUtils.isEmpty(encryptedEventContent.sessionId)
                 || TextUtils.isEmpty(encryptedEventContent.ciphertext)) {
-            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS_ERROR_CODE, MXCryptoError.MISSING_FIELDS_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
         }
 
         // TODO Why AS says this code is unreachable?
@@ -94,12 +94,12 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                 val detailedReason = String.format(MXCryptoError.DETAILED_OLM_REASON, encryptedEventContent.ciphertext, reason)
 
                                 return Try.Failure(MXCryptoError.Base(
-                                        MXCryptoError.ErrorType.OLM_ERROR_CODE,
+                                        MXCryptoError.ErrorType.OLM,
                                         reason,
                                         detailedReason))
                             }
                             if (throwable is MXCryptoError.Base) {
-                                if (throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
+                                if (throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                                     addEventToPendingList(event, timeline)
                                     if (requestKeysOnFail) {
                                         requestKeysForEvent(event)
@@ -121,7 +121,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                         )
                                 )
                             } else {
-                                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS_ERROR_CODE, MXCryptoError.MISSING_FIELDS_REASON))
+                                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
                             }
                         }
                 )

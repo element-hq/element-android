@@ -671,7 +671,7 @@ internal class MXOlmDevice @Inject constructor(
                             if (inboundGroupSessionMessageIndexes[timeline]?.get(messageIndexKey) != null) {
                                 val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
                                 Timber.e("## decryptGroupMessage() : $reason")
-                                return@flatMap Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX_ERROR_CODE, reason))
+                                return@flatMap Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason))
                             }
 
                             inboundGroupSessionMessageIndexes[timeline]!!.put(messageIndexKey, true)
@@ -684,7 +684,7 @@ internal class MXOlmDevice @Inject constructor(
                             adapter.fromJson(payloadString)
                         } catch (e: Exception) {
                             Timber.e("## decryptGroupMessage() : fails to parse the payload")
-                            return@flatMap Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT_ERROR_CODE, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON))
+                            return@flatMap Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON))
                         }
 
                         return@flatMap Try.just(
@@ -698,7 +698,7 @@ internal class MXOlmDevice @Inject constructor(
                     } else {
                         val reason = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, session.roomId)
                         Timber.e("## decryptGroupMessage() : $reason")
-                        return@flatMap Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID_ERROR_CODE, reason))
+                        return@flatMap Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, reason))
                     }
                 }
     }
@@ -766,7 +766,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun getInboundGroupSession(sessionId: String?, senderKey: String?, roomId: String?): Try<OlmInboundGroupSessionWrapper> {
         if (sessionId.isNullOrBlank() || senderKey.isNullOrBlank()) {
-            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_SENDER_KEY_ERROR_CODE, MXCryptoError.ERROR_MISSING_PROPERTY_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_SENDER_KEY, MXCryptoError.ERROR_MISSING_PROPERTY_REASON))
         }
 
         val session = store.getInboundGroupSession(sessionId, senderKey)
@@ -777,13 +777,13 @@ internal class MXOlmDevice @Inject constructor(
             if (!TextUtils.equals(roomId, session.roomId)) {
                 val errorDescription = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, session.roomId)
                 Timber.e("## getInboundGroupSession() : $errorDescription")
-                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID_ERROR_CODE, errorDescription))
+                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, errorDescription))
             } else {
                 Try.just(session)
             }
         } else {
             Timber.e("## getInboundGroupSession() : Cannot retrieve inbound group session $sessionId")
-            Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE, MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_REASON))
+            Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_REASON))
         }
     }
 
