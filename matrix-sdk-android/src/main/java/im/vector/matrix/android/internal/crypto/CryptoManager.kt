@@ -569,7 +569,7 @@ internal class CryptoManager @Inject constructor(
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
                         algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
                 Timber.e("## encryptEventContent() : $reason")
-                callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.UNABLE_TO_ENCRYPT_ERROR_CODE, reason)))
+                callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT_ERROR_CODE, reason)))
             }
         }
     }
@@ -618,14 +618,14 @@ internal class CryptoManager @Inject constructor(
         val eventContent = event.content
         return if (eventContent == null) {
             Timber.e("## decryptEvent : empty event content")
-            Try.Failure(MXCryptoError.Base(MXCryptoError.BAD_ENCRYPTED_MESSAGE_ERROR_CODE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
+            Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE_ERROR_CODE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
         } else {
             val algorithm = eventContent["algorithm"]?.toString()
             val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, algorithm)
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, algorithm)
                 Timber.e("## decryptEvent() : $reason")
-                Try.Failure(MXCryptoError.Base(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE, reason))
+                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT_ERROR_CODE, reason))
             } else {
                 alg.decryptEvent(event, timeline)
             }

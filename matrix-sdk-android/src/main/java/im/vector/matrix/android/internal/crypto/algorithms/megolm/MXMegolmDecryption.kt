@@ -69,34 +69,37 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
 
     private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): Try<MXEventDecryptionResult> {
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-                ?: throw MXCryptoError.Base(MXCryptoError.MISSING_FIELDS_ERROR_CODE, MXCryptoError.MISSING_FIELDS_REASON)
+                ?: return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS_ERROR_CODE, MXCryptoError.MISSING_FIELDS_REASON))
 
         if (TextUtils.isEmpty(encryptedEventContent.senderKey)
                 || TextUtils.isEmpty(encryptedEventContent.sessionId)
                 || TextUtils.isEmpty(encryptedEventContent.ciphertext)) {
-            throw MXCryptoError.Base(MXCryptoError.MISSING_FIELDS_ERROR_CODE, MXCryptoError.MISSING_FIELDS_REASON)
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS_ERROR_CODE, MXCryptoError.MISSING_FIELDS_REASON))
         }
 
+        // TODO Why AS says this code is unreachable?
         return olmDevice.decryptGroupMessage(encryptedEventContent.ciphertext!!, event.roomId!!, timeline, encryptedEventContent.sessionId!!, encryptedEventContent.senderKey!!)
                 .fold(
                         { throwable ->
-                            if (throwable is MXCryptoError.Base) {
-                                if (throwable.code == MXCryptoError.OLM_ERROR_CODE) {
-                                    if (MXCryptoError.UNKNOWN_MESSAGE_INDEX == throwable._message) {
-                                        addEventToPendingList(event, timeline)
-                                        if (requestKeysOnFail) {
-                                            requestKeysForEvent(event)
-                                        }
+                            if (throwable is MXCryptoError.OlmError) {
+                                // TODO Check the value of .message
+                                if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
+                                    addEventToPendingList(event, timeline)
+                                    if (requestKeysOnFail) {
+                                        requestKeysForEvent(event)
                                     }
+                                }
 
-                                    val reason = String.format(MXCryptoError.OLM_REASON, throwable._message)
-                                    val detailedReason = String.format(MXCryptoError.DETAILLED_OLM_REASON, encryptedEventContent.ciphertext, throwable._message)
+                                val reason = String.format(MXCryptoError.OLM_REASON, throwable.olmException.message)
+                                val detailedReason = String.format(MXCryptoError.DETAILED_OLM_REASON, encryptedEventContent.ciphertext, reason)
 
-                                    throw MXCryptoError.Base(
-                                            MXCryptoError.OLM_ERROR_CODE,
-                                            reason,
-                                            detailedReason)
-                                } else if (throwable.code == MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
+                                return Try.Failure(MXCryptoError.Base(
+                                        MXCryptoError.ErrorType.OLM_ERROR_CODE,
+                                        reason,
+                                        detailedReason))
+                            }
+                            if (throwable is MXCryptoError.Base) {
+                                if (throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
                                     addEventToPendingList(event, timeline)
                                     if (requestKeysOnFail) {
                                         requestKeysForEvent(event)
@@ -104,12 +107,12 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                 }
                             }
 
-                            throw throwable
+                            return Try.Failure(throwable)
                         },
                         { decryptionResult ->
                             // the decryption succeeds
-                            if (decryptionResult.payload != null) {
-                                return Try.just(
+                            return if (decryptionResult.payload != null) {
+                                Try.just(
                                         MXEventDecryptionResult(
                                                 clearEvent = decryptionResult.payload,
                                                 senderCurve25519Key = decryptionResult.senderKey,
@@ -118,7 +121,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                         )
                                 )
                             } else {
-                                throw MXCryptoError.Base(MXCryptoError.MISSING_FIELDS_ERROR_CODE, MXCryptoError.MISSING_FIELDS_REASON)
+                                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS_ERROR_CODE, MXCryptoError.MISSING_FIELDS_REASON))
                             }
                         }
                 )

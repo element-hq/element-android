@@ -49,11 +49,11 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                 val cryptoError = event.root.mCryptoError
                 val errorDescription =
                         if (cryptoError is MXCryptoError.Base) {
-                            if (cryptoError.code == MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
+                            if (cryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
                                 stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
                             } else {
                                 // TODO i18n
-                                cryptoError._message
+                                cryptoError.technicalMessage
                             }
                         } else {
                             // Cannot happen (for now)

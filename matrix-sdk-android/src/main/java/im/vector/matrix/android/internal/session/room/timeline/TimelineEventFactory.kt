@@ -16,8 +16,8 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
-import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -81,8 +81,8 @@ internal class SimpleTimelineEventFactory @Inject constructor(private val roomMe
             event.setClearData(result)
         } catch (failure: Throwable) {
             Timber.e("Encrypted event: decryption failed")
-            if (failure is Failure.CryptoError) {
-                event.setCryptoError(failure.error)
+            if (failure is MXCryptoError) {
+                event.setCryptoError(failure)
             }
         }
     }
@@ -138,9 +138,9 @@ internal class InMemoryTimelineEventFactory @Inject constructor(private val room
                 decryptionCache[cacheKey] = result
                 event.setClearData(result)
             } catch (failure: Throwable) {
-                Timber.e("Encrypted event: decryption failed ${failure.localizedMessage}")
-                if (failure is Failure.CryptoError) {
-                    event.setCryptoError(failure.error)
+                Timber.e("Encrypted event: decryption failed: $failure")
+                if (failure is MXCryptoError) {
+                    event.setCryptoError(failure)
                 } else {
                     // Other error
                     Timber.e("Other error, should be handled")
