@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.database.query
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
-import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
@@ -38,9 +37,9 @@ internal fun TimelineEventEntity.Companion.where(realm: Realm, eventIds: List<St
 }
 
 internal fun TimelineEventEntity.Companion.where(realm: Realm,
-                                         roomId: String? = null,
-                                         type: String? = null,
-                                         linkFilterMode: EventEntity.LinkFilterMode = LINKED_ONLY): RealmQuery<TimelineEventEntity> {
+                                                 roomId: String? = null,
+                                                 type: String? = null,
+                                                 linkFilterMode: EventEntity.LinkFilterMode = LINKED_ONLY): RealmQuery<TimelineEventEntity> {
     val query = realm.where<TimelineEventEntity>()
     if (roomId != null) {
         query.equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
@@ -77,6 +76,33 @@ internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
             ?.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
             ?.findFirst()
 }
+
+internal fun RealmQuery<TimelineEventEntity>.next(from: Int? = null, strict: Boolean = true): TimelineEventEntity? {
+    if (from != null) {
+        if (strict) {
+            this.greaterThan(TimelineEventEntityFields.ROOT.STATE_INDEX, from)
+        } else {
+            this.greaterThanOrEqualTo(TimelineEventEntityFields.ROOT.STATE_INDEX, from)
+        }
+    }
+    return this
+            .sort(TimelineEventEntityFields.ROOT.STATE_INDEX, Sort.ASCENDING)
+            .findFirst()
+}
+
+internal fun RealmQuery<TimelineEventEntity>.prev(since: Int? = null, strict: Boolean = false): TimelineEventEntity? {
+    if (since != null) {
+        if (strict) {
+            this.lessThan(TimelineEventEntityFields.ROOT.STATE_INDEX, since)
+        } else {
+            this.lessThanOrEqualTo(TimelineEventEntityFields.ROOT.STATE_INDEX, since)
+        }
+    }
+    return this
+            .sort(TimelineEventEntityFields.ROOT.STATE_INDEX, Sort.DESCENDING)
+            .findFirst()
+}
+
 
 internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEventEntity? {
     return this.where().equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, eventId).findFirst()
