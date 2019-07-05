@@ -50,7 +50,7 @@ class EmojiCompatFontProvider @Inject constructor(): FontsContractCompat.FontReq
     }
 
     fun addListener(listener: FontProviderListener) {
-        if (!listeners.contains(listener)) {
+        if (listener !in listeners) {
             listeners.add(listener)
         }
     }

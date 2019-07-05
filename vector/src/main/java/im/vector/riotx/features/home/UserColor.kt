@@ -18,6 +18,7 @@ package im.vector.riotx.features.home
 
 import androidx.annotation.ColorRes
 import im.vector.riotx.R
+import kotlin.math.abs
 
 
 @ColorRes
@@ -36,7 +37,7 @@ fun getColorFromUserId(userId: String?): Int {
         i++
     }
 
-    return when (Math.abs(hash) % 8 + 1) {
+    return when (abs(hash) % 8 + 1) {
         1    -> R.color.riotx_username_1
         2    -> R.color.riotx_username_2
         3    -> R.color.riotx_username_3

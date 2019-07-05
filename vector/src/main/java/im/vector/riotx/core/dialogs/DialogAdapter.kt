@@ -26,14 +26,16 @@ import im.vector.riotx.R
 internal abstract class DialogAdapter(context: Context) : ArrayAdapter<DialogListItem>(context, R.layout.item_dialog) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var view = convertView
-        if (view == null) {
+        val view: View
+        if (convertView == null) {
             view = LayoutInflater.from(context).inflate(R.layout.item_dialog, parent, false)
             view.tag = DialogListItemHolder(view)
+        } else {
+            view = convertView
         }
-        (view!!.tag as DialogListItemHolder).let {
-            it.icon.setImageResource(getItem(position).iconRes)
-            it.text.setText(getItem(position).titleRes)
+        with(view.tag as DialogListItemHolder) {
+            icon.setImageResource(getItem(position).iconRes)
+            text.setText(getItem(position).titleRes)
         }
         return view
     }
