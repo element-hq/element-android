@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.database.model
 
 import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.api.session.room.timeline.Timeline
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
@@ -65,5 +66,9 @@ internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUI
 
     @LinkingObjects("untimelinedStateEvents")
     val room: RealmResults<RoomEntity>? = null
+
+    @LinkingObjects("root")
+    val timelineEventEntity: RealmResults<TimelineEventEntity>? = null
+
 
 }
