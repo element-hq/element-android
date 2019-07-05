@@ -569,8 +569,7 @@ internal class CryptoManager @Inject constructor(
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
                         algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
                 Timber.e("## encryptEventContent() : $reason")
-                callback.onFailure(Failure.CryptoError(MXCryptoError(MXCryptoError.UNABLE_TO_ENCRYPT_ERROR_CODE,
-                        MXCryptoError.UNABLE_TO_ENCRYPT, reason)))
+                callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason)))
             }
         }
     }
@@ -580,10 +579,10 @@ internal class CryptoManager @Inject constructor(
      *
      * @param event    the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
-     * @return the MXEventDecryptionResult data, or null in case of error
+     * @return the MXEventDecryptionResult data, or throw in case of error
      */
-    @Throws(MXDecryptionException::class)
-    override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult? {
+    @Throws(MXCryptoError::class)
+    override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return runBlocking {
             internalDecryptEvent(event, timeline).fold(
                     { throw it },
@@ -599,7 +598,7 @@ internal class CryptoManager @Inject constructor(
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @param callback the callback to return data or null
      */
-    override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult?>) {
+    override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
         GlobalScope.launch(EmptyCoroutineContext) {
             val result = withContext(coroutineDispatchers.crypto) {
                 internalDecryptEvent(event, timeline)
@@ -616,18 +615,17 @@ internal class CryptoManager @Inject constructor(
      * @return the MXEventDecryptionResult data, or null in case of error wrapped into [Try]
      */
     private suspend fun internalDecryptEvent(event: Event, timeline: String): Try<MXEventDecryptionResult> {
-        return Try {
-            val eventContent = event.content
-            if (eventContent == null) {
-                Timber.e("## decryptEvent : empty event content")
-                throw MXDecryptionException(MXCryptoError(MXCryptoError.UNKNOWN_ERROR_CODE, MXCryptoError.UNKNOWN_ERROR_CODE))
-            }
+        val eventContent = event.content
+        return if (eventContent == null) {
+            Timber.e("## decryptEvent : empty event content")
+            Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
+        } else {
             val algorithm = eventContent["algorithm"]?.toString()
             val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, algorithm)
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, algorithm)
                 Timber.e("## decryptEvent() : $reason")
-                throw MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE, MXCryptoError.UNABLE_TO_DECRYPT, reason))
+                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason))
             } else {
                 alg.decryptEvent(event, timeline)
             }
@@ -872,7 +870,7 @@ internal class CryptoManager @Inject constructor(
     /**
      * Check if the user ids list have some unknown devices.
      * A success means there is no unknown devices.
-     * If there are some unknown devices, a MXCryptoError.UNKNOWN_DEVICES_CODE exception is triggered.
+     * If there are some unknown devices, a MXCryptoError.UnknownDevice exception is triggered.
      *
      * @param userIds  the user ids list
      * @param callback the asynchronous callback.
@@ -890,9 +888,7 @@ internal class CryptoManager @Inject constructor(
                                     callback.onSuccess(Unit)
                                 } else {
                                     // trigger an an unknown devices exception
-                                    callback.onFailure(
-                                            Failure.CryptoError(MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
-                                                    MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)))
+                                    callback.onFailure(Failure.CryptoError(MXCryptoError.UnknownDevice(unknownDevices)))
                                 }
                             }
                     )

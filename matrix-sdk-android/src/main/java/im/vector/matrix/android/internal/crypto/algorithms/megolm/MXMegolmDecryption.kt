@@ -28,7 +28,6 @@ import im.vector.matrix.android.internal.crypto.*
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
-import im.vector.matrix.android.internal.crypto.algorithms.MXDecryptionResult
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -64,66 +63,71 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
      */
     private var pendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>> = HashMap()
 
-    @Throws(MXDecryptionException::class)
-    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    override suspend fun decryptEvent(event: Event, timeline: String): Try<MXEventDecryptionResult> {
         return decryptEvent(event, timeline, true)
     }
 
-    @Throws(MXDecryptionException::class)
-    private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
-        val encryptedEventContent = event.content.toModel<EncryptedEventContent>()!!
-        if (TextUtils.isEmpty(encryptedEventContent.senderKey) || TextUtils.isEmpty(encryptedEventContent.sessionId) || TextUtils.isEmpty(encryptedEventContent.ciphertext)) {
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.MISSING_FIELDS_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_FIELDS_REASON))
+    private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): Try<MXEventDecryptionResult> {
+        if (event.roomId.isNullOrBlank()) {
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
         }
 
-        var cryptoError: MXCryptoError? = null
-        var decryptGroupMessageResult: MXDecryptionResult? = null
+        val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
+                ?: return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
 
-        try {
-            decryptGroupMessageResult = olmDevice.decryptGroupMessage(encryptedEventContent.ciphertext!!, event.roomId!!, timeline, encryptedEventContent.sessionId!!, encryptedEventContent.senderKey!!)
-        } catch (e: MXDecryptionException) {
-            cryptoError = e.cryptoError
+        if (encryptedEventContent.senderKey.isNullOrBlank()
+                || encryptedEventContent.sessionId.isNullOrBlank()
+                || encryptedEventContent.ciphertext.isNullOrBlank()) {
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
         }
-        // the decryption succeeds
-        if (decryptGroupMessageResult?.payload != null) {
-            val eventDecryptionResult = MXEventDecryptionResult()
 
-            eventDecryptionResult.clearEvent = decryptGroupMessageResult.payload
-            eventDecryptionResult.senderCurve25519Key = decryptGroupMessageResult.senderKey
+        return olmDevice.decryptGroupMessage(encryptedEventContent.ciphertext, event.roomId, timeline, encryptedEventContent.sessionId, encryptedEventContent.senderKey)
+                .fold(
+                        { throwable ->
+                            if (throwable is MXCryptoError.OlmError) {
+                                // TODO Check the value of .message
+                                if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
+                                    addEventToPendingList(event, timeline)
+                                    if (requestKeysOnFail) {
+                                        requestKeysForEvent(event)
+                                    }
+                                }
 
-            if (null != decryptGroupMessageResult.keysClaimed) {
-                eventDecryptionResult.claimedEd25519Key = decryptGroupMessageResult.keysClaimed?.get("ed25519")
-            }
+                                val reason = String.format(MXCryptoError.OLM_REASON, throwable.olmException.message)
+                                val detailedReason = String.format(MXCryptoError.DETAILED_OLM_REASON, encryptedEventContent.ciphertext, reason)
 
-            eventDecryptionResult.forwardingCurve25519KeyChain = decryptGroupMessageResult.forwardingCurve25519KeyChain
-                    ?: emptyList()
-            return eventDecryptionResult
-        } else if (cryptoError != null) {
-            if (cryptoError.isOlmError) {
-                if (MXCryptoError.UNKNOWN_MESSAGE_INDEX == cryptoError.message) {
-                    addEventToPendingList(event, timeline)
-                    if (requestKeysOnFail) {
-                        requestKeysForEvent(event)
-                    }
-                }
+                                Try.Failure(MXCryptoError.Base(
+                                        MXCryptoError.ErrorType.OLM,
+                                        reason,
+                                        detailedReason))
+                            }
+                            if (throwable is MXCryptoError.Base) {
+                                if (throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
+                                    addEventToPendingList(event, timeline)
+                                    if (requestKeysOnFail) {
+                                        requestKeysForEvent(event)
+                                    }
+                                }
+                            }
 
-                val reason = String.format(MXCryptoError.OLM_REASON, cryptoError.message)
-                val detailedReason = String.format(MXCryptoError.DETAILLED_OLM_REASON, encryptedEventContent.ciphertext, cryptoError.message)
-
-                throw MXDecryptionException(MXCryptoError(
-                        MXCryptoError.OLM_ERROR_CODE,
-                        reason,
-                        detailedReason))
-            } else if (TextUtils.equals(cryptoError.code, MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE)) {
-                addEventToPendingList(event, timeline)
-                if (requestKeysOnFail) {
-                    requestKeysForEvent(event)
-                }
-                throw MXDecryptionException(cryptoError)
-            }
-        }
-        throw MXDecryptionException(MXCryptoError(MXCryptoError.UNKNOWN_ERROR_CODE, MXCryptoError.UNKNOWN_ERROR_CODE))
+                            Try.Failure(throwable)
+                        },
+                        { olmDecryptionResult ->
+                            // the decryption succeeds
+                            if (olmDecryptionResult.payload != null) {
+                                Try.just(
+                                        MXEventDecryptionResult(
+                                                clearEvent = olmDecryptionResult.payload,
+                                                senderCurve25519Key = olmDecryptionResult.senderKey,
+                                                claimedEd25519Key = olmDecryptionResult.keysClaimed?.get("ed25519"),
+                                                forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain ?: emptyList()
+                                        )
+                                )
+                            } else {
+                                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
+                            }
+                        }
+                )
     }
 
 
@@ -319,11 +323,20 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                             Try.just(Unit)
                                         }
                                         Timber.v("""## shareKeysWithDevice() : sharing keys for session ${body?.senderKey}|${body?.sessionId} with device $userId:$deviceId""")
-                                        val inboundGroupSession = olmDevice.getInboundGroupSession(body?.sessionId, body?.senderKey, body?.roomId)
 
                                         val payloadJson = HashMap<String, Any>()
                                         payloadJson["type"] = EventType.FORWARDED_ROOM_KEY
-                                        payloadJson["content"] = inboundGroupSession!!.exportKeys()!!
+
+                                        olmDevice.getInboundGroupSession(body?.sessionId, body?.senderKey, body?.roomId)
+                                                .fold(
+                                                        {
+                                                            // TODO
+                                                        },
+                                                        {
+                                                            // TODO
+                                                            payloadJson["content"] = it.exportKeys() ?: ""
+                                                        }
+                                                )
 
                                         val encodedPayload = messageEncrypter.encryptMessage(payloadJson, Arrays.asList(deviceInfo))
                                         val sendToDeviceMap = MXUsersDevicesMap<Any>()
@@ -332,8 +345,6 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                         val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
                                         sendToDeviceTask.execute(sendToDeviceParams)
                                     }
-
-
                         }
                     }
         }

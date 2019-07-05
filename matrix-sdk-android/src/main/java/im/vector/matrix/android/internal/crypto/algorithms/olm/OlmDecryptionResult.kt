@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto.algorithms
+package im.vector.matrix.android.internal.crypto.algorithms.olm
 
 import im.vector.matrix.android.api.util.JsonDict
 
 /**
  * This class represents the decryption result.
  */
-data class MXDecryptionResult(
+data class OlmDecryptionResult(
         /**
          * The decrypted payload (with properties 'type', 'content')
          */
-        var payload: JsonDict? = null,
+        val payload: JsonDict? = null,
 
         /**
          * keys that the sender of the event claims ownership of:
          * map from key type to base64-encoded key.
          */
-        var keysClaimed: Map<String, String>? = null,
+        val keysClaimed: Map<String, String>? = null,
 
         /**
          * The curve25519 key that the sender of the event is known to have ownership of.
          */
-        var senderKey: String? = null,
+        val senderKey: String? = null,
 
         /**
          * Devices which forwarded this session to us (normally empty).
          */
-        var forwardingCurve25519KeyChain: List<String>? = null
+        val forwardingCurve25519KeyChain: List<String>? = null
 )

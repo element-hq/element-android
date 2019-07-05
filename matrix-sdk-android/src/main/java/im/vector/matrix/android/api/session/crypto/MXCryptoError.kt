@@ -18,108 +18,58 @@
 
 package im.vector.matrix.android.api.session.crypto
 
-import android.text.TextUtils
+import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.olm.OlmException
 
 /**
  * Represents a crypto error response.
  */
-class MXCryptoError(var code: String,
-                    var message: String) {
+sealed class MXCryptoError : Throwable() {
 
-    /**
-     * Describe the error with more details
-     */
-    private var mDetailedErrorDescription: String? = null
+    data class Base(val errorType: ErrorType,
+                    val technicalMessage: String,
+                    /**
+                     * Describe the error with more details
+                     */
+                    val detailedErrorDescription: String? = null) : MXCryptoError()
 
-    /**
-     * Data exception.
-     * Some exceptions provide some data to describe the exception
-     */
-    var mExceptionData: Any? = null
+    data class OlmError(val olmException: OlmException) : MXCryptoError()
 
-    /**
-     * @return true if the current error is an olm one.
-     */
-    val isOlmError: Boolean
-        get() = OLM_ERROR_CODE == code
+    data class UnknownDevice(val deviceList: MXUsersDevicesMap<MXDeviceInfo>) : MXCryptoError()
 
-
-    /**
-     * @return the detailed error description
-     */
-    val detailedErrorDescription: String?
-        get() = if (TextUtils.isEmpty(mDetailedErrorDescription)) {
-            message
-        } else mDetailedErrorDescription
-
-    /**
-     * Create a crypto error
-     *
-     * @param code                     the error code (see XX_ERROR_CODE)
-     * @param shortErrorDescription    the short error description
-     * @param detailedErrorDescription the detailed error description
-     */
-    constructor(code: String, shortErrorDescription: String, detailedErrorDescription: String?) : this(code, shortErrorDescription) {
-        mDetailedErrorDescription = detailedErrorDescription
-    }
-
-    /**
-     * Create a crypto error
-     *
-     * @param code                     the error code (see XX_ERROR_CODE)
-     * @param shortErrorDescription    the short error description
-     * @param detailedErrorDescription the detailed error description
-     * @param exceptionData            the exception data
-     */
-    constructor(code: String, shortErrorDescription: String, detailedErrorDescription: String?, exceptionData: Any) : this(code, shortErrorDescription) {
-        mDetailedErrorDescription = detailedErrorDescription
-        mExceptionData = exceptionData
+    enum class ErrorType {
+        ENCRYPTING_NOT_ENABLED,
+        UNABLE_TO_ENCRYPT,
+        UNABLE_TO_DECRYPT,
+        UNKNOWN_INBOUND_SESSION_ID,
+        INBOUND_SESSION_MISMATCH_ROOM_ID,
+        MISSING_FIELDS,
+        BAD_EVENT_FORMAT,
+        MISSING_SENDER_KEY,
+        MISSING_CIPHER_TEXT,
+        BAD_DECRYPTED_FORMAT,
+        NOT_INCLUDE_IN_RECIPIENTS,
+        BAD_RECIPIENT,
+        BAD_RECIPIENT_KEY,
+        FORWARDED_MESSAGE,
+        BAD_ROOM,
+        BAD_ENCRYPTED_MESSAGE,
+        DUPLICATED_MESSAGE_INDEX,
+        MISSING_PROPERTY,
+        OLM,
+        UNKNOWN_DEVICES,
+        UNKNOWN_MESSAGE_INDEX
     }
 
     companion object {
-
-        // TODO Create sealed class
-
         /**
-         * Error codes
+         * Resource for technicalMessage
          */
-        const val UNKNOWN_ERROR_CODE = "UNKNOWN_ERROR_CODE"
-        const val ENCRYPTING_NOT_ENABLED_ERROR_CODE = "ENCRYPTING_NOT_ENABLED"
-        const val UNABLE_TO_ENCRYPT_ERROR_CODE = "UNABLE_TO_ENCRYPT"
-        const val UNABLE_TO_DECRYPT_ERROR_CODE = "UNABLE_TO_DECRYPT"
-        const val UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE = "UNKNOWN_INBOUND_SESSION_ID"
-        const val INBOUND_SESSION_MISMATCH_ROOM_ID_ERROR_CODE = "INBOUND_SESSION_MISMATCH_ROOM_ID"
-        const val MISSING_FIELDS_ERROR_CODE = "MISSING_FIELDS"
-        const val BAD_EVENT_FORMAT_ERROR_CODE = "BAD_EVENT_FORMAT_ERROR_CODE"
-        const val MISSING_SENDER_KEY_ERROR_CODE = "MISSING_SENDER_KEY_ERROR_CODE"
-        const val MISSING_CIPHER_TEXT_ERROR_CODE = "MISSING_CIPHER_TEXT"
-        const val BAD_DECRYPTED_FORMAT_ERROR_CODE = "BAD_DECRYPTED_FORMAT_ERROR_CODE"
-        const val NOT_INCLUDE_IN_RECIPIENTS_ERROR_CODE = "NOT_INCLUDE_IN_RECIPIENTS"
-        const val BAD_RECIPIENT_ERROR_CODE = "BAD_RECIPIENT"
-        const val BAD_RECIPIENT_KEY_ERROR_CODE = "BAD_RECIPIENT_KEY"
-        const val FORWARDED_MESSAGE_ERROR_CODE = "FORWARDED_MESSAGE"
-        const val BAD_ROOM_ERROR_CODE = "BAD_ROOM"
-        const val BAD_ENCRYPTED_MESSAGE_ERROR_CODE = "BAD_ENCRYPTED_MESSAGE"
-        const val DUPLICATED_MESSAGE_INDEX_ERROR_CODE = "DUPLICATED_MESSAGE_INDEX"
-        const val MISSING_PROPERTY_ERROR_CODE = "MISSING_PROPERTY"
-        const val OLM_ERROR_CODE = "OLM_ERROR_CODE"
-        const val UNKNOWN_DEVICES_CODE = "UNKNOWN_DEVICES_CODE"
-        const val UNKNOWN_MESSAGE_INDEX = "UNKNOWN_MESSAGE_INDEX"
-
-        /**
-         * short error reasons
-         */
-        const val UNABLE_TO_DECRYPT = "Unable to decrypt"
-        const val UNABLE_TO_ENCRYPT = "Unable to encrypt"
-
-        /**
-         * Detailed error reasons
-         */
-        const val ENCRYPTING_NOT_ENABLED_REASON = "Encryption not enabled"
         const val UNABLE_TO_ENCRYPT_REASON = "Unable to encrypt %s"
         const val UNABLE_TO_DECRYPT_REASON = "Unable to decrypt %1\$s. Algorithm: %2\$s"
         const val OLM_REASON = "OLM error: %1\$s"
-        const val DETAILLED_OLM_REASON = "Unable to decrypt %1\$s. OLM error: %2\$s"
+        const val DETAILED_OLM_REASON = "Unable to decrypt %1\$s. OLM error: %2\$s"
         const val UNKNOWN_INBOUND_SESSION_ID_REASON = "Unknown inbound session id"
         const val INBOUND_SESSION_MISMATCH_ROOM_ID_REASON = "Mismatched room_id for inbound group session (expected %1\$s, was %2\$s)"
         const val MISSING_FIELDS_REASON = "Missing fields in input"
