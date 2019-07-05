@@ -83,7 +83,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     NoticeItem_()
                             .avatarRenderer(avatarRenderer)
                             .informationData(informationData)
-                            .noticeText("{ \"type\": ${event.root.type} }")
+                            .noticeText("{ \"type\": ${event.root.getClearType()} }")
                             .highlighted(highlight)
                             .baseCallback(callback)
                 }
