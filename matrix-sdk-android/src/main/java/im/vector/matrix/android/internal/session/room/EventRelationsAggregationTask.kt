@@ -86,6 +86,13 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(private 
                             }
                         }
 
+                        EventAnnotationsSummaryEntity.where(realm, event.eventId ?: "").findFirst()?.let {
+                            TimelineEventEntity.where(realm,eventId = event.eventId ?: "").findFirst()?.let { tet ->
+                                tet.annotations = it
+                            }
+                        }
+
+
                     }
                     EventType.REDACTION -> {
                         val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }

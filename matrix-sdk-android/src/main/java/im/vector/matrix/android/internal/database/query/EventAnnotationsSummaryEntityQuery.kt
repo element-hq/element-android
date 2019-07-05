@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntityFields
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
@@ -39,5 +40,9 @@ internal fun EventAnnotationsSummaryEntity.Companion.whereInRoom(realm: Realm, r
 
 internal fun EventAnnotationsSummaryEntity.Companion.create(realm: Realm, eventId: String): EventAnnotationsSummaryEntity {
     val obj = realm.createObject(EventAnnotationsSummaryEntity::class.java, eventId)
+    //Denormalization
+    TimelineEventEntity.where(realm, eventId = eventId).findFirst()?.let {
+        it.annotations = obj
+    }
     return obj
 }
