@@ -27,7 +27,7 @@ import java.util.*
 
 internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUID().toString(),
                                 @Index var eventId: String = "",
-                                var roomId: String = "",
+                                @Index var roomId: String = "",
                                 @Index var type: String = "",
                                 var content: String? = null,
                                 var prevContent: String? = null,
@@ -60,9 +60,6 @@ internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUI
 
 
     companion object
-
-    @LinkingObjects("events")
-    val chunk: RealmResults<ChunkEntity>? = null
 
     @LinkingObjects("untimelinedStateEvents")
     val room: RealmResults<RoomEntity>? = null

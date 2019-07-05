@@ -18,25 +18,6 @@ package im.vector.matrix.android.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
-import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.room.timeline.Timeline
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.internal.crypto.CryptoManager
-import im.vector.matrix.android.internal.database.model.SessionRealmModule
-import im.vector.matrix.android.internal.session.room.EventRelationExtractor
-import im.vector.matrix.android.internal.session.room.membership.SenderRoomMemberExtractor
-import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
-import im.vector.matrix.android.internal.session.room.timeline.TimelineEventFactory
-import im.vector.matrix.android.internal.session.room.timeline.TokenChunkEventPersistor
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.testCoroutineDispatchers
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import org.amshove.kluent.shouldEqual
-import org.junit.Before
-import org.junit.Test
-import timber.log.Timber
-import java.util.concurrent.CountDownLatch
 
 internal class TimelineTest : InstrumentedTest {
 

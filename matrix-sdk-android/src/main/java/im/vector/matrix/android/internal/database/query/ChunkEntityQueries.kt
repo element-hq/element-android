@@ -49,7 +49,7 @@ internal fun ChunkEntity.Companion.findLastLiveChunkFromRoom(realm: Realm, roomI
 
 internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds: List<String>): RealmResults<ChunkEntity> {
     return realm.where<ChunkEntity>()
-            .`in`(ChunkEntityFields.EVENTS.EVENT_ID, eventIds.toTypedArray())
+            .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, eventIds.toTypedArray())
             .findAll()
 }
 

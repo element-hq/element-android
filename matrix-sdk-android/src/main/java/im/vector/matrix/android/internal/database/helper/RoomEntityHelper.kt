@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.fastContains
 import im.vector.matrix.android.internal.extensions.assertIsManaged
 
@@ -60,5 +61,10 @@ internal fun RoomEntity.addSendingEvent(event: Event) {
     val eventEntity = event.toEntity(roomId).apply {
         this.sendState = SendState.UNSENT
     }
-    sendingTimelineEvents.add(0, eventEntity)
+    val timelineEventEntity = TimelineEventEntity().also {
+        it.root = eventEntity
+        it.eventId = event.eventId ?: ""
+        it.roomId = roomId
+    }
+    sendingTimelineEvents.add(0, timelineEventEntity)
 }

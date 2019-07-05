@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
@@ -77,19 +78,19 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
             }
         }
         roomSummaryEntity.highlightCount = unreadNotifications?.highlightCount ?: 0
-        roomSummaryEntity.notificationCount = unreadNotifications?.notificationCount ?:0
+        roomSummaryEntity.notificationCount = unreadNotifications?.notificationCount ?: 0
 
         if (membership != null) {
             roomSummaryEntity.membership = membership
         }
 
-        val lastEvent = EventEntity.latestEvent(realm, roomId, includedTypes = PREVIEWABLE_TYPES)
+        val latestEvent = TimelineEventEntity.latestEvent(realm, roomId, includedTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()?.asDomain()
         val otherRoomMembers = RoomMembers(realm, roomId).getLoaded().filterKeys { it != credentials.userId }
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
         roomSummaryEntity.topic = lastTopicEvent?.content.toModel<RoomTopicContent>()?.topic
-        roomSummaryEntity.latestEvent = lastEvent
+        roomSummaryEntity.latestEvent = latestEvent
         roomSummaryEntity.otherMemberIds.clear()
         roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers.keys)
     }

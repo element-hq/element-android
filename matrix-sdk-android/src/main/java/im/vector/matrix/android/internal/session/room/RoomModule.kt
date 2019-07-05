@@ -138,10 +138,4 @@ internal abstract class RoomModule {
     @Binds
     abstract fun bindTimelineService(timelineService: DefaultTimelineService): TimelineService
 
-    @Binds
-    abstract fun bindSimpleTimelineEventFactory(timelineEventFactory: SimpleTimelineEventFactory): TimelineEventFactory
-
-    @Binds
-    abstract fun bindCacheableTimelineEventFactory(inMemoryTimelineEventFactory: InMemoryTimelineEventFactory): CacheableTimelineEventFactory
-
 }

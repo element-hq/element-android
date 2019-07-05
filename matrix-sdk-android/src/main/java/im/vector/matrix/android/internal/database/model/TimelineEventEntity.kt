@@ -17,19 +17,25 @@
 package im.vector.matrix.android.internal.database.model
 
 import io.realm.RealmObject
+import io.realm.RealmResults
 import io.realm.annotations.Index
+import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 import java.util.*
 
 
 internal open class TimelineEventEntity(@PrimaryKey var localId: String = UUID.randomUUID().toString(),
                                         @Index var eventId: String = "",
+                                        @Index var roomId: String = "",
                                         var root: EventEntity? = null,
                                         var annotations: EventAnnotationsSummaryEntity? = null,
                                         var senderName: String? = null,
                                         var isUniqueDisplayName: Boolean = false,
                                         var senderAvatar: String? = null
 ) : RealmObject() {
+
+    @LinkingObjects("timelineEvents")
+    val chunk: RealmResults<ChunkEntity>? = null
 
     companion object
 

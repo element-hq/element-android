@@ -67,7 +67,6 @@ internal class DefaultTimeline(
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
-        private val timelineEventFactory: CacheableTimelineEventFactory,
         private val paginationTask: PaginationTask,
         private val cryptoService: CryptoService,
         private val allowedTypes: List<String>?
@@ -116,7 +115,6 @@ internal class DefaultTimeline(
                 nextDisplayIndex = DISPLAY_INDEX_UNKNOWN
                 builtEvents.clear()
                 builtEventsIdMap.clear()
-                timelineEventFactory.clear()
             }
             changeSet.insertionRanges.forEach { range ->
                 val (startDisplayIndex, direction) = if (range.startIndex == 0) {
@@ -145,7 +143,7 @@ internal class DefaultTimeline(
                     builtEventsIdMap[eventId]?.let { builtIndex ->
                         //Update the relation of existing event
                         builtEvents[builtIndex]?.let { te ->
-                            builtEvents[builtIndex] = timelineEventFactory.create(eventEntity, eventEntity.realm)
+                            //builtEvents[builtIndex] = timelineEventFactory.create(eventEntity, eventEntity.realm)
                             hasChanged = true
                         }
                     }
@@ -189,7 +187,7 @@ internal class DefaultTimeline(
                                 && (timelineEvent.root.mClearEvent == null || timelineEvent.root.mCryptoError != null)) {
                                 //we need to rebuild this event
                                 EventEntity.where(realm, eventId = timelineEvent.root.eventId!!).findFirst()?.let {
-                                    builtEvents[index] = timelineEventFactory.create(it, realm)
+                                    //builtEvents[index] = timelineEventFactory.create(it, realm)
                                     hasChange = true
                                 }
                             }
@@ -326,10 +324,10 @@ internal class DefaultTimeline(
         val sendingEvents = ArrayList<TimelineEvent>()
         if (hasReachedEnd(Timeline.Direction.FORWARDS)) {
             roomEntity?.sendingTimelineEvents
-                    ?.filter { allowedTypes?.contains(it.type) ?: false }
+                    ?.filter { allowedTypes?.contains(it.root?.type) ?: false }
                     ?.forEach {
-                        val timelineEvent = timelineEventFactory.create(it, it.realm)
-                        sendingEvents.add(timelineEvent)
+                        //val timelineEvent = timelineEventFactory.create(it, it.realm)
+                        //sendingEvents.add(timelineEvent)
                     }
         }
         return sendingEvents
@@ -432,7 +430,7 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it access realm live results
      */
     private fun getLiveChunk(): ChunkEntity? {
-        return liveEvents.firstOrNull()?.chunk?.firstOrNull()
+        return null //return liveEvents.firstOrNull()?.chunk?.firstOrNull()
     }
 
     /**

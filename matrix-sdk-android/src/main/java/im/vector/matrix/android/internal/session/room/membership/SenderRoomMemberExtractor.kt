@@ -16,29 +16,12 @@
 
 package im.vector.matrix.android.internal.session.room.membership
 
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.RoomMember
-import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.findIncludingEvent
-import im.vector.matrix.android.internal.database.query.next
-import im.vector.matrix.android.internal.database.query.prev
-import im.vector.matrix.android.internal.database.query.where
-import io.realm.Realm
-import io.realm.RealmList
-import io.realm.RealmQuery
-import javax.inject.Inject
+internal object SenderRoomMemberExtractor {
 
-internal class SenderRoomMemberExtractor @Inject constructor() {
-
-    fun extractFrom(event: EventEntity, realm: Realm = event.realm): RoomMember? {
+    /*
+    fun extractFrom(event: Event, realm: Realm): RoomMember? {
         val roomId = event.roomId
-        val sender = event.sender ?: return null
+        val sender = event.senderId ?: return null
         // If the event is unlinked we want to fetch unlinked state events
         val unlinked = event.isUnlinked
         val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return null
@@ -69,4 +52,5 @@ internal class SenderRoomMemberExtractor @Inject constructor() {
                 .equalTo(EventEntityFields.IS_UNLINKED, isUnlinked)
     }
 
+*/
 }
