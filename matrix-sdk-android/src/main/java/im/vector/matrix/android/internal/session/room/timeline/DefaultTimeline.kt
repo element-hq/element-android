@@ -326,8 +326,7 @@ internal class DefaultTimeline(
             roomEntity?.sendingTimelineEvents
                     ?.filter { allowedTypes?.contains(it.root?.type) ?: false }
                     ?.forEach {
-                        //val timelineEvent = timelineEventFactory.create(it, it.realm)
-                        //sendingEvents.add(timelineEvent)
+                        sendingEvents.add(it.asDomain())
                     }
         }
         return sendingEvents
