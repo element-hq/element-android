@@ -27,12 +27,12 @@ import im.vector.matrix.android.api.util.addTo
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
@@ -91,7 +91,7 @@ internal class DefaultTimeline(
     private val cancelableBag = CancelableBag()
     private val debouncer = Debouncer(mainHandler)
 
-    private lateinit var liveEvents: RealmResults<EventEntity>
+    private lateinit var liveEvents: RealmResults<TimelineEventEntity>
     private var roomEntity: RoomEntity? = null
 
     private var prevDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
@@ -105,7 +105,7 @@ internal class DefaultTimeline(
 
     private lateinit var eventRelations: RealmResults<EventAnnotationsSummaryEntity>
 
-    private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<EventEntity>> { results, changeSet ->
+    private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<TimelineEventEntity>> { results, changeSet ->
         if (changeSet.state == OrderedCollectionChangeSet.State.INITIAL) {
             handleInitialLoad()
         } else {
@@ -118,9 +118,9 @@ internal class DefaultTimeline(
             }
             changeSet.insertionRanges.forEach { range ->
                 val (startDisplayIndex, direction) = if (range.startIndex == 0) {
-                    Pair(liveEvents[range.length - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
+                    Pair(liveEvents[range.length - 1]!!.root!!.displayIndex, Timeline.Direction.FORWARDS)
                 } else {
-                    Pair(liveEvents[range.startIndex]!!.displayIndex, Timeline.Direction.BACKWARDS)
+                    Pair(liveEvents[range.startIndex]!!.root!!.displayIndex, Timeline.Direction.BACKWARDS)
                 }
                 val state = getPaginationState(direction)
                 if (state.isPaginating) {
@@ -233,7 +233,7 @@ internal class DefaultTimeline(
                 }
 
                 liveEvents = buildEventQuery(realm)
-                        .sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+                        .sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
                         .findAllAsync()
                         .also { it.addChangeListener(eventsChangeListener) }
 
@@ -268,13 +268,13 @@ internal class DefaultTimeline(
 
     private fun hasMoreInCache(direction: Timeline.Direction): Boolean {
         val localRealm = Realm.getInstance(realmConfiguration)
-        val eventEntity = buildEventQuery(localRealm).findFirst(direction) ?: return false
+        val timelineEventEntity = buildEventQuery(localRealm).findFirst(direction) ?: return false
         val hasMoreInCache = if (direction == Timeline.Direction.FORWARDS) {
             val firstEvent = builtEvents.firstOrNull() ?: return true
-            firstEvent.displayIndex < eventEntity.displayIndex
+            firstEvent.displayIndex < timelineEventEntity.root!!.displayIndex
         } else {
             val lastEvent = builtEvents.lastOrNull() ?: return true
-            lastEvent.displayIndex > eventEntity.displayIndex
+            lastEvent.displayIndex > timelineEventEntity.root!!.displayIndex
         }
         localRealm.close()
         return hasMoreInCache
@@ -287,7 +287,7 @@ internal class DefaultTimeline(
             currentChunk.isLastForward
         } else {
             val eventEntity = buildEventQuery(localRealm).findFirst(direction)
-            currentChunk.isLastBackward || eventEntity?.type == EventType.STATE_ROOM_CREATE
+            currentChunk.isLastBackward || eventEntity?.root?.type == EventType.STATE_ROOM_CREATE
         }
         localRealm.close()
         return hasReachedEnd
@@ -360,11 +360,11 @@ internal class DefaultTimeline(
     private fun handleInitialLoad() {
         var shouldFetchInitialEvent = false
         val initialDisplayIndex = if (isLive) {
-            liveEvents.firstOrNull()?.displayIndex
+            liveEvents.firstOrNull()?.root?.displayIndex
         } else {
-            val initialEvent = liveEvents.where().equalTo(EventEntityFields.EVENT_ID, initialEventId).findFirst()
+            val initialEvent = liveEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, initialEventId).findFirst()
             shouldFetchInitialEvent = initialEvent == null
-            initialEvent?.displayIndex
+            initialEvent?.root?.displayIndex
         } ?: DISPLAY_INDEX_UNKNOWN
 
         prevDisplayIndex = initialDisplayIndex
@@ -448,14 +448,14 @@ internal class DefaultTimeline(
         if (offsetResults.isEmpty()) {
             return 0
         }
-        val offsetIndex = offsetResults.last()!!.displayIndex
+        val offsetIndex = offsetResults.last()!!.root!!.displayIndex
         if (direction == Timeline.Direction.BACKWARDS) {
             prevDisplayIndex = offsetIndex - 1
         } else {
             nextDisplayIndex = offsetIndex + 1
         }
         offsetResults.forEach { eventEntity ->
-            val timelineEvent = timelineEventFactory.create(eventEntity, eventEntity.realm)
+            val timelineEvent = eventEntity.asDomain()
             val position = if (direction == Timeline.Direction.FORWARDS) 0 else builtEvents.size
             builtEvents.add(position, timelineEvent)
             //Need to shift :/
@@ -472,16 +472,16 @@ internal class DefaultTimeline(
      */
     private fun getOffsetResults(startDisplayIndex: Int,
                                  direction: Timeline.Direction,
-                                 count: Long): RealmResults<EventEntity> {
+                                 count: Long): RealmResults<TimelineEventEntity> {
         val offsetQuery = liveEvents.where()
         if (direction == Timeline.Direction.BACKWARDS) {
             offsetQuery
-                    .sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-                    .lessThanOrEqualTo(EventEntityFields.DISPLAY_INDEX, startDisplayIndex)
+                    .sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
+                    .lessThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, startDisplayIndex)
         } else {
             offsetQuery
-                    .sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
-                    .greaterThanOrEqualTo(EventEntityFields.DISPLAY_INDEX, startDisplayIndex)
+                    .sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.ASCENDING)
+                    .greaterThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, startDisplayIndex)
         }
         return offsetQuery
                 .filterAllowedTypes()
@@ -490,15 +490,15 @@ internal class DefaultTimeline(
     }
 
 
-    private fun buildEventQuery(realm: Realm): RealmQuery<EventEntity> {
+    private fun buildEventQuery(realm: Realm): RealmQuery<TimelineEventEntity> {
         return if (initialEventId == null) {
-            EventEntity
+            TimelineEventEntity
                     .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.LINKED_ONLY)
-                    .equalTo("${EventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST_FORWARD}", true)
+                    .equalTo("${TimelineEventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST_FORWARD}", true)
         } else {
-            EventEntity
+            TimelineEventEntity
                     .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.BOTH)
-                    .`in`("${EventEntityFields.CHUNK}.${ChunkEntityFields.EVENTS.EVENT_ID}", arrayOf(initialEventId))
+                    .`in`("${TimelineEventEntityFields.CHUNK}.${ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID}", arrayOf(initialEventId))
         }
     }
 
@@ -514,7 +514,7 @@ internal class DefaultTimeline(
         realm.executeTransaction {
             val unlinkedChunks = ChunkEntity
                     .where(it, roomId = roomId)
-                    .equalTo(ChunkEntityFields.EVENTS.IS_UNLINKED, true)
+                    .equalTo("${ChunkEntityFields.TIMELINE_EVENTS.ROOT}.${EventEntityFields.IS_UNLINKED}", true)
                     .findAll()
             unlinkedChunks.deleteAllFromRealm()
         }
@@ -537,19 +537,19 @@ internal class DefaultTimeline(
         return if (this == Timeline.Direction.BACKWARDS) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS
     }
 
-    private fun RealmQuery<EventEntity>.findFirst(direction: Timeline.Direction): EventEntity? {
+    private fun RealmQuery<TimelineEventEntity>.findFirst(direction: Timeline.Direction): TimelineEventEntity? {
         return if (direction == Timeline.Direction.FORWARDS) {
-            sort(EventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+            sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
         } else {
-            sort(EventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+            sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.ASCENDING)
         }
                 .filterAllowedTypes()
                 .findFirst()
     }
 
-    private fun RealmQuery<EventEntity>.filterAllowedTypes(): RealmQuery<EventEntity> {
+    private fun RealmQuery<TimelineEventEntity>.filterAllowedTypes(): RealmQuery<TimelineEventEntity> {
         if (allowedTypes != null) {
-            `in`(EventEntityFields.TYPE, allowedTypes.toTypedArray())
+            `in`(TimelineEventEntityFields.ROOT.TYPE, allowedTypes.toTypedArray())
         }
         return this
     }

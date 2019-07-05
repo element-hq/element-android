@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.database.helper
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -112,11 +113,16 @@ internal fun ChunkEntity.add(roomId: String,
         }
     }
 
-    val eventEntity = TimelineEventEntity().apply {
-        this.root = event.toEntity(roomId)
-        this.eventId = event.eventId ?: ""
-        this.roomId = roomId
-        this.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
+    val eventEntity = TimelineEventEntity().also {
+        it.root = event.toEntity(roomId).apply {
+            this.stateIndex = currentStateIndex
+            this.isUnlinked = isUnlinked
+            this.displayIndex = currentDisplayIndex
+            this.sendState = SendState.SYNCED
+        }
+        it.eventId = event.eventId ?: ""
+        it.roomId = roomId
+        it.annotations = EventAnnotationsSummaryEntity.where(realm, it.eventId).findFirst()
     }
     val position = if (direction == PaginationDirection.FORWARDS) 0 else this.timelineEvents.size
     timelineEvents.add(position, eventEntity)

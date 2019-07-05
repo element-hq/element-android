@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.SessionScope
@@ -38,7 +39,7 @@ internal class UserEntityUpdater @Inject constructor(@SessionDatabase realmConfi
 
     override val query = Monarchy.Query<EventEntity> {
         EventEntity
-                .where(it, type = EventType.STATE_ROOM_MEMBER)
+                .types(it, listOf(EventType.STATE_ROOM_MEMBER))
                 .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
                 .distinct(EventEntityFields.STATE_KEY)
 

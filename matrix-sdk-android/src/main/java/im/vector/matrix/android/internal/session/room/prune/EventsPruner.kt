@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.SessionScope
@@ -41,7 +42,7 @@ internal class EventsPruner @Inject constructor(@SessionDatabase realmConfigurat
                                                 private val taskExecutor: TaskExecutor) :
         RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
-    override val query = Monarchy.Query<EventEntity> { EventEntity.where(it, type = EventType.REDACTION) }
+    override val query = Monarchy.Query<EventEntity> { EventEntity.types(it, listOf(EventType.REDACTION)) }
 
     override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
         Timber.v("Event pruner called with ${inserted.size} insertions")

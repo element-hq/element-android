@@ -37,6 +37,24 @@ internal fun TimelineEventEntity.Companion.where(realm: Realm, eventIds: List<St
     return realm.where<TimelineEventEntity>().`in`(TimelineEventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
+internal fun TimelineEventEntity.Companion.where(realm: Realm,
+                                         roomId: String? = null,
+                                         type: String? = null,
+                                         linkFilterMode: EventEntity.LinkFilterMode = LINKED_ONLY): RealmQuery<TimelineEventEntity> {
+    val query = realm.where<TimelineEventEntity>()
+    if (roomId != null) {
+        query.equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+    }
+    if (type != null) {
+        query.equalTo(TimelineEventEntityFields.ROOT.TYPE, type)
+    }
+    return when (linkFilterMode) {
+        LINKED_ONLY   -> query.equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, false)
+        UNLINKED_ONLY -> query.equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, true)
+        BOTH          -> query
+    }
+}
+
 
 internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
                                                        roomId: String,
@@ -51,9 +69,9 @@ internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
     }
     val query = eventList?.where()
     if (includedTypes.isNotEmpty()) {
-        query?.`in`(EventEntityFields.TYPE, includedTypes.toTypedArray())
+        query?.`in`(TimelineEventEntityFields.ROOT.TYPE, includedTypes.toTypedArray())
     } else if (excludedTypes.isNotEmpty()) {
-        query?.not()?.`in`(EventEntityFields.TYPE, excludedTypes.toTypedArray())
+        query?.not()?.`in`(TimelineEventEntityFields.ROOT.TYPE, excludedTypes.toTypedArray())
     }
     return query
             ?.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
