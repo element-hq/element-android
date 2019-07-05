@@ -28,7 +28,6 @@ import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
-import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
 import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -49,10 +48,16 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
             EventType.ENCRYPTED == event.root.getClearType() -> {
                 val cryptoError = event.root.mCryptoError
                 val errorDescription =
-                        if (cryptoError?.code == MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
-                            stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
+                        if (cryptoError is MXCryptoError.Base) {
+                            if (cryptoError.code == MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
+                                stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
+                            } else {
+                                // TODO i18n
+                                cryptoError._message
+                            }
                         } else {
-                            cryptoError?.message
+                            // Cannot happen (for now)
+                            "Other error"
                         }
 
                 val message = stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
@@ -77,7 +82,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                                 }))
                         .longClickListener { view ->
                             return@longClickListener callback?.onEventLongClicked(informationData, null, view)
-                                                     ?: false
+                                    ?: false
                         }
             }
             else                                             -> null

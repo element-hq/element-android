@@ -98,9 +98,9 @@ interface CryptoService {
                             roomId: String,
                             callback: MatrixCallback<MXEncryptEventContentResult>)
 
-    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult?
+    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
-    fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult?>)
+    fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>)
 
     fun getEncryptionAlgorithm(roomId: String): String?
 

@@ -140,37 +140,32 @@ data class Event(
      *
      * @param decryptionResult the decryption result, including the plaintext and some key info.
      */
-    internal fun setClearData(decryptionResult: MXEventDecryptionResult?) {
+    internal fun setClearData(decryptionResult: MXEventDecryptionResult) {
         mClearEvent = null
-        if (decryptionResult != null) {
-            if (decryptionResult.clearEvent != null) {
-                val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
-                mClearEvent = adapter.fromJsonValue(decryptionResult.clearEvent)
+        mCryptoError = null
 
-                if (mClearEvent != null) {
-                    mSenderCurve25519Key = decryptionResult.senderCurve25519Key
-                    mClaimedEd25519Key = decryptionResult.claimedEd25519Key
-                    mForwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain
+        val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
+        mClearEvent = adapter.fromJsonValue(decryptionResult.clearEvent)
 
-                    // For encrypted events with relation, the m.relates_to is kept in clear, so we need to put it back
-                    // in the clear event
-                    try {
-                        content?.get("m.relates_to")?.let { clearRelates ->
-                            mClearEvent = mClearEvent?.copy(
-                                    content = HashMap(mClearEvent!!.content).apply {
-                                        this["m.relates_to"] = clearRelates
-                                    }
-                            )
-                        }
-                    } catch (e: Exception) {
-                        Timber.e(e, "Unable to restore 'm.relates_to' the clear event")
-                    }
+        if (mClearEvent != null) {
+            mSenderCurve25519Key = decryptionResult.senderCurve25519Key
+            mClaimedEd25519Key = decryptionResult.claimedEd25519Key
+            mForwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain
+
+            // For encrypted events with relation, the m.relates_to is kept in clear, so we need to put it back
+            // in the clear event
+            try {
+                content?.get("m.relates_to")?.let { clearRelates ->
+                    mClearEvent = mClearEvent?.copy(
+                            content = HashMap(mClearEvent!!.content).apply {
+                                this["m.relates_to"] = clearRelates
+                            }
+                    )
                 }
-
-
+            } catch (e: Exception) {
+                Timber.e(e, "Unable to restore 'm.relates_to' the clear event")
             }
         }
-        mCryptoError = null
     }
 
     /**

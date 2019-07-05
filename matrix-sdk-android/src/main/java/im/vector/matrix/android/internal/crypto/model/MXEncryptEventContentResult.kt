@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.session.events.model.Content
 
 data class MXEncryptEventContentResult(
         /**
-         * The event content
+         * The encrypted event content
          */
         val eventContent: Content,
         /**

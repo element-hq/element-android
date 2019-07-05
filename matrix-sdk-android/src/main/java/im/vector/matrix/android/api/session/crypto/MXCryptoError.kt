@@ -18,72 +18,28 @@
 
 package im.vector.matrix.android.api.session.crypto
 
-import android.text.TextUtils
+import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 
 /**
  * Represents a crypto error response.
  */
-class MXCryptoError(var code: String,
-                    var message: String) {
+sealed class MXCryptoError : Throwable() {
 
-    /**
-     * Describe the error with more details
-     */
-    private var mDetailedErrorDescription: String? = null
+    // TODO Create data class for all cases, and remove error code
+    data class Base(val code: String,
+                    val _message: String,
+                    /**
+                     * Describe the error with more details
+                     */
+                    val detailedErrorDescription: String? = null) : MXCryptoError()
 
-    /**
-     * Data exception.
-     * Some exceptions provide some data to describe the exception
-     */
-    var mExceptionData: Any? = null
-
-    /**
-     * @return true if the current error is an olm one.
-     */
-    val isOlmError: Boolean
-        get() = OLM_ERROR_CODE == code
-
-
-    /**
-     * @return the detailed error description
-     */
-    val detailedErrorDescription: String?
-        get() = if (TextUtils.isEmpty(mDetailedErrorDescription)) {
-            message
-        } else mDetailedErrorDescription
-
-    /**
-     * Create a crypto error
-     *
-     * @param code                     the error code (see XX_ERROR_CODE)
-     * @param shortErrorDescription    the short error description
-     * @param detailedErrorDescription the detailed error description
-     */
-    constructor(code: String, shortErrorDescription: String, detailedErrorDescription: String?) : this(code, shortErrorDescription) {
-        mDetailedErrorDescription = detailedErrorDescription
-    }
-
-    /**
-     * Create a crypto error
-     *
-     * @param code                     the error code (see XX_ERROR_CODE)
-     * @param shortErrorDescription    the short error description
-     * @param detailedErrorDescription the detailed error description
-     * @param exceptionData            the exception data
-     */
-    constructor(code: String, shortErrorDescription: String, detailedErrorDescription: String?, exceptionData: Any) : this(code, shortErrorDescription) {
-        mDetailedErrorDescription = detailedErrorDescription
-        mExceptionData = exceptionData
-    }
+    data class UnknownDevice(val deviceList: MXUsersDevicesMap<MXDeviceInfo>) : MXCryptoError()
 
     companion object {
-
-        // TODO Create sealed class
-
         /**
          * Error codes
          */
-        const val UNKNOWN_ERROR_CODE = "UNKNOWN_ERROR_CODE"
         const val ENCRYPTING_NOT_ENABLED_ERROR_CODE = "ENCRYPTING_NOT_ENABLED"
         const val UNABLE_TO_ENCRYPT_ERROR_CODE = "UNABLE_TO_ENCRYPT"
         const val UNABLE_TO_DECRYPT_ERROR_CODE = "UNABLE_TO_DECRYPT"

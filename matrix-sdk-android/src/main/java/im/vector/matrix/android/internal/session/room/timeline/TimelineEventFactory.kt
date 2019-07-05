@@ -16,12 +16,12 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
-import im.vector.matrix.android.internal.crypto.MXDecryptionException
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -81,8 +81,8 @@ internal class SimpleTimelineEventFactory @Inject constructor(private val roomMe
             event.setClearData(result)
         } catch (failure: Throwable) {
             Timber.e("Encrypted event: decryption failed")
-            if (failure is MXDecryptionException) {
-                event.setCryptoError(failure.cryptoError)
+            if (failure is Failure.CryptoError) {
+                event.setCryptoError(failure.error)
             }
         }
     }
@@ -135,14 +135,12 @@ internal class InMemoryTimelineEventFactory @Inject constructor(private val room
         } else {
             try {
                 val result = cryptoService.decryptEvent(event, timelineId)
-                if (result != null) {
-                    decryptionCache[cacheKey] = result
-                }
+                decryptionCache[cacheKey] = result
                 event.setClearData(result)
             } catch (failure: Throwable) {
                 Timber.e("Encrypted event: decryption failed ${failure.localizedMessage}")
-                if (failure is MXDecryptionException) {
-                    event.setCryptoError(failure.cryptoError)
+                if (failure is Failure.CryptoError) {
+                    event.setCryptoError(failure.error)
                 } else {
                     // Other error
                     Timber.e("Other error, should be handled")
