@@ -14,7 +14,7 @@ steps:
       - "./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/gplay/debug/*.apk"
-    branches: "develop feature/*"
+    branches: "!master"
     plugins:
       - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
@@ -28,7 +28,7 @@ steps:
       - "./gradlew clean lintFdroidRelease assembleFdroidDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/fdroid/debug/*.apk"
-    branches: "develop feature/*"
+    branches: "!master"
     plugins:
       - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
