@@ -25,19 +25,13 @@ import timber.log.Timber
  * @return the utf-8 string
  */
 fun convertToUTF8(s: String): String? {
-    var out: String? = s
-
-    if (null != out) {
-        try {
-            val bytes = out.toByteArray(charset("UTF-8"))
-            out = String(bytes)
-        } catch (e: Exception) {
-            Timber.e(e, "## convertToUTF8()  failed")
-        }
-
+    return try {
+        val bytes = s.toByteArray(Charsets.UTF_8)
+        String(bytes)
+    } catch (e: Exception) {
+        Timber.e(e, "## convertToUTF8()  failed")
+        null
     }
-
-    return out
 }
 
 /**
@@ -47,17 +41,11 @@ fun convertToUTF8(s: String): String? {
  * @return the utf-16 string
  */
 fun convertFromUTF8(s: String): String? {
-    var out: String? = s
-
-    if (null != out) {
-        try {
-            val bytes = out.toByteArray()
-            out = String(bytes, charset("UTF-8"))
-        } catch (e: Exception) {
-            Timber.e(e, "## convertFromUTF8()  failed")
-        }
-
+    return try {
+        val bytes = s.toByteArray()
+        String(bytes, Charsets.UTF_8)
+    } catch (e: Exception) {
+        Timber.e(e, "## convertFromUTF8()  failed")
+        null
     }
-
-    return out
 }

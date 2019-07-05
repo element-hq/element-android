@@ -21,13 +21,4 @@ import im.vector.matrix.android.api.MatrixCallback
 /**
  * Simple MatrixCallback implementation which delegate its calls to another callback
  */
-open class MatrixCallbackDelegate<T>(private val callback: MatrixCallback<T>) : MatrixCallback<T> {
-
-    override fun onSuccess(data: T) {
-        callback.onSuccess(data)
-    }
-
-    override fun onFailure(failure: Throwable) {
-        callback.onFailure(failure)
-    }
-}
+open class MatrixCallbackDelegate<T>(private val callback: MatrixCallback<T>) : MatrixCallback<T> by callback

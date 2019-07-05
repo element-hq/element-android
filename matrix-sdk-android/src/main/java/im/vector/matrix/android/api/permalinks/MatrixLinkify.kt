@@ -37,15 +37,13 @@ object MatrixLinkify {
         }
         val text = spannable.toString()
         var hasMatch = false
-        for (index in MatrixPatterns.MATRIX_PATTERNS.indices) {
-            val pattern = MatrixPatterns.MATRIX_PATTERNS[index]
-            val matcher = pattern.matcher(spannable)
-            while (matcher.find()) {
+        for (pattern in MatrixPatterns.MATRIX_PATTERNS) {
+            for (match in pattern.findAll(spannable)) {
                 hasMatch = true
-                val startPos = matcher.start(0)
+                val startPos = match.range.first
                 if (startPos == 0 || text[startPos - 1] != '/') {
-                    val endPos = matcher.end(0)
-                    val url = text.substring(matcher.start(0), matcher.end(0))
+                    val endPos = match.range.last
+                    val url = text.substring(match.range)
                     val span = MatrixPermalinkSpan(url, callback)
                     spannable.setSpan(span, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
