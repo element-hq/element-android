@@ -133,7 +133,7 @@ internal class DefaultTimeline(
                     builtEventsIdMap[eventId]?.let { builtIndex ->
                         //Update the relation of existing event
                         builtEvents[builtIndex]?.let { te ->
-                            //builtEvents[builtIndex] = timelineEventFactory.create(eventEntity, eventEntity.realm)
+                            builtEvents[builtIndex]  = eventEntity.asDomain()
                             hasChanged = true
                         }
                     }
