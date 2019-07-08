@@ -17,7 +17,6 @@
 package im.vector.riotx.features.home
 
 import android.app.ProgressDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -119,19 +118,19 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
         }
 
-        activeSessionHolder.getSafeActiveSession()?.getLiveStatus()?.observe(this, Observer {
-            Timber.e("${it?.statusText?.let { getString(it) }} ${it?.percentProgress}")
-            if (it == null) {
+        activeSessionHolder.getSafeActiveSession()?.getLiveStatus()?.observe(this, Observer { sprogress ->
+            Timber.e("${sprogress?.statusText?.let { getString(it) }} ${sprogress?.percentProgress}")
+            if (sprogress == null) {
                 waiting_view.isVisible = false
             } else {
                 waiting_view_status_horizontal_progress.apply {
                     isIndeterminate = false
                     max = 100
-                    progress = it.percentProgress
+                    progress = sprogress.percentProgress
                     isVisible = true
                 }
                 waiting_view_status_text.apply {
-                    text = it.statusText?.let { res -> getString(res) }
+                    text = sprogress.statusText?.let { getString(it) }
                     isVisible = true
                 }
                 waiting_view.isVisible = true
