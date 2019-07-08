@@ -36,7 +36,7 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
             val roomId: String,
             val eventId: String,
             val reason: String?,
-            override var lastFailureMessage: String? = null
+            override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI

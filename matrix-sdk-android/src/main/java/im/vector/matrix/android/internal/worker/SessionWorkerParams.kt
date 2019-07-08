@@ -20,5 +20,5 @@ interface SessionWorkerParams {
     val userId: String
 
     // Null is no error occurs. When chaining Workers, first step is to check that there is no lastFailureMessage from the previous workers
-    var lastFailureMessage: String?
+    val lastFailureMessage: String?
 }

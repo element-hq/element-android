@@ -48,7 +48,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
             val event: Event,
             val attachment: ContentAttachmentData,
             val isRoomEncrypted: Boolean,
-            override var lastFailureMessage: String? = null
+            override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var fileUploader: FileUploader
