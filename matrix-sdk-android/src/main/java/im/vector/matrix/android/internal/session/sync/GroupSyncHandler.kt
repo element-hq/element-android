@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
+import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.sync.model.GroupsSyncResponse
 import im.vector.matrix.android.internal.session.sync.model.InvitedGroupSync
 import io.realm.Realm
@@ -47,36 +48,21 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
 
     private fun handleGroupSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: DefaultInitialSyncProgressService?) {
         val groups = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  -> {
-                val total = handlingStrategy.data.size
-                reporter?.startTask(R.string.initial_sync_start_importing_account_groups, total, 0.6f)
-                var current = 0
-                handlingStrategy.data.map {
-                    reporter?.reportProgress((current / total.toFloat() * 100).toInt())
-                    current++
+            is HandlingStrategy.JOINED  ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.6f) {
                     handleJoinedGroup(realm, it.key)
                 }
-            }
-            is HandlingStrategy.INVITED -> {
-                val total = handlingStrategy.data.size
-                reporter?.startTask(R.string.initial_sync_start_importing_account_groups, total, 0.3f)
-                var current = 0
-                handlingStrategy.data.map {
-                    reporter?.reportProgress((current / total.toFloat() * 100).toInt())
-                    current++
+
+            is HandlingStrategy.INVITED ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.3f) {
                     handleInvitedGroup(realm, it.key)
                 }
-            }
-            is HandlingStrategy.LEFT    -> {
-                val total = handlingStrategy.data.size
-                reporter?.startTask(R.string.initial_sync_start_importing_account_groups, total, 0.1f)
-                var current = 0
-                handlingStrategy.data.map {
-                    reporter?.reportProgress((current / total.toFloat() * 100).toInt())
-                    current++
+
+            is HandlingStrategy.LEFT    ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.1f) {
                     handleLeftGroup(realm, it.key)
                 }
-            }
+
         }
         realm.insertOrUpdate(groups)
     }

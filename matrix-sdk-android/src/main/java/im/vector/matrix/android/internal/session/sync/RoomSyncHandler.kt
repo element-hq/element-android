@@ -34,6 +34,7 @@ import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
+import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
@@ -92,33 +93,19 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: DefaultInitialSyncProgressService?) {
 
         val rooms = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  -> {
-                val total = handlingStrategy.data.size
-                reporter?.startTask(R.string.initial_sync_start_importing_account_joined_rooms, total, 0.6f)
-                var current = 0
-                handlingStrategy.data.map {
-                    reporter?.reportProgress((current / total.toFloat() * 100).toInt())
-                    current++
-                    handleJoinedRoom(realm, it.key, it.value).also {
-                        reporter?.endTask(R.string.initial_sync_start_importing_account_joined_rooms)
-                    }
+            is HandlingStrategy.JOINED  ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
+                    handleJoinedRoom(realm, it.key, it.value)
+                }
+            is HandlingStrategy.INVITED ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.4f) {
+                    handleInvitedRoom(realm, it.key, it.value)
                 }
 
-            }
-            is HandlingStrategy.INVITED -> {
-                val total = handlingStrategy.data.size
-                reporter?.startTask(R.string.initial_sync_start_importing_account_invited_rooms, total, 0.4f)
-                var current = 0
-                handlingStrategy.data.map {
-                    reporter?.reportProgress((current / total.toFloat() * 100).toInt())
-                    current++
-                    handleInvitedRoom(realm, it.key, it.value)
-                }.also {
-                    reporter?.endTask(R.string.initial_sync_start_importing_account_invited_rooms)
-                }
-            }
             is HandlingStrategy.LEFT    -> {
-                handlingStrategy.data.map { handleLeftRoom(realm, it.key, it.value) }
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_left_rooms, 0.2f) {
+                    handleLeftRoom(realm, it.key, it.value)
+                }
             }
         }
         realm.insertOrUpdate(rooms)

@@ -95,3 +95,18 @@ public inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?
         reporter?.endTask(nameRes)
     }
 }
+
+
+public inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncProgressService?, taskId: Int, weight: Float, transform: (Map.Entry<K, V>) -> R): List<R> {
+    val total = this.count()
+    var current = 0
+    reporter?.startTask(taskId, 100, weight)
+    return this.map {
+        reporter?.reportProgress((current / total.toFloat() * 100).toInt())
+        current++
+        transform.invoke(it)
+    }.also {
+        reporter?.endTask(taskId)
+    }
+}
+
