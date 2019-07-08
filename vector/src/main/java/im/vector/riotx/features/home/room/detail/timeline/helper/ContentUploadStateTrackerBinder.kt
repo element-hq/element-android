@@ -71,13 +71,17 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
     }
 
     private fun handleIdle(state: ContentUploadStateTracker.State.Idle) {
-        progressLayout.visibility = View.VISIBLE
-        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
-        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
-        progressBar?.isVisible = true
-        progressBar?.isIndeterminate = true
-        progressBar?.progress = 0
-        progressTextView?.text = progressLayout.context.getString(R.string.send_file_step_idle)
+        if (mediaData.isLocalFile()) {
+            progressLayout.isVisible = true
+            val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
+            val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+            progressBar?.isVisible = true
+            progressBar?.isIndeterminate = true
+            progressBar?.progress = 0
+            progressTextView?.text = progressLayout.context.getString(R.string.send_file_step_idle)
+        } else {
+            progressLayout.isVisible = false
+        }
     }
 
     private fun handleEncryptingThumbnail(state: ContentUploadStateTracker.State.EncryptingThumbnail) {
