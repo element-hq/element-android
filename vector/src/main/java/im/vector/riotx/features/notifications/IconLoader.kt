@@ -55,7 +55,7 @@ class IconLoader @Inject constructor(val context: Context) {
     }
 
     @WorkerThread
-    fun loadUserIcon(path: String): IconCompat? {
+    private fun loadUserIcon(path: String): IconCompat? {
         val iconCompat = path.let {
             try {
                 Glide.with(context)
