@@ -43,8 +43,7 @@ import javax.inject.Inject
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
 class NotifiableEventResolver @Inject constructor(private val stringProvider: StringProvider,
-                                                  private val noticeEventFormatter: NoticeEventFormatter,
-                                                  private val cryptoService: CryptoService) {
+                                                  private val noticeEventFormatter: NoticeEventFormatter) {
 
     //private val eventDisplay = RiotEventDisplay(context)
 
@@ -52,7 +51,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
         val roomID = event.roomId ?: return null
         val eventId = event.eventId ?: return null
         val timelineEvent = session.getRoom(roomID)?.getTimeLineEvent(eventId) ?: return null
-
         when (event.getClearType()) {
             EventType.MESSAGE           -> {
                 return resolveMessageEvent(timelineEvent, session)
@@ -119,7 +117,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 //TODO use a global event decryptor? attache to session and that listen to new sessionId?
                 //for now decrypt sync
                 try {
-                    val result = cryptoService.decryptEvent(event.root, event.root.roomId + UUID.randomUUID().toString())
+                    val result = session.decryptEvent(event.root, event.root.roomId + UUID.randomUUID().toString())
                     event.root.mxDecryptionResult = OlmDecryptionResult(
                             payload = result.clearEvent,
                             senderKey = result.senderCurve25519Key,
