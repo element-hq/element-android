@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.features.media.ImageContentRenderer
-import java.io.File
 import javax.inject.Inject
 
 class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
@@ -61,48 +60,43 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
-            is ContentUploadStateTracker.State.Idle                  -> handleIdle(state)
-            is ContentUploadStateTracker.State.EncryptingThumbnail   -> handleEncryptingThumbnail(state)
-            is ContentUploadStateTracker.State.ProgressThumbnailData -> handleProgressThumbnail(state)
-            is ContentUploadStateTracker.State.Encrypting            -> handleEncrypting(state)
-            is ContentUploadStateTracker.State.ProgressData          -> handleProgress(state)
-            is ContentUploadStateTracker.State.Failure               -> handleFailure(state)
-            is ContentUploadStateTracker.State.Success               -> handleSuccess(state)
+            is ContentUploadStateTracker.State.Idle                -> handleIdle(state)
+            is ContentUploadStateTracker.State.EncryptingThumbnail -> handleEncryptingThumbnail(state)
+            is ContentUploadStateTracker.State.UploadingThumbnail  -> handleProgressThumbnail(state)
+            is ContentUploadStateTracker.State.Encrypting          -> handleEncrypting(state)
+            is ContentUploadStateTracker.State.Uploading           -> handleProgress(state)
+            is ContentUploadStateTracker.State.Failure             -> handleFailure(state)
+            is ContentUploadStateTracker.State.Success             -> handleSuccess(state)
         }
     }
 
     private fun handleIdle(state: ContentUploadStateTracker.State.Idle) {
-        if (mediaData.isLocalFile()) {
-            val file = File(mediaData.url)
-            progressLayout.visibility = View.VISIBLE
-            val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
-            val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
-            progressBar?.isVisible = true
-            progressBar?.isIndeterminate = true
-            progressBar?.progress = 0
-            progressTextView?.text = progressLayout.context.getString(R.string.send_file_step_idle)
-        } else {
-            progressLayout.visibility = View.GONE
-        }
+        progressLayout.visibility = View.VISIBLE
+        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
+        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+        progressBar?.isVisible = true
+        progressBar?.isIndeterminate = true
+        progressBar?.progress = 0
+        progressTextView?.text = progressLayout.context.getString(R.string.send_file_step_idle)
     }
 
     private fun handleEncryptingThumbnail(state: ContentUploadStateTracker.State.EncryptingThumbnail) {
-        _handleEncrypting(R.string.send_file_step_encrypting_thumbnail)
+        doHandleEncrypting(R.string.send_file_step_encrypting_thumbnail)
     }
 
-    private fun handleProgressThumbnail(state: ContentUploadStateTracker.State.ProgressThumbnailData) {
-        _handleProgress(R.string.send_file_step_sending_thumbnail, state.current, state.total)
+    private fun handleProgressThumbnail(state: ContentUploadStateTracker.State.UploadingThumbnail) {
+        doHandleProgress(R.string.send_file_step_sending_thumbnail, state.current, state.total)
     }
 
     private fun handleEncrypting(state: ContentUploadStateTracker.State.Encrypting) {
-        _handleEncrypting(R.string.send_file_step_encrypting_file)
+        doHandleEncrypting(R.string.send_file_step_encrypting_file)
     }
 
-    private fun handleProgress(state: ContentUploadStateTracker.State.ProgressData) {
-        _handleProgress(R.string.send_file_step_sending_file, state.current, state.total)
+    private fun handleProgress(state: ContentUploadStateTracker.State.Uploading) {
+        doHandleProgress(R.string.send_file_step_sending_file, state.current, state.total)
     }
 
-    private fun _handleEncrypting(resId: Int) {
+    private fun doHandleEncrypting(resId: Int) {
         progressLayout.visibility = View.VISIBLE
         val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
         val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
@@ -110,7 +104,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         progressTextView?.text = progressLayout.context.getString(resId)
     }
 
-    private fun _handleProgress(resId: Int, current: Long, total: Long) {
+    private fun doHandleProgress(resId: Int, current: Long, total: Long) {
         progressLayout.visibility = View.VISIBLE
         val percent = 100L * (current.toFloat() / total.toFloat())
         val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
@@ -128,10 +122,11 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
         val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
         progressBar?.isVisible = false
+        // TODO Red text
         progressTextView?.text = state.throwable.localizedMessage
     }
 
     private fun handleSuccess(state: ContentUploadStateTracker.State.Success) {
-        // Nothing to do
+        progressLayout.visibility = View.GONE
     }
 }

@@ -59,7 +59,7 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
     }
 
     internal fun setProgressThumbnail(key: String, current: Long, total: Long) {
-        val progressData = ContentUploadStateTracker.State.ProgressThumbnailData(current, total)
+        val progressData = ContentUploadStateTracker.State.UploadingThumbnail(current, total)
         updateState(key, progressData)
     }
 
@@ -69,7 +69,7 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
     }
 
     internal fun setProgress(key: String, current: Long, total: Long) {
-        val progressData = ContentUploadStateTracker.State.ProgressData(current, total)
+        val progressData = ContentUploadStateTracker.State.Uploading(current, total)
         updateState(key, progressData)
     }
 
