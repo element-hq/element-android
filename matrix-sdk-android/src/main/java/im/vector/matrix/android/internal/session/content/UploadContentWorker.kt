@@ -86,7 +86,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                 uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
                 fileUploader
-                        .uploadByteArray(encryptionResult.encryptedByteArray, "thumb_${attachment.name}", thumbnailData.mimeType)
+                        .uploadByteArray(encryptionResult.encryptedByteArray, "thumb_${attachment.name}", "application/octet-stream")
             } else {
                 fileUploader
                         .uploadByteArray(thumbnailData.bytes, "thumb_${attachment.name}", thumbnailData.mimeType)
