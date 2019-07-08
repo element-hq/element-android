@@ -22,8 +22,11 @@ import androidx.annotation.WorkerThread
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BitmapLoader(val context: Context) {
+@Singleton
+class BitmapLoader @Inject constructor(val context: Context) {
 
     /**
      * Avatar Url -> Icon

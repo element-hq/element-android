@@ -45,6 +45,8 @@ import javax.inject.Singleton
 @Singleton
 class NotificationDrawerManager @Inject constructor(private val context: Context,
                                                     private val activeSessionHolder: ActiveSessionHolder,
+                                                    private val iconLoader: IconLoader,
+                                                    private val bitmapLoader: BitmapLoader,
                                                     private val outdatedDetector: OutdatedEventDetector?) {
 
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
@@ -63,10 +65,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
 
     private var currentRoomId: String? = null
-
-    private var iconLoader = IconLoader(context)
-
-    private var bitmapLoader = BitmapLoader(context)
 
     /**
     Should be called as soon as a new event is ready to be displayed.

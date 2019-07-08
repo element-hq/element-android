@@ -24,8 +24,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class IconLoader(val context: Context) {
+@Singleton
+class IconLoader @Inject constructor(val context: Context) {
 
     /**
      * Avatar Url -> Icon
