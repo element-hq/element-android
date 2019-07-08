@@ -18,8 +18,6 @@ package im.vector.riotx.features.notifications
 
 import android.content.Context
 import android.os.Build
-import android.os.Handler
-import android.os.HandlerThread
 import androidx.annotation.WorkerThread
 import androidx.core.graphics.drawable.IconCompat
 import com.bumptech.glide.Glide
@@ -27,67 +25,34 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import timber.log.Timber
 
-/**
- * FIXME It works, but it does not refresh the notification, when it's already displayed
- */
-class IconLoader(val context: Context,
-                 val listener: IconLoaderListener) {
+class IconLoader(val context: Context) {
 
     /**
      * Avatar Url -> Icon
      */
-    private val cache = HashMap<String, IconCompat>()
-
-    // URLs to load
-    private val toLoad = HashSet<String>()
+    private val cache = HashMap<String, IconCompat?>()
 
     // Black list of URLs (broken URL, etc.)
     private val blacklist = HashSet<String>()
-
-    private var uiHandler = Handler()
-
-    private val handlerThread: HandlerThread = HandlerThread("IconLoader", Thread.MIN_PRIORITY)
-    private var backgroundHandler: Handler
-
-    init {
-        handlerThread.start()
-        backgroundHandler = Handler(handlerThread.looper)
-    }
 
     /**
      * Get icon of a user.
      * If already in cache, use it, else load it and call IconLoaderListener.onIconsLoaded() when ready
      * Before Android P, this does nothing because the icon won't be used
      */
+    @WorkerThread
     fun getUserIcon(path: String?): IconCompat? {
         if (path == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             return null
         }
 
-        synchronized(cache) {
-            if (cache[path] != null) {
-                return cache[path]
-            }
-
-            // Add to the queue, if not blacklisted
-            if (!blacklist.contains(path)) {
-                if (toLoad.contains(path)) {
-                    // Wait
-                } else {
-                    toLoad.add(path)
-
-                    backgroundHandler.post {
-                        loadUserIcon(path)
-                    }
-                }
-            }
+        return cache.getOrPut(path) {
+            loadUserIcon(path)
         }
-
-        return null
     }
 
     @WorkerThread
-    private fun loadUserIcon(path: String) {
+    fun loadUserIcon(path: String): IconCompat? {
         val iconCompat = path.let {
             try {
                 Glide.with(context)
@@ -105,26 +70,11 @@ class IconLoader(val context: Context,
             }
         }
 
-        synchronized(cache) {
-            if (iconCompat == null) {
-                // Add to the blacklist
-                blacklist.add(path)
-            } else {
-                cache[path] = iconCompat
-            }
-
-            toLoad.remove(path)
-
-            if (toLoad.isEmpty()) {
-                uiHandler.post {
-                    listener.onIconsLoaded()
-                }
-            }
+        if (iconCompat == null) {
+            // Add to the blacklist
+            blacklist.add(path)
         }
-    }
 
-
-    interface IconLoaderListener {
-        fun onIconsLoaded()
+        return iconCompat
     }
 }
