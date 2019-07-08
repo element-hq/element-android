@@ -38,12 +38,16 @@ internal class TimelineEventDecryptor(
     private val newSessionListener = object : NewSessionListener {
         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
             synchronized(unknownSessionsFailure) {
+                val toDecryptAgain = ArrayList<String>()
                 unknownSessionsFailure[sessionId]?.let { eventIds ->
-                    eventIds.forEach {
+                    toDecryptAgain.addAll(eventIds)
+                }
+                if (toDecryptAgain.isNotEmpty()) {
+                    unknownSessionsFailure[sessionId]?.clear()
+                    toDecryptAgain.forEach {
                         requestDecryption(it)
                     }
                 }
-                unknownSessionsFailure[sessionId]?.clear()
             }
         }
 

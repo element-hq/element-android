@@ -55,7 +55,8 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                             cryptoError?.name
                         }
 
-                val message = stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
+                        ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
                 val spannableStr = span(message) {
                     textStyle = "italic"
                     textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
