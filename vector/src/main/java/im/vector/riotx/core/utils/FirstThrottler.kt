@@ -17,9 +17,10 @@ package im.vector.riotx.core.utils
 
 
 /**
- * Simple Debouncer
+ * Simple ThrottleFirst
+ * See https://raw.githubusercontent.com/wiki/ReactiveX/RxJava/images/rx-operators/throttleFirst.png
  */
-class Debouncer(private val minimumInterval: Long = 800) {
+class FirstThrottler(private val minimumInterval: Long = 800) {
     private var lastDate = 0L
 
     fun canHandle(): Boolean {
