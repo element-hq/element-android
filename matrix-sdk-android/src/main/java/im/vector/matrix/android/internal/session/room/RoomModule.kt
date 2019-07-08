@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.members.MembershipService
@@ -27,6 +28,7 @@ import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
+import im.vector.matrix.android.internal.session.DefaultFileService
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.create.DefaultCreateRoomTask
@@ -138,4 +140,6 @@ internal abstract class RoomModule {
     @Binds
     abstract fun bindTimelineService(timelineService: DefaultTimelineService): TimelineService
 
+    @Binds
+    abstract fun bindFileService(fileService: DefaultFileService): FileService
 }

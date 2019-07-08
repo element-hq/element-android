@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto
+package im.vector.matrix.android.internal.session
 
 import android.content.Context
+import android.os.Environment
 import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
 import im.vector.matrix.android.internal.extensions.foldToCallback
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.md5
 import im.vector.matrix.android.internal.util.writeToFile
@@ -38,33 +39,29 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-@SessionScope
-internal class FileDecryptor @Inject constructor(private val context: Context,
-                                                 private val sessionParams: SessionParams,
-                                                 private val contentUrlResolver: ContentUrlResolver,
-                                                 private val coroutineDispatchers: MatrixCoroutineDispatchers) {
+internal class DefaultFileService @Inject constructor(private val context: Context,
+                                                      private val sessionParams: SessionParams,
+                                                      private val contentUrlResolver: ContentUrlResolver,
+                                                      private val coroutineDispatchers: MatrixCoroutineDispatchers) : FileService {
 
     val okHttpClient = OkHttpClient()
 
-    fun decryptFile(id: String,
-                    fileName: String,
-                    url: String,
-                    elementToDecrypt: ElementToDecrypt,
-                    callback: MatrixCallback<File>) {
+    /**
+     * Download file in the cache folder, and eventually decrypt it
+     * TODO implement clear file, to delete "MF"
+     */
+    override fun downloadFile(downloadMode: FileService.DownloadMode,
+                              id: String,
+                              fileName: String,
+                              url: String?,
+                              elementToDecrypt: ElementToDecrypt?,
+                              callback: MatrixCallback<File>) {
         GlobalScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.io) {
                 Try {
-                    // Create dir tree:
-                    // <cache>/DF/<md5(userId)>/<md5(id)>/
-                    val tmpFolderRoot = File(context.cacheDir, "DF")
-                    val tmpFolderUser = File(tmpFolderRoot, sessionParams.credentials.userId.md5())
-                    val tmpFolder = File(tmpFolderUser, id.md5())
+                    val folder = getFolder(downloadMode, id)
 
-                    if (!tmpFolder.exists()) {
-                        tmpFolder.mkdirs()
-                    }
-
-                    File(tmpFolder, fileName)
+                    File(folder, fileName)
                 }.map { destFile ->
                     if (!destFile.exists()) {
                         Try {
@@ -79,11 +76,16 @@ internal class FileDecryptor @Inject constructor(private val context: Context,
                             val response = okHttpClient.newCall(request).execute()
                             val inputStream = response.body()?.byteStream()
                             Timber.v("Response size ${response.body()?.contentLength()} - Stream available: ${inputStream?.available()}")
-                            if (!response.isSuccessful) {
+                            if (!response.isSuccessful
+                                    || inputStream == null) {
                                 throw IOException()
                             }
 
-                            MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt) ?: throw IllegalStateException("Decryption error")
+                            if (elementToDecrypt != null) {
+                                MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt) ?: throw IllegalStateException("Decryption error")
+                            } else {
+                                inputStream
+                            }
                         }
                                 .map { inputStream ->
                                     writeToFile(inputStream, destFile)
@@ -95,5 +97,25 @@ internal class FileDecryptor @Inject constructor(private val context: Context,
             }
                     .foldToCallback(callback)
         }
+    }
+
+    private fun getFolder(downloadMode: FileService.DownloadMode, id: String): File {
+        return when (downloadMode) {
+            FileService.DownloadMode.FOR_INTERNAL_USE -> {
+                // Create dir tree (MF stands for Matrix File):
+                // <cache>/MF/<md5(userId)>/<md5(id)>/
+                val tmpFolderRoot = File(context.cacheDir, "MF")
+                val tmpFolderUser = File(tmpFolderRoot, sessionParams.credentials.userId.md5())
+                File(tmpFolderUser, id.md5())
+            }
+            FileService.DownloadMode.TO_EXPORT        -> {
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            }
+        }
+                .also { folder ->
+                    if (!folder.exists()) {
+                        folder.mkdirs()
+                    }
+                }
     }
 }

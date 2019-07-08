@@ -105,13 +105,6 @@ interface CryptoService {
 
     fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>)
 
-    /**
-     * Decrypt a file.
-     * Result will be a decrypted file, stored in the cache folder. id parameter will be used to create a sub folder to avoid name collision.
-     * You can pass the eventId
-     */
-    fun decryptFile(id: String, filename: String, url: String, elementToDecrypt: ElementToDecrypt, callback: MatrixCallback<File>)
-
     fun getEncryptionAlgorithm(roomId: String): String?
 
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean

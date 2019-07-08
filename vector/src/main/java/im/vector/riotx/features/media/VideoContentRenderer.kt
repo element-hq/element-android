@@ -23,6 +23,7 @@ import android.widget.TextView
 import android.widget.VideoView
 import androidx.core.view.isVisible
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -64,7 +65,9 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 loadingView.isVisible = true
 
                 activeSessionHolder.getActiveSession()
-                        .decryptFile(data.eventId,
+                        .downloadFile(
+                                FileService.DownloadMode.FOR_INTERNAL_USE,
+                                data.eventId,
                                 data.filename,
                                 data.url,
                                 data.elementToDecrypt,

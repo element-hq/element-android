@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail
 
+import android.content.ClipDescription
 import android.net.Uri
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
@@ -31,10 +32,12 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
 import im.vector.riotx.core.intent.getFilenameFromUri
@@ -50,6 +53,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -113,6 +117,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.EnterEditMode          -> handleEditAction(action)
             is RoomDetailActions.EnterQuoteMode         -> handleQuoteAction(action)
             is RoomDetailActions.EnterReplyMode         -> handleReplyAction(action)
+            is RoomDetailActions.DownloadFile           -> handleDownloadFile(action)
             is RoomDetailActions.NavigateToEvent        -> handleNavigateToEvent(action)
             else                                        -> Timber.e("Unhandled Action: $action")
         }
@@ -148,6 +153,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val _navigateToEvent = MutableLiveData<LiveEvent<String>>()
     val navigateToEvent: LiveData<LiveEvent<String>>
         get() = _navigateToEvent
+
+    private val _downloadedFileEvent = MutableLiveData<LiveEvent<DownloadFileState>>()
+    val downloadedFileEvent: LiveData<LiveEvent<DownloadFileState>>
+        get() = _downloadedFileEvent
 
 
     // PRIVATE METHODS *****************************************************************************
@@ -432,6 +441,46 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             }
         }
     }
+
+    data class DownloadFileState(
+            val mimeType: String,
+            val file: File?,
+            val throwable: Throwable?
+    )
+
+    private fun handleDownloadFile(action: RoomDetailActions.DownloadFile) {
+        session.downloadFile(
+                FileService.DownloadMode.TO_EXPORT,
+                action.eventId,
+                action.messageFileContent.filename ?: "file.dat",
+                action.messageFileContent.url,
+                action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
+                object : MatrixCallback<File> {
+                    override fun onSuccess(data: File) {
+                        _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
+                                // Mimetype default to plain text, should not be used
+                                action.messageFileContent.encryptedFileInfo?.mimetype
+                                        ?: action.messageFileContent.info?.mimeType
+                                        ?: ClipDescription.MIMETYPE_TEXT_PLAIN,
+                                data,
+                                null
+                        )))
+                    }
+
+                    override fun onFailure(failure: Throwable) {
+                        _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
+                                // Mimetype default to plain text, should not be used
+                                action.messageFileContent.encryptedFileInfo?.mimetype
+                                        ?: action.messageFileContent.info?.mimeType
+                                        ?: ClipDescription.MIMETYPE_TEXT_PLAIN,
+                                null,
+                                failure
+                        )))
+                    }
+                })
+
+    }
+
 
     private fun handleNavigateToEvent(action: RoomDetailActions.NavigateToEvent) {
         val targetEventId = action.eventId

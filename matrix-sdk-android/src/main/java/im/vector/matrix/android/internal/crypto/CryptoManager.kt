@@ -114,8 +114,6 @@ internal class CryptoManager @Inject constructor(
         private val keysBackup: KeysBackup,
         //
         private val objectSigner: ObjectSigner,
-        // File decryptor
-        private val fileDecryptor: FileDecryptor,
         //
         private val oneTimeKeysUploader: OneTimeKeysUploader,
         //
@@ -609,10 +607,6 @@ internal class CryptoManager @Inject constructor(
             }
             result.foldToCallback(callback)
         }
-    }
-
-    override fun decryptFile(id: String, filename: String, url: String, elementToDecrypt: ElementToDecrypt, callback: MatrixCallback<File>) {
-        fileDecryptor.decryptFile(id, filename, url, elementToDecrypt, callback)
     }
 
     /**

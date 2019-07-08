@@ -11,5 +11,8 @@
     <string name="send_file_step_encrypting_file">Encrypting file…</string>
     <string name="send_file_step_sending_file">Sending file (%1$s / %2$s)</string>
 
+    <string name="downloading_file">Downloading file %1$s…</string>
+    <string name="downloaded_file">File %1$s has been downloaded!</string>
+
 
 </resources>

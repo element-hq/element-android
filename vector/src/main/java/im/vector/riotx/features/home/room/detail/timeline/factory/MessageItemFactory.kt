@@ -162,7 +162,7 @@ class MessageItemFactory @Inject constructor(
                 }
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { _ ->
-                            callback?.onFileMessageClicked(messageContent)
+                            callback?.onFileMessageClicked(informationData.eventId, messageContent)
                         }))
     }
 
