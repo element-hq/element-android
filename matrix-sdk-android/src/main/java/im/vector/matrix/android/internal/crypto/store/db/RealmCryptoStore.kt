@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.crypto.store.db.query.delete
 import im.vector.matrix.android.internal.crypto.store.db.query.getById
 import im.vector.matrix.android.internal.crypto.store.db.query.getOrCreate
 import im.vector.matrix.android.internal.session.SessionScope
+import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.Sort
 import io.realm.kotlin.where
@@ -46,6 +47,9 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
     /* ==========================================================================================
      * Memory cache, to correctly release JNI objects
      * ========================================================================================== */
+
+    // A realm instance, for faster future getInstance. Do not use it
+    private var realmLocker: Realm? = null
 
     // The olm account
     private var olmAccount: OlmAccount? = null
@@ -86,6 +90,8 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
     }
 
     override fun open() {
+        realmLocker = Realm.getInstance(realmConfiguration)
+
         // Ensure CryptoMetadataEntity is inserted in DB
         doWithRealm(realmConfiguration) { realm ->
             var currentMetadata = realm.where<CryptoMetadataEntity>().findFirst()
@@ -131,6 +137,9 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
         inboundGroupSessionToRelease.clear()
 
         olmAccount?.releaseAccount()
+
+        realmLocker?.close()
+        realmLocker = null
     }
 
     override fun storeDeviceId(deviceId: String) {

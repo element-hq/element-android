@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.CancelableBag
-import im.vector.matrix.android.api.util.addTo
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -393,7 +392,7 @@ internal class DefaultTimeline(
                                            limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
-        paginationTask.configureWith(params)
+        cancelableBag += paginationTask.configureWith(params)
                 .enableRetry()
                 .dispatchTo(object : MatrixCallback<TokenChunkEventPersistor.Result> {
                     override fun onSuccess(data: TokenChunkEventPersistor.Result) {
@@ -412,7 +411,6 @@ internal class DefaultTimeline(
                     }
                 })
                 .executeBy(taskExecutor)
-                .addTo(cancelableBag)
     }
 
     /**

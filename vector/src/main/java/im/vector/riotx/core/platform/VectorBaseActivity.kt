@@ -22,12 +22,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.annotation.AttrRes
-import androidx.annotation.LayoutRes
-import androidx.annotation.MainThread
-import androidx.annotation.MenuRes
-import androidx.annotation.Nullable
-import androidx.annotation.StringRes
+import androidx.annotation.*
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
@@ -260,8 +255,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            setResult(RESULT_CANCELED)
-            finish()
+            onBackPressed()
             return true
         }
 

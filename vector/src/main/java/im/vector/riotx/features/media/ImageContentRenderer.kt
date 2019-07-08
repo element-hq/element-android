@@ -28,6 +28,7 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.utils.DimensionUtils.dpToPx
 import kotlinx.android.parcel.Parcelize
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -93,6 +94,11 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
         val fullSize = contentUrlResolver.resolveFullSize(data.url)
         val thumbnail = contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+
+        if (fullSize.isNullOrBlank() || thumbnail.isNullOrBlank()) {
+            Timber.w("Invalid urls")
+            return
+        }
 
         // TODO DECRYPT_FILE Decrypt file
         imageView.showImage(

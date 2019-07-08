@@ -18,7 +18,6 @@
 package im.vector.matrix.android.internal.crypto.algorithms
 
 import arrow.core.Try
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Content
 
 /**

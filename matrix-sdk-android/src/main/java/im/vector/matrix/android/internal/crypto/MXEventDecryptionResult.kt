@@ -1,6 +1,5 @@
 /*
  * Copyright 2016 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +17,6 @@
 package im.vector.matrix.android.internal.crypto
 
 import im.vector.matrix.android.api.util.JsonDict
-import java.util.*
 
 /**
  * The result of a (successful) call to decryptEvent.
@@ -28,23 +26,23 @@ data class MXEventDecryptionResult(
         /**
          * The plaintext payload for the event (typically containing "type" and "content" fields).
          */
-        var clearEvent: JsonDict? = null,
+        val clearEvent: JsonDict,
 
         /**
          * Key owned by the sender of this event.
          * See MXEvent.senderKey.
          */
-        var senderCurve25519Key: String? = null,
+        val senderCurve25519Key: String? = null,
 
         /**
          * Ed25519 key claimed by the sender of this event.
          * See MXEvent.claimedEd25519Key.
          */
-        var claimedEd25519Key: String? = null,
+        val claimedEd25519Key: String? = null,
 
         /**
          * List of curve25519 keys involved in telling us about the senderCurve25519Key and
          * claimedEd25519Key. See MXEvent.forwardingCurve25519KeyChain.
          */
-        var forwardingCurve25519KeyChain: List<String> = ArrayList()
+        val forwardingCurve25519KeyChain: List<String> = emptyList()
 )

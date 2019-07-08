@@ -21,7 +21,6 @@ package im.vector.matrix.android.internal.crypto.algorithms.megolm
 import android.text.TextUtils
 import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -254,29 +253,31 @@ internal class MXMegolmEncryption(
     /**
      * process the pending encryptions
      */
-    private suspend fun encryptContent(session: MXOutboundSessionInfo, eventType: String, eventContent: Content) = Try<Content> {
-        // Everything is in place, encrypt all pending events
-        val payloadJson = HashMap<String, Any>()
-        payloadJson["room_id"] = roomId
-        payloadJson["type"] = eventType
-        payloadJson["content"] = eventContent
+    private fun encryptContent(session: MXOutboundSessionInfo, eventType: String, eventContent: Content): Try<Content> {
+        return Try<Content> {
+            // Everything is in place, encrypt all pending events
+            val payloadJson = HashMap<String, Any>()
+            payloadJson["room_id"] = roomId
+            payloadJson["type"] = eventType
+            payloadJson["content"] = eventContent
 
-        // Get canonical Json from
+            // Get canonical Json from
 
-        val payloadString = convertToUTF8(MoshiProvider.getCanonicalJson(Map::class.java, payloadJson))
-        val ciphertext = olmDevice.encryptGroupMessage(session.sessionId, payloadString!!)
+            val payloadString = convertToUTF8(MoshiProvider.getCanonicalJson(Map::class.java, payloadJson))
+            val ciphertext = olmDevice.encryptGroupMessage(session.sessionId, payloadString!!)
 
-        val map = HashMap<String, Any>()
-        map["algorithm"] = MXCRYPTO_ALGORITHM_MEGOLM
-        map["sender_key"] = olmDevice.deviceCurve25519Key!!
-        map["ciphertext"] = ciphertext!!
-        map["session_id"] = session.sessionId
+            val map = HashMap<String, Any>()
+            map["algorithm"] = MXCRYPTO_ALGORITHM_MEGOLM
+            map["sender_key"] = olmDevice.deviceCurve25519Key!!
+            map["ciphertext"] = ciphertext!!
+            map["session_id"] = session.sessionId
 
-        // Include our device ID so that recipients can send us a
-        // m.new_device message if they don't have our session key.
-        map["device_id"] = credentials.deviceId!!
-        session.useCount++
-        map
+            // Include our device ID so that recipients can send us a
+            // m.new_device message if they don't have our session key.
+            map["device_id"] = credentials.deviceId!!
+            session.useCount++
+            map
+        }
     }
 
     /**
@@ -328,9 +329,7 @@ internal class MXMegolmEncryption(
                     if (unknownDevices.isEmpty) {
                         Try.just(devicesInRoom)
                     } else {
-                        val cryptoError = MXCryptoError(MXCryptoError.UNKNOWN_DEVICES_CODE,
-                                MXCryptoError.UNABLE_TO_ENCRYPT, MXCryptoError.UNKNOWN_DEVICES_REASON, unknownDevices)
-                        Try.Failure(Failure.CryptoError(cryptoError))
+                        Try.Failure(MXCryptoError.UnknownDevice(unknownDevices))
                     }
                 }
     }

@@ -17,13 +17,13 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
+import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import im.vector.matrix.android.api.util.JsonDict
-import im.vector.matrix.android.internal.crypto.MXDecryptionException
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
@@ -41,30 +41,29 @@ internal class MXOlmDecryption(
         private val credentials: Credentials)
     : IMXDecrypting {
 
-    @Throws(MXDecryptionException::class)
-    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    override suspend fun decryptEvent(event: Event, timeline: String): Try<MXEventDecryptionResult> {
         val olmEventContent = event.content.toModel<OlmEventContent>() ?: run {
             Timber.e("## decryptEvent() : bad event format")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_EVENT_FORMAT_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.BAD_EVENT_FORMAT_TEXT_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_EVENT_FORMAT,
+                    MXCryptoError.BAD_EVENT_FORMAT_TEXT_REASON))
         }
 
         val cipherText = olmEventContent.ciphertext ?: run {
             Timber.e("## decryptEvent() : missing cipher text")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.MISSING_CIPHER_TEXT_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_CIPHER_TEXT_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_CIPHER_TEXT,
+                    MXCryptoError.MISSING_CIPHER_TEXT_REASON))
         }
 
         val senderKey = olmEventContent.senderKey ?: run {
             Timber.e("## decryptEvent() : missing sender key")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.MISSING_SENDER_KEY_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_SENDER_KEY_TEXT_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_SENDER_KEY,
+                    MXCryptoError.MISSING_SENDER_KEY_TEXT_REASON))
         }
 
         val messageAny = cipherText[olmDevice.deviceCurve25519Key] ?: run {
             Timber.e("## decryptEvent() : our device ${olmDevice.deviceCurve25519Key} is not included in recipients")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.NOT_INCLUDE_IN_RECIPIENTS_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.NOT_INCLUDED_IN_RECIPIENT_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.NOT_INCLUDE_IN_RECIPIENTS,
+                    MXCryptoError.NOT_INCLUDED_IN_RECIPIENT_REASON))
         }
 
         // The message for myUser
@@ -74,14 +73,14 @@ internal class MXOlmDecryption(
 
         if (decryptedPayload == null) {
             Timber.e("## decryptEvent() Failed to decrypt Olm event (id= ${event.eventId} from $senderKey")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_ENCRYPTED_MESSAGE_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE,
+                    MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
         }
         val payloadString = convertFromUTF8(decryptedPayload)
         if (payloadString == null) {
             Timber.e("## decryptEvent() Failed to decrypt Olm event (id= ${event.eventId} from $senderKey")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_ENCRYPTED_MESSAGE_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE,
+                    MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
         }
 
         val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
@@ -89,73 +88,72 @@ internal class MXOlmDecryption(
 
         if (payload == null) {
             Timber.e("## decryptEvent failed : null payload")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_CIPHER_TEXT_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT,
+                    MXCryptoError.MISSING_CIPHER_TEXT_REASON))
         }
 
         val olmPayloadContent = OlmPayloadContent.fromJsonString(payloadString) ?: run {
             Timber.e("## decryptEvent() : bad olmPayloadContent format")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_DECRYPTED_FORMAT_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT,
+                    MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON))
         }
 
         if (olmPayloadContent.recipient.isNullOrBlank()) {
             val reason = String.format(MXCryptoError.ERROR_MISSING_PROPERTY_REASON, "recipient")
             Timber.e("## decryptEvent() : $reason")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.MISSING_PROPERTY_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, reason))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_PROPERTY,
+                    reason))
         }
 
         if (olmPayloadContent.recipient != credentials.userId) {
             Timber.e("## decryptEvent() : Event ${event.eventId}: Intended recipient ${olmPayloadContent.recipient} does not match our id ${credentials.userId}")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_RECIPIENT_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, String.format(MXCryptoError.BAD_RECIPIENT_REASON, olmPayloadContent.recipient)))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_RECIPIENT,
+                    String.format(MXCryptoError.BAD_RECIPIENT_REASON, olmPayloadContent.recipient)))
         }
 
         val recipientKeys = olmPayloadContent.recipient_keys ?: run {
             Timber.e("## decryptEvent() : Olm event (id=${event.eventId}) contains no 'recipient_keys' property; cannot prevent unknown-key attack")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.MISSING_PROPERTY_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, String.format(MXCryptoError.ERROR_MISSING_PROPERTY_REASON, "recipient_keys")))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_PROPERTY,
+                    String.format(MXCryptoError.ERROR_MISSING_PROPERTY_REASON, "recipient_keys")))
         }
 
         val ed25519 = recipientKeys["ed25519"]
 
         if (ed25519 != olmDevice.deviceEd25519Key) {
             Timber.e("## decryptEvent() : Event ${event.eventId}: Intended recipient ed25519 key $ed25519 did not match ours")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_RECIPIENT_KEY_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.BAD_RECIPIENT_KEY_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_RECIPIENT_KEY,
+                    MXCryptoError.BAD_RECIPIENT_KEY_REASON))
         }
 
         if (olmPayloadContent.sender.isNullOrBlank()) {
             Timber.e("## decryptEvent() : Olm event (id=${event.eventId}) contains no 'sender' property; cannot prevent unknown-key attack")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.MISSING_PROPERTY_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, String.format(MXCryptoError.ERROR_MISSING_PROPERTY_REASON, "sender")))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_PROPERTY,
+                    String.format(MXCryptoError.ERROR_MISSING_PROPERTY_REASON, "sender")))
         }
 
         if (olmPayloadContent.sender != event.senderId) {
             Timber.e("Event ${event.eventId}: original sender ${olmPayloadContent.sender} does not match reported sender ${event.senderId}")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.FORWARDED_MESSAGE_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, String.format(MXCryptoError.FORWARDED_MESSAGE_REASON, olmPayloadContent.sender)))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.FORWARDED_MESSAGE,
+                    String.format(MXCryptoError.FORWARDED_MESSAGE_REASON, olmPayloadContent.sender)))
         }
 
         if (olmPayloadContent.room_id != event.roomId) {
             Timber.e("## decryptEvent() : Event ${event.eventId}: original room ${olmPayloadContent.room_id} does not match reported room ${event.roomId}")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.BAD_ROOM_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, String.format(MXCryptoError.BAD_ROOM_REASON, olmPayloadContent.room_id)))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ROOM,
+                    String.format(MXCryptoError.BAD_ROOM_REASON, olmPayloadContent.room_id)))
         }
 
         val keys = olmPayloadContent.keys ?: run {
             Timber.e("## decryptEvent failed : null keys")
-            throw MXDecryptionException(MXCryptoError(MXCryptoError.UNABLE_TO_DECRYPT_ERROR_CODE,
-                    MXCryptoError.UNABLE_TO_DECRYPT, MXCryptoError.MISSING_CIPHER_TEXT_REASON))
+            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT,
+                    MXCryptoError.MISSING_CIPHER_TEXT_REASON))
         }
 
-        val result = MXEventDecryptionResult()
-        result.clearEvent = payload
-        result.senderCurve25519Key = senderKey
-        result.claimedEd25519Key = keys["ed25519"]
-
-        return result
+        return Try.just(MXEventDecryptionResult(
+                clearEvent = payload,
+                senderCurve25519Key = senderKey,
+                claimedEd25519Key = keys["ed25519"]
+        ))
     }
 
     /**

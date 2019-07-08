@@ -38,7 +38,7 @@ sealed class Failure(cause: Throwable? = null) : Throwable(cause = cause) {
 
     data class RegistrationFlowError(val registrationFlowResponse: RegistrationFlowResponse) : Failure(RuntimeException(registrationFlowResponse.toString()))
 
-    data class CryptoError(val error: MXCryptoError) : Failure(RuntimeException(error.toString()))
+    data class CryptoError(val error: MXCryptoError) : Failure(error)
 
     abstract class FeatureFailure : Failure()
 
