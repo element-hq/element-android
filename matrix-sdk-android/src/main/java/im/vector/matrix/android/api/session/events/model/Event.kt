@@ -81,6 +81,7 @@ data class Event(
     var mxDecryptionResult: OlmDecryptionResult? = null
     var mCryptoError: MXCryptoError.ErrorType? = null
 
+
     /**
      * Check if event is a state event.
      * @return true if event is state event.
@@ -237,4 +238,42 @@ data class Event(
      * Tells if the event is redacted
      */
     fun isRedacted() = unsignedData?.redactedEvent != null
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Event
+
+        if (type != other.type) return false
+        if (eventId != other.eventId) return false
+        if (content != other.content) return false
+        if (prevContent != other.prevContent) return false
+        if (originServerTs != other.originServerTs) return false
+        if (senderId != other.senderId) return false
+        if (stateKey != other.stateKey) return false
+        if (roomId != other.roomId) return false
+        if (unsignedData != other.unsignedData) return false
+        if (redacts != other.redacts) return false
+        if (mxDecryptionResult != other.mxDecryptionResult) return false
+        if (mCryptoError != other.mCryptoError) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = type.hashCode()
+        result = 31 * result + (eventId?.hashCode() ?: 0)
+        result = 31 * result + (content?.hashCode() ?: 0)
+        result = 31 * result + (prevContent?.hashCode() ?: 0)
+        result = 31 * result + (originServerTs?.hashCode() ?: 0)
+        result = 31 * result + (senderId?.hashCode() ?: 0)
+        result = 31 * result + (stateKey?.hashCode() ?: 0)
+        result = 31 * result + (roomId?.hashCode() ?: 0)
+        result = 31 * result + (unsignedData?.hashCode() ?: 0)
+        result = 31 * result + (redacts?.hashCode() ?: 0)
+        result = 31 * result + (mxDecryptionResult?.hashCode() ?: 0)
+        result = 31 * result + (mCryptoError?.hashCode() ?: 0)
+        return result
+    }
 }
