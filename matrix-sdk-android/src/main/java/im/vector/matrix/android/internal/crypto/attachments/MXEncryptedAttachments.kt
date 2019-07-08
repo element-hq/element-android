@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.attachments
 
 import android.text.TextUtils
 import android.util.Base64
+import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileKey
 import timber.log.Timber
@@ -51,7 +52,7 @@ object MXEncryptedAttachments {
      * @param mimetype the mime type
      * @return the encryption file info
      */
-    fun encryptAttachment(attachmentStream: InputStream, mimetype: String): EncryptionResult? {
+    fun encryptAttachment(attachmentStream: InputStream, mimetype: String): Try<EncryptionResult> {
         val t0 = System.currentTimeMillis()
         val secureRandom = SecureRandom()
 
@@ -115,23 +116,21 @@ object MXEncryptedAttachments {
                     encryptedByteArray = outStream.toByteArray()
             )
 
-            outStream.close()
-
             Timber.v("Encrypt in " + (System.currentTimeMillis() - t0) + " ms")
-            return result
+            return Try.just(result)
         } catch (oom: OutOfMemoryError) {
-            Timber.e(oom, "## encryptAttachment failed " + oom.message)
+            Timber.e(oom, "## encryptAttachment failed")
+            return Try.Failure(oom)
         } catch (e: Exception) {
-            Timber.e(e, "## encryptAttachment failed " + e.message)
+            Timber.e(e, "## encryptAttachment failed")
+            return Try.Failure(e)
+        } finally {
+            try {
+                outStream.close()
+            } catch (e: Exception) {
+                Timber.e(e, "## encryptAttachment() : fail to close outStream")
+            }
         }
-
-        try {
-            outStream.close()
-        } catch (e: Exception) {
-            Timber.e(e, "## encryptAttachment() : fail to close outStream")
-        }
-
-        return null
     }
 
     /**

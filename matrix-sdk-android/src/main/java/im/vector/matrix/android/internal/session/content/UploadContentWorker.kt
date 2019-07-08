@@ -69,24 +69,30 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         val eventId = params.event.eventId ?: return Result.success()
         val attachment = params.attachment
 
-        val isRoomEncrypted = params.isRoomEncrypted
+        val attachmentFile = try {
+            File(attachment.path)
+        } catch (e: Exception) {
+            Timber.e(e)
+            return Result.success(
+                    WorkerParamsFactory.toData(params.copy(
+                            lastFailureMessage = e.localizedMessage
+                    ))
+            )
+        }
 
-
-        val thumbnailData = ThumbnailExtractor.extractThumbnail(params.attachment)
-        val attachmentFile = createAttachmentFile(attachment) ?: return Result.failure()
         var uploadedThumbnailUrl: String? = null
         var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
 
-        if (thumbnailData != null) {
-            val contentUploadResponse = if (isRoomEncrypted) {
+        ThumbnailExtractor.extractThumbnail(params.attachment)?.let { thumbnailData ->
+            val contentUploadResponse = if (params.isRoomEncrypted) {
                 Timber.v("Encrypt thumbnail")
-                val encryptionResult = MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
-                        ?: return Result.failure()
+                MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
+                        .flatMap { encryptionResult ->
+                            uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
-                uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
-
-                fileUploader
-                        .uploadByteArray(encryptionResult.encryptedByteArray, "thumb_${attachment.name}", "application/octet-stream")
+                            fileUploader
+                                    .uploadByteArray(encryptionResult.encryptedByteArray, "thumb_${attachment.name}", "application/octet-stream")
+                        }
             } else {
                 fileUploader
                         .uploadByteArray(thumbnailData.bytes, "thumb_${attachment.name}", thumbnailData.mimeType)
@@ -107,16 +113,16 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
 
         var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
-        val contentUploadResponse = if (isRoomEncrypted) {
+        val contentUploadResponse = if (params.isRoomEncrypted) {
             Timber.v("Encrypt file")
 
-            val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
-                    ?: return Result.failure()
+            MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
+                    .flatMap { encryptionResult ->
+                        uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
-            uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
-
-            fileUploader
-                    .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
+                        fileUploader
+                                .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
+                    }
         } else {
             fileUploader
                     .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
@@ -127,15 +133,6 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                         { handleFailure(params, it) },
                         { handleSuccess(params, it.contentUri, uploadedFileEncryptedFileInfo, uploadedThumbnailUrl, uploadedThumbnailEncryptedFileInfo) }
                 )
-    }
-
-    private fun createAttachmentFile(attachment: ContentAttachmentData): File? {
-        return try {
-            File(attachment.path)
-        } catch (e: Exception) {
-            Timber.e(e)
-            null
-        }
     }
 
     private fun handleFailure(params: Params, failure: Throwable): Result {
