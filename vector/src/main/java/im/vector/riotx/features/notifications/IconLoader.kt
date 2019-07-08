@@ -17,6 +17,7 @@
 package im.vector.riotx.features.notifications
 
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import androidx.annotation.WorkerThread
@@ -56,9 +57,10 @@ class IconLoader(val context: Context,
     /**
      * Get icon of a user.
      * If already in cache, use it, else load it and call IconLoaderListener.onIconsLoaded() when ready
+     * Before Android P, this does nothing because the icon won't be used
      */
     fun getUserIcon(path: String?): IconCompat? {
-        if (path == null) {
+        if (path == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             return null
         }
 
