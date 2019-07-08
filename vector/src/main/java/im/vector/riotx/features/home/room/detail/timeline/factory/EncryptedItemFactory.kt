@@ -48,16 +48,11 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
             EventType.ENCRYPTED == event.root.getClearType() -> {
                 val cryptoError = event.root.mCryptoError
                 val errorDescription =
-                        if (cryptoError is MXCryptoError.Base) {
-                            if (cryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                                stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
-                            } else {
-                                // TODO i18n
-                                cryptoError.technicalMessage
-                            }
+                        if (cryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
+                            stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
                         } else {
-                            // Cannot happen (for now)
-                            "Other error"
+                            // TODO i18n
+                            cryptoError?.name
                         }
 
                 val message = stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)

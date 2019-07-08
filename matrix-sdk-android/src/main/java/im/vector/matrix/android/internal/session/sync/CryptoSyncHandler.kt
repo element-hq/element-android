@@ -24,7 +24,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
-import im.vector.matrix.android.internal.crypto.algorithms.MXDecryptionResult
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.sync.model.ToDeviceSyncResponse
@@ -67,7 +67,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: 
             try {
                 result = cryptoManager.decryptEvent(event, timelineId ?: "")
             } catch (exception: MXCryptoError) {
-                event.setCryptoError(exception)
+                event.mCryptoError = (exception as? MXCryptoError.Base)?.errorType //setCryptoError(exception.cryptoError)
             }
 
             if (null != result) {
@@ -76,7 +76,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: 
 //                        keysClaimed = map
 //                )
                 //TODO persist that?
-                event.mxDecryptionResult = MXDecryptionResult(
+                event.mxDecryptionResult = OlmDecryptionResult(
                         payload = result.clearEvent,
                         senderKey = result.senderCurve25519Key,
                         keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },

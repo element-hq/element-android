@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.database.model
 
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
-import im.vector.matrix.android.internal.crypto.algorithms.MXDecryptionResult
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
 import io.realm.RealmObject
 import io.realm.RealmResults
@@ -73,13 +73,13 @@ internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUI
 
 
     fun setDecryptionResult(result: MXEventDecryptionResult) {
-        val decryptionResult = MXDecryptionResult(
+        val decryptionResult = OlmDecryptionResult(
                 payload = result.clearEvent,
                 senderKey = result.senderCurve25519Key,
                 keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
                 forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
         )
-        val adapter = MoshiProvider.providesMoshi().adapter<MXDecryptionResult>(MXDecryptionResult::class.java)
+        val adapter = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java)
         decryptionResultJson = adapter.toJson(decryptionResult)
     }
 }

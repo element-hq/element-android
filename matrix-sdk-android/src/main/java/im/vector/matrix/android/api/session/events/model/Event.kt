@@ -20,9 +20,8 @@ import android.text.TextUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.util.JsonDict
-import im.vector.matrix.android.internal.crypto.algorithms.MXDecryptionResult
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
 import timber.log.Timber
 
@@ -79,8 +78,8 @@ data class Event(
 ) {
 
 
-    var mxDecryptionResult: MXDecryptionResult? = null
-    var mCryptoError: MXCryptoError? = null
+    var mxDecryptionResult: OlmDecryptionResult? = null
+    var mCryptoError: MXCryptoError.ErrorType? = null
 
     /**
      * Check if event is a state event.
@@ -181,7 +180,7 @@ data class Event(
      */
     fun getSenderKey(): String? {
         return mxDecryptionResult?.senderKey
-       // return mClearEvent?.mSenderCurve25519Key ?: mSenderCurve25519Key
+        // return mClearEvent?.mSenderCurve25519Key ?: mSenderCurve25519Key
     }
 
     /**

@@ -20,7 +20,9 @@ import com.squareup.moshi.JsonDataException
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.UnsignedData
-import im.vector.matrix.android.internal.crypto.algorithms.MXDecryptionResult
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryption
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
 import timber.log.Timber
@@ -73,13 +75,13 @@ internal object EventMapper {
         ).also {
             eventEntity.decryptionResultJson?.let { json ->
                 try {
-                    it.mxDecryptionResult = MoshiProvider.providesMoshi().adapter(MXDecryptionResult::class.java).fromJson(json)
+                    it.mxDecryptionResult = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).fromJson(json)
                 } catch (t: JsonDataException) {
                     Timber.e(t, "Failed to parse decryption result")
                 }
             }
             //TODO get the full crypto error object
-            it.mCryptoError = eventEntity.decryptionErrorCode?.let { MXCryptoError(it, it) }
+            it.mCryptoError = eventEntity.decryptionErrorCode?.let { MXCryptoError.ErrorType.valueOf(it) }
         }
     }
 

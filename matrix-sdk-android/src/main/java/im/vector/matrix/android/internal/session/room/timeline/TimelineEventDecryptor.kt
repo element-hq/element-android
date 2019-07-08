@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.room.timeline
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.internal.crypto.MXDecryptionException
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -107,9 +106,10 @@ internal class TimelineEventDecryptor(
                 eventEntity.setDecryptionResult(result)
             }
 
-        } catch (e: MXDecryptionException) {
-            if (e.cryptoError?.code == MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_ERROR_CODE) {
+        } catch (e: MXCryptoError) {
+            if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 //Keep track of unknown sessions to automatically try to decrypt on new session
+                eventEntity.decryptionErrorCode = e.errorType.name
                 event.content?.toModel<EncryptedEventContent>()?.let { content ->
                     content.sessionId?.let { sessionId ->
                         synchronized(unknownSessionsFailure) {
