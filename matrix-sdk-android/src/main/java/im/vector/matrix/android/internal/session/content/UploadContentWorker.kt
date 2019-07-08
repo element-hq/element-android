@@ -202,9 +202,10 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                                            thumbnailEncryptedFileInfo: EncryptedFileInfo?): MessageVideoContent {
         return copy(
                 url = if (encryptedFileInfo == null) url else null,
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url),
                 videoInfo = videoInfo?.copy(
                         thumbnailUrl = if (thumbnailEncryptedFileInfo == null) thumbnailUrl else null,
-                        thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = url)
+                        thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = thumbnailUrl)
                 )
         )
     }
