@@ -43,14 +43,29 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
         }
     }
 
-    internal fun setFailure(key: String) {
-        val failure = ContentUploadStateTracker.State.Failure
+    internal fun setFailure(key: String, throwable: Throwable) {
+        val failure = ContentUploadStateTracker.State.Failure(throwable)
         updateState(key, failure)
     }
 
     internal fun setSuccess(key: String) {
         val success = ContentUploadStateTracker.State.Success
         updateState(key, success)
+    }
+
+    internal fun setEncryptingThumbnail(key: String) {
+        val progressData = ContentUploadStateTracker.State.EncryptingThumbnail
+        updateState(key, progressData)
+    }
+
+    internal fun setProgressThumbnail(key: String, current: Long, total: Long) {
+        val progressData = ContentUploadStateTracker.State.ProgressThumbnailData(current, total)
+        updateState(key, progressData)
+    }
+
+    internal fun setEncrypting(key: String) {
+        val progressData = ContentUploadStateTracker.State.Encrypting
+        updateState(key, progressData)
     }
 
     internal fun setProgress(key: String, current: Long, total: Long) {

@@ -16,12 +16,12 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
-import android.content.Context
 import android.text.format.Formatter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.view.isVisible
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -61,10 +61,13 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
-            is ContentUploadStateTracker.State.Idle         -> handleIdle(state)
-            is ContentUploadStateTracker.State.Failure      -> handleFailure(state)
-            is ContentUploadStateTracker.State.Success      -> handleSuccess(state)
-            is ContentUploadStateTracker.State.ProgressData -> handleProgress(state)
+            is ContentUploadStateTracker.State.Idle                  -> handleIdle(state)
+            is ContentUploadStateTracker.State.EncryptingThumbnail   -> handleEncryptingThumbnail(state)
+            is ContentUploadStateTracker.State.ProgressThumbnailData -> handleProgressThumbnail(state)
+            is ContentUploadStateTracker.State.Encrypting            -> handleEncrypting(state)
+            is ContentUploadStateTracker.State.ProgressData          -> handleProgress(state)
+            is ContentUploadStateTracker.State.Failure               -> handleFailure(state)
+            is ContentUploadStateTracker.State.Success               -> handleSuccess(state)
         }
     }
 
@@ -74,32 +77,61 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
             progressLayout.visibility = View.VISIBLE
             val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
             val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+            progressBar?.isVisible = true
+            progressBar?.isIndeterminate = true
             progressBar?.progress = 0
-            progressTextView?.text = formatStats(progressLayout.context, 0L, file.length())
+            progressTextView?.text = progressLayout.context.getString(R.string.send_file_step_idle)
         } else {
             progressLayout.visibility = View.GONE
         }
     }
 
-    private fun handleFailure(state: ContentUploadStateTracker.State.Failure) {
-
+    private fun handleEncryptingThumbnail(state: ContentUploadStateTracker.State.EncryptingThumbnail) {
+        _handleEncrypting(R.string.send_file_step_encrypting_thumbnail)
     }
 
-    private fun handleSuccess(state: ContentUploadStateTracker.State.Success) {
+    private fun handleProgressThumbnail(state: ContentUploadStateTracker.State.ProgressThumbnailData) {
+        _handleProgress(R.string.send_file_step_sending_thumbnail, state.current, state.total)
+    }
 
+    private fun handleEncrypting(state: ContentUploadStateTracker.State.Encrypting) {
+        _handleEncrypting(R.string.send_file_step_encrypting_file)
     }
 
     private fun handleProgress(state: ContentUploadStateTracker.State.ProgressData) {
+        _handleProgress(R.string.send_file_step_sending_file, state.current, state.total)
+    }
+
+    private fun _handleEncrypting(resId: Int) {
         progressLayout.visibility = View.VISIBLE
-        val percent = 100L * (state.current.toFloat() / state.total.toFloat())
         val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
         val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+        progressBar?.isIndeterminate = true
+        progressTextView?.text = progressLayout.context.getString(resId)
+    }
+
+    private fun _handleProgress(resId: Int, current: Long, total: Long) {
+        progressLayout.visibility = View.VISIBLE
+        val percent = 100L * (current.toFloat() / total.toFloat())
+        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
+        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+        progressBar?.isVisible = true
+        progressBar?.isIndeterminate = false
         progressBar?.progress = percent.toInt()
-        progressTextView?.text = formatStats(progressLayout.context, state.current, state.total)
+        progressTextView?.text = progressLayout.context.getString(resId,
+                Formatter.formatShortFileSize(progressLayout.context, current),
+                Formatter.formatShortFileSize(progressLayout.context, total))
     }
 
-    private fun formatStats(context: Context, current: Long, total: Long): String {
-        return "${Formatter.formatShortFileSize(context, current)} / ${Formatter.formatShortFileSize(context, total)}"
+    private fun handleFailure(state: ContentUploadStateTracker.State.Failure) {
+        progressLayout.visibility = View.VISIBLE
+        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
+        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+        progressBar?.isVisible = false
+        progressTextView?.text = state.throwable.localizedMessage
     }
 
+    private fun handleSuccess(state: ContentUploadStateTracker.State.Success) {
+        // Nothing to do
+    }
 }

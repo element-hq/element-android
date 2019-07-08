@@ -5,5 +5,11 @@
 
     <string name="bottom_action_people_x">Direct Messages</string>
 
+    <string name="send_file_step_idle">Waiting…</string>
+    <string name="send_file_step_encrypting_thumbnail">Encrypting thumbnail…</string>
+    <string name="send_file_step_sending_thumbnail">Sending thumbnail (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Encrypting file…</string>
+    <string name="send_file_step_sending_file">Sending file (%1$s / %2$s)</string>
+
 
 </resources>
