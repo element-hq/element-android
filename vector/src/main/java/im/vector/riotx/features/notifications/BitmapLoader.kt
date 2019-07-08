@@ -29,12 +29,9 @@ import javax.inject.Singleton
 class BitmapLoader @Inject constructor(val context: Context) {
 
     /**
-     * Avatar Url -> Icon
+     * Avatar Url -> Bitmap
      */
     private val cache = HashMap<String, Bitmap?>()
-
-    // Black list of URLs (broken URL, etc.)
-    private val blacklist = HashSet<String>()
 
     /**
      * Get icon of a room.
@@ -53,7 +50,7 @@ class BitmapLoader @Inject constructor(val context: Context) {
 
     @WorkerThread
     private fun loadRoomBitmap(path: String): Bitmap? {
-        val bitmap = path.let {
+        return path.let {
             try {
                 Glide.with(context)
                         .asBitmap()
@@ -66,12 +63,5 @@ class BitmapLoader @Inject constructor(val context: Context) {
                 null
             }
         }
-
-        if (bitmap == null) {
-            // Add to the blacklist
-            blacklist.add(path)
-        }
-
-        return bitmap
     }
 }

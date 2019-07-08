@@ -31,12 +31,9 @@ import javax.inject.Singleton
 class IconLoader @Inject constructor(val context: Context) {
 
     /**
-     * Avatar Url -> Icon
+     * Avatar Url -> IconCompat
      */
     private val cache = HashMap<String, IconCompat?>()
-
-    // Black list of URLs (broken URL, etc.)
-    private val blacklist = HashSet<String>()
 
     /**
      * Get icon of a user.
@@ -56,7 +53,7 @@ class IconLoader @Inject constructor(val context: Context) {
 
     @WorkerThread
     private fun loadUserIcon(path: String): IconCompat? {
-        val iconCompat = path.let {
+        return path.let {
             try {
                 Glide.with(context)
                         .asBitmap()
@@ -72,12 +69,5 @@ class IconLoader @Inject constructor(val context: Context) {
                 IconCompat.createWithBitmap(bitmap)
             }
         }
-
-        if (iconCompat == null) {
-            // Add to the blacklist
-            blacklist.add(path)
-        }
-
-        return iconCompat
     }
 }
