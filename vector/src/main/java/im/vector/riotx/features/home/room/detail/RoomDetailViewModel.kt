@@ -500,17 +500,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary(false)
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap {
-                    if (it.membership != Membership.INVITE || it.latestEvent != null) {
-                        // Not an invitation, or already fetching last event
-                        Observable.just(it)
-                    } else {
-                        // We need the last event
-                        room.rx().liveRoomSummary(true)
-                    }
-                }
+        room.rx().liveRoomSummary()
                 .execute { async ->
                     copy(
                             asyncRoomSummary = async,

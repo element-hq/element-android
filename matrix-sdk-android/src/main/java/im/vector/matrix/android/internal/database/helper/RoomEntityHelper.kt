@@ -72,6 +72,7 @@ internal fun RoomEntity.addSendingEvent(event: Event) {
         it.senderName = myUser?.displayName
         it.senderAvatar = myUser?.avatarUrl
         it.isUniqueDisplayName = roomMembers.isUniqueDisplayName(myUser?.displayName)
+        it.senderMembershipEvent = roomMembers.queryRoomMemberEvent(senderId).findFirst()
     }
     sendingTimelineEvents.add(0, timelineEventEntity)
 }

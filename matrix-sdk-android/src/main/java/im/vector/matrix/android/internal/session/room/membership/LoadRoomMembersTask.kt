@@ -20,15 +20,16 @@ import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.helper.addStateEvents
+import im.vector.matrix.android.internal.database.helper.updateSenderData
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
+import io.realm.Realm
 import io.realm.kotlin.createObject
 import javax.inject.Inject
 
@@ -41,9 +42,9 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Boolea
 }
 
 internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAPI: RoomAPI,
-                                          private val monarchy: Monarchy,
-                                          private val syncTokenStore: SyncTokenStore,
-                                          private val roomSummaryUpdater: RoomSummaryUpdater
+                                                              private val monarchy: Monarchy,
+                                                              private val syncTokenStore: SyncTokenStore,
+                                                              private val roomSummaryUpdater: RoomSummaryUpdater
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params): Try<Boolean> {
@@ -68,20 +69,20 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
 
                     val roomMembers = RoomMembers(realm, roomId).getLoaded()
                     val eventsToInsert = response.roomMemberEvents.filter { !roomMembers.containsKey(it.stateKey) }
-
                     roomEntity.addStateEvents(eventsToInsert)
+                    roomEntity.chunks.flatMap { it.timelineEvents }.forEach {
+                        it.updateSenderData()
+                    }
                     roomEntity.areAllMembersLoaded = true
-
                     roomSummaryUpdater.update(realm, roomId)
                 }
                 .map { response }
     }
 
     private fun areAllMembersAlreadyLoaded(roomId: String): Boolean {
-        return monarchy
-                       .fetchAllCopiedSync { RoomEntity.where(it, roomId) }
-                       .firstOrNull()
-                       ?.areAllMembersLoaded ?: false
+        return Realm.getInstance(monarchy.realmConfiguration).use {
+            RoomEntity.where(it, roomId).findFirst()?.areAllMembersLoaded ?: false
+        }
     }
 
 }

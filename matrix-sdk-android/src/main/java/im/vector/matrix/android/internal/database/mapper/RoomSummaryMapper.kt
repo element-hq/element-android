@@ -29,7 +29,7 @@ internal class RoomSummaryMapper @Inject constructor(
         val cryptoService: CryptoService
 ) {
 
-    fun map(roomSummaryEntity: RoomSummaryEntity, getLatestEvent: Boolean = false): RoomSummary {
+    fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
         val tags = roomSummaryEntity.tags.map {
             RoomTag(it.tagName, it.tagOrder)
         }

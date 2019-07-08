@@ -26,8 +26,8 @@ import io.reactivex.schedulers.Schedulers
 
 class RxSession(private val session: Session) {
 
-    fun liveRoomSummaries(fetchLastEvents: Boolean): Observable<List<RoomSummary>> {
-        return session.liveRoomSummaries(fetchLastEvents).asObservable().observeOn(Schedulers.computation())
+    fun liveRoomSummaries(): Observable<List<RoomSummary>> {
+        return session.liveRoomSummaries().asObservable().observeOn(Schedulers.computation())
     }
 
     fun liveGroupSummaries(): Observable<List<GroupSummary>> {
