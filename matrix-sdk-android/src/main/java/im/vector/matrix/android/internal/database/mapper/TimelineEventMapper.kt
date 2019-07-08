@@ -46,8 +46,7 @@ internal object TimelineEventMapper {
                 senderName = timelineEventEntity.senderName,
                 isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
                 senderAvatar = timelineEventEntity.senderAvatar,
-                sendState = timelineEventEntity.root?.sendState ?: SendState.UNKNOWN,
-                hasClearEventFlag = timelineEventEntity.root?.decryptionResultJson != null
+                sendState = timelineEventEntity.root?.sendState ?: SendState.UNKNOWN
         )
     }
 
