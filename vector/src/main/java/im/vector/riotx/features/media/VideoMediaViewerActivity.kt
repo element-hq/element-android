@@ -28,6 +28,7 @@ import javax.inject.Inject
 
 class VideoMediaViewerActivity : VectorBaseActivity() {
 
+    @Inject lateinit var imageContentRenderer: ImageContentRenderer
     @Inject lateinit var videoContentRenderer: VideoContentRenderer
 
     override fun injectWith(injector: ScreenComponent) {
@@ -38,12 +39,10 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(im.vector.riotx.R.layout.activity_video_media_viewer)
         val mediaData = intent.getParcelableExtra<VideoContentRenderer.Data>(EXTRA_MEDIA_DATA)
-        if (mediaData.videoUrl.isNullOrEmpty()) {
-            finish()
-        } else {
-            configureToolbar(videoMediaViewerToolbar, mediaData)
-            videoContentRenderer.render(mediaData, videoMediaViewerThumbnailView, videoMediaViewerVideoView)
-        }
+
+        configureToolbar(videoMediaViewerToolbar, mediaData)
+        imageContentRenderer.render(mediaData.thumbnailMediaData, ImageContentRenderer.Mode.FULL_SIZE, videoMediaViewerThumbnailView)
+        videoContentRenderer.render(mediaData, videoMediaViewerThumbnailView, videoMediaViewerLoading, videoMediaViewerVideoView, videoMediaViewerErrorView)
     }
 
     private fun configureToolbar(toolbar: Toolbar, mediaData: VideoContentRenderer.Data) {

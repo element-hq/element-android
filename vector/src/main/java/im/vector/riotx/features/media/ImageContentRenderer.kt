@@ -100,7 +100,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             return
         }
 
-        // TODO DECRYPT_FILE Decrypt file
         imageView.showImage(
                 Uri.parse(thumbnail),
                 Uri.parse(fullSize)

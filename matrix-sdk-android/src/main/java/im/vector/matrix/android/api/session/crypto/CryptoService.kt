@@ -26,12 +26,14 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.NewSessionListener
+import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+import java.io.File
 
 interface CryptoService {
 
@@ -102,6 +104,13 @@ interface CryptoService {
     fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
     fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>)
+
+    /**
+     * Decrypt a file.
+     * Result will be a decrypted file, stored in the cache folder. id parameter will be used to create a sub folder to avoid name collision.
+     * You can pass the eventId
+     */
+    fun decryptFile(id: String, filename: String, url: String, elementToDecrypt: ElementToDecrypt, callback: MatrixCallback<File>)
 
     fun getEncryptionAlgorithm(roomId: String): String?
 

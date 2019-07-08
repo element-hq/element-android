@@ -23,6 +23,7 @@ import arrow.core.Try
 import okio.Okio
 import timber.log.Timber
 import java.io.File
+import java.io.InputStream
 
 /**
  * Save a string to a file with Okio

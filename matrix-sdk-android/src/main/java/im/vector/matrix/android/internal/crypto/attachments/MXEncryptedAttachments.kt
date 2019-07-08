@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.attachments
 
-import android.text.TextUtils
 import android.util.Base64
 import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
@@ -198,7 +197,7 @@ object MXEncryptedAttachments {
 
             val currentDigestValue = base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))
 
-            if (!TextUtils.equals(elementToDecrypt.sha256, currentDigestValue)) {
+            if (elementToDecrypt.sha256 != currentDigestValue) {
                 Timber.e("## decryptAttachment() :  Digest value mismatch")
                 outStream.close()
                 return null

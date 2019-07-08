@@ -48,6 +48,7 @@ import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAct
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
+import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
@@ -78,6 +79,7 @@ import im.vector.matrix.android.internal.util.fetchCopied
 import kotlinx.coroutines.*
 import org.matrix.olm.OlmManager
 import timber.log.Timber
+import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -112,6 +114,8 @@ internal class CryptoManager @Inject constructor(
         private val keysBackup: KeysBackup,
         //
         private val objectSigner: ObjectSigner,
+        // File decryptor
+        private val fileDecryptor: FileDecryptor,
         //
         private val oneTimeKeysUploader: OneTimeKeysUploader,
         //
@@ -605,6 +609,10 @@ internal class CryptoManager @Inject constructor(
             }
             result.foldToCallback(callback)
         }
+    }
+
+    override fun decryptFile(id: String, filename: String, url: String, elementToDecrypt: ElementToDecrypt, callback: MatrixCallback<File>) {
+        fileDecryptor.decryptFile(id, filename, url, elementToDecrypt, callback)
     }
 
     /**
