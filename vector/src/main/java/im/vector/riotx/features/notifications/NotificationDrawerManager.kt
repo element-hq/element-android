@@ -168,13 +168,20 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
 
     fun refreshNotificationDrawer() {
-        backgroundHandler.post {
-            refreshNotificationDrawerBg()
-        }
+        // Implement last throttler
+        Timber.w("refreshNotificationDrawer()")
+        backgroundHandler.removeCallbacksAndMessages(null)
+        backgroundHandler.postDelayed(
+                {
+                    refreshNotificationDrawerBg()
+                }
+                , 200)
     }
 
     @WorkerThread
     private fun refreshNotificationDrawerBg() {
+        Timber.w("refreshNotificationDrawerBg()")
+
         val session = activeSessionHolder.getActiveSession()
         val user = session.getUser(session.sessionParams.credentials.userId)
         val myUserDisplayName = user?.displayName ?: ""
