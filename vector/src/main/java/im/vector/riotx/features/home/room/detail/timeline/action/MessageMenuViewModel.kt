@@ -176,7 +176,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
 
                 this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, JSONObject(event.root.toContent()).toString(4)))
                 if (event.isEncrypted()) {
-                    val decryptedContent = event.root.mClearEvent.toContent()?.let {
+                    val decryptedContent = event.root.getClearContent()?.let {
                         JSONObject(it).toString(4)
                     } ?: stringProvider.getString(R.string.encryption_information_decryption_error)
                     this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, decryptedContent))

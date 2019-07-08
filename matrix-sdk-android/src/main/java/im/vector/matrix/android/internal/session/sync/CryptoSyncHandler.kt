@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.crypto.algorithms.MXDecryptionResult
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.sync.model.ToDeviceSyncResponse
@@ -39,7 +40,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: 
             // Decrypt event if necessary
             decryptEvent(event, null)
             if (TextUtils.equals(event.getClearType(), EventType.MESSAGE)
-                    && event.mClearEvent?.content?.toModel<MessageContent>()?.type == "m.bad.encrypted") {
+                    && event.getClearContent()?.toModel<MessageContent>()?.type == "m.bad.encrypted") {
                 Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : " + event.content)
             } else {
                 sasVerificationService.onToDeviceEvent(event)
@@ -70,7 +71,18 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: 
             }
 
             if (null != result) {
-                event.setClearData(result)
+//                event.mxDecryptionResult = MXDecryptionResult(
+//                        payload = result.clearEvent,
+//                        keysClaimed = map
+//                )
+                //TODO persist that?
+                event.mxDecryptionResult = MXDecryptionResult(
+                        payload = result.clearEvent,
+                        senderKey = result.senderCurve25519Key,
+                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                )
+//                event.setClearData(result)
                 return true
             }
         }

@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.room.timeline
 
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
@@ -34,7 +35,7 @@ data class TimelineEvent(
         val isUniqueDisplayName: Boolean,
         val senderAvatar: String?,
         val sendState: SendState,
-        val hasClearEventFlag: Boolean = false,
+//        val hasClearEventFlag: Boolean = false,
         val annotations: EventAnnotationsSummary? = null
 ) {
 

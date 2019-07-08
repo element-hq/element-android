@@ -16,6 +16,10 @@
 
 package im.vector.matrix.android.internal.database.model
 
+import com.squareup.moshi.Types
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
+import im.vector.matrix.android.internal.di.MoshiProvider
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
