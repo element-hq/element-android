@@ -99,14 +99,10 @@ internal class TimelineEventDecryptor(
         val event = eventEntity.asDomain()
         try {
             val result = cryptoService.decryptEvent(event, timelineId)
-            if (result == null) {
-                Timber.e("Null decryption result for event ${eventId}")
-            } else {
-                Timber.v("Successfully decrypted event ${eventId}")
-                eventEntity.setDecryptionResult(result)
-            }
-
+            Timber.v("Successfully decrypted event ${eventId}")
+            eventEntity.setDecryptionResult(result)
         } catch (e: MXCryptoError) {
+            Timber.v("Failed to decrypte event ${eventId} ${e}")
             if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 //Keep track of unknown sessions to automatically try to decrypt on new session
                 eventEntity.decryptionErrorCode = e.errorType.name

@@ -81,5 +81,7 @@ internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUI
         )
         val adapter = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java)
         decryptionResultJson = adapter.toJson(decryptionResult)
+        decryptionErrorCode = null
+        timelineEventEntity?.firstOrNull()?.root = this
     }
 }
