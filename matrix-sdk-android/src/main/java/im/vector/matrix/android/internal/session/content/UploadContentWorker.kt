@@ -73,6 +73,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
             File(attachment.path)
         } catch (e: Exception) {
             Timber.e(e)
+            contentUploadStateTracker.setFailure(params.event.eventId)
             return Result.success(
                     WorkerParamsFactory.toData(params.copy(
                             lastFailureMessage = e.localizedMessage
