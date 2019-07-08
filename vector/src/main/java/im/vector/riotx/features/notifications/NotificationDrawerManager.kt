@@ -18,6 +18,9 @@ package im.vector.riotx.features.notifications
 import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Handler
+import android.os.HandlerThread
+import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
@@ -42,7 +45,17 @@ import javax.inject.Singleton
 @Singleton
 class NotificationDrawerManager @Inject constructor(private val context: Context,
                                                     private val activeSessionHolder: ActiveSessionHolder,
+                                                    private val iconLoader: IconLoader,
+                                                    private val bitmapLoader: BitmapLoader,
                                                     private val outdatedDetector: OutdatedEventDetector?) {
+
+    private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
+    private var backgroundHandler: Handler
+
+    init {
+        handlerThread.start()
+        backgroundHandler = Handler(handlerThread.looper)
+    }
 
     //The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
@@ -52,22 +65,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
 
     private var currentRoomId: String? = null
-
-    private var iconLoader = IconLoader(context,
-            object : IconLoader.IconLoaderListener {
-                override fun onIconsLoaded() {
-                    // Force refresh
-                    refreshNotificationDrawer()
-                }
-            })
-
-    private var bitmapLoader = BitmapLoader(context,
-            object : BitmapLoader.BitmapLoaderListener {
-                override fun onBitmapsLoaded() {
-                    // Force refresh
-                    refreshNotificationDrawer()
-                }
-            })
 
     /**
     Should be called as soon as a new event is ready to be displayed.
@@ -171,6 +168,20 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
 
     fun refreshNotificationDrawer() {
+        // Implement last throttler
+        Timber.w("refreshNotificationDrawer()")
+        backgroundHandler.removeCallbacksAndMessages(null)
+        backgroundHandler.postDelayed(
+                {
+                    refreshNotificationDrawerBg()
+                }
+                , 200)
+    }
+
+    @WorkerThread
+    private fun refreshNotificationDrawerBg() {
+        Timber.w("refreshNotificationDrawerBg()")
+
         val session = activeSessionHolder.getActiveSession()
         val user = session.getUser(session.sessionParams.credentials.userId)
         val myUserDisplayName = user?.displayName ?: ""

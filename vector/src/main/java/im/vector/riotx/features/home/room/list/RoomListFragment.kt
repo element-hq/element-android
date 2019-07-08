@@ -33,7 +33,7 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.observeEvent
-import im.vector.riotx.core.extensions.observeEventDebounced
+import im.vector.riotx.core.extensions.observeEventFirstThrottle
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -81,7 +81,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         setupCreateRoomButton()
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
-        roomListViewModel.openRoomLiveData.observeEventDebounced(this, 800L) {
+        roomListViewModel.openRoomLiveData.observeEventFirstThrottle(this, 800L) {
             navigator.openRoom(requireActivity(), it)
         }
 

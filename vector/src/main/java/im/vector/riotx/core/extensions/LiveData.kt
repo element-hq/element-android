@@ -19,7 +19,7 @@ package im.vector.riotx.core.extensions
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import im.vector.riotx.core.utils.Debouncer
+import im.vector.riotx.core.utils.FirstThrottler
 import im.vector.riotx.core.utils.EventObserver
 import im.vector.riotx.core.utils.LiveEvent
 
@@ -35,11 +35,11 @@ inline fun <T> LiveData<LiveEvent<T>>.observeEvent(owner: LifecycleOwner, crossi
     this.observe(owner, EventObserver { it.run(observer) })
 }
 
-inline fun <T> LiveData<LiveEvent<T>>.observeEventDebounced(owner: LifecycleOwner, minimumInterval: Long, crossinline observer: (T) -> Unit) {
-    val debouncer = Debouncer(minimumInterval)
+inline fun <T> LiveData<LiveEvent<T>>.observeEventFirstThrottle(owner: LifecycleOwner, minimumInterval: Long, crossinline observer: (T) -> Unit) {
+    val firstThrottler = FirstThrottler(minimumInterval)
 
     this.observe(owner, EventObserver {
-        if (debouncer.canHandle()) {
+        if (firstThrottler.canHandle()) {
             it.run(observer)
         }
     })
