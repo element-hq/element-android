@@ -68,7 +68,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     // the http client
     private val mOkHttpClient = OkHttpClient()
 
-    // the pending bug reportSubtask call
+    // the pending bug report call
     private var mBugReportCall: Call? = null
 
 
@@ -96,16 +96,16 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     private val LOGCAT_CMD_DEBUG = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
 
     /**
-     * Bug reportSubtask upload listener
+     * Bug report upload listener
      */
     interface IMXBugReportListener {
         /**
-         * The bug reportSubtask has been cancelled
+         * The bug report has been cancelled
          */
         fun onUploadCancelled()
 
         /**
-         * The bug reportSubtask upload failed.
+         * The bug report upload failed.
          *
          * @param reason the failure reason
          */
@@ -119,13 +119,13 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
         fun onProgress(progress: Int)
 
         /**
-         * The bug reportSubtask upload succeeded.
+         * The bug report upload succeeded.
          */
         fun onUploadSucceed()
     }
 
     /**
-     * Send a bug reportSubtask.
+     * Send a bug report.
      *
      * @param context           the application context
      * @param forSuggestion     true to send a suggestion
@@ -407,7 +407,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             override fun onPostExecute(reason: String?) {
                 mBugReportCall = null
 
-                // delete when the bug reportSubtask has been successfully sent
+                // delete when the bug report has been successfully sent
                 for (file in mBugReportFiles) {
                     file.delete()
                 }
@@ -431,7 +431,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     }
 
     /**
-     * Send a bug reportSubtask either with email or with Vector.
+     * Send a bug report either with email or with Vector.
      */
     fun openBugReportScreen(activity: Activity, forSuggestion: Boolean = false) {
         screenshot = takeScreenshot(activity)
@@ -442,7 +442,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     }
 
     //==============================================================================================================
-    // crash reportSubtask management
+    // crash report management
     //==============================================================================================================
 
     /**
@@ -472,7 +472,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     }
 
     /**
-     * Save the crash reportSubtask
+     * Save the crash report
      *
      * @param context          the context
      * @param crashDescription teh crash description
