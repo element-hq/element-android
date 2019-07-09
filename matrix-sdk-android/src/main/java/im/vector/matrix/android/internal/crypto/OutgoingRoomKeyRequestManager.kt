@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import timber.log.Timber
-import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -185,9 +184,9 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
 
         Timber.v("## sendOutgoingRoomKeyRequests() :  Looking for queued outgoing room key requests")
         val outgoingRoomKeyRequest = cryptoStore.getOutgoingRoomKeyRequestByState(
-                HashSet<OutgoingRoomKeyRequest.RequestState>(Arrays.asList<OutgoingRoomKeyRequest.RequestState>(OutgoingRoomKeyRequest.RequestState.UNSENT,
+                setOf(OutgoingRoomKeyRequest.RequestState.UNSENT,
                         OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING,
-                        OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND)))
+                        OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND))
 
         if (null == outgoingRoomKeyRequest) {
             Timber.e("## sendOutgoingRoomKeyRequests() : No more outgoing room key requests")

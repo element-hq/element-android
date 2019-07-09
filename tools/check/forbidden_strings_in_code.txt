@@ -50,7 +50,7 @@ succes[^s]
 ### Use int instead of Integer
 protected Integer
 
-### Use the interface declaration. Example: use type "Map" instead of type "HashMap" to declare variable or parameter
+### Use the interface declaration. Example: use type "Map" instead of type "HashMap" to declare variable or parameter. For Kotlin, use mapOf, setOf, ...
 (private|public|protected|    ) (static )?(final )?(HashMap|HashSet|ArrayList)<
 
 ### Use int instead of short
