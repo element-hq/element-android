@@ -105,8 +105,9 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
 
 }
 
-inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?, nameRes: Int
-                             , totalProgress: Int,
+inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?,
+                             nameRes: Int,
+                             totalProgress: Int,
                              parentWeight: Float = 1f,
                              block: () -> T): T {
     reporter?.startTask(nameRes, totalProgress, parentWeight)
