@@ -17,16 +17,13 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import android.content.Context
 import androidx.work.*
+import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import java.util.concurrent.TimeUnit
 
 
 private const val SEND_WORK = "SEND_WORK"
 private const val BACKOFF_DELAY = 10_000L
-
-private val WORK_CONSTRAINTS = Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
 
 /**
  * Helper class for sending event related works.
@@ -62,7 +59,7 @@ internal object TimelineSendEventWorkCommon {
 
     inline fun <reified W : ListenableWorker> createWork(data: Data): OneTimeWorkRequest {
         return matrixOneTimeWorkRequestBuilder<W>()
-                .setConstraints(WORK_CONSTRAINTS)
+                .setConstraints(WorkManagerUtil.workConstraints)
                 .setInputData(data)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()

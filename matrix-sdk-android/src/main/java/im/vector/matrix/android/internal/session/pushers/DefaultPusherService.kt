@@ -18,8 +18,6 @@ package im.vector.matrix.android.internal.session.pushers
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.NetworkType
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
@@ -31,6 +29,7 @@ import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import java.util.*
@@ -73,10 +72,8 @@ internal class DefaultPusherService @Inject constructor(
 
         val params = AddHttpPusherWorker.Params(pusher, sessionParam.credentials.userId)
 
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-
         val request = matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
-                .setConstraints(constraints)
+                .setConstraints(WorkManagerUtil.workConstraints)
                 .setInputData(WorkerParamsFactory.toData(params))
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000L, TimeUnit.MILLISECONDS)
                 .build()

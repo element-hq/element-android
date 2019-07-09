@@ -17,12 +17,15 @@
 package im.vector.matrix.android.internal.worker
 
 import android.content.Context
-import androidx.work.ListenableWorker
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 
 internal object WorkManagerUtil {
     private const val MATRIX_SDK_TAG = "MatrixSDK"
+
+    // Default constraints: network
+    val workConstraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
     inline fun <reified W : ListenableWorker> matrixOneTimeWorkRequestBuilder() =
             OneTimeWorkRequestBuilder<W>()
