@@ -46,7 +46,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
     override val preferenceXmlRes = R.xml.vector_settings_notification_advanced_preferences
 
     override fun bindPref() {
-        val callNotificationsSystemOptions = findPreference(PreferencesManager.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)
+        val callNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)
         if (supportNotificationChannels()) {
             callNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 NotificationUtils.openSystemSettingsForCallCategory(this)
@@ -56,7 +56,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
             callNotificationsSystemOptions.isVisible = false
         }
 
-        val noisyNotificationsSystemOptions = findPreference(PreferencesManager.SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY)
+        val noisyNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY)
         if (supportNotificationChannels()) {
             noisyNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 NotificationUtils.openSystemSettingsForNoisyCategory(this)
@@ -66,7 +66,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
             noisyNotificationsSystemOptions.isVisible = false
         }
 
-        val silentNotificationsSystemOptions = findPreference(PreferencesManager.SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY)
+        val silentNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY)
         if (supportNotificationChannels()) {
             silentNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 NotificationUtils.openSystemSettingsForSilentCategory(this)
@@ -78,18 +78,18 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
 
 
         // Ringtone
-        val ringtonePreference = findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)
+        val ringtonePreference = findPreference(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)
 
         if (supportNotificationChannels()) {
             ringtonePreference.isVisible = false
         } else {
-            ringtonePreference.summary = PreferencesManager.getNotificationRingToneName(requireContext())
+            ringtonePreference.summary = VectorPreferences.getNotificationRingToneName(requireContext())
             ringtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
 
-                if (null != PreferencesManager.getNotificationRingTone(requireContext())) {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(requireContext()))
+                if (null != VectorPreferences.getNotificationRingTone(requireContext())) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, VectorPreferences.getNotificationRingTone(requireContext()))
                 }
 
                 startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
@@ -152,14 +152,14 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_NOTIFICATION_RINGTONE -> {
-                    PreferencesManager.setNotificationRingTone(requireContext(),
+                    VectorPreferences.setNotificationRingTone(requireContext(),
                             data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
 
                     // test if the selected ring tone can be played
-                    val notificationRingToneName = PreferencesManager.getNotificationRingToneName(requireContext())
+                    val notificationRingToneName = VectorPreferences.getNotificationRingToneName(requireContext())
                     if (null != notificationRingToneName) {
-                        PreferencesManager.setNotificationRingTone(requireContext(), PreferencesManager.getNotificationRingTone(requireContext()))
-                        findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY).summary = notificationRingToneName
+                        VectorPreferences.setNotificationRingTone(requireContext(), VectorPreferences.getNotificationRingTone(requireContext()))
+                        findPreference(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY).summary = notificationRingToneName
                     }
                 }
             }
@@ -217,13 +217,13 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
 
         //  preference name <-> rule Id
         private var mPrefKeyToBingRuleId = mapOf(
-                PreferencesManager.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_DISPLAY_NAME,
-                PreferencesManager.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_USER_NAME,
-                PreferencesManager.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY to BingRule.RULE_ID_ONE_TO_ONE_ROOM,
-                PreferencesManager.SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY to BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS,
-                PreferencesManager.SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY to BingRule.RULE_ID_INVITE_ME,
-                PreferencesManager.SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY to BingRule.RULE_ID_CALL,
-                PreferencesManager.SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY to BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS
+                VectorPreferences.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_DISPLAY_NAME,
+                VectorPreferences.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_USER_NAME,
+                VectorPreferences.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY to BingRule.RULE_ID_ONE_TO_ONE_ROOM,
+                VectorPreferences.SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY to BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS,
+                VectorPreferences.SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY to BingRule.RULE_ID_INVITE_ME,
+                VectorPreferences.SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY to BingRule.RULE_ID_CALL,
+                VectorPreferences.SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY to BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS
         )
 
         fun newInstance(matrixId: String) = VectorSettingsAdvancedNotificationPreferenceFragment()

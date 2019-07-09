@@ -61,25 +61,25 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private var mDisplayedPhoneNumber = ArrayList<String>()
 
     private val mUserSettingsCategory by lazy {
-        findPreference(PreferencesManager.SETTINGS_USER_SETTINGS_PREFERENCE_KEY) as PreferenceCategory
+        findPreference(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY) as PreferenceCategory
     }
     private val mUserAvatarPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY) as UserAvatarPreference
+        findPreference(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY) as UserAvatarPreference
     }
     private val mDisplayNamePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY) as EditTextPreference
+        findPreference(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY) as EditTextPreference
     }
     private val mPasswordPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)
     }
 
     // Local contacts
     private val mContactSettingsCategory by lazy {
-        findPreference(PreferencesManager.SETTINGS_CONTACT_PREFERENCE_KEYS) as PreferenceCategory
+        findPreference(VectorPreferences.SETTINGS_CONTACT_PREFERENCE_KEYS) as PreferenceCategory
     }
 
     private val mContactPhonebookCountryPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)
     }
 
 
@@ -147,15 +147,15 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         // Advanced settings
 
         // user account
-        findPreference(PreferencesManager.SETTINGS_LOGGED_IN_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_LOGGED_IN_PREFERENCE_KEY)
                 .summary = session.sessionParams.credentials.userId
 
         // home server
-        findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
                 .summary = session.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
 
         // identity server
-        findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
                 .summary = session.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
 
 
@@ -165,7 +165,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         setContactsPreferences()
 
         // clear cache
-        findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
+        findPreference(VectorPreferences.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
             /*
             TODO
             MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
@@ -185,7 +185,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // clear medias cache
-        findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
+        findPreference(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
             val size = getSizeOfFiles(requireContext(),
                     File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
 
@@ -232,7 +232,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         // Deactivate account section
 
         // deactivate account
-        findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_KEY)
+        findPreference(VectorPreferences.SETTINGS_DEACTIVATE_ACCOUNT_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
                 notImplemented()
@@ -834,7 +834,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                 override fun onSuccess(info: Void?) {
                     // refresh the settings value
                     PreferenceManager.getDefaultSharedPreferences(activity).edit {
-                        putString(PreferencesManager.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, value)
+                        putString(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY, value)
                     }
 
                     onCommonDone(null)

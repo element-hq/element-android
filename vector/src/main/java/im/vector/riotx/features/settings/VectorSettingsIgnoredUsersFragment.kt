@@ -34,10 +34,10 @@ class VectorSettingsIgnoredUsersFragment : VectorSettingsBaseFragment() {
 
     // displayed the ignored users list
     private val mIgnoredUserSettingsCategoryDivider by lazy {
-        findPreference(PreferencesManager.SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY)
     }
     private val mIgnoredUserSettingsCategory by lazy {
-        findPreference(PreferencesManager.SETTINGS_IGNORED_USERS_PREFERENCE_KEY) as PreferenceCategory
+        findPreference(VectorPreferences.SETTINGS_IGNORED_USERS_PREFERENCE_KEY) as PreferenceCategory
     }
 
     override fun bindPref() {

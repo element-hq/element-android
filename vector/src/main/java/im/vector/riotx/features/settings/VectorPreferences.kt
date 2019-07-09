@@ -32,7 +32,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.*
 
-object PreferencesManager {
+object VectorPreferences {
 
     const val SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY = "SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY_2"
     const val SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"

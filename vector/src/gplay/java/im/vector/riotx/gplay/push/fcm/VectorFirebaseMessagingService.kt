@@ -39,7 +39,7 @@ import im.vector.riotx.features.notifications.NotifiableEventResolver
 import im.vector.riotx.features.notifications.NotifiableMessageEvent
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.SimpleNotifiableEvent
-import im.vector.riotx.features.settings.PreferencesManager
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.push.fcm.FcmHelper
 import timber.log.Timber
 
@@ -72,7 +72,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param message the message
      */
     override fun onMessageReceived(message: RemoteMessage?) {
-        if (!PreferencesManager.areNotificationEnabledForDevice(applicationContext)) {
+        if (!VectorPreferences.areNotificationEnabledForDevice(applicationContext)) {
             Timber.i("Notification are disabled for this device")
             return
         }
@@ -107,7 +107,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         if (refreshedToken == null) {
             Timber.w("onNewToken:received null token")
         } else {
-            if (PreferencesManager.areNotificationEnabledForDevice(applicationContext) && activeSessionHolder.hasActiveSession()) {
+            if (VectorPreferences.areNotificationEnabledForDevice(applicationContext) && activeSessionHolder.hasActiveSession()) {
                 pusherManager.registerPusherWithFcmKey(refreshedToken)
             }
         }

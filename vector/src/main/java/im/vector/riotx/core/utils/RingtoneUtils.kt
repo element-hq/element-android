@@ -22,7 +22,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.preference.PreferenceManager
 import androidx.core.content.edit
-import im.vector.riotx.features.settings.PreferencesManager
+import im.vector.riotx.features.settings.VectorPreferences
 
 /**
  * This file manages the sound ringtone for calls.
@@ -41,7 +41,7 @@ import im.vector.riotx.features.settings.PreferencesManager
  */
 fun getCallRingtoneUri(context: Context): Uri? {
     val callRingtone: String? = PreferenceManager.getDefaultSharedPreferences(context)
-            .getString(PreferencesManager.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, null)
+            .getString(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, null)
 
     callRingtone?.let {
         return Uri.parse(it)
@@ -96,7 +96,7 @@ fun getCallRingtoneName(context: Context): String? {
 fun setCallRingtoneUri(context: Context, ringtoneUri: Uri) {
     PreferenceManager.getDefaultSharedPreferences(context)
             .edit {
-                putString(PreferencesManager.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, ringtoneUri.toString())
+                putString(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, ringtoneUri.toString())
             }
 }
 
@@ -104,7 +104,7 @@ fun setCallRingtoneUri(context: Context, ringtoneUri: Uri) {
  * Set using Riot default ringtone
  */
 fun useRiotDefaultRingtone(context: Context): Boolean {
-    return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesManager.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, true)
+    return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, true)
 }
 
 /**
@@ -113,7 +113,7 @@ fun useRiotDefaultRingtone(context: Context): Boolean {
 fun setUseRiotDefaultRingtone(context: Context, useRiotDefault: Boolean) {
     PreferenceManager.getDefaultSharedPreferences(context)
             .edit {
-                putBoolean(PreferencesManager.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, useRiotDefault)
+                putBoolean(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, useRiotDefault)
             }
 }
 

@@ -37,10 +37,10 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
     override val preferenceXmlRes = R.xml.vector_settings_preferences
 
     private val selectedLanguagePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)
     }
     private val textSizePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY)
+        findPreference(VectorPreferences.SETTINGS_INTERFACE_TEXT_SIZE_KEY)
     }
 
     @Inject lateinit var vectorConfiguration: VectorConfiguration
@@ -72,7 +72,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         }
 
         // Url preview
-        (findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference).let {
+        (findPreference(VectorPreferences.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference).let {
             /*
             TODO
             it.isChecked = session.isURLPreviewEnabled
@@ -112,18 +112,18 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         }
 
         // update keep medias period
-        findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
-            it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(requireContext())
+        findPreference(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
+            it.summary = VectorPreferences.getSelectedMediasSavingPeriodString(requireContext())
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 context?.let { context: Context ->
                     AlertDialog.Builder(context)
                             .setSingleChoiceItems(R.array.media_saving_choice,
-                                    PreferencesManager.getSelectedMediasSavingPeriod(context)) { d, n ->
-                                PreferencesManager.setSelectedMediasSavingPeriod(context, n)
+                                    VectorPreferences.getSelectedMediasSavingPeriod(context)) { d, n ->
+                                VectorPreferences.setSelectedMediasSavingPeriod(context, n)
                                 d.cancel()
 
-                                it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(context)
+                                it.summary = VectorPreferences.getSelectedMediasSavingPeriodString(context)
                             }
                             .show()
                 }
