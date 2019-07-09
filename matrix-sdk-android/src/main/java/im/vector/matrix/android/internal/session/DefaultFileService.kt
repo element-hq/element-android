@@ -62,11 +62,9 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
                     val folder = getFolder(downloadMode, id)
 
                     File(folder, fileName)
-                }.map { destFile ->
-                    if (!destFile.exists()) {
+                }.flatMap { destFile ->
+                    if (!destFile.exists() || downloadMode == FileService.DownloadMode.TO_EXPORT) {
                         Try {
-                            Timber.v("## decrypt file")
-
                             val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: throw IllegalArgumentException("url is null")
 
                             val request = Request.Builder()
@@ -82,6 +80,7 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
                             }
 
                             if (elementToDecrypt != null) {
+                                Timber.v("## decrypt file")
                                 MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt) ?: throw IllegalStateException("Decryption error")
                             } else {
                                 inputStream
@@ -89,10 +88,11 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
                         }
                                 .map { inputStream ->
                                     writeToFile(inputStream, destFile)
+                                    destFile
                                 }
+                    } else {
+                        Try.just(destFile)
                     }
-
-                    destFile
                 }
             }
                     .foldToCallback(callback)
