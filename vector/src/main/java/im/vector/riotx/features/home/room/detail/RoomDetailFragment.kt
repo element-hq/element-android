@@ -621,7 +621,26 @@ class RoomDetailFragment :
     }
 
     override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {
-        roomDetailViewModel.process(RoomDetailActions.DownloadFile(eventId, messageFileContent))
+        val action = RoomDetailActions.DownloadFile(eventId, messageFileContent)
+        // We need WRITE_EXTERNAL permission
+        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_DOWNLOAD_FILE)) {
+            roomDetailViewModel.process(action)
+        } else {
+            roomDetailViewModel.pendingAction = action
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            if (requestCode == PERMISSION_REQUEST_CODE_DOWNLOAD_FILE) {
+                val action = roomDetailViewModel.pendingAction
+
+                if (action != null) {
+                    roomDetailViewModel.pendingAction = null
+                    roomDetailViewModel.process(action)
+                }
+            }
+        }
     }
 
     override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {

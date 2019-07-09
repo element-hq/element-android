@@ -75,6 +75,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
     private var timeline = room.createTimeline(eventId, allowedTypes)
 
+    // Slot to keep a pending action during permission request
+    var pendingAction: RoomDetailActions? = null
+
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
