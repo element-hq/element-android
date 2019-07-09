@@ -123,6 +123,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             if (sprogress == null) {
                 waiting_view.isVisible = false
             } else {
+                waiting_view.setOnClickListener {
+                    //block interactions
+                }
                 waiting_view_status_horizontal_progress.apply {
                     isIndeterminate = false
                     max = 100
