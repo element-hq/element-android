@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail
 
 import com.jaiselrahman.filepicker.model.MediaFile
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
@@ -33,6 +34,7 @@ sealed class RoomDetailActions {
     data class UpdateQuickReactAction(val targetEventId: String, val selectedReaction: String, val add: Boolean) : RoomDetailActions()
     data class ShowEditHistoryAction(val event: String, val editAggregatedSummary: EditAggregatedSummary) : RoomDetailActions()
     data class NavigateToEvent(val eventId: String, val position: Int?) : RoomDetailActions()
+    data class DownloadFile(val eventId: String, val messageFileContent: MessageFileContent) : RoomDetailActions()
     object AcceptInvite : RoomDetailActions()
     object RejectInvite : RoomDetailActions()
 

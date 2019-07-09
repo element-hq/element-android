@@ -63,19 +63,14 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.dialogs.DialogListItem
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
-import im.vector.riotx.core.utils.checkPermissions
-import im.vector.riotx.core.utils.copyToClipboard
-import im.vector.riotx.core.utils.openCamera
-import im.vector.riotx.core.utils.shareMedia
+import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
@@ -180,6 +175,7 @@ class RoomDetailFragment :
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var roomDetailViewModelFactory: RoomDetailViewModel.Factory
     @Inject lateinit var textComposerViewModelFactory: TextComposerViewModel.Factory
+    @Inject lateinit var errorFormatter: ErrorFormatter
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
 
@@ -218,6 +214,15 @@ class RoomDetailFragment :
         roomDetailViewModel.navigateToEvent.observeEvent(this) {
             //
             scrollOnHighlightedEventCallback.scheduleScrollTo(it)
+        }
+
+        roomDetailViewModel.downloadedFileEvent.observeEvent(this) { downloadFileState ->
+            if (downloadFileState.throwable != null) {
+                requireActivity().toast(errorFormatter.toHumanReadable(downloadFileState.throwable))
+            } else if (downloadFileState.file != null) {
+                requireActivity().toast(getString(R.string.downloaded_file, downloadFileState.file.path))
+                addEntryToDownloadManager(requireContext(), downloadFileState.file, downloadFileState.mimeType)
+            }
         }
 
         roomDetailViewModel.selectSubscribe(
@@ -615,8 +620,27 @@ class RoomDetailFragment :
         startActivity(intent)
     }
 
-    override fun onFileMessageClicked(messageFileContent: MessageFileContent) {
-        vectorBaseActivity.notImplemented("open file")
+    override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {
+        val action = RoomDetailActions.DownloadFile(eventId, messageFileContent)
+        // We need WRITE_EXTERNAL permission
+        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_DOWNLOAD_FILE)) {
+            roomDetailViewModel.process(action)
+        } else {
+            roomDetailViewModel.pendingAction = action
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            if (requestCode == PERMISSION_REQUEST_CODE_DOWNLOAD_FILE) {
+                val action = roomDetailViewModel.pendingAction
+
+                if (action != null) {
+                    roomDetailViewModel.pendingAction = null
+                    roomDetailViewModel.process(action)
+                }
+            }
+        }
     }
 
     override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {

@@ -39,7 +39,7 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
             override val userId: String,
             val roomId: String,
             val event: Event,
-            override var lastFailureMessage: String? = null
+            override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater

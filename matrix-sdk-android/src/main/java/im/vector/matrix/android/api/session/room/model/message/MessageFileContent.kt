@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.room.model.message
 
+import android.content.ClipDescription
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Content
@@ -47,10 +48,22 @@ data class MessageFileContent(
         /**
          * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the file.
          */
-        @Json(name = "url") val url: String? = null,
+        @Json(name = "url") override val url: String? = null,
 
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,
 
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
-) : MessageEncyptedContent
+) : MessageEncryptedContent {
+
+    fun getMimeType(): String {
+        // Mimetype default to plain text, should not be used
+        return encryptedFileInfo?.mimetype
+                ?: info?.mimeType
+                ?: ClipDescription.MIMETYPE_TEXT_PLAIN
+    }
+
+    fun getFileName(): String {
+        return filename ?: body
+    }
+}

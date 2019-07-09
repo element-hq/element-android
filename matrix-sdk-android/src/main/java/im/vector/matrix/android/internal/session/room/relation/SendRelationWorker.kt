@@ -40,7 +40,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
             val roomId: String,
             val event: Event,
             val relationType: String? = null,
-            override var lastFailureMessage: String?
+            override val lastFailureMessage: String?
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI

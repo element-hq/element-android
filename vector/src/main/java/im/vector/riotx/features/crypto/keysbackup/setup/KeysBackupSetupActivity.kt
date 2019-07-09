@@ -27,7 +27,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.ExportKeysDialog
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.SimpleFragmentActivity
-import im.vector.riotx.core.utils.toast
+import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.crypto.keys.KeysExporter
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
@@ -132,39 +132,48 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
     }
 
     private fun exportKeysManually() {
-        ExportKeysDialog().show(this, object : ExportKeysDialog.ExportKeyDialogListener {
-            override fun onPassphrase(passphrase: String) {
-                showWaitingView()
+        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
+            ExportKeysDialog().show(this, object : ExportKeysDialog.ExportKeyDialogListener {
+                override fun onPassphrase(passphrase: String) {
+                    showWaitingView()
 
-                KeysExporter(session)
-                        .export(this@KeysBackupSetupActivity,
-                                passphrase,
-                                object : MatrixCallback<String> {
+                    KeysExporter(session)
+                            .export(this@KeysBackupSetupActivity,
+                                    passphrase,
+                                    object : MatrixCallback<String> {
 
-                                    override fun onSuccess(data: String) {
-                                        hideWaitingView()
+                                        override fun onSuccess(data: String) {
+                                            hideWaitingView()
 
-                                        AlertDialog.Builder(this@KeysBackupSetupActivity)
-                                                .setMessage(getString(R.string.encryption_export_saved_as, data))
-                                                .setCancelable(false)
-                                                .setPositiveButton(R.string.ok) { dialog, which ->
-                                                    val resultIntent = Intent()
-                                                    resultIntent.putExtra(MANUAL_EXPORT, true)
-                                                    setResult(RESULT_OK, resultIntent)
-                                                    finish()
-                                                }
-                                                .show()
-                                    }
+                                            AlertDialog.Builder(this@KeysBackupSetupActivity)
+                                                    .setMessage(getString(R.string.encryption_export_saved_as, data))
+                                                    .setCancelable(false)
+                                                    .setPositiveButton(R.string.ok) { dialog, which ->
+                                                        val resultIntent = Intent()
+                                                        resultIntent.putExtra(MANUAL_EXPORT, true)
+                                                        setResult(RESULT_OK, resultIntent)
+                                                        finish()
+                                                    }
+                                                    .show()
+                                        }
 
-                                    override fun onFailure(failure: Throwable) {
-                                        toast(failure.localizedMessage)
-                                        hideWaitingView()
-                                    }
-                                })
-            }
-        })
+                                        override fun onFailure(failure: Throwable) {
+                                            toast(failure.localizedMessage)
+                                            hideWaitingView()
+                                        }
+                                    })
+                }
+            })
+        }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
+                exportKeysManually()
+            }
+        }
+    }
 
     override fun onBackPressed() {
         if (viewModel.shouldPromptOnBack) {

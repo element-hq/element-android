@@ -43,7 +43,7 @@ data class MessageImageContent(
         /**
          * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the image.
          */
-        @Json(name = "url") val url: String? = null,
+        @Json(name = "url") override val url: String? = null,
 
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,
@@ -52,4 +52,4 @@ data class MessageImageContent(
          * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
-) : MessageEncyptedContent
+) : MessageEncryptedContent

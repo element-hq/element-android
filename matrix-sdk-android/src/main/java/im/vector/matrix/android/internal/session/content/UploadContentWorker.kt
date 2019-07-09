@@ -48,7 +48,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
             val event: Event,
             val attachment: ContentAttachmentData,
             val isRoomEncrypted: Boolean,
-            override var lastFailureMessage: String? = null
+            override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var fileUploader: FileUploader
@@ -69,27 +69,47 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         val eventId = params.event.eventId ?: return Result.success()
         val attachment = params.attachment
 
-        val isRoomEncrypted = params.isRoomEncrypted
+        val attachmentFile = try {
+            File(attachment.path)
+        } catch (e: Exception) {
+            Timber.e(e)
+            contentUploadStateTracker.setFailure(params.event.eventId, e)
+            return Result.success(
+                    WorkerParamsFactory.toData(params.copy(
+                            lastFailureMessage = e.localizedMessage
+                    ))
+            )
+        }
 
-
-        val thumbnailData = ThumbnailExtractor.extractThumbnail(params.attachment)
-        val attachmentFile = createAttachmentFile(attachment) ?: return Result.failure()
         var uploadedThumbnailUrl: String? = null
         var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
 
-        if (thumbnailData != null) {
-            val contentUploadResponse = if (isRoomEncrypted) {
+        ThumbnailExtractor.extractThumbnail(params.attachment)?.let { thumbnailData ->
+            val thumbnailProgressListener = object : ProgressRequestBody.Listener {
+                override fun onProgress(current: Long, total: Long) {
+                    contentUploadStateTracker.setProgressThumbnail(eventId, current, total)
+                }
+            }
+
+            val contentUploadResponse = if (params.isRoomEncrypted) {
                 Timber.v("Encrypt thumbnail")
-                val encryptionResult = MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
-                        ?: return Result.failure()
+                contentUploadStateTracker.setEncryptingThumbnail(eventId)
+                MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
+                        .flatMap { encryptionResult ->
+                            uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
-                uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
-
-                fileUploader
-                        .uploadByteArray(encryptionResult.encryptedByteArray, "thumb_${attachment.name}", thumbnailData.mimeType)
+                            fileUploader
+                                    .uploadByteArray(encryptionResult.encryptedByteArray,
+                                            "thumb_${attachment.name}",
+                                            "application/octet-stream",
+                                            thumbnailProgressListener)
+                        }
             } else {
                 fileUploader
-                        .uploadByteArray(thumbnailData.bytes, "thumb_${attachment.name}", thumbnailData.mimeType)
+                        .uploadByteArray(thumbnailData.bytes,
+                                "thumb_${attachment.name}",
+                                thumbnailData.mimeType,
+                                thumbnailProgressListener)
             }
 
             contentUploadResponse
@@ -107,16 +127,17 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
 
         var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
-        val contentUploadResponse = if (isRoomEncrypted) {
+        val contentUploadResponse = if (params.isRoomEncrypted) {
             Timber.v("Encrypt file")
+            contentUploadStateTracker.setEncrypting(eventId)
 
-            val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
-                    ?: return Result.failure()
+            MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
+                    .flatMap { encryptionResult ->
+                        uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
-            uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
-
-            fileUploader
-                    .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
+                        fileUploader
+                                .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
+                    }
         } else {
             fileUploader
                     .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
@@ -129,17 +150,8 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                 )
     }
 
-    private fun createAttachmentFile(attachment: ContentAttachmentData): File? {
-        return try {
-            File(attachment.path)
-        } catch (e: Exception) {
-            Timber.e(e)
-            null
-        }
-    }
-
     private fun handleFailure(params: Params, failure: Throwable): Result {
-        contentUploadStateTracker.setFailure(params.event.eventId!!)
+        contentUploadStateTracker.setFailure(params.event.eventId!!, failure)
         return Result.success(
                 WorkerParamsFactory.toData(
                         params.copy(
@@ -190,9 +202,10 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                                            thumbnailEncryptedFileInfo: EncryptedFileInfo?): MessageVideoContent {
         return copy(
                 url = if (encryptedFileInfo == null) url else null,
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url),
                 videoInfo = videoInfo?.copy(
                         thumbnailUrl = if (thumbnailEncryptedFileInfo == null) thumbnailUrl else null,
-                        thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = url)
+                        thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = thumbnailUrl)
                 )
         )
     }

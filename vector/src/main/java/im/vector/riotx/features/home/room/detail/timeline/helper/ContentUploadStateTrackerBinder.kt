@@ -16,17 +16,16 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
-import android.content.Context
 import android.text.format.Formatter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.view.isVisible
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.features.media.ImageContentRenderer
-import java.io.File
 import javax.inject.Inject
 
 class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
@@ -61,45 +60,77 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
-            is ContentUploadStateTracker.State.Idle         -> handleIdle(state)
-            is ContentUploadStateTracker.State.Failure      -> handleFailure(state)
-            is ContentUploadStateTracker.State.Success      -> handleSuccess(state)
-            is ContentUploadStateTracker.State.ProgressData -> handleProgress(state)
+            is ContentUploadStateTracker.State.Idle                -> handleIdle(state)
+            is ContentUploadStateTracker.State.EncryptingThumbnail -> handleEncryptingThumbnail(state)
+            is ContentUploadStateTracker.State.UploadingThumbnail  -> handleProgressThumbnail(state)
+            is ContentUploadStateTracker.State.Encrypting          -> handleEncrypting(state)
+            is ContentUploadStateTracker.State.Uploading           -> handleProgress(state)
+            is ContentUploadStateTracker.State.Failure             -> handleFailure(state)
+            is ContentUploadStateTracker.State.Success             -> handleSuccess(state)
         }
     }
 
     private fun handleIdle(state: ContentUploadStateTracker.State.Idle) {
         if (mediaData.isLocalFile()) {
-            val file = File(mediaData.url)
-            progressLayout.visibility = View.VISIBLE
+            progressLayout.isVisible = true
             val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
             val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+            progressBar?.isVisible = true
+            progressBar?.isIndeterminate = true
             progressBar?.progress = 0
-            progressTextView?.text = formatStats(progressLayout.context, 0L, file.length())
+            progressTextView?.text = progressLayout.context.getString(R.string.send_file_step_idle)
         } else {
-            progressLayout.visibility = View.GONE
+            progressLayout.isVisible = false
         }
     }
 
-    private fun handleFailure(state: ContentUploadStateTracker.State.Failure) {
+    private fun handleEncryptingThumbnail(state: ContentUploadStateTracker.State.EncryptingThumbnail) {
+        doHandleEncrypting(R.string.send_file_step_encrypting_thumbnail)
+    }
 
+    private fun handleProgressThumbnail(state: ContentUploadStateTracker.State.UploadingThumbnail) {
+        doHandleProgress(R.string.send_file_step_sending_thumbnail, state.current, state.total)
+    }
+
+    private fun handleEncrypting(state: ContentUploadStateTracker.State.Encrypting) {
+        doHandleEncrypting(R.string.send_file_step_encrypting_file)
+    }
+
+    private fun handleProgress(state: ContentUploadStateTracker.State.Uploading) {
+        doHandleProgress(R.string.send_file_step_sending_file, state.current, state.total)
+    }
+
+    private fun doHandleEncrypting(resId: Int) {
+        progressLayout.visibility = View.VISIBLE
+        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
+        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+        progressBar?.isIndeterminate = true
+        progressTextView?.text = progressLayout.context.getString(resId)
+    }
+
+    private fun doHandleProgress(resId: Int, current: Long, total: Long) {
+        progressLayout.visibility = View.VISIBLE
+        val percent = 100L * (current.toFloat() / total.toFloat())
+        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
+        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+        progressBar?.isVisible = true
+        progressBar?.isIndeterminate = false
+        progressBar?.progress = percent.toInt()
+        progressTextView?.text = progressLayout.context.getString(resId,
+                Formatter.formatShortFileSize(progressLayout.context, current),
+                Formatter.formatShortFileSize(progressLayout.context, total))
+    }
+
+    private fun handleFailure(state: ContentUploadStateTracker.State.Failure) {
+        progressLayout.visibility = View.VISIBLE
+        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
+        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
+        progressBar?.isVisible = false
+        // TODO Red text
+        progressTextView?.text = state.throwable.localizedMessage
     }
 
     private fun handleSuccess(state: ContentUploadStateTracker.State.Success) {
-
+        progressLayout.visibility = View.GONE
     }
-
-    private fun handleProgress(state: ContentUploadStateTracker.State.ProgressData) {
-        progressLayout.visibility = View.VISIBLE
-        val percent = 100L * (state.current.toFloat() / state.total.toFloat())
-        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
-        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
-        progressBar?.progress = percent.toInt()
-        progressTextView?.text = formatStats(progressLayout.context, state.current, state.total)
-    }
-
-    private fun formatStats(context: Context, current: Long, total: Long): String {
-        return "${Formatter.formatShortFileSize(context, current)} / ${Formatter.formatShortFileSize(context, total)}"
-    }
-
 }

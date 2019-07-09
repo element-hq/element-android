@@ -21,7 +21,6 @@ import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.work.WorkManager
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.PushRuleService
@@ -30,6 +29,7 @@ import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
@@ -61,20 +61,22 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val pushRuleService: PushRuleService,
                                                   private val pushersService: PushersService,
                                                   private val cryptoService: CryptoManager,
+                                                  private val fileService: FileService,
                                                   private val syncThread: SyncThread,
                                                   private val contentUrlResolver: ContentUrlResolver,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker)
     : Session,
-      RoomService by roomService,
-      RoomDirectoryService by roomDirectoryService,
-      GroupService by groupService,
-      UserService by userService,
-      CryptoService by cryptoService,
-      CacheService by cacheService,
-      SignOutService by signOutService,
-      FilterService by filterService,
-      PushRuleService by pushRuleService,
-      PushersService by pushersService {
+        RoomService by roomService,
+        RoomDirectoryService by roomDirectoryService,
+        GroupService by groupService,
+        UserService by userService,
+        CryptoService by cryptoService,
+        CacheService by cacheService,
+        SignOutService by signOutService,
+        FilterService by filterService,
+        FileService by fileService,
+        PushRuleService by pushRuleService,
+        PushersService by pushersService {
 
     private var isOpen = false
 

@@ -42,7 +42,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             val event: Event,
             /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
             val keepKeys: List<String>? = null,
-            override var lastFailureMessage: String? = null
+            override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var crypto: CryptoService

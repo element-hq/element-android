@@ -28,10 +28,11 @@ interface ContentUploadStateTracker {
 
     sealed class State {
         object Idle : State()
-        data class ProgressData(val current: Long, val total: Long) : State()
+        object EncryptingThumbnail : State()
+        data class UploadingThumbnail(val current: Long, val total: Long) : State()
+        object Encrypting : State()
+        data class Uploading(val current: Long, val total: Long) : State()
         object Success : State()
-        object Failure : State()
+        data class Failure(val throwable: Throwable) : State()
     }
-
-
 }

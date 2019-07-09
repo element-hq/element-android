@@ -31,10 +31,13 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
 import im.vector.riotx.core.intent.getFilenameFromUri
@@ -50,6 +53,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -70,6 +74,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         TimelineDisplayableEvents.DISPLAYABLE_TYPES
     }
     private var timeline = room.createTimeline(eventId, allowedTypes)
+
+    // Slot to keep a pending action during permission request
+    var pendingAction: RoomDetailActions? = null
 
     @AssistedInject.Factory
     interface Factory {
@@ -113,6 +120,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.EnterEditMode          -> handleEditAction(action)
             is RoomDetailActions.EnterQuoteMode         -> handleQuoteAction(action)
             is RoomDetailActions.EnterReplyMode         -> handleReplyAction(action)
+            is RoomDetailActions.DownloadFile           -> handleDownloadFile(action)
             is RoomDetailActions.NavigateToEvent        -> handleNavigateToEvent(action)
             else                                        -> Timber.e("Unhandled Action: $action")
         }
@@ -148,6 +156,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val _navigateToEvent = MutableLiveData<LiveEvent<String>>()
     val navigateToEvent: LiveData<LiveEvent<String>>
         get() = _navigateToEvent
+
+    private val _downloadedFileEvent = MutableLiveData<LiveEvent<DownloadFileState>>()
+    val downloadedFileEvent: LiveData<LiveEvent<DownloadFileState>>
+        get() = _downloadedFileEvent
 
 
     // PRIVATE METHODS *****************************************************************************
@@ -432,6 +444,40 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             }
         }
     }
+
+    data class DownloadFileState(
+            val mimeType: String,
+            val file: File?,
+            val throwable: Throwable?
+    )
+
+    private fun handleDownloadFile(action: RoomDetailActions.DownloadFile) {
+        session.downloadFile(
+                FileService.DownloadMode.TO_EXPORT,
+                action.eventId,
+                action.messageFileContent.getFileName(),
+                action.messageFileContent.getFileUrl(),
+                action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
+                object : MatrixCallback<File> {
+                    override fun onSuccess(data: File) {
+                        _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
+                                action.messageFileContent.getMimeType(),
+                                data,
+                                null
+                        )))
+                    }
+
+                    override fun onFailure(failure: Throwable) {
+                        _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
+                                action.messageFileContent.getMimeType(),
+                                null,
+                                failure
+                        )))
+                    }
+                })
+
+    }
+
 
     private fun handleNavigateToEvent(action: RoomDetailActions.NavigateToEvent) {
         val targetEventId = action.eventId

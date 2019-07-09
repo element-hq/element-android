@@ -32,7 +32,7 @@ internal class GetGroupDataWorker(context: Context, params: WorkerParameters) : 
     internal data class Params(
             override val userId: String,
             val groupIds: List<String>,
-            override var lastFailureMessage: String? = null
+            override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var getGroupDataTask: GetGroupDataTask
