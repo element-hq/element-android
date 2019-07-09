@@ -452,7 +452,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 FileService.DownloadMode.TO_EXPORT,
                 action.eventId,
                 action.messageFileContent.getFileName(),
-                action.messageFileContent.encryptedFileInfo?.url ?: action.messageFileContent.url,
+                action.messageFileContent.getSafeUrl(),
                 action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
                 object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {

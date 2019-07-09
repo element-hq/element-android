@@ -20,8 +20,18 @@ import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 
 
 /**
- * Interface for message which can contains encrypted data
+ * Interface for message which can contains an encrypted file
  */
 interface MessageEncryptedContent : MessageContent {
+    /**
+     * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the image.
+     */
+    val url: String?
+
     val encryptedFileInfo: EncryptedFileInfo?
 }
+
+/**
+ * Get the url of the encrypted file or of the file
+ */
+fun MessageEncryptedContent.getFileUrl() = encryptedFileInfo?.url ?: url

@@ -48,7 +48,7 @@ data class MessageFileContent(
         /**
          * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the file.
          */
-        @Json(name = "url") val url: String? = null,
+        @Json(name = "url") override val url: String? = null,
 
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,

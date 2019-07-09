@@ -42,7 +42,7 @@ data class MessageAudioContent(
         /**
          * Required. Required if the file is not encrypted. The URL (typically MXC URI) to the audio clip.
          */
-        @Json(name = "url") val url: String? = null,
+        @Json(name = "url") override val url: String? = null,
 
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,
