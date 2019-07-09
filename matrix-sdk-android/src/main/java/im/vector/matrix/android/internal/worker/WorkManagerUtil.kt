@@ -22,17 +22,22 @@ import androidx.work.*
 internal object WorkManagerUtil {
     private const val MATRIX_SDK_TAG = "MatrixSDK"
 
-    // Default constraints: network
+    /**
+     * Default constraints: connected network
+     */
     val workConstraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
+    /**
+     * Create a OneTimeWorkRequestBuilder, with the Matrix SDK tag
+     */
     inline fun <reified W : ListenableWorker> matrixOneTimeWorkRequestBuilder() =
             OneTimeWorkRequestBuilder<W>()
                     .addTag(MATRIX_SDK_TAG)
 
     /**
-     * Cancel all work instanciated by the Matrix SDK and not those from the SDK client
+     * Cancel all works instantiated by the Matrix SDK and not those from the SDK client
      */
     fun cancelAllWorks(context: Context) {
         WorkManager.getInstance(context).also {
