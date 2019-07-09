@@ -35,6 +35,7 @@ import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.rx.rx
@@ -452,7 +453,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 FileService.DownloadMode.TO_EXPORT,
                 action.eventId,
                 action.messageFileContent.getFileName(),
-                action.messageFileContent.getSafeUrl(),
+                action.messageFileContent.getFileUrl(),
                 action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
                 object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
