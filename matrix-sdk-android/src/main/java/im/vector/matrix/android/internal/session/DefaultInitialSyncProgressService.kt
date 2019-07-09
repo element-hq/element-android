@@ -105,7 +105,10 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
 
 }
 
-inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?, nameRes: Int, totalProgress: Int, parentWeight: Float = 1f, block: () -> T): T {
+inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?, nameRes: Int
+                             , totalProgress: Int,
+                             parentWeight: Float = 1f,
+                             block: () -> T): T {
     reporter?.startTask(nameRes, totalProgress, parentWeight)
     return block().also {
         reporter?.endTask(nameRes)
@@ -113,7 +116,10 @@ inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?, nameR
 }
 
 
-inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncProgressService?, taskId: Int, weight: Float, transform: (Map.Entry<K, V>) -> R): List<R> {
+inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncProgressService?,
+                                                   taskId: Int,
+                                                   weight: Float,
+                                                   transform: (Map.Entry<K, V>) -> R): List<R> {
     val total = count()
     var current = 0
     reporter?.startTask(taskId, 100, weight)
