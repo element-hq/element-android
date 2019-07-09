@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.di;
+package im.vector.riotx.core.di
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import javax.inject.Scope;
+import javax.inject.Scope
 
 @Scope
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ScreenScope {
-}
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ScreenScope

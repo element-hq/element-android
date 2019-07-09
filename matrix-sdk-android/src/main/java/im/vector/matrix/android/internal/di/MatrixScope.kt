@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session;
+package im.vector.matrix.android.internal.di
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import javax.inject.Scope;
+import javax.inject.Scope
 
 @Scope
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SessionScope {
-}
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class MatrixScope

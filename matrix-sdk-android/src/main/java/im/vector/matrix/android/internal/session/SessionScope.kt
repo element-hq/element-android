@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di;
+package im.vector.matrix.android.internal.session
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import javax.inject.Scope
 
-import javax.inject.Scope;
-
-// TODO convert the 3 scope to Java?
 @Scope
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-public @interface MatrixScope {
-}
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class SessionScope
