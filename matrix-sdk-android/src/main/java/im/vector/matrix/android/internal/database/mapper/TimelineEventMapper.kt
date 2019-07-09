@@ -16,12 +16,10 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
-import com.squareup.moshi.Types
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.di.MoshiProvider
 
 internal object TimelineEventMapper {
 
@@ -35,7 +33,6 @@ internal object TimelineEventMapper {
     }
 
     fun map(timelineEventEntity: TimelineEventEntity): TimelineEvent {
-        val listMapper = MoshiProvider.providesMoshi().adapter<List<String>>(Types.newParameterizedType(List::class.java, String::class.java))
 
         return TimelineEvent(
                 root = timelineEventEntity.root?.asDomain()
