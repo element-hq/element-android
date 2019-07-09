@@ -39,39 +39,61 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
             Timber.v("Start handling sync, is InitialSync: $isInitialSync")
             val reporter = initialSyncProgressService.takeIf { isInitialSync }
 
-            if (!cryptoManager.isStarted()) {
-                Timber.v("Should start cryptoManager")
-                cryptoManager.start(isInitialSync)
+            measureTimeMillis {
+                if (!cryptoManager.isStarted()) {
+                    Timber.v("Should start cryptoManager")
+                    cryptoManager.start(isInitialSync)
+                }
+            }.also {
+                Timber.v("Finish handling start cryptoManager in $it ms")
             }
             val measure = measureTimeMillis {
                 // Handle the to device events before the room ones
                 // to ensure to decrypt them properly
-                Timber.v("Handle toDevice")
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_crypto, 100, 0.2f) {
-                    if (syncResponse.toDevice != null) {
-                        cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
+                measureTimeMillis {
+                    Timber.v("Handle toDevice")
+                    reportSubtask(reporter, R.string.initial_sync_start_importing_account_crypto, 100, 0.1f) {
+                        if (syncResponse.toDevice != null) {
+                            cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
+                        }
                     }
-                }
-                Timber.v("Handle rooms")
-
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 100, 0.5f) {
-                    if (syncResponse.rooms != null) {
-                        roomSyncHandler.handle(syncResponse.rooms, reporter)
-                    }
+                }.also {
+                    Timber.v("Finish handling toDevice in $it ms")
                 }
 
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_groups, 100, 0.2f) {
-                    Timber.v("Handle groups")
-                    if (syncResponse.groups != null) {
-                        groupSyncHandler.handle(syncResponse.groups, reporter)
+                measureTimeMillis {
+                    Timber.v("Handle rooms")
+
+                    reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 100, 0.7f) {
+                        if (syncResponse.rooms != null) {
+                            roomSyncHandler.handle(syncResponse.rooms, reporter)
+                        }
                     }
+                }.also {
+                    Timber.v("Finish handling rooms in $it ms")
                 }
 
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
-                    Timber.v("Handle accountData")
-                    if (syncResponse.accountData != null) {
-                        userAccountDataSyncHandler.handle(syncResponse.accountData)
+
+                measureTimeMillis {
+                    reportSubtask(reporter, R.string.initial_sync_start_importing_account_groups, 100, 0.1f) {
+                        Timber.v("Handle groups")
+                        if (syncResponse.groups != null) {
+                            groupSyncHandler.handle(syncResponse.groups, reporter)
+                        }
                     }
+                }.also {
+                    Timber.v("Finish handling groups in $it ms")
+                }
+
+                measureTimeMillis {
+                    reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
+                        Timber.v("Handle accountData")
+                        if (syncResponse.accountData != null) {
+                            userAccountDataSyncHandler.handle(syncResponse.accountData)
+                        }
+                    }
+                }.also {
+                    Timber.v("Finish handling accountData in $it ms")
                 }
 
                 Timber.v("On sync completed")
