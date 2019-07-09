@@ -184,7 +184,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
         val session = activeSessionHolder.getActiveSession()
         val user = session.getUser(session.sessionParams.credentials.userId)
-        val myUserDisplayName = user?.displayName ?: ""
+        val myUserDisplayName = user?.displayName ?: session.sessionParams.credentials.userId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
 
