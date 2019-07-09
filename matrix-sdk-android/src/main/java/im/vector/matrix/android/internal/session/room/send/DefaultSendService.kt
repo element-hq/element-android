@@ -17,7 +17,10 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
@@ -29,6 +32,8 @@ import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.util.CancelableWork
+import im.vector.matrix.android.internal.worker.WorkManagerUtil
+import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -36,10 +41,6 @@ import javax.inject.Inject
 
 private const val UPLOAD_WORK = "UPLOAD_WORK"
 private const val BACKOFF_DELAY = 10_000L
-
-private val WORK_CONSTRAINTS = Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
 
 internal class DefaultSendService @Inject constructor(private val context: Context,
                                                       private val credentials: Credentials,
@@ -135,8 +136,8 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val params = EncryptEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(params)
 
-        return OneTimeWorkRequestBuilder<EncryptEventWorker>()
-                .setConstraints(WORK_CONSTRAINTS)
+        return matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
+                .setConstraints(WorkManagerUtil.workConstraints)
                 .setInputData(sendWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()
@@ -162,8 +163,8 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment, isRoomEncrypted)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
-        return OneTimeWorkRequestBuilder<UploadContentWorker>()
-                .setConstraints(WORK_CONSTRAINTS)
+        return matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
+                .setConstraints(WorkManagerUtil.workConstraints)
                 .setInputData(uploadWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()

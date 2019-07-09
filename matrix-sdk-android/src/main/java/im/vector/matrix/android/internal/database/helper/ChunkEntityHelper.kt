@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.database.helper
 
+import androidx.annotation.VisibleForTesting
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -102,11 +103,12 @@ internal fun ChunkEntity.updateSenderDataFor(eventIds: List<String>) {
     }
 }
 
-private fun ChunkEntity.add(roomId: String,
-                            event: Event,
-                            direction: PaginationDirection,
-                            stateIndexOffset: Int = 0,
-                            isUnlinked: Boolean = false) {
+@VisibleForTesting
+internal fun ChunkEntity.add(roomId: String,
+                             event: Event,
+                             direction: PaginationDirection,
+                             stateIndexOffset: Int = 0,
+                             isUnlinked: Boolean = false) {
 
     assertIsManaged()
     if (event.eventId != null && timelineEvents.find(event.eventId) != null) {
@@ -149,14 +151,14 @@ private fun ChunkEntity.add(roomId: String,
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> forwardsDisplayIndex
-               PaginationDirection.BACKWARDS -> backwardsDisplayIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> forwardsDisplayIndex
+        PaginationDirection.BACKWARDS -> backwardsDisplayIndex
+    } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> forwardsStateIndex
-               PaginationDirection.BACKWARDS -> backwardsStateIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> forwardsStateIndex
+        PaginationDirection.BACKWARDS -> backwardsStateIndex
+    } ?: defaultValue
 }

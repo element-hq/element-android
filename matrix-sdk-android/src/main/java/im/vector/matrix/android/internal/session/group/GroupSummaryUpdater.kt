@@ -17,10 +17,7 @@
 package im.vector.matrix.android.internal.session.group
 
 import android.content.Context
-import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -28,6 +25,8 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.worker.WorkManagerUtil
+import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import io.realm.RealmConfiguration
 import javax.inject.Inject
@@ -41,18 +40,14 @@ internal class GroupSummaryUpdater @Inject constructor(private val context: Cont
 
     override val query = Monarchy.Query<GroupEntity> { GroupEntity.where(it) }
 
-    private val workConstraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
     override fun processChanges(inserted: List<GroupEntity>, updated: List<GroupEntity>, deleted: List<GroupEntity>) {
         val newGroupIds = inserted.map { it.groupId }
         val getGroupDataWorkerParams = GetGroupDataWorker.Params(credentials.userId, newGroupIds)
         val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
 
-        val sendWork = OneTimeWorkRequestBuilder<GetGroupDataWorker>()
+        val sendWork = matrixOneTimeWorkRequestBuilder<GetGroupDataWorker>()
                 .setInputData(workData)
-                .setConstraints(workConstraints)
+                .setConstraints(WorkManagerUtil.workConstraints)
                 .build()
 
         WorkManager.getInstance(context)

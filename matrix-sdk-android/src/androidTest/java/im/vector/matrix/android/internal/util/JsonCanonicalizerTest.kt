@@ -52,7 +52,7 @@ internal class JsonCanonicalizerTest : InstrumentedTest {
 
     @Test
     fun realSampleTest() {
-        assertEquals("""{"algorithms":["m.megolm.v1.aes-sha2","m.olm.v1.curve25519-aes-sha2"],"device_id":"VSCUNFSOUI","keys":{"curve25519:VSCUNFSOUI":"utyOjnhiQ73qNhi9HlN0OgWIowe5gthTS8r0r9TcJ3o","ed25519:VSCUNFSOUI":"qNhEt+Yggaajet0hX/FjTRLfySgs65ldYyomm7PIx6U"},"user_id":"@benoitx:matrix.org"}""",
+        assertEquals("""{"algorithms":["m.megolm.v1.aes-sha2","m.olm.v1.curve25519-aes-sha2"],"device_id":"VSCUNFSOUI","keys":{"curve25519:VSCUNFSOUI":"utyOjnhiQ73qNhi9HlN0OgWIowe5gthTS8r0r9TcJ3o","ed25519:VSCUNFSOUI":"qNhEt+Yggaajet0hX\/FjTRLfySgs65ldYyomm7PIx6U"},"user_id":"@benoitx:matrix.org"}""",
                 JsonCanonicalizer.canonicalize("""{"algorithms":["m.megolm.v1.aes-sha2","m.olm.v1.curve25519-aes-sha2"],"device_id":"VSCUNFSOUI","user_id":"@benoitx:matrix.org","keys":{"curve25519:VSCUNFSOUI":"utyOjnhiQ73qNhi9HlN0OgWIowe5gthTS8r0r9TcJ3o","ed25519:VSCUNFSOUI":"qNhEt+Yggaajet0hX/FjTRLfySgs65ldYyomm7PIx6U"}}"""))
     }
 

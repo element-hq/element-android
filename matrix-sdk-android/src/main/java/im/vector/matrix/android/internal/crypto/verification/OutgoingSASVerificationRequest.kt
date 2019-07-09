@@ -27,8 +27,8 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import timber.log.Timber
 
 internal class OutgoingSASVerificationRequest(
@@ -164,7 +164,7 @@ internal class OutgoingSASVerificationRequest(
         // in Bob’s m.key.verification.key and the content of Alice’s m.key.verification.start message.
 
         //check commitment
-        val concat = vKey.key + MoshiProvider.getCanonicalJson(KeyVerificationStart::class.java, startReq!!)
+        val concat = vKey.key + JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, startReq!!)
         val otherCommitment = hashUsingAgreedHashMethod(concat) ?: ""
 
         if (accepted!!.commitment.equals(otherCommitment)) {

@@ -16,6 +16,8 @@
 
 package im.vector.matrix.android.internal.util
 
+import androidx.annotation.VisibleForTesting
+import im.vector.matrix.android.internal.di.MoshiProvider
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -28,45 +30,41 @@ import java.util.*
  */
 object JsonCanonicalizer {
 
-    fun canonicalize(json: String): String {
-        var can: String? = null
-        try {
-            val _json = JSONObject(json)
+    fun <T> getCanonicalJson(type: Class<T>, o: T): String {
+        val adapter = MoshiProvider.providesMoshi().adapter<T>(type)
 
-            can = _canonicalize(_json)
+        // Canonicalize manually
+        return canonicalize(adapter.toJson(o))
+                .replace("\\/", "/")
+    }
+
+    @VisibleForTesting
+    fun canonicalize(jsonString: String): String {
+        return try {
+            val jsonObject = JSONObject(jsonString)
+
+            canonicalizeRecursive(jsonObject)
         } catch (e: JSONException) {
             Timber.e(e, "Unable to canonicalize")
+            jsonString
         }
-
-        if (can == null) {
-            Timber.e("Error")
-            return json
-        }
-
-        return can
     }
 
     /**
-     * Canonicalize a JsonElement element
+     * Canonicalize a JSON element
      *
      * @param src the src
      * @return the canonicalize element
      */
-    private fun _canonicalize(src: Any?): String? {
-        // sanity check
-        if (null == src) {
-            return null
-        }
-
-        when (src) {
+    private fun canonicalizeRecursive(any: Any): String {
+        when (any) {
             is JSONArray  -> {
                 // Canonicalize each element of the array
-                val srcArray = src as JSONArray?
                 val result = StringBuilder("[")
 
-                for (i in 0 until srcArray!!.length()) {
-                    result.append(_canonicalize(srcArray.get(i)))
-                    if (i < srcArray.length() - 1) {
+                for (i in 0 until any.length()) {
+                    result.append(canonicalizeRecursive(any.get(i)))
+                    if (i < any.length() - 1) {
                         result.append(",")
                     }
                 }
@@ -76,11 +74,11 @@ object JsonCanonicalizer {
                 return result.toString()
             }
             is JSONObject -> {
-                // Sort the attributes by name, and the canonicalize each element of the object
+                // Sort the attributes by name, and the canonicalize each element of the JSONObject
                 val result = StringBuilder("{")
 
                 val attributes = TreeSet<String>()
-                for (entry in src.keys()) {
+                for (entry in any.keys()) {
                     attributes.add(entry)
                 }
 
@@ -89,7 +87,7 @@ object JsonCanonicalizer {
                             .append(attribute.value)
                             .append("\"")
                             .append(":")
-                            .append(_canonicalize(src[attribute.value]))
+                            .append(canonicalizeRecursive(any[attribute.value]))
 
                     if (attribute.index < attributes.size - 1) {
                         result.append(",")
@@ -100,8 +98,8 @@ object JsonCanonicalizer {
 
                 return result.toString()
             }
-            is String     -> return JSONObject.quote(src)
-            else          -> return src.toString()
+            is String     -> return JSONObject.quote(any)
+            else          -> return any.toString()
         }
     }
 

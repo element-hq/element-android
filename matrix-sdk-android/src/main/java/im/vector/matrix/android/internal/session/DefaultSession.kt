@@ -20,7 +20,6 @@ import android.content.Context
 import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
-import androidx.work.WorkManager
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.PushRuleService
@@ -44,6 +43,7 @@ import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
+import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -150,10 +150,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                         Timber.w("SIGN_OUT: clear cache -> SUCCESS: clear crypto cache")
                         cryptoService.clearCryptoCache(MatrixCallbackDelegate(callback))
 
-                        WorkManager.getInstance(context).also {
-                            it.cancelAllWork()
-                            it.pruneWork()
-                        }
+                        WorkManagerUtil.cancelAllWorks(context)
                     }
 
                     override fun onFailure(failure: Throwable) {

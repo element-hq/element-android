@@ -36,7 +36,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.convertToUTF8
 import timber.log.Timber
 import java.util.*
@@ -263,7 +263,7 @@ internal class MXMegolmEncryption(
 
             // Get canonical Json from
 
-            val payloadString = convertToUTF8(MoshiProvider.getCanonicalJson(Map::class.java, payloadJson))
+            val payloadString = convertToUTF8(JsonCanonicalizer.getCanonicalJson(Map::class.java, payloadJson))
             val ciphertext = olmDevice.encryptGroupMessage(session.sessionId, payloadString!!)
 
             val map = HashMap<String, Any>()
