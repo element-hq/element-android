@@ -27,6 +27,8 @@ import im.vector.matrix.android.api.session.room.model.message.MessageImageConte
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
+import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.rx.RxRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
@@ -174,11 +176,9 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                     //TODO sent by me or sufficient power level
                 }
 
-                this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, JSONObject(event.root.toContent()).toString(4)))
+                this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source,event.root.toContentStringWithIndent()))
                 if (event.isEncrypted()) {
-                    val decryptedContent = event.root.getClearContent()?.let {
-                        JSONObject(it).toString(4)
-                    } ?: stringProvider.getString(R.string.encryption_information_decryption_error)
+                    val decryptedContent = event.root.toClearContentStringWithIndent() ?: stringProvider.getString(R.string.encryption_information_decryption_error)
                     this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, decryptedContent))
                 }
                 this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, event.root.eventId))

@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
+import org.json.JSONObject
 import timber.log.Timber
 
 typealias Content = JsonDict
@@ -233,6 +234,20 @@ data class Event(
 //            mClearEvent = null
 //        }
 //    }
+
+
+    fun toContentStringWithIndent(): String {
+        val contentMap = this.toContent()?.toMutableMap() ?: HashMap()
+        contentMap.remove("mxDecryptionResult")
+        contentMap.remove("mCryptoError")
+        return JSONObject(contentMap).toString(4)
+    }
+
+    fun toClearContentStringWithIndent(): String? {
+        val contentMap = this.mxDecryptionResult?.payload?.toMutableMap()
+        val adapter = MoshiProvider.providesMoshi().adapter(Map::class.java)
+        return contentMap?.let { JSONObject(adapter.toJson(it)).toString(4) }
+    }
 
     /**
      * Tells if the event is redacted
