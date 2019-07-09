@@ -81,7 +81,11 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
             return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON))
         }
 
-        return olmDevice.decryptGroupMessage(encryptedEventContent.ciphertext, event.roomId, timeline, encryptedEventContent.sessionId, encryptedEventContent.senderKey)
+        return olmDevice.decryptGroupMessage(encryptedEventContent.ciphertext,
+                event.roomId,
+                timeline,
+                encryptedEventContent.sessionId,
+                encryptedEventContent.senderKey)
                 .fold(
                         { throwable ->
                             if (throwable is MXCryptoError.OlmError) {
@@ -211,7 +215,8 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
             return
         }
         if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
-            Timber.v("## onRoomKeyEvent(), forward adding key : roomId ${roomKeyContent.roomId} sessionId ${roomKeyContent.sessionId} sessionKey ${roomKeyContent.sessionKey}") // from " + event);
+            Timber.v("## onRoomKeyEvent(), forward adding key : roomId ${roomKeyContent.roomId}" +
+                    " sessionId ${roomKeyContent.sessionId} sessionKey ${roomKeyContent.sessionKey}")
             val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>()
                     ?: return
 
@@ -259,7 +264,13 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
             return
         }
 
-        val added = olmDevice.addInboundGroupSession(roomKeyContent.sessionId, roomKeyContent.sessionKey, roomKeyContent.roomId, senderKey, forwardingCurve25519KeyChain, keysClaimed, exportFormat)
+        val added = olmDevice.addInboundGroupSession(roomKeyContent.sessionId,
+                roomKeyContent.sessionKey,
+                roomKeyContent.roomId,
+                senderKey,
+                forwardingCurve25519KeyChain,
+                keysClaimed,
+                exportFormat)
 
         if (added) {
             keysBackup.maybeBackupKeys()
@@ -322,7 +333,8 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                             // were no one-time keys.
                                             Try.just(Unit)
                                         }
-                                        Timber.v("""## shareKeysWithDevice() : sharing keys for session ${body?.senderKey}|${body?.sessionId} with device $userId:$deviceId""")
+                                        Timber.v("## shareKeysWithDevice() : sharing keys for session" +
+                                                " ${body?.senderKey}|${body?.sessionId} with device $userId:$deviceId")
 
                                         val payloadJson = HashMap<String, Any>()
                                         payloadJson["type"] = EventType.FORWARDED_ROOM_KEY

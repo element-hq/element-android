@@ -40,7 +40,8 @@ data class PushCondition(
         /**
          * Required for room_member_count conditions.
          * A decimal integer optionally prefixed by one of, ==, <, >, >= or <=.
-         * A prefix of < matches rooms where the member count is strictly less than the given number and so forth. If no prefix is present, this parameter defaults to ==.
+         * A prefix of < matches rooms where the member count is strictly less than the given number and so forth.
+         * If no prefix is present, this parameter defaults to ==.
          */
         @Json(name = "is") val iz: String? = null
 ) {

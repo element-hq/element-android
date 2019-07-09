@@ -106,7 +106,8 @@ internal class MXOlmDecryption(
         }
 
         if (olmPayloadContent.recipient != credentials.userId) {
-            Timber.e("## decryptEvent() : Event ${event.eventId}: Intended recipient ${olmPayloadContent.recipient} does not match our id ${credentials.userId}")
+            Timber.e("## decryptEvent() : Event ${event.eventId}:" +
+                    " Intended recipient ${olmPayloadContent.recipient} does not match our id ${credentials.userId}")
             return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_RECIPIENT,
                     String.format(MXCryptoError.BAD_RECIPIENT_REASON, olmPayloadContent.recipient)))
         }

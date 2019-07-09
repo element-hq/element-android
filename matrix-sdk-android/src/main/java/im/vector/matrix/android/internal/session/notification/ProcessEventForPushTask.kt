@@ -69,7 +69,8 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
             }.filter {
                 it.senderId != sessionParams.credentials.userId
             }
-            Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size} to check for push rules with ${params.rules.size} rules")
+            Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
+                    " to check for push rules with ${params.rules.size} rules")
             allEvents.forEach { event ->
                 fulfilledBingRule(event, params.rules)?.let {
                     Timber.v("[PushRules] Rule $it match for event ${event.eventId}")

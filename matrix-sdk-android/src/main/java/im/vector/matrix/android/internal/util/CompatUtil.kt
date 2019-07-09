@@ -120,7 +120,8 @@ object CompatUtil {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             // Get the version of Android when the key has been generated, default to the current version of the system. In this case, the
             // key will be generated
-            val androidVersionWhenTheKeyHasBeenGenerated = sharedPreferences.getInt(SHARED_KEY_ANDROID_VERSION_WHEN_KEY_HAS_BEEN_GENERATED, Build.VERSION.SDK_INT)
+            val androidVersionWhenTheKeyHasBeenGenerated = sharedPreferences
+                    .getInt(SHARED_KEY_ANDROID_VERSION_WHEN_KEY_HAS_BEEN_GENERATED, Build.VERSION.SDK_INT)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (keyStore.containsAlias(AES_LOCAL_PROTECTION_KEY_ALIAS)) {

@@ -665,7 +665,8 @@ internal class KeysBackup @Inject constructor(
                                         // Do not trigger a backup for them if they come from the backup version we are using
                                         val backUp = keysVersionResult.version != keysBackupVersion?.version
                                         if (backUp) {
-                                            Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up to backup version: " + keysBackupVersion?.version)
+                                            Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up to backup version: "
+                                                    + keysBackupVersion?.version)
                                         }
 
                                         // Import them into the crypto store
@@ -1224,7 +1225,8 @@ internal class KeysBackup @Inject constructor(
                     }
 
                     try {
-                        keysBackupData.roomIdToRoomKeysBackupData[olmInboundGroupSessionWrapper.roomId]!!.sessionIdToKeyBackupData[olmInboundGroupSessionWrapper.olmInboundGroupSession!!.sessionIdentifier()] = keyBackupData
+                        keysBackupData.roomIdToRoomKeysBackupData[olmInboundGroupSessionWrapper.roomId]!!
+                                .sessionIdToKeyBackupData[olmInboundGroupSessionWrapper.olmInboundGroupSession!!.sessionIdentifier()] = keyBackupData
                     } catch (e: OlmException) {
                         Timber.e(e, "OlmException")
                     }
@@ -1276,7 +1278,8 @@ internal class KeysBackup @Inject constructor(
                                                 // Do not stay in KeysBackupState.WrongBackUpVersion but check what is available on the homeserver
                                                 checkAndStartKeysBackup()
                                             }
-                                            else                                -> // Come back to the ready state so that we will retry on the next received key
+                                            else                                ->
+                                                // Come back to the ready state so that we will retry on the next received key
                                                 keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
                                         }
                                     }

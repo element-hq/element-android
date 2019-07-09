@@ -132,20 +132,26 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
 
         Timber.v("cancelRoomKeyRequest: requestId: " + req.requestId + " state: " + req.state + " andResend: " + andResend)
 
-        if (req.state === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING || req.state === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND) {
-            // nothing to do here
-        } else if (req.state === OutgoingRoomKeyRequest.RequestState.UNSENT || req.state === OutgoingRoomKeyRequest.RequestState.FAILED) {
-            Timber.v("## cancelRoomKeyRequest() : deleting unnecessary room key request for $requestBody")
-            cryptoStore.deleteOutgoingRoomKeyRequest(req.requestId)
-        } else if (req.state === OutgoingRoomKeyRequest.RequestState.SENT) {
-            if (andResend) {
-                req.state = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
-            } else {
-                req.state = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING
+        when (req.state) {
+            OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING,
+            OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND -> {
+                // nothing to do here
             }
-            req.cancellationTxnId = makeTxnId()
-            cryptoStore.updateOutgoingRoomKeyRequest(req)
-            sendOutgoingRoomKeyRequestCancellation(req)
+            OutgoingRoomKeyRequest.RequestState.UNSENT,
+            OutgoingRoomKeyRequest.RequestState.FAILED                               -> {
+                Timber.v("## cancelRoomKeyRequest() : deleting unnecessary room key request for $requestBody")
+                cryptoStore.deleteOutgoingRoomKeyRequest(req.requestId)
+            }
+            OutgoingRoomKeyRequest.RequestState.SENT                                 -> {
+                if (andResend) {
+                    req.state = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
+                } else {
+                    req.state = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING
+                }
+                req.cancellationTxnId = makeTxnId()
+                cryptoStore.updateOutgoingRoomKeyRequest(req)
+                sendOutgoingRoomKeyRequestCancellation(req)
+            }
         }
     }
 
