@@ -164,6 +164,10 @@ class MessageItemFactory @Inject constructor(
                         DebouncedClickListener(View.OnClickListener { _ ->
                             callback?.onFileMessageClicked(informationData.eventId, messageContent)
                         }))
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
+                            ?: false
+                }
     }
 
     private fun buildNotHandledMessageItem(messageContent: MessageContent, highlight: Boolean): DefaultItem? {
