@@ -34,7 +34,10 @@ import io.realm.Sort
 // By default if a chunk is empty we consider it unlinked
 internal fun ChunkEntity.isUnlinked(): Boolean {
     assertIsManaged()
-    return timelineEvents.where().equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, false).findAll().isEmpty()
+    return timelineEvents.where()
+            .equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, false)
+            .findAll()
+            .isEmpty()
 }
 
 internal fun ChunkEntity.deleteOnCascade() {

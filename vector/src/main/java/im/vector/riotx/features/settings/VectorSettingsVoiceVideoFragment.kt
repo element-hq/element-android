@@ -34,10 +34,10 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
     override val preferenceXmlRes = R.xml.vector_settings_voice_video
 
     private val mUseRiotCallRingtonePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY) as SwitchPreference
+        findPreference(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY) as SwitchPreference
     }
     private val mCallRingtonePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY)
     }
 
     override fun bindPref() {

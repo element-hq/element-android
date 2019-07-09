@@ -53,7 +53,7 @@ class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
         }
 
         // application version
-        (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY)).let {
+        (findPreference(VectorPreferences.SETTINGS_VERSION_PREFERENCE_KEY)).let {
             it.summary = getVersion(longFormat = false, useBuildNumber = true)
 
             it.setOnPreferenceClickListener { pref ->
@@ -63,7 +63,7 @@ class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
         }
 
         // SDK version
-        (findPreference(PreferencesManager.SETTINGS_SDK_VERSION_PREFERENCE_KEY)).let {
+        (findPreference(VectorPreferences.SETTINGS_SDK_VERSION_PREFERENCE_KEY)).let {
             it.summary = Matrix.getSdkVersion()
 
             it.setOnPreferenceClickListener { pref ->
@@ -73,38 +73,38 @@ class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
         }
 
         // olm version
-        findPreference(PreferencesManager.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
                 .summary = session.getCryptoVersion(requireContext(), false)
 
         // copyright
-        findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.COPYRIGHT)
             false
         }
 
         // terms & conditions
-        findPreference(PreferencesManager.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.TAC)
             false
         }
 
         // privacy policy
-        findPreference(PreferencesManager.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.PRIVACY_POLICY)
             false
         }
 
         // third party notice
-        findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
             false
         }
 
-        findPreference(PreferencesManager.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
+        findPreference(VectorPreferences.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             // See https://developers.google.com/android/guides/opensource
             startActivity(Intent(requireActivity(), OssLicensesMenuActivity::class.java))

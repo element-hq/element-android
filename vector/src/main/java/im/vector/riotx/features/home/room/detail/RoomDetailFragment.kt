@@ -98,7 +98,7 @@ import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
-import im.vector.riotx.features.settings.PreferencesManager
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
@@ -419,7 +419,7 @@ class RoomDetailFragment :
         composerLayout.sendButton.setOnClickListener {
             val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
-                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, PreferencesManager.isMarkdownEnabled(requireContext())))
+                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, VectorPreferences.isMarkdownEnabled(requireContext())))
             }
         }
     }
@@ -440,7 +440,7 @@ class RoomDetailFragment :
             items.add(DialogListItem.SendFile)
             // Send voice
 
-            if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
+            if (VectorPreferences.isSendVoiceFeatureEnabled(this)) {
                 items.add(DialogListItem.SendVoice.INSTANCE)
             }
 
@@ -449,7 +449,7 @@ class RoomDetailFragment :
             //items.add(DialogListItem.SendSticker)
             // Camera
 
-            //if (PreferencesManager.useNativeCamera(this)) {
+            //if (VectorPreferences.useNativeCamera(this)) {
             items.add(DialogListItem.TakePhoto)
             items.add(DialogListItem.TakeVideo)
             //} else {
@@ -829,7 +829,7 @@ class RoomDetailFragment :
 //                vibrate = true
             }
 
-//            if (vibrate && PreferencesManager.vibrateWhenMentioning(context)) {
+//            if (vibrate && VectorPreferences.vibrateWhenMentioning(context)) {
 //                val v= context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
 //                if (v?.hasVibrator() == true) {
 //                    v.vibrate(100)

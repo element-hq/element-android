@@ -36,7 +36,8 @@ private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
 internal class GroupSummaryUpdater @Inject constructor(private val context: Context,
                                                        private val credentials: Credentials,
-                                                       @SessionDatabase realmConfiguration: RealmConfiguration) : RealmLiveEntityObserver<GroupEntity>(realmConfiguration) {
+                                                       @SessionDatabase realmConfiguration: RealmConfiguration)
+    : RealmLiveEntityObserver<GroupEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<GroupEntity> { GroupEntity.where(it) }
 

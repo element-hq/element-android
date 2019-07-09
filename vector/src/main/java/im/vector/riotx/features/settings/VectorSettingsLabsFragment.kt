@@ -25,8 +25,8 @@ class VectorSettingsLabsFragment : VectorSettingsBaseFragment() {
 
     override fun bindPref() {
         // Lab
-//        val useCryptoPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY) as SwitchPreference
-//        val cryptoIsEnabledPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
+//        val useCryptoPref = findPreference(VectorPreferences.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY) as SwitchPreference
+//        val cryptoIsEnabledPref = findPreference(VectorPreferences.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
 
 
         if (session.isCryptoEnabled()) {
@@ -102,7 +102,7 @@ class VectorSettingsLabsFragment : VectorSettingsBaseFragment() {
         }
 
         // SaveMode Management
-//        findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY)
+//        findPreference(VectorPreferences.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY)
 //                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
 //            notImplemented()
 //            /* TODO

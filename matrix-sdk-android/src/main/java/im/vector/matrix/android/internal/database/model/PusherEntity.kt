@@ -23,7 +23,8 @@ import io.realm.annotations.Index
 //        at java.lang.Thread.run(Thread.java:764)
 //     Caused by: java.lang.IllegalArgumentException: 'value' is not a valid managed object.
 //        at io.realm.ProxyState.checkValidObject(ProxyState.java:213)
-//        at io.realm.im_vector_matrix_android_internal_database_model_PusherEntityRealmProxy.realmSet$data(im_vector_matrix_android_internal_database_model_PusherEntityRealmProxy.java:413)
+//        at io.realm.im_vector_matrix_android_internal_database_model_PusherEntityRealmProxy
+//            .realmSet$data(im_vector_matrix_android_internal_database_model_PusherEntityRealmProxy.java:413)
 //        at im.vector.matrix.android.internal.database.model.PusherEntity.setData(PusherEntity.kt:16)
 //        at im.vector.matrix.android.internal.session.pushers.AddHttpPusherWorker$doWork$$inlined$fold$lambda$2.execute(AddHttpPusherWorker.kt:70)
 //        at io.realm.Realm.executeTransaction(Realm.java:1493)

@@ -65,7 +65,13 @@ echo
 echo "Search for forbidden patterns in code..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt \
-    ./vector/src/main/java
+    ./matrix-sdk-android/src/main/java \
+    ./matrix-sdk-android-rx/src/main/java \
+    ./vector/src/main/java \
+    ./vector/src/debug/java \
+    ./vector/src/release/java \
+    ./vector/src/fdroid/java \
+    ./vector/src/gplay/java
 
 resultForbiddenStringInCode=$?
 

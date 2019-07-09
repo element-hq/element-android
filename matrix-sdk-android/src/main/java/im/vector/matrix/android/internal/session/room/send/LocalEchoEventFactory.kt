@@ -81,7 +81,12 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
     }
 
 
-    fun createReplaceTextEvent(roomId: String, targetEventId: String, newBodyText: String, newBodyAutoMarkdown: Boolean, msgType: String, compatibilityText: String): Event {
+    fun createReplaceTextEvent(roomId: String,
+                               targetEventId: String,
+                               newBodyText: String,
+                               newBodyAutoMarkdown: Boolean,
+                               msgType: String,
+                               compatibilityText: String): Event {
 
         var newContent = MessageTextContent(
                 type = MessageType.MSGTYPE_TEXT,
@@ -255,9 +260,15 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
 //        </mx-reply>
 //        This is where the reply goes.
         val body = bodyForReply(eventReplied.getClearContent().toModel<MessageContent>())
-        val replyFallbackTemplateFormatted = """
-           <mx-reply><blockquote><a href="%s">${stringProvider.getString(R.string.message_reply_to_prefix)}</a><a href="%s">%s</a><br />%s</blockquote></mx-reply>%s
-        """.trimIndent().format(permalink, userLink, userId, body.second ?: body.first, replyText)
+        val replyFallbackTemplateFormatted = """<mx-reply>
+               <blockquote>
+                   <a href="%s">${stringProvider.getString(R.string.message_reply_to_prefix)}</a>
+                   <a href="%s">%s</a>
+                   <br />
+                   %s
+               </blockquote>
+           </mx-reply>
+           %s""".trimIndent().format(permalink, userLink, userId, body.second ?: body.first, replyText)
 //
 //        > <@alice:example.org> This is the original body
 //

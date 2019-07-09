@@ -85,7 +85,9 @@ sealed class MXCryptoError : Throwable() {
         const val BAD_ENCRYPTED_MESSAGE_REASON = "Bad Encrypted Message"
         const val DUPLICATE_MESSAGE_INDEX_REASON = "Duplicate message index, possible replay attack %1\$s"
         const val ERROR_MISSING_PROPERTY_REASON = "No '%1\$s' property. Cannot prevent unknown-key attack"
-        const val UNKNOWN_DEVICES_REASON = "This room contains unknown devices which have not been verified.\n" + "We strongly recommend you verify them before continuing."
-        const val NO_MORE_ALGORITHM_REASON = "Room was previously configured to use encryption, but is no longer." + " Perhaps the homeserver is hiding the configuration event."
+        const val UNKNOWN_DEVICES_REASON = "This room contains unknown devices which have not been verified.\n" +
+                "We strongly recommend you verify them before continuing."
+        const val NO_MORE_ALGORITHM_REASON = "Room was previously configured to use encryption, but is no longer." +
+                " Perhaps the homeserver is hiding the configuration event."
     }
 }

@@ -40,7 +40,9 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
         val newDirectRoomIds = directMessages.content.values.flatten()
         monarchy.runTransactionSync { realm ->
 
-            val oldDirectRooms = RoomSummaryEntity.where(realm).equalTo(RoomSummaryEntityFields.IS_DIRECT, true).findAll()
+            val oldDirectRooms = RoomSummaryEntity.where(realm)
+                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    .findAll()
             oldDirectRooms.forEach { it.isDirect = false }
 
             newDirectRoomIds.forEach { roomId ->

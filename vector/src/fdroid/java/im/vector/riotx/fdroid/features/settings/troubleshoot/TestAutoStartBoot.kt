@@ -18,7 +18,7 @@ package im.vector.riotx.fdroid.features.settings.troubleshoot
 import androidx.appcompat.app.AppCompatActivity
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.settings.PreferencesManager
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
@@ -26,10 +26,11 @@ import javax.inject.Inject
  * Test that the application is started on boot
  */
 class TestAutoStartBoot @Inject constructor(private val context: AppCompatActivity,
-                                            private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_service_boot_title) {
+                                            private val stringProvider: StringProvider)
+    : TroubleshootTest(R.string.settings_troubleshoot_test_service_boot_title) {
 
     override fun perform() {
-        if (PreferencesManager.autoStartOnBoot(context)) {
+        if (VectorPreferences.autoStartOnBoot(context)) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_service_boot_success)
             status = TestStatus.SUCCESS
             quickFix = null
@@ -37,7 +38,7 @@ class TestAutoStartBoot @Inject constructor(private val context: AppCompatActivi
             description = stringProvider.getString(R.string.settings_troubleshoot_test_service_boot_failed)
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_service_boot_quickfix) {
                 override fun doFix() {
-                    PreferencesManager.setAutoStartOnBoot(context, true)
+                    VectorPreferences.setAutoStartOnBoot(context, true)
                     manager?.retry()
                 }
             }

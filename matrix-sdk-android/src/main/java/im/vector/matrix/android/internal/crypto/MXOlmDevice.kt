@@ -684,7 +684,8 @@ internal class MXOlmDevice @Inject constructor(
                             adapter.fromJson(payloadString)
                         } catch (e: Exception) {
                             Timber.e("## decryptGroupMessage() : fails to parse the payload")
-                            return@flatMap Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON))
+                            return@flatMap Try.Failure(
+                                    MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON))
                         }
 
                         return@flatMap Try.just(

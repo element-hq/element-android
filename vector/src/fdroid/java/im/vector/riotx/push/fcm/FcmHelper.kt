@@ -21,7 +21,7 @@ import android.content.Context
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.fdroid.receiver.AlarmSyncBroadcastReceiver
-import im.vector.riotx.features.settings.PreferencesManager
+import im.vector.riotx.features.settings.VectorPreferences
 import timber.log.Timber
 
 /**
@@ -65,7 +65,7 @@ object FcmHelper {
 
     fun onEnterBackground(context: Context, activeSessionHolder: ActiveSessionHolder) {
         //We need to use alarm in this mode
-        if (PreferencesManager.areNotificationEnabledForDevice(context) && activeSessionHolder.hasActiveSession()) {
+        if (VectorPreferences.areNotificationEnabledForDevice(context) && activeSessionHolder.hasActiveSession()) {
             val currentSession = activeSessionHolder.getActiveSession()
             AlarmSyncBroadcastReceiver.scheduleAlarm(context, currentSession.myUserId, 4_000L)
             Timber.i("Alarm scheduled to restart service")

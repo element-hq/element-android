@@ -351,7 +351,9 @@ internal class DefaultTimeline(
         val initialDisplayIndex = if (isLive) {
             liveEvents.firstOrNull()?.root?.displayIndex
         } else {
-            val initialEvent = liveEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, initialEventId).findFirst()
+            val initialEvent = liveEvents.where()
+                    .equalTo(TimelineEventEntityFields.EVENT_ID, initialEventId)
+                    .findFirst()
             shouldFetchInitialEvent = initialEvent == null
             initialEvent?.root?.displayIndex
         } ?: DISPLAY_INDEX_UNKNOWN

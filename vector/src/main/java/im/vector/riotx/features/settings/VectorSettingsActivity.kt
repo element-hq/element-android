@@ -78,9 +78,9 @@ class VectorSettingsActivity : VectorBaseActivity(),
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat?, pref: Preference?): Boolean {
         var oFragment: Fragment? = null
 
-        if (PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref?.key) {
+        if (VectorPreferences.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref?.key) {
             oFragment = VectorSettingsNotificationsTroubleshootFragment.newInstance(session.sessionParams.credentials.userId)
-        } else if (PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref?.key) {
+        } else if (VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref?.key) {
             oFragment = VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.sessionParams.credentials.userId)
         } else {
             try {

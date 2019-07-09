@@ -25,7 +25,8 @@ import im.vector.riotx.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
 class TestBackgroundRestrictions @Inject constructor(private val context: AppCompatActivity,
-                                                     private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_bg_restricted_title) {
+                                                     private val stringProvider: StringProvider)
+    : TroubleshootTest(R.string.settings_troubleshoot_test_bg_restricted_title) {
 
     override fun perform() {
         (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).apply {

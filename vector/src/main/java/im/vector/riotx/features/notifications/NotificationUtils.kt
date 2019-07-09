@@ -41,7 +41,7 @@ import im.vector.riotx.core.utils.startNotificationChannelSettingsIntent
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
-import im.vector.riotx.features.settings.PreferencesManager
+import im.vector.riotx.features.settings.VectorPreferences
 import timber.log.Timber
 import java.util.*
 
@@ -420,7 +420,7 @@ object NotificationUtils {
                     priority = NotificationCompat.PRIORITY_DEFAULT
                     if (roomInfo.shouldBing) {
                         //Compat
-                        PreferencesManager.getNotificationRingTone(context)?.let {
+                        VectorPreferences.getNotificationRingTone(context)?.let {
                             setSound(it)
                         }
                         setLights(accentColor, 500, 500)
@@ -534,7 +534,7 @@ object NotificationUtils {
                     if (simpleNotifiableEvent.noisy) {
                         //Compat
                         priority = NotificationCompat.PRIORITY_DEFAULT
-                        PreferencesManager.getNotificationRingTone(context)?.let {
+                        VectorPreferences.getNotificationRingTone(context)?.let {
                             setSound(it)
                         }
                         setLights(accentColor, 500, 500)
@@ -630,7 +630,7 @@ object NotificationUtils {
                     if (noisy) {
                         //Compat
                         priority = NotificationCompat.PRIORITY_DEFAULT
-                        PreferencesManager.getNotificationRingTone(context)?.let {
+                        VectorPreferences.getNotificationRingTone(context)?.let {
                             setSound(it)
                         }
                         setLights(accentColor, 500, 500)

@@ -67,7 +67,8 @@ data class PublicRoom(
         var worldReadable: Boolean = false,
 
         /**
-         * Required. Whether guest users may join the room and participate in it. If they can, they will be subject to ordinary power level rules like any other user.
+         * Required. Whether guest users may join the room and participate in it. If they can,
+         * they will be subject to ordinary power level rules like any other user.
          */
         @Json(name = "guest_can_join")
         var guestCanJoin: Boolean = false,

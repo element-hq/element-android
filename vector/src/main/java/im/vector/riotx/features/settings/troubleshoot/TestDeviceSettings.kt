@@ -18,7 +18,7 @@ package im.vector.riotx.features.settings.troubleshoot
 import androidx.appcompat.app.AppCompatActivity
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.settings.PreferencesManager
+import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Inject
 
 /**
@@ -30,14 +30,14 @@ class TestDeviceSettings @Inject constructor(private val context: AppCompatActiv
 
     override fun perform() {
 
-        if (PreferencesManager.areNotificationEnabledForDevice(context)) {
+        if (VectorPreferences.areNotificationEnabledForDevice(context)) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_device_settings_success)
             quickFix = null
             status = TestStatus.SUCCESS
         } else {
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_device_settings_quickfix) {
                 override fun doFix() {
-                    PreferencesManager.setNotificationEnabledForDevice(context, true)
+                    VectorPreferences.setNotificationEnabledForDevice(context, true)
                     manager?.retry()
                 }
             }

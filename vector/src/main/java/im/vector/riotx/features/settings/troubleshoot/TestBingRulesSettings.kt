@@ -72,7 +72,7 @@ class TestBingRulesSettings @Inject constructor(private val activeSessionHolder:
 //                    override fun doFix() {
 //                        val activity = fragment.activity
 //                        if (activity is VectorSettingsFragmentInteractionListener) {
-//                            activity.requestHighlightPreferenceKeyOnResume(PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
+//                            activity.requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
 //                        }
 //                        activity?.supportFragmentManager?.popBackStack()
 //                    }

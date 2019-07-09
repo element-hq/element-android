@@ -178,7 +178,8 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
 
                 this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source,event.root.toContentStringWithIndent()))
                 if (event.isEncrypted()) {
-                    val decryptedContent = event.root.toClearContentStringWithIndent() ?: stringProvider.getString(R.string.encryption_information_decryption_error)
+                    val decryptedContent = event.root.toClearContentStringWithIndent()
+                            ?: stringProvider.getString(R.string.encryption_information_decryption_error)
                     this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, decryptedContent))
                 }
                 this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, event.root.eventId))

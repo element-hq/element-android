@@ -28,7 +28,7 @@ import im.vector.matrix.android.api.util.SecretStoringUtils
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
-import im.vector.riotx.features.settings.PreferencesManager
+import im.vector.riotx.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import timber.log.Timber
 import java.io.File
@@ -73,7 +73,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     Events might be grouped and there might not be one notification per event!
      */
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
-        if (!PreferencesManager.areNotificationEnabledForDevice(context)) {
+        if (!VectorPreferences.areNotificationEnabledForDevice(context)) {
             Timber.i("Notification are disabled for this device")
             return
         }

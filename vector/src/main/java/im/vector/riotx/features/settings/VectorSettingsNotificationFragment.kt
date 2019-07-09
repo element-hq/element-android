@@ -38,7 +38,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     override fun bindPref() {
-        findPreference(PreferencesManager.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY).let { pref ->
+        findPreference(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY).let { pref ->
             val pushRuleService = session
             val mRuleMaster = pushRuleService.getPushRules()
                     .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
@@ -65,15 +65,15 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
 
         return when (preference?.key) {
-            PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> {
+            VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> {
                 updateEnabledForDevice(preference)
                 true
             }
-            PreferencesManager.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY   -> {
+            VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY   -> {
                 updateEnabledForAccount(preference)
                 true
             }
-            else                                                          -> {
+            else                                                         -> {
                 return super.onPreferenceTreeClick(preference)
             }
         }
@@ -84,7 +84,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
         val switchPref = preference as SwitchPreference
         if (switchPref.isChecked) {
             FcmHelper.getFcmToken(requireContext())?.let {
-                if (PreferencesManager.areNotificationEnabledForDevice(requireContext())) {
+                if (VectorPreferences.areNotificationEnabledForDevice(requireContext())) {
                     pushManager.registerPusherWithFcmKey(it)
                 }
             }

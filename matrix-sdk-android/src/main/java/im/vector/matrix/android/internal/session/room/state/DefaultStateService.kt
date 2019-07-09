@@ -30,9 +30,9 @@ internal class DefaultStateService @Inject constructor(private val roomId: Strin
     override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
         val params = SendStateTask.Params(roomId,
                 EventType.STATE_ROOM_TOPIC,
-                HashMap<String, String>().apply {
-                    put("topic", topic)
-                })
+                mapOf(
+                        "topic" to topic
+                ))
 
 
         sendStateTask.configureWith(params)
