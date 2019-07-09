@@ -117,7 +117,6 @@ ButterKnife\.findById\(
 
 ### Bad formatting of chain (missing new line)
 \w\.flatMap\(
-\w\.map\(
 
 ### Bad formatting of Realm query chain. Insert new line
 \)\.equalTo
