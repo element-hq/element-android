@@ -83,13 +83,13 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         if (supportNotificationChannels()) {
             ringtonePreference.isVisible = false
         } else {
-            ringtonePreference.summary = PreferencesManager.getNotificationRingToneName(activity)
+            ringtonePreference.summary = PreferencesManager.getNotificationRingToneName(requireContext())
             ringtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
 
-                if (null != PreferencesManager.getNotificationRingTone(activity)) {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(activity))
+                if (null != PreferencesManager.getNotificationRingTone(requireContext())) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, PreferencesManager.getNotificationRingTone(requireContext()))
                 }
 
                 startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
@@ -152,13 +152,13 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_NOTIFICATION_RINGTONE -> {
-                    PreferencesManager.setNotificationRingTone(activity,
+                    PreferencesManager.setNotificationRingTone(requireContext(),
                             data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
 
                     // test if the selected ring tone can be played
-                    val notificationRingToneName = PreferencesManager.getNotificationRingToneName(activity)
+                    val notificationRingToneName = PreferencesManager.getNotificationRingToneName(requireContext())
                     if (null != notificationRingToneName) {
-                        PreferencesManager.setNotificationRingTone(activity, PreferencesManager.getNotificationRingTone(activity))
+                        PreferencesManager.setNotificationRingTone(requireContext(), PreferencesManager.getNotificationRingTone(requireContext()))
                         findPreference(PreferencesManager.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY).summary = notificationRingToneName
                     }
                 }

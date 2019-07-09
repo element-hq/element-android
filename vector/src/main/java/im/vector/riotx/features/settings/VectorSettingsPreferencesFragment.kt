@@ -113,17 +113,17 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
 
         // update keep medias period
         findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
-            it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
+            it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(requireContext())
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 context?.let { context: Context ->
                     AlertDialog.Builder(context)
                             .setSingleChoiceItems(R.array.media_saving_choice,
-                                    PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
-                                PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
+                                    PreferencesManager.getSelectedMediasSavingPeriod(context)) { d, n ->
+                                PreferencesManager.setSelectedMediasSavingPeriod(context, n)
                                 d.cancel()
 
-                                it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
+                                it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(context)
                             }
                             .show()
                 }
