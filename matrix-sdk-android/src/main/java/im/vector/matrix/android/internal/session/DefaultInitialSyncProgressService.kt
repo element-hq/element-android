@@ -61,13 +61,13 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
             parent?.incrementProgress(endedTask.offset + (endedTask.totalProgress * endedTask.parentWeight).toInt())
         }
         if (endedTask?.parent == null) {
-            this@DefaultInitialSyncProgressService.status.postValue(null)
+            status.postValue(null)
         }
     }
 
     fun endAll() {
         rootTask = null
-        this@DefaultInitialSyncProgressService.status.postValue(null)
+        status.postValue(null)
     }
 
 
@@ -96,7 +96,7 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
             }
             if (parent == null) {
                 Timber.e("--- ${leaf().nameRes}: ${currentProgress}")
-                this@DefaultInitialSyncProgressService.status.postValue(
+                status.postValue(
                         InitialSyncProgressService.Status(leaf().nameRes, currentProgress)
                 )
             }
@@ -105,7 +105,7 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
 
 }
 
-public inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?, nameRes: Int, totalProgress: Int, parentWeight: Float = 1f, block: () -> T): T {
+inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?, nameRes: Int, totalProgress: Int, parentWeight: Float = 1f, block: () -> T): T {
     reporter?.startTask(nameRes, totalProgress, parentWeight)
     return block().also {
         reporter?.endTask(nameRes)
@@ -113,8 +113,8 @@ public inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?
 }
 
 
-public inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncProgressService?, taskId: Int, weight: Float, transform: (Map.Entry<K, V>) -> R): List<R> {
-    val total = this.count()
+inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncProgressService?, taskId: Int, weight: Float, transform: (Map.Entry<K, V>) -> R): List<R> {
+    val total = count()
     var current = 0
     reporter?.startTask(taskId, 100, weight)
     return this.map {

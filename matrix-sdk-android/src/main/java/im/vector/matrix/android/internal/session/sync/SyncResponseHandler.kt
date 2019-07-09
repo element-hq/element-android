@@ -36,7 +36,7 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
     fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
         return Try {
             val isInitialSync = fromToken == null
-            Timber.v("Start handling sync, is InitialSync: ${isInitialSync}")
+            Timber.v("Start handling sync, is InitialSync: $isInitialSync")
             val reporter = initialSyncProgressService.takeIf { isInitialSync }
 
             if (!cryptoManager.isStarted()) {
@@ -68,7 +68,7 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
                 }
 
                 reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
-                    Timber.v("Handle accoundData")
+                    Timber.v("Handle accountData")
                     if (syncResponse.accountData != null) {
                         userAccountDataSyncHandler.handle(syncResponse.accountData)
                     }

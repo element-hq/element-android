@@ -51,7 +51,7 @@ import javax.inject.Singleton
  * BugReporter creates and sends the bug reports.
  */
 @Singleton
-class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder){
+class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
     var inMultiWindowMode = false
 
     companion object {
@@ -72,7 +72,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     private var mBugReportCall: Call? = null
 
 
-    // boolean to cancel the bug reportSubtask
+    // boolean to cancel the bug report
     private val mIsCancelled = false
 
     /**
