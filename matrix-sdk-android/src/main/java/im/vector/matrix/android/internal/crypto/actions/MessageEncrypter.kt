@@ -22,8 +22,7 @@ import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_OLM
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedMessage
-import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.convertToUTF8
 import timber.log.Timber
 import java.util.*
@@ -81,7 +80,7 @@ internal class MessageEncrypter @Inject constructor(private val credentials: Cre
                 recipientsKeysMap["ed25519"] = deviceInfo.fingerprint()!!
                 payloadJson["recipient_keys"] = recipientsKeysMap
 
-                val payloadString = convertToUTF8(MoshiProvider.getCanonicalJson(Map::class.java, payloadJson))
+                val payloadString = convertToUTF8(JsonCanonicalizer.getCanonicalJson(Map::class.java, payloadJson))
                 ciphertext[deviceKey] = olmDevice.encryptMessage(deviceKey, sessionId!!, payloadString!!)!!
             }
         }

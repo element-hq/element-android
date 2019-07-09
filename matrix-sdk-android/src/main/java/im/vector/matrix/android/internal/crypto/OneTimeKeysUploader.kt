@@ -22,8 +22,8 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmAccount
 import timber.log.Timber
 import java.util.*
@@ -158,7 +158,7 @@ internal class OneTimeKeysUploader @Inject constructor(
                 k["key"] = curve25519Map.getValue(key_id)
 
                 // the key is also signed
-                val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, k)
+                val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, k)
 
                 k["signatures"] = objectSigner.signObject(canonicalJson)
 

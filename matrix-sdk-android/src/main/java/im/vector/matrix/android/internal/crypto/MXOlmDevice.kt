@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.convertFromUTF8
 import im.vector.matrix.android.internal.util.convertToUTF8
 import org.matrix.olm.*
@@ -728,7 +729,7 @@ internal class MXOlmDevice @Inject constructor(
     @Throws(Exception::class)
     fun verifySignature(key: String, jsonDictionary: Map<String, Any>, signature: String) {
         // Check signature on the canonical version of the JSON
-        olmUtility!!.verifyEd25519Signature(signature, key, MoshiProvider.getCanonicalJson<Map<*, *>>(Map::class.java, jsonDictionary))
+        olmUtility!!.verifyEd25519Signature(signature, key, JsonCanonicalizer.getCanonicalJson(Map::class.java, jsonDictionary))
     }
 
     /**

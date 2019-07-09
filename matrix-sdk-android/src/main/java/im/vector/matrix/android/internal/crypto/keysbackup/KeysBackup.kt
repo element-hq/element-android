@@ -55,6 +55,7 @@ import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -176,7 +177,7 @@ internal class KeysBackup @Inject constructor(
                         megolmBackupAuthData.publicKey = publicKey
                     }
 
-                    val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, megolmBackupAuthData.signalableJSONDictionary())
+                    val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, megolmBackupAuthData.signalableJSONDictionary())
 
                     megolmBackupAuthData.signatures = objectSigner.signObject(canonicalJson)
 
@@ -456,7 +457,7 @@ internal class KeysBackup @Inject constructor(
 
                     if (trust) {
                         // Add current device signature
-                        val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, authData.signalableJSONDictionary())
+                        val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, authData.signalableJSONDictionary())
 
                         val deviceSignatures = objectSigner.signObject(canonicalJson)
 

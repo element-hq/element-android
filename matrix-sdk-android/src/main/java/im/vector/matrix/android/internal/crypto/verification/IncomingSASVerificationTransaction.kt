@@ -29,8 +29,8 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import timber.log.Timber
 
 internal class IncomingSASVerificationTransaction(
@@ -147,7 +147,7 @@ internal class IncomingSASVerificationTransaction(
 
         //The hash commitment is the hash (using the selected hash algorithm) of the unpadded base64 representation of QB,
         // concatenated with the canonical JSON representation of the content of the m.key.verification.start message
-        val concat = getSAS().publicKey + MoshiProvider.getCanonicalJson(KeyVerificationStart::class.java, startReq!!)
+        val concat = getSAS().publicKey + JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, startReq!!)
         accept.commitment = hashUsingAgreedHashMethod(concat) ?: ""
         //we need to send this to other device now
         state = SasVerificationTxState.SendingAccept

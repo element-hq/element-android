@@ -48,7 +48,6 @@ import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAct
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
-import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
@@ -74,12 +73,12 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.fetchCopied
 import kotlinx.coroutines.*
 import org.matrix.olm.OlmManager
 import timber.log.Timber
-import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -766,7 +765,7 @@ internal class CryptoManager @Inject constructor(
     private suspend fun uploadDeviceKeys(): Try<KeysUploadResponse> {
         // Prepare the device keys data to send
         // Sign it
-        val canonicalJson = MoshiProvider.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
+        val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
         getMyDevice().signatures = objectSigner.signObject(canonicalJson)
 
         // For now, we set the device id explicitly, as we may not be using the

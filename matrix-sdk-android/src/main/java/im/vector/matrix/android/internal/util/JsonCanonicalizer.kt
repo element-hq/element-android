@@ -16,6 +16,8 @@
 
 package im.vector.matrix.android.internal.util
 
+import androidx.annotation.VisibleForTesting
+import im.vector.matrix.android.internal.di.MoshiProvider
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -28,22 +30,24 @@ import java.util.*
  */
 object JsonCanonicalizer {
 
-    fun canonicalize(json: String): String {
-        var can: String? = null
-        try {
-            val _json = JSONObject(json)
+    fun <T> getCanonicalJson(type: Class<T>, o: T): String {
+        val adapter = MoshiProvider.providesMoshi().adapter<T>(type)
 
-            can = _canonicalize(_json)
+        // Canonicalize manually
+        return canonicalize(adapter.toJson(o))
+                .replace("\\/", "/")
+    }
+
+    @VisibleForTesting
+    fun canonicalize(jsonString: String): String {
+        return try {
+            val jsonObject = JSONObject(jsonString)
+
+            canonicalizeRecursive(jsonObject)
         } catch (e: JSONException) {
             Timber.e(e, "Unable to canonicalize")
+            jsonString
         }
-
-        if (can == null) {
-            Timber.e("Error")
-            return json
-        }
-
-        return can
     }
 
     /**
@@ -52,11 +56,8 @@ object JsonCanonicalizer {
      * @param src the src
      * @return the canonicalize element
      */
-    private fun _canonicalize(src: Any?): String? {
+    private fun canonicalizeRecursive(src: Any): String {
         // sanity check
-        if (null == src) {
-            return null
-        }
 
         when (src) {
             is JSONArray  -> {
@@ -65,7 +66,7 @@ object JsonCanonicalizer {
                 val result = StringBuilder("[")
 
                 for (i in 0 until srcArray!!.length()) {
-                    result.append(_canonicalize(srcArray.get(i)))
+                    result.append(canonicalizeRecursive(srcArray.get(i)))
                     if (i < srcArray.length() - 1) {
                         result.append(",")
                     }
@@ -89,7 +90,7 @@ object JsonCanonicalizer {
                             .append(attribute.value)
                             .append("\"")
                             .append(":")
-                            .append(_canonicalize(src[attribute.value]))
+                            .append(canonicalizeRecursive(src[attribute.value]))
 
                     if (attribute.index < attributes.size - 1) {
                         result.append(",")

@@ -59,7 +59,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk: ChunkEntity = realm.createObject()
             val fakeEvent = createFakeMessageEvent()
             chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
-            chunk.events.size shouldEqual 1
+            chunk.timelineEvents.size shouldEqual 1
         }
     }
 
@@ -70,7 +70,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             val fakeEvent = createFakeMessageEvent()
             chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
             chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
-            chunk.events.size shouldEqual 1
+            chunk.timelineEvents.size shouldEqual 1
         }
     }
 
@@ -126,7 +126,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
-            chunk1.events.size shouldEqual 60
+            chunk1.timelineEvents.size shouldEqual 60
         }
     }
 
@@ -142,7 +142,7 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk1.addAll("roomId", eventsForChunk1, PaginationDirection.FORWARDS)
             chunk2.addAll("roomId", eventsForChunk2, PaginationDirection.BACKWARDS)
             chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
-            chunk1.events.size shouldEqual 40
+            chunk1.timelineEvents.size shouldEqual 40
             chunk1.isLastForward.shouldBeTrue()
         }
     }
