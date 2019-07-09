@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.task.toConfigurableTask
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -49,7 +50,7 @@ internal class DefaultPusherService @Inject constructor(
 
     override fun refreshPushers() {
         getPusherTask
-                .configureWith(Unit)
+                .toConfigurableTask()
                 .executeBy(taskExecutor)
     }
 

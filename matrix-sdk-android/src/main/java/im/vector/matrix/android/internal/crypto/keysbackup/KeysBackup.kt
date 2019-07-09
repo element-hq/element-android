@@ -51,6 +51,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEnt
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.task.*
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
@@ -876,7 +877,7 @@ internal class KeysBackup @Inject constructor(
 
     override fun getCurrentVersion(callback: MatrixCallback<KeysVersionResult?>) {
         getKeysBackupLastVersionTask
-                .configureWith(Unit)
+                .toConfigurableTask()
                 .dispatchTo(object : MatrixCallback<KeysVersionResult> {
                     override fun onSuccess(data: KeysVersionResult) {
                         callback.onSuccess(data)

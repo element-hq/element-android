@@ -21,7 +21,14 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 
 internal fun <PARAMS, RESULT> Task<PARAMS, RESULT>.configureWith(params: PARAMS): ConfigurableTask<PARAMS, RESULT> {
-    return ConfigurableTask (this, params)
+    return ConfigurableTask(this, params)
+}
+
+/**
+ * Convert a Task to a ConfigurableTask without parameter
+ */
+internal fun <RESULT> Task<Unit, RESULT>.toConfigurableTask(): ConfigurableTask<Unit, RESULT> {
+    return ConfigurableTask(this, Unit)
 }
 
 internal data class ConfigurableTask<PARAMS, RESULT>(
