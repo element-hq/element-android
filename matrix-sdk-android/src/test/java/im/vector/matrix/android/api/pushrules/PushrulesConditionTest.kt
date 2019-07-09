@@ -179,7 +179,7 @@ class PushrulesConditionTest {
             }
         }
 
-        override fun liveRoomSummaries(fetchLastEvents: Boolean): LiveData<List<RoomSummary>> {
+        override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
             return MutableLiveData()
         }
     }
@@ -194,11 +194,11 @@ class PushrulesConditionTest {
             return _numberOfJoinedMembers
         }
 
-        override fun liveRoomSummary(fetchLastEvent: Boolean): LiveData<RoomSummary> {
+        override fun liveRoomSummary(): LiveData<RoomSummary> {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun roomSummary(fetchLastEvent: Boolean): RoomSummary? {
+        override fun roomSummary(): RoomSummary? {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

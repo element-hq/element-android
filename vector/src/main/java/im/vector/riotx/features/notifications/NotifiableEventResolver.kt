@@ -18,6 +18,8 @@ package im.vector.riotx.features.notifications
 import androidx.core.app.NotificationCompat
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -25,11 +27,13 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -47,7 +51,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
         val roomID = event.roomId ?: return null
         val eventId = event.eventId ?: return null
         val timelineEvent = session.getRoom(roomID)?.getTimeLineEvent(eventId) ?: return null
-
         when (event.getClearType()) {
             EventType.MESSAGE           -> {
                 return resolveMessageEvent(timelineEvent, session)
@@ -110,6 +113,22 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             notifiableEvent.matrixID = session.sessionParams.credentials.userId
             return notifiableEvent
         } else {
+            if (event.root.isEncrypted() && event.root.mxDecryptionResult == null) {
+                //TODO use a global event decryptor? attache to session and that listen to new sessionId?
+                //for now decrypt sync
+                try {
+                    val result = session.decryptEvent(event.root, event.root.roomId + UUID.randomUUID().toString())
+                    event.root.mxDecryptionResult = OlmDecryptionResult(
+                            payload = result.clearEvent,
+                            senderKey = result.senderCurve25519Key,
+                            keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                    )
+                } catch (e: MXCryptoError) {
+
+                }
+            }
+
             val body = event.annotations?.editSummary?.aggregatedContent?.toModel<MessageContent>()?.body
                     ?: event.root.getClearContent().toModel<MessageContent>()?.body
                     ?: stringProvider.getString(R.string.notification_unknown_new_event)

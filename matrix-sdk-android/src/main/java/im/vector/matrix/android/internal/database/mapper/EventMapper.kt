@@ -17,10 +17,15 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import com.squareup.moshi.JsonDataException
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.UnsignedData
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryption
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
+import timber.log.Timber
 import java.util.*
 
 internal object EventMapper {
@@ -46,7 +51,6 @@ internal object EventMapper {
     }
 
     fun map(eventEntity: EventEntity): Event {
-        //TODO proxy the event to only parse unsigned data when accessed?
         val ud = if (eventEntity.unsignedData.isNullOrBlank()) {
             null
         } else {
@@ -68,7 +72,17 @@ internal object EventMapper {
                 roomId = eventEntity.roomId,
                 unsignedData = ud,
                 redacts = eventEntity.redacts
-        )
+        ).also {
+            eventEntity.decryptionResultJson?.let { json ->
+                try {
+                    it.mxDecryptionResult = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).fromJson(json)
+                } catch (t: JsonDataException) {
+                    Timber.e(t, "Failed to parse decryption result")
+                }
+            }
+            //TODO get the full crypto error object
+            it.mCryptoError = eventEntity.decryptionErrorCode?.let { MXCryptoError.ErrorType.valueOf(it) }
+        }
     }
 
 }

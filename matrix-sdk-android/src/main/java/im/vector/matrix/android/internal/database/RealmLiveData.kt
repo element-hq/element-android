@@ -31,8 +31,7 @@ class RealmLiveData<T : RealmModel>(private val realmConfiguration: RealmConfigu
 
     override fun onActive() {
         val realm = Realm.getInstance(realmConfiguration)
-        val results = query.invoke(realm).findAll()
-        value = results
+        val results = query.invoke(realm).findAllAsync()
         results.addChangeListener(listener)
         this.realm = realm
         this.results = results

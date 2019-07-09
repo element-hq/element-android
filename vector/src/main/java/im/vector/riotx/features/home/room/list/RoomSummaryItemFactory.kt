@@ -93,7 +93,10 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
             val date = latestEvent.root.localDateTime()
             val currentDate = DateProvider.currentLocalDateTime()
             val isSameDay = date.toLocalDate() == currentDate.toLocalDate()
-            latestFormattedEvent = if (latestEvent.root.getClearType() == EventType.MESSAGE) {
+            latestFormattedEvent = if (latestEvent.root.isEncrypted()
+                    && latestEvent.root.mxDecryptionResult == null) {
+                stringProvider.getString(R.string.encrypted_message)
+            } else if (latestEvent.root.getClearType() == EventType.MESSAGE) {
                 val senderName = latestEvent.senderName() ?: latestEvent.root.senderId
                 val content = latestEvent.root.getClearContent()?.toModel<MessageContent>()
                 val message = content?.body ?: ""

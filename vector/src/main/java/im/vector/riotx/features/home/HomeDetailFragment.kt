@@ -212,6 +212,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
             is SyncState.RUNNING -> if (it.syncState.catchingUp) View.VISIBLE else View.GONE
             else                 -> View.GONE
         }
+        syncProgressBarWrap.visibility = syncProgressBar.visibility
     }
 
     companion object {

@@ -19,7 +19,10 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
+import im.vector.matrix.android.internal.database.model.EditAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
+import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntity
+import io.realm.RealmList
 
 internal object EventAnnotationsSummaryMapper {
     fun map(annotationsSummary: EventAnnotationsSummaryEntity): EventAnnotationsSummary {
@@ -44,6 +47,35 @@ internal object EventAnnotationsSummaryMapper {
                     )
                 }
         )
+    }
+
+    fun map(annotationsSummary: EventAnnotationsSummary, roomId: String): EventAnnotationsSummaryEntity {
+        val eventAnnotationsSummaryEntity = EventAnnotationsSummaryEntity()
+        eventAnnotationsSummaryEntity.eventId = annotationsSummary.eventId
+        eventAnnotationsSummaryEntity.roomId = roomId
+        eventAnnotationsSummaryEntity.editSummary = annotationsSummary.editSummary?.let {
+            EditAggregatedSummaryEntity(
+                    ContentMapper.map(it.aggregatedContent),
+                    RealmList<String>().apply { addAll(it.sourceEvents) },
+                    RealmList<String>().apply { addAll(it.localEchos) },
+                    it.lastEditTs
+            )
+        }
+        eventAnnotationsSummaryEntity.reactionsSummary = annotationsSummary.reactionsSummary?.let {
+            RealmList<ReactionAggregatedSummaryEntity>().apply {
+                addAll(it.map {
+                    ReactionAggregatedSummaryEntity(
+                            it.key,
+                            it.count,
+                            it.addedByMe,
+                            it.firstTimestamp,
+                            RealmList<String>().apply { addAll(it.sourceEvents) },
+                            RealmList<String>().apply { addAll(it.localEchoEvents) }
+                    )
+                })
+            }
+        }
+        return eventAnnotationsSummaryEntity
     }
 }
 

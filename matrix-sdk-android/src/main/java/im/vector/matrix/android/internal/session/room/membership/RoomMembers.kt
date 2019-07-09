@@ -29,6 +29,10 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
 
+/**
+ * This class is an helper around STATE_ROOM_MEMBER events.
+ * It allows to get the live membership of a user.
+ */
 internal class RoomMembers(private val realm: Realm,
                            private val roomId: String
 ) {

@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.latestEvent
@@ -82,7 +83,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
 
     private fun updateNotificationCountIfNecessary(roomId: String, eventId: String) {
         monarchy.tryTransactionAsync { realm ->
-            val isLatestReceived = EventEntity.latestEvent(realm, roomId)?.eventId == eventId
+            val isLatestReceived = TimelineEventEntity.latestEvent(realm, roomId)?.eventId == eventId
             if (isLatestReceived) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
                         ?: return@tryTransactionAsync
@@ -99,9 +100,9 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
                     ?: return@doWithRealm
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(it, roomId)
                     ?: return@doWithRealm
-            val readReceiptIndex = liveChunk.events.find(readReceipt.eventId)?.displayIndex
+            val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex
                     ?: Int.MIN_VALUE
-            val eventToCheckIndex = liveChunk.events.find(eventId)?.displayIndex
+            val eventToCheckIndex = liveChunk.timelineEvents.find(eventId)?.root?.displayIndex
                     ?: Int.MAX_VALUE
             isEventRead = eventToCheckIndex <= readReceiptIndex
         }

@@ -21,12 +21,14 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.internal.database.helper.updateSenderData
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.query.findWithSenderMembershipEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
@@ -59,13 +61,13 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
         }
 
         val redactionEventEntity = EventEntity.where(realm, eventId = redactionEvent.eventId
-                ?: "").findFirst()
-                ?: return
+                                                                      ?: "").findFirst()
+                                   ?: return
         val isLocalEcho = redactionEventEntity.sendState == SendState.UNSENT
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
         val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
-                ?: return
+                           ?: return
 
         val allowedKeys = computeAllowedKeys(eventToPrune.type)
         if (allowedKeys.isNotEmpty()) {
@@ -76,7 +78,7 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
                 EventType.MESSAGE -> {
                     Timber.d("REDACTION for message ${eventToPrune.eventId}")
                     val unsignedData = EventMapper.map(eventToPrune).unsignedData
-                            ?: UnsignedData(null, null)
+                                       ?: UnsignedData(null, null)
 
                     //was this event a m.replace
 //                    val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
@@ -94,28 +96,34 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
 //                }
             }
         }
+        if (eventToPrune.type == EventType.STATE_ROOM_MEMBER) {
+            val timelineEventsToUpdate = TimelineEventEntity.findWithSenderMembershipEvent(realm, eventToPrune.eventId)
+            for (timelineEvent in timelineEventsToUpdate) {
+                timelineEvent.updateSenderData()
+            }
+        }
     }
 
 
     private fun computeAllowedKeys(type: String): List<String> {
         // Add filtered content, allowed keys in content depends on the event type
         return when (type) {
-            EventType.STATE_ROOM_MEMBER -> listOf("membership")
-            EventType.STATE_ROOM_CREATE -> listOf("creator")
-            EventType.STATE_ROOM_JOIN_RULES -> listOf("join_rule")
+            EventType.STATE_ROOM_MEMBER       -> listOf("membership")
+            EventType.STATE_ROOM_CREATE       -> listOf("creator")
+            EventType.STATE_ROOM_JOIN_RULES   -> listOf("join_rule")
             EventType.STATE_ROOM_POWER_LEVELS -> listOf("users",
-                    "users_default",
-                    "events",
-                    "events_default",
-                    "state_default",
-                    "ban",
-                    "kick",
-                    "redact",
-                    "invite")
-            EventType.STATE_ROOM_ALIASES -> listOf("aliases")
-            EventType.STATE_CANONICAL_ALIAS -> listOf("alias")
-            EventType.FEEDBACK -> listOf("type", "target_event_id")
-            else -> emptyList()
+                                                        "users_default",
+                                                        "events",
+                                                        "events_default",
+                                                        "state_default",
+                                                        "ban",
+                                                        "kick",
+                                                        "redact",
+                                                        "invite")
+            EventType.STATE_ROOM_ALIASES      -> listOf("aliases")
+            EventType.STATE_CANONICAL_ALIAS   -> listOf("alias")
+            EventType.FEEDBACK                -> listOf("type", "target_event_id")
+            else                              -> emptyList()
         }
     }
 }
