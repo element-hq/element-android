@@ -229,7 +229,7 @@ object MXMegolmExportEncryption {
                 throw Exception("Header line not found")
             }
 
-            val line = fileStr.substring(lineStart, lineEnd).trim { it <= ' ' }
+            val line = fileStr.substring(lineStart, lineEnd).trim()
 
             // start the next line after the newline
             lineStart = lineEnd + 1
@@ -247,9 +247,9 @@ object MXMegolmExportEncryption {
             val line: String
 
             if (lineEnd < 0) {
-                line = fileStr.substring(lineStart).trim { it <= ' ' }
+                line = fileStr.substring(lineStart).trim()
             } else {
-                line = fileStr.substring(lineStart, lineEnd).trim { it <= ' ' }
+                line = fileStr.substring(lineStart, lineEnd).trim()
             }
 
             if (TextUtils.equals(line, TRAILER_LINE)) {
