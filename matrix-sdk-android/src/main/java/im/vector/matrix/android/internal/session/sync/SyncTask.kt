@@ -63,6 +63,7 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
 
         val isInitialSync = token == null
         if (isInitialSync) {
+            initialSyncProgressService.endAll()
             initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100)
         }
         return executeRequest<SyncResponse> {
