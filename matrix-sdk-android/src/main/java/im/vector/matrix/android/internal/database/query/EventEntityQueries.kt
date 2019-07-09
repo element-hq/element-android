@@ -26,11 +26,13 @@ import io.realm.Sort
 import io.realm.kotlin.where
 
 internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {
-    return realm.where<EventEntity>().equalTo(EventEntityFields.EVENT_ID, eventId)
+    return realm.where<EventEntity>()
+            .equalTo(EventEntityFields.EVENT_ID, eventId)
 }
 
 internal fun EventEntity.Companion.where(realm: Realm, eventIds: List<String>): RealmQuery<EventEntity> {
-    return realm.where<EventEntity>().`in`(EventEntityFields.EVENT_ID, eventIds.toTypedArray())
+    return realm.where<EventEntity>()
+            .`in`(EventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
 internal fun EventEntity.Companion.where(realm: Realm,
@@ -86,7 +88,9 @@ internal fun RealmQuery<EventEntity>.prev(since: Int? = null, strict: Boolean = 
 }
 
 internal fun RealmList<EventEntity>.find(eventId: String): EventEntity? {
-    return this.where().equalTo(EventEntityFields.EVENT_ID, eventId).findFirst()
+    return this.where()
+            .equalTo(EventEntityFields.EVENT_ID, eventId)
+            .findFirst()
 }
 
 internal fun RealmList<EventEntity>.fastContains(eventId: String): Boolean {

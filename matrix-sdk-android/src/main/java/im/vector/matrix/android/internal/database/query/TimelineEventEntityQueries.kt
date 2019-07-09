@@ -29,11 +29,13 @@ import io.realm.Sort
 import io.realm.kotlin.where
 
 internal fun TimelineEventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<TimelineEventEntity> {
-    return realm.where<TimelineEventEntity>().equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
+    return realm.where<TimelineEventEntity>()
+            .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
 }
 
 internal fun TimelineEventEntity.Companion.where(realm: Realm, eventIds: List<String>): RealmQuery<TimelineEventEntity> {
-    return realm.where<TimelineEventEntity>().`in`(TimelineEventEntityFields.EVENT_ID, eventIds.toTypedArray())
+    return realm.where<TimelineEventEntity>()
+            .`in`(TimelineEventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
 internal fun TimelineEventEntity.Companion.where(realm: Realm,
@@ -111,5 +113,7 @@ internal fun RealmQuery<TimelineEventEntity>.prev(since: Int? = null, strict: Bo
 
 
 internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEventEntity? {
-    return this.where().equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, eventId).findFirst()
+    return this.where()
+            .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, eventId)
+            .findFirst()
 }

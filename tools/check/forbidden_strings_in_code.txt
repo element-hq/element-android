@@ -121,7 +121,6 @@ ButterKnife\.findById\(
 
 ### Bad formatting of Realm query chain. Insert new line
 \)\.equalTo
-\)\.findAll
 
 # Use StandardCharsets.UTF_8.name()
 # DISABLED (min API to low)

@@ -25,7 +25,8 @@ import io.realm.RealmQuery
 import io.realm.kotlin.where
 
 internal fun RoomEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<RoomEntity> {
-    return realm.where<RoomEntity>().equalTo(RoomEntityFields.ROOM_ID, roomId)
+    return realm.where<RoomEntity>()
+            .equalTo(RoomEntityFields.ROOM_ID, roomId)
 }
 
 internal fun RoomEntity.Companion.where(realm: Realm, membership: Membership? = null): RealmQuery<RoomEntity> {
