@@ -18,12 +18,13 @@ package im.vector.matrix.android.internal.di;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Scope;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
+// TODO convert the 3 scope to Java?
 @Scope
 @Documented
-@Retention(RUNTIME)
-public @interface MatrixScope {}
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MatrixScope {
+}

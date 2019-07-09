@@ -18,12 +18,12 @@ package im.vector.matrix.android.internal.session;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Scope;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 @Scope
 @Documented
-@Retention(RUNTIME)
-public @interface SessionScope {}
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SessionScope {
+}
