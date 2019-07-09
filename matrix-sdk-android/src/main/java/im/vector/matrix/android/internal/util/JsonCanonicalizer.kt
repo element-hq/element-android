@@ -51,23 +51,20 @@ object JsonCanonicalizer {
     }
 
     /**
-     * Canonicalize a JsonElement element
+     * Canonicalize a JSON element
      *
      * @param src the src
      * @return the canonicalize element
      */
-    private fun canonicalizeRecursive(src: Any): String {
-        // sanity check
-
-        when (src) {
+    private fun canonicalizeRecursive(any: Any): String {
+        when (any) {
             is JSONArray  -> {
                 // Canonicalize each element of the array
-                val srcArray = src as JSONArray?
                 val result = StringBuilder("[")
 
-                for (i in 0 until srcArray!!.length()) {
-                    result.append(canonicalizeRecursive(srcArray.get(i)))
-                    if (i < srcArray.length() - 1) {
+                for (i in 0 until any.length()) {
+                    result.append(canonicalizeRecursive(any.get(i)))
+                    if (i < any.length() - 1) {
                         result.append(",")
                     }
                 }
@@ -77,11 +74,11 @@ object JsonCanonicalizer {
                 return result.toString()
             }
             is JSONObject -> {
-                // Sort the attributes by name, and the canonicalize each element of the object
+                // Sort the attributes by name, and the canonicalize each element of the JSONObject
                 val result = StringBuilder("{")
 
                 val attributes = TreeSet<String>()
-                for (entry in src.keys()) {
+                for (entry in any.keys()) {
                     attributes.add(entry)
                 }
 
@@ -90,7 +87,7 @@ object JsonCanonicalizer {
                             .append(attribute.value)
                             .append("\"")
                             .append(":")
-                            .append(canonicalizeRecursive(src[attribute.value]))
+                            .append(canonicalizeRecursive(any[attribute.value]))
 
                     if (attribute.index < attributes.size - 1) {
                         result.append(",")
@@ -101,8 +98,8 @@ object JsonCanonicalizer {
 
                 return result.toString()
             }
-            is String     -> return JSONObject.quote(src)
-            else          -> return src.toString()
+            is String     -> return JSONObject.quote(any)
+            else          -> return any.toString()
         }
     }
 
