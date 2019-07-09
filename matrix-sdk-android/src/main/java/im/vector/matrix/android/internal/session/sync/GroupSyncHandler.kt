@@ -17,10 +17,12 @@
 package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
+import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.sync.model.GroupsSyncResponse
 import im.vector.matrix.android.internal.session.sync.model.InvitedGroupSync
 import io.realm.Realm
@@ -34,21 +36,33 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
         data class LEFT(val data: Map<String, Any>) : HandlingStrategy()
     }
 
-    fun handle(roomsSyncResponse: GroupsSyncResponse) {
+    fun handle(roomsSyncResponse: GroupsSyncResponse, reporter: DefaultInitialSyncProgressService? = null) {
         monarchy.runTransactionSync { realm ->
-            handleGroupSync(realm, GroupSyncHandler.HandlingStrategy.JOINED(roomsSyncResponse.join))
-            handleGroupSync(realm, GroupSyncHandler.HandlingStrategy.INVITED(roomsSyncResponse.invite))
-            handleGroupSync(realm, GroupSyncHandler.HandlingStrategy.LEFT(roomsSyncResponse.leave))
+            handleGroupSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
+            handleGroupSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
+            handleGroupSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleGroupSync(realm: Realm, handlingStrategy: HandlingStrategy) {
+    private fun handleGroupSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: DefaultInitialSyncProgressService?) {
         val groups = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedGroup(realm, it.key) }
-            is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedGroup(realm, it.key) }
-            is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftGroup(realm, it.key) }
+            is HandlingStrategy.JOINED  ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.6f) {
+                    handleJoinedGroup(realm, it.key)
+                }
+
+            is HandlingStrategy.INVITED ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.3f) {
+                    handleInvitedGroup(realm, it.key)
+                }
+
+            is HandlingStrategy.LEFT    ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.1f) {
+                    handleLeftGroup(realm, it.key)
+                }
+
         }
         realm.insertOrUpdate(groups)
     }

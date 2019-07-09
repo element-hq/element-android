@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -32,6 +33,8 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
+import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
@@ -60,11 +63,11 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(roomsSyncResponse: RoomsSyncResponse) {
+    fun handle(roomsSyncResponse: RoomsSyncResponse, reporter: DefaultInitialSyncProgressService? = null) {
         monarchy.runTransactionSync { realm ->
-            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join))
-            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite))
-            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave))
+            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
+            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
+            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
         }
 
         //handle event for bing rule checks
@@ -87,11 +90,23 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy) {
+    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: DefaultInitialSyncProgressService?) {
+
         val rooms = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  -> handlingStrategy.data.map { handleJoinedRoom(realm, it.key, it.value) }
-            is HandlingStrategy.INVITED -> handlingStrategy.data.map { handleInvitedRoom(realm, it.key, it.value) }
-            is HandlingStrategy.LEFT    -> handlingStrategy.data.map { handleLeftRoom(realm, it.key, it.value) }
+            is HandlingStrategy.JOINED  ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
+                    handleJoinedRoom(realm, it.key, it.value)
+                }
+            is HandlingStrategy.INVITED ->
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.4f) {
+                    handleInvitedRoom(realm, it.key, it.value)
+                }
+
+            is HandlingStrategy.LEFT    -> {
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_left_rooms, 0.2f) {
+                    handleLeftRoom(realm, it.key, it.value)
+                }
+            }
         }
         realm.insertOrUpdate(rooms)
     }

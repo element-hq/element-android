@@ -25,6 +25,7 @@ import dagger.multibindings.IntoSet
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.configureEncryption
@@ -131,5 +132,8 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindUserEntityUpdater(groupSummaryUpdater: UserEntityUpdater): LiveEntityObserver
+
+    @Binds
+    abstract fun bindInitialSyncProgressService(initialSyncProgressService: DefaultInitialSyncProgressService): InitialSyncProgressService
 
 }

@@ -24,6 +24,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -45,6 +46,8 @@ import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import im.vector.riotx.push.fcm.FcmHelper
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -114,6 +117,28 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             notificationDrawerManager.clearAllEvents()
             intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
         }
+
+        activeSessionHolder.getSafeActiveSession()?.getLiveStatus()?.observe(this, Observer { sprogress ->
+            Timber.e("${sprogress?.statusText?.let { getString(it) }} ${sprogress?.percentProgress}")
+            if (sprogress == null) {
+                waiting_view.isVisible = false
+            } else {
+                waiting_view.setOnClickListener {
+                    //block interactions
+                }
+                waiting_view_status_horizontal_progress.apply {
+                    isIndeterminate = false
+                    max = 100
+                    progress = sprogress.percentProgress
+                    isVisible = true
+                }
+                waiting_view_status_text.apply {
+                    text = sprogress.statusText?.let { getString(it) }
+                    isVisible = true
+                }
+                waiting_view.isVisible = true
+            }
+        })
     }
 
     override fun onNewIntent(intent: Intent?) {
