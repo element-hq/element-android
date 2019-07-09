@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.room.model.message
 
+import android.content.ClipDescription
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Content
@@ -53,4 +54,16 @@ data class MessageFileContent(
         @Json(name = "m.new_content") override val newContent: Content? = null,
 
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
-) : MessageEncyptedContent
+) : MessageEncryptedContent {
+
+    fun getMimeType(): String {
+        // Mimetype default to plain text, should not be used
+        return encryptedFileInfo?.mimetype
+                ?: info?.mimeType
+                ?: ClipDescription.MIMETYPE_TEXT_PLAIN
+    }
+
+    fun getFileName(): String {
+        return filename ?: body
+    }
+}

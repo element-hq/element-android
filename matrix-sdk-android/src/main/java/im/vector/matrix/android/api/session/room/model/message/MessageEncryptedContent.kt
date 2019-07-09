@@ -22,6 +22,6 @@ import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 /**
  * Interface for message which can contains encrypted data
  */
-interface MessageEncyptedContent : MessageContent {
+interface MessageEncryptedContent : MessageContent {
     val encryptedFileInfo: EncryptedFileInfo?
 }

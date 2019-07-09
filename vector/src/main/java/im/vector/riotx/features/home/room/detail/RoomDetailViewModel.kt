@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail
 
-import android.content.ClipDescription
 import android.net.Uri
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
@@ -452,16 +451,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         session.downloadFile(
                 FileService.DownloadMode.TO_EXPORT,
                 action.eventId,
-                action.messageFileContent.filename ?: "file.dat",
+                action.messageFileContent.getFileName(),
                 action.messageFileContent.url,
                 action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
                 object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
                         _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
-                                // Mimetype default to plain text, should not be used
-                                action.messageFileContent.encryptedFileInfo?.mimetype
-                                        ?: action.messageFileContent.info?.mimeType
-                                        ?: ClipDescription.MIMETYPE_TEXT_PLAIN,
+                                action.messageFileContent.getMimeType(),
                                 data,
                                 null
                         )))
@@ -469,10 +465,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
                     override fun onFailure(failure: Throwable) {
                         _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
-                                // Mimetype default to plain text, should not be used
-                                action.messageFileContent.encryptedFileInfo?.mimetype
-                                        ?: action.messageFileContent.info?.mimeType
-                                        ?: ClipDescription.MIMETYPE_TEXT_PLAIN,
+                                action.messageFileContent.getMimeType(),
                                 null,
                                 failure
                         )))
