@@ -128,6 +128,12 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         nextToken = receivedChunk.start
                         prevToken = receivedChunk.end
                     }
+
+                    if (ChunkEntity.find(realm, roomId, nextToken = nextToken) != null || ChunkEntity.find(realm, roomId, prevToken = prevToken) != null) {
+                        Timber.v("Already inserted - SKIP")
+                        return@tryTransactionSync
+                    }
+
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
                     val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
 
