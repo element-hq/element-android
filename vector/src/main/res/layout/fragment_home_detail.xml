@@ -44,18 +44,29 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ProgressBar
-        android:id="@+id/syncProgressBar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?riotx_header_panel_background"
-        android:indeterminate="true"
+    <!-- Trick to remove surrounding padding (clip frome wrapping frame) -->
+    <FrameLayout
+        android:id="@+id/syncProgressBarWrap"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/groupToolbar"
-        tools:visibility="visible" />
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/syncProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            android:background="?riotx_header_panel_background"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </FrameLayout>
+
 
     <im.vector.riotx.core.ui.views.KeysBackupBanner
         android:id="@+id/homeKeysBackupBanner"
@@ -65,7 +76,7 @@
         android:minHeight="67dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/syncProgressBar" />
+        app:layout_constraintTop_toBottomOf="@id/syncProgressBarWrap" />
 
     <FrameLayout
         android:id="@+id/roomListContainer"
