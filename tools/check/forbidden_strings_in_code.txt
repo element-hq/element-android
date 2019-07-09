@@ -147,3 +147,6 @@ android\.app\.AlertDialog
 
 ### Use JsonUtils.getBasicGson()
 new Gson\(\)
+
+### Use matrixOneTimeWorkRequestBuilder
+import androidx.work.OneTimeWorkRequestBuilder===1

@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.util.CancelableWork
+import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -135,7 +136,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val params = EncryptEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(params)
 
-        return OneTimeWorkRequestBuilder<EncryptEventWorker>()
+        return matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
                 .setConstraints(WORK_CONSTRAINTS)
                 .setInputData(sendWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
@@ -162,7 +163,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment, isRoomEncrypted)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
-        return OneTimeWorkRequestBuilder<UploadContentWorker>()
+        return matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
                 .setConstraints(WORK_CONSTRAINTS)
                 .setInputData(uploadWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)

@@ -17,6 +17,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import android.content.Context
 import androidx.work.*
+import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import java.util.concurrent.TimeUnit
 
 
@@ -60,7 +61,7 @@ internal object TimelineSendEventWorkCommon {
     }
 
     inline fun <reified W : ListenableWorker> createWork(data: Data): OneTimeWorkRequest {
-        return OneTimeWorkRequestBuilder<W>()
+        return matrixOneTimeWorkRequestBuilder<W>()
                 .setConstraints(WORK_CONSTRAINTS)
                 .setInputData(data)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)

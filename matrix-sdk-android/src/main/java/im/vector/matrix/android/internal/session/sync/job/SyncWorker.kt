@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
@@ -86,7 +87,7 @@ internal class SyncWorker(context: Context,
 
         fun requireBackgroundSync(context: Context, userId: String, serverTimeout: Long = 0) {
             val data = WorkerParamsFactory.toData(Params(userId, serverTimeout, false))
-            val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+            val workRequest = matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setInputData(data)
                     .setConstraints(Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -98,7 +99,7 @@ internal class SyncWorker(context: Context,
 
         fun automaticallyBackgroundSync(context: Context, userId: String, serverTimeout: Long = 0, delay: Long = 30_000) {
             val data = WorkerParamsFactory.toData(Params(userId, serverTimeout, true))
-            val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+            val workRequest = matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setInputData(data)
                     .setConstraints(Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.CONNECTED)
