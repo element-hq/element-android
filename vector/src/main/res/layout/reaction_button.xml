@@ -37,8 +37,9 @@
 
     <TextView
         android:id="@+id/reactionText"
-        android:layout_width="20dp"
+        android:layout_width="wrap_content"
         android:layout_height="20dp"
+        android:minWidth="20dp"
         android:layout_gravity="center"
         android:layout_marginStart="6dp"
         android:layout_marginLeft="6dp"
@@ -50,7 +51,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/reactionCount"
-        tools:text="👍" />
+        tools:text="* Party Parrot Again *" />
 
     <TextView
         android:id="@+id/reactionCount"

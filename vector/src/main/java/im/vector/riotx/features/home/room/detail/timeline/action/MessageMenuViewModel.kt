@@ -35,7 +35,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.canReact
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.isSingleEmoji
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 
 
@@ -244,7 +243,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
         //TODO if user is admin or moderator
-        return event.annotations?.reactionsSummary?.any { isSingleEmoji(it.key) } ?: false
+        return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
 

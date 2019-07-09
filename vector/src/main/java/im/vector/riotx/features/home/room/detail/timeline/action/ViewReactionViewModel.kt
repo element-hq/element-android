@@ -90,7 +90,7 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
                 .flatMapSingle { summaries ->
                     Observable
                             .fromIterable(summaries.reactionsSummary)
-                            .filter { reactionAggregatedSummary -> isSingleEmoji(reactionAggregatedSummary.key) }
+                            //.filter { reactionAggregatedSummary -> isSingleEmoji(reactionAggregatedSummary.key) }
                             .toReactionInfoList()
                 }
                 .execute {
