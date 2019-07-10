@@ -21,11 +21,11 @@ import com.squareup.inject.assisted.AssistedInject
 import dagger.Lazy
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.rx.RxRoom
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
@@ -57,8 +57,7 @@ data class MessageActionState(
     fun messageBody(eventHtmlRenderer: EventHtmlRenderer?, noticeEventFormatter: NoticeEventFormatter?): CharSequence? {
         return when (timelineEvent()?.root?.getClearType()) {
             EventType.MESSAGE     -> {
-                val messageContent: MessageContent? = timelineEvent()?.annotations?.editSummary?.aggregatedContent?.toModel()
-                        ?: timelineEvent()?.root?.getClearContent().toModel()
+                val messageContent: MessageContent? = timelineEvent()?.getLastMessageContent()
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                     eventHtmlRenderer?.render(messageContent.formattedBody
                             ?: messageContent.body)

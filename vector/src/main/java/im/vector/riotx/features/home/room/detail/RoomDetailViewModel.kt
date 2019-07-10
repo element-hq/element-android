@@ -275,7 +275,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
                 is SendMode.REPLY -> {
                     state.sendMode.timelineEvent.let {
-                        room.replyToMessage(it.root, action.text, action.autoMarkdown)
+                        room.replyToMessage(it, action.text, action.autoMarkdown)
                         setState {
                             copy(
                                     sendMode = SendMode.REGULAR

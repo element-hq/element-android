@@ -54,11 +54,11 @@ import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -249,10 +249,7 @@ class RoomDetailFragment :
             setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
         }
 
-        //TODO this is used at several places, find way to refactor?
-        val messageContent: MessageContent? =
-                event.annotations?.editSummary?.aggregatedContent?.toModel()
-                        ?: event.root.getClearContent().toModel()
+        val messageContent: MessageContent? = event.getLastMessageContent()
         val nonFormattedBody = messageContent?.body ?: ""
         var formattedBody: CharSequence? = null
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {

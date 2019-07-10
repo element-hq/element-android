@@ -18,15 +18,14 @@ package im.vector.riotx.features.notifications
 import androidx.core.app.NotificationCompat
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
@@ -94,8 +93,8 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             Timber.e("## Unable to resolve room for eventId [${event}]")
             // Ok room is not known in store, but we can still display something
             val body =
-                    event.annotations?.editSummary?.aggregatedContent?.toModel<MessageContent>()?.body
-                            ?: event.root.getClearContent().toModel<MessageContent>()?.body
+                    event.getLastMessageContent()
+                            ?.body
                             ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.senderName ?: event.root.senderId
@@ -129,8 +128,8 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 }
             }
 
-            val body = event.annotations?.editSummary?.aggregatedContent?.toModel<MessageContent>()?.body
-                    ?: event.root.getClearContent().toModel<MessageContent>()?.body
+            val body = event.getLastMessageContent()
+                    ?.body
                     ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = room.roomSummary()?.displayName ?: ""
             val senderDisplayName = event.senderName ?: event.root.senderId
