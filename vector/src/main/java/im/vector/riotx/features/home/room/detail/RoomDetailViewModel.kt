@@ -124,11 +124,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    fun enterEditMode(event: TimelineEvent) {
+    private fun enterEditMode(event: TimelineEvent) {
         setState {
             copy(
-                    sendMode = SendMode.EDIT,
-                    selectedEvent = event
+                    sendMode = SendMode.EDIT(event)
             )
         }
     }
@@ -136,8 +135,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     fun resetSendMode() {
         setState {
             copy(
-                    sendMode = SendMode.REGULAR,
-                    selectedEvent = null
+                    sendMode = SendMode.REGULAR
             )
         }
     }
@@ -165,7 +163,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleSendMessage(action: RoomDetailActions.SendMessage) {
         withState { state ->
             when (state.sendMode) {
-                SendMode.REGULAR -> {
+                SendMode.REGULAR  -> {
                     val slashCommandResult = CommandParser.parseSplashCommand(action.text)
 
                     when (slashCommandResult) {
@@ -231,30 +229,29 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                     }
                 }
-                SendMode.EDIT    -> {
+                is SendMode.EDIT  -> {
                     val messageContent: MessageContent? =
-                            state.selectedEvent?.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.selectedEvent?.root?.getClearContent().toModel()
+                            state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
+                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val nonFormattedBody = messageContent?.body ?: ""
 
                     if (nonFormattedBody != action.text) {
-                        room.editTextMessage(state.selectedEvent?.root?.eventId
+                        room.editTextMessage(state.sendMode.timelineEvent.root.eventId
                                 ?: "", action.text, action.autoMarkdown)
                     } else {
                         Timber.w("Same message content, do not send edition")
                     }
                     setState {
                         copy(
-                                sendMode = SendMode.REGULAR,
-                                selectedEvent = null
+                                sendMode = SendMode.REGULAR
                         )
                     }
                     _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
                 }
-                SendMode.QUOTE   -> {
+                is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
-                            state.selectedEvent?.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.selectedEvent?.root?.getClearContent().toModel()
+                            state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
+                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)
@@ -271,19 +268,17 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     }
                     setState {
                         copy(
-                                sendMode = SendMode.REGULAR,
-                                selectedEvent = null
+                                sendMode = SendMode.REGULAR
                         )
                     }
                     _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
                 }
-                SendMode.REPLY   -> {
-                    state.selectedEvent?.let {
+                is SendMode.REPLY -> {
+                    state.sendMode.timelineEvent.let {
                         room.replyToMessage(it.root, action.text, action.autoMarkdown)
                         setState {
                             copy(
-                                    sendMode = SendMode.REGULAR,
-                                    selectedEvent = null
+                                    sendMode = SendMode.REGULAR
                             )
                         }
                         _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
@@ -434,8 +429,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         room.getTimeLineEvent(action.eventId)?.let {
             setState {
                 copy(
-                        sendMode = SendMode.QUOTE,
-                        selectedEvent = it
+                        sendMode = SendMode.QUOTE(it)
                 )
             }
         }
@@ -445,8 +439,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         room.getTimeLineEvent(action.eventId)?.let {
             setState {
                 copy(
-                        sendMode = SendMode.REPLY,
-                        selectedEvent = it
+                        sendMode = SendMode.REPLY(it)
                 )
             }
         }
