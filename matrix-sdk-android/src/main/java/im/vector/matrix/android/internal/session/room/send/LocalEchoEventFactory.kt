@@ -260,7 +260,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         // </mx-reply>
         // This is where the reply goes.
         val body = bodyForReply(eventReplied.getClearContent().toModel<MessageContent>())
-        val replyFallbackTemplateFormatted = REPLY_PATTERN.format(
+        val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 stringProvider.getString(R.string.message_reply_to_prefix),
                 userLink,
@@ -272,21 +272,22 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         // > <@alice:example.org> This is the original body
         //
         val lines = body.first.split("\n")
-        val plainTextBody = StringBuffer("><$userId>")
-        lines.firstOrNull()?.also { plainTextBody.append(" $it") }
+        val replyFallback = StringBuffer("><$userId>")
         lines.forEachIndexed { index, s ->
-            if (index > 0) {
-                plainTextBody.append("\n>$s")
+            if (index == 0) {
+                replyFallback.append(" $s")
+            } else {
+                replyFallback.append("\n>$s")
             }
         }
-        plainTextBody.append("\n\n").append(replyText)
+        replyFallback.append("\n\n").append(replyText)
 
         val eventId = eventReplied.eventId ?: return null
         val content = MessageTextContent(
                 type = MessageType.MSGTYPE_TEXT,
                 format = MessageType.FORMAT_MATRIX_HTML,
-                body = plainTextBody.toString(),
-                formattedBody = replyFallbackTemplateFormatted,
+                body = replyFallback.toString(),
+                formattedBody = replyFormatted,
                 relatesTo = RelationDefaultContent(null, null, ReplyToContent(eventId))
         )
         return createEvent(roomId, content)
@@ -315,9 +316,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
             MessageType.MSGTYPE_IMAGE  -> return stringProvider.getString(R.string.reply_to_an_image) to null
             MessageType.MSGTYPE_VIDEO  -> return stringProvider.getString(R.string.reply_to_a_video) to null
             else                       -> return (content?.body ?: "") to null
-
         }
-
     }
 
     /*
