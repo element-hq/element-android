@@ -52,7 +52,7 @@ data class MessageActionState(
     fun time(): String? = timelineEvent()?.root?.originServerTs?.let { dateFormat.format(Date(it)) }
             ?: ""
 
-    fun canReact(): Boolean = timelineEvent()?.root?.type == EventType.MESSAGE && timelineEvent()?.sendState?.isSent() == true
+    fun canReact(): Boolean = timelineEvent()?.root?.getClearType() == EventType.MESSAGE && timelineEvent()?.sendState?.isSent() == true
 
     fun messageBody(eventHtmlRenderer: EventHtmlRenderer?, noticeEventFormatter: NoticeEventFormatter?): CharSequence? {
         return when (timelineEvent()?.root?.getClearType()) {
