@@ -16,6 +16,9 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+
 /**
  * Contains a text and eventually a formatted text
  */
@@ -25,4 +28,14 @@ data class TextContent(
         val formattedText: String? = null
 ) {
     fun takeFormatted() = formattedText ?: text
+}
+
+
+fun TextContent.toMessageTextContent(): MessageTextContent {
+    return MessageTextContent(
+            type = MessageType.MSGTYPE_TEXT,
+            format = MessageType.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
+            body = text,
+            formattedBody = formattedText
+    )
 }

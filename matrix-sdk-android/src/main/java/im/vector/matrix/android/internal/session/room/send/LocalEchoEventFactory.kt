@@ -82,15 +82,8 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
             text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
     fun createFormattedTextEvent(roomId: String, textContent: TextContent): Event {
-        val content = MessageTextContent(
-                type = MessageType.MSGTYPE_TEXT,
-                format = if (textContent.formattedText == null) MessageType.FORMAT_MATRIX_HTML else null,
-                body = textContent.text,
-                formattedBody = textContent.formattedText
-        )
-        return createEvent(roomId, content)
+        return createEvent(roomId, textContent.toMessageTextContent())
     }
-
 
     fun createReplaceTextEvent(roomId: String,
                                targetEventId: String,
@@ -98,36 +91,15 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                                newBodyAutoMarkdown: Boolean,
                                msgType: String,
                                compatibilityText: String): Event {
-        val newContent = if (newBodyAutoMarkdown) {
-            val document = parser.parse(newBodyText)
-            val htmlText = renderer.render(document)
-            if (isFormattedTextPertinent(newBodyText, htmlText)) {
+        return createEvent(roomId,
                 MessageTextContent(
-                        type = MessageType.MSGTYPE_TEXT,
-                        format = MessageType.FORMAT_MATRIX_HTML,
-                        body = newBodyText,
-                        formattedBody = htmlText
-                )
-            } else {
-                MessageTextContent(
-                        type = MessageType.MSGTYPE_TEXT,
-                        body = newBodyText
-                )
-            }
-        } else {
-            MessageTextContent(
-                    type = MessageType.MSGTYPE_TEXT,
-                    body = newBodyText
-            )
-        }
-
-        val content = MessageTextContent(
-                type = msgType,
-                body = compatibilityText,
-                relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
-                newContent = newContent.toContent()
-        )
-        return createEvent(roomId, content)
+                        type = msgType,
+                        body = compatibilityText,
+                        relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
+                        newContent = createTextContent(newBodyText, newBodyAutoMarkdown)
+                                .toMessageTextContent()
+                                .toContent()
+                ))
     }
 
     fun createMediaEvent(roomId: String, attachment: ContentAttachmentData): Event {
