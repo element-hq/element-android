@@ -98,6 +98,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 errorView.isVisible = true
                 errorView.setText(R.string.unknown_error)
             } else {
+                videoView.isVisible = true
                 videoView.setVideoPath(resolvedUrl)
                 videoView.start()
             }
