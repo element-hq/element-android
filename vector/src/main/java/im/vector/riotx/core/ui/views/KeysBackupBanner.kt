@@ -93,12 +93,12 @@ class KeysBackupBanner @JvmOverloads constructor(
         hideAll()
 
         when (newState) {
-            State.Initial -> renderInitial()
-            State.Hidden -> renderHidden()
-            is State.Setup -> renderSetup(newState.numberOfKeys)
+            State.Initial    -> renderInitial()
+            State.Hidden     -> renderHidden()
+            is State.Setup   -> renderSetup(newState.numberOfKeys)
             is State.Recover -> renderRecover(newState.version)
-            is State.Update -> renderUpdate(newState.version)
-            State.BackingUp -> renderBackingUp()
+            is State.Update  -> renderUpdate(newState.version)
+            State.BackingUp  -> renderBackingUp()
         }
     }
 
@@ -120,7 +120,7 @@ class KeysBackupBanner @JvmOverloads constructor(
 
     override fun onClick(v: View?) {
         when (state) {
-            is State.Setup -> {
+            is State.Setup   -> {
                 delegate?.setupKeysBackup()
             }
             is State.Recover -> {
@@ -133,7 +133,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     internal fun onCloseClicked() {
         state.let {
             when (it) {
-                is State.Setup -> {
+                is State.Setup   -> {
                     PreferenceManager.getDefaultSharedPreferences(context).edit {
                         putBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, true)
                     }
@@ -143,12 +143,12 @@ class KeysBackupBanner @JvmOverloads constructor(
                         putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
-                is State.Update -> {
+                is State.Update  -> {
                     PreferenceManager.getDefaultSharedPreferences(context).edit {
                         putString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
-                else -> {
+                else             -> {
                     // Should not happen, close button is not displayed in other cases
                 }
             }
@@ -217,7 +217,8 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     private fun renderBackingUp() {
-        isVisible = true
+        // Do not render when backing up anymore
+        isVisible = false
 
         textView1.setText(R.string.keys_backup_banner_in_progress)
         loading.isVisible = true
