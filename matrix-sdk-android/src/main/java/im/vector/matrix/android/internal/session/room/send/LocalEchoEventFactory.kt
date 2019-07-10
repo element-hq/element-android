@@ -98,24 +98,27 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                                newBodyAutoMarkdown: Boolean,
                                msgType: String,
                                compatibilityText: String): Event {
-        // TODO Format newBodyText
-        var newContent = MessageTextContent(
-                type = MessageType.MSGTYPE_TEXT,
-                body = newBodyText
-        )
-        if (newBodyAutoMarkdown) {
-            val parser = Parser.builder().build()
+        val newContent = if (newBodyAutoMarkdown) {
             val document = parser.parse(newBodyText)
-            val renderer = HtmlRenderer.builder().build()
             val htmlText = renderer.render(document)
             if (isFormattedTextPertinent(newBodyText, htmlText)) {
-                newContent = MessageTextContent(
+                MessageTextContent(
                         type = MessageType.MSGTYPE_TEXT,
                         format = MessageType.FORMAT_MATRIX_HTML,
                         body = newBodyText,
                         formattedBody = htmlText
                 )
+            } else {
+                MessageTextContent(
+                        type = MessageType.MSGTYPE_TEXT,
+                        body = newBodyText
+                )
             }
+        } else {
+            MessageTextContent(
+                    type = MessageType.MSGTYPE_TEXT,
+                    body = newBodyText
+            )
         }
 
         val content = MessageTextContent(
@@ -226,7 +229,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                 type = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
-                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() }  ?: "application/octet-stream",
+                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() } ?: "application/octet-stream",
                         size = attachment.size
                 ),
                 url = attachment.path
