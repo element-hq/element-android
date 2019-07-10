@@ -232,8 +232,17 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     }
                 }
                 SendMode.EDIT    -> {
-                    room.editTextMessage(state.selectedEvent?.root?.eventId
-                            ?: "", action.text, action.autoMarkdown)
+                    val messageContent: MessageContent? =
+                            state.selectedEvent?.annotations?.editSummary?.aggregatedContent.toModel()
+                                    ?: state.selectedEvent?.root?.getClearContent().toModel()
+                    val nonFormattedBody = messageContent?.body ?: ""
+
+                    if (nonFormattedBody != action.text) {
+                        room.editTextMessage(state.selectedEvent?.root?.eventId
+                                ?: "", action.text, action.autoMarkdown)
+                    } else {
+                        Timber.w("Same message content, do not send edition")
+                    }
                     setState {
                         copy(
                                 sendMode = SendMode.REGULAR,
@@ -244,7 +253,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
                 SendMode.QUOTE   -> {
                     val messageContent: MessageContent? =
-                            state.selectedEvent?.annotations?.editSummary?.aggregatedContent?.toModel()
+                            state.selectedEvent?.annotations?.editSummary?.aggregatedContent.toModel()
                                     ?: state.selectedEvent?.root?.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
