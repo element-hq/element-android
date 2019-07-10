@@ -62,8 +62,8 @@ internal class SyncWorker(context: Context,
         val latch = CountDownLatch(1)
         val taskParams = SyncTask.Params(0)
         cancelableTask = syncTask.configureWith(taskParams)
-                .callbackOn(TaskThread.CALLER)
-                .executeOn(TaskThread.CALLER)
+                .callbackOn(TaskThread.SYNC)
+                .executeOn(TaskThread.SYNC)
                 .dispatchTo(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         latch.countDown()
