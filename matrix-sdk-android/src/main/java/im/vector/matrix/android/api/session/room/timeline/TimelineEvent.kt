@@ -28,7 +28,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
  */
 data class TimelineEvent(
         val root: Event,
-        val localId: String,
+        val localId: Long,
         val displayIndex: Int,
         val senderName: String?,
         val isUniqueDisplayName: Boolean,

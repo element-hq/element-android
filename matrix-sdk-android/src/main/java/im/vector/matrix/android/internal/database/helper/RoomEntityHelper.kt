@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.database.query.fastContains
 import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 
-
 internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
     chunks.remove(chunkEntity)
     chunkEntity.deleteOnCascade()
@@ -65,7 +64,8 @@ internal fun RoomEntity.addSendingEvent(event: Event) {
     }
     val roomMembers = RoomMembers(realm, roomId)
     val myUser = roomMembers.get(senderId)
-    val timelineEventEntity = TimelineEventEntity().also {
+    val localId  = TimelineEventEntity.nextId(realm)
+    val timelineEventEntity = TimelineEventEntity(localId).also {
         it.root = eventEntity
         it.eventId = event.eventId ?: ""
         it.roomId = roomId

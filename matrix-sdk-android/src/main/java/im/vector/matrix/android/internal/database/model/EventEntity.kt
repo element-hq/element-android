@@ -27,8 +27,7 @@ import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 import java.util.*
 
-internal open class EventEntity(@PrimaryKey var localId: String = UUID.randomUUID().toString(),
-                                @Index var eventId: String = "",
+internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var roomId: String = "",
                                 @Index var type: String = "",
                                 var content: String? = null,

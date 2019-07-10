@@ -23,15 +23,6 @@ import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 
 internal object TimelineEventMapper {
 
-    fun map(timelineEvent: TimelineEvent, roomId: String): TimelineEventEntity {
-        val timelineEventEntity = TimelineEventEntity()
-        timelineEventEntity.root = timelineEvent.root.toEntity(roomId)
-        timelineEventEntity.eventId = timelineEvent.root.eventId ?: ""
-        timelineEventEntity.roomId = roomId
-        timelineEventEntity.annotations = timelineEvent.annotations?.let { EventAnnotationsSummaryMapper.map(it, roomId) }
-        return timelineEventEntity
-    }
-
     fun map(timelineEventEntity: TimelineEventEntity): TimelineEvent {
 
         return TimelineEvent(
@@ -51,10 +42,6 @@ internal object TimelineEventMapper {
 
 internal fun TimelineEventEntity.asDomain(): TimelineEvent {
     return TimelineEventMapper.map(this)
-}
-
-internal fun TimelineEvent.toEntity(roomId: String): TimelineEventEntity {
-    return TimelineEventMapper.map(this, roomId)
 }
 
 
