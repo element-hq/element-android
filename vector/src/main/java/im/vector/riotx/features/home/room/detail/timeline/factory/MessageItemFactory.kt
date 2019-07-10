@@ -311,8 +311,7 @@ class MessageItemFactory @Inject constructor(
                                    editSummary: EditAggregatedSummary?): SpannableStringBuilder {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
-        // TODO i18n
-        val editedSuffix = "(edited)"
+        val editedSuffix = stringProvider.getString(R.string.edited_suffix)
         spannable.append(" ").append(editedSuffix)
         val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
         val editStart = spannable.indexOf(editedSuffix)

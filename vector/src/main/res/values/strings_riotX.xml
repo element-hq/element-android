@@ -14,5 +14,7 @@
     <string name="downloading_file">Downloading file %1$s…</string>
     <string name="downloaded_file">File %1$s has been downloaded!</string>
 
+    <string name="edited_suffix">"(edited)"</string>
+
 
 </resources>
