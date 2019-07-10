@@ -38,7 +38,6 @@ import org.junit.Test
 
 class PushrulesConditionTest {
 
-
     @Test
     fun test_eventmatch_type_condition() {
         val condition = EventMatchCondition("type", "m.room.message")
@@ -286,7 +285,7 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun replyToMessage(eventReplied: Event, replyText: String): Cancelable? {
+        override fun replyToMessage(eventReplied: Event, replyText: String, autoMarkdown: Boolean): Cancelable? {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

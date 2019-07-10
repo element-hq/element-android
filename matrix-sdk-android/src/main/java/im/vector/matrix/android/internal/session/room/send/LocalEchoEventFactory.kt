@@ -201,7 +201,8 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                 type = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
-                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() } ?: "application/octet-stream",
+                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() }
+                                ?: "application/octet-stream",
                         size = attachment.size
                 ),
                 url = attachment.path
@@ -287,14 +288,17 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE -> {
-                //If we already have formatted body, return it?
                 var formattedText: String? = null
                 if (content is MessageTextContent) {
                     if (content.format == MessageType.FORMAT_MATRIX_HTML) {
                         formattedText = content.formattedBody
                     }
                 }
-                return TextContent(content.body, formattedText)
+                val isReply = content.relatesTo?.inReplyTo?.eventId != null
+                return if (isReply)
+                    TextContent(content.body, formattedText).removeInReplyFallbacks()
+                else
+                    TextContent(content.body, formattedText)
             }
             MessageType.MSGTYPE_FILE   -> return TextContent(stringProvider.getString(R.string.reply_to_a_file))
             MessageType.MSGTYPE_AUDIO  -> return TextContent(stringProvider.getString(R.string.reply_to_an_audio_file))

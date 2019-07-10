@@ -50,6 +50,10 @@ class EventHtmlRenderer @Inject constructor(context: Context,
         return markwon.toMarkdown(text)
     }
 
+    fun render(node: Node) : CharSequence {
+        return markwon.render(node)
+    }
+
 }
 
 private class MatrixPlugin private constructor(private val glideRequests: GlideRequests,

@@ -91,6 +91,7 @@ import im.vector.riotx.features.home.room.detail.timeline.action.MessageMenuView
 import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.media.ImageContentRenderer
@@ -105,8 +106,6 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 import org.commonmark.parser.Parser
-import ru.noties.markwon.Markwon
-import ru.noties.markwon.html.HtmlPlugin
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -179,6 +178,7 @@ class RoomDetailFragment :
     @Inject lateinit var errorFormatter: ErrorFormatter
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
+    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
 
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
@@ -259,8 +259,7 @@ class RoomDetailFragment :
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
                     ?: messageContent.body)
-            formattedBody = Markwon.builder(requireContext())
-                    .usePlugin(HtmlPlugin.create()).build().render(document)
+            formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
                 ?: nonFormattedBody
