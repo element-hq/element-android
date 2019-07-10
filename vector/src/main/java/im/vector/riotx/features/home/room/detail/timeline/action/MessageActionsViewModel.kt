@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageTextConten
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.rx.RxRoom
+import im.vector.riotx.core.extensions.canReact
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -52,7 +53,7 @@ data class MessageActionState(
     fun time(): String? = timelineEvent()?.root?.originServerTs?.let { dateFormat.format(Date(it)) }
             ?: ""
 
-    fun canReact(): Boolean = timelineEvent()?.root?.type == EventType.MESSAGE && timelineEvent()?.sendState?.isSent() == true
+    fun canReact() = timelineEvent()?.canReact() == true
 
     fun messageBody(eventHtmlRenderer: EventHtmlRenderer?, noticeEventFormatter: NoticeEventFormatter?): CharSequence? {
         return when (timelineEvent()?.root?.getClearType()) {

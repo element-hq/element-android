@@ -76,7 +76,7 @@ class QuickReactionFragment : VectorBaseFragment() {
     }
 
     interface InteractionListener {
-        fun didQuickReactWith(clikedOn: String, add: Boolean, eventId: String)
+        fun didQuickReactWith(clickedOn: String, add: Boolean, eventId: String)
     }
 
     companion object {
