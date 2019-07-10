@@ -265,13 +265,13 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                 stringProvider.getString(R.string.message_reply_to_prefix),
                 userLink,
                 userId,
-                body.second ?: body.first,
+                body.takeFormatted(),
                 replyText
         )
         //
         // > <@alice:example.org> This is the original body
         //
-        val lines = body.first.split("\n")
+        val lines = body.text.split("\n")
         val replyFallback = StringBuffer("><$userId>")
         lines.forEachIndexed { index, s ->
             if (index == 0) {
@@ -297,7 +297,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
      * Returns a pair of <Plain Text, Formatted Text?> used for the fallback event representation
      * in a reply message.
      */
-    private fun bodyForReply(content: MessageContent?): Pair<String, String?> {
+    private fun bodyForReply(content: MessageContent?): TextContent {
         when (content?.type) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
@@ -309,13 +309,13 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                         formattedText = content.formattedBody
                     }
                 }
-                return content.body to formattedText
+                return TextContent(content.body, formattedText)
             }
-            MessageType.MSGTYPE_FILE   -> return stringProvider.getString(R.string.reply_to_a_file) to null
-            MessageType.MSGTYPE_AUDIO  -> return stringProvider.getString(R.string.reply_to_an_audio_file) to null
-            MessageType.MSGTYPE_IMAGE  -> return stringProvider.getString(R.string.reply_to_an_image) to null
-            MessageType.MSGTYPE_VIDEO  -> return stringProvider.getString(R.string.reply_to_a_video) to null
-            else                       -> return (content?.body ?: "") to null
+            MessageType.MSGTYPE_FILE   -> return TextContent(stringProvider.getString(R.string.reply_to_a_file))
+            MessageType.MSGTYPE_AUDIO  -> return TextContent(stringProvider.getString(R.string.reply_to_an_audio_file))
+            MessageType.MSGTYPE_IMAGE  -> return TextContent(stringProvider.getString(R.string.reply_to_an_image))
+            MessageType.MSGTYPE_VIDEO  -> return TextContent(stringProvider.getString(R.string.reply_to_a_video))
+            else                       -> return TextContent(content?.body ?: "")
         }
     }
 
