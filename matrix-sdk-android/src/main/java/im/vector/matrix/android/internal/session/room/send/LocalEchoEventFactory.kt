@@ -28,6 +28,8 @@ import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -230,11 +232,11 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         return "$LOCAL_ID_PREFIX${UUID.randomUUID()}"
     }
 
-    fun createReplyTextEvent(roomId: String, eventReplied: Event, replyText: String, autoMarkdown: Boolean): Event? {
+    fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Event? {
         //Fallbacks and event representation
         //TODO Add error/warning logs when any of this is null
-        val permalink = PermalinkFactory.createPermalink(eventReplied) ?: return null
-        val userId = eventReplied.senderId ?: return null
+        val permalink = PermalinkFactory.createPermalink(eventReplied.root) ?: return null
+        val userId = eventReplied.root.senderId ?: return null
         val userLink = PermalinkFactory.createPermalink(userId) ?: return null
         // <mx-reply>
         //     <blockquote>
@@ -245,7 +247,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         //     </blockquote>
         // </mx-reply>
         // This is where the reply goes.
-        val body = bodyForReply(eventReplied.getClearContent().toModel<MessageContent>())
+        val body = bodyForReply(eventReplied.getLastMessageContent())
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 stringProvider.getString(R.string.message_reply_to_prefix),
@@ -268,7 +270,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         }
         replyFallback.append("\n\n").append(replyText)
 
-        val eventId = eventReplied.eventId ?: return null
+        val eventId = eventReplied.root.eventId ?: return null
         val content = MessageTextContent(
                 type = MessageType.MSGTYPE_TEXT,
                 format = MessageType.FORMAT_MATRIX_HTML,
