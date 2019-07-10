@@ -250,31 +250,29 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         val permalink = PermalinkFactory.createPermalink(eventReplied) ?: return null
         val userId = eventReplied.senderId ?: return null
         val userLink = PermalinkFactory.createPermalink(userId) ?: return null
-//        <mx-reply>
-//            <blockquote>
-//                <a href="https://matrix.to/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
-//                <a href="https://matrix.to/#/@alice:example.org">@alice:example.org</a>
-//                <br />
-//                <!-- This is where the related event's HTML would be. -->
-//            </blockquote>
-//        </mx-reply>
-//        This is where the reply goes.
+        // <mx-reply>
+        //     <blockquote>
+        //         <a href="https://matrix.to/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
+        //         <a href="https://matrix.to/#/@alice:example.org">@alice:example.org</a>
+        //         <br />
+        //         <!-- This is where the related event's HTML would be. -->
+        //     </blockquote>
+        // </mx-reply>
+        // This is where the reply goes.
         val body = bodyForReply(eventReplied.getClearContent().toModel<MessageContent>())
-        val replyFallbackTemplateFormatted = """<mx-reply>
-               <blockquote>
-                   <a href="%s">${stringProvider.getString(R.string.message_reply_to_prefix)}</a>
-                   <a href="%s">%s</a>
-                   <br />
-                   %s
-               </blockquote>
-           </mx-reply>
-           %s""".trimIndent().format(permalink, userLink, userId, body.second ?: body.first, replyText)
-//
-//        > <@alice:example.org> This is the original body
-//
-//        This is where the reply goes
+        val replyFallbackTemplateFormatted = REPLY_PATTERN.format(
+                permalink,
+                stringProvider.getString(R.string.message_reply_to_prefix),
+                userLink,
+                userId,
+                body.second ?: body.first,
+                replyText
+        )
+        //
+        // > <@alice:example.org> This is the original body
+        //
         val lines = body.first.split("\n")
-        val plainTextBody = StringBuffer("><${userId}>")
+        val plainTextBody = StringBuffer("><$userId>")
         lines.firstOrNull()?.also { plainTextBody.append(" $it") }
         lines.forEachIndexed { index, s ->
             if (index > 0) {
@@ -364,6 +362,9 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
 
     companion object {
         const val LOCAL_ID_PREFIX = "local."
+
+        // No whitespace
+        const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">%s</a><a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
 
         fun isLocalEchoId(eventId: String): Boolean = eventId.startsWith(LOCAL_ID_PREFIX)
     }
