@@ -52,30 +52,41 @@ import javax.inject.Inject
 internal class LocalEchoEventFactory @Inject constructor(private val credentials: Credentials,
                                                          private val stringProvider: StringProvider,
                                                          private val roomSummaryUpdater: RoomSummaryUpdater) {
+    // TODO Inject
+    private val parser = Parser.builder().build()
+    // TODO Inject
+    private val renderer = HtmlRenderer.builder().build()
 
     fun createTextEvent(roomId: String, msgType: String, text: String, autoMarkdown: Boolean): Event {
-        if (autoMarkdown && msgType == MessageType.MSGTYPE_TEXT) {
-            val parser = Parser.builder().build()
-            val document = parser.parse(text)
-            val renderer = HtmlRenderer.builder().build()
-            val htmlText = renderer.render(document)
-            if (isFormattedTextPertinent(text, htmlText)) { //FIXME
-                return createFormattedTextEvent(roomId, text, htmlText)
-            }
+        if (msgType == MessageType.MSGTYPE_TEXT) {
+            return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown))
         }
         val content = MessageTextContent(type = msgType, body = text)
         return createEvent(roomId, content)
     }
 
+    private fun createTextContent(text: String, autoMarkdown: Boolean): TextContent {
+        if (autoMarkdown) {
+            val document = parser.parse(text)
+            val htmlText = renderer.render(document)
+
+            if (isFormattedTextPertinent(text, htmlText)) {
+                return TextContent(text, htmlText)
+            }
+        }
+
+        return TextContent(text)
+    }
+
     private fun isFormattedTextPertinent(text: String, htmlText: String?) =
             text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
-    fun createFormattedTextEvent(roomId: String, text: String, formattedText: String): Event {
+    fun createFormattedTextEvent(roomId: String, textContent: TextContent): Event {
         val content = MessageTextContent(
                 type = MessageType.MSGTYPE_TEXT,
-                format = MessageType.FORMAT_MATRIX_HTML,
-                body = text,
-                formattedBody = formattedText
+                format = if (textContent.formattedText == null) MessageType.FORMAT_MATRIX_HTML else null,
+                body = textContent.text,
+                formattedBody = textContent.formattedText
         )
         return createEvent(roomId, content)
     }
@@ -87,7 +98,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                                newBodyAutoMarkdown: Boolean,
                                msgType: String,
                                compatibilityText: String): Event {
-
+        // TODO Format newBodyText
         var newContent = MessageTextContent(
                 type = MessageType.MSGTYPE_TEXT,
                 body = newBodyText
@@ -202,7 +213,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                 type = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
-                        mimeType = attachment.mimeType ?: "audio/mpeg",
+                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() } ?: "audio/mpeg",
                         size = attachment.size
                 ),
                 url = attachment.path
@@ -215,7 +226,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                 type = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
-                        mimeType = attachment.mimeType ?: "application/octet-stream",
+                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() }  ?: "application/octet-stream",
                         size = attachment.size
                 ),
                 url = attachment.path
@@ -244,7 +255,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         return "$LOCAL_ID_PREFIX${UUID.randomUUID()}"
     }
 
-    fun createReplyTextEvent(roomId: String, eventReplied: Event, replyText: String): Event? {
+    fun createReplyTextEvent(roomId: String, eventReplied: Event, replyText: String, autoMarkdown: Boolean): Event? {
         //Fallbacks and event representation
         //TODO Add error/warning logs when any of this is null
         val permalink = PermalinkFactory.createPermalink(eventReplied) ?: return null
@@ -266,7 +277,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                 userLink,
                 userId,
                 body.takeFormatted(),
-                replyText
+                createTextContent(replyText, autoMarkdown).takeFormatted()
         )
         //
         // > <@alice:example.org> This is the original body
@@ -294,8 +305,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
     }
 
     /**
-     * Returns a pair of <Plain Text, Formatted Text?> used for the fallback event representation
-     * in a reply message.
+     * Returns a TextContent used for the fallback event representation in a reply message.
      */
     private fun bodyForReply(content: MessageContent?): TextContent {
         when (content?.type) {

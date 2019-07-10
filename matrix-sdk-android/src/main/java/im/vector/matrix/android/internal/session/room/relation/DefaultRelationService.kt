@@ -127,8 +127,8 @@ internal class DefaultRelationService @Inject constructor(private val context: C
 
     }
 
-    override fun replyToMessage(eventReplied: Event, replyText: String): Cancelable? {
-        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText)?.also {
+    override fun replyToMessage(eventReplied: Event, replyText: String, autoMarkdown: Boolean): Cancelable? {
+        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)?.also {
             saveLocalEcho(it)
         } ?: return null
 

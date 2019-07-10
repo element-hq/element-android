@@ -47,8 +47,6 @@ import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
@@ -272,7 +270,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
                 SendMode.REPLY   -> {
                     state.selectedEvent?.let {
-                        room.replyToMessage(it.root, action.text)
+                        room.replyToMessage(it.root, action.text, action.autoMarkdown)
                         setState {
                             copy(
                                     sendMode = SendMode.REGULAR,

@@ -59,7 +59,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     }
 
     override fun sendFormattedTextMessage(text: String, formattedText: String): Cancelable {
-        val event = localEchoEventFactory.createFormattedTextEvent(roomId, text, formattedText).also {
+        val event = localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText)).also {
             saveLocalEcho(it)
         }
 

@@ -77,8 +77,9 @@ interface RelationService {
      * https://matrix.org/docs/spec/client_server/r0.4.0.html#id350
      * @param eventReplied the event referenced by the reply
      * @param replyText the reply text
+     * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      */
-    fun replyToMessage(eventReplied: Event, replyText: String): Cancelable?
+    fun replyToMessage(eventReplied: Event, replyText: String, autoMarkdown: Boolean = false): Cancelable?
 
     fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary>
 }
