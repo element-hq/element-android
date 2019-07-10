@@ -43,7 +43,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-private const val INITIAL_LOAD_SIZE = 20
+private const val INITIAL_LOAD_SIZE = 10
 private const val MIN_FETCHING_COUNT = 30
 private const val DISPLAY_INDEX_UNKNOWN = Int.MIN_VALUE
 
@@ -216,6 +216,7 @@ internal class DefaultTimeline(
                 backgroundRealm.set(realm)
                 clearUnlinkedEvents(realm)
 
+
                 roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()?.also {
                     it.sendingTimelineEvents.addChangeListener { _ ->
                         postSnapshot()
@@ -242,6 +243,8 @@ internal class DefaultTimeline(
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             BACKGROUND_HANDLER.post {
                 cancelableBag.cancel()
+                roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
+                eventRelations.removeAllChangeListeners()
                 liveEvents.removeAllChangeListeners()
                 backgroundRealm.getAndSet(null).also {
                     it.close()
