@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.api.session.room.timeline
 
-import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary

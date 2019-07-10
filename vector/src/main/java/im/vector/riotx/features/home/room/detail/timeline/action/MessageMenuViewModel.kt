@@ -20,22 +20,19 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.rx.RxRoom
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.canReact
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.isSingleEmoji
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import org.json.JSONObject
 
 
 data class SimpleAction(val uid: String, val titleRes: Int, val iconResId: Int?, val data: Any? = null)
@@ -129,7 +126,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 }
                 //TODO is downloading attachement?
 
-                if (canReact(event, messageContent)) {
+                if (event.canReact()) {
                     this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, eventId))
                 }
                 if (canCopy(type)) {
@@ -176,7 +173,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                     //TODO sent by me or sufficient power level
                 }
 
-                this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source,event.root.toContentStringWithIndent()))
+                this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, event.root.toContentStringWithIndent()))
                 if (event.isEncrypted()) {
                     val decryptedContent = event.root.toClearContentStringWithIndent()
                             ?: stringProvider.getString(R.string.encryption_information_decryption_error)
@@ -207,11 +204,6 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
             MessageType.MSGTYPE_FILE -> true
             else                     -> false
         }
-    }
-
-    private fun canReact(event: TimelineEvent, messageContent: MessageContent?): Boolean {
-        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-        return event.root.getClearType() == EventType.MESSAGE
     }
 
     private fun canQuote(event: TimelineEvent, messageContent: MessageContent?): Boolean {
