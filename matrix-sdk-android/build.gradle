@@ -6,18 +6,12 @@ apply plugin: 'realm-android'
 apply plugin: 'okreplay'
 
 buildscript {
-
     repositories {
         jcenter()
     }
     dependencies {
         classpath "io.realm:realm-gradle-plugin:5.12.0"
     }
-}
-
-repositories {
-    google()
-    jcenter()
 }
 
 androidExtensions {
