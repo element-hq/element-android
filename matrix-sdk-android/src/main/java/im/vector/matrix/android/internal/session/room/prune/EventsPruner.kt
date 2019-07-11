@@ -26,9 +26,12 @@ import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.room.EventRelationsAggregationTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmConfiguration
+import io.realm.RealmResults
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,18 +47,19 @@ internal class EventsPruner @Inject constructor(@SessionDatabase realmConfigurat
 
     override val query = Monarchy.Query<EventEntity> { EventEntity.types(it, listOf(EventType.REDACTION)) }
 
-    override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
-        Timber.v("Event pruner called with ${inserted.size} insertions")
-        val redactionEvents = inserted.map { it.asDomain() }
+    override fun onChange(results: RealmResults<EventEntity>, changeSet: OrderedCollectionChangeSet) {
+        Timber.v("Event pruner called with ${changeSet.insertions.size} insertions")
+
+        val insertedDomains = changeSet.insertions
+                .asSequence()
+                .mapNotNull { results[it]?.asDomain() }
+                .toList()
 
         val params = PruneEventTask.Params(
-                redactionEvents,
+                insertedDomains,
                 credentials.userId
         )
-
-        pruneEventTask.configureWith(params)
-                .executeBy(taskExecutor)
-
+        pruneEventTask.configureWith(params).executeBy(taskExecutor)
     }
 
 }
