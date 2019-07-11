@@ -133,5 +133,10 @@ class DebugMenuActivity : VectorBaseActivity() {
         startActivity(Intent(this, DebugMaterialThemeDarkActivity::class.java))
     }
 
+    @OnClick(R.id.debug_test_crash)
+    fun testCrash() {
+        throw RuntimeException("Application crashed from user demand")
+    }
+
 }
 

@@ -47,6 +47,13 @@
                 android:layout_height="wrap_content"
                 android:text="Test Material theme Dark" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/debug_test_crash"
+                style="@style/VectorButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Crash the app" />
+
         </LinearLayout>
 
     </ScrollView>
