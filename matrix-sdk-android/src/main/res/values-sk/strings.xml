@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s poslal obrázok.</string>
+
+    <string name="notice_room_invite_no_invitee">Pozvanie %s</string>
+    <string name="notice_room_invite">%1$s pozval %2$s</string>
+    <string name="notice_room_invite_you">%1$s vás pozval</string>
+    <string name="notice_room_join">%1$s vstúpil</string>
+    <string name="notice_room_leave">%1$s opustil</string>
+    <string name="notice_room_reject">%1$s odmietol pozvanie</string>
+    <string name="notice_room_kick">%1$s vykázal %2$s</string>
+    <string name="notice_room_unban">%1$s povolil vstup %2$s</string>
+    <string name="notice_room_ban">%1$s zakázal vstup %2$s</string>
+    <string name="notice_room_withdraw">%1$s stiahol pozvanie %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s si zmenil obrázok v profile</string>
+    <string name="notice_display_name_set">%1$s si nastavil zobrazované meno %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s si zmenil zobrazované meno z %2$s na %3$s</string>
+    <string name="notice_display_name_removed">%1$s odstránil svoje zobrazované meno (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s zmenil tému na: %2$s</string>
+    <string name="notice_room_name_changed">%1$s zmenil názov miestnosti na: %2$s</string>
+    <string name="notice_placed_video_call">%s uskutočnil video hovor.</string>
+    <string name="notice_placed_voice_call">%s uskutočnil audio hovor.</string>
+    <string name="notice_answered_call">%s prijal hovor.</string>
+    <string name="notice_ended_call">%s ukončil hovor.</string>
+    <string name="notice_made_future_room_visibility">%1$s sprístupnil budúcu históriu miestnosti %2$s</string>
+    <string name="notice_room_visibility_invited">pre všetkých členov, od kedy boli pozvaní.</string>
+    <string name="notice_room_visibility_joined">pre všetkých členov, od kedy vstúpili.</string>
+    <string name="notice_room_visibility_shared">pre všetkých členov.</string>
+    <string name="notice_room_visibility_world_readable">pre každého.</string>
+    <string name="notice_room_visibility_unknown">neznámym (%s).</string>
+    <string name="notice_end_to_end">%1$s povolil E2E šifrovanie (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s požiadal o VoIP konferenciu</string>
+    <string name="notice_voip_started">Začala VoIP konferencia</string>
+    <string name="notice_voip_finished">Skončila VoIP konferencia</string>
+
+    <string name="notice_avatar_changed_too">(a tiež obrázok v profile)</string>
+    <string name="notice_room_name_removed">%1$s odstránil názov miestnosti</string>
+    <string name="notice_room_topic_removed">%1$s odstránil tému miestnosti</string>
+    <string name="notice_profile_change_redacted">%1$s aktualizoval svoj profil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s pozval %2$s vstúpiť do miestnosti</string>
+    <string name="notice_room_third_party_registered_invite">%1$s prijal pozvanie do %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Nie je možné dešifrovať: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Zo zariadenia odosieľateľa nebolo možné získať kľúče potrebné na dešifrovanie tejto správy.</string>
+
+    <string name="could_not_redact">Nie je ožné vymazať</string>
+    <string name="unable_to_send_message">Nie je možné odoslať správu</string>
+
+    <string name="message_failed_to_upload">Nepodarilo sa nahrať obrázok</string>
+
+    <string name="network_error">Chyba siete</string>
+    <string name="matrix_error">Chyba Matrix</string>
+
+    <string name="room_error_join_failed_empty_room">V súčasnosti nie je možné znovu vstúpiť do prázdnej miestnosti.</string>
+
+    <string name="encrypted_message">Šifrovaná správa</string>
+
+    <string name="medium_email">Emailová adresa</string>
+    <string name="medium_phone_number">Telefónne číslo</string>
+
+    <string name="summary_user_sent_sticker">%1$s poslal nálepku.</string>
+
+    <string name="message_reply_to_prefix">Odpoveď na</string>
+
+    <string name="reply_to_an_image">odoslal obrázok.</string>
+    <string name="reply_to_a_video">odoslal video.</string>
+    <string name="reply_to_an_audio_file">odoslal zvukový súbor.</string>
+    <string name="reply_to_a_file">Odoslal súbor.</string>
+
+    <string name="room_displayname_invite_from">Pozvanie od %s</string>
+    <string name="room_displayname_room_invite">Pozvanie do miestnosti</string>
+    <string name="room_displayname_two_members">%1$s a %2$s</string>
+    <string name="room_displayname_empty_room">Prázdna miestnosť</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s a 1 ďalší</item>
+        <item quantity="few">%1$s a %2$d ďalší</item>
+        <item quantity="many">%1$s a %2$d ďalších</item>
+        <item quantity="other" />
+    </plurals>
+
+
+</resources>

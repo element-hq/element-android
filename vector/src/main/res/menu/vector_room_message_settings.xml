@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/ic_action_vector_resend_message"
+        android:icon="@drawable/ic_material_send_black"
+        android:title="@string/resend"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_cancel_upload"
+        android:icon="@drawable/vector_cancel_upload_download"
+        android:title="@string/room_event_action_cancel_upload"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_cancel_download"
+        android:icon="@drawable/vector_cancel_upload_download"
+        android:title="@string/room_event_action_cancel_download"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_redact_message"
+        android:icon="@drawable/ic_material_delete"
+        android:title="@string/redact"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_copy"
+        android:icon="@drawable/ic_material_copy"
+        android:title="@string/copy"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_quote"
+        android:icon="@drawable/ic_material_quote"
+        android:title="@string/quote"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_share"
+        android:icon="@drawable/ic_material_share"
+        android:title="@string/share"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_forward"
+        android:icon="@drawable/ic_material_forward"
+        android:title="@string/forward"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_save"
+        android:icon="@drawable/ic_material_save"
+        android:title="@string/save"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_view_source"
+        android:icon="@drawable/ic_material_message_black"
+        android:title="@string/view_source"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_view_decrypted_source"
+        android:icon="@drawable/ic_material_message_black"
+        android:title="@string/view_decrypted_source"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_permalink"
+        android:icon="@drawable/ic_material_link_black"
+        android:title="@string/permalink"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_report"
+        android:icon="@drawable/ic_report_black"
+        android:title="@string/report_content"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_device_verification"
+        android:icon="@drawable/ic_perm_device_information_black"
+        android:title="@string/device_information"
+        app:showAsAction="never" />
+
+</menu>

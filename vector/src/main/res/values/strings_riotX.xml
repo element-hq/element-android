@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Strings not defined in Riot -->
+
+    <string name="bottom_action_people_x">Direct Messages</string>
+
+    <string name="send_file_step_idle">Waiting…</string>
+    <string name="send_file_step_encrypting_thumbnail">Encrypting thumbnail…</string>
+    <string name="send_file_step_sending_thumbnail">Sending thumbnail (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Encrypting file…</string>
+    <string name="send_file_step_sending_file">Sending file (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Downloading file %1$s…</string>
+    <string name="downloaded_file">File %1$s has been downloaded!</string>
+
+    <string name="edited_suffix">"(edited)"</string>
+
+    <!-- param will be replaced by the value of riotx_no_registration_notice_colored_part -->
+    <string name="riotx_no_registration_notice">%1$s to create an account.</string>
+    <string name="riotx_no_registration_notice_colored_part">Use the old app</string>
+
+
+</resources>

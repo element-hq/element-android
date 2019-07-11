@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="encrypted_message">Kryptert melding</string>
+
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s sende eit bilæte.</string>
+    <string name="summary_user_sent_sticker">%1$s sende eit klistremerke.</string>
+
+    <string name="notice_room_invite_no_invitee">%s si innbjoding</string>
+    <string name="notice_room_invite">%1$s baud %2$s inn</string>
+    <string name="notice_room_invite_you">%1$s baud deg inn</string>
+    <string name="notice_room_join">%1$s kom inn</string>
+    <string name="notice_room_leave">%1$s fór ut</string>
+    <string name="notice_room_reject">%1$s sa nei til innbjodingi</string>
+    <string name="notice_room_kick">%1$s sparka %2$s</string>
+    <string name="notice_room_unban">%1$s slapp %2$s inn att</string>
+    <string name="notice_room_ban">%1$s stengde %2$s ute</string>
+    <string name="notice_room_withdraw">%1$s tok attende %2$s si innbjoding</string>
+    <string name="notice_avatar_url_changed">%1$s byta avataren sin</string>
+    <string name="notice_display_name_set">%1$s sette visingsnamnet sitt som %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s byta visingsnamnet sitt frå %2$s til %3$s</string>
+    <string name="notice_display_name_removed">%1$s tok burt visingsnamnet sitt (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s gjorde emnet til: %2$s</string>
+    <string name="notice_room_name_changed">%1$s gjorde romnamnet til: %2$s</string>
+    <string name="notice_placed_video_call">%s starta ei videosamtala.</string>
+    <string name="notice_placed_voice_call">%s starta ei røystsamtala.</string>
+    <string name="notice_answered_call">%s tok røyret.</string>
+    <string name="notice_ended_call">%s la på røyret.</string>
+    <string name="notice_made_future_room_visibility">%1$s gjorde den framtidige romsoga synleg for %2$s</string>
+    <string name="notice_room_visibility_invited">alle rommedlemer, frå då dei vart bodne inn.</string>
+    <string name="notice_room_visibility_joined">alle rommedlemer, frå då dei kom inn.</string>
+    <string name="notice_room_visibility_shared">alle rommedlemer.</string>
+    <string name="notice_room_visibility_world_readable">kven som heldst.</string>
+    <string name="notice_room_visibility_unknown">uvisst (%s).</string>
+    <string name="notice_end_to_end">%1$s skrudde ende-til-ende-kryptering på (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s bad um ei VoIP-gruppasamtala</string>
+    <string name="notice_voip_started">VoIP-gruppasamtala er starta</string>
+    <string name="notice_voip_finished">VoIP-gruppasamtala er ferdug</string>
+
+    <string name="notice_avatar_changed_too">(avataren vart au byta)</string>
+    <string name="notice_room_name_removed">%1$s tok burt romnamnet</string>
+    <string name="notice_room_topic_removed">%1$s tok burt romemnet</string>
+    <string name="notice_profile_change_redacted">%1$s gjorde um på skildringi si %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s baud %2$s inn i romet</string>
+    <string name="notice_room_third_party_registered_invite">%1$s sa ja til innbjodingi til %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Fekk ikkje til å dekryptera: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Avsendareiningi hev ikkje sendt oss nyklane fyr denna meldingi.</string>
+
+    <string name="message_reply_to_prefix">Som svar til</string>
+
+    <string name="could_not_redact">Kunde ikkje gjera um</string>
+    <string name="unable_to_send_message">Fekk ikkje å senda meldingi</string>
+
+    <string name="message_failed_to_upload">Fekk ikkje til å lasta biletet upp</string>
+
+    <string name="network_error">Noko gjekk gale med netverket</string>
+    <string name="matrix_error">Noko gjekk gale med Matrix</string>
+
+    <string name="room_error_join_failed_empty_room">Det lèt seg fyrebils ikkje gjera å fara inn att i eit tomt rom.</string>
+
+    <string name="medium_email">Epostadresse</string>
+    <string name="medium_phone_number">Telefonnummer</string>
+
+    <string name="reply_to_an_image">sende eit bilæte.</string>
+    <string name="reply_to_a_video">sende ein video.</string>
+    <string name="reply_to_an_audio_file">sende ei ljodfil.</string>
+    <string name="reply_to_a_file">sende ei fil.</string>
+
+    <string name="room_displayname_invite_from">Innbjoding frå %s</string>
+    <string name="room_displayname_room_invite">Rominnbjoding</string>
+    <string name="room_displayname_two_members">%1$s og %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s og 1 til</item>
+        <item quantity="other">%1$s og %2$d til</item>
+    </plurals>
+
+    <string name="room_displayname_empty_room">Tomt rom</string>
+
+    <string name="notice_event_redacted">Ei melding vart stroki</string>
+    <string name="notice_event_redacted_by">%1$s strauk meldingi</string>
+    <string name="notice_event_redacted_with_reason">Meldingi vart stroki [av di: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">%1$s strauk meldingi [av di: %2$s]</string>
+    <string name="verification_emoji_dog">Hund</string>
+    <string name="verification_emoji_cat">Katt</string>
+    <string name="verification_emoji_lion">Løva</string>
+    <string name="verification_emoji_horse">Hest</string>
+    <string name="verification_emoji_unicorn">Einhyrning</string>
+    <string name="verification_emoji_pig">Gris</string>
+    <string name="verification_emoji_elephant">Elefant</string>
+    <string name="verification_emoji_rabbit">Hare</string>
+    <string name="verification_emoji_panda">Panda</string>
+    <string name="verification_emoji_rooster">Hane</string>
+    <string name="verification_emoji_penguin">Pingvin</string>
+    <string name="verification_emoji_turtle">Skjoldpadda</string>
+    <string name="verification_emoji_fish">Fisk</string>
+    <string name="verification_emoji_octopus">Blekksprut</string>
+    <string name="verification_emoji_butterfly">Fivrelde</string>
+    <string name="verification_emoji_flower">Blome</string>
+    <string name="verification_emoji_tree">Tre</string>
+    <string name="verification_emoji_cactus">Kaktus</string>
+    <string name="verification_emoji_mushroom">Sopp</string>
+    <string name="verification_emoji_globe">Klote</string>
+    <string name="verification_emoji_moon">Måne</string>
+    <string name="verification_emoji_cloud">Sky</string>
+    <string name="verification_emoji_fire">Eld</string>
+    <string name="verification_emoji_banana">Banan</string>
+    <string name="verification_emoji_apple">Eple</string>
+    <string name="verification_emoji_strawberry">Jordbær</string>
+    <string name="verification_emoji_corn">Mais</string>
+    <string name="verification_emoji_pizza">Pizza</string>
+    <string name="verification_emoji_cake">Kaka</string>
+    <string name="verification_emoji_heart">Hjarta</string>
+    <string name="verification_emoji_smiley">Smilandlit</string>
+    <string name="verification_emoji_robot">Robot</string>
+    <string name="verification_emoji_hat">Hatt</string>
+    <string name="verification_emoji_glasses">Brillor</string>
+    <string name="verification_emoji_wrench">Skiftenykel</string>
+    <string name="verification_emoji_santa">Nissen</string>
+    <string name="verification_emoji_thumbsup">Tumalen Upp</string>
+    <string name="verification_emoji_umbrella">Regnskjold</string>
+    <string name="verification_emoji_hourglass">Timeglas</string>
+    <string name="verification_emoji_clock">Ur</string>
+    <string name="verification_emoji_gift">Gåva</string>
+    <string name="verification_emoji_lightbulb">Ljospera</string>
+    <string name="verification_emoji_book">Bok</string>
+    <string name="verification_emoji_pencil">Blyant</string>
+    <string name="verification_emoji_paperclip">Binders</string>
+    <string name="verification_emoji_scissors">Saks</string>
+    <string name="verification_emoji_lock">Lås</string>
+    <string name="verification_emoji_key">Nykel</string>
+    <string name="verification_emoji_hammer">Hamar</string>
+    <string name="verification_emoji_telephone">Telefon</string>
+    <string name="verification_emoji_flag">Flagg</string>
+    <string name="verification_emoji_train">Tog</string>
+    <string name="verification_emoji_bicycle">Sykkel</string>
+    <string name="verification_emoji_airplane">Flyg</string>
+    <string name="verification_emoji_rocket">Rakett</string>
+    <string name="verification_emoji_trophy">Pokal</string>
+    <string name="verification_emoji_ball">Ball</string>
+    <string name="verification_emoji_guitar">Gitar</string>
+    <string name="verification_emoji_trumpet">Trompet</string>
+    <string name="verification_emoji_bell">Klokka</string>
+    <string name="verification_emoji_anchor">Ankar</string>
+    <string name="verification_emoji_headphone">Hodetelefon</string>
+    <string name="verification_emoji_folder">Mappa</string>
+    <string name="verification_emoji_pin">Nål</string>
+
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_verify_phone_number"
+        android:icon="@drawable/ic_material_done_white"
+        android:title="@string/settings_phone_number_verification"
+        app:showAsAction="always" />
+
+</menu>

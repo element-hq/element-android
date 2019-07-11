@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "reaction" : "👍"
+    },
+    {
+      "reaction" : "😀"
+    },
+    {
+      "reaction" : "😞"
+    },
+    {
+      "reaction" : "Not a reaction"
+    },
+    {
+      "reaction" : "✅"
+    },
+    {
+      "reaction" : "🎉"
+    }
+  ]
+}

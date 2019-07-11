@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s отправил(а) изображение.</string>
+
+    <string name="notice_room_invite_no_invitee">%s приглашение</string>
+    <string name="notice_room_invite">%1$s пригласил(а) %2$s</string>
+    <string name="notice_room_invite_you">%1$s пригласил(а) вас</string>
+    <string name="notice_room_join">%1$s присоединился(лась)</string>
+    <string name="notice_room_leave">%1$s покинул(а)</string>
+    <string name="notice_room_reject">%1$s отклонил(а) приглашение</string>
+    <string name="notice_room_kick">%1$s выгнан %2$s</string>
+    <string name="notice_room_unban">%1$s разблокировал(а) %2$s</string>
+    <string name="notice_room_ban">%1$s заблокировал(а) %2$s</string>
+    <string name="notice_room_withdraw">%1$s отозвал(а) приглашение %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s изменил(а) свой аватар</string>
+    <string name="notice_display_name_set">%1$s установил(а) имя %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s изменил(а) имя с %2$s на %3$s</string>
+    <string name="notice_display_name_removed">%1$s удалил(а) свое имя (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s изменил(а) тему на: %2$s</string>
+    <string name="notice_room_name_changed">%1$s изменил(а) название комнаты: %2$s</string>
+    <string name="notice_placed_video_call">%s начал(а) видеовызов.</string>
+    <string name="notice_placed_voice_call">%s начал(а) голосовой вызов.</string>
+    <string name="notice_answered_call">%s ответил(а) на звонок.</string>
+    <string name="notice_ended_call">%s завершил(а) вызов.</string>
+    <string name="notice_made_future_room_visibility">%1$s сделал(а) будущую историю комнаты видимой %2$s</string>
+    <string name="notice_room_visibility_invited">всем членам, с момента их приглашения.</string>
+    <string name="notice_room_visibility_joined">всем членам, с момента присоединения.</string>
+    <string name="notice_room_visibility_shared">всем членам.</string>
+    <string name="notice_room_visibility_world_readable">всем.</string>
+    <string name="notice_room_visibility_unknown">неизвестно (%s).</string>
+    <string name="notice_end_to_end">%1$s включил(а) сквозное шифрование (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s запросил(а) VoIP конференцию</string>
+    <string name="notice_voip_started">VoIP-конференция начата</string>
+    <string name="notice_voip_finished">VoIP-конференция завершена</string>
+
+    <string name="notice_avatar_changed_too">(аватар также был изменен)</string>
+    <string name="notice_room_name_removed">%1$s удалил(а) название комнаты</string>
+    <string name="notice_room_topic_removed">%1$s удалил(а) тему комнаты</string>
+    <string name="notice_profile_change_redacted">%1$s обновил(а) свой профиль %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s отправил(а) приглашение %2$s присоединиться к комнате</string>
+    <string name="notice_room_third_party_registered_invite">%1$s принял(а) приглашение от %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Невозможно расшифровать: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Устройство отправителя не предоставило нам ключ для расшифровки этого сообщения.</string>
+
+    <!-- Room Screen -->
+    <string name="could_not_redact">Не удалось изменить</string>
+    <string name="unable_to_send_message">Не удалось отправить сообщение</string>
+
+    <string name="message_failed_to_upload">Не удалось загрузить изображение</string>
+
+    <!-- general errors -->
+    <string name="network_error">Сетевая ошибка</string>
+    <string name="matrix_error">Ошибка Matrix</string>
+
+    <!-- Home Screen -->
+
+    <!-- Last seen time -->
+
+    <!-- call events -->
+
+    <!-- room error messages -->
+    <string name="room_error_join_failed_empty_room">В настоящее время невозможно вновь присоединиться к пустой комнате.</string>
+
+    <string name="encrypted_message">Зашифрованное сообщение</string>
+
+    <!-- medium friendly name -->
+    <string name="medium_email">Адрес электронной почты</string>
+    <string name="medium_phone_number">Номер телефона</string>
+
+    <string name="summary_user_sent_sticker">%1$s отправил стикер.</string>
+
+    <string name="message_reply_to_prefix">В ответ на</string>
+
+    <string name="reply_to_an_image">отправил изображение.</string>
+    <string name="reply_to_a_video">отправил видео.</string>
+    <string name="reply_to_an_audio_file">отправил аудиофайл.</string>
+    <string name="reply_to_a_file">отправил файл.</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Приглашение от %s</string>
+    <string name="room_displayname_room_invite">Приглашение в комнату</string>
+    <string name="room_displayname_two_members">%1$s и %2$s</string>
+    <string name="room_displayname_empty_room">Пустая комната</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s и 1 другой</item>
+        <item quantity="few">%1$s и %2$d другие</item>
+        <item quantity="many">%1$s и %2$d других</item>
+        <item quantity="other" />
+    </plurals>
+
+
+    <string name="notice_event_redacted">Сообщение удалено</string>
+    <string name="notice_event_redacted_by">%1$s удалил(а) сообщение</string>
+    <string name="notice_event_redacted_with_reason">Сообщение удалено [причина: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">%1$s удалил(а) сообщение [причина: %2$s]</string>
+    <string name="verification_emoji_dog">Собака</string>
+    <string name="verification_emoji_cat">Кошка</string>
+    <string name="verification_emoji_lion">Лев</string>
+    <string name="verification_emoji_horse">Лошадь</string>
+    <string name="verification_emoji_unicorn">Единорог</string>
+    <string name="verification_emoji_pig">Поросёнок</string>
+    <string name="verification_emoji_elephant">Слон</string>
+    <string name="verification_emoji_rabbit">Кролик</string>
+    <string name="verification_emoji_panda">Панда</string>
+    <string name="verification_emoji_rooster">Петух</string>
+    <string name="verification_emoji_penguin">Пингвин</string>
+    <string name="verification_emoji_turtle">Черепаха</string>
+    <string name="verification_emoji_fish">Рыба</string>
+    <string name="verification_emoji_octopus">Осьминог</string>
+    <string name="verification_emoji_butterfly">Бабочка</string>
+    <string name="verification_emoji_flower">Цветок</string>
+    <string name="verification_emoji_tree">Дерево</string>
+    <string name="verification_emoji_cactus">Кактус</string>
+    <string name="verification_emoji_mushroom">Гриб</string>
+    <string name="verification_emoji_globe">Земля</string>
+    <string name="verification_emoji_moon">Луна</string>
+    <string name="verification_emoji_cloud">Облако</string>
+    <string name="verification_emoji_fire">Огонь</string>
+    <string name="verification_emoji_banana">Банан</string>
+    <string name="verification_emoji_apple">Яблоко</string>
+    <string name="verification_emoji_strawberry">Клубника</string>
+    <string name="verification_emoji_corn">Кукуруза</string>
+    <string name="verification_emoji_pizza">Пицца</string>
+    <string name="verification_emoji_cake">Пирожное</string>
+    <string name="verification_emoji_heart">Сердце</string>
+    <string name="verification_emoji_smiley">Смайлик</string>
+    <string name="verification_emoji_robot">Робот</string>
+    <string name="verification_emoji_hat">Шляпа</string>
+    <string name="verification_emoji_glasses">Очки</string>
+    <string name="verification_emoji_wrench">гаечный ключ</string>
+    <string name="verification_emoji_santa">Санта</string>
+    <string name="verification_emoji_thumbsup">Большой палец вверх</string>
+    <string name="verification_emoji_umbrella">Зонтик</string>
+    <string name="verification_emoji_hourglass">Песочные часы</string>
+    <string name="verification_emoji_clock">Часы</string>
+    <string name="verification_emoji_gift">Подарок</string>
+    <string name="verification_emoji_lightbulb">Лампочка</string>
+    <string name="verification_emoji_book">Книга</string>
+    <string name="verification_emoji_pencil">Карандаш</string>
+    <string name="verification_emoji_paperclip">Скрепка для бумаг</string>
+    <string name="verification_emoji_scissors">Ножницы</string>
+    <string name="verification_emoji_lock">Замок</string>
+    <string name="verification_emoji_key">Ключ</string>
+    <string name="verification_emoji_hammer">Молоток</string>
+    <string name="verification_emoji_telephone">Телефон</string>
+    <string name="verification_emoji_flag">Флаг</string>
+    <string name="verification_emoji_train">Поезд</string>
+    <string name="verification_emoji_bicycle">Велосипед</string>
+    <string name="verification_emoji_airplane">Самолёт</string>
+    <string name="verification_emoji_rocket">Ракета</string>
+    <string name="verification_emoji_trophy">Трофей</string>
+    <string name="verification_emoji_ball">Мяч</string>
+    <string name="verification_emoji_guitar">Гитара</string>
+    <string name="verification_emoji_trumpet">Труба</string>
+    <string name="verification_emoji_bell">Колокол</string>
+    <string name="verification_emoji_anchor">Якорь</string>
+    <string name="verification_emoji_headphone">Гарнитура</string>
+    <string name="verification_emoji_folder">Папка</string>
+    <string name="verification_emoji_pin">Булавка</string>
+
+</resources>

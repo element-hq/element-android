@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- BLACK THEME COLORS -->
+
+    <style name="AppTheme.Base.Black" parent="AppTheme.Base.Dark">
+        <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
+
+        <!-- Riotx attribute for palette -->
+        <item name="riotx_background">@color/riotx_background_black</item>
+        <item name="riotx_base">@color/riotx_base_black</item>
+        <item name="riotx_base_text_icon_primary">@color/riotx_base_text_icon_primary_black</item>
+        <item name="riotx_base_text_icon_secondary">@color/riotx_base_text_icon_secondary_black</item>
+        <item name="riotx_search_background_mobile">@color/riotx_search_background_mobile_black</item>
+        <item name="riotx_header_panel_background">@color/riotx_header_panel_background_black</item>
+        <item name="riotx_header_panel_border_mobile">@color/riotx_header_panel_border_mobile_black</item>
+        <item name="riotx_header_panel_text_primary">@color/riotx_header_panel_text_primary_black</item>
+        <item name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_black</item>
+        <item name="riotx_text_primary">@color/riotx_text_primary_black</item>
+        <item name="riotx_text_secondary">@color/riotx_text_secondary_black</item>
+        <item name="riotx_android_secondary">@color/riotx_android_secondary_black</item>
+        <item name="riotx_search_placeholder">@color/riotx_search_placeholder_black</item>
+        <item name="riotx_room_highlight">@color/riotx_room_highlight_black</item>
+        <item name="riotx_unread_room_indent">@color/riotx_unread_room_indent_black</item>
+        <item name="riotx_android_status_bar">@color/riotx_android_status_bar_black</item>
+        <item name="riotx_line_break_mobile">@color/riotx_line_break_mobile_black</item>
+        <item name="riotx_unread_room_badge">@color/riotx_unread_room_badge_black</item>
+        <item name="riotx_fab_secondary_bg">@color/riotx_fab_secondary_bg_black</item>
+        <item name="riotx_fab_secondary_color">@color/riotx_fab_secondary_color_black</item>
+        <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_black</item>
+        <item name="riotx_fab_label_color">@color/riotx_fab_label_color_black</item>
+        <item name="riotx_touch_guard_bg">@color/riotx_touch_guard_bg_black</item>
+
+        <!-- Drawables -->
+        <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_black</item>
+
+        <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
+        <item name="colorPrimary">@color/riotx_accent</item>
+        <!--item name="colorPrimaryVariant">@color/primary_color_dark_light</item-->
+        <item name="colorOnPrimary">@color/riotx_text_primary_light</item>
+        <!-- We do not use color secondary, default will be colorPrimary values: It does not work so declare again the value -->
+        <item name="colorSecondary">@color/riotx_accent</item>
+        <item name="colorSecondaryVariant">@color/primary_color_dark_black</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorError">@color/riotx_notice</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <!--item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#212121</item-->
+        <item name="android:colorBackground">?riotx_background</item>
+        <item name="colorOnBackground">?riotx_text_primary</item>
+
+        <!-- Keep color accent for legacy widget-->
+        <item name="colorAccent">@color/riotx_accent</item>
+
+        <item name="materialButtonStyle">@style/VectorButtonStyle</item>
+        <item name="toolbarStyle">@style/VectorToolbarStyle</item>
+        <item name="alertDialogTheme">@style/VectorAlertDialogStyleDark</item>
+
+        <item name="android:textColorLink">@color/riotx_links</item>
+
+        <!-- Menu text color -->
+        <!--item name="android:actionMenuTextColor">#FFFFFFFF</item-->
+
+        <!-- list colors -->
+        <!--Header/Panel Background-->
+        <item name="vctr_list_header_background_color">#FF090A0C</item>
+        <!--Header/Panel Text Primary-->
+        <item name="vctr_tab_home">@color/primary_color_black</item>
+        <!--Header/Panel Text Secondary-->
+        <item name="vctr_tab_home_secondary">@color/primary_color_dark_black</item>
+        <item name="vctr_list_divider_color">@color/list_divider_color_black</item>
+
+        <!-- color for dividers in settings -->
+        <item name="vctr_preference_divider_color">@color/list_divider_color_black</item>
+
+        <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
+
+        <!-- activities background -->
+        <item name="android:windowBackground">@color/riot_primary_background_color_black</item>
+        <item name="vctr_bottom_nav_background_color">@color/primary_color_black</item>
+        <item name="vctr_bottom_nav_background_border_color">#FFE9EDF1</item>
+
+        <item name="vctr_direct_chat_circle">@drawable/direct_chat_circle_black</item>
+    </style>
+
+    <style name="AppTheme.Black" parent="AppTheme.Base.Black" />
+
+</resources>

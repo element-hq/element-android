@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/active_room_actions">
+        <item
+            android:id="@+id/ic_action_notifications_noisy"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_all_messages_noisy" />
+
+        <item
+            android:id="@+id/ic_action_notifications_all_message"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_all_messages" />
+
+        <item
+            android:id="@+id/ic_action_notifications_mention_only"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_mention_only" />
+
+        <item
+            android:id="@+id/ic_action_notifications_mute"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_mute" />
+
+
+        <item
+            android:id="@+id/ic_action_select_fav"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_favourite" />
+
+        <item
+            android:id="@+id/ic_action_select_deprioritize"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_de_prioritize" />
+
+        <item
+            android:id="@+id/ic_action_select_direct_chat"
+            android:icon="@drawable/ic_material_done"
+            android:title="@string/room_settings_direct_chat" />
+
+        <item
+            android:id="@+id/ic_action_select_remove"
+            android:icon="@drawable/ic_material_leave"
+            android:title="@string/room_settings_leave_conversation" />
+
+    </group>
+
+    <group android:id="@+id/add_shortcut_actions">
+        <item
+            android:id="@+id/ic_action_add_homescreen_shortcut"
+            android:icon="@drawable/ic_material_transparent"
+            android:title="@string/room_settings_add_homescreen_shortcut" />
+    </group>
+
+    <group android:id="@+id/historical_room_actions">
+        <item
+            android:id="@+id/action_forget_room"
+            android:icon="@drawable/ic_material_leave"
+            android:title="@string/room_settings_forget" />
+    </group>
+</menu>

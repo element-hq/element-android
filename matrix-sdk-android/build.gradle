@@ -1,35 +1,167 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'realm-android'
+apply plugin: 'okreplay'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "io.realm:realm-gradle-plugin:5.12.0"
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
 
 android {
     compileSdkVersion 28
+    testOptions.unitTests.includeAndroidResources = true
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName "0.0.1"
+        // Multidex is useful for tests
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
+        resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
+        resValue "string", "git_sdk_revision_unix_date", "\"${gitRevisionUnixDate()}\""
+        resValue "string", "git_sdk_revision_date", "\"${gitRevisionDate()}\""
     }
 
     buildTypes {
+
+        debug {
+            // Set to true to log privacy or sensible data, such as token
+            buildConfigField "boolean", "LOG_PRIVATE_DATA", project.property("vector.debugPrivateData")
+            // Set to BODY instead of NONE to enable logging
+            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level." + project.property("vector.httpLogLevel")
+        }
+
         release {
+            buildConfigField "boolean", "LOG_PRIVATE_DATA", "false"
+            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.NONE"
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
+    adbOptions {
+        installOptions "-g"
+    }
+
+    lintOptions {
+        lintConfig file("lint.xml")
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+static def gitRevision() {
+    def cmd = "git rev-parse --short HEAD"
+    return cmd.execute().text.trim()
+}
+
+static def gitRevisionUnixDate() {
+    def cmd = "git show -s --format=%ct HEAD^{commit}"
+    return cmd.execute().text.trim()
+}
+
+static def gitRevisionDate() {
+    def cmd = "git show -s --format=%ci HEAD^{commit}"
+    return cmd.execute().text.trim()
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    def arrow_version = "0.8.0"
+    def support_version = '1.1.0-beta01'
+    def moshi_version = '1.8.0'
+    def lifecycle_version = '2.0.0'
+    def coroutines_version = "1.0.1"
+    def markwon_version = '3.0.0'
+    def daggerVersion = '2.23.1'
+
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    implementation "androidx.appcompat:appcompat:1.1.0-beta01"
+    implementation "androidx.recyclerview:recyclerview:1.1.0-alpha06"
+
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    // Network
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.4.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.novoda:merlin:1.1.6'
+    implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
+    implementation "ru.noties.markwon:core:$markwon_version"
+
+    // Database
+    implementation 'com.github.Zhuinden:realm-monarchy:0.5.1'
+    kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
+
+    // Work
+    implementation "androidx.work:work-runtime-ktx:2.1.0-rc01"
+
+    // FP
+    implementation "io.arrow-kt:arrow-core:$arrow_version"
+    implementation "io.arrow-kt:arrow-instances-core:$arrow_version"
+    implementation "io.arrow-kt:arrow-effects:$arrow_version"
+    implementation "io.arrow-kt:arrow-effects-instances:$arrow_version"
+    implementation "io.arrow-kt:arrow-integration-retrofit-adapter:$arrow_version"
+
+    // olm lib is now hosted by jitpack: https://jitpack.io/#org.matrix.gitlab.matrix-org/olm
+    implementation 'org.matrix.gitlab.matrix-org:olm:3.1.2'
+
+    // DI
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.4.0'
+    kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.4.0'
+
+    // Logging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+
+    debugImplementation 'com.airbnb.okreplay:okreplay:1.4.0'
+    releaseImplementation 'com.airbnb.okreplay:noop:1.4.0'
+    androidTestImplementation 'com.airbnb.okreplay:espresso:1.4.0'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation 'org.robolectric:robolectric:4.0.2'
+    //testImplementation 'org.robolectric:shadows-support-v4:3.0'
+    testImplementation "io.mockk:mockk:1.8.13.kotlin13"
+    testImplementation 'org.amshove.kluent:kluent-android:1.44'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    androidTestImplementation 'androidx.test:core:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
+    androidTestImplementation "io.mockk:mockk-android:1.8.13.kotlin13"
+    androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
 }

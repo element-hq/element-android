@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/quickReactionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/quick_reactions"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/quickReaction0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="👍" />
+
+    <TextView
+        android:id="@+id/quickReaction1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="👎" />
+
+    <TextView
+        android:id="@+id/quickReaction2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="😀" />
+
+
+    <TextView
+        android:id="@+id/quickReaction3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="🎉" />
+
+    <TextView
+        android:id="@+id/quickReaction4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="😕" />
+
+    <TextView
+        android:id="@+id/quickReaction5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="♥" />
+
+    <TextView
+        android:id="@+id/quickReaction6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:text="🍆" />
+
+    <TextView
+        android:id="@+id/quickReaction7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="26sp"
+        tools:ignore="MissingConstraints"
+        tools:text="👀" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/reactionsFlowHelper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:constraint_referenced_ids="quickReaction0,quickReaction1,quickReaction2,quickReaction3,quickReaction4,quickReaction5,quickReaction6,quickReaction7"
+        app:flow_horizontalGap="8dp"
+        app:flow_horizontalStyle="spread"
+        app:flow_verticalBias="0"
+        app:flow_verticalGap="4dp"
+        app:flow_wrapMode="chain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/quickReactionTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

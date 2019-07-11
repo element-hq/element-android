@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s heeft een afbeelding gestuurd.</string>
+
+    <string name="notice_room_invite_no_invitee">Uitnodiging van %s</string>
+    <string name="notice_room_invite">%1$s heeft %2$s uitgenodigd</string>
+    <string name="notice_room_invite_you">%1$s heeft u uitgenodigd</string>
+    <string name="notice_room_join">%1$s neemt nu deel aan het gesprek</string>
+    <string name="notice_room_leave">%1$s heeft het gesprek verlaten</string>
+    <string name="notice_room_reject">%1$s heeft de uitnodiging geweigerd</string>
+    <string name="notice_room_kick">%1$s heeft %2$s uit het gesprek verwijderd</string>
+    <string name="notice_room_unban">%1$s heeft %2$s ontbannen</string>
+    <string name="notice_room_ban">%1$s heeft %2$s verbannen</string>
+    <string name="notice_room_withdraw">%1$s heeft de uitnodiging van %2$s ingetrokken</string>
+    <string name="notice_avatar_url_changed">%1$s heeft zijn/haar avatar aangepast</string>
+    <string name="notice_display_name_set">%1$s heeft zijn/haar naam aangepast naar %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s heeft zijn/haar naam aangepast van %2$s naar %3$s</string>
+    <string name="notice_display_name_removed">%1$s heeft zijn/haar naam verwijderd (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s heeft het onderwerp veranderd naar: %2$s</string>
+    <string name="notice_room_name_changed">%1$s heeft de gespreksnaam veranderd naar: %2$s</string>
+    <string name="notice_placed_video_call">%s heeft een video-oproep gemaakt.</string>
+    <string name="notice_placed_voice_call">%s heeft een spraakoproep gemaakt.</string>
+    <string name="notice_answered_call">%s heeft de oproep beantwoord.</string>
+    <string name="notice_ended_call">%s heeft opgehangen.</string>
+    <string name="notice_made_future_room_visibility">%1$s heeft de toekomstige gespreksgeschiedenis zichtbaar gemaakt voor %2$s</string>
+    <string name="notice_room_visibility_invited">alle deelnemers aan het gesprek, vanaf het punt dat ze zijn uitgenodigd.</string>
+    <string name="notice_room_visibility_joined">alle deelnemers aan het gesprek, vanaf het punt dat ze zijn toegetreden.</string>
+    <string name="notice_room_visibility_shared">alle deelnemers aan het gesprek.</string>
+    <string name="notice_room_visibility_world_readable">iedereen.</string>
+    <string name="notice_room_visibility_unknown">onbekend (%s).</string>
+    <string name="notice_end_to_end">%1$s heeft eind-tot-eind-versleuteling aangezet (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s heeft een VoIP-vergadering aangevraagd</string>
+    <string name="notice_voip_started">VoIP-vergadering gestart</string>
+    <string name="notice_voip_finished">VoIP-vergadering gestopt</string>
+
+    <string name="notice_avatar_changed_too">(avatar is ook veranderd)</string>
+    <string name="notice_room_name_removed">%1$s heeft de gespreksnaam verwijderd</string>
+    <string name="notice_room_topic_removed">%1$s heeft het gespreksonderwerp verwijderd</string>
+    <string name="notice_profile_change_redacted">%1$s heeft zijn/haar profiel %2$s bijgewerkt</string>
+    <string name="notice_room_third_party_invite">%1$s heeft een uitnodiging naar %2$s gestuurd om het gesprek toe te treden</string>
+    <string name="notice_room_third_party_registered_invite">%1$s heeft de uitnodiging voor %2$s aanvaard</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Kan niet ontsleutelen: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Het apparaat van de afzender heeft geen sleutels voor dit bericht gestuurd.</string>
+
+    <!-- Room Screen -->
+    <string name="could_not_redact">Kon niet verwijderd worden</string>
+    <string name="unable_to_send_message">Kan bericht niet verzenden</string>
+
+    <string name="message_failed_to_upload">Uploaden van de afbeelding mislukt</string>
+
+    <!-- general errors -->
+    <string name="network_error">Netwerkfout</string>
+    <string name="matrix_error">Matrix-fout</string>
+
+    <!-- Home Screen -->
+
+    <!-- Last seen time -->
+
+    <!-- room error messages -->
+    <string name="room_error_join_failed_empty_room">Het is momenteel niet mogelijk om een leeg gesprek opnieuw toe te treden.</string>
+
+    <string name="encrypted_message">Versleuteld bericht</string>
+
+    <!-- medium friendly name -->
+    <string name="medium_email">E-mailadres</string>
+    <string name="medium_phone_number">Telefoonnummer</string>
+
+    <string name="summary_user_sent_sticker">%1$s heeft een sticker gestuurd.</string>
+
+    <string name="message_reply_to_prefix">Als antwoord op</string>
+
+    <string name="reply_to_an_image">heeft een afbeelding gestuurd.</string>
+    <string name="reply_to_a_video">heeft een video gestuurd.</string>
+    <string name="reply_to_an_audio_file">heeft een audiobestand gestuurd.</string>
+    <string name="reply_to_a_file">heeft een bestand gestuurd.</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Uitnodiging van %s</string>
+    <string name="room_displayname_room_invite">Gespreksuitnodiging</string>
+    <string name="room_displayname_two_members">%1$s en %2$s</string>
+    <string name="room_displayname_empty_room">Leeg gesprek</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s en 1 andere</item>
+        <item quantity="other">%1$s en %2$d anderen</item>
+    </plurals>
+
+
+    <string name="notice_event_redacted">Bericht verwijderd</string>
+    <string name="notice_event_redacted_by">Bericht verwijderd door %1$s</string>
+    <string name="notice_event_redacted_with_reason">Bericht verwijderd [reden: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Bericht verwijderd door %1$s [reden: %2$s]</string>
+    <string name="verification_emoji_dog">Hond</string>
+    <string name="verification_emoji_cat">Kat</string>
+    <string name="verification_emoji_lion">Leeuw</string>
+    <string name="verification_emoji_horse">Paard</string>
+    <string name="verification_emoji_unicorn">Eenhoorn</string>
+    <string name="verification_emoji_pig">Varken</string>
+    <string name="verification_emoji_elephant">Olifant</string>
+    <string name="verification_emoji_rabbit">Konijn</string>
+    <string name="verification_emoji_panda">Panda</string>
+    <string name="verification_emoji_rooster">Haan</string>
+    <string name="verification_emoji_penguin">Pinguïn</string>
+    <string name="verification_emoji_turtle">Schildpad</string>
+    <string name="verification_emoji_fish">Vis</string>
+    <string name="verification_emoji_octopus">Octopus</string>
+    <string name="verification_emoji_butterfly">Vlinder</string>
+    <string name="verification_emoji_flower">Bloem</string>
+    <string name="verification_emoji_tree">Boom</string>
+    <string name="verification_emoji_cactus">Cactus</string>
+    <string name="verification_emoji_mushroom">Paddenstoel</string>
+    <string name="verification_emoji_globe">Aardbol</string>
+    <string name="verification_emoji_moon">Maan</string>
+    <string name="verification_emoji_cloud">Wolk</string>
+    <string name="verification_emoji_fire">Vuur</string>
+    <string name="verification_emoji_banana">Banaan</string>
+    <string name="verification_emoji_apple">Appel</string>
+    <string name="verification_emoji_strawberry">Aardbei</string>
+    <string name="verification_emoji_corn">Maïs</string>
+    <string name="verification_emoji_pizza">Pizza</string>
+    <string name="verification_emoji_cake">Taart</string>
+    <string name="verification_emoji_heart">Hart</string>
+    <string name="verification_emoji_smiley">Smiley</string>
+    <string name="verification_emoji_robot">Robot</string>
+    <string name="verification_emoji_hat">Hoed</string>
+    <string name="verification_emoji_glasses">Bril</string>
+    <string name="verification_emoji_wrench">Moersleutel</string>
+    <string name="verification_emoji_santa">Kerstman</string>
+    <string name="verification_emoji_thumbsup">Duim omhoog</string>
+    <string name="verification_emoji_umbrella">Paraplu</string>
+    <string name="verification_emoji_hourglass">Zandloper</string>
+    <string name="verification_emoji_clock">Klok</string>
+    <string name="verification_emoji_gift">Cadeau</string>
+    <string name="verification_emoji_lightbulb">Gloeilamp</string>
+    <string name="verification_emoji_book">Boek</string>
+    <string name="verification_emoji_pencil">Potlood</string>
+    <string name="verification_emoji_paperclip">Paperclip</string>
+    <string name="verification_emoji_scissors">Schaar</string>
+    <string name="verification_emoji_lock">Hangslot</string>
+    <string name="verification_emoji_key">Sleutel</string>
+    <string name="verification_emoji_hammer">Hamer</string>
+    <string name="verification_emoji_telephone">Telefoon</string>
+    <string name="verification_emoji_flag">Vlag</string>
+    <string name="verification_emoji_train">Trein</string>
+    <string name="verification_emoji_bicycle">Fiets</string>
+    <string name="verification_emoji_airplane">Vliegtuig</string>
+    <string name="verification_emoji_rocket">Raket</string>
+    <string name="verification_emoji_trophy">Trofee</string>
+    <string name="verification_emoji_ball">Bal</string>
+    <string name="verification_emoji_guitar">Gitaar</string>
+    <string name="verification_emoji_trumpet">Trompet</string>
+    <string name="verification_emoji_bell">Bel</string>
+    <string name="verification_emoji_anchor">Anker</string>
+    <string name="verification_emoji_headphone">Koptelefoon</string>
+    <string name="verification_emoji_folder">Map</string>
+    <string name="verification_emoji_pin">Speld</string>
+
+</resources>

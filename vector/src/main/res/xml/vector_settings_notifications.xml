@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_NOTIFICATIONS_KEY"
+        android:title="@string/settings_notifications">
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+            android:title="@string/settings_enable_all_notif" />
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+            android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+            android:title="@string/settings_enable_this_device" />
+
+        <!--<im.vector.riotx.core.preference.VectorSwitchPreference-->
+        <!--android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"-->
+        <!--android:key="SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY"-->
+        <!--android:title="@string/settings_turn_screen_on" />-->
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+            android:enabled="false"
+            android:key="SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_notification_advanced_summary"
+            android:title="@string/settings_notification_advanced"
+            android:visibility="gone"
+            app:fragment="im.vector.fragments.VectorSettingsNotificationsAdvancedFragment" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
+            android:title="@string/settings_notification_troubleshoot"
+            app:fragment="im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+
+    <!--im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
+        android:title="@string/settings_background_sync">
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
+            android:title="@string/settings_start_on_boot" />
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
+            android:title="@string/settings_enable_background_sync" />
+
+        <im.vector.riotx.core.preference.VectorEditTextPreference
+            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
+            android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_timeout" />
+
+        <im.vector.riotx.core.preference.VectorEditTextPreference
+            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
+            android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_delay" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY" />
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
+        android:title="@string/settings_notifications_targets" />
+
+    <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" /-->
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_expert">
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:layout_width="match_parent"
+            android:persistent="false"
+            android:title="@string/settings_notifications_targets"
+            app:fragment="im.vector.riotx.features.settings.push.PushGatewaysFragment" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:layout_width="match_parent"
+            android:persistent="false"
+            android:title="@string/settings_push_rules"
+            app:fragment="im.vector.riotx.features.settings.push.PushRulesFragment" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+</androidx.preference.PreferenceScreen>

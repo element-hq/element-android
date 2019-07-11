@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.RoomActivity">
+
+    <item
+        android:id="@+id/ic_action_room_details_delete"
+        android:icon="@drawable/ic_material_delete_white"
+        android:title="@string/delete"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/ic_action_room_details_edition_mode"
+        android:icon="@drawable/ic_material_create_white"
+        android:title="@string/delete"
+        app:showAsAction="always" />
+</menu>

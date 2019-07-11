@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<im.vector.riotx.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stateView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?riotx_header_panel_background">
+
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/epoxyRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <im.vector.riotx.features.home.room.list.widget.FabMenuView
+        android:id="@+id/createChatFabMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layoutDescription="@xml/motion_scene_fab_menu"
+        tools:showPaths="true"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createChatRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_fab_add_chat"
+        android:visibility="gone"
+        app:maxImageSize="34dp"
+        tools:layout_marginEnd="80dp"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createGroupRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_fab_add_room"
+        android:visibility="gone"
+        app:maxImageSize="32dp"
+        tools:layout_marginEnd="144dp"
+        tools:visibility="visible" />
+
+</im.vector.riotx.core.platform.StateView>

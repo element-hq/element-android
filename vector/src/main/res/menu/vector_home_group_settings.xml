@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ic_action_select_remove_group"
+        android:icon="@drawable/vector_leave_room_black"
+        android:title="@string/leave" />
+</menu>

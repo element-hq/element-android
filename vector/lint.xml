@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Modify some severity -->
+
+    <!-- Resource -->
+    <issue id="MissingTranslation" severity="warning" />
+    <issue id="TypographyEllipsis" severity="error" />
+    <issue id="ImpliedQuantity" severity="warning" />
+
+    <!-- UX -->
+    <issue id="ButtonOrder" severity="error" />
+
+    <!-- Layout -->
+    <issue id="UnknownIdInLayout" severity="error" />
+    <issue id="StringFormatCount" severity="error" />
+    <issue id="HardcodedText" severity="error" />
+    <issue id="SpUsage" severity="error" />
+    <issue id="ObsoleteLayoutParam" severity="error" />
+    <issue id="InefficientWeight" severity="error" />
+    <issue id="DisableBaselineAlignment" severity="error" />
+    <issue id="ScrollViewSize" severity="error" />
+
+    <!-- RTL -->
+    <issue id="RtlEnabled" severity="error" />
+    <!-- Now with min API set to 19, we do not need Left and Right attribute, Start and End is enougth. For the moment, just reduce the severity -->
+    <issue id="RtlHardcoded" severity="warning" />
+    <issue id="RtlSymmetry" severity="error" />
+
+    <!-- Code -->
+    <issue id="SetTextI18n" severity="error" />
+    <issue id="ViewConstructor" severity="error" />
+    <issue id="UseValueOf" severity="error" />
+
+</lint>

@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <string name="summary_user_sent_image">أرسل ⁨%1$s⁩ صورة.</string>
+
+    <string name="notice_room_invite_no_invitee">دعوة من ⁨%s⁩</string>
+    <string name="notice_room_invite">دعى ⁨%1$s⁩ ⁨%2$s⁩</string>
+    <string name="notice_room_invite_you">دعاك ⁨%1$s⁩</string>
+    <string name="notice_room_join">انضمّ ⁨%1$s⁩</string>
+    <string name="notice_room_leave">غادر ⁨%1$s⁩</string>
+    <string name="notice_room_reject">رفض ⁨%1$s⁩ الدعوة</string>
+    <string name="notice_room_kick">طرد ⁨%1$s⁩ ⁨%2$s⁩</string>
+    <string name="notice_room_unban">رفع ⁨%1$s⁩ الحظر عن ⁨%2$s⁩</string>
+    <string name="notice_room_ban">منع ⁨%1$s⁩ ⁨%2$s⁩</string>
+    <string name="notice_avatar_url_changed">غيّر ⁨%1$s⁩ صورته</string>
+    <string name="notice_display_name_set">ضبط ⁨%1$s⁩ اسم العرض على ⁨%2$s⁩</string>
+    <string name="notice_display_name_changed_from">غيّر ⁨%1$s⁩ اسم الحساب المعروض من %2$s⁩ إلى %3$s⁩</string>
+    <string name="notice_display_name_removed">أزال ⁨%1$s⁩ اسم الحساب المعروض (⁨%2$s⁩)</string>
+    <string name="notice_room_topic_changed">غيّر ⁨%1$s⁩ الموضوع إلى: ⁨%2$s⁩</string>
+    <string name="notice_room_name_changed">غيّر ⁨%1$s⁩ اسم الغرفة إلى: ⁨%2$s⁩</string>
+    <string name="notice_answered_call">ردّ ⁨%s⁩ على المكالمة.</string>
+    <string name="notice_ended_call">أنهى ⁨%s⁩ المكالمة.</string>
+    <string name="notice_made_future_room_visibility">جعل ⁨%1$s⁩ تأريخ الغرفة مستقبلًا ظاهرا على %2$s</string>
+    <string name="notice_room_visibility_invited">كل أعضاء الغرفة من لحظة دعوتهم.</string>
+    <string name="notice_room_visibility_joined">كل أعضاء الغرفة من لحظة انضمامهم.</string>
+    <string name="notice_room_visibility_shared">كل أعضاء الغرفة.</string>
+    <string name="notice_room_visibility_world_readable">الكل.</string>
+    <string name="notice_room_visibility_unknown">المجهول (⁨%s⁩).</string>
+    <string name="notice_end_to_end">فعّل ⁨%1$s⁩ تعمية الطرفين (⁨%2$s⁩)</string>
+
+    <string name="notice_requested_voip_conference">طلب ⁨%1$s⁩ اجتماع VoIP</string>
+    <string name="notice_voip_started">بدأ اجتماع VoIP</string>
+    <string name="notice_voip_finished">انتهى اجتماع VoIP</string>
+
+    <string name="notice_room_name_removed">أزال ⁨%1$s⁩ اسم الغرفة</string>
+    <string name="notice_room_topic_removed">أزال ⁨%1$s⁩ موضوع الغرفة</string>
+    <string name="notice_profile_change_redacted">حدّث ⁨%1$s⁩ اللاحة ⁨%2$s⁩</string>
+    <string name="notice_room_third_party_invite">أرسل ⁨%1$s⁩ دعوة إلى ⁨%2$s⁩ للانضمام إلى الغرفة</string>
+    <string name="notice_crypto_unable_to_decrypt">** تعذّر فك التعمية: ⁨%s⁩ **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">لم يُرسل جهاز المرسل مفاتيح هذه الرسالة.</string>
+
+    <string name="unable_to_send_message">تعذّر إرسال الرسالة</string>
+
+    <string name="message_failed_to_upload">فشل رفع الصورة</string>
+
+    <string name="network_error">خطأ في الشبكة</string>
+    <string name="matrix_error">خطأ في «ماترِكس»</string>
+
+    <string name="room_error_join_failed_empty_room">ليس ممكنا الانضمام ثانيةً إلى غرفة فارغة.</string>
+
+    <string name="encrypted_message">رسالة معمّاة</string>
+
+    <string name="medium_email">عنوان البريد الإلكتروني</string>
+    <string name="medium_phone_number">رقم الهاتف</string>
+
+    <string name="summary_message">‏‏⁨%1$s⁩: ‏⁨%2$s⁩</string>
+    <string name="notice_room_withdraw">انسحب ⁨%1$s⁩ من الدعوة ⁨%2$s⁩</string>
+    <string name="notice_placed_video_call">أجرى ⁨%s⁩ مكالمة مرئية.</string>
+    <string name="notice_placed_voice_call">أجرى ⁨%s⁩ مكالمة صوتية.</string>
+    <string name="notice_room_third_party_registered_invite">قبل ⁨%1$s⁩ دعوة ⁨%2$s⁩</string>
+
+    <string name="could_not_redact">تعذر التهذيب</string>
+    <string name="summary_user_sent_sticker">أرسل ⁨%1$s⁩ ملصقا.</string>
+
+    <string name="notice_avatar_changed_too">(تغيّرت الصورة أيضا)</string>
+    <string name="message_reply_to_prefix">ردا على</string>
+
+    <string name="reply_to_an_image">أرسل صورة.</string>
+    <string name="reply_to_a_video">أرسل فديوهًا.</string>
+    <string name="reply_to_an_audio_file">أرسل ملف صوت.</string>
+    <string name="reply_to_a_file">أرسل ملفًا.</string>
+
+    <string name="room_displayname_invite_from">دعوة من ⁨%s⁩</string>
+    <string name="room_displayname_empty_room">غرفة فارغة</string>
+
+    <string name="room_displayname_two_members">‏⁨%1$s⁩ و ⁨%2$s⁩</string>
+    <string name="room_displayname_room_invite">دعوة إلى غرفة</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="zero">صفر</item>
+        <item quantity="one">واحد</item>
+        <item quantity="two">اثنان</item>
+        <item quantity="few">قليل</item>
+        <item quantity="many">كثير</item>
+        <item quantity="other">اخرى</item>
+    </plurals>
+
+</resources>

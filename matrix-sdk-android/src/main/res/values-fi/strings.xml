@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="summary_user_sent_image">%1$s lähetti kuvan.</string>
+
+    <string name="notice_room_invite_no_invitee">%s:n kutsu</string>
+    <string name="notice_room_invite">%1$s kutsui käyttäjän %2$s</string>
+    <string name="notice_room_invite_you">%1$s kutsui sinut</string>
+    <string name="notice_room_join">%1$s liittyi</string>
+    <string name="notice_room_leave">%1$s poistui</string>
+    <string name="notice_room_reject">%1$s hylkäsi kutsun</string>
+    <string name="notice_room_kick">%1$s poisti käyttäjän %2$s</string>
+    <string name="notice_room_unban">%1$s poisti porttikiellon käyttäjältä %2$s</string>
+    <string name="notice_room_ban">%1$s antoi porttikiellon käyttäjälle %2$s</string>
+    <string name="notice_room_withdraw">%1$s veti takaisin kutsun käyttäjälle %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s vaihtoi profiilikuvaa</string>
+    <string name="notice_display_name_set">%1$s asetti näyttönimekseen %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s muutti näyttönimensä nimestä %2$s nimeen %3$s</string>
+    <string name="notice_display_name_removed">%1$s poisti näyttönimensä (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s muutti aiheeksi %2$s</string>
+    <string name="notice_room_name_changed">%1$s muutti huoneen nimeksi %2$s</string>
+    <string name="notice_placed_video_call">%s soitti videopuhelun.</string>
+    <string name="notice_placed_voice_call">%s soitti äänipuhelun.</string>
+    <string name="notice_answered_call">%s vastasi puheluun.</string>
+    <string name="notice_ended_call">%s lopetti puhelun.</string>
+    <string name="notice_made_future_room_visibility">%1$s muutti tulevan huonehistorian näkyväksi käyttäjälle %2$s</string>
+    <string name="notice_room_visibility_invited">kaikki huoneen jäsenet, heidän kutsumisestaan asti.</string>
+    <string name="notice_room_visibility_joined">kaikki huoneen jäsenet, heidän liittymisestään asti.</string>
+    <string name="notice_room_visibility_shared">kaikki huoneen jäsenet.</string>
+    <string name="notice_room_visibility_world_readable">kaikki.</string>
+    <string name="notice_room_visibility_unknown">tuntematon (%s).</string>
+    <string name="notice_end_to_end">%1$s otti käyttöön osapuolten välisen salauksen (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s lähetti VoIP-konferenssipyynnön</string>
+    <string name="notice_voip_started">VoIP-konferenssi alkoi</string>
+    <string name="notice_voip_finished">VoIP-konferenssi päättyi</string>
+
+    <string name="notice_avatar_changed_too">(profiilikuva muuttui myös)</string>
+    <string name="notice_room_name_removed">%1$s poisti huoneen nimen</string>
+    <string name="notice_room_topic_removed">%1$s poisti huoneen aiheen</string>
+    <string name="notice_profile_change_redacted">%1$s päivitti profiilinsa %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s lähetti liittymiskutsun käyttäjälle %2$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s hyväksyi kutsun käyttäjän %2$s puolesta</string>
+    <string name="notice_crypto_unable_to_decrypt">** Salauksen purku epäonnistui: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Lähettäjän laite ei ole lähettänyt avaimia tähän viestiin.</string>
+
+    <string name="unable_to_send_message">Viestin lähetys epäonnistui</string>
+
+    <string name="message_failed_to_upload">Kuvan lataaminen epäonnistui</string>
+
+    <string name="network_error">Verkkovirhe</string>
+    <string name="matrix_error">Matrix-virhe</string>
+
+    <string name="room_error_join_failed_empty_room">Tällä hetkellä ei ole mahdollista liittyä uudelleen tyhjään huoneeseen.</string>
+
+    <string name="encrypted_message">Salattu viesti</string>
+
+    <string name="medium_email">Sähköpostiosoite</string>
+    <string name="medium_phone_number">Puhelinnumero</string>
+
+
+    <string name="could_not_redact">Takaisinveto epäonnistui</string>
+    <string name="summary_message">%1$s: %2$s</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Kutsu käyttäjältä %s</string> <!-- Grammar problem -->
+    <string name="room_displayname_room_invite">Huonekutsu</string>
+    <string name="room_displayname_two_members">%1$s ja %2$s</string>
+    <string name="room_displayname_empty_room">Tyhjä huone</string>
+
+
+    <string name="summary_user_sent_sticker">%1$s lähetti tarran.</string>
+
+    <string name="message_reply_to_prefix">Vastauksena käyttäjälle</string>
+
+    <string name="reply_to_an_image">lähetti kuvan.</string>
+    <string name="reply_to_a_video">lähetti videon.</string>
+    <string name="reply_to_an_audio_file">lähetti äänitiedoston.</string>
+    <string name="reply_to_a_file">lähetti tiedoston.</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s ja yksi muu</item>
+        <item quantity="other">%1$s ja %2$d muuta</item>
+    </plurals>
+
+    <string name="notice_event_redacted">Viesti poistettu</string>
+    <string name="notice_event_redacted_by">%1$s poisti viestin</string>
+    <string name="notice_event_redacted_with_reason">Viesti poistettu [syy: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">%1$s poisti viestin [syy: %2$s]</string>
+    <string name="verification_emoji_dog">Koira</string>
+    <string name="verification_emoji_cat">Kissa</string>
+    <string name="verification_emoji_lion">Leijona</string>
+    <string name="verification_emoji_horse">Hevonen</string>
+    <string name="verification_emoji_unicorn">Yksisarvinen</string>
+    <string name="verification_emoji_pig">Sika</string>
+    <string name="verification_emoji_elephant">Norsu</string>
+    <string name="verification_emoji_rabbit">Kani</string>
+    <string name="verification_emoji_panda">Panda</string>
+    <string name="verification_emoji_rooster">Kukko</string>
+    <string name="verification_emoji_penguin">Pingviini</string>
+    <string name="verification_emoji_turtle">Kilpikonna</string>
+    <string name="verification_emoji_fish">Kala</string>
+    <string name="verification_emoji_octopus">Tursas</string>
+    <string name="verification_emoji_butterfly">Perhonen</string>
+    <string name="verification_emoji_flower">Kukka</string>
+    <string name="verification_emoji_tree">Puu</string>
+    <string name="verification_emoji_cactus">Kaktus</string>
+    <string name="verification_emoji_mushroom">Sieni</string>
+    <string name="verification_emoji_globe">Maapallo</string>
+    <string name="verification_emoji_moon">Kuu</string>
+    <string name="verification_emoji_cloud">Pilvi</string>
+    <string name="verification_emoji_fire">Tuli</string>
+    <string name="verification_emoji_banana">Banaani</string>
+    <string name="verification_emoji_apple">Omena</string>
+    <string name="verification_emoji_strawberry">Mansikka</string>
+    <string name="verification_emoji_corn">Maissi</string>
+    <string name="verification_emoji_pizza">Pizza</string>
+    <string name="verification_emoji_cake">Kakku</string>
+    <string name="verification_emoji_heart">Sydän</string>
+    <string name="verification_emoji_smiley">Hymiö</string>
+    <string name="verification_emoji_robot">Robotti</string>
+    <string name="verification_emoji_hat">Hattu</string>
+    <string name="verification_emoji_glasses">Silmälasit</string>
+    <string name="verification_emoji_wrench">Jakoavain</string>
+    <string name="verification_emoji_santa">Joulupukki</string>
+    <string name="verification_emoji_thumbsup">Peukut ylös</string>
+    <string name="verification_emoji_umbrella">Sateenvarjo</string>
+    <string name="verification_emoji_hourglass">Tiimalasi</string>
+    <string name="verification_emoji_clock">Kello</string>
+    <string name="verification_emoji_gift">Lahja</string>
+    <string name="verification_emoji_lightbulb">Hehkulamppu</string>
+    <string name="verification_emoji_book">Kirja</string>
+    <string name="verification_emoji_pencil">Lyijykynä</string>
+    <string name="verification_emoji_paperclip">Klemmari</string>
+    <string name="verification_emoji_scissors">Sakset</string>
+    <string name="verification_emoji_lock">Lukko</string>
+    <string name="verification_emoji_key">Avain</string>
+    <string name="verification_emoji_hammer">Vasara</string>
+    <string name="verification_emoji_telephone">Puhelin</string>
+    <string name="verification_emoji_flag">Lippu</string>
+    <string name="verification_emoji_train">Juna</string>
+    <string name="verification_emoji_bicycle">Polkupyörä</string>
+    <string name="verification_emoji_airplane">Lentokone</string>
+    <string name="verification_emoji_rocket">Raketti</string>
+    <string name="verification_emoji_trophy">Palkinto</string>
+    <string name="verification_emoji_ball">Pallo</string>
+    <string name="verification_emoji_guitar">Kitara</string>
+    <string name="verification_emoji_trumpet">Trumpetti</string>
+    <string name="verification_emoji_bell">Soittokello</string>
+    <string name="verification_emoji_anchor">Ankkuri</string>
+    <string name="verification_emoji_headphone">Kuulokkeet</string>
+    <string name="verification_emoji_folder">Kansio</string>
+    <string name="verification_emoji_pin">Nuppineula</string>
+
+</resources>

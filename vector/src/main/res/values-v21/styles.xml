@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- On post Lollipop use default background drawable instead of color -->
+    <style name="Vector.PopupMenu" parent="Vector.PopupMenuBase" />
+
+</resources>

@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">eo</string>
+    <string name="light_theme">Hela haŭto</string>
+    <string name="dark_theme">Malhela haŭto</string>
+    <string name="black_them">Nigra haŭto</string>
+
+    <string name="notification_sync_in_progress">Sinkroniganta</string>
+    <string name="notification_listening_for_events">Atentanta pri eventoj</string>
+    <string name="notification_noisy_notifications">Laŭtaj sciigoj</string>
+    <string name="notification_silent_notifications">Silentaj sciigoj</string>
+
+    <string name="title_activity_home">Mesaĝoj</string>
+    <string name="title_activity_room">Babilejo</string>
+    <string name="resources_country_code">EO</string>
+
+    <string name="title_activity_settings">Agordoj</string>
+    <string name="title_activity_bug_report">Cimraporto</string>
+    <string name="title_activity_group_details">Komunumaj detaloj</string>
+    <string name="title_activity_choose_sticker">Sendi glumarkon</string>
+
+    <string name="dialog_title_third_party_licences">Permesiloj de eksteraj liverantoj</string>
+
+    <string name="loading">Ŝarganta…</string>
+
+    <string name="ok">Bone</string>
+    <string name="cancel">Nuligi</string>
+    <string name="save">Konservi</string>
+    <string name="leave">Eliri</string>
+    <string name="send">Sendi</string>
+    <string name="copy">Kopii</string>
+    <string name="resend">Resendi</string>
+    <string name="redact">Forigi</string>
+    <string name="quote">Citi</string>
+    <string name="download">Elŝuti</string>
+    <string name="share">Diskonigi</string>
+    <string name="speak">Paroli</string>
+    <string name="clear">Forviŝi</string>
+    <string name="later">Poste</string>
+    <string name="forward">Plusendi</string>
+    <string name="permalink">Fiksligilo</string>
+    <string name="view_source">Vidi fonton</string>
+    <string name="view_decrypted_source">Vidi malĉifritan fonton</string>
+    <string name="delete">Forigi</string>
+    <string name="rename">Renomi</string>
+    <string name="title_activity_member_details">Membro-Detaloj</string>
+    <string name="title_activity_historical">Historia</string>
+    <string name="report_content">Raporti enhavon</string>
+    <string name="active_call">Aktiva alvoko</string>
+    <string name="send_bug_report">Cimraporto</string>
+    <string name="ongoing_conference_call">Daŭranta telekonferenco.\nAliĝi %1$s aŭ %2$s.</string>
+    <string name="ongoing_conference_call_voice">voĉe</string>
+    <string name="ongoing_conference_call_video">videe</string>
+    <string name="cannot_start_call">Ne eblas ekigi la alvokon, bonvolu provi poste</string>
+    <string name="missing_permissions_title_to_start_conf_call">Ne eblas ekigi alvokon</string>
+    <string name="missing_permissions_warning">Pro mankantaj permesoj, kelkaj ebloj eble mankos…</string>
+    <string name="missing_permissions_error">Pro mankantaj permesoj, tiu ago ne eblas.</string>
+    <string name="device_information">Aparata informo</string>
+    <string name="send_anyway">Tamen sendi</string>
+    <string name="or">aŭ</string>
+    <string name="invite">Inviti</string>
+    <string name="offline">Malinterrete</string>
+
+    <string name="action_exit">Eliri</string>
+    <string name="actions">Agoj</string>
+    <string name="action_voice_call">Telefono</string>
+    <string name="action_video_call">videotelefono</string>
+    <string name="action_global_search">Universala serĉo</string>
+    <string name="call_anyway">Tamen alvoki</string>
+    <string name="action_quick_reply">Rapida respondo</string>
+    <string name="action_open">Malfermi</string>
+    <string name="action_close">Fermi</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Sendi ĉifritan respondon…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Sendi respondon (neĉifritan)…</string>
+    <string name="bottom_action_people">Homoj</string>
+    <string name="bottom_action_rooms">Babilejoj</string>
+    <string name="bottom_action_groups">Komunumoj</string>
+
+    <string name="home_filter_placeholder_home">Filtri nomojn de babilejoj</string>
+    <string name="home_filter_placeholder_people">Filtri homojn</string>
+    <string name="home_filter_placeholder_rooms">Filtri nomojn de babilejoj</string>
+    <string name="room_details_people">Homoj</string>
+    <string name="room_details_files">Dosieroj</string>
+    <string name="room_details_settings">Agordoj</string>
+    <string name="tab_title_search_people">HOMOJ</string>
+    <string name="tab_title_search_files">DOSIEROJ</string>
+
+    <string name="room_recents_join">ALIĜI</string>
+    <string name="group_details_people">Homoj</string>
+    <string name="group_details_rooms">Babilejoj</string>
+    <string name="no_users_placeholder">Neniu uzantoj</string>
+
+    <string name="rooms">Babilejoj</string>
+    <string name="room_jump_to_first_unread">Salti al unua nelegita mesaĝo.</string>
+
+    <string name="title_activity_keys_backup_setup">Ŝlosilo-Sekukopio</string>
+    <string name="title_activity_keys_backup_restore">Usi Ŝlosilo-Sekukopion</string>
+    <string name="title_activity_verify_device">Kontroli aparaton</string>
+
+    <string name="encryption_information_verify_device">Kontroli aparaton</string>
+</resources>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.FrameLayout">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonStateButtonFlat"
+        style="@style/VectorButtonStyleFlat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:layout_gravity="center_horizontal"
+        tools:text="@string/join" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonStateButtonBig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minWidth="120dp"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="40dp"
+        tools:text="@string/join" />
+
+    <ProgressBar
+        android:id="@+id/buttonStateLoading"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:scaleType="center"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="80dp" />
+
+    <ImageView
+        android:id="@+id/buttonStateLoaded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="120dp"
+        tools:src="@drawable/ic_tick" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonStateRetry"
+        style="@style/VectorButtonStyleFlat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/global_retry"
+        android:textColor="@color/riotx_notice"
+        tools:layout_gravity="center_horizontal"
+        tools:layout_marginTop="160dp" />
+
+</merge>

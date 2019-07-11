@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ************************ Common items ************************ -->
+
+    <!-- toolbar styles-->
+    <style name="VectorToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
+        <!-- main text -->
+        <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
+        <item name="subtitleTextAppearance">@style/Vector.Toolbar.SubTitle</item>
+        <item name="android:background">?riotx_background</item>
+    </style>
+
+    <style name="VectorToolbarStyle.Group">
+        <item name="android:background">@color/tab_groups</item>
+        <item name="background">@color/tab_groups</item>
+    </style>
+
+    <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+    </style>
+
+    <style name="Vector.Toolbar.SubTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">"sans-serif"</item>
+    </style>
+
+    <style name="VectorAppBarLayoutStyle" parent="Widget.Design.AppBarLayout">
+        <item name="android:background">?riotx_background</item>
+    </style>
+
+    <!-- Alert Dialog: Button color are not colorAccent by default -->
+    <style name="VectorAlertDialogStyleLight" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle</item>
+    </style>
+
+    <style name="VectorAlertDialogStyleDark" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle</item>
+    </style>
+
+    <style name="VectorAlertDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/riotx_accent</item>
+    </style>
+
+
+    <!-- TextInputLayout -->
+    <style name="VectorTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+
+    <!-- tabbar text color -->
+    <style name="Vector.TabText" parent="Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+
+    <style name="Vector.PopupMenuBase" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:dropDownHorizontalOffset">0dp</item>
+        <item name="android:dropDownVerticalOffset">0dp</item>
+    </style>
+
+    <style name="Vector.PopupMenu" parent="Vector.PopupMenuBase">
+        <!--
+            Before Lollipop the popup background is white on dark theme, so force color here.
+            (v21 will revert back to default drawable)
+        -->
+        <item name="android:popupBackground">?colorBackgroundFloating</item>
+    </style>
+
+    <!-- actionbar icons color -->
+    <style name="Vector.ActionBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+    <!-- custom action bar -->
+    <style name="Vector.Styled.ActionBar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">?colorPrimary</item>
+        <item name="background">?colorPrimary</item>
+
+        <!-- remove shadow under the action bar -->
+        <item name="elevation">0dp</item>
+
+        <!-- main text -->
+        <item name="titleTextStyle">@style/ActionBarTitleText</item>
+
+        <!-- sub text -->
+        <item name="subtitleTextStyle">@style/ActionBarSubTitleText</item>
+    </style>
+
+    <!-- main text -->
+    <style name="ActionBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- sub text -->
+    <style name="ActionBarSubTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- home scroller menu -->
+    <style name="NavigationViewStyle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Styles for login screen -->
+    <style name="LoginEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Styles for button -->
+    <!--
+        Widget.AppCompat.Button.Colored, which sets the button color to colorAccent,
+         using colorControlHighlight as an overlay for focused and pressed states.
+    -->
+    <style name="VectorButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">?colorAccent</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:minWidth">94dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/button_text_color_selector</item>
+    </style>
+
+    <!--Widget.AppCompat.Button.Borderless.Colored, which sets the text color to colorAccent,
+        using colorControlHighlight as an overlay for focused and pressed states.-->
+    <style name="VectorButtonStyleFlat" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@null</item>
+        <!--item name="android:textColor">?colorAccent</item-->
+        <item name="colorControlHighlight">?colorAccent</item>
+    </style>
+
+    <style name="VectorButtonStyleOutlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@null</item>
+        <!--item name="android:textColor">?colorAccent</item-->
+        <item name="colorControlHighlight">?colorAccent</item>
+    </style>
+
+    <style name="AlerterButton" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+    </style>
+
+    <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
+    </style>
+
+    <style name="VectorSearches.Styled.ActionBar" parent="Vector.Styled.ActionBar">
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="background">?android:attr/colorBackground</item>
+    </style>
+
+    <!-- tabbar text color -->
+    <style name="VectorSearches.TabText" parent="Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="VectorSearches.ActionBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">?attr/colorAccent</item>
+    </style>
+
+    <style name="VectorPeopleSearches.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabGravity">fill</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabPaddingStart">0dp</item>
+        <item name="tabPaddingEnd">0dp</item>
+        <item name="tabBackground">?attr/colorAccent</item>
+        <item name="tabTextColor">@android:color/white</item>
+        <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="tabIndicatorColor">@android:color/white</item>
+        <item name="tabMaxWidth">0dp</item>
+    </style>
+
+    <style name="VectorUnifiedSearches.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabGravity">fill</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabPaddingStart">0dp</item>
+        <item name="tabPaddingEnd">0dp</item>
+        <item name="tabBackground">?attr/vctr_tab_bar_inverted_background_color</item>
+        <item name="tabTextColor">?attr/colorAccent</item>
+        <item name="tabSelectedTextColor">?attr/colorAccent</item>
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabMaxWidth">0dp</item>
+    </style>
+
+    <style name="ListHeader">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?vctr_list_header_primary_text_color</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:background">?vctr_list_header_background_color</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
+    <style name="SpinnerTheme">
+        <item name="colorControlNormal">?attr/vctr_list_header_primary_text_color</item>
+    </style>
+
+    <style name="PopMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!--style name="Floating_Action_Button">
+        <item name="fab_labelsPosition">left</item>
+    </style-->
+
+    <style name="Floating_Actions_Menu">
+        <item name="android:background">@drawable/vector_background_fab_label</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="Floating_Actions_Menu.Light">
+        <item name="android:background">@drawable/vector_background_fab_label_light</item>
+    </style>
+
+    <style name="Vector.TabView.Group" parent="Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/vector_tabbar_background_group_light</item>
+        <item name="background">@drawable/vector_tabbar_background_group_light</item>
+    </style>
+
+    <!-- Linear Layout orientation, depending on screen size. Vertical by default -->
+    <style name="VectorLinearLayout">
+        <item name="android:gravity">end</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- BottomSheet theming -->
+    <style name="Vector.BottomSheet.Dark" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:textColorPrimary">@color/riot_primary_text_color_dark</item>
+        <item name="android:textColorSecondary">@color/riot_secondary_text_color_dark</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_dark</item>
+    </style>
+
+    <style name="Vector.BottomSheet.Light" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:textColorPrimary">@color/riot_primary_text_color_light</item>
+        <item name="android:textColorSecondary">@color/riot_secondary_text_color_light</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_light</item>
+    </style>
+
+    <style name="Vector.BottomSheet.Status" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:textColorPrimary">@color/riot_primary_text_color_status</item>
+        <item name="android:textColorSecondary">@color/riot_secondary_text_color_status</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_status</item>
+    </style>
+
+
+    <style name="TimelineContentStubBaseParams">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintStart_toEndOf">@id/messageStartGuideline</item>
+    </style>
+
+    <style name="TimelineContentStubNoInfoLayoutParams" parent="TimelineContentStubBaseParams">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+    </style>
+
+
+    <style name="TimelineContentStubLayoutParams" parent="TimelineContentStubBaseParams">
+        <item name="layout_constraintTop_toBottomOf">@id/messageMemberNameView</item>
+        <item name="layout_constraintBottom_toTopOf">@id/messageBottomInfo</item>
+    </style>
+
+    <style name="VectorLabel">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?riotx_fab_label_color</item>
+        <!-- Note bg will be updated in the code -->
+        <item name="android:background">@drawable/vector_label_background_light</item>
+    </style>
+
+</resources>

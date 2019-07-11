@@ -1,8 +1,0 @@
-apply plugin: 'java-library'
-apply plugin: "kotlin"
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
-
-}

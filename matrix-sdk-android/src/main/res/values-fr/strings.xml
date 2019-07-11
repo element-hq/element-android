@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <string name="summary_message">%1$s : %2$s</string>
+    <string name="summary_user_sent_image">%1$s a envoyé une image.</string>
+
+    <string name="notice_room_invite_no_invitee">invitation de %s</string>
+    <string name="notice_room_invite">%1$s a invité %2$s</string>
+    <string name="notice_room_invite_you">%1$s vous a invité</string>
+    <string name="notice_room_join">%1$s a rejoint la discussion</string>
+    <string name="notice_room_leave">%1$s est parti</string>
+    <string name="notice_room_reject">%1$s a rejeté l’invitation</string>
+    <string name="notice_room_kick">%1$s a expulsé %2$s</string>
+    <string name="notice_room_unban">%1$s a révoqué le bannissement de %2$s</string>
+    <string name="notice_room_ban">%1$s a banni %2$s</string>
+    <string name="notice_room_withdraw">%1$s a annulé l’invitation de %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s a changé d’avatar</string>
+    <string name="notice_display_name_set">%1$s a modifié son nom affiché en %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s a modifié son nom affiché %2$s en %3$s</string>
+    <string name="notice_display_name_removed">%1$s a supprimé son nom affiché (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s a changé le sujet en : %2$s</string>
+    <string name="notice_room_name_changed">%1$s a changé le nom du salon en : %2$s</string>
+    <string name="notice_placed_video_call">%s a passé un appel vidéo.</string>
+    <string name="notice_placed_voice_call">%s a passé un appel vocal.</string>
+    <string name="notice_answered_call">%s a répondu à l’appel.</string>
+    <string name="notice_ended_call">%s a raccroché.</string>
+    <string name="notice_made_future_room_visibility">%1$s a rendu l’historique futur du salon visible pour %2$s</string>
+    <string name="notice_room_visibility_invited">tous les membres du salon, depuis qu’ils ont été invités.</string>
+    <string name="notice_room_visibility_joined">tous les membres du salon, depuis qu’ils l’ont rejoint.</string>
+    <string name="notice_room_visibility_shared">tous les membres du salon.</string>
+    <string name="notice_room_visibility_world_readable">n’importe qui.</string>
+    <string name="notice_room_visibility_unknown">inconnu (%s).</string>
+    <string name="notice_end_to_end">%1$s a activé le chiffrement de bout en bout (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s a demandé une téléconférence VoIP</string>
+    <string name="notice_voip_started">Téléconférence VoIP démarrée</string>
+    <string name="notice_voip_finished">Téléconférence VoIP terminée</string>
+
+    <string name="notice_avatar_changed_too">(l’avatar a aussi changé)</string>
+    <string name="notice_room_name_removed">%1$s a supprimé le nom du salon</string>
+    <string name="notice_room_topic_removed">%1$s a supprimé le sujet du salon</string>
+    <string name="notice_profile_change_redacted">%1$s a mis à jour son profil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s a envoyé une invitation à %2$s pour rejoindre le salon</string>
+    <string name="notice_room_third_party_registered_invite">%1$s a accepté l’invitation pour %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Déchiffrement impossible : %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
+
+    <string name="could_not_redact">Effacement impossible</string>
+    <string name="unable_to_send_message">Envoi du message impossible</string>
+
+    <string name="message_failed_to_upload">L’envoi de l’image a échoué</string>
+
+    <string name="network_error">Erreur de réseau</string>
+    <string name="matrix_error">Erreur de Matrix</string>
+
+    <string name="room_error_join_failed_empty_room">Il est impossible pour le moment de revenir dans un salon vide.</string>
+
+    <string name="encrypted_message">Message chiffré</string>
+
+    <string name="medium_email">Adresse e-mail</string>
+    <string name="medium_phone_number">Numéro de téléphone</string>
+
+    <string name="summary_user_sent_sticker">%1$s a envoyé un sticker.</string>
+
+    <string name="message_reply_to_prefix">En réponse à</string>
+
+    <string name="reply_to_an_image">a envoyé une image.</string>
+    <string name="reply_to_a_video">a envoyé une vidéo.</string>
+    <string name="reply_to_an_audio_file">a envoyé un fichier audio.</string>
+    <string name="reply_to_a_file">a envoyé un fichier.</string>
+
+    <string name="room_displayname_invite_from">Invitation de %s</string>
+    <string name="room_displayname_room_invite">Invitation au salon</string>
+    <string name="room_displayname_empty_room">Salon vide</string>
+    <string name="room_displayname_two_members">%1$s et %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s et 1 autre</item>
+        <item quantity="other">%1$s et %2$d autres</item>
+    </plurals>
+
+
+    <string name="notice_event_redacted">Message supprimé</string>
+    <string name="notice_event_redacted_by">Message supprimé par %1$s</string>
+    <string name="notice_event_redacted_with_reason">Message supprimé [motif : %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Message supprimé par %1$s [motif : %2$s]</string>
+    <string name="verification_emoji_dog">Chien</string>
+    <string name="verification_emoji_cat">Chat</string>
+    <string name="verification_emoji_lion">Lion</string>
+    <string name="verification_emoji_horse">Cheval</string>
+    <string name="verification_emoji_unicorn">Licorne</string>
+    <string name="verification_emoji_pig">Cochon</string>
+    <string name="verification_emoji_elephant">Éléphant</string>
+    <string name="verification_emoji_rabbit">Lapin</string>
+    <string name="verification_emoji_panda">Panda</string>
+    <string name="verification_emoji_rooster">Coq</string>
+    <string name="verification_emoji_penguin">Manchot</string>
+    <string name="verification_emoji_turtle">Tortue</string>
+    <string name="verification_emoji_fish">Poisson</string>
+    <string name="verification_emoji_octopus">Pieuvre</string>
+    <string name="verification_emoji_butterfly">Papillon</string>
+    <string name="verification_emoji_flower">Fleur</string>
+    <string name="verification_emoji_tree">Arbre</string>
+    <string name="verification_emoji_cactus">Cactus</string>
+    <string name="verification_emoji_mushroom">Champignon</string>
+    <string name="verification_emoji_globe">Terre</string>
+    <string name="verification_emoji_moon">Lune</string>
+    <string name="verification_emoji_cloud">Nuage</string>
+    <string name="verification_emoji_fire">Feu</string>
+    <string name="verification_emoji_banana">Banane</string>
+    <string name="verification_emoji_apple">Pomme</string>
+    <string name="verification_emoji_strawberry">Fraise</string>
+    <string name="verification_emoji_corn">Maïs</string>
+    <string name="verification_emoji_pizza">Pizza</string>
+    <string name="verification_emoji_cake">Gâteau</string>
+    <string name="verification_emoji_heart">Cœur</string>
+    <string name="verification_emoji_smiley">Smiley</string>
+    <string name="verification_emoji_robot">Robot</string>
+    <string name="verification_emoji_hat">Chapeau</string>
+    <string name="verification_emoji_glasses">Lunettes</string>
+    <string name="verification_emoji_wrench">Clé plate</string>
+    <string name="verification_emoji_santa">Père Noël</string>
+    <string name="verification_emoji_thumbsup">Pouce levé</string>
+    <string name="verification_emoji_umbrella">Parapluie</string>
+    <string name="verification_emoji_hourglass">Sablier</string>
+    <string name="verification_emoji_clock">Horloge</string>
+    <string name="verification_emoji_gift">Cadeau</string>
+    <string name="verification_emoji_lightbulb">Ampoule</string>
+    <string name="verification_emoji_book">Livre</string>
+    <string name="verification_emoji_pencil">Crayon</string>
+    <string name="verification_emoji_paperclip">Trombone</string>
+    <string name="verification_emoji_scissors">Ciseaux</string>
+    <string name="verification_emoji_lock">Cadenas</string>
+    <string name="verification_emoji_key">Clé</string>
+    <string name="verification_emoji_hammer">Marteau</string>
+    <string name="verification_emoji_telephone">Téléphone</string>
+    <string name="verification_emoji_flag">Drapeau</string>
+    <string name="verification_emoji_train">Train</string>
+    <string name="verification_emoji_bicycle">Vélo</string>
+    <string name="verification_emoji_airplane">Avion</string>
+    <string name="verification_emoji_rocket">Fusée</string>
+    <string name="verification_emoji_trophy">Trophée</string>
+    <string name="verification_emoji_ball">Balle</string>
+    <string name="verification_emoji_guitar">Guitare</string>
+    <string name="verification_emoji_trumpet">Trompette</string>
+    <string name="verification_emoji_bell">Cloche</string>
+    <string name="verification_emoji_anchor">Ancre</string>
+    <string name="verification_emoji_headphone">Écouteurs</string>
+    <string name="verification_emoji_folder">Dossier</string>
+    <string name="verification_emoji_pin">Épingle</string>
+
+</resources>
