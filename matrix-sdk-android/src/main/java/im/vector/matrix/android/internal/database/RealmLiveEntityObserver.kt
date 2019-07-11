@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.database
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import io.realm.OrderedCollectionChangeSet
+import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
@@ -33,7 +34,7 @@ internal interface LiveEntityObserver {
 }
 
 internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val realmConfiguration: RealmConfiguration)
-    : LiveEntityObserver {
+    : LiveEntityObserver, OrderedRealmCollectionChangeListener<RealmResults<T>> {
 
     private companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("LIVE_ENTITY_BACKGROUND")
@@ -50,9 +51,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
                 val queryResults = query.createQuery(realm).findAll()
-                queryResults.addChangeListener { t, changeSet ->
-                    onChanged(t, changeSet)
-                }
+                queryResults.addChangeListener(this)
                 results = AtomicReference(queryResults)
             }
         }
@@ -72,20 +71,5 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
     override fun isStarted(): Boolean {
         return isStarted.get()
     }
-
-    private fun onChanged(realmResults: RealmResults<T>, changeSet: OrderedCollectionChangeSet) {
-        val insertionIndexes = changeSet.insertions
-        val updateIndexes = changeSet.changes
-        val deletionIndexes = changeSet.deletions
-        val inserted = realmResults.filterIndexed { index, _ -> insertionIndexes.contains(index) }
-        val updated = realmResults.filterIndexed { index, _ -> updateIndexes.contains(index) }
-        val deleted = realmResults.filterIndexed { index, _ -> deletionIndexes.contains(index) }
-        processChanges(inserted, updated, deleted)
-    }
-
-    /**
-     * Do quick treatment or delegate on a task
-     */
-    protected abstract fun processChanges(inserted: List<T>, updated: List<T>, deleted: List<T>)
 
 }

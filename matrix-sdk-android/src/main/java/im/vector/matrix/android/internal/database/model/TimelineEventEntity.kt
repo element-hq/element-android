@@ -16,10 +16,6 @@
 
 package im.vector.matrix.android.internal.database.model
 
-import com.squareup.moshi.Types
-import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
-import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.di.MoshiProvider
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
@@ -28,7 +24,7 @@ import io.realm.annotations.PrimaryKey
 import java.util.*
 
 
-internal open class TimelineEventEntity(@PrimaryKey var localId: String = UUID.randomUUID().toString(),
+internal open class TimelineEventEntity(var localId: Long = 0,
                                         @Index var eventId: String = "",
                                         @Index var roomId: String = "",
                                         var root: EventEntity? = null,

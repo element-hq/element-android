@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.PushRuleService
@@ -52,34 +53,34 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val context: Context,
                                                   private val liveEntityObservers: Set<@JvmSuppressWildcards LiveEntityObserver>,
                                                   private val sessionListeners: SessionListeners,
-                                                  private val roomService: RoomService,
-                                                  private val roomDirectoryService: RoomDirectoryService,
-                                                  private val groupService: GroupService,
-                                                  private val userService: UserService,
-                                                  private val filterService: FilterService,
-                                                  private val cacheService: CacheService,
-                                                  private val signOutService: SignOutService,
-                                                  private val pushRuleService: PushRuleService,
-                                                  private val pushersService: PushersService,
-                                                  private val cryptoService: CryptoManager,
-                                                  private val fileService: FileService,
+                                                  private val roomService: Lazy<RoomService>,
+                                                  private val roomDirectoryService: Lazy<RoomDirectoryService>,
+                                                  private val groupService: Lazy<GroupService>,
+                                                  private val userService: Lazy<UserService>,
+                                                  private val filterService: Lazy<FilterService>,
+                                                  private val cacheService: Lazy<CacheService>,
+                                                  private val signOutService: Lazy<SignOutService>,
+                                                  private val pushRuleService: Lazy<PushRuleService>,
+                                                  private val pushersService: Lazy<PushersService>,
+                                                  private val cryptoService: Lazy<CryptoManager>,
+                                                  private val fileService: Lazy<FileService>,
                                                   private val syncThread: SyncThread,
                                                   private val contentUrlResolver: ContentUrlResolver,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker,
-                                                  private val initialSyncProgressService: InitialSyncProgressService)
+                                                  private val initialSyncProgressService: Lazy<InitialSyncProgressService>)
     : Session,
-        RoomService by roomService,
-        RoomDirectoryService by roomDirectoryService,
-        GroupService by groupService,
-        UserService by userService,
-        CryptoService by cryptoService,
-        CacheService by cacheService,
-        SignOutService by signOutService,
-        FilterService by filterService,
-        PushRuleService by pushRuleService,
-        PushersService by pushersService,
-        FileService by fileService,
-        InitialSyncProgressService by initialSyncProgressService {
+        RoomService by roomService.get(),
+        RoomDirectoryService by roomDirectoryService.get(),
+        GroupService by groupService.get(),
+        UserService by userService.get(),
+        CryptoService by cryptoService.get(),
+        CacheService by cacheService.get(),
+        SignOutService by signOutService.get(),
+        FilterService by filterService.get(),
+        PushRuleService by pushRuleService.get(),
+        PushersService by pushersService.get(),
+        FileService by fileService.get(),
+        InitialSyncProgressService by initialSyncProgressService.get() {
 
     private var isOpen = false
 
@@ -123,7 +124,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         assert(isOpen)
         stopSync()
         liveEntityObservers.forEach { it.dispose() }
-        cryptoService.close()
+        cryptoService.get().close()
         isOpen = false
     }
 
@@ -140,15 +141,15 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         //syncThread.kill()
 
         Timber.w("SIGN_OUT: call webservice")
-        return signOutService.signOut(object : MatrixCallback<Unit> {
+        return signOutService.get().signOut(object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 Timber.w("SIGN_OUT: call webservice -> SUCCESS: clear cache")
 
                 // Clear the cache
-                cacheService.clearCache(object : MatrixCallback<Unit> {
+                cacheService.get().clearCache(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         Timber.w("SIGN_OUT: clear cache -> SUCCESS: clear crypto cache")
-                        cryptoService.clearCryptoCache(MatrixCallbackDelegate(callback))
+                        cryptoService.get().clearCryptoCache(MatrixCallbackDelegate(callback))
 
                         WorkManagerUtil.cancelAllWorks(context)
                     }

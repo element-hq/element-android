@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline
 
 import android.os.Handler
 import android.os.Looper
+import android.util.LongSparseArray
 import android.view.View
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
@@ -82,8 +83,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
         fun onUrlLongClicked(url: String): Boolean
     }
 
-    private val collapsedEventIds = linkedSetOf<String>()
-    private val mergeItemCollapseStates = HashMap<String, Boolean>()
+    private val collapsedEventIds = linkedSetOf<Long>()
+    private val mergeItemCollapseStates = HashMap<Long,Boolean>()
     private val modelCache = arrayListOf<CacheItemData?>()
 
     private var currentSnapshot: List<TimelineEvent> = emptyList()
@@ -298,7 +299,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                 } else {
                     collapsedEventIds.removeAll(mergedEventIds)
                 }
-                val mergeId = mergedEventIds.joinToString(separator = "_") { it }
+                val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
                 MergedHeaderItem(isCollapsed, mergeId, mergedData, avatarRenderer) {
                     mergeItemCollapseStates[event.localId] = it
                     requestModelBuild()
@@ -329,7 +330,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
 }
 
 private data class CacheItemData(
-        val localId: String,
+        val localId: Long,
         val eventId: String?,
         val eventModel: EpoxyModel<*>? = null,
         val mergedHeaderModel: MergedHeaderItem? = null,

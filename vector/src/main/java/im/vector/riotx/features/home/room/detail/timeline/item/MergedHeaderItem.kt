@@ -78,7 +78,7 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
     }
 
     data class Data(
-            val eventId: String,
+            val eventId: Long,
             val userId: String,
             val memberName: String,
             val avatarUrl: String?

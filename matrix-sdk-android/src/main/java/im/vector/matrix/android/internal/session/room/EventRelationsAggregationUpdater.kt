@@ -25,7 +25,9 @@ import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmConfiguration
+import io.realm.RealmResults
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,19 +52,18 @@ internal class EventRelationsAggregationUpdater @Inject constructor(@SessionData
         )
     }
 
-    override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
-        Timber.v("EventRelationsAggregationUpdater called with ${inserted.size} insertions")
-        val domainInserted = inserted
-                .map { it.asDomain() }
+    override fun onChange(results: RealmResults<EventEntity>, changeSet: OrderedCollectionChangeSet) {
+        Timber.v("EventRelationsAggregationUpdater called with ${changeSet.insertions.size} insertions")
 
+        val insertedDomains = changeSet.insertions
+                .asSequence()
+                .mapNotNull { results[it]?.asDomain() }
+                .toList()
         val params = EventRelationsAggregationTask.Params(
-                domainInserted,
+                insertedDomains,
                 credentials.userId
         )
-
-        task.configureWith(params)
-                .executeBy(taskExecutor)
-
+        task.configureWith(params).executeBy(taskExecutor)
     }
 
 }

@@ -105,8 +105,8 @@ open class SyncService : Service() {
             Timber.v("Execute sync request with timeout 0")
             val params = SyncTask.Params(TIME_OUT)
             cancelableTask = syncTask.configureWith(params)
-                    .callbackOn(TaskThread.CALLER)
-                    .executeOn(TaskThread.CALLER)
+                    .callbackOn(TaskThread.SYNC)
+                    .executeOn(TaskThread.SYNC)
                     .dispatchTo(object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             cancelableTask = null

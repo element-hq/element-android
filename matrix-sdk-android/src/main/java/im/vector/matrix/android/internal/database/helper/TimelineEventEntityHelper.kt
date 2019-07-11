@@ -30,8 +30,10 @@ import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
+
 
 internal fun TimelineEventEntity.updateSenderData() {
     assertIsManaged()
@@ -67,6 +69,15 @@ internal fun TimelineEventEntity.updateSenderData() {
     this.senderName = senderRoomMember?.displayName
     this.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(senderRoomMember?.displayName)
     this.senderMembershipEvent = senderMembershipEvent
+}
+
+internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long{
+    val currentIdNum = realm.where(TimelineEventEntity::class.java).max(TimelineEventEntityFields.LOCAL_ID)
+    return if (currentIdNum == null) {
+        1
+    } else {
+        currentIdNum.toLong() + 1
+    }
 }
 
 private fun RealmList<TimelineEventEntity>.buildQuery(sender: String, isUnlinked: Boolean): RealmQuery<TimelineEventEntity> {

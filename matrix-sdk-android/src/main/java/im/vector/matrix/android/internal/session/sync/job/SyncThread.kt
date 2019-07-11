@@ -97,8 +97,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 val latch = CountDownLatch(1)
                 val params = SyncTask.Params(DEFAULT_LONG_POOL_TIMEOUT)
                 cancelableTask = syncTask.configureWith(params)
-                        .callbackOn(TaskThread.CALLER)
-                        .executeOn(TaskThread.CALLER)
+                        .callbackOn(TaskThread.SYNC)
+                        .executeOn(TaskThread.SYNC)
                         .dispatchTo(object : MatrixCallback<Unit> {
                             override fun onSuccess(data: Unit) {
                                 latch.countDown()

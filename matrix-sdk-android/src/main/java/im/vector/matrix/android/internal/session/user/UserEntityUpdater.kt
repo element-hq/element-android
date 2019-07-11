@@ -22,13 +22,13 @@ import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.types
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmConfiguration
+import io.realm.RealmResults
 import io.realm.Sort
 import javax.inject.Inject
 
@@ -42,15 +42,19 @@ internal class UserEntityUpdater @Inject constructor(@SessionDatabase realmConfi
                 .types(it, listOf(EventType.STATE_ROOM_MEMBER))
                 .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
                 .distinct(EventEntityFields.STATE_KEY)
-
     }
 
-    override fun processChanges(inserted: List<EventEntity>, updated: List<EventEntity>, deleted: List<EventEntity>) {
-        val roomMembersEvents = inserted.map { it.eventId }
+    override fun onChange(results: RealmResults<EventEntity>, changeSet: OrderedCollectionChangeSet) {
+        val roomMembersEvents = changeSet.insertions
+                .asSequence()
+                .mapNotNull { results[it]?.eventId }
+                .toList()
+
         val taskParams = UpdateUserTask.Params(roomMembersEvents)
         updateUserTask
                 .configureWith(taskParams)
                 .executeOn(TaskThread.IO)
                 .executeBy(taskExecutor)
     }
+
 }
