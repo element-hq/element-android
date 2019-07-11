@@ -1,23 +1,10 @@
-Changes in RiotX 0.XX (2019-XX-XX)
+Changes in RiotX 0.1.0 (2019-07-11)
 ===================================================
 
-Features:
- - Contextual action menu for messages in room
+First release!
 
-Improvements:
- -
 
-Other changes:
- -
 
-Bugfix:
- -
-
-Translations:
- -
-
-Build:
- -
 
 
 
