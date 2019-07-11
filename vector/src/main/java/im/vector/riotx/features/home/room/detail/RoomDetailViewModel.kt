@@ -237,7 +237,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
                     if (nonFormattedBody != action.text) {
                         room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                ?: "", action.text, action.autoMarkdown)
+                                ?: "", messageContent?.type ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
                     } else {
                         Timber.w("Same message content, do not send edition")
                     }
