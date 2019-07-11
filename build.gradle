@@ -24,15 +24,27 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url "http://dl.bintray.com/piasy/maven" }
-        maven { url 'https://jitpack.io' }
+        // For olm library. This has to be declared first, to ensure that Olm library is not downloaded from another repo
+        maven {
+            url 'https://jitpack.io'
+            content {
+                // Use this repo only for olm library
+                includeGroupByRegex "org\\.matrix\\.gitlab\\.matrix-org"
+                // And also for FilePicker
+                includeGroupByRegex "com\\.github\\.jaiselrahman"
+                // And monarchy
+                includeGroupByRegex "com\\.github\\.Zhuinden"
+            }
+        }
+        maven {
+            url "http://dl.bintray.com/piasy/maven"
+            content {
+                includeGroupByRegex "com\\.github\\.piasy"
+            }
+        }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         google()
         jcenter()
-        // For Olm SDK
-        maven {
-            url 'https://jitpack.io'
-        }
     }
 }
 
