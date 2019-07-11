@@ -25,7 +25,6 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
-import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
@@ -116,7 +115,11 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
 
-    override fun editTextMessage(targetEventId: String, msgType: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String): Cancelable {
+    override fun editTextMessage(targetEventId: String,
+                                 msgType: String,
+                                 newBodyText: String,
+                                 newBodyAutoMarkdown: Boolean,
+                                 compatibilityBodyText: String): Cancelable {
         val event = eventFactory
                 .createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
                 .also {

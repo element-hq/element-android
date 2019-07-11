@@ -51,7 +51,8 @@ interface RelationService {
      * @param reaction the reaction (preferably emoji)
      * @param targetEventId the id of the event being reacted
      */
-    fun sendReaction(reaction: String, targetEventId: String): Cancelable
+    fun sendReaction(reaction: String,
+                     targetEventId: String): Cancelable
 
 
     /**
@@ -60,7 +61,9 @@ interface RelationService {
      * @param targetEventId the id of the event being reacted
      * @param myUserId used to know if a reaction event was made by the user
      */
-    fun undoReaction(reaction: String, targetEventId: String, myUserId: String)//: Cancelable
+    fun undoReaction(reaction: String,
+                     targetEventId: String,
+                     myUserId: String)//: Cancelable
 
 
     /**
@@ -69,7 +72,11 @@ interface RelationService {
      * @param newBodyText The edited body
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
-    fun editTextMessage(targetEventId: String, msgType: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String = "* $newBodyText"): Cancelable
+    fun editTextMessage(targetEventId: String,
+                        msgType: String,
+                        newBodyText: String,
+                        newBodyAutoMarkdown: Boolean,
+                        compatibilityBodyText: String = "* $newBodyText"): Cancelable
 
 
     /**
@@ -79,7 +86,9 @@ interface RelationService {
      * @param replyText the reply text
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      */
-    fun replyToMessage(eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean = false): Cancelable?
+    fun replyToMessage(eventReplied: TimelineEvent,
+                       replyText: String,
+                       autoMarkdown: Boolean = false): Cancelable?
 
     fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary>
 }

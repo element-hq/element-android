@@ -31,7 +31,7 @@ data class TextContent(
 }
 
 
-fun TextContent.toMessageTextContent(msgType : String = MessageType.MSGTYPE_TEXT): MessageTextContent {
+fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
     return MessageTextContent(
             type = msgType,
             format = MessageType.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
