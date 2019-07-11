@@ -38,7 +38,6 @@ import org.junit.Test
 
 class PushrulesConditionTest {
 
-
     @Test
     fun test_eventmatch_type_condition() {
         val condition = EventMatchCondition("type", "m.room.message")
@@ -158,9 +157,9 @@ class PushrulesConditionTest {
                 content = MessageTextContent("m.text", "A").toContent(),
                 originServerTs = 0,
                 roomId = "3joined").also {
-            Assert.assertTrue("This room has 3 members",conditionEqual3.isSatisfied(it, session))
-            Assert.assertTrue("This room has 3 members",conditionEqual3Bis.isSatisfied(it, session))
-            Assert.assertFalse("This room has more than 3 members",conditionLessThan3.isSatisfied(it, session))
+            Assert.assertTrue("This room has 3 members", conditionEqual3.isSatisfied(it, session))
+            Assert.assertTrue("This room has 3 members", conditionEqual3Bis.isSatisfied(it, session))
+            Assert.assertFalse("This room has more than 3 members", conditionLessThan3.isSatisfied(it, session))
         }
     }
 
@@ -286,7 +285,7 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun replyToMessage(eventReplied: Event, replyText: String): Cancelable? {
+        override fun replyToMessage(eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Cancelable? {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

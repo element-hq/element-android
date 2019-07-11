@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
@@ -127,8 +128,8 @@ internal class DefaultRelationService @Inject constructor(private val context: C
 
     }
 
-    override fun replyToMessage(eventReplied: Event, replyText: String): Cancelable? {
-        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText)?.also {
+    override fun replyToMessage(eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Cancelable? {
+        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)?.also {
             saveLocalEcho(it)
         } ?: return null
 

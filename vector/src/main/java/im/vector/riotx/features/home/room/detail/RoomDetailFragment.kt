@@ -33,6 +33,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
@@ -53,11 +54,11 @@ import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -90,6 +91,7 @@ import im.vector.riotx.features.home.room.detail.timeline.action.MessageMenuView
 import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.media.ImageContentRenderer
@@ -104,8 +106,6 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 import org.commonmark.parser.Parser
-import ru.noties.markwon.Markwon
-import ru.noties.markwon.html.HtmlPlugin
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -178,6 +178,7 @@ class RoomDetailFragment :
     @Inject lateinit var errorFormatter: ErrorFormatter
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
+    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
 
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
@@ -225,76 +226,50 @@ class RoomDetailFragment :
             }
         }
 
-        roomDetailViewModel.selectSubscribe(
-                RoomDetailViewState::sendMode,
-                RoomDetailViewState::selectedEvent,
-                RoomDetailViewState::roomId) { mode, event, roomId ->
+        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode) { mode ->
             when (mode) {
-                SendMode.REGULAR -> {
-                    commandAutocompletePolicy.enabled = true
-                    val uid = session.sessionParams.credentials.userId
-                    val meMember = session.getRoom(roomId)?.getRoomMember(uid)
-                    avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
-                    composerLayout.collapse()
-                }
-                SendMode.EDIT,
-                SendMode.QUOTE,
-                SendMode.REPLY   -> {
-                    commandAutocompletePolicy.enabled = false
-                    if (event == null) {
-                        //we should ignore? can this happen?
-                        Timber.e("Enter edit mode with no event selected")
-                        return@selectSubscribe
-                    }
-                    //switch to expanded bar
-                    composerLayout.composerRelatedMessageTitle.apply {
-                        text = event.getDisambiguatedDisplayName()
-                        setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
-                    }
-
-                    //TODO this is used at several places, find way to refactor?
-                    val messageContent: MessageContent? =
-                            event.annotations?.editSummary?.aggregatedContent?.toModel()
-                                    ?: event.root.getClearContent().toModel()
-                    val nonFormattedBody = messageContent?.body ?: ""
-                    var formattedBody: CharSequence? = null
-                    if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
-                        val parser = Parser.builder().build()
-                        val document = parser.parse(messageContent.formattedBody
-                                ?: messageContent.body)
-                        formattedBody = Markwon.builder(requireContext())
-                                .usePlugin(HtmlPlugin.create()).build().render(document)
-                    }
-                    composerLayout.composerRelatedMessageContent.text = formattedBody
-                            ?: nonFormattedBody
-
-
-                    if (mode == SendMode.EDIT) {
-                        //TODO if it's a reply we should trim the top part of message
-                        composerLayout.composerEditText.setText(nonFormattedBody)
-                        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit))
-                    } else if (mode == SendMode.QUOTE) {
-                        composerLayout.composerEditText.setText("")
-                        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_quote))
-                    } else if (mode == SendMode.REPLY) {
-                        composerLayout.composerEditText.setText("")
-                        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_reply))
-                    }
-
-                    avatarRenderer.render(event.senderAvatar, event.root.senderId
-                            ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
-
-                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
-                    composerLayout.expand {
-                        focusComposerAndShowKeyboard()
-                    }
-                    composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
-                        composerLayout.composerEditText.setText("")
-                        roomDetailViewModel.resetSendMode()
-                    }
-
-                }
+                SendMode.REGULAR  -> exitSpecialMode()
+                is SendMode.EDIT  -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_edit, true)
+                is SendMode.QUOTE -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_quote, false)
+                is SendMode.REPLY -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_reply, false)
             }
+        }
+    }
+
+    private fun exitSpecialMode() {
+        commandAutocompletePolicy.enabled = true
+        composerLayout.collapse()
+    }
+
+    private fun enterSpecialMode(event: TimelineEvent, @DrawableRes iconRes: Int, useText: Boolean) {
+        commandAutocompletePolicy.enabled = false
+        //switch to expanded bar
+        composerLayout.composerRelatedMessageTitle.apply {
+            text = event.getDisambiguatedDisplayName()
+            setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
+        }
+
+        val messageContent: MessageContent? = event.getLastMessageContent()
+        val nonFormattedBody = messageContent?.body ?: ""
+        var formattedBody: CharSequence? = null
+        if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
+            val parser = Parser.builder().build()
+            val document = parser.parse(messageContent.formattedBody
+                    ?: messageContent.body)
+            formattedBody = eventHtmlRenderer.render(document)
+        }
+        composerLayout.composerRelatedMessageContent.text = formattedBody
+                ?: nonFormattedBody
+
+        composerLayout.composerEditText.setText(if (useText) nonFormattedBody else "")
+        composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
+
+        avatarRenderer.render(event.senderAvatar, event.root.senderId
+                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+
+        composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+        composerLayout.expand {
+            focusComposerAndShowKeyboard()
         }
     }
 
@@ -421,6 +396,10 @@ class RoomDetailFragment :
             if (textMessage.isNotBlank()) {
                 roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, VectorPreferences.isMarkdownEnabled(requireContext())))
             }
+        }
+        composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
+            composerLayout.composerEditText.setText("")
+            roomDetailViewModel.resetSendMode()
         }
     }
 

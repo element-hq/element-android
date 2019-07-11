@@ -18,7 +18,9 @@ package im.vector.matrix.android.api.session.room.timeline
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.send.SendState
 
 /**
@@ -80,3 +82,9 @@ data class TimelineEvent(
         return EventType.ENCRYPTED == root.type
     }
 }
+
+/**
+ * Get last MessageContent, after a possible edition
+ */
+fun TimelineEvent.getLastMessageContent(): MessageContent? = annotations?.editSummary?.aggregatedContent?.toModel()
+        ?: root.getClearContent().toModel()

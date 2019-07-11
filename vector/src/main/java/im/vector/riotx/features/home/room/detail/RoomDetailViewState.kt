@@ -32,11 +32,11 @@ import im.vector.matrix.android.api.session.user.model.User
  *
  * Depending on the state the bottom toolbar will change (icons/preview/actions...)
  */
-enum class SendMode {
-    REGULAR,
-    QUOTE,
-    EDIT,
-    REPLY
+sealed class SendMode {
+    object REGULAR : SendMode()
+    data class QUOTE(val timelineEvent: TimelineEvent) : SendMode()
+    data class EDIT(val timelineEvent: TimelineEvent) : SendMode()
+    data class REPLY(val timelineEvent: TimelineEvent) : SendMode()
 }
 
 data class RoomDetailViewState(
@@ -46,7 +46,6 @@ data class RoomDetailViewState(
         val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val sendMode: SendMode = SendMode.REGULAR,
-        val selectedEvent: TimelineEvent? = null,
         val isEncrypted: Boolean = false
 ) : MvRxState {
 

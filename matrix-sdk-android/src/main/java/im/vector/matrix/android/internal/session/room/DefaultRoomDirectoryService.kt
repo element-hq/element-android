@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyPro
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.task.toConfigurableTask
 import javax.inject.Inject
 
 internal class DefaultRoomDirectoryService @Inject constructor(private val getPublicRoomTask: GetPublicRoomTask,
@@ -52,7 +53,7 @@ internal class DefaultRoomDirectoryService @Inject constructor(private val getPu
 
     override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>) {
         getThirdPartyProtocolsTask
-                .configureWith(Unit)
+                .toConfigurableTask()
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }

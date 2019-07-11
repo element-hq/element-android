@@ -28,6 +28,8 @@ import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -52,34 +54,38 @@ import javax.inject.Inject
 internal class LocalEchoEventFactory @Inject constructor(private val credentials: Credentials,
                                                          private val stringProvider: StringProvider,
                                                          private val roomSummaryUpdater: RoomSummaryUpdater) {
+    // TODO Inject
+    private val parser = Parser.builder().build()
+    // TODO Inject
+    private val renderer = HtmlRenderer.builder().build()
 
     fun createTextEvent(roomId: String, msgType: String, text: String, autoMarkdown: Boolean): Event {
-        if (autoMarkdown && msgType == MessageType.MSGTYPE_TEXT) {
-            val parser = Parser.builder().build()
-            val document = parser.parse(text)
-            val renderer = HtmlRenderer.builder().build()
-            val htmlText = renderer.render(document)
-            if (isFormattedTextPertinent(text, htmlText)) { //FIXME
-                return createFormattedTextEvent(roomId, text, htmlText)
-            }
+        if (msgType == MessageType.MSGTYPE_TEXT) {
+            return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown))
         }
         val content = MessageTextContent(type = msgType, body = text)
         return createEvent(roomId, content)
     }
 
+    private fun createTextContent(text: String, autoMarkdown: Boolean): TextContent {
+        if (autoMarkdown) {
+            val document = parser.parse(text)
+            val htmlText = renderer.render(document)
+
+            if (isFormattedTextPertinent(text, htmlText)) {
+                return TextContent(text, htmlText)
+            }
+        }
+
+        return TextContent(text)
+    }
+
     private fun isFormattedTextPertinent(text: String, htmlText: String?) =
             text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
-    fun createFormattedTextEvent(roomId: String, text: String, formattedText: String): Event {
-        val content = MessageTextContent(
-                type = MessageType.MSGTYPE_TEXT,
-                format = MessageType.FORMAT_MATRIX_HTML,
-                body = text,
-                formattedBody = formattedText
-        )
-        return createEvent(roomId, content)
+    fun createFormattedTextEvent(roomId: String, textContent: TextContent): Event {
+        return createEvent(roomId, textContent.toMessageTextContent())
     }
-
 
     fun createReplaceTextEvent(roomId: String,
                                targetEventId: String,
@@ -87,33 +93,15 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                                newBodyAutoMarkdown: Boolean,
                                msgType: String,
                                compatibilityText: String): Event {
-
-        var newContent = MessageTextContent(
-                type = MessageType.MSGTYPE_TEXT,
-                body = newBodyText
-        )
-        if (newBodyAutoMarkdown) {
-            val parser = Parser.builder().build()
-            val document = parser.parse(newBodyText)
-            val renderer = HtmlRenderer.builder().build()
-            val htmlText = renderer.render(document)
-            if (isFormattedTextPertinent(newBodyText, htmlText)) {
-                newContent = MessageTextContent(
-                        type = MessageType.MSGTYPE_TEXT,
-                        format = MessageType.FORMAT_MATRIX_HTML,
-                        body = newBodyText,
-                        formattedBody = htmlText
-                )
-            }
-        }
-
-        val content = MessageTextContent(
-                type = msgType,
-                body = compatibilityText,
-                relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
-                newContent = newContent.toContent()
-        )
-        return createEvent(roomId, content)
+        return createEvent(roomId,
+                MessageTextContent(
+                        type = msgType,
+                        body = compatibilityText,
+                        relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
+                        newContent = createTextContent(newBodyText, newBodyAutoMarkdown)
+                                .toMessageTextContent()
+                                .toContent()
+                ))
     }
 
     fun createMediaEvent(roomId: String, attachment: ContentAttachmentData): Event {
@@ -202,7 +190,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                 type = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
-                        mimeType = attachment.mimeType ?: "audio/mpeg",
+                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() } ?: "audio/mpeg",
                         size = attachment.size
                 ),
                 url = attachment.path
@@ -215,7 +203,8 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                 type = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
-                        mimeType = attachment.mimeType ?: "application/octet-stream",
+                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() }
+                                ?: "application/octet-stream",
                         size = attachment.size
                 ),
                 url = attachment.path
@@ -244,82 +233,81 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         return "$LOCAL_ID_PREFIX${UUID.randomUUID()}"
     }
 
-    fun createReplyTextEvent(roomId: String, eventReplied: Event, replyText: String): Event? {
+    fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Event? {
         //Fallbacks and event representation
         //TODO Add error/warning logs when any of this is null
-        val permalink = PermalinkFactory.createPermalink(eventReplied) ?: return null
-        val userId = eventReplied.senderId ?: return null
+        val permalink = PermalinkFactory.createPermalink(eventReplied.root) ?: return null
+        val userId = eventReplied.root.senderId ?: return null
         val userLink = PermalinkFactory.createPermalink(userId) ?: return null
-//        <mx-reply>
-//            <blockquote>
-//                <a href="https://matrix.to/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
-//                <a href="https://matrix.to/#/@alice:example.org">@alice:example.org</a>
-//                <br />
-//                <!-- This is where the related event's HTML would be. -->
-//            </blockquote>
-//        </mx-reply>
-//        This is where the reply goes.
-        val body = bodyForReply(eventReplied.getClearContent().toModel<MessageContent>())
-        val replyFallbackTemplateFormatted = """<mx-reply>
-               <blockquote>
-                   <a href="%s">${stringProvider.getString(R.string.message_reply_to_prefix)}</a>
-                   <a href="%s">%s</a>
-                   <br />
-                   %s
-               </blockquote>
-           </mx-reply>
-           %s""".trimIndent().format(permalink, userLink, userId, body.second ?: body.first, replyText)
-//
-//        > <@alice:example.org> This is the original body
-//
-//        This is where the reply goes
-        val lines = body.first.split("\n")
-        val plainTextBody = StringBuffer("><${userId}>")
-        lines.firstOrNull()?.also { plainTextBody.append(" $it") }
+        // <mx-reply>
+        //     <blockquote>
+        //         <a href="https://matrix.to/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
+        //         <a href="https://matrix.to/#/@alice:example.org">@alice:example.org</a>
+        //         <br />
+        //         <!-- This is where the related event's HTML would be. -->
+        //     </blockquote>
+        // </mx-reply>
+        // This is where the reply goes.
+        val body = bodyForReply(eventReplied.getLastMessageContent())
+        val replyFormatted = REPLY_PATTERN.format(
+                permalink,
+                stringProvider.getString(R.string.message_reply_to_prefix),
+                userLink,
+                userId,
+                body.takeFormatted(),
+                createTextContent(replyText, autoMarkdown).takeFormatted()
+        )
+        //
+        // > <@alice:example.org> This is the original body
+        //
+        val lines = body.text.split("\n")
+        val replyFallback = StringBuffer("><$userId>")
         lines.forEachIndexed { index, s ->
-            if (index > 0) {
-                plainTextBody.append("\n>$s")
+            if (index == 0) {
+                replyFallback.append(" $s")
+            } else {
+                replyFallback.append("\n>$s")
             }
         }
-        plainTextBody.append("\n\n").append(replyText)
+        replyFallback.append("\n\n").append(replyText)
 
-        val eventId = eventReplied.eventId ?: return null
+        val eventId = eventReplied.root.eventId ?: return null
         val content = MessageTextContent(
                 type = MessageType.MSGTYPE_TEXT,
                 format = MessageType.FORMAT_MATRIX_HTML,
-                body = plainTextBody.toString(),
-                formattedBody = replyFallbackTemplateFormatted,
+                body = replyFallback.toString(),
+                formattedBody = replyFormatted,
                 relatesTo = RelationDefaultContent(null, null, ReplyToContent(eventId))
         )
         return createEvent(roomId, content)
     }
 
     /**
-     * Returns a pair of <Plain Text, Formatted Text?> used for the fallback event representation
-     * in a reply message.
+     * Returns a TextContent used for the fallback event representation in a reply message.
      */
-    private fun bodyForReply(content: MessageContent?): Pair<String, String?> {
+    private fun bodyForReply(content: MessageContent?): TextContent {
         when (content?.type) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE -> {
-                //If we already have formatted body, return it?
                 var formattedText: String? = null
                 if (content is MessageTextContent) {
                     if (content.format == MessageType.FORMAT_MATRIX_HTML) {
                         formattedText = content.formattedBody
                     }
                 }
-                return content.body to formattedText
+                val isReply = content.relatesTo?.inReplyTo?.eventId != null
+                return if (isReply)
+                    TextContent(content.body, formattedText).removeInReplyFallbacks()
+                else
+                    TextContent(content.body, formattedText)
             }
-            MessageType.MSGTYPE_FILE   -> return stringProvider.getString(R.string.reply_to_a_file) to null
-            MessageType.MSGTYPE_AUDIO  -> return stringProvider.getString(R.string.reply_to_an_audio_file) to null
-            MessageType.MSGTYPE_IMAGE  -> return stringProvider.getString(R.string.reply_to_an_image) to null
-            MessageType.MSGTYPE_VIDEO  -> return stringProvider.getString(R.string.reply_to_a_video) to null
-            else                       -> return (content?.body ?: "") to null
-
+            MessageType.MSGTYPE_FILE   -> return TextContent(stringProvider.getString(R.string.reply_to_a_file))
+            MessageType.MSGTYPE_AUDIO  -> return TextContent(stringProvider.getString(R.string.reply_to_an_audio_file))
+            MessageType.MSGTYPE_IMAGE  -> return TextContent(stringProvider.getString(R.string.reply_to_an_image))
+            MessageType.MSGTYPE_VIDEO  -> return TextContent(stringProvider.getString(R.string.reply_to_a_video))
+            else                       -> return TextContent(content?.body ?: "")
         }
-
     }
 
     /*
@@ -364,6 +352,9 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
 
     companion object {
         const val LOCAL_ID_PREFIX = "local."
+
+        // No whitespace
+        const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">%s</a><a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
 
         fun isLocalEchoId(eventId: String): Boolean = eventId.startsWith(LOCAL_ID_PREFIX)
     }

@@ -73,6 +73,7 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.task.toConfigurableTask
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -197,7 +198,7 @@ internal class CryptoManager @Inject constructor(
 
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
-                .configureWith(Unit)
+                .toConfigurableTask()
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }
@@ -1054,7 +1055,8 @@ internal class CryptoManager @Inject constructor(
     }
 
     override fun clearCryptoCache(callback: MatrixCallback<Unit>) {
-        clearCryptoDataTask.configureWith(Unit)
+        clearCryptoDataTask
+                .toConfigurableTask()
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }

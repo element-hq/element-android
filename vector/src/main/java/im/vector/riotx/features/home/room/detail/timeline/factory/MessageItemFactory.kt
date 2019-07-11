@@ -27,11 +27,11 @@ import dagger.Lazy
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
@@ -79,8 +79,7 @@ class MessageItemFactory @Inject constructor(
         }
 
         val messageContent: MessageContent =
-                event.annotations?.editSummary?.aggregatedContent?.toModel()
-                        ?: event.root.getClearContent().toModel()
+                event.getLastMessageContent()
                         ?: //Malformed content, we should echo something on screen
                         return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 
@@ -311,8 +310,7 @@ class MessageItemFactory @Inject constructor(
                                    editSummary: EditAggregatedSummary?): SpannableStringBuilder {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
-        // TODO i18n
-        val editedSuffix = "(edited)"
+        val editedSuffix = stringProvider.getString(R.string.edited_suffix)
         spannable.append(" ").append(editedSuffix)
         val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
         val editStart = spannable.indexOf(editedSuffix)
