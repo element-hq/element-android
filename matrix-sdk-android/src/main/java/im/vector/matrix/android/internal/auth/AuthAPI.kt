@@ -21,6 +21,7 @@ import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 /**
@@ -30,9 +31,11 @@ internal interface AuthAPI {
 
     /**
      * Pass params to the server for the current login phase.
+     * Set all the timeouts to 1 minute
      *
      * @param loginParams the login parameters
      */
+    @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
     fun login(@Body loginParams: PasswordLoginParams): Call<Credentials>
 

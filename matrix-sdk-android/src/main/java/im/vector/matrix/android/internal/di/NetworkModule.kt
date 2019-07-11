@@ -21,16 +21,13 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.BuildConfig
-import im.vector.matrix.android.internal.network.AccessTokenInterceptor
-import im.vector.matrix.android.internal.network.UnitConverterFactory
+import im.vector.matrix.android.internal.network.TimeOutInterceptor
 import im.vector.matrix.android.internal.network.UserAgentInterceptor
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.network.interceptors.FormattedJsonHttpLogger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okreplay.OkReplayInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -68,15 +65,17 @@ internal object NetworkModule {
     @JvmStatic
     @Unauthenticated
     fun providesOkHttpClient(stethoInterceptor: StethoInterceptor,
+                             timeoutInterceptor: TimeOutInterceptor,
                              userAgentInterceptor: UserAgentInterceptor,
                              httpLoggingInterceptor: HttpLoggingInterceptor,
                              curlLoggingInterceptor: CurlLoggingInterceptor,
                              okReplayInterceptor: OkReplayInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
-                .connectTimeout(1, TimeUnit.MINUTES)
+                .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .addNetworkInterceptor(stethoInterceptor)
+                .addInterceptor(timeoutInterceptor)
                 .addInterceptor(userAgentInterceptor)
                 .addInterceptor(httpLoggingInterceptor)
                 .apply {

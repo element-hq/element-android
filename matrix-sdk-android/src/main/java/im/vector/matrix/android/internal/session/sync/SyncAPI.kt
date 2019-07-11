@@ -20,10 +20,15 @@ import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.QueryMap
 
 internal interface SyncAPI {
 
+    /**
+     * Set all the timeouts to 1 minute
+     */
+    @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "sync")
     fun sync(@QueryMap params: Map<String, String>): Call<SyncResponse>
 
