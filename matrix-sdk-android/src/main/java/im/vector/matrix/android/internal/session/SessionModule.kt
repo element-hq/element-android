@@ -38,7 +38,6 @@ import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
-import im.vector.matrix.android.internal.session.user.UserEntityUpdater
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
@@ -128,10 +127,6 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindEventRelationsAggregationUpdater(groupSummaryUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
-
-    @Binds
-    @IntoSet
-    abstract fun bindUserEntityUpdater(groupSummaryUpdater: UserEntityUpdater): LiveEntityObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(initialSyncProgressService: DefaultInitialSyncProgressService): InitialSyncProgressService

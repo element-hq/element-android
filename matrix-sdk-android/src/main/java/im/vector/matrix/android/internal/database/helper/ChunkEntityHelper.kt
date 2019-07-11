@@ -103,7 +103,6 @@ internal fun ChunkEntity.updateSenderDataFor(eventIds: List<String>) {
     }
 }
 
-@VisibleForTesting
 internal fun ChunkEntity.add(roomId: String,
                              event: Event,
                              direction: PaginationDirection,

@@ -21,11 +21,14 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.tryTransactionAsync
+import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
@@ -33,6 +36,7 @@ import io.realm.Sort
 import javax.inject.Inject
 
 internal class UserEntityUpdater @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
+                                                     private val monarchy: Monarchy,
                                                      private val updateUserTask: UpdateUserTask,
                                                      private val taskExecutor: TaskExecutor)
     : RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
@@ -45,16 +49,19 @@ internal class UserEntityUpdater @Inject constructor(@SessionDatabase realmConfi
     }
 
     override fun onChange(results: RealmResults<EventEntity>, changeSet: OrderedCollectionChangeSet) {
-        val roomMembersEvents = changeSet.insertions
-                .asSequence()
-                .mapNotNull { results[it]?.eventId }
-                .toList()
-
-        val taskParams = UpdateUserTask.Params(roomMembersEvents)
-        updateUserTask
-                .configureWith(taskParams)
-                .executeOn(TaskThread.IO)
-                .executeBy(taskExecutor)
+        monarchy.tryTransactionSync { realm ->
+            val userEntities = ArrayList<UserEntity>(changeSet.insertions.size)
+            for (insertion in changeSet.insertions) {
+                val roomMemberEvent = results[insertion] ?: continue
+                val roomMemberTimelineEvent = roomMemberEvent.timelineEventEntity?.firstOrNull()
+                                              ?: continue
+                val userEntity = UserEntity(roomMemberEvent.stateKey
+                                            ?: "", roomMemberTimelineEvent.senderName ?: "",
+                                            roomMemberTimelineEvent.senderAvatar ?: "")
+                userEntities.add(userEntity)
+            }
+            realm.insertOrUpdate(userEntities)
+        }
     }
 
 }

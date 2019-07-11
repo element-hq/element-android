@@ -20,16 +20,19 @@ import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.addStateEvent
 import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.helper.isUnlinked
 import im.vector.matrix.android.internal.database.helper.merge
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
 import timber.log.Timber
@@ -153,8 +156,13 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         currentChunk.isLastBackward = true
                     } else {
                         Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
-                        currentChunk.addAll(roomId, receivedChunk.events, direction, isUnlinked = currentChunk.isUnlinked())
-
+                        val userEntities = ArrayList<UserEntity>(receivedChunk.events.size + receivedChunk.stateEvents.size)
+                        for (event in receivedChunk.events) {
+                            currentChunk.addAll(roomId, receivedChunk.events, direction, isUnlinked = currentChunk.isUnlinked())
+                            UserEntityFactory.create(event)?.also {
+                                userEntities.add(it)
+                            }
+                        }
                         // Then we merge chunks if needed
                         if (currentChunk != prevChunk && prevChunk != null) {
                             currentChunk = handleMerge(roomEntity, direction, currentChunk, prevChunk)
@@ -170,7 +178,13 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                                     }
                         }
                         roomEntity.addOrUpdate(currentChunk)
-                        roomEntity.addStateEvents(receivedChunk.stateEvents, isUnlinked = currentChunk.isUnlinked())
+                        for (stateEvent in receivedChunk.stateEvents) {
+                            roomEntity.addStateEvent(stateEvent, isUnlinked = currentChunk.isUnlinked())
+                            UserEntityFactory.create(stateEvent)?.also {
+                                userEntities.add(it)
+                            }
+                        }
+                        realm.insertOrUpdate(userEntities)
                     }
                 }
                 .map {

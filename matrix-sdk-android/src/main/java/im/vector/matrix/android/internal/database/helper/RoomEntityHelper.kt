@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.database.helper
 
+import com.squareup.moshi.JsonReader
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.toEntity
@@ -24,7 +25,10 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.fastContains
 import im.vector.matrix.android.internal.extensions.assertIsManaged
+import im.vector.matrix.android.internal.network.parsing.GetRoomMembersResponseHandler
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import okhttp3.ResponseBody
+import okio.Okio
 
 internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
     chunks.remove(chunkEntity)
@@ -37,24 +41,41 @@ internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {
     }
 }
 
-internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
-                                       stateIndex: Int = Int.MIN_VALUE,
-                                       filterDuplicates: Boolean = false,
-                                       isUnlinked: Boolean = false) {
+internal fun RoomEntity.addStateEvent(stateEvent: Event,
+                                      stateIndex: Int = Int.MIN_VALUE,
+                                      filterDuplicates: Boolean = false,
+                                      isUnlinked: Boolean = false) {
     assertIsManaged()
-
-    stateEvents.forEach { event ->
-        if (event.eventId == null || (filterDuplicates && fastContains(event.eventId))) {
-            return@forEach
-        }
-        val eventEntity = event.toEntity(roomId).apply {
+    if (stateEvent.eventId == null || (filterDuplicates && fastContains(stateEvent.eventId))) {
+        return
+    } else {
+        val entity = stateEvent.toEntity(roomId).apply {
             this.stateIndex = stateIndex
             this.isUnlinked = isUnlinked
             this.sendState = SendState.SYNCED
         }
-        untimelinedStateEvents.add(0, eventEntity)
+        untimelinedStateEvents.add(entity)
     }
 }
+
+internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
+                                       stateIndex: Int = Int.MIN_VALUE,
+                                       filterDuplicates: Boolean = false,
+                                       isUnlinked: Boolean = false) {
+    stateEvents.forEach { event ->
+        addStateEvent(event, stateIndex, filterDuplicates, isUnlinked)
+    }
+}
+
+internal fun RoomEntity.addStateEvents(response: ResponseBody,
+                                       stateIndex: Int = Int.MIN_VALUE,
+                                       isUnlinked: Boolean = false) {
+    val manualParser = GetRoomMembersResponseHandler()
+    val bufferedSource = Okio.buffer(Okio.source(response.byteStream()))
+    val inputReader = JsonReader.of(bufferedSource)
+    manualParser.handle(inputReader, this, stateIndex, isUnlinked)
+}
+
 
 internal fun RoomEntity.addSendingEvent(event: Event) {
     assertIsManaged()
@@ -64,7 +85,7 @@ internal fun RoomEntity.addSendingEvent(event: Event) {
     }
     val roomMembers = RoomMembers(realm, roomId)
     val myUser = roomMembers.get(senderId)
-    val localId  = TimelineEventEntity.nextId(realm)
+    val localId = TimelineEventEntity.nextId(realm)
     val timelineEventEntity = TimelineEventEntity(localId).also {
         it.root = eventEntity
         it.eventId = event.eventId ?: ""

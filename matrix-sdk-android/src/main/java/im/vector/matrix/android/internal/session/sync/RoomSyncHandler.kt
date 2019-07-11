@@ -22,14 +22,18 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
 import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.helper.addAll
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.addStateEvent
 import im.vector.matrix.android.internal.database.helper.addStateEvents
 import im.vector.matrix.android.internal.database.helper.lastStateIndex
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
@@ -40,6 +44,7 @@ import im.vector.matrix.android.internal.session.notification.ProcessEventForPus
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.*
+import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Realm
@@ -118,7 +123,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         Timber.v("Handle join sync for room $roomId")
 
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                         ?: realm.createObject(roomId)
 
         if (roomEntity.membership == Membership.INVITE) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -133,43 +138,30 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
         // State event
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
+            val userEntities = ArrayList<UserEntity>(roomSync.state.events.size)
             val untimelinedStateIndex = if (isInitialSync) Int.MIN_VALUE else stateIndexOffset
-            roomEntity.addStateEvents(roomSync.state.events, filterDuplicates = true, stateIndex = untimelinedStateIndex)
-
-            // Give info to crypto module
-            roomSync.state.events.forEach {
-                cryptoManager.onStateEvent(roomId, it)
+            roomSync.state.events.forEach { event ->
+                roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
+                // Give info to crypto module
+                cryptoManager.onStateEvent(roomId, event)
+                UserEntityFactory.create(event)?.also {
+                    userEntities.add(it)
+                }
             }
+            realm.insertOrUpdate(userEntities)
         }
 
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
             val timelineStateOffset = if (isInitialSync || roomSync.timeline.limited.not()) 0 else stateIndexOffset
             val chunkEntity = handleTimelineEvents(
                     realm,
-                    roomId,
+                    roomEntity,
                     roomSync.timeline.events,
                     roomSync.timeline.prevToken,
                     roomSync.timeline.limited,
                     timelineStateOffset
             )
             roomEntity.addOrUpdate(chunkEntity)
-
-            // Give info to crypto module
-            roomSync.timeline.events.forEach {
-                cryptoManager.onLiveEvent(roomId, it)
-            }
-
-            // Try to remove local echo
-            val transactionIds = roomSync.timeline.events.mapNotNull { it.unsignedData?.transactionId }
-            transactionIds.forEach {
-                val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)
-                if (sendingEventEntity != null) {
-                    Timber.v("Remove local echo for tx:$it")
-                    roomEntity.sendingTimelineEvents.remove(sendingEventEntity)
-                } else {
-                    Timber.v("Can't find corresponding local echo for tx:$it")
-                }
-            }
         }
         roomSummaryUpdater.update(realm, roomId, Membership.JOIN, roomSync.summary, roomSync.unreadNotifications)
 
@@ -189,10 +181,10 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                   InvitedRoomSync): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                         ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
-            val chunkEntity = handleTimelineEvents(realm, roomId, roomSync.inviteState.events)
+            val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events)
             roomEntity.addOrUpdate(chunkEntity)
         }
         roomSummaryUpdater.update(realm, roomId, Membership.INVITE)
@@ -203,7 +195,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                roomId: String,
                                roomSync: RoomSync): RoomEntity {
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                         ?: realm.createObject(roomId)
 
         roomEntity.membership = Membership.LEAVE
         roomEntity.chunks.deleteAllFromRealm()
@@ -212,13 +204,13 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     }
 
     private fun handleTimelineEvents(realm: Realm,
-                                     roomId: String,
+                                     roomEntity: RoomEntity,
                                      eventList: List<Event>,
                                      prevToken: String? = null,
                                      isLimited: Boolean = true,
                                      stateIndexOffset: Int = 0): ChunkEntity {
 
-        val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
+        val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
@@ -226,12 +218,30 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         }
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true
-        chunkEntity.addAll(roomId, eventList, PaginationDirection.FORWARDS, stateIndexOffset)
 
-        //update eventAnnotationSummary here?
-
+        val userEntities = ArrayList<UserEntity>(eventList.size)
+        for (event in eventList) {
+            chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)
+            // Give info to crypto module
+            cryptoManager.onLiveEvent(roomEntity.roomId, event)
+            // Try to remove local echo
+            event.unsignedData?.transactionId?.also {
+                val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)
+                if (sendingEventEntity != null) {
+                    Timber.v("Remove local echo for tx:$it")
+                    roomEntity.sendingTimelineEvents.remove(sendingEventEntity)
+                } else {
+                    Timber.v("Can't find corresponding local echo for tx:$it")
+                }
+            }
+            UserEntityFactory.create(event)?.also {
+                userEntities.add(it)
+            }
+        }
+        realm.insertOrUpdate(userEntities)
         return chunkEntity
     }
+
 
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,

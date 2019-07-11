@@ -21,6 +21,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.SessionScope
@@ -38,21 +39,6 @@ internal interface UpdateUserTask : Task<UpdateUserTask.Params, Unit> {
 internal class DefaultUpdateUserTask @Inject constructor(private val monarchy: Monarchy) : UpdateUserTask {
 
     override suspend fun execute(params: UpdateUserTask.Params): Try<Unit> {
-        return monarchy.tryTransactionSync { realm ->
-            params.eventIds.forEach { eventId ->
-                val event = EventEntity.where(realm, eventId).findFirst()?.asDomain()
-                            ?: return@forEach
-                val roomId = event.roomId ?: return@forEach
-                val userId = event.stateKey ?: return@forEach
-                val roomMember = RoomMembers(realm, roomId).get(userId) ?: return@forEach
-                if (roomMember.membership != Membership.JOIN) return@forEach
-
-                val userEntity = UserEntity.where(realm, userId).findFirst()
-                                 ?: realm.createObject(UserEntity::class.java, userId)
-                userEntity.displayName = roomMember.displayName ?: ""
-                userEntity.avatarUrl = roomMember.avatarUrl ?: ""
-            }
-        }
+        return Try.just(Unit)
     }
-
 }
