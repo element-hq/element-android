@@ -281,7 +281,7 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun editTextMessage(targetEventId: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String): Cancelable {
+        override fun editTextMessage(targetEventId: String, msgType: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String): Cancelable {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

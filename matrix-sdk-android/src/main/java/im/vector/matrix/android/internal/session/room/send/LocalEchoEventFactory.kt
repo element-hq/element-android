@@ -99,7 +99,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                         body = compatibilityText,
                         relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
                         newContent = createTextContent(newBodyText, newBodyAutoMarkdown)
-                                .toMessageTextContent()
+                                .toMessageTextContent(msgType)
                                 .toContent()
                 ))
     }

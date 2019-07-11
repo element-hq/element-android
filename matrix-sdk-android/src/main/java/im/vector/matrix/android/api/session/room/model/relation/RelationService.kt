@@ -69,7 +69,7 @@ interface RelationService {
      * @param newBodyText The edited body
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
-    fun editTextMessage(targetEventId: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String = "* $newBodyText"): Cancelable
+    fun editTextMessage(targetEventId: String, msgType: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String = "* $newBodyText"): Cancelable
 
 
     /**

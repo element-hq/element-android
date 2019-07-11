@@ -116,9 +116,9 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
     }
 
-    override fun editTextMessage(targetEventId: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String): Cancelable {
+    override fun editTextMessage(targetEventId: String, msgType: String, newBodyText: String, newBodyAutoMarkdown: Boolean, compatibilityBodyText: String): Cancelable {
         val event = eventFactory
-                .createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
+                .createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
                 .also {
                     saveLocalEcho(it)
                 }
