@@ -45,7 +45,7 @@ steps:
     branches: "master"
     plugins:
       - docker#v3.1.0:
-        image: "runmymind/docker-android-sdk"
+          image: "runmymind/docker-android-sdk"
 
   # Code quality
 
