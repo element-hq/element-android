@@ -19,8 +19,8 @@ package im.vector.riotx.features.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import arrow.core.Try
 import com.jakewharton.rxbinding2.widget.RxTextView
 import im.vector.matrix.android.api.MatrixCallback
@@ -31,8 +31,10 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.configureAndStart
+import im.vector.riotx.core.extensions.setTextWithColoredPart
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
@@ -61,9 +63,18 @@ class LoginActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        setupNotice()
         setupAuthButton()
         setupPasswordReveal()
         homeServerField.setText(DEFAULT_HOME_SERVER_URI)
+    }
+
+    private fun setupNotice() {
+        riotx_no_registration_notice.setTextWithColoredPart(R.string.riotx_no_registration_notice, R.string.riotx_no_registration_notice_colored_part)
+
+        riotx_no_registration_notice.setOnClickListener {
+            openUrlInExternalBrowser(this@LoginActivity, "https://about.riot.im/downloads")
+        }
     }
 
     override fun onResume() {
@@ -85,7 +96,8 @@ class LoginActivity : VectorBaseActivity() {
     }
 
     private fun authenticateWith(homeServerConnectionConfig: HomeServerConnectionConfig, login: String, password: String) {
-        progressBar.visibility = View.VISIBLE
+        progressBar.isVisible = true
+        touchArea.isVisible = true
         authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
             override fun onSuccess(data: Session) {
                 activeSessionHolder.setActiveSession(data)
@@ -94,7 +106,8 @@ class LoginActivity : VectorBaseActivity() {
             }
 
             override fun onFailure(failure: Throwable) {
-                progressBar.visibility = View.GONE
+                progressBar.isVisible = false
+                touchArea.isVisible = false
                 Toast.makeText(this@LoginActivity, "Authenticate failure: $failure", Toast.LENGTH_LONG).show()
             }
         })

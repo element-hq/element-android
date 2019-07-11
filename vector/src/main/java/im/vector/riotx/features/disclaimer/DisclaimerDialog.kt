@@ -45,12 +45,7 @@ fun showDisclaimerDialog(activity: Activity) {
         val textView = (dialogLayout as ViewGroup).findViewById<TextView>(R.id.dialogDisclaimerContentLine2)
         @Suppress("ConstantConditionIf")
         if (BuildConfig.FLAVOR == "gplay") {
-
-            textView.setTextWithColoredPart(
-                    R.string.alpha_disclaimer_content_line_2_gplay,
-                    R.string.alpha_disclaimer_content_line_2_gplay_colored_part,
-                    R.attr.colorAccent
-            )
+            textView.setTextWithColoredPart(R.string.alpha_disclaimer_content_line_2_gplay, R.string.alpha_disclaimer_content_line_2_gplay_colored_part)
 
             textView.setOnClickListener {
                 openPlayStore(activity)
