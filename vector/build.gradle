@@ -96,6 +96,9 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix ".debug"
+            resValue "string", "app_name", "RiotX dbg"
+
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
 
@@ -103,6 +106,8 @@ android {
         }
 
         release {
+            resValue "string", "app_name", "RiotX"
+
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
 
