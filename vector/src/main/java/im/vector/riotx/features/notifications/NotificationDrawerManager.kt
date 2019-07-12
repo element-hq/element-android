@@ -121,11 +121,13 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         Timber.v("clearMessageEventOfRoom $roomId")
 
         if (roomId != null) {
-            eventList.removeAll { e ->
-                if (e is NotifiableMessageEvent) {
-                    return@removeAll e.roomId == roomId
+            synchronized(eventList) {
+                eventList.removeAll { e ->
+                    if (e is NotifiableMessageEvent) {
+                        return@removeAll e.roomId == roomId
+                    }
+                    return@removeAll false
                 }
-                return@removeAll false
             }
             NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
         }
@@ -433,18 +435,20 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
 
     fun persistInfo() {
-        if (eventList.isEmpty()) {
-            deleteCachedRoomNotifications(context)
-            return
-        }
-        try {
-            val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-            if (!file.exists()) file.createNewFile()
-            FileOutputStream(file).use {
-                SecretStoringUtils.securelyStoreObject(eventList, "notificationMgr", it, this.context)
+        synchronized(eventList) {
+            if (eventList.isEmpty()) {
+                deleteCachedRoomNotifications(context)
+                return
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "## Failed to save cached notification info")
+            try {
+                val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
+                if (!file.exists()) file.createNewFile()
+                FileOutputStream(file).use {
+                    SecretStoringUtils.securelyStoreObject(eventList, "notificationMgr", it, this.context)
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "## Failed to save cached notification info")
+            }
         }
     }
 

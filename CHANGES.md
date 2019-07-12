@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix:
  - Fix regression on permalink click
+ - Fix crash reported by the PlayStore (#341)
 
 Translations:
  -
