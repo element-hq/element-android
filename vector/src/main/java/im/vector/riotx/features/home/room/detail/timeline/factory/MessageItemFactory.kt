@@ -417,6 +417,14 @@ class MessageItemFactory @Inject constructor(
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, null, view)
+                        }))
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, null, view)
+                            ?: false
+                }
     }
 
     private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {

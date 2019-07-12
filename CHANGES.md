@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - Handle click on redacted events: view source and create permalink
 
 Other changes:
  -
