@@ -57,23 +57,17 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         super.unbind(holder)
     }
 
-    override fun getStubType(): Int = STUB_ID
+    override fun getViewType() = STUB_ID
 
-    class Holder : AbsMessageItem.Holder() {
-
-        override fun getStubId(): Int = STUB_ID
-
+    class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
         val imageView by bind<ImageView>(R.id.messageThumbnailView)
         val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
 
         val mediaContentView by bind<ViewGroup>(R.id.messageContentMedia)
-
     }
-
 
     companion object {
-        private val STUB_ID = R.id.messageContentMediaStub
+        private const val STUB_ID = R.id.messageContentMediaStub
     }
-
 }

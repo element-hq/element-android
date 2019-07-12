@@ -46,19 +46,16 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
     }
 
-    override fun getStubType(): Int = STUB_ID
+    override fun getViewType() = STUB_ID
 
-    class Holder : AbsMessageItem.Holder() {
-        override fun getStubId(): Int = STUB_ID
-
+    class Holder : AbsMessageItem.Holder(STUB_ID) {
         val fileLayout by bind<ViewGroup>(R.id.messageFileLayout)
         val fileImageView by bind<ImageView>(R.id.messageFileImageView)
         val filenameView by bind<TextView>(R.id.messageFilenameView)
-
     }
 
     companion object {
-        private val STUB_ID = R.id.messageContentFileStub
+        private const val STUB_ID = R.id.messageContentFileStub
     }
 
 }

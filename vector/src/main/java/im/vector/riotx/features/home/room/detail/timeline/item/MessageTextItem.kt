@@ -85,12 +85,13 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         }
     }
 
-    override fun getStubType(): Int = R.id.messageContentTextStub
+    override fun getViewType() = STUB_ID
 
-    class Holder : AbsMessageItem.Holder() {
+    class Holder : AbsMessageItem.Holder(STUB_ID) {
         val messageView by bind<AppCompatTextView>(R.id.messageTextView)
-        override fun getStubId(): Int = R.id.messageContentTextStub
-
     }
 
+    companion object {
+        private const val STUB_ID = R.id.messageContentTextStub
+    }
 }

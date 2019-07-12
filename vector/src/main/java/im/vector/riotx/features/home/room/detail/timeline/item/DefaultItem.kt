@@ -31,11 +31,9 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
         holder.messageView.text = text
     }
 
-    override fun getStubType(): Int = STUB_ID
+    override fun getViewType() = STUB_ID
 
-    class Holder : BaseHolder() {
-        override fun getStubId(): Int = STUB_ID
-
+    class Holder : BaseHolder(STUB_ID) {
         val messageView by bind<TextView>(R.id.stateMessageView)
     }
 

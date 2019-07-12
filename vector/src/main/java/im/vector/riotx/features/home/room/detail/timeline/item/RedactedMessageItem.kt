@@ -22,15 +22,13 @@ import im.vector.riotx.R
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class RedactedMessageItem : AbsMessageItem<RedactedMessageItem.Holder>() {
 
-    override fun getStubType(): Int = STUB_ID
+    override fun getViewType() = STUB_ID
 
     override fun shouldShowReactionAtBottom() = false
 
-    class Holder : AbsMessageItem.Holder() {
-        override fun getStubId(): Int = STUB_ID
-    }
+    class Holder : AbsMessageItem.Holder(STUB_ID)
 
     companion object {
-        private val STUB_ID = R.id.messageContentRedactedStub
+        private const val STUB_ID = R.id.messageContentRedactedStub
     }
 }

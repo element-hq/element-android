@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.IdRes
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.view.children
 import androidx.core.view.isGone
@@ -165,8 +166,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         textView?.setTextColor(colorProvider.getMessageTextColor(informationData.sendState))
     }
 
-    abstract class Holder : BaseHolder() {
-
+    abstract class Holder(@IdRes stubId: Int) : BaseHolder(stubId) {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
