@@ -182,7 +182,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private fun refreshNotificationDrawerBg() {
         Timber.w("refreshNotificationDrawerBg()")
 
-        val session = activeSessionHolder.getActiveSession()
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+
         val user = session.getUser(session.sessionParams.credentials.userId)
         val myUserDisplayName = user?.displayName ?: session.sessionParams.credentials.userId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
