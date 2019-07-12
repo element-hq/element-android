@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.database.helper
 
-import com.squareup.moshi.JsonReader
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.toEntity
@@ -25,10 +24,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.fastContains
 import im.vector.matrix.android.internal.extensions.assertIsManaged
-import im.vector.matrix.android.internal.network.parsing.GetRoomMembersResponseHandler
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
-import okhttp3.ResponseBody
-import okio.Okio
 
 internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
     chunks.remove(chunkEntity)
@@ -57,26 +53,6 @@ internal fun RoomEntity.addStateEvent(stateEvent: Event,
         untimelinedStateEvents.add(entity)
     }
 }
-
-internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
-                                       stateIndex: Int = Int.MIN_VALUE,
-                                       filterDuplicates: Boolean = false,
-                                       isUnlinked: Boolean = false) {
-    stateEvents.forEach { event ->
-        addStateEvent(event, stateIndex, filterDuplicates, isUnlinked)
-    }
-}
-
-internal fun RoomEntity.addStateEvents(response: ResponseBody,
-                                       stateIndex: Int = Int.MIN_VALUE,
-                                       isUnlinked: Boolean = false) {
-    val manualParser = GetRoomMembersResponseHandler()
-    val bufferedSource = Okio.buffer(Okio.source(response.byteStream()))
-    val inputReader = JsonReader.of(bufferedSource)
-    manualParser.handle(inputReader, this, stateIndex, isUnlinked)
-}
-
-
 internal fun RoomEntity.addSendingEvent(event: Event) {
     assertIsManaged()
     val senderId = event.senderId ?: return

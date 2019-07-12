@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.database.helper
 
-import androidx.annotation.VisibleForTesting
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -133,7 +132,7 @@ internal fun ChunkEntity.add(roomId: String,
         }
     }
 
-    val localId  = TimelineEventEntity.nextId(realm)
+    val localId = TimelineEventEntity.nextId(realm)
     val eventEntity = TimelineEventEntity(localId).also {
         it.root = event.toEntity(roomId).apply {
             this.stateIndex = currentStateIndex
