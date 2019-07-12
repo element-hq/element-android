@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix regression on permalink click
 
 Translations:
  -
