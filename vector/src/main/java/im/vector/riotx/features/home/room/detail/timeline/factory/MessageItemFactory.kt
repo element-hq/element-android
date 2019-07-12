@@ -117,6 +117,7 @@ class MessageItemFactory @Inject constructor(
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -144,6 +145,7 @@ class MessageItemFactory @Inject constructor(
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -195,6 +197,7 @@ class MessageItemFactory @Inject constructor(
         )
         return MessageImageVideoItem_()
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .playable(messageContent.info?.mimeType == "image/gif")
@@ -246,6 +249,7 @@ class MessageItemFactory @Inject constructor(
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .playable(true)
                 .informationData(informationData)
                 .highlighted(highlight)
@@ -288,6 +292,7 @@ class MessageItemFactory @Inject constructor(
                 }
                 .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
+                .colorProvider(colorProvider)
                 .highlighted(highlight)
                 .avatarCallback(callback)
                 .urlClickCallback(callback)
@@ -353,6 +358,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .avatarRenderer(avatarRenderer)
                 .message(message)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -393,6 +399,7 @@ class MessageItemFactory @Inject constructor(
                     }
                 }
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -414,6 +421,7 @@ class MessageItemFactory @Inject constructor(
                                   callback: TimelineEventController.Callback?): RedactedMessageItem? {
         return RedactedMessageItem_()
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)

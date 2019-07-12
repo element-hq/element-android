@@ -44,7 +44,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.fileLayout.renderSendState()
+        renderSendState(holder.fileLayout, holder.filenameView)
         holder.filenameView.text = filename
         holder.fileImageView.setImageResource(iconRes)
         holder.filenameView.setOnClickListener(clickListener)

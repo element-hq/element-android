@@ -52,7 +52,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         holder.imageView.setOnLongClickListener(longClickListener)
         holder.mediaContentView.setOnClickListener(cellClickListener)
         holder.mediaContentView.setOnLongClickListener(longClickListener)
-        holder.imageView.renderSendState()
+        // The sending state color will be apply to the progress text
+        renderSendState(holder.imageView, null)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
     }
 

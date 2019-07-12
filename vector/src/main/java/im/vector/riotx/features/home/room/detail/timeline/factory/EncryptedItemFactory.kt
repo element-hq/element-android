@@ -68,6 +68,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                 return MessageTextItem_()
                         .message(spannableStr)
                         .avatarRenderer(avatarRenderer)
+                        .colorProvider(colorProvider)
                         .informationData(informationData)
                         .highlighted(highlight)
                         .avatarCallback(callback)
