@@ -60,7 +60,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     //The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
 
-    private var eventList = loadEventInfo()
+    private val eventList = loadEventInfo()
 
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
 
@@ -123,10 +123,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         if (roomId != null) {
             synchronized(eventList) {
                 eventList.removeAll { e ->
-                    if (e is NotifiableMessageEvent) {
-                        return@removeAll e.roomId == roomId
-                    }
-                    return@removeAll false
+                    e is NotifiableMessageEvent && e.roomId == roomId
                 }
             }
             NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
@@ -152,7 +149,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     fun homeActivityDidResume(matrixID: String?) {
         synchronized(eventList) {
             eventList.removeAll { e ->
-                return@removeAll e !is NotifiableMessageEvent //messages are cleared when entering room
+                // messages are cleared when entering room
+                e !is NotifiableMessageEvent
             }
         }
     }
@@ -160,10 +158,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     fun clearMemberShipNotificationForRoom(roomId: String) {
         synchronized(eventList) {
             eventList.removeAll { e ->
-                if (e is InviteNotifiableEvent) {
-                    return@removeAll e.roomId == roomId
-                }
-                return@removeAll false
+                e is InviteNotifiableEvent && e.roomId == roomId
             }
         }
     }
