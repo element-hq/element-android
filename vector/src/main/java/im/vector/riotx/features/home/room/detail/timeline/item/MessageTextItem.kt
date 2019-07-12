@@ -24,7 +24,6 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.utils.containsOnlyEmojis
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
@@ -38,10 +37,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
     var message: CharSequence? = null
-    @EpoxyAttribute
-    override lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute
-    override lateinit var informationData: MessageInformationData
     @EpoxyAttribute
     var urlClickCallback: TimelineEventController.UrlClickCallback? = null
 

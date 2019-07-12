@@ -40,9 +40,11 @@ import im.vector.riotx.features.ui.getMessageTextColor
 
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
-    abstract val informationData: MessageInformationData
+    @EpoxyAttribute
+    lateinit var informationData: MessageInformationData
 
-    abstract val avatarRenderer: AvatarRenderer
+    @EpoxyAttribute
+    lateinit var avatarRenderer: AvatarRenderer
 
     @EpoxyAttribute
     lateinit var colorProvider: ColorProvider

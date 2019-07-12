@@ -25,7 +25,6 @@ import androidx.annotation.DrawableRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
@@ -35,10 +34,6 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     @EpoxyAttribute
     @DrawableRes
     var iconRes: Int = 0
-    @EpoxyAttribute
-    override lateinit var informationData: MessageInformationData
-    @EpoxyAttribute
-    override lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
     var clickListener: View.OnClickListener? = null
 

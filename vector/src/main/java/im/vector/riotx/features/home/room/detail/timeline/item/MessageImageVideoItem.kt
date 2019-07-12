@@ -22,7 +22,6 @@ import android.widget.ImageView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.media.ImageContentRenderer
 
@@ -31,10 +30,6 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
     @EpoxyAttribute
     lateinit var mediaData: ImageContentRenderer.Data
-    @EpoxyAttribute
-    override lateinit var informationData: MessageInformationData
-    @EpoxyAttribute
-    override lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
     var playable: Boolean = false
     @EpoxyAttribute
