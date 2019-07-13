@@ -21,7 +21,6 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.text.TextUtils
 import arrow.core.Try
 import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
@@ -83,7 +82,7 @@ import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
-import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.math.max
 
 /**
  * A `CryptoService` class instance manages the end-to-end crypto for a session.
@@ -248,7 +247,7 @@ internal class CryptoManager @Inject constructor(
             return
         }
         isStarting.set(true)
-        CoroutineScope(coroutineDispatchers.crypto).launch {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
             internalStart(isInitialSync)
         }
     }
@@ -315,7 +314,7 @@ internal class CryptoManager @Inject constructor(
      * @param syncResponse the syncResponse
      */
     fun onSyncCompleted(syncResponse: SyncResponse) {
-        CoroutineScope(coroutineDispatchers.crypto).launch {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
             if (syncResponse.deviceLists != null) {
                 deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
             }
@@ -535,7 +534,7 @@ internal class CryptoManager @Inject constructor(
                                      eventType: String,
                                      roomId: String,
                                      callback: MatrixCallback<MXEncryptEventContentResult>) {
-        CoroutineScope(coroutineDispatchers.crypto).launch {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
             if (!isStarted()) {
                 Timber.v("## encryptEventContent() : wait after e2e init")
                 internalStart(false)
@@ -601,7 +600,7 @@ internal class CryptoManager @Inject constructor(
      * @param callback the callback to return data or null
      */
     override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
-        GlobalScope.launch(EmptyCoroutineContext) {
+        GlobalScope.launch {
             val result = withContext(coroutineDispatchers.crypto) {
                 internalDecryptEvent(event, timeline)
             }
@@ -649,7 +648,7 @@ internal class CryptoManager @Inject constructor(
      * @param event the event
      */
     fun onToDeviceEvent(event: Event) {
-        CoroutineScope(coroutineDispatchers.crypto).launch {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.ROOM_KEY, EventType.FORWARDED_ROOM_KEY -> {
                     onRoomKeyEvent(event)
@@ -689,7 +688,7 @@ internal class CryptoManager @Inject constructor(
      * @param event the encryption event.
      */
     private fun onRoomEncryptionEvent(roomId: String, event: Event) {
-        CoroutineScope(coroutineDispatchers.crypto).launch {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
             val params = LoadRoomMembersTask.Params(roomId)
             loadRoomMembersTask
                     .execute(params)
@@ -879,7 +878,7 @@ internal class CryptoManager @Inject constructor(
      */
     fun checkUnknownDevices(userIds: List<String>, callback: MatrixCallback<Unit>) {
         // force the refresh to ensure that the devices list is up-to-date
-        CoroutineScope(coroutineDispatchers.crypto).launch {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
             deviceListManager
                     .downloadKeys(userIds, true)
                     .fold(
@@ -1047,7 +1046,7 @@ internal class CryptoManager @Inject constructor(
     }
 
     override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>) {
-        CoroutineScope(coroutineDispatchers.crypto).launch {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
             deviceListManager
                     .downloadKeys(userIds, forceDownload)
                     .foldToCallback(callback)
