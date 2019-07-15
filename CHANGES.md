@@ -8,7 +8,7 @@ Features:
 Improvements:
  - Handle click on redacted events: view source and create permalink
  - Improve long tap menu: reply on top, more compact (#368)
- - Quick reply in timeline with swipe gesture
+ - Quick reply in timeline with swipe gesture (#167)
  - Improve edit of replies
 
 Other changes:
@@ -19,6 +19,7 @@ Bugfix:
  - Fix crash reported by the PlayStore (#341)
  - Fix Chat composer separator color in dark/black theme
  - Fix bad layout for room directory filter (#349)
+ - Fix Copying link from a message shouldn't open context menu (#364)
 
 Translations:
  -
