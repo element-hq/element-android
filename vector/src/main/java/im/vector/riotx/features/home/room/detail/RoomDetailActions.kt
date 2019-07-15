@@ -32,7 +32,6 @@ sealed class RoomDetailActions {
     data class RedactAction(val targetEventId: String, val reason: String? = "") : RoomDetailActions()
     data class UndoReaction(val targetEventId: String, val key: String, val reason: String? = "") : RoomDetailActions()
     data class UpdateQuickReactAction(val targetEventId: String, val selectedReaction: String, val add: Boolean) : RoomDetailActions()
-    data class ShowEditHistoryAction(val event: String, val editAggregatedSummary: EditAggregatedSummary) : RoomDetailActions()
     data class NavigateToEvent(val eventId: String, val position: Int?) : RoomDetailActions()
     data class DownloadFile(val eventId: String, val messageFileContent: MessageFileContent) : RoomDetailActions()
     object AcceptInvite : RoomDetailActions()

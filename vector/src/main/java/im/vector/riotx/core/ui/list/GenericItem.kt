@@ -51,7 +51,7 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
     var title: String? = null
 
     @EpoxyAttribute
-    var description: String? = null
+    var description: CharSequence? = null
 
     @EpoxyAttribute
     var style: STYLE = STYLE.NORMAL_TEXT

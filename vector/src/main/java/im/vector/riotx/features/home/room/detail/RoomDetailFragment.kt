@@ -85,10 +85,7 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerView
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.action.ActionsHandler
-import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.action.MessageMenuViewModel
-import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionBottomSheet
+import im.vector.riotx.features.home.room.detail.timeline.action.*
 import im.vector.riotx.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.html.EventHtmlRenderer
@@ -666,10 +663,8 @@ class RoomDetailFragment :
     }
 
     override fun onEditedDecorationClicked(informationData: MessageInformationData, editAggregatedSummary: EditAggregatedSummary?) {
-        editAggregatedSummary?.also {
-            roomDetailViewModel.process(RoomDetailActions.ShowEditHistoryAction(informationData.eventId, it))
-        }
-
+        ViewEditHistoryBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+                .show(requireActivity().supportFragmentManager, "DISPLAY_EDITS")
     }
 // AutocompleteUserPresenter.Callback
 

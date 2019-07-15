@@ -142,4 +142,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindFileService(fileService: DefaultFileService): FileService
+
+    @Binds
+    abstract fun bindFetchEditHistoryTask(editHistoryTask: DefaultFetchEditHistoryTask): FetchEditHistoryTask
 }

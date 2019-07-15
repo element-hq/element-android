@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package im.vector.riotx.features.home.room.detail.timeline.action
 
 import android.os.Bundle
@@ -28,28 +27,29 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.html.EventHtmlRenderer
 import kotlinx.android.synthetic.main.bottom_sheet_epoxylist_with_title.*
 import javax.inject.Inject
 
+
 /**
- * Bottom sheet displaying list of reactions for a given event ordered by timestamp
+ * Bottom sheet displaying list of edits for a given event ordered by timestamp
  */
-class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
-    private val viewModel: ViewReactionViewModel by fragmentViewModel(ViewReactionViewModel::class)
+    private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)
 
-    @Inject lateinit var viewReactionViewModelFactory: ViewReactionViewModel.Factory
-    @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
+    @Inject lateinit var viewEditHistoryViewModelFactory: ViewEditHistoryViewModel.Factory
+    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
 
     @BindView(R.id.bottom_sheet_display_reactions_list)
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
 
     private val epoxyController by lazy {
-        ViewReactionsEpoxyController(requireContext(), emojiCompatFontProvider.typeface)
+        ViewEditHistoryEpoxyController(requireContext(), viewModel.timelineDateFormatter, eventHtmlRenderer)
     }
 
     override fun injectWith(screenComponent: ScreenComponent) {
@@ -68,7 +68,7 @@ class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context,
                 LinearLayout.VERTICAL)
         epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
-        bottomSheetTitle.text = context?.getString(R.string.reactions)
+        bottomSheetTitle.text = context?.getString(R.string.message_edits)
     }
 
 
@@ -77,7 +77,7 @@ class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(roomId: String, informationData: MessageInformationData): ViewReactionBottomSheet {
+        fun newInstance(roomId: String, informationData: MessageInformationData): ViewEditHistoryBottomSheet {
             val args = Bundle()
             val parcelableArgs = TimelineEventFragmentArgs(
                     informationData.eventId,
@@ -85,8 +85,9 @@ class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     informationData
             )
             args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
-            return ViewReactionBottomSheet().apply { arguments = args }
+            return ViewEditHistoryBottomSheet().apply { arguments = args }
 
         }
     }
 }
+

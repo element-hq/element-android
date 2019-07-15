@@ -7,23 +7,14 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/bottomSheetTitle"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:gravity="center_vertical"
         android:padding="8dp"
-        android:text="@string/reactions"
         android:textColor="?android:textColorSecondary"
-        android:textSize="16sp" />
-
-    <ProgressBar
-        android:id="@+id/bottomSheetViewReactionSpinner"
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
+        android:textSize="16sp"
+        tools:text="@string/reactions" />
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/bottom_sheet_display_reactions_list"

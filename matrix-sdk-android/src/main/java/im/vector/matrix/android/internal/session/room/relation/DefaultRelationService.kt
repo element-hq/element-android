@@ -53,6 +53,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                                                           private val eventFactory: LocalEchoEventFactory,
                                                           private val cryptoService: CryptoService,
                                                           private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
+                                                          private val fetchEditHistoryTask: FetchEditHistoryTask,
                                                           private val monarchy: Monarchy,
                                                           private val taskExecutor: TaskExecutor)
     : RelationService {
@@ -131,6 +132,13 @@ internal class DefaultRelationService @Inject constructor(private val context: C
 
     }
 
+    override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
+        val params = FetchEditHistoryTask.Params(roomId, eventId)
+        fetchEditHistoryTask.configureWith(params)
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
+    }
+
     override fun replyToMessage(eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Cancelable? {
         val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)?.also {
             saveLocalEcho(it)
@@ -169,7 +177,8 @@ internal class DefaultRelationService @Inject constructor(private val context: C
             EventAnnotationsSummaryEntity.where(realm, eventId)
         }
         return Transformations.map(liveEntity) { realmResults ->
-            realmResults.firstOrNull()?.asDomain() ?: EventAnnotationsSummary(eventId, emptyList(), null)
+            realmResults.firstOrNull()?.asDomain()
+                    ?: EventAnnotationsSummary(eventId, emptyList(), null)
         }
     }
 
