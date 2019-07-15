@@ -47,7 +47,7 @@ fun TextContent.removeInReplyFallbacks(): TextContent {
     )
 }
 
-private fun extractUsefulTextFromReply(repliedBody: String): String {
+fun extractUsefulTextFromReply(repliedBody: String): String {
     val lines = repliedBody.lines()
     var wellFormed = repliedBody.startsWith(">")
     var endOfPreviousFound = false
@@ -66,7 +66,7 @@ private fun extractUsefulTextFromReply(repliedBody: String): String {
     return usefullines.joinToString("\n").takeIf { wellFormed } ?: repliedBody
 }
 
-private fun extractUsefulTextFromHtmlReply(repliedBody: String): String {
+fun extractUsefulTextFromHtmlReply(repliedBody: String): String {
     if (repliedBody.startsWith("<mx-reply>")) {
         return repliedBody.substring(repliedBody.lastIndexOf("</mx-reply>") + "</mx-reply>".length).trim()
     }

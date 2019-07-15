@@ -80,6 +80,20 @@ interface RelationService {
                         newBodyAutoMarkdown: Boolean,
                         compatibilityBodyText: String = "* $newBodyText"): Cancelable
 
+
+    /**
+     * Edit a reply. This is a special case because replies contains fallback text as a prefix.
+     * This method will take the new body (stripped from fallbacks) and re-add them before sending.
+     * @param targetEventId The event to edit
+     * @param newBodyText The edited body (stripped from in reply to content)
+     * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
+     */
+    fun editReply(replyToEdit: TimelineEvent,
+                  originalSenderId: String?,
+                  originalEventId : String,
+                  newBodyText: String,
+                  compatibilityBodyText: String = "* $newBodyText"): Cancelable
+
     /**
      * Get's the edit history of the given event
      */
