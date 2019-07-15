@@ -60,7 +60,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     //The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
 
-    private var eventList = loadEventInfo()
+    private val eventList = loadEventInfo()
 
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
 
@@ -121,11 +121,10 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         Timber.v("clearMessageEventOfRoom $roomId")
 
         if (roomId != null) {
-            eventList.removeAll { e ->
-                if (e is NotifiableMessageEvent) {
-                    return@removeAll e.roomId == roomId
+            synchronized(eventList) {
+                eventList.removeAll { e ->
+                    e is NotifiableMessageEvent && e.roomId == roomId
                 }
-                return@removeAll false
             }
             NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
         }
@@ -150,7 +149,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     fun homeActivityDidResume(matrixID: String?) {
         synchronized(eventList) {
             eventList.removeAll { e ->
-                return@removeAll e !is NotifiableMessageEvent //messages are cleared when entering room
+                // messages are cleared when entering room
+                e !is NotifiableMessageEvent
             }
         }
     }
@@ -158,10 +158,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     fun clearMemberShipNotificationForRoom(roomId: String) {
         synchronized(eventList) {
             eventList.removeAll { e ->
-                if (e is InviteNotifiableEvent) {
-                    return@removeAll e.roomId == roomId
-                }
-                return@removeAll false
+                e is InviteNotifiableEvent && e.roomId == roomId
             }
         }
     }
@@ -433,18 +430,20 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
 
     fun persistInfo() {
-        if (eventList.isEmpty()) {
-            deleteCachedRoomNotifications(context)
-            return
-        }
-        try {
-            val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-            if (!file.exists()) file.createNewFile()
-            FileOutputStream(file).use {
-                SecretStoringUtils.securelyStoreObject(eventList, "notificationMgr", it, this.context)
+        synchronized(eventList) {
+            if (eventList.isEmpty()) {
+                deleteCachedRoomNotifications(context)
+                return
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "## Failed to save cached notification info")
+            try {
+                val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
+                if (!file.exists()) file.createNewFile()
+                FileOutputStream(file).use {
+                    SecretStoringUtils.securelyStoreObject(eventList, "notificationMgr", it, this.context)
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "## Failed to save cached notification info")
+            }
         }
     }
 
