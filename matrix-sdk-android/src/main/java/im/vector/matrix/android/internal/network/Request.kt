@@ -19,54 +19,40 @@ package im.vector.matrix.android.internal.network
 import arrow.core.Try
 import arrow.core.failure
 import arrow.core.recoverWith
-import arrow.effects.IO
-import arrow.effects.fix
-import arrow.effects.instances.io.async.async
-import arrow.integrations.retrofit.adapter.runAsync
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.di.MoshiProvider
-import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.ResponseBody
 import retrofit2.Call
 import timber.log.Timber
 import java.io.IOException
-import kotlin.coroutines.resume
 
-internal suspend inline fun <DATA> executeRequest(block: Request<DATA>.() -> Unit) = Request<DATA>().apply(block).execute()
+internal suspend inline fun <DATA : Any> executeRequest(block: Request<DATA>.() -> Unit) = Request<DATA>().apply(block).execute()
 
-internal class Request<DATA> {
+internal class Request<DATA : Any> {
 
     private val moshi: Moshi = MoshiProvider.providesMoshi()
     lateinit var apiCall: Call<DATA>
 
     suspend fun execute(): Try<DATA> {
-        return suspendCancellableCoroutine { continuation ->
-            continuation.invokeOnCancellation {
-                Timber.v("Request is canceled")
-                apiCall.cancel()
+        return Try {
+            val response = apiCall.awaitResponse()
+            if (response.isSuccessful) {
+                response.body()
+                        ?: throw IllegalStateException("The request returned a null body")
+            } else {
+                throw manageFailure(response.errorBody(), response.code())
             }
-            val result = Try {
-                val response = apiCall.runAsync(IO.async()).fix().unsafeRunSync()
-                if (response.isSuccessful) {
-                    response.body()
-                            ?: throw IllegalStateException("The request returned a null body")
-                } else {
-                    throw manageFailure(response.errorBody(), response.code())
-                }
-            }.recoverWith {
-                when (it) {
-                    is IOException              -> Failure.NetworkConnection(it)
-                    is Failure.ServerError,
-                    is Failure.OtherServerError -> it
-                    else                        -> Failure.Unknown(it)
-                }.failure()
-            }
-            continuation.resume(result)
+        }.recoverWith {
+            when (it) {
+                is IOException              -> Failure.NetworkConnection(it)
+                is Failure.ServerError,
+                is Failure.OtherServerError -> it
+                else                        -> Failure.Unknown(it)
+            }.failure()
         }
-
     }
 
     private fun manageFailure(errorBody: ResponseBody?, httpCode: Int): Throwable {
