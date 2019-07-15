@@ -22,6 +22,7 @@
                 android:id="@+id/filteredRoomsSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:closeIcon="@drawable/ic_x_green"
                 app:iconifiedByDefault="false"
                 app:queryHint="@string/home_filter_placeholder_home"
                 app:searchIcon="@drawable/ic_filter" />
