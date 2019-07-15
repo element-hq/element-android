@@ -2,7 +2,7 @@ Changes in RiotX 0.2.1 (2019-XX-XX)
 ===================================================
 
 Features:
- -
+ - Message Editing: View edit history
 
 Improvements:
  - Handle click on redacted events: view source and create permalink

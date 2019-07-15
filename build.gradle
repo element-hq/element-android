@@ -45,6 +45,12 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         google()
         jcenter()
+        maven {
+            url 'https://repo.adobe.com/nexus/content/repositories/public/'
+            content {
+                includeGroupByRegex "diff_match_patch"
+            }
+        }
     }
 }
 

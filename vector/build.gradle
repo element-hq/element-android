@@ -254,6 +254,8 @@ dependencies {
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
     }
 
+    implementation 'diff_match_patch:diff_match_patch:current'
+
     // TESTS
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

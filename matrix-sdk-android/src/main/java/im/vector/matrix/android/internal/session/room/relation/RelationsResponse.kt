@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.internal.session.room.relation
 
-package im.vector.matrix.android.internal.network
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.session.events.model.Event
 
-internal object NetworkConstants {
-
-    private const val URI_API_PREFIX_PATH = "_matrix/client"
-    const val URI_API_PREFIX_PATH_R0 = "$URI_API_PREFIX_PATH/r0/"
-    const val URI_API_PREFIX_PATH_UNSTABLE = "$URI_API_PREFIX_PATH/unstable/"
-
-}
+@JsonClass(generateAdapter = true)
+internal data class RelationsResponse(
+        @Json(name = "chunk") val chunks: List<Event>,
+        @Json(name = "next_batch") val nextBatch: String?,
+        @Json(name = "prev_batch") val prevBatch: String?
+)

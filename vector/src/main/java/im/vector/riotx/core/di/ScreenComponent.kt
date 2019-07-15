@@ -35,10 +35,7 @@ import im.vector.riotx.features.crypto.verification.SASVerificationIncomingFragm
 import im.vector.riotx.features.home.*
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
-import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.action.MessageMenuFragment
-import im.vector.riotx.features.home.room.detail.timeline.action.QuickReactionFragment
-import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionBottomSheet
+import im.vector.riotx.features.home.room.detail.timeline.action.*
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.login.LoginActivity
@@ -92,6 +89,8 @@ interface ScreenComponent {
     fun inject(messageActionsBottomSheet: MessageActionsBottomSheet)
 
     fun inject(viewReactionBottomSheet: ViewReactionBottomSheet)
+
+    fun inject(viewEditHistoryBottomSheet: ViewEditHistoryBottomSheet)
 
     fun inject(messageMenuFragment: MessageMenuFragment)
 

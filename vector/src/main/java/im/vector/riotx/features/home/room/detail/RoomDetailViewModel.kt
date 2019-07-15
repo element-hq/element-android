@@ -114,7 +114,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.RedactAction           -> handleRedactEvent(action)
             is RoomDetailActions.UndoReaction           -> handleUndoReact(action)
             is RoomDetailActions.UpdateQuickReactAction -> handleUpdateQuickReaction(action)
-            is RoomDetailActions.ShowEditHistoryAction  -> handleShowEditHistoryReaction(action)
             is RoomDetailActions.EnterEditMode          -> handleEditAction(action)
             is RoomDetailActions.EnterQuoteMode         -> handleQuoteAction(action)
             is RoomDetailActions.EnterReplyMode         -> handleReplyAction(action)
@@ -308,22 +307,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         val finalText = "$quotedTextMsg\n\n$myText"
         return finalText
     }
-
-    private fun handleShowEditHistoryReaction(action: RoomDetailActions.ShowEditHistoryAction) {
-        //TODO temporary implementation
-        val lastReplace = action.editAggregatedSummary.sourceEvents.lastOrNull()?.let {
-            room.getTimeLineEvent(it)
-        } ?: return
-
-        val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
-        _nonBlockingPopAlert.postValue(LiveEvent(
-                Pair(R.string.last_edited_info_message, listOf(
-                        lastReplace.getDisambiguatedDisplayName(),
-                        dateFormat.format(Date(lastReplace.root.originServerTs ?: 0)))
-                ))
-        )
-    }
-
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
         _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
