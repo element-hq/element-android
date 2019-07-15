@@ -24,7 +24,6 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.utils.containsOnlyEmojis
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
@@ -38,10 +37,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
     var message: CharSequence? = null
-    @EpoxyAttribute
-    override lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute
-    override lateinit var informationData: MessageInformationData
     @EpoxyAttribute
     var urlClickCallback: TimelineEventController.UrlClickCallback? = null
 
@@ -73,7 +68,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 null)
 
         holder.messageView.setTextFuture(textFuture)
-        holder.messageView.renderSendState()
+        renderSendState(holder.messageView, holder.messageView)
         holder.messageView.setOnClickListener(cellClickListener)
         holder.messageView.setOnLongClickListener(longClickListener)
         findPillsAndProcess { it.bind(holder.messageView) }
@@ -90,12 +85,13 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         }
     }
 
-    override fun getStubType(): Int = R.id.messageContentTextStub
+    override fun getViewType() = STUB_ID
 
-    class Holder : AbsMessageItem.Holder() {
+    class Holder : AbsMessageItem.Holder(STUB_ID) {
         val messageView by bind<AppCompatTextView>(R.id.messageTextView)
-        override fun getStubId(): Int = R.id.messageContentTextStub
-
     }
 
+    companion object {
+        private const val STUB_ID = R.id.messageContentTextStub
+    }
 }

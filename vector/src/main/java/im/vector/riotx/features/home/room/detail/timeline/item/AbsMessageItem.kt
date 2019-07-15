@@ -23,24 +23,32 @@ import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.IdRes
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.view.children
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotx.R
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.core.utils.DimensionUtils.dpToPx
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.reactions.widget.ReactionButton
+import im.vector.riotx.features.ui.getMessageTextColor
 
 
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
-    abstract val informationData: MessageInformationData
+    @EpoxyAttribute
+    lateinit var informationData: MessageInformationData
 
-    abstract val avatarRenderer: AvatarRenderer
+    @EpoxyAttribute
+    lateinit var avatarRenderer: AvatarRenderer
+
+    @EpoxyAttribute
+    lateinit var colorProvider: ColorProvider
 
     @EpoxyAttribute
     var longClickListener: View.OnLongClickListener? = null
@@ -153,13 +161,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         return true
     }
 
-    protected fun View.renderSendState() {
-        isClickable = informationData.sendState.isSent()
-        alpha = if (informationData.sendState.isSent()) 1f else 0.5f
+    protected fun renderSendState(root: View, textView: TextView?) {
+        root.isClickable = informationData.sendState.isSent()
+        textView?.setTextColor(colorProvider.getMessageTextColor(informationData.sendState))
     }
 
-    abstract class Holder : BaseHolder() {
-
+    abstract class Holder(@IdRes stubId: Int) : BaseHolder(stubId) {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)

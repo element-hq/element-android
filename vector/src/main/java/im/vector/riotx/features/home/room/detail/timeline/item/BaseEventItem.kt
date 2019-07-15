@@ -26,6 +26,9 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.platform.CheckableView
 import im.vector.riotx.core.utils.DimensionUtils.dpToPx
 
+/**
+ * Children must override getViewType()
+ */
 abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>() {
 
     var avatarStyle: AvatarStyle = AvatarStyle.SMALL
@@ -43,21 +46,9 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         holder.checkableBackground.isChecked = highlighted
     }
 
-
-    override fun getViewType(): Int {
-        return getStubType()
-    }
-
-    abstract fun getStubType(): Int
-
-
-    abstract class BaseHolder : VectorEpoxyHolder() {
-
+    abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
         val leftGuideline by bind<Guideline>(R.id.messageStartGuideline)
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
-
-        @IdRes
-        abstract fun getStubId(): Int
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)
@@ -65,9 +56,8 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         }
 
         private fun inflateStub() {
-            view.findViewById<ViewStub>(getStubId()).inflate()
+            view.findViewById<ViewStub>(stubId).inflate()
         }
-
     }
 
     companion object {

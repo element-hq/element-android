@@ -25,7 +25,6 @@ import androidx.annotation.DrawableRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
@@ -36,34 +35,27 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     @DrawableRes
     var iconRes: Int = 0
     @EpoxyAttribute
-    override lateinit var informationData: MessageInformationData
-    @EpoxyAttribute
-    override lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute
     var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.fileLayout.renderSendState()
+        renderSendState(holder.fileLayout, holder.filenameView)
         holder.filenameView.text = filename
         holder.fileImageView.setImageResource(iconRes)
         holder.filenameView.setOnClickListener(clickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
     }
 
-    override fun getStubType(): Int = STUB_ID
+    override fun getViewType() = STUB_ID
 
-    class Holder : AbsMessageItem.Holder() {
-        override fun getStubId(): Int = STUB_ID
-
+    class Holder : AbsMessageItem.Holder(STUB_ID) {
         val fileLayout by bind<ViewGroup>(R.id.messageFileLayout)
         val fileImageView by bind<ImageView>(R.id.messageFileImageView)
         val filenameView by bind<TextView>(R.id.messageFilenameView)
-
     }
 
     companion object {
-        private val STUB_ID = R.id.messageContentFileStub
+        private const val STUB_ID = R.id.messageContentFileStub
     }
 
 }

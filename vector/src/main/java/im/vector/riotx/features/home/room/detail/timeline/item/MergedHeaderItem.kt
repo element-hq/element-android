@@ -46,7 +46,7 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
         return Holder()
     }
 
-    override fun getStubType(): Int = STUB_ID
+    override fun getViewType() = STUB_ID
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -84,8 +84,7 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
             val avatarUrl: String?
     )
 
-    class Holder : BaseHolder() {
-        override fun getStubId(): Int = STUB_ID
+    class Holder : BaseHolder(STUB_ID) {
 
         val expandView by bind<TextView>(R.id.itemMergedExpandTextView)
         val summaryView by bind<TextView>(R.id.itemMergedSummaryTextView)
@@ -95,6 +94,6 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
     }
 
     companion object {
-        private val STUB_ID = R.id.messageContentMergedheaderStub
+        private const val STUB_ID = R.id.messageContentMergedheaderStub
     }
 }

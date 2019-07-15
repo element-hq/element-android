@@ -57,10 +57,9 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         holder.view.setOnLongClickListener(longClickListener)
     }
 
-    override fun getStubType(): Int = STUB_ID
+    override fun getViewType() = STUB_ID
 
-    class Holder : BaseHolder() {
-        override fun getStubId(): Int = STUB_ID
+    class Holder : BaseHolder(STUB_ID) {
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
     }

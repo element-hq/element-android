@@ -22,7 +22,6 @@ import android.widget.ImageView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.media.ImageContentRenderer
 
@@ -31,10 +30,6 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
     @EpoxyAttribute
     lateinit var mediaData: ImageContentRenderer.Data
-    @EpoxyAttribute
-    override lateinit var informationData: MessageInformationData
-    @EpoxyAttribute
-    override lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
     var playable: Boolean = false
     @EpoxyAttribute
@@ -52,7 +47,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         holder.imageView.setOnLongClickListener(longClickListener)
         holder.mediaContentView.setOnClickListener(cellClickListener)
         holder.mediaContentView.setOnLongClickListener(longClickListener)
-        holder.imageView.renderSendState()
+        // The sending state color will be apply to the progress text
+        renderSendState(holder.imageView, null)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
     }
 
@@ -61,23 +57,17 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         super.unbind(holder)
     }
 
-    override fun getStubType(): Int = STUB_ID
+    override fun getViewType() = STUB_ID
 
-    class Holder : AbsMessageItem.Holder() {
-
-        override fun getStubId(): Int = STUB_ID
-
+    class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
         val imageView by bind<ImageView>(R.id.messageThumbnailView)
         val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
 
         val mediaContentView by bind<ViewGroup>(R.id.messageContentMedia)
-
     }
-
 
     companion object {
-        private val STUB_ID = R.id.messageContentMediaStub
+        private const val STUB_ID = R.id.messageContentMediaStub
     }
-
 }
