@@ -28,4 +28,6 @@ sealed class RoomListActions {
 
     data class RejectInvitation(val roomSummary: RoomSummary) : RoomListActions()
 
+    data class FilterWith(val filter: String) : RoomListActions()
+
 }

@@ -14,8 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room
+package im.vector.riotx.features.home.room.list
 
-import im.vector.riotx.core.utils.RxStore
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import io.reactivex.functions.Predicate
 
-class VisibleRoomStore : RxStore<String>()
+class RoomListNameFilter : Predicate<RoomSummary> {
+
+    var filter: String = ""
+
+    override fun test(roomSummary: RoomSummary): Boolean {
+        if (filter.isBlank()) {
+            // No filter
+            return true
+        }
+
+        return roomSummary.displayName.contains(filter, ignoreCase = true)
+    }
+}

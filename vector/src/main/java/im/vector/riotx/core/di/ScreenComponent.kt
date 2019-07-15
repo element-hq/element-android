@@ -32,10 +32,14 @@ import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupStep1Frag
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupStep2Fragment
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupStep3Fragment
 import im.vector.riotx.features.crypto.verification.SASVerificationIncomingFragment
-import im.vector.riotx.features.home.*
+import im.vector.riotx.features.home.HomeActivity
+import im.vector.riotx.features.home.HomeDetailFragment
+import im.vector.riotx.features.home.HomeDrawerFragment
+import im.vector.riotx.features.home.HomeModule
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.timeline.action.*
+import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.login.LoginActivity
@@ -129,6 +133,8 @@ interface ScreenComponent {
     fun inject(bugReportActivity: BugReportActivity)
 
     fun inject(imageMediaViewerActivity: ImageMediaViewerActivity)
+
+    fun inject(filteredRoomsActivity: FilteredRoomsActivity)
 
     fun inject(vectorInviteView: VectorInviteView)
 

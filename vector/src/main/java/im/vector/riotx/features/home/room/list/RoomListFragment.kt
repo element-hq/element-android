@@ -53,7 +53,8 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     enum class DisplayMode(@StringRes val titleRes: Int) {
         HOME(R.string.bottom_action_home),
         PEOPLE(R.string.bottom_action_people_x),
-        ROOMS(R.string.bottom_action_rooms)
+        ROOMS(R.string.bottom_action_rooms),
+        FILTERED(/* Not used */ R.string.bottom_action_rooms)
     }
 
     companion object {
@@ -97,9 +98,10 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
 
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
-            DisplayMode.HOME   -> createChatFabMenu.isVisible = true
-            DisplayMode.PEOPLE -> createChatRoomButton.isVisible = true
-            else               -> createGroupRoomButton.isVisible = true
+            DisplayMode.HOME     -> createChatFabMenu.isVisible = true
+            DisplayMode.PEOPLE   -> createChatRoomButton.isVisible = true
+            DisplayMode.ROOMS    -> createGroupRoomButton.isVisible = true
+            DisplayMode.FILTERED -> Unit // No button in this mode
         }
 
         createChatRoomButton.setOnClickListener {
@@ -122,9 +124,10 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
-                                    DisplayMode.HOME   -> createChatFabMenu.hide()
-                                    DisplayMode.PEOPLE -> createChatRoomButton.hide()
-                                    else               -> createGroupRoomButton.hide()
+                                    DisplayMode.HOME     -> createChatFabMenu.hide()
+                                    DisplayMode.PEOPLE   -> createChatRoomButton.hide()
+                                    DisplayMode.ROOMS    -> createGroupRoomButton.hide()
+                                    DisplayMode.FILTERED -> Unit
                                 }
                             }
                         }
@@ -132,6 +135,9 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
                 })
     }
 
+    fun filterRoomsWith(filter: String) {
+        roomListViewModel.accept(RoomListActions.FilterWith(filter))
+    }
 
     override fun openRoomDirectory() {
         navigator.openRoomDirectory(requireActivity())
@@ -155,9 +161,10 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     private val showFabRunnable = Runnable {
         if (isAdded) {
             when (roomListParams.displayMode) {
-                DisplayMode.HOME   -> createChatFabMenu.show()
-                DisplayMode.PEOPLE -> createChatRoomButton.show()
-                else               -> createGroupRoomButton.show()
+                DisplayMode.HOME     -> createChatFabMenu.show()
+                DisplayMode.PEOPLE   -> createChatRoomButton.show()
+                DisplayMode.ROOMS    -> createGroupRoomButton.show()
+                DisplayMode.FILTERED -> Unit
             }
         }
     }
@@ -188,7 +195,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
                 }
                 .isNullOrEmpty()
         val emptyState = when (roomListParams.displayMode) {
-            DisplayMode.HOME   -> {
+            DisplayMode.HOME     -> {
                 if (hasNoRoom) {
                     StateView.State.Empty(
                             getString(R.string.room_list_catchup_welcome_title),
@@ -202,18 +209,21 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
                             getString(R.string.room_list_catchup_empty_body))
                 }
             }
-            DisplayMode.PEOPLE ->
+            DisplayMode.PEOPLE   ->
                 StateView.State.Empty(
                         getString(R.string.room_list_people_empty_title),
                         ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_chat),
                         getString(R.string.room_list_people_empty_body)
                 )
-            DisplayMode.ROOMS  ->
+            DisplayMode.ROOMS    ->
                 StateView.State.Empty(
                         getString(R.string.room_list_rooms_empty_title),
                         ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
                         getString(R.string.room_list_rooms_empty_body)
                 )
+            DisplayMode.FILTERED ->
+                // Always display the content in this mode, because if the footer
+                StateView.State.Content
         }
         stateView.state = emptyState
     }
@@ -255,4 +265,10 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     override fun onToggleRoomCategory(roomCategory: RoomCategory) {
         roomListViewModel.accept(RoomListActions.ToggleCategory(roomCategory))
     }
+
+    override fun createRoom() {
+        // TODO Create an Activity to host CreateRoomFragment
+        navigator.openRoomDirectory(requireActivity())
+    }
+
 }

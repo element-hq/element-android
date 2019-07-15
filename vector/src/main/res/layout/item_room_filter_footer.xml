@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?riotx_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="56dp"
+        android:text="@string/room_filtering_footer_title"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/roomFilterFooterCreateRoom"
+        style="@style/VectorButtonStyleFlat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:text="@string/room_filtering_footer_create_new_room" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/roomFilterFooterCreateDirect"
+        style="@style/VectorButtonStyleFlat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/room_filtering_footer_create_new_direct_message" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/roomFilterFooterOpenRoomDirectory"
+        style="@style/VectorButtonStyleFlat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
+        android:text="@string/room_filtering_footer_open_room_directory" />
+
+</LinearLayout>

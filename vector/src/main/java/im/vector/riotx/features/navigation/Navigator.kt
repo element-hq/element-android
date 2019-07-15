@@ -29,6 +29,8 @@ interface Navigator {
 
     fun openRoomDirectory(context: Context)
 
+    fun openRoomsFiltering(context: Context)
+
     fun openSettings(context: Context)
 
     fun openDebug(context: Context)
