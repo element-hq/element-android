@@ -18,6 +18,8 @@ package im.vector.matrix.android.internal.session.room.send
 
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromHtmlReply
+import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
 
 /**
  * Contains a text and eventually a formatted text
@@ -47,28 +49,4 @@ fun TextContent.removeInReplyFallbacks(): TextContent {
     )
 }
 
-fun extractUsefulTextFromReply(repliedBody: String): String {
-    val lines = repliedBody.lines()
-    var wellFormed = repliedBody.startsWith(">")
-    var endOfPreviousFound = false
-    val usefullines = ArrayList<String>()
-    lines.forEach {
-        if (it == "") {
-            endOfPreviousFound = true
-            return@forEach
-        }
-        if (!endOfPreviousFound) {
-            wellFormed = wellFormed && it.startsWith(">")
-        } else {
-            usefullines.add(it)
-        }
-    }
-    return usefullines.joinToString("\n").takeIf { wellFormed } ?: repliedBody
-}
 
-fun extractUsefulTextFromHtmlReply(repliedBody: String): String {
-    if (repliedBody.startsWith("<mx-reply>")) {
-        return repliedBody.substring(repliedBody.lastIndexOf("</mx-reply>") + "</mx-reply>".length).trim()
-    }
-    return repliedBody
-}

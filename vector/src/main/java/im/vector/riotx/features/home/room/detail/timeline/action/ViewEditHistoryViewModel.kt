@@ -21,6 +21,8 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFormatter
 
@@ -28,6 +30,7 @@ import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFor
 data class ViewEditHistoryViewState(
         val eventId: String,
         val roomId: String,
+        val isOriginalAReply: Boolean = false,
         val editList: Async<List<Event>> = Uninitialized)
     : MvRxState {
 
@@ -77,11 +80,16 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
             override fun onSuccess(data: List<Event>) {
                 //TODO until supported by API Add original event manually
                 val withOriginal = data.toMutableList()
+                var originalIsReply = false
                 room.getTimeLineEvent(eventId)?.let {
                     withOriginal.add(it.root)
+                    originalIsReply = it.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId != null
                 }
                 setState {
-                    copy(editList = Success(withOriginal))
+                    copy(
+                            editList = Success(withOriginal),
+                            isOriginalAReply = originalIsReply
+                    )
                 }
             }
         })
