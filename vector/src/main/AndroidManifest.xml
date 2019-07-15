@@ -58,6 +58,7 @@
         <activity
             android:name=".features.reactions.EmojiReactionPickerActivity"
             android:label="@string/title_activity_emoji_reaction_picker" />
+        <activity android:name=".features.roomdirectory.createroom.CreateRoomActivity" />
         <activity android:name=".features.roomdirectory.RoomDirectoryActivity" />
         <activity android:name=".features.roomdirectory.roompreview.RoomPreviewActivity" />
         <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />

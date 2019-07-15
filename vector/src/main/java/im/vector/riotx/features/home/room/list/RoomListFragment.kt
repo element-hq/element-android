@@ -266,9 +266,9 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         roomListViewModel.accept(RoomListActions.ToggleCategory(roomCategory))
     }
 
+    // TODO Pass title
     override fun createRoom() {
-        // TODO Create an Activity to host CreateRoomFragment
-        navigator.openRoomDirectory(requireActivity())
+        navigator.openCreateRoom(requireActivity())
     }
 
 }

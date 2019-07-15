@@ -51,6 +51,7 @@ import im.vector.riotx.features.rageshake.RageShake
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
+import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
@@ -135,6 +136,8 @@ interface ScreenComponent {
     fun inject(imageMediaViewerActivity: ImageMediaViewerActivity)
 
     fun inject(filteredRoomsActivity: FilteredRoomsActivity)
+
+    fun inject(createRoomActivity: CreateRoomActivity)
 
     fun inject(vectorInviteView: VectorInviteView)
 
