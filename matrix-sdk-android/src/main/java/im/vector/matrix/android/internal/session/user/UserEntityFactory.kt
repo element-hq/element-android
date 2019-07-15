@@ -24,7 +24,7 @@ import im.vector.matrix.android.internal.database.model.UserEntity
 
 internal object UserEntityFactory {
 
-    fun create(event: Event): UserEntity? {
+    fun createOrNull(event: Event): UserEntity? {
         if (event.type != EventType.STATE_ROOM_MEMBER) {
             return null
         }

@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
 import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.find
@@ -124,34 +125,29 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         }
         roomEntity.membership = Membership.JOIN
 
-        val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
-        val isInitialSync = lastChunk == null
-        val lastStateIndex = lastChunk?.lastStateIndex(PaginationDirection.FORWARDS) ?: 0
-        val numberOfStateEvents = roomSync.state?.events?.size ?: 0
-        val stateIndexOffset = lastStateIndex + numberOfStateEvents
-
         // State event
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
-            val untimelinedStateIndex = if (isInitialSync) Int.MIN_VALUE else stateIndexOffset
+            val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
+                    ?: Int.MIN_VALUE
+            val untimelinedStateIndex = minStateIndex + 1
             roomSync.state.events.forEach { event ->
                 roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
                 // Give info to crypto module
                 cryptoManager.onStateEvent(roomId, event)
-                UserEntityFactory.create(event)?.also {
+                UserEntityFactory.createOrNull(event)?.also {
                     realm.insertOrUpdate(it)
                 }
             }
         }
 
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
-            val timelineStateOffset = if (isInitialSync || roomSync.timeline.limited.not()) 0 else stateIndexOffset
             val chunkEntity = handleTimelineEvents(
                     realm,
                     roomEntity,
                     roomSync.timeline.events,
                     roomSync.timeline.prevToken,
                     roomSync.timeline.limited,
-                    timelineStateOffset
+                    0
             )
             roomEntity.addOrUpdate(chunkEntity)
         }
@@ -227,7 +223,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                     Timber.v("Can't find corresponding local echo for tx:$it")
                 }
             }
-            UserEntityFactory.create(event)?.also {
+            UserEntityFactory.createOrNull(event)?.also {
                 realm.insertOrUpdate(it)
             }
         }

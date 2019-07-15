@@ -74,7 +74,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
 
                     for (roomMemberEvent in response.roomMemberEvents) {
                         roomEntity.addStateEvent(roomMemberEvent)
-                        UserEntityFactory.create(roomMemberEvent)?.also {
+                        UserEntityFactory.createOrNull(roomMemberEvent)?.also {
                             realm.insertOrUpdate(it)
                         }
                     }

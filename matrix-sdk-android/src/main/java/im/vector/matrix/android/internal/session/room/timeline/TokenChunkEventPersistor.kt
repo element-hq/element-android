@@ -153,7 +153,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         for (event in receivedChunk.events) {
                             event.eventId?.also { eventIds.add(it) }
                             currentChunk.add(roomId, event, direction, isUnlinked = currentChunk.isUnlinked())
-                            UserEntityFactory.create(event)?.also {
+                            UserEntityFactory.createOrNull(event)?.also {
                                 realm.insertOrUpdate(it)
                             }
                         }
@@ -174,7 +174,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         roomEntity.addOrUpdate(currentChunk)
                         for (stateEvent in receivedChunk.stateEvents) {
                             roomEntity.addStateEvent(stateEvent, isUnlinked = currentChunk.isUnlinked())
-                            UserEntityFactory.create(stateEvent)?.also {
+                            UserEntityFactory.createOrNull(stateEvent)?.also {
                                 realm.insertOrUpdate(it)
                             }
                         }
