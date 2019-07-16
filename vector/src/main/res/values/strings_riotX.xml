@@ -32,5 +32,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Send a new direct message</string>
     <string name="room_filtering_footer_open_room_directory">View the room directory</string>
 
+    <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
+
 
 </resources>

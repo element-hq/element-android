@@ -33,26 +33,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways">
 
-            <!-- Note: Background is modified in the code for other themes -->
-            <EditText
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/publicRoomsFilter"
+                style="@style/VectorSearchView"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="@dimen/layout_horizontal_margin"
-                android:layout_marginRight="@dimen/layout_horizontal_margin"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/bg_search_edit_text_light"
-                android:drawableStart="@drawable/ic_search_white"
-                android:drawableLeft="@drawable/ic_search_white"
-                android:drawablePadding="8dp"
-                android:drawableTint="?riotx_text_secondary"
-                android:hint="@string/home_filter_placeholder_rooms"
-                android:lines="1"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp" />
+                android:layout_height="wrap_content"
+                app:queryHint="@string/room_directory_search_hint" />
 
         </androidx.appcompat.widget.Toolbar>
 
