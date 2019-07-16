@@ -84,7 +84,7 @@ interface Session :
     /**
      * This method start the sync thread.
      */
-    fun startSync()
+    fun startSync(fromForeground : Boolean)
 
     /**
      * This method stop the sync thread.
