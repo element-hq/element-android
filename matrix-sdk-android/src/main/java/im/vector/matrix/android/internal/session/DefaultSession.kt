@@ -94,11 +94,11 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     }
 
     override fun requireBackgroundSync() {
-        SyncWorker.requireBackgroundSync(context, sessionParams.credentials.userId)
+        SyncWorker.requireBackgroundSync(context, myUserId)
     }
 
     override fun startAutomaticBackgroundSync(repeatDelay: Long) {
-        SyncWorker.automaticallyBackgroundSync(context, sessionParams.credentials.userId, 0, repeatDelay)
+        SyncWorker.automaticallyBackgroundSync(context, myUserId, 0, repeatDelay)
     }
 
     override fun stopAnyBackgroundSync() {

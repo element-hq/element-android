@@ -58,7 +58,7 @@ internal class SessionManager @Inject constructor(private val matrixComponent: M
                 .factory()
                 .create(matrixComponent, sessionParams)
                 .also {
-                    sessionComponents[sessionParams.credentials.userId] = it
+                    sessionComponents[userId] = it
                 }
     }
 

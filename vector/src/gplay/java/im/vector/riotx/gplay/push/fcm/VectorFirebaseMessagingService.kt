@@ -199,7 +199,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         if (eventType == null) {
             //Just add a generic unknown event
             val simpleNotifiableEvent = SimpleNotifiableEvent(
-                    session.sessionParams.credentials.userId,
+                    session.myUserId,
                     eventId,
                     true, //It's an issue in this case, all event will bing even if expected to be silent.
                     title = getString(R.string.notification_unknown_new_event),
@@ -238,7 +238,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 }
 
                 notifiableEvent.isPushGatewayEvent = true
-                notifiableEvent.matrixID = session.sessionParams.credentials.userId
+                notifiableEvent.matrixID = session.myUserId
                 notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
                 notificationDrawerManager.refreshNotificationDrawer()
             }

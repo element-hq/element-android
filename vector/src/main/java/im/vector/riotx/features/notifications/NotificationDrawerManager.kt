@@ -181,9 +181,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        val user = session.getUser(session.sessionParams.credentials.userId)
+        val user = session.getUser(session.myUserId)
         // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-        val myUserDisplayName = user?.displayName?.takeIf { it.isNotBlank() } ?: session.sessionParams.credentials.userId
+        val myUserDisplayName = user?.displayName?.takeIf { it.isNotBlank() } ?: session.myUserId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
 

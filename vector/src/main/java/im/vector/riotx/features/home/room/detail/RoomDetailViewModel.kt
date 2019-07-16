@@ -39,7 +39,6 @@ import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.rx.rx
-import im.vector.riotx.R
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.UserPreferencesProvider
@@ -52,8 +51,6 @@ import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -347,7 +344,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleUndoReact(action: RoomDetailActions.UndoReaction) {
-        room.undoReaction(action.key, action.targetEventId, session.sessionParams.credentials.userId)
+        room.undoReaction(action.key, action.targetEventId, session.myUserId)
     }
 
 
@@ -355,7 +352,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (action.add) {
             room.sendReaction(action.selectedReaction, action.targetEventId)
         } else {
-            room.undoReaction(action.selectedReaction, action.targetEventId, session.sessionParams.credentials.userId)
+            room.undoReaction(action.selectedReaction, action.targetEventId, session.myUserId)
         }
     }
 

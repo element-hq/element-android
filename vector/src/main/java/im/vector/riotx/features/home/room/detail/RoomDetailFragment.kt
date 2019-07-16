@@ -486,7 +486,7 @@ class RoomDetailFragment :
             timelineEventController.setTimeline(state.timeline, state.eventId)
             inviteView.visibility = View.GONE
 
-            val uid = session.sessionParams.credentials.userId
+            val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
             avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
 
@@ -780,7 +780,7 @@ class RoomDetailFragment :
         if (null != text) {
 //            var vibrate = false
 
-            val myDisplayName = session.getUser(session.sessionParams.credentials.userId)?.displayName
+            val myDisplayName = session.getUser(session.myUserId)?.displayName
             if (TextUtils.equals(myDisplayName, text)) {
                 // current user
                 if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
