@@ -127,13 +127,6 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 //TODO is downloading attachement?
 
                 if (!event.root.isRedacted()) {
-                    if (event.canReact()) {
-                        this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, eventId))
-                    }
-                    if (canCopy(type)) {
-                        //TODO copy images? html? see ClipBoard
-                        this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent!!.body))
-                    }
 
                     if (canReply(event, messageContent)) {
                         this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, eventId))
@@ -145,6 +138,15 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
 
                     if (canRedact(event, session.sessionParams.credentials.userId)) {
                         this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, eventId))
+                    }
+
+                    if (canCopy(type)) {
+                        //TODO copy images? html? see ClipBoard
+                        this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent!!.body))
+                    }
+
+                    if (event.canReact()) {
+                        this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, eventId))
                     }
 
                     if (canQuote(event, messageContent)) {
