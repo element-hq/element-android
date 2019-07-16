@@ -20,10 +20,9 @@
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/filteredRoomsSearchView"
+                style="@style/VectorSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:closeIcon="@drawable/ic_x_green"
-                app:iconifiedByDefault="false"
                 app:queryHint="@string/room_filtering_filter_hint"
                 app:searchIcon="@drawable/ic_filter" />
 
