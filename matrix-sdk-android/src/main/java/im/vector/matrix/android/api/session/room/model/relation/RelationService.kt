@@ -84,7 +84,9 @@ interface RelationService {
     /**
      * Edit a reply. This is a special case because replies contains fallback text as a prefix.
      * This method will take the new body (stripped from fallbacks) and re-add them before sending.
-     * @param targetEventId The event to edit
+     * @param replyToEdit The event to edit
+     * @param originalSenderId the sender of the message that this reply (being edited) is relating to
+     * @param originalEventId the event id that this reply (being edited) is relating to
      * @param newBodyText The edited body (stripped from in reply to content)
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */

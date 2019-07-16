@@ -21,8 +21,9 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.session.room.send.extractUsefulTextFromReply
+import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
 
 /**
  * This data class is a wrapper around an Event. It allows to get useful data in the context of a timeline.
@@ -93,7 +94,7 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? = annotations?.editSu
 
 fun TimelineEvent.getTextEditableContent(): String? {
     val originalContent = root.getClearContent().toModel<MessageContent>() ?: return null
-    val isReply = originalContent.relatesTo?.inReplyTo != null
+    val isReply = originalContent.isReply()
     val lastContent = getLastMessageContent()
     return if (isReply) {
         return extractUsefulTextFromReply(lastContent?.body ?: "")

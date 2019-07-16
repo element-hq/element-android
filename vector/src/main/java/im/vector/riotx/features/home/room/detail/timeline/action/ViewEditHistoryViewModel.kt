@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFormatter
 
@@ -83,7 +84,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                 var originalIsReply = false
                 room.getTimeLineEvent(eventId)?.let {
                     withOriginal.add(it.root)
-                    originalIsReply = it.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId != null
+                    originalIsReply = it.root.getClearContent().toModel<MessageContent>().isReply()
                 }
                 setState {
                     copy(

@@ -38,7 +38,9 @@ object ContentUtils {
 
     fun extractUsefulTextFromHtmlReply(repliedBody: String): String {
         if (repliedBody.startsWith("<mx-reply>")) {
-            return repliedBody.substring(repliedBody.lastIndexOf("</mx-reply>") + "</mx-reply>".length).trim()
+            val closingTagIndex = repliedBody.lastIndexOf("</mx-reply>")
+            if (closingTagIndex != -1)
+                return repliedBody.substring(closingTagIndex + "</mx-reply>".length).trim()
         }
         return repliedBody
     }
