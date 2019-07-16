@@ -32,10 +32,14 @@ import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupStep1Frag
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupStep2Fragment
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupStep3Fragment
 import im.vector.riotx.features.crypto.verification.SASVerificationIncomingFragment
-import im.vector.riotx.features.home.*
+import im.vector.riotx.features.home.HomeActivity
+import im.vector.riotx.features.home.HomeDetailFragment
+import im.vector.riotx.features.home.HomeDrawerFragment
+import im.vector.riotx.features.home.HomeModule
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.timeline.action.*
+import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.login.LoginActivity
@@ -47,6 +51,7 @@ import im.vector.riotx.features.rageshake.RageShake
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
+import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
@@ -129,6 +134,10 @@ interface ScreenComponent {
     fun inject(bugReportActivity: BugReportActivity)
 
     fun inject(imageMediaViewerActivity: ImageMediaViewerActivity)
+
+    fun inject(filteredRoomsActivity: FilteredRoomsActivity)
+
+    fun inject(createRoomActivity: CreateRoomActivity)
 
     fun inject(vectorInviteView: VectorInviteView)
 

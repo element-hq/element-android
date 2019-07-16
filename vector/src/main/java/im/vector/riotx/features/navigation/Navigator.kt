@@ -27,7 +27,11 @@ interface Navigator {
 
     fun openRoomPreview(publicRoom: PublicRoom, context: Context)
 
+    fun openCreateRoom(context: Context)
+
     fun openRoomDirectory(context: Context)
+
+    fun openRoomsFiltering(context: Context)
 
     fun openSettings(context: Context)
 

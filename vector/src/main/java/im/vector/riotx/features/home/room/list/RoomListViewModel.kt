@@ -76,6 +76,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             is RoomListActions.ToggleCategory   -> handleToggleCategory(action)
             is RoomListActions.AcceptInvitation -> handleAcceptInvitation(action)
             is RoomListActions.RejectInvitation -> handleRejectInvitation(action)
+            is RoomListActions.FilterWith       -> handleFilter(action)
         }
     }
 
@@ -89,10 +90,21 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
         this.toggle(action.category)
     }
 
+    private fun handleFilter(action: RoomListActions.FilterWith) {
+        setState {
+            copy(
+                    roomFilter = action.filter
+            )
+        }
+    }
 
     private fun observeRoomSummaries() {
         homeRoomListObservableSource
                 .observe()
+                .observeOn(Schedulers.computation())
+                .map {
+                    it.sortedWith(chronologicalRoomComparator)
+                }
                 .execute { asyncRooms ->
                     copy(asyncRooms = asyncRooms)
                 }
@@ -201,9 +213,10 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                 }
 
         val roomComparator = when (displayMode) {
-            RoomListFragment.DisplayMode.HOME   -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.PEOPLE -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.ROOMS  -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.HOME     -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.PEOPLE   -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.ROOMS    -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.FILTERED -> chronologicalRoomComparator
         }
 
         return RoomSummaries().apply {

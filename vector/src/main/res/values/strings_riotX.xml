@@ -25,4 +25,11 @@
     <string name="message_edits">Message Edits</string>
     <string name="no_message_edits_found">No edits found</string>
 
+    <!-- Room filtering -->
+    <string name="room_filtering_footer_title">Can’t find what you’re looking for?</string>
+    <string name="room_filtering_footer_create_new_room">Create a new room</string>
+    <string name="room_filtering_footer_create_new_direct_message">Send a new direct message</string>
+    <string name="room_filtering_footer_open_room_directory">View the room directory</string>
+
+
 </resources>
