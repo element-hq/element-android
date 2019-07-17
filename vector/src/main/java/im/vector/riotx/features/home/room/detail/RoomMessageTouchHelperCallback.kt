@@ -78,15 +78,21 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     //We never let items completely go out
     override fun convertToAbsoluteDirection(flags: Int, layoutDirection: Int): Int {
         if (swipeBack) {
-            swipeBack = false;
-            return 0;
+            swipeBack = false
+            return 0
         }
-        return super.convertToAbsoluteDirection(flags, layoutDirection);
+        return super.convertToAbsoluteDirection(flags, layoutDirection)
     }
 
-    override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: EpoxyViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+    override fun onChildDraw(c: Canvas,
+                             recyclerView: RecyclerView,
+                             viewHolder: EpoxyViewHolder,
+                             dX: Float,
+                             dY: Float,
+                             actionState: Int,
+                             isCurrentlyActive: Boolean) {
         if (actionState == ACTION_STATE_SWIPE) {
-            setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
         }
         val size = triggerDistance
         if (Math.abs(viewHolder.itemView.translationX) < size || dX > this.dX /*going back*/) {
@@ -102,8 +108,10 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     private fun setTouchListener(c: Canvas,
                                  recyclerView: RecyclerView,
                                  viewHolder: EpoxyViewHolder,
-                                 dX: Float, dY: Float,
-                                 actionState: Int, isCurrentlyActive: Boolean) {
+                                 dX: Float,
+                                 dY: Float,
+                                 actionState: Int,
+                                 isCurrentlyActive: Boolean) {
         //TODO can this interfer with other interactions? should i remove it
         recyclerView.setOnTouchListener { v, event ->
             swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
