@@ -334,8 +334,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                         formattedText = content.formattedBody
                     }
                 }
-                val isReply = content.isReply() ||
-                        originalContent.isReply()
+                val isReply = content.isReply() || originalContent.isReply()
                 return if (isReply)
                     TextContent(content.body, formattedText).removeInReplyFallbacks()
                 else
