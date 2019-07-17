@@ -23,19 +23,19 @@ import retrofit2.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-suspend fun <T : Any> Call<T>.awaitResponse(): Response<T> {
-  return suspendCancellableCoroutine { continuation ->
-    continuation.invokeOnCancellation {
-      cancel()
-    }
-    enqueue(object : Callback<T> {
-      override fun onResponse(call: Call<T>, response: Response<T>) {
-        continuation.resume(response)
-      }
+suspend fun <T> Call<T>.awaitResponse(): Response<T> {
+    return suspendCancellableCoroutine { continuation ->
+        continuation.invokeOnCancellation {
+            cancel()
+        }
+        enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                continuation.resume(response)
+            }
 
-      override fun onFailure(call: Call<T>, t: Throwable) {
-        continuation.resumeWithException(t)
-      }
-    })
-  }
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                continuation.resumeWithException(t)
+            }
+        })
+    }
 }

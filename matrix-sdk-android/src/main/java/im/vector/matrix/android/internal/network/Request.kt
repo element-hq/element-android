@@ -29,9 +29,9 @@ import retrofit2.Call
 import timber.log.Timber
 import java.io.IOException
 
-internal suspend inline fun <DATA : Any> executeRequest(block: Request<DATA>.() -> Unit) = Request<DATA>().apply(block).execute()
+internal suspend inline fun <DATA> executeRequest(block: Request<DATA>.() -> Unit) = Request<DATA>().apply(block).execute()
 
-internal class Request<DATA : Any> {
+internal class Request<DATA> {
 
     private val moshi: Moshi = MoshiProvider.providesMoshi()
     lateinit var apiCall: Call<DATA>
