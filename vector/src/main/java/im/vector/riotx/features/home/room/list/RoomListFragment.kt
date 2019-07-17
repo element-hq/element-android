@@ -112,7 +112,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         }
 
         // Hide FAB when list is scrolling
-        epoxyRecyclerView.addOnScrollListener(
+        roomListEpoxyRecyclerView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         createChatFabMenu.removeCallbacks(showFabRunnable)
@@ -136,11 +136,14 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     }
 
     fun filterRoomsWith(filter: String) {
+        // Scroll the list to top
+        roomListEpoxyRecyclerView.scrollToPosition(0)
+
         roomListViewModel.accept(RoomListActions.FilterWith(filter))
     }
 
-    override fun openRoomDirectory() {
-        navigator.openRoomDirectory(requireActivity())
+    override fun openRoomDirectory(initialFilter: String) {
+        navigator.openRoomDirectory(requireActivity(), initialFilter)
     }
 
     override fun createDirectChat() {
@@ -150,12 +153,12 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
-        epoxyRecyclerView.layoutManager = layoutManager
-        epoxyRecyclerView.itemAnimator = RoomListAnimator()
+        roomListEpoxyRecyclerView.layoutManager = layoutManager
+        roomListEpoxyRecyclerView.itemAnimator = RoomListAnimator()
         roomController.listener = this
         roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
-        stateView.contentView = epoxyRecyclerView
-        epoxyRecyclerView.setController(roomController)
+        stateView.contentView = roomListEpoxyRecyclerView
+        roomListEpoxyRecyclerView.setController(roomController)
     }
 
     private val showFabRunnable = Runnable {
@@ -266,9 +269,8 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         roomListViewModel.accept(RoomListActions.ToggleCategory(roomCategory))
     }
 
-    // TODO Pass title
-    override fun createRoom() {
-        navigator.openCreateRoom(requireActivity())
+    override fun createRoom(initialName: String) {
+        navigator.openCreateRoom(requireActivity(), initialName)
     }
 
 }

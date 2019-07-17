@@ -21,7 +21,7 @@ import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -35,9 +35,8 @@ import javax.inject.Inject
 class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
 
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
-    private val viewModel: CreateRoomViewModel by fragmentViewModel()
+    private val viewModel: CreateRoomViewModel by activityViewModel()
     @Inject lateinit var createRoomController: CreateRoomController
-    @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
 
     override fun getLayoutResId() = R.layout.fragment_create_room
 

@@ -11,10 +11,10 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/createRoomToolbar"
+            style="@style/VectorToolbarStyle"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
             android:elevation="4dp"
-            app:contentInsetStartWithNavigation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">

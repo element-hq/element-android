@@ -22,6 +22,8 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 
 data class PublicRoomsViewState(
+        // The current filter
+        val currentFilter: String = "",
         // Store cumul of pagination result
         val publicRooms: List<PublicRoom> = emptyList(),
         // Current pagination request

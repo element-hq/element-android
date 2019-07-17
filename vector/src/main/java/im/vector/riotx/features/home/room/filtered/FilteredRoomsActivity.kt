@@ -20,17 +20,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.replaceFragment
-import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import kotlinx.android.synthetic.main.activity_filtered_rooms.*
 
-class FilteredRoomsActivity : VectorBaseActivity(), ToolbarConfigurable {
+class FilteredRoomsActivity : VectorBaseActivity() {
 
     private lateinit var roomListFragment: RoomListFragment
 
@@ -44,6 +42,9 @@ class FilteredRoomsActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        configureToolbar(filteredRoomsToolbar)
+
         if (isFirstCreation()) {
             roomListFragment = RoomListFragment.newInstance(RoomListParams(RoomListFragment.DisplayMode.FILTERED))
             replaceFragment(roomListFragment, R.id.filteredRoomsFragmentContainer, FRAGMENT_TAG)
@@ -65,10 +66,6 @@ class FilteredRoomsActivity : VectorBaseActivity(), ToolbarConfigurable {
 
         // Open the keyboard immediately
         filteredRoomsSearchView.requestFocus()
-    }
-
-    override fun configure(toolbar: Toolbar) {
-        configureToolbar(toolbar)
     }
 
     companion object {

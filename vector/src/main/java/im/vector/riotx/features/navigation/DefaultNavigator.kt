@@ -58,13 +58,13 @@ class DefaultNavigator @Inject constructor() : Navigator {
         context.startActivity(intent)
     }
 
-    override fun openRoomDirectory(context: Context) {
-        val intent = Intent(context, RoomDirectoryActivity::class.java)
+    override fun openRoomDirectory(context: Context, initialFilter: String) {
+        val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
         context.startActivity(intent)
     }
 
-    override fun openCreateRoom(context: Context) {
-        val intent = CreateRoomActivity.getIntent(context)
+    override fun openCreateRoom(context: Context, initialName: String) {
+        val intent = CreateRoomActivity.getIntent(context, initialName)
         context.startActivity(intent)
     }
 

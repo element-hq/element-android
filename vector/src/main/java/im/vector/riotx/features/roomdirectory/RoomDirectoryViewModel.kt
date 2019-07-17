@@ -59,9 +59,6 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
         get() = _joinRoomErrorLiveData
 
 
-    // TODO Store in ViewState?
-    private var currentFilter: String = ""
-
     private var since: String? = null
 
     private var currentTask: Cancelable? = null
@@ -70,9 +67,6 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     private var roomDirectoryData = RoomDirectoryData()
 
     init {
-        // Load with empty filter
-        load()
-
         setState {
             copy(
                     roomDirectoryDisplayName = roomDirectoryData.displayName
@@ -115,24 +109,20 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
         this.roomDirectoryData = roomDirectoryData
 
-        reset()
-        load()
+        reset("")
+        load("")
     }
 
-    fun filterWith(filter: String) {
-        if (currentFilter == filter) {
-            return
+    fun filterWith(filter: String) = withState { state ->
+        if (state.currentFilter != filter) {
+            currentTask?.cancel()
+
+            reset(filter)
+            load(filter)
         }
-
-        currentTask?.cancel()
-
-        currentFilter = filter
-
-        reset()
-        load()
     }
 
-    private fun reset() {
+    private fun reset(newFilter: String) {
         // Reset since token
         since = null
 
@@ -141,12 +131,13 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                     publicRooms = emptyList(),
                     asyncPublicRoomsRequest = Loading(),
                     hasMore = false,
-                    roomDirectoryDisplayName = roomDirectoryData.displayName
+                    roomDirectoryDisplayName = roomDirectoryData.displayName,
+                    currentFilter = newFilter
             )
         }
     }
 
-    fun loadMore() {
+    fun loadMore() = withState { state ->
         if (currentTask == null) {
             setState {
                 copy(
@@ -154,15 +145,15 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                 )
             }
 
-            load()
+            load(state.currentFilter)
         }
     }
 
-    private fun load() {
+    private fun load(filter: String) {
         currentTask = session.getPublicRooms(roomDirectoryData.homeServer,
                 PublicRoomsParams(
                         limit = PUBLIC_ROOMS_LIMIT,
-                        filter = PublicRoomsFilter(searchTerm = currentFilter),
+                        filter = PublicRoomsFilter(searchTerm = filter),
                         includeAllNetworks = roomDirectoryData.includeAllNetworks,
                         since = since,
                         thirdPartyInstanceId = roomDirectoryData.thirdPartyInstanceId
