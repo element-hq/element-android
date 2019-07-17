@@ -7,6 +7,8 @@ Features:
 
 Improvements:
  - Handle click on redacted events: view source and create permalink
+ - Improve long tap menu: reply on top, more compact (#368)
+ - Quick reply in timeline with swipe gesture
  - Improve edit of replies
 
 Other changes:

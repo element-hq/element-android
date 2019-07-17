@@ -35,4 +35,5 @@
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
 
 
+    <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
 </resources>
