@@ -40,7 +40,7 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
@@ -71,7 +71,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
 
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
-        CoroutineScope(coroutineDispatchers.crypto).launch {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
                     onStartRequestReceived(event)

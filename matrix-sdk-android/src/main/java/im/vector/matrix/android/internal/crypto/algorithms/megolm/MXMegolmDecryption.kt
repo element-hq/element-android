@@ -29,7 +29,6 @@ import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevi
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
@@ -38,10 +37,9 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import kotlin.collections.HashMap
 
 internal class MXMegolmDecryption(private val credentials: Credentials,
@@ -312,7 +310,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
             return
         }
         val userId = request.userId ?: return
-        CoroutineScope(coroutineDispatchers.crypto).launch {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
             deviceListManager
                     .downloadKeys(listOf(userId), false)
                     .flatMap {
@@ -321,8 +319,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                         if (deviceInfo == null) {
                             throw RuntimeException()
                         } else {
-                            val devicesByUser = HashMap<String, List<MXDeviceInfo>>()
-                            devicesByUser[userId] = ArrayList(Arrays.asList(deviceInfo))
+                            val devicesByUser = mapOf(userId to listOf(deviceInfo))
                             ensureOlmSessionsForDevicesAction
                                     .handle(devicesByUser)
                                     .flatMap {
@@ -336,8 +333,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                         Timber.v("## shareKeysWithDevice() : sharing keys for session" +
                                                 " ${body?.senderKey}|${body?.sessionId} with device $userId:$deviceId")
 
-                                        val payloadJson = HashMap<String, Any>()
-                                        payloadJson["type"] = EventType.FORWARDED_ROOM_KEY
+                                        val payloadJson = mutableMapOf<String, Any>("type" to EventType.FORWARDED_ROOM_KEY)
 
                                         olmDevice.getInboundGroupSession(body?.sessionId, body?.senderKey, body?.roomId)
                                                 .fold(
@@ -350,7 +346,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                                         }
                                                 )
 
-                                        val encodedPayload = messageEncrypter.encryptMessage(payloadJson, Arrays.asList(deviceInfo))
+                                        val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
                                         val sendToDeviceMap = MXUsersDevicesMap<Any>()
                                         sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
                                         Timber.v("## shareKeysWithDevice() : sending to $userId:$deviceId")
