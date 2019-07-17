@@ -65,7 +65,8 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
         navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryNavigationViewModel::class.java)
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
             when (navigation) {
-                is RoomDirectoryActivity.Navigation.Back -> finish()
+                is RoomDirectoryActivity.Navigation.Back,
+                is RoomDirectoryActivity.Navigation.Close -> finish()
             }
         }
     }
