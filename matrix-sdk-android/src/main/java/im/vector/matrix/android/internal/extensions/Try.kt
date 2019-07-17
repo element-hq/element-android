@@ -31,3 +31,6 @@ inline fun <A> TryOf<A>.onError(f: (Throwable) -> Unit): Try<A> = fix()
 fun <A> Try<A>.foldToCallback(callback: MatrixCallback<A>): Unit = fold(
         { callback.onFailure(it) },
         { callback.onSuccess(it) })
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <A> Try<A>.get(): A = fold({ throw it }, { it })

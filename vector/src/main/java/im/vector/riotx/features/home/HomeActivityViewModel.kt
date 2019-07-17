@@ -25,7 +25,6 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -36,6 +35,9 @@ import im.vector.riotx.features.home.group.ALL_COMMUNITIES_GROUP_ID
 import im.vector.riotx.features.home.group.SelectedGroupStore
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 data class EmptyState(val isEmpty: Boolean = true) : MvRxState
@@ -107,16 +109,13 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
     fun createRoom(createRoomParams: CreateRoomParams = CreateRoomParams()) {
         _isLoading.value = true
 
-        session.createRoom(createRoomParams, object : MatrixCallback<String> {
-            override fun onSuccess(data: String) {
+        viewModelScope.launch(Dispatchers.Main) {
+            try {
+                session.createRoom(createRoomParams)
+            } finally {
                 _isLoading.value = false
             }
-
-            override fun onFailure(failure: Throwable) {
-                _isLoading.value = false
-                super.onFailure(failure)
-            }
-        })
+        }
     }
 
     override fun onCleared() {

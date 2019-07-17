@@ -16,27 +16,24 @@
 
 package im.vector.matrix.android.internal.session.room.state
 
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.state.StateService
+import im.vector.matrix.android.api.util.suspendCallback
+import im.vector.matrix.android.internal.extensions.get
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultStateService @Inject constructor(private val roomId: String,
-                                                       private val taskExecutor: TaskExecutor,
                                                        private val sendStateTask: SendStateTask) : StateService {
 
-    override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
+    override suspend fun updateTopic(topic: String) {
         val params = SendStateTask.Params(roomId,
                 EventType.STATE_ROOM_TOPIC,
                 mapOf(
                         "topic" to topic
                 ))
 
-
-        sendStateTask.configureWith(params)
-                .dispatchTo(callback)
-                .executeBy(taskExecutor)
+        sendStateTask.execute(params).get()
     }
 }

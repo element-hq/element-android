@@ -205,7 +205,7 @@ internal class KeysBackup @Inject constructor(
 
         createKeysBackupVersionTask
                 .configureWith(createKeysBackupVersionBody)
-                .dispatchTo(object : MatrixCallback<KeysVersion> {
+                .dispatchTo(object : MatrixCallback<KeysVersion>() {
                     override fun onSuccess(info: KeysVersion) {
                         // Reset backup markers.
                         cryptoStore.resetBackupMarkers()
@@ -244,7 +244,7 @@ internal class KeysBackup @Inject constructor(
                 }
 
                 deleteBackupTask.configureWith(DeleteBackupTask.Params(version))
-                        .dispatchTo(object : MatrixCallback<Unit> {
+                        .dispatchTo(object : MatrixCallback<Unit>() {
                             private fun eventuallyRestartBackup() {
                                 // Do not stay in KeysBackupState.Unknown but check what is available on the homeserver
                                 if (state == KeysBackupState.Unknown) {
@@ -493,7 +493,7 @@ internal class KeysBackup @Inject constructor(
                 // And send it to the homeserver
                 updateKeysBackupVersionTask
                         .configureWith(UpdateKeysBackupVersionTask.Params(keysBackupVersion.version!!, updateKeysBackupVersionBody))
-                        .dispatchTo(object : MatrixCallback<Unit> {
+                        .dispatchTo(object : MatrixCallback<Unit>() {
                             override fun onSuccess(data: Unit) {
                                 // Relaunch the state machine on this updated backup version
                                 val newKeysBackupVersion = KeysVersionResult()
@@ -641,7 +641,7 @@ internal class KeysBackup @Inject constructor(
                         stepProgressListener?.onStepProgress(StepProgressListener.Step.DownloadingKey)
 
                         // Get backed up keys from the homeserver
-                        getKeys(sessionId, roomId, keysVersionResult.version!!, object : MatrixCallback<KeysBackupData> {
+                        getKeys(sessionId, roomId, keysVersionResult.version!!, object : MatrixCallback<KeysBackupData>() {
                             override fun onSuccess(data: KeysBackupData) {
                                 GlobalScope.launch(coroutineDispatchers.main) {
                                     val importRoomKeysResult = withContext(coroutineDispatchers.crypto) {
@@ -759,7 +759,7 @@ internal class KeysBackup @Inject constructor(
             // Get key for the room and for the session
             getRoomSessionDataTask
                     .configureWith(GetRoomSessionDataTask.Params(roomId, sessionId, version))
-                    .dispatchTo(object : MatrixCallback<KeyBackupData> {
+                    .dispatchTo(object : MatrixCallback<KeyBackupData>() {
                         override fun onSuccess(data: KeyBackupData) {
                             // Convert to KeysBackupData
                             val keysBackupData = KeysBackupData()
@@ -781,7 +781,7 @@ internal class KeysBackup @Inject constructor(
             // Get all keys for the room
             getRoomSessionsDataTask
                     .configureWith(GetRoomSessionsDataTask.Params(roomId, version))
-                    .dispatchTo(object : MatrixCallback<RoomKeysBackupData> {
+                    .dispatchTo(object : MatrixCallback<RoomKeysBackupData>() {
                         override fun onSuccess(data: RoomKeysBackupData) {
                             // Convert to KeysBackupData
                             val keysBackupData = KeysBackupData()
@@ -856,7 +856,7 @@ internal class KeysBackup @Inject constructor(
                             callback: MatrixCallback<KeysVersionResult?>) {
         getKeysBackupVersionTask
                 .configureWith(version)
-                .dispatchTo(object : MatrixCallback<KeysVersionResult> {
+                .dispatchTo(object : MatrixCallback<KeysVersionResult>() {
                     override fun onSuccess(data: KeysVersionResult) {
                         callback.onSuccess(data)
                     }
@@ -878,7 +878,7 @@ internal class KeysBackup @Inject constructor(
     override fun getCurrentVersion(callback: MatrixCallback<KeysVersionResult?>) {
         getKeysBackupLastVersionTask
                 .toConfigurableTask()
-                .dispatchTo(object : MatrixCallback<KeysVersionResult> {
+                .dispatchTo(object : MatrixCallback<KeysVersionResult>() {
                     override fun onSuccess(data: KeysVersionResult) {
                         callback.onSuccess(data)
                     }
@@ -898,7 +898,7 @@ internal class KeysBackup @Inject constructor(
     }
 
     override fun forceUsingLastVersion(callback: MatrixCallback<Boolean>) {
-        getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
+        getCurrentVersion(object : MatrixCallback<KeysVersionResult?>() {
             override fun onSuccess(data: KeysVersionResult?) {
                 val localBackupVersion = keysBackupVersion?.version
                 val serverBackupVersion = data?.version
@@ -953,7 +953,7 @@ internal class KeysBackup @Inject constructor(
         keysBackupVersion = null
         keysBackupStateManager.state = KeysBackupState.CheckingBackUpOnHomeserver
 
-        getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
+        getCurrentVersion(object : MatrixCallback<KeysVersionResult?>() {
             override fun onSuccess(data: KeysVersionResult?) {
                 checkAndStartWithKeysBackupVersion(data)
             }
@@ -975,7 +975,7 @@ internal class KeysBackup @Inject constructor(
             resetKeysBackupData()
             keysBackupStateManager.state = KeysBackupState.Disabled
         } else {
-            getKeysBackupTrust(keyBackupVersion, object : MatrixCallback<KeysBackupVersionTrust> {
+            getKeysBackupTrust(keyBackupVersion, object : MatrixCallback<KeysBackupVersionTrust>() {
 
                 override fun onSuccess(data: KeysBackupVersionTrust) {
                     val versionInStore = cryptoStore.getKeyBackupVersion()
@@ -1239,7 +1239,7 @@ internal class KeysBackup @Inject constructor(
                 // Make the request
                 storeSessionDataTask
                         .configureWith(StoreSessionsDataTask.Params(keysBackupVersion!!.version!!, keysBackupData))
-                        .dispatchTo(object : MatrixCallback<BackupKeysResult> {
+                        .dispatchTo(object : MatrixCallback<BackupKeysResult>() {
                             override fun onSuccess(data: BackupKeysResult) {
                                 uiHandler.post {
                                     Timber.v("backupKeys: 5a - Request complete")

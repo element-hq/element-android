@@ -116,7 +116,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
                                     total)
                         }
                     },
-                    object : MatrixCallback<MegolmBackupCreationInfo> {
+                    object : MatrixCallback<MegolmBackupCreationInfo>() {
                         override fun onSuccess(data: MegolmBackupCreationInfo) {
                             if (requestedId != currentRequestId.value) {
                                 //this is an old request, we can't cancel but we can ignore
@@ -161,7 +161,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
 
         creatingBackupError.value = null
 
-        keysBackup.getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
+        keysBackup.getCurrentVersion(object : MatrixCallback<KeysVersionResult?>() {
             override fun onSuccess(data: KeysVersionResult?) {
                 if (data?.version.isNullOrBlank() || forceOverride) {
                     processOnCreate()
@@ -182,7 +182,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
             }
 
             fun processOnCreate() {
-                keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : MatrixCallback<KeysVersion> {
+                keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : MatrixCallback<KeysVersion>() {
                     override fun onSuccess(data: KeysVersion) {
                         loadingStatus.value = null
 

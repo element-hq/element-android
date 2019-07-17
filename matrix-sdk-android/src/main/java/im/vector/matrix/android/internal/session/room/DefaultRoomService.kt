@@ -18,11 +18,11 @@ package im.vector.matrix.android.internal.session.room
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.util.suspendCallback
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -37,14 +37,10 @@ import javax.inject.Inject
 internal class DefaultRoomService @Inject constructor(private val monarchy: Monarchy,
                                                       private val roomSummaryMapper: RoomSummaryMapper,
                                                       private val createRoomTask: CreateRoomTask,
-                                                      private val roomFactory: RoomFactory,
-                                                      private val taskExecutor: TaskExecutor) : RoomService {
+                                                      private val roomFactory: RoomFactory) : RoomService {
 
-    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>) {
-        createRoomTask
-                .configureWith(createRoomParams)
-                .dispatchTo(callback)
-                .executeBy(taskExecutor)
+    override suspend fun createRoom(createRoomParams: CreateRoomParams): String {
+        return createRoomTask.execute(createRoomParams).fold({ throw it }, { it })
     }
 
     override fun getRoom(roomId: String): Room? {

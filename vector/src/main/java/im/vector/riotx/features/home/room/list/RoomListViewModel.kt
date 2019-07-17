@@ -23,7 +23,6 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -32,6 +31,8 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.home.HomeRoomListObservableStore
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class RoomListViewModel @AssistedInject constructor(@Assisted initialState: RoomListViewState,
@@ -134,24 +135,27 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             )
         }
 
-        session.getRoom(roomId)?.join(object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
-                // Instead, we wait for the room to be joined
-            }
+        val room = session.getRoom(roomId)
+        if (room != null) {
+            viewModelScope.launch {
+                try {
+                    room.join()
+                    // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the
+                    // sync data.
+                    // Instead, we wait for the room to be joined
+                } catch (failure: Throwable) {
+                    // Notify the user
+                    _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
 
-            override fun onFailure(failure: Throwable) {
-                // Notify the user
-                _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
-
-                setState {
-                    copy(
-                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(roomId) },
-                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(roomId) }
-                    )
+                    setState {
+                        copy(
+                                joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(roomId) },
+                                joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                        )
+                    }
                 }
             }
-        })
+        }
     }
 
     private fun handleRejectInvitation(action: RoomListActions.RejectInvitation) = withState { state ->
@@ -170,24 +174,27 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             )
         }
 
-        session.getRoom(roomId)?.leave(object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
-                // Instead, we wait for the room to be joined
-            }
+        val room = session.getRoom(roomId)
+        if (room != null) {
+            viewModelScope.launch {
+                try {
+                    room.leave()
+                    // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the
+                    // sync data.
+                    // Instead, we wait for the room to be joined
+                } catch (failure: Throwable) {
+                    // Notify the user
+                    _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
 
-            override fun onFailure(failure: Throwable) {
-                // Notify the user
-                _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
-
-                setState {
-                    copy(
-                            rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { remove(roomId) },
-                            rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { add(roomId) }
-                    )
+                    setState {
+                        copy(
+                                rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { remove(roomId) },
+                                rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                        )
+                    }
                 }
             }
-        })
+        }
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {

@@ -17,9 +17,9 @@
 package im.vector.matrix.android.internal.session.room.read
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.read.ReadService
+import im.vector.matrix.android.api.util.suspendCallback
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.extensions.get
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -34,25 +35,24 @@ import javax.inject.Inject
 
 internal class DefaultReadService @Inject constructor(private val roomId: String,
                                                       private val monarchy: Monarchy,
-                                                      private val taskExecutor: TaskExecutor,
                                                       private val setReadMarkersTask: SetReadMarkersTask,
                                                       private val credentials: Credentials) : ReadService {
 
-    override fun markAllAsRead(callback: MatrixCallback<Unit>) {
+    override suspend fun markAllAsRead() {
         //TODO shouldn't it be latest synced event?
         val latestEvent = getLatestEvent()
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = latestEvent?.eventId, readReceiptEventId = latestEvent?.eventId)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        setReadMarkersTask.execute(params).get()
     }
 
-    override fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun setReadReceipt(eventId: String) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = null, readReceiptEventId = eventId)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        setReadMarkersTask.execute(params).get()
     }
 
-    override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun setReadMarker(fullyReadEventId: String) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = fullyReadEventId, readReceiptEventId = null)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        setReadMarkersTask.execute(params).get()
     }
 
     private fun getLatestEvent(): TimelineEventEntity? {

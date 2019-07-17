@@ -63,7 +63,7 @@ class VectorSettingsLabsFragment : VectorSettingsBaseFragment() {
 //                        /* TODO
 //                        displayLoadingView()
 //
-//                        session.enableCrypto(newValue, object : MatrixCallback<Unit> {
+//                        session.enableCrypto(newValue, object : MatrixCallback<Unit>() {
 //                            private fun refresh() {
 //                                activity?.runOnUiThread {
 //                                    hideLoadingView()

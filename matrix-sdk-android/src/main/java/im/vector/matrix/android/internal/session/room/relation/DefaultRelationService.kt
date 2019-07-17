@@ -83,7 +83,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         )
         findReactionEventForUndoTask.configureWith(params)
                 .enableRetry()
-                .dispatchTo(object : MatrixCallback<FindReactionEventForUndoTask.Result> {
+                .dispatchTo(object : MatrixCallback<FindReactionEventForUndoTask.Result>() {
                     override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
                         if (data.redactEventId == null) {
                             Timber.w("Cannot find reaction to undo (not yet synced?)")
@@ -96,7 +96,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                             }
                             val redactWork = createRedactEventWork(redactEvent, toRedact, null)
 
-                            TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
+                            TimelineSendEventWorkCommon.postWork(this@DefaultRelationService.context, roomId, redactWork)
 
                         }
                     }

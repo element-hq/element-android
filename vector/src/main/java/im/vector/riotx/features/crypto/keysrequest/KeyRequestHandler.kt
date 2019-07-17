@@ -101,7 +101,7 @@ class KeyRequestHandler @Inject constructor(val context: Context)
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
         //Add a notification for every incoming request
-        session?.downloadKeys(Arrays.asList(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
+        session?.downloadKeys(Arrays.asList(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
                 val deviceInfo = data.getObject(userId, deviceId)
 
@@ -117,22 +117,22 @@ class KeyRequestHandler @Inject constructor(val context: Context)
                     deviceInfo.verified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
 
                     //can we get more info on this device?
-                    session?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+                    session?.getDevicesList(object : MatrixCallback<DevicesListResponse>() {
                         override fun onSuccess(data: DevicesListResponse) {
                             data.devices?.find { it.deviceId == deviceId }?.let {
-                                postAlert(context, userId, deviceId, true, deviceInfo, it)
+                                postAlert(this@KeyRequestHandler.context, userId, deviceId, true, deviceInfo, it)
                             } ?: run {
-                                postAlert(context, userId, deviceId, true, deviceInfo)
+                                postAlert(this@KeyRequestHandler.context, userId, deviceId, true, deviceInfo)
                             }
                         }
 
                         override fun onFailure(failure: Throwable) {
-                            postAlert(context, userId, deviceId, true, deviceInfo)
+                            postAlert(this@KeyRequestHandler.context, userId, deviceId, true, deviceInfo)
                         }
 
                     })
                 } else {
-                    postAlert(context, userId, deviceId, false, deviceInfo)
+                    postAlert(this@KeyRequestHandler.context, userId, deviceId, false, deviceInfo)
                 }
             }
 

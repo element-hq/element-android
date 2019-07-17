@@ -90,7 +90,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
             }
         } else {
             FcmHelper.getFcmToken(requireContext())?.let {
-                pushManager.unregisterPusher(it, object : MatrixCallback<Unit> {
+                pushManager.unregisterPusher(it, object : MatrixCallback<Unit>() {
                     override fun onSuccess(data: Unit) {
                         session.refreshPushers()
                         super.onSuccess(data)
@@ -114,7 +114,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
                 ?.let {
                     //Trick, we must enable this room to disable notifications
                     pushRuleService.updatePushRuleEnableStatus("override", it, !switchPref.isChecked,
-                                                               object : MatrixCallback<Unit> {
+                                                               object : MatrixCallback<Unit>() {
 
                                                                    override fun onSuccess(data: Unit) {
                                                                        pushRuleService.fetchPushRules()

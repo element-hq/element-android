@@ -51,7 +51,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initial
     }
 
     fun load() {
-        session.getThirdPartyProtocol(object : MatrixCallback<Map<String, ThirdPartyProtocol>> {
+        session.getThirdPartyProtocol(object : MatrixCallback<Map<String, ThirdPartyProtocol>>() {
             override fun onSuccess(data: Map<String, ThirdPartyProtocol>) {
                 setState {
                     copy(asyncThirdPartyRequest = Success(data))

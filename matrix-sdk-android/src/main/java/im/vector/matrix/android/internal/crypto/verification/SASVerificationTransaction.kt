@@ -288,7 +288,7 @@ internal abstract class SASVerificationTransaction(
         contentMap.setObject(otherUserId, otherDeviceId, keyToDevice)
 
         sendToDeviceTask.configureWith(SendToDeviceTask.Params(type, contentMap, transactionId))
-                .dispatchTo(object : MatrixCallback<Unit> {
+                .dispatchTo(object : MatrixCallback<Unit>() {
                     override fun onSuccess(data: Unit) {
                         Timber.v("## SAS verification [$transactionId] toDevice type '$type' success.")
                         if (onDone != null) {

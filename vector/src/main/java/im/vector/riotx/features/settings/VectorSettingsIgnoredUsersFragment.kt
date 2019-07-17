@@ -87,7 +87,7 @@ class VectorSettingsIgnoredUsersFragment : VectorSettingsBaseFragment() {
 
                                     notImplemented()
                                     /* TODO
-                                    session.unIgnoreUsers(idsList, object : MatrixCallback<Unit> {
+                                    session.unIgnoreUsers(idsList, object : MatrixCallback<Unit>() {
                                         override fun onSuccess(info: Void?) {
                                             onCommonDone(null)
                                         }

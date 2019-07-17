@@ -131,7 +131,7 @@ class VectorSettingsFlairFragment : VectorSettingsBaseFragment() {
 
                         if (newValue != isFlaired) {
                             displayLoadingView()
-                            session.groupsManager.updateGroupPublicity(group.groupId, newValue, object : MatrixCallback<Unit> {
+                            session.groupsManager.updateGroupPublicity(group.groupId, newValue, object : MatrixCallback<Unit>() {
                                 override fun onSuccess(info: Void?) {
                                     hideLoadingView()
                                     if (newValue) {

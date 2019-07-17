@@ -39,7 +39,6 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
-import im.vector.matrix.android.api.util.MatrixCallbackDelegate
 import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
@@ -143,17 +142,17 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         //syncThread.kill()
 
         Timber.w("SIGN_OUT: call webservice")
-        return signOutService.get().signOut(object : MatrixCallback<Unit> {
+        return signOutService.get().signOut(object : MatrixCallback<Unit>() {
             override fun onSuccess(data: Unit) {
                 Timber.w("SIGN_OUT: call webservice -> SUCCESS: clear cache")
 
                 // Clear the cache
-                cacheService.get().clearCache(object : MatrixCallback<Unit> {
+                cacheService.get().clearCache(object : MatrixCallback<Unit>() {
                     override fun onSuccess(data: Unit) {
                         Timber.w("SIGN_OUT: clear cache -> SUCCESS: clear crypto cache")
-                        cryptoService.get().clearCryptoCache(MatrixCallbackDelegate(callback))
+                        cryptoService.get().clearCryptoCache(callback)
 
-                        WorkManagerUtil.cancelAllWorks(context)
+                        WorkManagerUtil.cancelAllWorks(this@DefaultSession.context)
                     }
 
                     override fun onFailure(failure: Throwable) {

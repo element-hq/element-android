@@ -98,7 +98,7 @@ class LoginActivity : VectorBaseActivity() {
     private fun authenticateWith(homeServerConnectionConfig: HomeServerConnectionConfig, login: String, password: String) {
         progressBar.isVisible = true
         touchArea.isVisible = true
-        authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
+        authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session>() {
             override fun onSuccess(data: Session) {
                 activeSessionHolder.setActiveSession(data)
                 data.configureAndStart(pushRuleTriggerListener)

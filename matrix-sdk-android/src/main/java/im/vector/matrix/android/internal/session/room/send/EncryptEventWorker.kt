@@ -79,7 +79,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         }
 
         try {
-            crypto.encryptEventContent(localMutableContent, localEvent.type, params.roomId, object : MatrixCallback<MXEncryptEventContentResult> {
+            crypto.encryptEventContent(localMutableContent, localEvent.type, params.roomId, object : MatrixCallback<MXEncryptEventContentResult>() {
                 override fun onSuccess(data: MXEncryptEventContentResult) {
                     result = data
                     latch.countDown()

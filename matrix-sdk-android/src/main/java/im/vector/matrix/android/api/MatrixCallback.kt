@@ -16,17 +16,21 @@
 
 package im.vector.matrix.android.api
 
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+
 /**
  * Generic callback interface for asynchronously.
  * @param <T> the type of data to return on success
  */
-interface MatrixCallback<in T> {
+abstract class MatrixCallback<in T> : Continuation<T> {
 
     /**
      * On success method, default to no-op
      * @param data the data successfully returned from the async function
      */
-    fun onSuccess(data: T) {
+    open fun onSuccess(data: T) {
         //no-op
     }
 
@@ -34,8 +38,13 @@ interface MatrixCallback<in T> {
      * On failure method, default to no-op
      * @param failure the failure data returned from the async function
      */
-    fun onFailure(failure: Throwable) {
+    open fun onFailure(failure: Throwable) {
         //no-op
     }
 
+    override val context: CoroutineContext get() = EmptyCoroutineContext
+
+    final override fun resumeWith(result: Result<T>) {
+        result.fold(::onSuccess, ::onFailure)
+    }
 }

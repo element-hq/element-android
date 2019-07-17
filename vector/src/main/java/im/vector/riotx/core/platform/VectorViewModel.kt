@@ -18,18 +18,16 @@ package im.vector.riotx.core.platform
 
 import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.MvRxState
-import im.vector.matrix.android.api.util.CancelableBag
-import im.vector.riotx.BuildConfig
+import kotlinx.coroutines.*
 
 abstract class VectorViewModel<S : MvRxState>(initialState: S)
     : BaseMvRxViewModel<S>(initialState, false) {
 
-    protected val cancelableBag = CancelableBag()
+    protected val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     override fun onCleared() {
         super.onCleared()
-        cancelableBag.cancel()
+        viewModelScope.coroutineContext.cancel()
     }
-
 
 }

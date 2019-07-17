@@ -18,33 +18,28 @@ package im.vector.matrix.android.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
-import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 
 internal class DefaultMembershipService @Inject constructor(private val roomId: String,
                                                             private val monarchy: Monarchy,
-                                                            private val taskExecutor: TaskExecutor,
                                                             private val loadRoomMembersTask: LoadRoomMembersTask,
                                                             private val inviteTask: InviteTask,
                                                             private val joinTask: JoinRoomTask,
                                                             private val leaveRoomTask: LeaveRoomTask
 ) : MembershipService {
 
-    override fun loadRoomMembersIfNeeded(): Cancelable {
-        val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
-        return loadRoomMembersTask.configureWith(params).executeBy(taskExecutor)
+    override suspend fun loadRoomMembersIfNeeded() {
+        loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId, Membership.LEAVE))
     }
 
     override fun getRoomMember(userId: String): RoomMember? {
@@ -73,24 +68,15 @@ internal class DefaultMembershipService @Inject constructor(private val roomId: 
         return result
     }
 
-    override fun invite(userId: String, callback: MatrixCallback<Unit>) {
-        val params = InviteTask.Params(roomId, userId)
-        inviteTask.configureWith(params)
-                .dispatchTo(callback)
-                .executeBy(taskExecutor)
+    override suspend fun invite(userId: String) {
+        inviteTask.execute(InviteTask.Params(roomId, userId))
     }
 
-    override fun join(callback: MatrixCallback<Unit>) {
-        val params = JoinRoomTask.Params(roomId)
-        joinTask.configureWith(params)
-                .dispatchTo(callback)
-                .executeBy(taskExecutor)
+    override suspend fun join() {
+        joinTask.execute(JoinRoomTask.Params(roomId))
     }
 
-    override fun leave(callback: MatrixCallback<Unit>) {
-        val params = LeaveRoomTask.Params(roomId)
-        leaveRoomTask.configureWith(params)
-                .dispatchTo(callback)
-                .executeBy(taskExecutor)
+    override suspend fun leave() {
+        leaveRoomTask.execute(LeaveRoomTask.Params(roomId))
     }
 }

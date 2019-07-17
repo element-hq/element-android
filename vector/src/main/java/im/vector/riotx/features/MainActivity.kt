@@ -83,14 +83,14 @@ class MainActivity : VectorBaseActivity() {
         }
 
         when {
-            clearCredentials -> sessionHolder.getActiveSession().signOut(object : MatrixCallback<Unit> {
+            clearCredentials -> sessionHolder.getActiveSession().signOut(object : MatrixCallback<Unit>() {
                 override fun onSuccess(data: Unit) {
                     Timber.w("SIGN_OUT: success, start app")
                     sessionHolder.clearActiveSession()
                     start()
                 }
             })
-            clearCache       -> sessionHolder.getActiveSession().clearCache(object : MatrixCallback<Unit> {
+            clearCache       -> sessionHolder.getActiveSession().clearCache(object : MatrixCallback<Unit>() {
                 override fun onSuccess(data: Unit) {
                     start()
                 }

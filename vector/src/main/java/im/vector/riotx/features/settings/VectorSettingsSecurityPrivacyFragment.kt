@@ -215,7 +215,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                         KeysExporter(session)
                                 .export(requireContext(),
                                         passphrase,
-                                        object : MatrixCallback<String> {
+                                        object : MatrixCallback<String>() {
                                             override fun onSuccess(data: String) {
                                                 if (isAdded) {
                                                     hideLoadingView()
@@ -319,7 +319,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                 uri,
                                 mimetype,
                                 password,
-                                object : MatrixCallback<ImportRoomKeysResult> {
+                                object : MatrixCallback<ImportRoomKeysResult>() {
                                     override fun onSuccess(data: ImportRoomKeysResult) {
                                         if (!isAdded) {
                                             return
@@ -451,7 +451,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                 }
             }
 
-            session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+            session.getDevicesList(object : MatrixCallback<DevicesListResponse>() {
                 override fun onSuccess(data: DevicesListResponse) {
                     if (!isAdded) {
                         return
@@ -633,7 +633,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
                         val newName = input.text.toString()
 
-                        session.setDeviceName(aDeviceInfoToRename.deviceId!!, newName, object : MatrixCallback<Unit> {
+                        session.setDeviceName(aDeviceInfoToRename.deviceId!!, newName, object : MatrixCallback<Unit>() {
                             override fun onSuccess(data: Unit) {
                                 hideLoadingView()
 
@@ -680,7 +680,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
 
         displayLoadingView()
-        session.deleteDevice(deviceId, object : MatrixCallback<Unit> {
+        session.deleteDevice(deviceId, object : MatrixCallback<Unit>() {
             override fun onSuccess(data: Unit) {
                 hideLoadingView()
                 // force settings update
@@ -752,7 +752,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
     }
 
     private fun deleteDeviceWithPassword(deviceId: String, authSession: String?, accountPassword: String) {
-        session.deleteDeviceWithUserPassword(deviceId, authSession, accountPassword, object : MatrixCallback<Unit> {
+        session.deleteDeviceWithUserPassword(deviceId, authSession, accountPassword, object : MatrixCallback<Unit>() {
             override fun onSuccess(data: Unit) {
                 hideLoadingView()
                 // force settings update
@@ -824,7 +824,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                             .setPositiveButton(R.string.remove)
                                             { _, _ ->
                                                 displayLoadingView()
-                                                pushManager.unregister(session, pushRule, object : MatrixCallback<Unit> {
+                                                pushManager.unregister(session, pushRule, object : MatrixCallback<Unit>() {
                                                     override fun onSuccess(info: Void?) {
                                                         refreshPushersList()
                                                         onCommonDone(null)

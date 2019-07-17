@@ -80,7 +80,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if (null != newValue && newValue as Boolean != session.isURLPreviewEnabled) {
                     displayLoadingView()
-                    session.setURLPreviewStatus(newValue, object : MatrixCallback<Unit> {
+                    session.setURLPreviewStatus(newValue, object : MatrixCallback<Unit>() {
                         override fun onSuccess(info: Void?) {
                             it.isChecked = session.isURLPreviewEnabled
                             hideLoadingView()

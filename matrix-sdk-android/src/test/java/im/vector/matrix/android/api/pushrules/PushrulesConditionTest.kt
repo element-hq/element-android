@@ -18,7 +18,6 @@ package im.vector.matrix.android.api.pushrules
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
@@ -35,6 +34,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 import org.junit.Assert
 import org.junit.Test
+import kotlin.coroutines.suspendCoroutine
 
 class PushrulesConditionTest {
 
@@ -166,8 +166,8 @@ class PushrulesConditionTest {
 
     class MockRoomService() : RoomService {
 
-        override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>) {
-
+        override suspend fun createRoom(createRoomParams: CreateRoomParams): String {
+            return suspendCoroutine {  }
         }
 
         override fun getRoom(roomId: String): Room? {
@@ -229,15 +229,15 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun markAllAsRead(callback: MatrixCallback<Unit>) {
+        override suspend fun markAllAsRead() {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>) {
+        override suspend fun setReadReceipt(eventId: String) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>) {
+        override suspend fun setReadMarker(fullyReadEventId: String) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -245,7 +245,7 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun loadRoomMembersIfNeeded(): Cancelable {
+        override suspend fun loadRoomMembersIfNeeded() {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -257,19 +257,19 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun invite(userId: String, callback: MatrixCallback<Unit>) {
+        override suspend fun invite(userId: String) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun join(callback: MatrixCallback<Unit>) {
+        override suspend fun join() {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun leave(callback: MatrixCallback<Unit>) {
+        override suspend fun leave() {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
+        override suspend fun updateTopic(topic: String) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

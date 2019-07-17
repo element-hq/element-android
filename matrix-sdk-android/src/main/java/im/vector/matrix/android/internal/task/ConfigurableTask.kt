@@ -37,7 +37,7 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
         val callbackThread: TaskThread = TaskThread.MAIN,
         val executionThread: TaskThread = TaskThread.IO,
         val retryCount: Int = 0,
-        val callback: MatrixCallback<RESULT> = object : MatrixCallback<RESULT> {}
+        val callback: MatrixCallback<RESULT> = object : MatrixCallback<RESULT>() {}
 ) : Task<PARAMS, RESULT> {
 
 

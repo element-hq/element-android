@@ -90,7 +90,7 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel
                         }
                     }
                 },
-                object : MatrixCallback<ImportRoomKeysResult> {
+                object : MatrixCallback<ImportRoomKeysResult>() {
                     override fun onSuccess(data: ImportRoomKeysResult) {
                         sharedViewModel.loadingEvent.value = null
                         sharedViewModel.didRecoverSucceed(data)
@@ -109,7 +109,7 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel
 
     private fun trustOnDecrypt(keysBackup: KeysBackupService, keysVersionResult: KeysVersionResult) {
         keysBackup.trustKeysBackupVersion(keysVersionResult, true,
-                object : MatrixCallback<Unit> {
+                object : MatrixCallback<Unit>() {
 
                     override fun onSuccess(data: Unit) {
                         Timber.v("##### trustKeysBackupVersion onSuccess")

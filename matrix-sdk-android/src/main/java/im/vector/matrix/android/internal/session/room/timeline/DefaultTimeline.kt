@@ -390,7 +390,7 @@ internal class DefaultTimeline(
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask.configureWith(params)
                 .enableRetry()
-                .dispatchTo(object : MatrixCallback<TokenChunkEventPersistor.Result> {
+                .dispatchTo(object : MatrixCallback<TokenChunkEventPersistor.Result>() {
                     override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                         if (data == TokenChunkEventPersistor.Result.SUCCESS) {
                             Timber.v("Success fetching $limit items $direction from pagination request")

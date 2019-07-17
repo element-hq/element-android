@@ -47,6 +47,8 @@ import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
@@ -94,7 +96,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeRoomSummary()
         observeEventDisplayedActions()
         observeInvitationState()
-        cancelableBag += room.loadRoomMembersIfNeeded()
+        viewModelScope.launch {
+            room.loadRoomMembersIfNeeded()
+        }
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
     }
@@ -316,29 +320,27 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
         _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
 
-        room.updateTopic(changeTopic.topic, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                room.updateTopic(changeTopic.topic)
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultOk))
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultError(failure)))
             }
-        })
+        }
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
         _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
 
-        room.invite(invite.userId, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                room.invite(invite.userId)
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultOk))
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultError(failure)))
             }
-        })
+        }
     }
 
 
@@ -400,11 +402,15 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleRejectInvite() {
-        room.leave(object : MatrixCallback<Unit> {})
+        viewModelScope.launch {
+            room.leave()
+        }
     }
 
     private fun handleAcceptInvite() {
-        room.join(object : MatrixCallback<Unit> {})
+        viewModelScope.launch {
+            room.join()
+        }
     }
 
     private fun handleEditAction(action: RoomDetailActions.EnterEditMode) {
@@ -446,7 +452,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 action.messageFileContent.getFileName(),
                 action.messageFileContent.getFileUrl(),
                 action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
-                object : MatrixCallback<File> {
+                object : MatrixCallback<File>() {
                     override fun onSuccess(data: File) {
                         _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
                                 action.messageFileContent.getMimeType(),
@@ -527,7 +533,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 .subscribeBy(onNext = { actions ->
                     val mostRecentEvent = actions.maxBy { it.event.displayIndex }
                     mostRecentEvent?.event?.root?.eventId?.let { eventId ->
-                        room.setReadReceipt(eventId, callback = object : MatrixCallback<Unit> {})
+                        viewModelScope.launch {
+                            room.setReadReceipt(eventId)
+                        }
                     }
                 })
                 .disposeOnClear()

@@ -36,7 +36,7 @@ class KeysExporter(private val session: Session) {
      * Export keys and return the file path with the callback
      */
     fun export(context: Context, password: String, callback: MatrixCallback<String>) {
-        session.exportRoomKeys(password, object : MatrixCallback<ByteArray> {
+        session.exportRoomKeys(password, object : MatrixCallback<ByteArray>() {
 
             override fun onSuccess(data: ByteArray) {
                 GlobalScope.launch(Dispatchers.Main) {

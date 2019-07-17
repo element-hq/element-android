@@ -66,7 +66,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     fun init() {
-        keysBackupService.forceUsingLastVersion(object : MatrixCallback<Boolean> {})
+        keysBackupService.forceUsingLastVersion(object : MatrixCallback<Boolean>() {})
     }
 
     fun getKeysBackupTrust() = withState { state ->
@@ -81,7 +81,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
             }
 
             keysBackupService
-                    .getKeysBackupTrust(versionResult, object : MatrixCallback<KeysBackupVersionTrust> {
+                    .getKeysBackupTrust(versionResult, object : MatrixCallback<KeysBackupVersionTrust>() {
                         override fun onSuccess(data: KeysBackupVersionTrust) {
                             setState {
                                 copy(
@@ -127,7 +127,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
                 )
             }
 
-            keysBackupService.deleteBackup(keysBackupService.currentBackupVersion!!, object : MatrixCallback<Unit> {
+            keysBackupService.deleteBackup(keysBackupService.currentBackupVersion!!, object : MatrixCallback<Unit>() {
                 override fun onSuccess(data: Unit) {
                     setState {
                         copy(

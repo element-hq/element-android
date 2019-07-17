@@ -413,7 +413,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         contentMap.setObject(userId, userDevice, cancelMessage)
 
         sendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId))
-                .dispatchTo(object : MatrixCallback<Unit> {
+                .dispatchTo(object : MatrixCallback<Unit>() {
                     override fun onSuccess(data: Unit) {
                         Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
                     }

@@ -71,7 +71,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                                 data.filename,
                                 data.url,
                                 data.elementToDecrypt,
-                                object : MatrixCallback<File> {
+                                object : MatrixCallback<File>() {
                                     override fun onSuccess(data: File) {
                                         thumbnailView.isVisible = false
                                         loadingView.isVisible = false

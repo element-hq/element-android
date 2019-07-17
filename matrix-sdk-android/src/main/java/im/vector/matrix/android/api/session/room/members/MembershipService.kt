@@ -17,7 +17,6 @@
 package im.vector.matrix.android.api.session.room.members
 
 import androidx.lifecycle.LiveData
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -28,9 +27,8 @@ interface MembershipService {
 
     /**
      * This methods load all room members if it was done yet.
-     * @return a [Cancelable]
      */
-    fun loadRoomMembersIfNeeded(): Cancelable
+    suspend fun loadRoomMembersIfNeeded()
 
     /**
      * Return the roomMember with userId or null.
@@ -52,16 +50,16 @@ interface MembershipService {
     /**
      * Invite a user in the room
      */
-    fun invite(userId: String, callback: MatrixCallback<Unit>)
+    suspend fun invite(userId: String)
 
     /**
      * Join the room, or accept an invitation.
      */
-    fun join(callback: MatrixCallback<Unit>)
+    suspend fun join()
 
     /**
      * Leave the room, or reject an invitation.
      */
-    fun leave(callback: MatrixCallback<Unit>)
+    suspend fun leave()
 
 }

@@ -276,7 +276,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
                                     override fun onUploadComplete(uploadId: String?, contentUri: String?) {
                                         activity?.runOnUiThread {
-                                            session.myUser.updateAvatarUrl(contentUri, object : MatrixCallback<Unit> {
+                                            session.myUser.updateAvatarUrl(contentUri, object : MatrixCallback<Unit>() {
                                                 override fun onSuccess(info: Void?) {
                                                     onCommonDone(null)
                                                     refreshDisplay()
@@ -551,7 +551,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         displayLoadingView()
 
-        session.myUser.requestEmailValidationToken(pid, object : MatrixCallback<Unit> {
+        session.myUser.requestEmailValidationToken(pid, object : MatrixCallback<Unit>() {
             override fun onSuccess(info: Void?) {
                 activity?.runOnUiThread { showEmailValidationDialog(pid) }
             }
@@ -587,7 +587,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     .setTitle(R.string.account_email_validation_title)
                     .setMessage(R.string.account_email_validation_message)
                     .setPositiveButton(R.string._continue) { _, _ ->
-                        session.myUser.add3Pid(pid, true, object : MatrixCallback<Unit> {
+                        session.myUser.add3Pid(pid, true, object : MatrixCallback<Unit>() {
                             override fun onSuccess(info: Void?) {
                                 it.runOnUiThread {
                                     hideLoadingView()
@@ -642,7 +642,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         /* TODO
                         displayLoadingView()
 
-                        session.myUser.delete3Pid(pid, object : MatrixCallback<Unit> {
+                        session.myUser.delete3Pid(pid, object : MatrixCallback<Unit>() {
                             override fun onSuccess(info: Void?) {
                                 when (pid.medium) {
                                     ThreePid.MEDIUM_EMAIL -> refreshEmailsList()
@@ -781,7 +781,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     /* TODO
                     showPasswordLoadingView(true)
 
-                    session.updatePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
+                    session.updatePassword(oldPwd, newPwd, object : MatrixCallback<Unit>() {
                         private fun onDone(@StringRes textResId: Int) {
                             showPasswordLoadingView(false)
 
@@ -830,7 +830,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         if (!TextUtils.equals(session.myUser.displayname, value)) {
             displayLoadingView()
 
-            session.myUser.updateDisplayName(value, object : MatrixCallback<Unit> {
+            session.myUser.updateDisplayName(value, object : MatrixCallback<Unit>() {
                 override fun onSuccess(info: Void?) {
                     // refresh the settings value
                     PreferenceManager.getDefaultSharedPreferences(activity).edit {

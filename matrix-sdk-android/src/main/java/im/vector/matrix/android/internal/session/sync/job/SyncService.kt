@@ -107,7 +107,7 @@ open class SyncService : Service() {
             cancelableTask = syncTask.configureWith(params)
                     .callbackOn(TaskThread.SYNC)
                     .executeOn(TaskThread.SYNC)
-                    .dispatchTo(object : MatrixCallback<Unit> {
+                    .dispatchTo(object : MatrixCallback<Unit>() {
                         override fun onSuccess(data: Unit) {
                             cancelableTask = null
                             if (!once) {

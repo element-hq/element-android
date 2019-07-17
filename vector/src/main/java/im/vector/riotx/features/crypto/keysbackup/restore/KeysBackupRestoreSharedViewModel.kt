@@ -71,7 +71,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor() : ViewModel() {
 
         loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restore_is_getting_backup_version))
 
-        keysBackup.getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
+        keysBackup.getCurrentVersion(object : MatrixCallback<KeysVersionResult?>() {
             override fun onSuccess(data: KeysVersionResult?) {
                 loadingEvent.value = null
                 if (data?.version.isNullOrBlank()) {
