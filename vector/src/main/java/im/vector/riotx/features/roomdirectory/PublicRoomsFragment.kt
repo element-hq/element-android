@@ -144,9 +144,9 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        if (publicRoomsFilter.text.toString() != state.currentFilter) {
+        if (publicRoomsFilter.query.toString() != state.currentFilter) {
             // For initial filter
-            publicRoomsFilter.setText(state.currentFilter)
+            publicRoomsFilter.setQuery(state.currentFilter, false)
         }
 
         // Populate list with Epoxy
