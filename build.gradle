@@ -1,3 +1,5 @@
+import javax.tools.JavaCompiler
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -52,6 +54,19 @@ allprojects {
             }
         }
     }
+
+    tasks.withType(JavaCompile).all {
+        options.compilerArgs += [
+                '-Adagger.gradle.incremental=enabled'
+        ]
+    }
+
+    afterEvaluate {
+        extensions.findByName("kapt")?.arguments {
+            arg("dagger.gradle.incremental", "enabled")
+        }
+    }
+
 }
 
 task clean(type: Delete) {

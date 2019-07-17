@@ -160,6 +160,12 @@
         <item name="colorControlHighlight">@android:color/white</item>
     </style>
 
+    <style name="VectorSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="searchIcon">@drawable/ic_search</item>
+        <item name="closeIcon">@drawable/ic_x_green</item>
+        <item name="iconifiedByDefault">false</item>
+    </style>
+
     <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
         <item name="android:background">@android:color/transparent</item>

@@ -10,12 +10,13 @@ Improvements:
  - Improve edit of replies
 
 Other changes:
- -
+ - migrate from rxbinding 2 to rxbinding 3
 
 Bugfix:
  - Fix regression on permalink click
  - Fix crash reported by the PlayStore (#341)
  - Fix Chat composer separator color in dark/black theme
+ - Fix bad layout for room directory filter (#349)
 
 Translations:
  -
