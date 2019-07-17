@@ -130,7 +130,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
         return if (isUnique) {
             roomMember.displayName
         } else {
-            "${roomMember.displayName} ( ${eventEntity.stateKey} )"
+            "${roomMember.displayName} (${eventEntity.stateKey})"
         }
     }
 
