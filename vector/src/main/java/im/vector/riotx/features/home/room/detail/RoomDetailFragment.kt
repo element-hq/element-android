@@ -858,10 +858,12 @@ class RoomDetailFragment :
     // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
+        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
         roomDetailViewModel.process(RoomDetailActions.AcceptInvite)
     }
 
     override fun onRejectInvite() {
+        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
         roomDetailViewModel.process(RoomDetailActions.RejectInvite)
     }
 }

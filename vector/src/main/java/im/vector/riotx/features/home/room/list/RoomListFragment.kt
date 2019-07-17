@@ -38,6 +38,7 @@ import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
+import im.vector.riotx.features.notifications.NotificationDrawerManager
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import javax.inject.Inject
@@ -69,6 +70,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     @Inject lateinit var roomController: RoomSummaryController
     @Inject lateinit var roomListViewModelFactory: RoomListViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
@@ -258,10 +260,12 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     }
 
     override fun onAcceptRoomInvitation(room: RoomSummary) {
+        notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
         roomListViewModel.accept(RoomListActions.AcceptInvitation(room))
     }
 
     override fun onRejectRoomInvitation(room: RoomSummary) {
+        notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
         roomListViewModel.accept(RoomListActions.RejectInvitation(room))
     }
 
