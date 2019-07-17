@@ -18,7 +18,18 @@ package im.vector.riotx.core.platform
 
 import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.MvRxState
+import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.riotx.BuildConfig
 
 abstract class VectorViewModel<S : MvRxState>(initialState: S)
-    : BaseMvRxViewModel<S>(initialState, false)
+    : BaseMvRxViewModel<S>(initialState, false) {
+
+    protected val cancelableBag = CancelableBag()
+
+    override fun onCleared() {
+        super.onCleared()
+        cancelableBag.cancel()
+    }
+
+
+}

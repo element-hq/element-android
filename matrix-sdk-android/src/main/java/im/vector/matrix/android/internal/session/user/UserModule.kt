@@ -26,7 +26,4 @@ internal abstract class UserModule {
     @Binds
     abstract fun bindUserService(userService: DefaultUserService): UserService
 
-    @Binds
-    abstract fun bindUpdateUserTask(updateUserTask: DefaultUpdateUserTask): UpdateUserTask
-
 }

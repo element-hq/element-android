@@ -94,7 +94,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeRoomSummary()
         observeEventDisplayedActions()
         observeInvitationState()
-        room.loadRoomMembersIfNeeded()
+        cancelableBag += room.loadRoomMembersIfNeeded()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
     }

@@ -37,25 +37,22 @@ internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {
     }
 }
 
-internal fun RoomEntity.addStateEvents(stateEvents: List<Event>,
-                                       stateIndex: Int = Int.MIN_VALUE,
-                                       filterDuplicates: Boolean = false,
-                                       isUnlinked: Boolean = false) {
+internal fun RoomEntity.addStateEvent(stateEvent: Event,
+                                      stateIndex: Int = Int.MIN_VALUE,
+                                      filterDuplicates: Boolean = false,
+                                      isUnlinked: Boolean = false) {
     assertIsManaged()
-
-    stateEvents.forEach { event ->
-        if (event.eventId == null || (filterDuplicates && fastContains(event.eventId))) {
-            return@forEach
-        }
-        val eventEntity = event.toEntity(roomId).apply {
+    if (stateEvent.eventId == null || (filterDuplicates && fastContains(stateEvent.eventId))) {
+        return
+    } else {
+        val entity = stateEvent.toEntity(roomId).apply {
             this.stateIndex = stateIndex
             this.isUnlinked = isUnlinked
             this.sendState = SendState.SYNCED
         }
-        untimelinedStateEvents.add(0, eventEntity)
+        untimelinedStateEvents.add(entity)
     }
 }
-
 internal fun RoomEntity.addSendingEvent(event: Event) {
     assertIsManaged()
     val senderId = event.senderId ?: return
@@ -64,7 +61,7 @@ internal fun RoomEntity.addSendingEvent(event: Event) {
     }
     val roomMembers = RoomMembers(realm, roomId)
     val myUser = roomMembers.get(senderId)
-    val localId  = TimelineEventEntity.nextId(realm)
+    val localId = TimelineEventEntity.nextId(realm)
     val timelineEventEntity = TimelineEventEntity(localId).also {
         it.root = eventEntity
         it.eventId = event.eventId ?: ""
