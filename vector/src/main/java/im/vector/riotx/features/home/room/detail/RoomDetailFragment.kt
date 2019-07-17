@@ -37,9 +37,11 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
+import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -57,6 +59,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
@@ -87,7 +90,7 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.action.*
 import im.vector.riotx.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
@@ -323,6 +326,32 @@ class RoomDetailFragment :
                 })
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
+
+        if (VectorPreferences.swipeToReplyIsEnabled(requireContext())) {
+            val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
+                    R.drawable.ic_reply,
+                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                            (model as? AbsMessageItem)?.informationData?.let {
+                                val eventId = it.eventId
+                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                            }
+                        }
+
+                        override fun canSwipeModelModel(model: EpoxyModel<*>): Boolean {
+                            return when (model) {
+                                is MessageFileItem,
+                                is MessageImageVideoItem,
+                                is MessageTextItem -> {
+                                    return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
+                                }
+                                else               -> false
+                            }
+                        }
+                    })
+            val touchHelper = ItemTouchHelper(swipeCallback)
+            touchHelper.attachToRecyclerView(recyclerView)
+        }
     }
 
     private fun setupComposer() {
