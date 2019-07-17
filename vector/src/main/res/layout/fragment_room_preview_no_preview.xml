@@ -13,10 +13,10 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/roomPreviewNoPreviewToolbar"
+            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:elevation="4dp"
-            app:contentInsetStartWithNavigation="0dp">
+            android:elevation="4dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
