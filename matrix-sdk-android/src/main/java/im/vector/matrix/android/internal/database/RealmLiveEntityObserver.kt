@@ -17,13 +17,12 @@
 package im.vector.matrix.android.internal.database
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.util.createBackgroundHandler
-import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
 import io.realm.RealmResults
+import kotlinx.coroutines.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
@@ -37,7 +36,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
     : LiveEntityObserver, OrderedRealmCollectionChangeListener<RealmResults<T>> {
 
     private companion object {
-        val BACKGROUND_HANDLER = createBackgroundHandler("LIVE_ENTITY_BACKGROUND")
+        val BACKGROUND_CONTEXT = CoroutineName("LIVE_ENTITY_BACKGROUND")
     }
 
     protected abstract val query: Monarchy.Query<T>
@@ -47,11 +46,11 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
 
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
-            BACKGROUND_HANDLER.post {
+            GlobalScope.launch(BACKGROUND_CONTEXT) {
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
                 val queryResults = query.createQuery(realm).findAll()
-                queryResults.addChangeListener(this)
+                queryResults.addChangeListener(this@RealmLiveEntityObserver)
                 results = AtomicReference(queryResults)
             }
         }
@@ -59,7 +58,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
 
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
-            BACKGROUND_HANDLER.post {
+            GlobalScope.launch(BACKGROUND_CONTEXT) {
                 results.getAndSet(null).removeAllChangeListeners()
                 backgroundRealm.getAndSet(null).also {
                     it.close()

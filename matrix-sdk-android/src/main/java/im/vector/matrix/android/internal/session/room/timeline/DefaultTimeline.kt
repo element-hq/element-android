@@ -32,9 +32,11 @@ import im.vector.matrix.android.internal.database.query.whereInRoom
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
-import im.vector.matrix.android.internal.util.createBackgroundHandler
 import im.vector.matrix.android.internal.util.createUIHandler
 import io.realm.*
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -59,13 +61,13 @@ internal class DefaultTimeline(
 ) : Timeline {
 
     private companion object {
-        val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
+        val BACKGROUND_CONTEXT = CoroutineName("TIMELINE_DB_THREAD")
     }
 
     override var listener: Timeline.Listener? = null
         set(value) {
             field = value
-            BACKGROUND_HANDLER.post {
+            GlobalScope.launch(BACKGROUND_CONTEXT) {
                 postSnapshot()
             }
         }
@@ -167,7 +169,7 @@ internal class DefaultTimeline(
 //        override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
 //            if (roomId == this@DefaultTimeline.roomId) {
 //                Timber.v("New session id detected for this room")
-//                BACKGROUND_HANDLER.post {
+//                GlobalScope.launch(BACKGROUND_CONTEXT) {
 //                    val realm = backgroundRealm.get()
 //                    var hasChange = false
 //                    builtEvents.forEachIndexed { index, timelineEvent ->
@@ -193,9 +195,9 @@ internal class DefaultTimeline(
 // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
-        BACKGROUND_HANDLER.post {
+        GlobalScope.launch(BACKGROUND_CONTEXT) {
             if (!canPaginate(direction)) {
-                return@post
+                return@launch
             }
             Timber.v("Paginate $direction of $count items")
             val startDisplayIndex = if (direction == Timeline.Direction.BACKWARDS) prevDisplayIndex else nextDisplayIndex
@@ -211,7 +213,7 @@ internal class DefaultTimeline(
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
             eventDecryptor.start()
-            BACKGROUND_HANDLER.post {
+            GlobalScope.launch(BACKGROUND_CONTEXT) {
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
                 clearUnlinkedEvents(realm)
@@ -241,7 +243,7 @@ internal class DefaultTimeline(
         if (isStarted.compareAndSet(true, false)) {
             eventDecryptor.destroy()
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
-            BACKGROUND_HANDLER.post {
+            GlobalScope.launch(BACKGROUND_CONTEXT) {
                 cancelableBag.cancel()
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 eventRelations.removeAllChangeListeners()
@@ -396,7 +398,7 @@ internal class DefaultTimeline(
                             Timber.v("Success fetching $limit items $direction from pagination request")
                         } else {
                             // Database won't be updated, so we force pagination request
-                            BACKGROUND_HANDLER.post {
+                            GlobalScope.launch(BACKGROUND_CONTEXT) {
                                 executePaginationTask(direction, limit)
                             }
                         }
