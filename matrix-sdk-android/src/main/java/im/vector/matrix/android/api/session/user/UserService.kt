@@ -36,6 +36,12 @@ interface UserService {
      * @param userId the userId to look for.
      * @return a Livedata of user with userId
      */
-    fun observeUser(userId: String): LiveData<User?>
+    fun liveUser(userId: String): LiveData<User?>
+
+    /**
+     * Observe a live list of users sorted alphabetically
+     * @return a Livedata of users
+     */
+    fun liveUsers(): LiveData<List<User>>
 
 }

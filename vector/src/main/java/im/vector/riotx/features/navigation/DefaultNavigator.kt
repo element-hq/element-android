@@ -25,6 +25,8 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.riotx.features.debug.DebugMenuActivity
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
@@ -65,6 +67,11 @@ class DefaultNavigator @Inject constructor() : Navigator {
 
     override fun openCreateRoom(context: Context) {
         val intent = CreateRoomActivity.getIntent(context)
+        context.startActivity(intent)
+    }
+
+    override fun openCreateDirectRoom(context: Context) {
+        val intent = CreateDirectRoomActivity.getIntent(context)
         context.startActivity(intent)
     }
 

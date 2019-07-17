@@ -144,7 +144,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     }
 
     override fun createDirectChat() {
-        vectorBaseActivity.notImplemented("creating direct chat")
+        navigator.openCreateDirectRoom(requireActivity())
     }
 
     private fun setupRecyclerView() {
@@ -248,7 +248,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         return super.onBackPressed()
     }
 
-// RoomSummaryController.Callback **************************************************************
+    // RoomSummaryController.Callback **************************************************************
 
     override fun onRoomSelected(room: RoomSummary) {
         roomListViewModel.accept(RoomListActions.SelectRoom(room))

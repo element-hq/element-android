@@ -36,6 +36,7 @@ import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.HomeModule
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomFragment
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.timeline.action.*
@@ -152,6 +153,8 @@ interface ScreenComponent {
     fun inject(vectorSettingsNotificationsTroubleshootFragment: VectorSettingsNotificationsTroubleshootFragment)
 
     fun inject(pushGatewaysFragment: PushGatewaysFragment)
+
+    fun inject(createDirectRoomFragment: CreateDirectRoomFragment)
 
     @Component.Factory
     interface Factory {
