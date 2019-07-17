@@ -93,7 +93,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                 .rx()
                 .liveGroupSummaries()
                 .map {
-                    val myUser = session.getUser(session.sessionParams.credentials.userId)
+                    val myUser = session.getUser(session.myUserId)
                     val allCommunityGroup = GroupSummary(
                             groupId = ALL_COMMUNITIES_GROUP_ID,
                             displayName = stringProvider.getString(R.string.group_all_communities),

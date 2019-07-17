@@ -21,8 +21,8 @@ import androidx.lifecycle.ViewModel
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.StepProgressListener
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
-import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.WaitingViewData
 import im.vector.riotx.core.ui.views.KeysBackupBanner
@@ -58,7 +58,7 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel
         keysBackup.restoreKeyBackupWithPassword(keysVersionResult,
                 passphrase.value!!,
                 null,
-                sharedViewModel.session.sessionParams.credentials.userId,
+                sharedViewModel.session.myUserId,
                 object : StepProgressListener {
                     override fun onStepProgress(step: StepProgressListener.Step) {
                         when (step) {

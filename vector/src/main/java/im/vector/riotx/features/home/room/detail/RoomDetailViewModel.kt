@@ -352,7 +352,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleUndoReact(action: RoomDetailActions.UndoReaction) {
-        room.undoReaction(action.key, action.targetEventId, session.sessionParams.credentials.userId)
+        room.undoReaction(action.key, action.targetEventId, session.myUserId)
     }
 
 
@@ -360,7 +360,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (action.add) {
             room.sendReaction(action.selectedReaction, action.targetEventId)
         } else {
-            room.undoReaction(action.selectedReaction, action.targetEventId, session.sessionParams.credentials.userId)
+            room.undoReaction(action.selectedReaction, action.targetEventId, session.myUserId)
         }
     }
 

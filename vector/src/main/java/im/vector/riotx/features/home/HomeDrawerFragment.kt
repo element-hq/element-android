@@ -52,7 +52,7 @@ class HomeDrawerFragment : VectorBaseFragment() {
             replaceChildFragment(groupListFragment, R.id.homeDrawerGroupListContainer)
         }
 
-        session.observeUser(session.sessionParams.credentials.userId).observeK(this) { user ->
+        session.observeUser(session.myUserId).observeK(this) { user ->
             if (user != null) {
                 avatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)
                 homeDrawerUsernameView.text = user.displayName

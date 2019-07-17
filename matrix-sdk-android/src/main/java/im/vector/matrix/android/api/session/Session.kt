@@ -57,6 +57,9 @@ interface Session :
      */
     val sessionParams: SessionParams
 
+    /**
+     * Useful shortcut to get access to the userId
+     */
     val myUserId: String
         get() = sessionParams.credentials.userId
 

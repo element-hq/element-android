@@ -139,11 +139,11 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                         this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, eventId))
                     }
 
-                    if (canEdit(event, session.sessionParams.credentials.userId)) {
+                    if (canEdit(event, session.myUserId)) {
                         this.add(SimpleAction(ACTION_EDIT, R.string.edit, R.drawable.ic_edit, eventId))
                     }
 
-                    if (canRedact(event, session.sessionParams.credentials.userId)) {
+                    if (canRedact(event, session.myUserId)) {
                         this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, eventId))
                     }
 
@@ -183,7 +183,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 }
                 this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, event.root.eventId))
 
-                if (session.sessionParams.credentials.userId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
+                if (session.myUserId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
                     //not sent by me
                     this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, event.root.eventId))
                 }
