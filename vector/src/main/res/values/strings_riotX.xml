@@ -36,4 +36,7 @@
 
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
+
+    <string name="link_copied_to_clipboard">Link copied to clipboard</string>
+
 </resources>

@@ -602,7 +602,7 @@ class RoomDetailFragment :
 
     override fun onUrlLongClicked(url: String): Boolean {
         // Copy the url to the clipboard
-        copyToClipboard(requireContext(), url)
+        copyToClipboard(requireContext(), url, true, R.string.link_copied_to_clipboard)
         return true
     }
 
