@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
@@ -130,6 +131,24 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
         return CancelableWork(context, workRequest.id)
 
+    }
+
+    override fun editReply(replyToEdit: TimelineEvent,
+                           originalSenderId: String?,
+                           originalEventId: String,
+                           newBodyText: String,
+                           compatibilityBodyText: String): Cancelable {
+        val event = eventFactory
+                .createReplaceTextOfReply(roomId,
+                        replyToEdit,
+                        originalSenderId, originalEventId,
+                        newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
+                .also {
+                    saveLocalEcho(it)
+                }
+        val workRequest = createSendEventWork(event)
+        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+        return CancelableWork(context, workRequest.id)
     }
 
     override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {

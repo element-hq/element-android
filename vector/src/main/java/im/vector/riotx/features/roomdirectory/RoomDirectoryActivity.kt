@@ -16,8 +16,11 @@
 
 package im.vector.riotx.features.roomdirectory
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
+import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
@@ -25,6 +28,7 @@ import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
+import im.vector.riotx.features.roomdirectory.createroom.CreateRoomViewModel
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import javax.inject.Inject
 
@@ -39,7 +43,10 @@ class RoomDirectoryActivity : VectorBaseActivity() {
     }
 
 
+    @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
+    private val roomDirectoryViewModel: RoomDirectoryViewModel by viewModel()
+    private val createRoomViewModel: CreateRoomViewModel by viewModel()
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
@@ -51,6 +58,11 @@ class RoomDirectoryActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryNavigationViewModel::class.java)
+
+        if (isFirstCreation()) {
+            roomDirectoryViewModel.filterWith(intent?.getStringExtra(INITIAL_FILTER) ?: "")
+        }
+
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
             when (navigation) {
                 is Navigation.Back           -> onBackPressed()
@@ -58,6 +70,11 @@ class RoomDirectoryActivity : VectorBaseActivity() {
                 is Navigation.ChangeProtocol -> addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
                 is Navigation.Close          -> finish()
             }
+        }
+
+        roomDirectoryViewModel.selectSubscribe(this, PublicRoomsViewState::currentFilter) { currentFilter ->
+            // Transmit the filter to the createRoomViewModel
+            createRoomViewModel.setName(currentFilter)
         }
     }
 
@@ -67,4 +84,13 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         }
     }
 
+    companion object {
+        private const val INITIAL_FILTER = "INITIAL_FILTER"
+
+        fun getIntent(context: Context, initialFilter: String = ""): Intent {
+            val intent = Intent(context, RoomDirectoryActivity::class.java)
+            intent.putExtra(INITIAL_FILTER, initialFilter)
+            return intent
+        }
+    }
 }

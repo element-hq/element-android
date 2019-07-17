@@ -22,7 +22,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.view.isVisible
 import arrow.core.Try
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
@@ -127,9 +127,9 @@ class LoginActivity : VectorBaseActivity() {
     private fun setupAuthButton() {
         Observable
                 .combineLatest(
-                        RxTextView.textChanges(loginField).map { it.trim().isNotEmpty() },
-                        RxTextView.textChanges(passwordField).map { it.trim().isNotEmpty() },
-                        RxTextView.textChanges(homeServerField).map { it.trim().isNotEmpty() },
+                        loginField.textChanges().map { it.trim().isNotEmpty() },
+                        passwordField.textChanges().map { it.trim().isNotEmpty() },
+                        homeServerField.textChanges().map { it.trim().isNotEmpty() },
                         Function3<Boolean, Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty, isHomeServerNotEmpty ->
                             isLoginNotEmpty && isPasswordNotEmpty && isHomeServerNotEmpty
                         }

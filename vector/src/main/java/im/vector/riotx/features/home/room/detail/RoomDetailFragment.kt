@@ -62,6 +62,7 @@ import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
+import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -261,7 +262,7 @@ class RoomDetailFragment :
         composerLayout.composerRelatedMessageContent.text = formattedBody
                 ?: nonFormattedBody
 
-        composerLayout.composerEditText.setText(if (useText) nonFormattedBody else "")
+        composerLayout.composerEditText.setText(if (useText) event.getTextEditableContent() else "")
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
@@ -515,7 +516,7 @@ class RoomDetailFragment :
             timelineEventController.setTimeline(state.timeline, state.eventId)
             inviteView.visibility = View.GONE
 
-            val uid = session.sessionParams.credentials.userId
+            val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
             avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
 
@@ -809,7 +810,7 @@ class RoomDetailFragment :
         if (null != text) {
 //            var vibrate = false
 
-            val myDisplayName = session.getUser(session.sessionParams.credentials.userId)?.displayName
+            val myDisplayName = session.getUser(session.myUserId)?.displayName
             if (TextUtils.equals(myDisplayName, text)) {
                 // current user
                 if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {

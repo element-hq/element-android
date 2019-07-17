@@ -181,8 +181,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        val user = session.getUser(session.sessionParams.credentials.userId)
-        val myUserDisplayName = user?.displayName ?: session.sessionParams.credentials.userId
+        val user = session.getUser(session.myUserId)
+        // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
+        val myUserDisplayName = user?.displayName?.takeIf { it.isNotBlank() } ?: session.myUserId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
 
@@ -343,7 +344,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             for (event in simpleEvents) {
                 //We build a simple event
                 if (firstTime || !event.hasBeenDisplayed) {
-                    NotificationUtils.buildSimpleEventNotification(context, event, null, myUserDisplayName)?.let {
+                    NotificationUtils.buildSimpleEventNotification(context, event, null, session.myUserId)?.let {
                         notifications.add(it)
                         NotificationUtils.showNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID, it)
                         event.hasBeenDisplayed = true //we can consider it as displayed

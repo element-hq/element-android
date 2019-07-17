@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
+import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
@@ -29,11 +30,15 @@ import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryNavigationViewModel
+import javax.inject.Inject
 
 /**
  * Simple container for [CreateRoomFragment]
  */
 class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
+
+    @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
+    private val createRoomViewModel: CreateRoomViewModel by viewModel()
 
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
 
@@ -46,6 +51,8 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(CreateRoomFragment(), R.id.simpleFragmentContainer)
+
+            createRoomViewModel.setName(intent?.getStringExtra(INITIAL_NAME) ?: "")
         }
     }
 
@@ -58,14 +65,19 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
         navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryNavigationViewModel::class.java)
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
             when (navigation) {
-                is RoomDirectoryActivity.Navigation.Back -> finish()
+                is RoomDirectoryActivity.Navigation.Back,
+                is RoomDirectoryActivity.Navigation.Close -> finish()
             }
         }
     }
 
     companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, CreateRoomActivity::class.java)
+        private const val INITIAL_NAME = "INITIAL_NAME"
+
+        fun getIntent(context: Context, initialName: String = ""): Intent {
+            return Intent(context, CreateRoomActivity::class.java).apply {
+                putExtra(INITIAL_NAME, initialName)
+            }
         }
     }
 
