@@ -139,8 +139,8 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         roomListViewModel.accept(RoomListActions.FilterWith(filter))
     }
 
-    override fun openRoomDirectory() {
-        navigator.openRoomDirectory(requireActivity())
+    override fun openRoomDirectory(initialFilter: String) {
+        navigator.openRoomDirectory(requireActivity(), initialFilter)
     }
 
     override fun createDirectChat() {
@@ -266,9 +266,8 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         roomListViewModel.accept(RoomListActions.ToggleCategory(roomCategory))
     }
 
-    // TODO Pass title
-    override fun createRoom() {
-        navigator.openCreateRoom(requireActivity())
+    override fun createRoom(initialName: String) {
+        navigator.openCreateRoom(requireActivity(), initialName)
     }
 
 }

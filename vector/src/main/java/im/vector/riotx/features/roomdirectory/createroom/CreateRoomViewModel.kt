@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.roomdirectory.createroom
 
+import androidx.fragment.app.FragmentActivity
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -25,6 +26,7 @@ import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomPreset
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
                                                       private val session: Session
@@ -39,8 +41,13 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreateRoomViewState): CreateRoomViewModel? {
-            val fragment: CreateRoomFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.createRoomViewModelFactory.create(state)
+            val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()
+
+            return when (activity) {
+                is CreateRoomActivity    -> activity.createRoomViewModelFactory.create(state)
+                is RoomDirectoryActivity -> activity.createRoomViewModelFactory.create(state)
+                else                     -> throw IllegalStateException("Wrong activity")
+            }
         }
     }
 
