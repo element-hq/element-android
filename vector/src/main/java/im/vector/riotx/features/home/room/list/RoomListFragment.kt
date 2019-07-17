@@ -136,6 +136,9 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     }
 
     fun filterRoomsWith(filter: String) {
+        // Scroll the list to top
+        epoxyRecyclerView.scrollToPosition(0)
+
         roomListViewModel.accept(RoomListActions.FilterWith(filter))
     }
 
