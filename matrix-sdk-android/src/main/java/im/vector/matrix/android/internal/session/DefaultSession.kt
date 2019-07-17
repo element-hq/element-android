@@ -105,8 +105,10 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         SyncWorker.stopAnyBackgroundSync(context)
     }
 
-    override fun startSync() {
+    override fun startSync(fromForeground : Boolean) {
+        Timber.i("Starting sync thread")
         assert(isOpen)
+        syncThread.setInitialForeground(fromForeground)
         if (!syncThread.isAlive) {
             syncThread.start()
         } else {
