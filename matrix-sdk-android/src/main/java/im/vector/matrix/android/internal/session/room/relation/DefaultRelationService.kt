@@ -142,14 +142,13 @@ internal class DefaultRelationService @Inject constructor(private val context: C
     }
 
     override fun editReply(replyToEdit: TimelineEvent,
-                           originalSenderId: String?,
-                           originalEventId: String,
+                           originalEvent: TimelineEvent,
                            newBodyText: String,
                            compatibilityBodyText: String): Cancelable {
         val event = eventFactory
                 .createReplaceTextOfReply(roomId,
                         replyToEdit,
-                        originalSenderId, originalEventId,
+                        originalEvent,
                         newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
                 .also {
                     saveLocalEcho(it)
