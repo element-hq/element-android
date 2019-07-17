@@ -10,6 +10,7 @@ Improvements:
  - Improve long tap menu: reply on top, more compact (#368)
  - Quick reply in timeline with swipe gesture (#167)
  - Improve edit of replies
+ - Improve performance on Room Members and Users management (#381)
 
 Other changes:
  - migrate from rxbinding 2 to rxbinding 3

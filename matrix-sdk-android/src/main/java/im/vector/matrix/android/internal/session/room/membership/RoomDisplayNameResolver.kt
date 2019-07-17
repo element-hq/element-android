@@ -90,7 +90,9 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
                 val inviteMeEvent = roomMembers.queryRoomMemberEvent(credentials.userId).findFirst()
                 val inviterId = inviteMeEvent?.sender
                 name = if (inviterId != null) {
-                    val inviterMemberEvent = loadedMembers.where().equalTo(EventEntityFields.STATE_KEY, inviterId).findFirst()
+                    val inviterMemberEvent = loadedMembers.where()
+                            .equalTo(EventEntityFields.STATE_KEY, inviterId)
+                            .findFirst()
                     inviterMemberEvent?.toRoomMember()?.displayName
                 } else {
                     context.getString(R.string.room_displayname_room_invite)
