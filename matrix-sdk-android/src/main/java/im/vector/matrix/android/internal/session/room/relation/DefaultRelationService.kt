@@ -127,9 +127,17 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 .also {
                     saveLocalEcho(it)
                 }
-        val workRequest = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-        return CancelableWork(context, workRequest.id)
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
+            return CancelableWork(context, encryptWork.id)
+
+        } else {
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+            return CancelableWork(context, workRequest.id)
+        }
 
     }
 
@@ -146,13 +154,21 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 .also {
                     saveLocalEcho(it)
                 }
-        val workRequest = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-        return CancelableWork(context, workRequest.id)
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
+            return CancelableWork(context, encryptWork.id)
+
+        } else {
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+            return CancelableWork(context, workRequest.id)
+        }
     }
 
     override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
-        val params = FetchEditHistoryTask.Params(roomId, eventId)
+        val params = FetchEditHistoryTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), eventId)
         fetchEditHistoryTask.configureWith(params)
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)

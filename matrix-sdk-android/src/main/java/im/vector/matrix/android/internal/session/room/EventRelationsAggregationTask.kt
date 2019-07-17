@@ -17,9 +17,13 @@ package im.vector.matrix.android.internal.session.room
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.*
@@ -43,7 +47,9 @@ internal interface EventRelationsAggregationTask : Task<EventRelationsAggregatio
 /**
  * Called by EventRelationAggregationUpdater, when new events that can affect relations are inserted in base.
  */
-internal class DefaultEventRelationsAggregationTask @Inject constructor(private val monarchy: Monarchy) : EventRelationsAggregationTask {
+internal class DefaultEventRelationsAggregationTask @Inject constructor(
+        private val monarchy: Monarchy,
+        private val cryptoService: CryptoService) : EventRelationsAggregationTask {
 
     //OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
@@ -86,13 +92,41 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(private 
                             }
                         }
 
-                        EventAnnotationsSummaryEntity.where(realm, event.eventId ?: "").findFirst()?.let {
-                            TimelineEventEntity.where(realm,eventId = event.eventId ?: "").findFirst()?.let { tet ->
+                        EventAnnotationsSummaryEntity.where(realm, event.eventId
+                                ?: "").findFirst()?.let {
+                            TimelineEventEntity.where(realm, eventId = event.eventId
+                                    ?: "").findFirst()?.let { tet ->
                                 tet.annotations = it
                             }
                         }
 
 
+                    }
+
+                    EventType.ENCRYPTED -> {
+                        //Relation type is in clear
+                        val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
+                        if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE) {
+                            //we need to decrypt if needed
+                            if (event.mxDecryptionResult == null) {
+                                try {
+                                    val result = cryptoService.decryptEvent(event, event.roomId)
+                                    event.mxDecryptionResult = OlmDecryptionResult(
+                                            payload = result.clearEvent,
+                                            senderKey = result.senderCurve25519Key,
+                                            keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                                    )
+                                } catch (e: MXCryptoError) {
+
+                                }
+                            }
+                            event.getClearContent().toModel<MessageContent>()?.let {
+                                Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
+                                //A replace!
+                                handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
+                            }
+                        }
                     }
                     EventType.REDACTION -> {
                         val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
@@ -125,9 +159,9 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(private 
 
     }
 
-    private fun handleReplace(realm: Realm, event: Event, content: MessageContent, roomId: String, isLocalEcho: Boolean) {
+    private fun handleReplace(realm: Realm, event: Event, content: MessageContent, roomId: String, isLocalEcho: Boolean, relatedEventId: String? = null) {
         val eventId = event.eventId ?: return
-        val targetEventId = content.relatesTo?.eventId ?: return
+        val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
         val newContent = content.newContent ?: return
         //ok, this is a replace
         var existing = EventAnnotationsSummaryEntity.where(realm, targetEventId).findFirst()

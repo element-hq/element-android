@@ -20,12 +20,15 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.isReply
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import java.util.*
 
 
 data class ViewEditHistoryViewState(
@@ -79,16 +82,36 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
             }
 
             override fun onSuccess(data: List<Event>) {
-                //TODO until supported by API Add original event manually
-                val withOriginal = data.toMutableList()
                 var originalIsReply = false
-                room.getTimeLineEvent(eventId)?.let {
-                    withOriginal.add(it.root)
-                    originalIsReply = it.root.getClearContent().toModel<MessageContent>().isReply()
+
+                val events = data.map {
+                    val timelineID = it.roomId + UUID.randomUUID().toString()
+                    it.apply {
+                        //We need to check encryption
+                        if (isEncrypted() && mxDecryptionResult == null) {
+                            //for now decrypt sync
+                            try {
+                                val result = session.decryptEvent(this, timelineID)
+                                mxDecryptionResult = OlmDecryptionResult(
+                                        payload = result.clearEvent,
+                                        senderKey = result.senderCurve25519Key,
+                                        keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                                )
+                            } catch (e: MXCryptoError) {
+
+                            }
+                        }
+
+                        if (it.eventId == eventId) {
+                            originalIsReply = getClearContent().toModel<MessageContent>().isReply()
+                        }
+                    }
+
                 }
                 setState {
                     copy(
-                            editList = Success(withOriginal),
+                            editList = Success(events),
                             isOriginalAReply = originalIsReply
                     )
                 }
