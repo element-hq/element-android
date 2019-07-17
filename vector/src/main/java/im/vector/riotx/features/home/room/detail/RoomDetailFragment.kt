@@ -338,7 +338,7 @@ class RoomDetailFragment :
                             }
                         }
 
-                        override fun canSwipeModelModel(model: EpoxyModel<*>): Boolean {
+                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
                             return when (model) {
                                 is MessageFileItem,
                                 is MessageImageVideoItem,

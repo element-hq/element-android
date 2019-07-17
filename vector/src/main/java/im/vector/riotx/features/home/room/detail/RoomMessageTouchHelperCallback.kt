@@ -40,7 +40,7 @@ class RoomMessageTouchHelperCallback(private val context: Context,
 
     interface QuickReplayHandler {
         fun performQuickReplyOnHolder(model: EpoxyModel<*>)
-        fun canSwipeModelModel(model: EpoxyModel<*>): Boolean
+        fun canSwipeModel(model: EpoxyModel<*>): Boolean
     }
 
     private var swipeBack: Boolean = false
@@ -67,7 +67,7 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     }
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: EpoxyViewHolder): Int {
-        if (handler.canSwipeModelModel(viewHolder.model)) {
+        if (handler.canSwipeModel(viewHolder.model)) {
             return ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.START) //Should we use Left?
         } else {
             return 0
