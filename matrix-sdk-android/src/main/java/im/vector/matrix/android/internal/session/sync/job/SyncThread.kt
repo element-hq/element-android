@@ -54,8 +54,9 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         updateStateTo(SyncState.IDLE)
     }
 
-    fun setInitialForeground(initialForground : Boolean) {
-        updateStateTo(if (initialForground) SyncState.IDLE else SyncState.PAUSED)
+    fun setInitialForeground(initialForeground: Boolean) {
+        val newState = if (initialForeground) SyncState.IDLE else SyncState.PAUSED
+        updateStateTo(newState)
     }
 
     fun restart() = synchronized(lock) {
@@ -96,7 +97,9 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                     lock.wait()
                 }
             } else {
-                updateStateTo(SyncState.RUNNING(catchingUp = true))
+                if (state !is SyncState.RUNNING) {
+                    updateStateTo(SyncState.RUNNING(catchingUp = true))
+                }
                 Timber.v("[$this] Execute sync request with timeout $DEFAULT_LONG_POOL_TIMEOUT")
                 val latch = CountDownLatch(1)
                 val params = SyncTask.Params(DEFAULT_LONG_POOL_TIMEOUT)
