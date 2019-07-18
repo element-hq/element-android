@@ -269,7 +269,10 @@ class RoomDetailFragment :
                 ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
         composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
-        composerLayout.expand()
+        composerLayout.expand {
+            //need to do it here also when not using quick reply
+            focusComposerAndShowKeyboard()
+        }
         focusComposerAndShowKeyboard()
     }
 
