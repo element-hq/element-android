@@ -1484,4 +1484,51 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="keys_backup_unable_to_get_trust_info">Ndodhi një gabim gjatë marrjes së të dhënave të besueshmërisë</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Ndodhi një gabim teksa merreshin të dhëna kopjeruajtjeje kyçesh</string>
 
+    <string name="alpha_disclaimer_title">Mirë se vini në beta!</string>
+    <string name="alpha_disclaimer_content_line_1">Teksa Riot X është në fillimet e zhvillimit, disa veçori mund të mos jenë gati dhe mund të hasni të meta.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Lista e veçorive më të reja gjendet te %1$s, dhe nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Përshkrim në Play Store</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>
+
+    <string name="import_e2e_keys_from_file">Importo kyçe e2e prej kartelës \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Versioni Matrix SDK</string>
+    <string name="settings_other_third_party_notices">Shënime të tjera palësh të treta</string>
+    <string name="navigate_to_room_when_already_in_the_room">Po e shihni tashmë këtë dhomë!</string>
+
+    <string name="quick_reactions">Reagime të Shpejta</string>
+
+    <string name="settings_general_title">Të përgjithshme</string>
+    <string name="settings_preferences">Parapëlqime</string>
+    <string name="settings_security_and_privacy">Siguri &amp; Privatësi</string>
+    <string name="settings_expert">Ekspert</string>
+    <string name="settings_push_rules">Rregulla për Push</string>
+    <string name="settings_push_rules_no_rules">S’ka të përcaktuara rregulla për push</string>
+    <string name="settings_push_gateway_no_pushers">Pa kanale push të regjistruar</string>
+
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Format:</string>
+
+    <string name="preference_voice_and_video">Zë &amp; Video</string>
+    <string name="preference_root_help_about">Ndihmë &amp; Mbi</string>
+
+
+    <string name="send_suggestion">Bëni një sugjerim</string>
+    <string name="send_suggestion_content">Ju lutemi, shkruajeni sugjerimin tuaj më poshtë.</string>
+    <string name="send_suggestion_report_placeholder">Përshkruani këtu sugjerimin tuaj</string>
+    <string name="send_suggestion_sent">Faleminderit, sugjerimi u dërgua me sukses</string>
+    <string name="send_suggestion_failed">S’u arrit të dërgohej sugjerimi (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Shfaq te rrjedha kohore akte të fshehura</string>
+
+    <string name="store_riotx_title">RiotX - Klient Matrix i Brezit të Ardhshëm</string>
+    <string name="store_riotx_short_description">Një klient më i shpejtë dhe më i lehtë për Matrix, që përdor mekanizmat më të rinj Android</string>
+    <string name="store_riotx_full_description">RiotX është një klient i ri për protokollin Matrix (Matrix.org): një rrjet i hapur për komunikim të sigurt, të centralizuar. RiotX është një rishkrim i plotë i klientit Riot Android, bazuar në një rishkrim të plotë të Matrix Android SDK-së.
+\n
+\nKlauzolë: Ky është një version beta. RiotX-i është ende nën zhivillim aktiv dhe përmban kufizime dhe (shpresojmë të mos jenë shumë) të meta. Mirëpresim krejt përshtypjet dhe sugjerimet!
+\n
+\nRiotX-i mbulon: • Hyrje në një llogari ekzistuese • Krijim dhome dhe pjesëmarrje në dhoma publike • Pranim dhe hedhje poshtë ftesash • Njohje të dhomave të përdoruesve • Parje hollësish dhome • Dërgim mesazhesh tekst • Dërgim bashkëngjitjesh • Lexim dhe shkrim mesazhesh në dhoma të fshehtëzuara • Kriptografi: kopjeruajtje kyçesh E2E, verifikim i thelluar pajisjesh, kërkesa dhe përgjigje për ndarje kyçesh • Njoftime push • Tema të Çelëta, të Errëta dhe të Zeza
+\n
+\nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Krijim llogarish • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Krijim dhomash fjalosjeje të drejtpërdrejtë • Thirrje • Widget-es • …</string>
+
 </resources>

@@ -1476,7 +1476,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="send_you_invite">Gonbidapen bat bidali dizu</string>
     <string name="invited_by">%s erabiltzaileak gonbidatuta</string>
 
-    <string name="room_list_catchup_empty_title">Arrapatu zaituztete!</string>
+    <string name="room_list_catchup_empty_title">Egunean zaude!</string>
     <string name="room_list_catchup_empty_body">Ez duzu irakurri gabeko mezu gehiagorik</string>
     <string name="room_list_catchup_welcome_title">Ongi etorri etxera!</string>
     <string name="room_list_catchup_welcome_body">Jarri egunean hemengo irakurri gabeko mezuekin</string>
@@ -1522,4 +1522,57 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_unable_to_get_trust_info">Errore bat gertatu da konfiantzazko informazioa jasotzean</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Errore bat gertatu da gakoen babes-kopiaren datuak jasotzean</string>
 
+    <string name="alpha_disclaimer_title">Ongi etorri betara!</string>
+    <string name="alpha_disclaimer_content_line_1">Riot X oraindik garapenean dagoenez, ezaugarri batzuk faltan bota ditzakezu eta akatsen bat aurkitu dezakezu.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Azken ezaugarrien zerrenda hemen dago beti : %1$s, eta akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-ko deskripzioa</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
+
+    <string name="import_e2e_keys_from_file">"Inportatu e2e gakoak \"%1$s\"  fitxategitik."</string>
+
+    <string name="settings_sdk_version">Matrix SDK bertsioa</string>
+    <string name="settings_other_third_party_notices">Beste hirugarrengoen adierazpenak</string>
+    <string name="navigate_to_room_when_already_in_the_room">Gela hau ikusten ari zara dagoeneko!</string>
+
+    <string name="quick_reactions">Erreakzio azkarrak</string>
+
+    <string name="settings_general_title">Orokorra</string>
+    <string name="settings_preferences">Hobespenak</string>
+    <string name="settings_security_and_privacy">Segurtasuna eta pribatutasuna</string>
+    <string name="settings_expert">Aditua</string>
+    <string name="settings_push_rules">Push arauak</string>
+    <string name="settings_push_rules_no_rules">Ez da push araurik zehaztu</string>
+    <string name="settings_push_gateway_no_pushers">Ez dago push arauentzako erregistratutako atebiderik</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_gakoa:</string>
+    <string name="push_gateway_item_device_name">gailu_izena:</string>
+    <string name="push_gateway_item_url">Url-a:</string>
+    <string name="push_gateway_item_format">Formatua:</string>
+
+    <string name="preference_voice_and_video">Ahotsa eta bideoa</string>
+    <string name="preference_root_help_about">Laguntza eta honi buruz</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Erregistratu token-a</string>
+
+    <string name="send_suggestion">Egin iradokizun bat</string>
+    <string name="send_suggestion_content">Idatzi zure iradokizuna azpian.</string>
+    <string name="send_suggestion_report_placeholder">Deskribatu zure iradokizuna hemen</string>
+    <string name="send_suggestion_sent">Eskerrik asko, iradokizuna ongi bidali da</string>
+    <string name="send_suggestion_failed">Huts egin su iradokizuna bidaltzean (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Erakutsi ezkutatutako gertaerak denbora lerroan</string>
+
+    <string name="store_riotx_title">RiotX - Hurrengo belaunaldiko Matrix bezeroa</string>
+    <string name="store_riotx_short_description">Matrix-erako bezero azkarrago eta arinago bat azken Android tresnak erabiliz eginak</string>
+    <string name="store_riotx_full_description">RiotX bezero berri bat da Matrix protokoloarentzako (Matrix.org): komunikazioa seguru eta deszentralizatuarentzako sare libre bat. RiotX Android plataformarako Riot bezeroaren berridazketa oso bat da, erabat berridatzitako Android SDK-n oinarritua.
+\n
+\nAbisua: hau beta bertsio bat da. RiotX garapen aktiboan dago eta baditu mugak zein akatsak (gehiegi ez espero dugu). Iruzkin guztiak ongi etorriak dira!
+\n
+\nRiotX bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Gai argia, iluna eta beltza
+\n
+\nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Txat zuzenerako gelak sortzea • Deiak • Trepetak • …</string>
+
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
 </resources>

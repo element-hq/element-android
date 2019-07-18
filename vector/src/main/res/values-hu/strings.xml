@@ -1526,4 +1526,57 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="keys_backup_unable_to_get_trust_info">A megbízhatósági információ beszerzésekor hiba történt</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">A kulcs mentés adatainak beszerzésekor hiba történt</string>
 
+    <string name="alpha_disclaimer_title">Üdv a béta verzióban!</string>
+    <string name="alpha_disclaimer_content_line_1">Amíg a Riot X újdonsült fejlesztés, néhány funkció hiányozhat és találkozhatsz hibákkal.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">A legfrissebb funkciók listáját itt találod: %1$s, és ha hibát találsz kérlek küldj egy jelentést róla a Kezdő oldal bal felső sarkában lévő menüvel és ahogy tudjuk javítjuk.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play áruház leírás</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Ha hibát találsz kérlek küldj egy jelentést róla a Kezdő oldal bal felső sarkában lévő menüvel és ahogy tudjuk javítjuk.</string>
+
+    <string name="import_e2e_keys_from_file">Végponttól végpontig titkosítás kulcsainak betöltése ebből a fájlból: \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Matrix SDK Verzió</string>
+    <string name="settings_other_third_party_notices">Harmadik fél megjegyzések</string>
+    <string name="navigate_to_room_when_already_in_the_room">Már nézed ezt a szobát!</string>
+
+    <string name="quick_reactions">Gyors Reakció</string>
+
+    <string name="settings_general_title">Általános</string>
+    <string name="settings_preferences">Beállítások</string>
+    <string name="settings_security_and_privacy">Biztonság &amp; Adatvédelem</string>
+    <string name="settings_expert">Haladó</string>
+    <string name="settings_push_rules">„Push” szabályok</string>
+    <string name="settings_push_rules_no_rules">„Push” szabályok nincsenek</string>
+    <string name="settings_push_gateway_no_pushers">„Push” átjárók nincsenek regisztrálva</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Formátum:</string>
+
+    <string name="preference_voice_and_video">Hang &amp; Videó</string>
+    <string name="preference_root_help_about">Segítség &amp; Névjegy</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">„Token” regisztrálás</string>
+
+    <string name="send_suggestion">Javaslat tétel</string>
+    <string name="send_suggestion_content">A javaslatodat kérlek ír le alulra.</string>
+    <string name="send_suggestion_report_placeholder">Ír le a javaslatodat ide</string>
+    <string name="send_suggestion_sent">Köszönjük, a javaslatodat sikeresen elküldtük</string>
+    <string name="send_suggestion_failed">A javaslatot nem sikerült elküldeni (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Rejtett események megjelenítése az idővonalon</string>
+
+    <string name="store_riotx_title">RiotX - Matrix Kliens Új Nemzedéke</string>
+    <string name="store_riotx_short_description">A gyorsabb és kisebb Matrix kliens ami a legfrissebb Android keretrendszert használja</string>
+    <string name="store_riotx_full_description">RiotX a Matrix protokollhoz (Matrix.org) készült új kliens: nyílt hálózat biztonságos és decentralizált kommunikációhoz. RiotX a Riot Android kliens teljesen újraírt változata ami a teljesen újraírt Matrix Android SDK-ra épül.
+\n
+\nFigyelmeztetés: Ez egy béta verzió. RiotX aktív fejlesztés alatt áll és vannak korlátai és (reméljük nem olyan sok) hibái. Minden visszajelzést szívesen fogadunk!
+\n
+\nRiotX ezeket támogatja: • Bejelentkezés létező fiókba • Szoba készítés és nyilvános szobába való belépés • Meghívók fogadása és elutasítás • Felhasználók szobáinak listázása • Szoba adatainak megtekintése • Szöveges üzenet küldése • Csatolmány küldése • Titkosított szobákban üzenetek olvasása és írása • Titkosítás: Végponttól végpontig titkosító kulcsok mentése, fejlett eszköz ellenőrzés, kulcs megosztás kérése és válasz • „Push” értesítések • Világos, sötét és fekete téma
+\n
+\nNem minden Riot funkció támogatott a RiotX-ben jelenleg. A fő hiányzó (és hamarosan elérhető!) funkciók: • Felhasználói fiók létrehozása • Szoba beállítások (szoba tagság mutatása, stb…) • Közvetlen beszélgetések indítása • Hívások • Kisalkalmazások • …</string>
+
 </resources>

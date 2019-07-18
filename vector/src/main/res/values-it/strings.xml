@@ -1570,4 +1570,57 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="keys_backup_unable_to_get_trust_info">Si è verificato un errore nell\'ottenere informazioni sulla fiducia</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Si è verificato un errore nell\'ottenere i dati del backup chiavi</string>
 
+    <string name="alpha_disclaimer_title">Benvenuti nella beta!</string>
+    <string name="alpha_disclaimer_content_line_1">Mentre Riot X si trova nella fase iniziale dello sviluppo, potrebbero mancare alcune funzioni e potrebbero verificarsi errori.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">L\'elenco di funzioni più recenti è sempre nel %1$s, se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descrizione nel Play Store</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
+
+    <string name="import_e2e_keys_from_file">Importa chiavi e2e dal file \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Versione SDK Matrix</string>
+    <string name="settings_other_third_party_notices">Altre note di terze parti</string>
+    <string name="navigate_to_room_when_already_in_the_room">Stai già visualizzando questa stanza!</string>
+
+    <string name="quick_reactions">Reazioni rapide</string>
+
+    <string name="settings_general_title">Generali</string>
+    <string name="settings_preferences">Preferenze</string>
+    <string name="settings_security_and_privacy">Sicurezza e privacy</string>
+    <string name="settings_expert">Esperto</string>
+    <string name="settings_push_rules">Regole di push</string>
+    <string name="settings_push_rules_no_rules">Nessuna regola di push definita</string>
+    <string name="settings_push_gateway_no_pushers">Nessun gateway di push registrato</string>
+
+    <string name="push_gateway_item_app_id">id_app:</string>
+    <string name="push_gateway_item_push_key">chiave_push:</string>
+    <string name="push_gateway_item_app_display_name">nome_visualizzato_app:</string>
+    <string name="push_gateway_item_device_name">nome_dispositivo:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Formato:</string>
+
+    <string name="preference_voice_and_video">Voce e video</string>
+    <string name="preference_root_help_about">Aiuto e informazioni</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Registra token</string>
+
+    <string name="send_suggestion">Suggerisci qualcosa</string>
+    <string name="send_suggestion_content">Scrivi qua sotto il tuo suggerimento.</string>
+    <string name="send_suggestion_report_placeholder">Descrivi qui il tuo suggerimento</string>
+    <string name="send_suggestion_sent">Grazie, il suggerimento è stato inviato correttamente</string>
+    <string name="send_suggestion_failed">L\'invio del suggerimento è fallito (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Mostra eventi nascosti nella cronologia</string>
+
+    <string name="store_riotx_title">RiotX - Client Matrix di nuova generazione</string>
+    <string name="store_riotx_short_description">Un client per Matrix più veloce e leggero usando gli ultimi framework di Android</string>
+    <string name="store_riotx_full_description">RiotX è un nuovo client per il protocollo Matrix (Matrix.org): una rete aperta per comunicazioni sicure e decentralizzate. RiotX è una riscrittura totale del client Riot Android, basata su una riscrittura completa dell\'SDK Android di Matrix.
+\n
+\nDisclaimer: questa è una versione beta. RiotX è attualmente in uno sviluppo attivo e contiene limitazioni ed errori (speriamo non troppi). I suggerimenti sono ben accetti!
+\n
+\nRiotX supporta: • Accesso ad account esistente • Crea stanze ed entra in stanze pubbliche • Accetta e rifiuta inviti • Elenca stanze utenti • Vedi dettagli stanza • Invia messaggi di testo • Invia allegati • Leggi e scrivi messaggi in stanze cifrate • Crypto: backup chiavi E2E, verifica avanzata dispositivi, richiesta e risposta condivisione chiavi • Notifiche push • Tema chiaro, scuro e nero
+\n
+\nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Creazione account • Impostazioni stanza (elenca membri stanza, ecc.) • Creazione di stanze di chat diretta • Chiamate • Widget • …</string>
+
 </resources>

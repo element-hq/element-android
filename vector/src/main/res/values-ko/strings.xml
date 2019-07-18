@@ -7,7 +7,7 @@
     <string name="dark_theme">어두운 테마</string>
     <string name="black_them">검정 테마</string>
 
-    <string name="notification_sync_in_progress">동기화</string>
+    <string name="notification_sync_in_progress">동기화하는중…</string>
     <string name="title_activity_home">메시지</string>
     <string name="title_activity_room">방</string>
     <string name="title_activity_settings">설정</string>
@@ -26,7 +26,7 @@
     <string name="send">보내기</string>
     <string name="copy">복사</string>
     <string name="resend">다시 보내기</string>
-    <string name="redact">삭제하기</string>
+    <string name="redact">지우기</string>
     <string name="quote">인용</string>
     <string name="download">받기</string>
     <string name="share">공유</string>
@@ -38,7 +38,7 @@
     <string name="report_content">컨텐츠 신고</string>
     <string name="ongoing_conference_call_voice">음성</string>
     <string name="ongoing_conference_call_video">영상</string>
-    <string name="cannot_start_call">전화를 걸 수 없습니다, 나중에 다시 시도해주세요.</string>
+    <string name="cannot_start_call">전화를 걸 수 없습니다, 나중에 다시 시도해주세요</string>
     <string name="missing_permissions_warning">권한이 없어졌기 때문에, 일부 기능이 빠졌을 수 있습니다…</string>
     <string name="missing_permissions_error">권한이 없어졌기 때문에, 이 행동을 할 수 없습니다.</string>
     <string name="missing_permissions_title_to_start_conf_call">전화를 걸 수 없습니다</string>
@@ -80,13 +80,13 @@
     <string name="send_bug_report_include_logs">로그 보내기</string>
     <string name="send_bug_report_include_crash_logs">충돌 로그 보내기</string>
     <string name="send_bug_report_include_screenshot">스크린샷 보내기</string>
-    <string name="send_bug_report">버그 보고서</string>
+    <string name="send_bug_report">버그 보고하기</string>
     <string name="send_bug_report_description">버그에 대해 설명해주세요. 무엇을 했나요? 어떤 일이 일어나길 바라고 한 건가요? 실제로는 어떤 일이 일어났나요?</string>
     <string name="send_bug_report_description_in_english">가능하다면, 영어로 설명해주세요.</string>
     <string name="send_bug_report_placeholder">여기에 문제를 설명해주세요</string>
     <string name="send_bug_report_sent">버그 보고서를 보내는데 성공했습니다</string>
     <string name="send_bug_report_failed">버그 보고서를 보내는데 실패했습니다 (%s)</string>
-    <string name="create_account">등록하기</string>
+    <string name="create_account">계정 만들기</string>
     <string name="login">로그인</string>
     <string name="logout">로그아웃</string>
     <string name="hs_url">홈서버 URL</string>
@@ -108,7 +108,7 @@
     <string name="option_take_video">영상 찍기</string>
 
     <string name="auth_login">로그인</string>
-    <string name="auth_register">등록하기</string>
+    <string name="auth_register">계정 만들기</string>
     <string name="auth_submit">제출하기</string>
     <string name="auth_skip">건너뛰기</string>
     <string name="auth_user_id_placeholder">이메일이나 이용자 이름</string>
@@ -117,4 +117,65 @@
     <string name="auth_user_name_placeholder">이용자 이름</string>
     <string name="auth_add_email_message">이용자가 당신을 찾고 재설정 비밀번호를 보낼 수 있게 이메일 주소를 적어주세요.</string>
     <string name="auth_add_phone_message">이용자가 당신을 찾을 수 있게 계정에 전화번호를 추가해주세요.</string>
+    <string name="status_theme">Status.im 테마</string>
+
+    <string name="notification_sync_init">서비스 초기화 중</string>
+    <string name="notification_noisy_notifications">소리로 알림</string>
+    <string name="notification_silent_notifications">소리 없이 알림</string>
+
+    <string name="title_activity_member_details">구성원 정보</string>
+    <string name="title_activity_group_details">커뮤니티 정보</string>
+    <string name="title_activity_keys_backup_setup">키 백업</string>
+    <string name="title_activity_keys_backup_restore">키 백업하기</string>
+    <string name="title_activity_verify_device">인증 기기</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">키 백업이 끝나지 않았습니다, 기다려주세요…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">지금 로그아웃하면 암호화된 메세지가 사라집니다</string>
+    <string name="keys_backup_activate">키 백업하기</string>
+    <string name="are_you_sure">정말이세요\?</string>
+    <string name="backup">백업</string>
+    <string name="stay">머물기</string>
+    <string name="skip">넘기기</string>
+    <string name="done">완료</string>
+    <string name="action_sign_out_confirmation_simple">정말 로그아웃하시겠어요\?</string>
+    <string name="action_mark_room_read">읽었다고 표시</string>
+    <string name="no_contact_access_placeholder">Riot이 주소록에 접근할 수 없게 되어 있습니다</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="other">%d 사람들</item>
+    </plurals>
+
+    <string name="groups_invite_header">초대</string>
+    <string name="groups_header">커뮤니티</string>
+    <string name="send_bug_report_app_crashed">최근에 애플리케이션이 충돌한 것 같습니다. 충돌 보고서를 열까요\?</string>
+    <string name="read_receipt">읽기</string>
+
+    <string name="username">사용자 이름</string>
+    <string name="option_send_voice">음성 보내기</string>
+
+    <string name="no_sticker_application_dialog_content">스티커팩이 하나도 없습니다.
+\n
+\n뭐라도 추가할까요\?</string>
+
+    <string name="auth_return_to_login">로그인 화면으로 돌아가기</string>
+    <string name="auth_email_placeholder">이메일 주소</string>
+    <string name="auth_opt_email_placeholder">이메일 주소 (선택)</string>
+    <string name="auth_phone_number_placeholder">전화번호</string>
+    <string name="auth_opt_phone_number_placeholder">전화번호 (선택)</string>
+    <string name="auth_repeat_password_placeholder">비밀번호 확인</string>
+    <string name="auth_repeat_new_password_placeholder">새 비밀번호 확인</string>
+    <string name="auth_invalid_login_param">알맞지 않은 사용자 이름이나 비밀번호</string>
+    <string name="auth_invalid_password">비밀번호가 너무 짧아요 (최소 6자)</string>
+    <string name="auth_invalid_email">유효한 이메일 주소가 아닌 것 같아요</string>
+    <string name="auth_invalid_phone">유효한 전화번호가 아닌 것 같아요</string>
+    <string name="auth_password_dont_match">비밀번호가 맞지 않아요</string>
+    <string name="auth_forgot_password">비밀번호를 잊어버리셨나요\?</string>
+    <string name="auth_username_in_use">사용중인 사용자 이름입니다</string>
+    <string name="auth_home_server">홈서버:</string>
+    <string name="auth_reset_password_message">비밀번호를 초기화하려면, 계정에 이메일을 등록해야합니다:</string>
+    <string name="auth_reset_password_missing_password">새 비밀번호를 입력해야합니다.</string>
+    <string name="auth_reset_password_success_message">비밀번호가 초기화되었습니다.
+\n
+\n모든 기기에서 로그아웃되고 알림도 가지 않을 거에요. 다시 알림을 받으려면, 각 기기에 다시 로그인하세요.</string>
+    <string name="login_mobile_device">모바일</string>
+
 </resources>
