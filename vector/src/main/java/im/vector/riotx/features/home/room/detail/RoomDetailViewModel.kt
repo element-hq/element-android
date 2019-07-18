@@ -39,7 +39,6 @@ import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.rx.rx
-import im.vector.riotx.R
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.UserPreferencesProvider
@@ -52,8 +51,6 @@ import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -97,7 +94,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeRoomSummary()
         observeEventDisplayedActions()
         observeInvitationState()
-        room.loadRoomMembersIfNeeded()
+        cancelableBag += room.loadRoomMembersIfNeeded()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
     }
@@ -229,16 +226,24 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     }
                 }
                 is SendMode.EDIT  -> {
-                    val messageContent: MessageContent? =
-                            state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
-                    val nonFormattedBody = messageContent?.body ?: ""
 
-                    if (nonFormattedBody != action.text) {
-                        room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                ?: "", messageContent?.type ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                    //is original event a reply?
+                    val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
+                    if (inReplyTo != null) {
+                        //TODO check if same content?
+                        room.editReply(state.sendMode.timelineEvent, room.getTimeLineEvent(inReplyTo)?.root?.senderId, inReplyTo, action.text)
                     } else {
-                        Timber.w("Same message content, do not send edition")
+                        val messageContent: MessageContent? =
+                                state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
+                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                        val existingBody = messageContent?.body ?: ""
+                        if (existingBody != action.text) {
+                            room.editTextMessage(state.sendMode.timelineEvent.root.eventId
+                                    ?: "", messageContent?.type
+                                    ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                        } else {
+                            Timber.w("Same message content, do not send edition")
+                        }
                     }
                     setState {
                         copy(
@@ -347,7 +352,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleUndoReact(action: RoomDetailActions.UndoReaction) {
-        room.undoReaction(action.key, action.targetEventId, session.sessionParams.credentials.userId)
+        room.undoReaction(action.key, action.targetEventId, session.myUserId)
     }
 
 
@@ -355,7 +360,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (action.add) {
             room.sendReaction(action.selectedReaction, action.targetEventId)
         } else {
-            room.undoReaction(action.selectedReaction, action.targetEventId, session.sessionParams.credentials.userId)
+            room.undoReaction(action.selectedReaction, action.targetEventId, session.myUserId)
         }
     }
 

@@ -148,6 +148,7 @@ object VectorPreferences {
     private const val SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY = "SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
 
     private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
+    private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
 
     // analytics
     const val SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY"
@@ -247,6 +248,10 @@ object VectorPreferences {
 
     fun shouldShowHiddenEvents(context: Context): Boolean {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY, false)
+    }
+
+    fun swipeToReplyIsEnabled(context: Context): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY, true)
     }
 
     /**

@@ -95,7 +95,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         // Display name
         mDisplayNamePreference.let {
-            it.summary = session.getUser(session.sessionParams.credentials.userId)?.displayName ?: ""
+            it.summary = session.getUser(session.myUserId)?.displayName ?: ""
             it.text = it.summary.toString()
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 onDisplayNameClick(newValue?.let { (it as String).trim() })
@@ -148,7 +148,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         // user account
         findPreference(VectorPreferences.SETTINGS_LOGGED_IN_PREFERENCE_KEY)
-                .summary = session.sessionParams.credentials.userId
+                .summary = session.myUserId
 
         // home server
         findPreference(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)

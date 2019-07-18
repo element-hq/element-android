@@ -70,13 +70,14 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 viewState.rejectingRoomsIds,
                 viewState.rejectingErrorRoomsIds)
 
-        addFilterFooter()
+        addFilterFooter(viewState)
     }
 
-    private fun addFilterFooter() {
+    private fun addFilterFooter(viewState: RoomListViewState) {
         filteredRoomFooterItem {
             id("filter_footer")
             listener(listener)
+            currentFilter(viewState.roomFilter)
         }
     }
 

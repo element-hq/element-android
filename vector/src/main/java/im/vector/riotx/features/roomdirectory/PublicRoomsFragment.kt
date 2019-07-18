@@ -25,14 +25,13 @@ import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.themes.ThemeUtils
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
 import timber.log.Timber
@@ -70,9 +69,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
             it.setDisplayHomeAsUpEnabled(true)
         }
 
-        publicRoomsFilter.setBackgroundResource(ThemeUtils.getResourceId(requireContext(), R.drawable.bg_search_edit_text_light))
-
-        RxTextView.textChanges(publicRoomsFilter)
+        publicRoomsFilter.queryTextChanges()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy {
                     viewModel.filterWith(it.toString())
@@ -147,6 +144,11 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     }
 
     override fun invalidate() = withState(viewModel) { state ->
+        if (publicRoomsFilter.query.toString() != state.currentFilter) {
+            // For initial filter
+            publicRoomsFilter.setQuery(state.currentFilter, false)
+        }
+
         // Populate list with Epoxy
         publicRoomsController.setData(state)
     }

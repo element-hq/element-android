@@ -59,9 +59,15 @@ import im.vector.riotx.features.workers.signout.SignOutViewModel
 interface ViewModelModule {
 
 
+    /**
+     * ViewModels with @IntoMap will be injected by this factory
+     */
     @Binds
     fun bindViewModelFactory(factory: VectorViewModelFactory): ViewModelProvider.Factory
 
+    /**
+     *  Below are bindings for the androidx view models (which extend ViewModel). Will be converted to MvRx ViewModel in the future.
+     */
     @Binds
     @IntoMap
     @ViewModelKey(SignOutViewModel::class)
@@ -111,6 +117,10 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ConfigurationViewModel::class)
     fun bindConfigurationViewModel(viewModel: ConfigurationViewModel): ViewModel
+
+    /**
+     * Below are bindings for the MvRx view models (which extend VectorViewModel). Will be the only usage in the future.
+     */
 
     @Binds
     fun bindHomeActivityViewModelFactory(factory: HomeActivityViewModel_AssistedFactory): HomeActivityViewModel.Factory

@@ -27,11 +27,11 @@ interface Navigator {
 
     fun openRoomPreview(publicRoom: PublicRoom, context: Context)
 
-    fun openCreateRoom(context: Context)
+    fun openCreateRoom(context: Context, initialName: String = "")
 
     fun openCreateDirectRoom(context: Context)
 
-    fun openRoomDirectory(context: Context)
+    fun openRoomDirectory(context: Context, initialFilter: String = "")
 
     fun openRoomsFiltering(context: Context)
 

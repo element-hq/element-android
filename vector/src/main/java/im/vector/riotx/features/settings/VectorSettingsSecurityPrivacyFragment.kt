@@ -367,7 +367,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      * @param aMyDeviceInfo the device info
      */
     private fun refreshCryptographyPreference(aMyDeviceInfo: DeviceInfo?) {
-        val userId = session.sessionParams.credentials.userId
+        val userId = session.myUserId
         val deviceId = session.sessionParams.credentials.deviceId
 
         // device name

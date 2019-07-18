@@ -17,9 +17,10 @@
 package im.vector.matrix.android.internal.session.room.membership
 
 import arrow.core.Try
+import com.squareup.moshi.JsonReader
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.internal.database.helper.addStateEvents
+import im.vector.matrix.android.internal.database.helper.addStateEvent
 import im.vector.matrix.android.internal.database.helper.updateSenderData
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -27,10 +28,13 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
+import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import okhttp3.ResponseBody
+import okio.Okio
 import javax.inject.Inject
 
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Boolean> {
@@ -60,23 +64,26 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
         }
     }
 
-    private fun insertInDb(response: RoomMembersResponse, roomId: String): Try<RoomMembersResponse> {
+    private fun insertInDb(response: RoomMembersResponse, roomId: String): Try<Unit> {
         return monarchy
                 .tryTransactionSync { realm ->
                     // We ignore all the already known members
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                                     ?: realm.createObject(roomId)
+                            ?: realm.createObject(roomId)
 
-                    val roomMembers = RoomMembers(realm, roomId).getLoaded()
-                    val eventsToInsert = response.roomMemberEvents.filter { !roomMembers.containsKey(it.stateKey) }
-                    roomEntity.addStateEvents(eventsToInsert)
+
+                    for (roomMemberEvent in response.roomMemberEvents) {
+                        roomEntity.addStateEvent(roomMemberEvent)
+                        UserEntityFactory.createOrNull(roomMemberEvent)?.also {
+                            realm.insertOrUpdate(it)
+                        }
+                    }
                     roomEntity.chunks.flatMap { it.timelineEvents }.forEach {
                         it.updateSenderData()
                     }
                     roomEntity.areAllMembersLoaded = true
                     roomSummaryUpdater.update(realm, roomId)
                 }
-                .map { response }
     }
 
     private fun areAllMembersAlreadyLoaded(roomId: String): Boolean {

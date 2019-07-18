@@ -79,9 +79,9 @@ class VectorSettingsActivity : VectorBaseActivity(),
         var oFragment: Fragment? = null
 
         if (VectorPreferences.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref?.key) {
-            oFragment = VectorSettingsNotificationsTroubleshootFragment.newInstance(session.sessionParams.credentials.userId)
+            oFragment = VectorSettingsNotificationsTroubleshootFragment.newInstance(session.myUserId)
         } else if (VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref?.key) {
-            oFragment = VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.sessionParams.credentials.userId)
+            oFragment = VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.myUserId)
         } else {
             try {
                 pref?.fragment?.let {

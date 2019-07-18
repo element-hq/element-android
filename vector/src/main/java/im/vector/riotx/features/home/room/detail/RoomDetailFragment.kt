@@ -37,9 +37,11 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
+import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -57,8 +59,10 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
+import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -87,7 +91,7 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.action.*
 import im.vector.riotx.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
@@ -258,7 +262,7 @@ class RoomDetailFragment :
         composerLayout.composerRelatedMessageContent.text = formattedBody
                 ?: nonFormattedBody
 
-        composerLayout.composerEditText.setText(if (useText) nonFormattedBody else "")
+        composerLayout.composerEditText.setText(if (useText) event.getTextEditableContent() else "")
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
@@ -323,6 +327,32 @@ class RoomDetailFragment :
                 })
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
+
+        if (VectorPreferences.swipeToReplyIsEnabled(requireContext())) {
+            val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
+                    R.drawable.ic_reply,
+                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                            (model as? AbsMessageItem)?.informationData?.let {
+                                val eventId = it.eventId
+                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                            }
+                        }
+
+                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                            return when (model) {
+                                is MessageFileItem,
+                                is MessageImageVideoItem,
+                                is MessageTextItem -> {
+                                    return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
+                                }
+                                else               -> false
+                            }
+                        }
+                    })
+            val touchHelper = ItemTouchHelper(swipeCallback)
+            touchHelper.attachToRecyclerView(recyclerView)
+        }
     }
 
     private fun setupComposer() {
@@ -486,7 +516,7 @@ class RoomDetailFragment :
             timelineEventController.setTimeline(state.timeline, state.eventId)
             inviteView.visibility = View.GONE
 
-            val uid = session.sessionParams.credentials.userId
+            val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
             avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
 
@@ -572,7 +602,7 @@ class RoomDetailFragment :
 
     override fun onUrlLongClicked(url: String): Boolean {
         // Copy the url to the clipboard
-        copyToClipboard(requireContext(), url)
+        copyToClipboard(requireContext(), url, true, R.string.link_copied_to_clipboard)
         return true
     }
 
@@ -780,7 +810,7 @@ class RoomDetailFragment :
         if (null != text) {
 //            var vibrate = false
 
-            val myDisplayName = session.getUser(session.sessionParams.credentials.userId)?.displayName
+            val myDisplayName = session.getUser(session.myUserId)?.displayName
             if (TextUtils.equals(myDisplayName, text)) {
                 // current user
                 if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
@@ -828,10 +858,12 @@ class RoomDetailFragment :
     // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
+        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
         roomDetailViewModel.process(RoomDetailActions.AcceptInvite)
     }
 
     override fun onRejectInvite() {
+        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
         roomDetailViewModel.process(RoomDetailActions.RejectInvite)
     }
 }
