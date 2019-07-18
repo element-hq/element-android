@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - UX image preview screen transition (#393)
 
 Other changes:
  -

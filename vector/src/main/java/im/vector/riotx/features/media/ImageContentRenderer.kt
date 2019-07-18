@@ -16,11 +16,16 @@
 
 package im.vector.riotx.features.media
 
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
 import android.widget.ImageView
 import androidx.exifinterface.media.ExifInterface
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.github.piasy.biv.view.BigImageView
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
@@ -87,6 +92,48 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .transform(RoundedCorners(dpToPx(8, imageView.context)))
                 .thumbnail(0.3f)
                 .into(imageView)
+
+    }
+
+    fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback :((Boolean) -> Unit)? = null) {
+        val (width, height) = processSize(data, mode)
+
+        val glideRequest = if (data.elementToDecrypt != null) {
+            // Encrypted image
+            GlideApp
+                    .with(imageView)
+                    .load(data)
+        } else {
+            // Clear image
+            val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+            val resolvedUrl = when (mode) {
+                Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
+                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+            }
+            //Fallback to base url
+                    ?: data.url
+
+            GlideApp
+                    .with(imageView)
+                    .load(resolvedUrl)
+        }
+
+        glideRequest
+                .listener(object: RequestListener<Drawable> {
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        callback?.invoke(false)
+                        return false
+                    }
+
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        callback?.invoke(true)
+                        return false
+                    }
+
+                })
+                .fitCenter()
+                .into(imageView)
+
     }
 
     fun render(data: Data, imageView: BigImageView) {

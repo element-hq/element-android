@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -45,6 +46,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         contentUploadStateTrackerBinder.bind(informationData.eventId, mediaData, holder.progressLayout)
         holder.imageView.setOnClickListener(clickListener)
         holder.imageView.setOnLongClickListener(longClickListener)
+        ViewCompat.setTransitionName(holder.imageView,"imagePreview_${id()}")
         holder.mediaContentView.setOnClickListener(cellClickListener)
         holder.mediaContentView.setOnLongClickListener(longClickListener)
         // The sending state color will be apply to the progress text
