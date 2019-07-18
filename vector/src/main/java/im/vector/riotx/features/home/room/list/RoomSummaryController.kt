@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.list
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
@@ -62,7 +63,8 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
 
         roomListNameFilter.filter = viewState.roomFilter
 
-        val filteredSummaries = summaries.filter { roomListNameFilter.test(it) }
+        val filteredSummaries = summaries
+                .filter { it.membership == Membership.JOIN && roomListNameFilter.test(it) }
 
         buildRoomModels(filteredSummaries,
                 viewState.joiningRoomsIds,
