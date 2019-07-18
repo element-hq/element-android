@@ -105,28 +105,28 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
     }
 
     fun createReplaceTextOfReply(roomId: String, eventReplaced: TimelineEvent,
-                                 originalSenderId: String?,
-                                 originalEventId: String,
+                                 originalEvent: TimelineEvent,
                                  newBodyText: String,
                                  newBodyAutoMarkdown: Boolean,
                                  msgType: String,
                                  compatibilityText: String): Event {
-        val permalink = PermalinkFactory.createPermalink(roomId, originalEventId)
-        val userLink = originalSenderId?.let { PermalinkFactory.createPermalink(it) } ?: ""
+        val permalink = PermalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "")
+        val userLink = originalEvent.root.senderId?.let { PermalinkFactory.createPermalink(it) }
+                ?: ""
 
-        val body = bodyForReply(eventReplaced.getLastMessageContent(), eventReplaced.root.getClearContent().toModel())
+        val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.root.getClearContent().toModel())
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 stringProvider.getString(R.string.message_reply_to_prefix),
                 userLink,
-                originalSenderId,
+                originalEvent.senderName ?: originalEvent.root.senderId,
                 body.takeFormatted(),
                 createTextContent(newBodyText, newBodyAutoMarkdown).takeFormatted()
         )
         //
         // > <@alice:example.org> This is the original body
         //
-        val replyFallback = buildReplyFallback(body, originalSenderId, newBodyText)
+        val replyFallback = buildReplyFallback(body, originalEvent.root.senderId ?: "", newBodyText)
 
         return createEvent(roomId,
                 MessageTextContent(

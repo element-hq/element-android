@@ -29,6 +29,7 @@ internal interface FetchEditHistoryTask : Task<FetchEditHistoryTask.Params, List
 
     data class Params(
             val roomId: String,
+            val isRoomEncrypted: Boolean,
             val eventId: String
     )
 }
@@ -40,9 +41,14 @@ internal class DefaultFetchEditHistoryTask @Inject constructor(
 
     override suspend fun execute(params: FetchEditHistoryTask.Params): Try<List<Event>> {
         return executeRequest<RelationsResponse> {
-            apiCall = roomAPI.getRelations(params.roomId, params.eventId, RelationType.REPLACE, EventType.MESSAGE)
+            apiCall = roomAPI.getRelations(params.roomId,
+                    params.eventId,
+                    RelationType.REPLACE,
+                    if (params.isRoomEncrypted) EventType.ENCRYPTED else EventType.MESSAGE)
         }.map { resp ->
-            resp.chunks
+            val events = resp.chunks.toMutableList()
+            resp.originalEvent?.let { events.add(it) }
+            events
         }
     }
 }

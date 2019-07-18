@@ -75,9 +75,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
             }
         } else {
             var lastDate: Calendar? = null
-            sourceEvents.sortedByDescending {
-                it.originServerTs ?: 0
-            }.forEachIndexed { index, timelineEvent ->
+            sourceEvents.forEachIndexed { index, timelineEvent ->
 
                 val evDate = Calendar.getInstance().apply {
                     timeInMillis = timelineEvent.originServerTs

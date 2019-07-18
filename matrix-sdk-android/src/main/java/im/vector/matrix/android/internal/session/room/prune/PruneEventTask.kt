@@ -61,13 +61,13 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
         }
 
         val redactionEventEntity = EventEntity.where(realm, eventId = redactionEvent.eventId
-                                                                      ?: "").findFirst()
-                                   ?: return
+                ?: "").findFirst()
+                ?: return
         val isLocalEcho = redactionEventEntity.sendState == SendState.UNSENT
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
         val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
-                           ?: return
+                ?: return
 
         val allowedKeys = computeAllowedKeys(eventToPrune.type)
         if (allowedKeys.isNotEmpty()) {
@@ -75,10 +75,11 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
             eventToPrune.content = ContentMapper.map(prunedContent)
         } else {
             when (eventToPrune.type) {
+                EventType.ENCRYPTED,
                 EventType.MESSAGE -> {
                     Timber.d("REDACTION for message ${eventToPrune.eventId}")
                     val unsignedData = EventMapper.map(eventToPrune).unsignedData
-                                       ?: UnsignedData(null, null)
+                            ?: UnsignedData(null, null)
 
                     //was this event a m.replace
 //                    val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
@@ -89,6 +90,8 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
                     val modified = unsignedData.copy(redactedEvent = redactionEvent)
                     eventToPrune.content = ContentMapper.map(emptyMap())
                     eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
+                    eventToPrune.decryptionResultJson = null
+                    eventToPrune.decryptionErrorCode = null
 
                 }
 //                EventType.REACTION -> {
@@ -112,14 +115,14 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
             EventType.STATE_ROOM_CREATE       -> listOf("creator")
             EventType.STATE_ROOM_JOIN_RULES   -> listOf("join_rule")
             EventType.STATE_ROOM_POWER_LEVELS -> listOf("users",
-                                                        "users_default",
-                                                        "events",
-                                                        "events_default",
-                                                        "state_default",
-                                                        "ban",
-                                                        "kick",
-                                                        "redact",
-                                                        "invite")
+                    "users_default",
+                    "events",
+                    "events_default",
+                    "state_default",
+                    "ban",
+                    "kick",
+                    "redact",
+                    "invite")
             EventType.STATE_ROOM_ALIASES      -> listOf("aliases")
             EventType.STATE_CANONICAL_ALIAS   -> listOf("alias")
             EventType.FEEDBACK                -> listOf("type", "target_event_id")

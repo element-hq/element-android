@@ -27,12 +27,14 @@ import dagger.Lazy
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -83,7 +85,9 @@ class MessageItemFactory @Inject constructor(
                         ?: //Malformed content, we should echo something on screen
                         return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 
-        if (messageContent.relatesTo?.type == RelationType.REPLACE) {
+        if (messageContent.relatesTo?.type == RelationType.REPLACE
+                || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
+        ) {
             // ignore replace event, the targeted id is already edited
             return BlankItem_()
         }
@@ -229,7 +233,8 @@ class MessageItemFactory @Inject constructor(
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
-                url = messageContent.videoInfo?.thumbnailFile?.url ?: messageContent.videoInfo?.thumbnailUrl,
+                url = messageContent.videoInfo?.thumbnailFile?.url
+                        ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
