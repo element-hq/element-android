@@ -37,7 +37,6 @@ import javax.inject.Inject
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
 private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
-private const val DEFAULT_LONG_POOL_DELAY = 0L
 
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
@@ -143,8 +142,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                     updateStateTo(SyncState.RUNNING(afterPause = false))
                 }
 
-                Timber.v("Waiting for $DEFAULT_LONG_POOL_DELAY delay before new pool...")
-                if (DEFAULT_LONG_POOL_DELAY > 0) sleep(DEFAULT_LONG_POOL_DELAY)
                 Timber.v("...Continue")
             }
         }
