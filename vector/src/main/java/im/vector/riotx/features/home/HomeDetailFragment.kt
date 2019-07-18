@@ -209,7 +209,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
         syncProgressBar.visibility = when (it.syncState) {
-            is SyncState.RUNNING -> if (it.syncState.catchingUp) View.VISIBLE else View.GONE
+            is SyncState.RUNNING -> if (it.syncState.afterPause) View.VISIBLE else View.GONE
             else                 -> View.GONE
         }
         syncProgressBarWrap.visibility = syncProgressBar.visibility
