@@ -39,4 +39,6 @@
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
+    <string name="add_by_matrix_id">Add by matrix ID</string>
+
 </resources>

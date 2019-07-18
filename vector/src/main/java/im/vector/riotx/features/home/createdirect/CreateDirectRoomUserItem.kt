@@ -32,8 +32,6 @@ import im.vector.riotx.features.home.AvatarRenderer
 abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute var showLetter: Boolean = false
-    @EpoxyAttribute var firstLetter: String = ""
     @EpoxyAttribute var name: String? = null
     @EpoxyAttribute var userId: String = ""
     @EpoxyAttribute var avatarUrl: String? = null
@@ -41,14 +39,20 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
 
     override fun bind(holder: Holder) {
         holder.view.setOnClickListener(clickListener)
-        holder.nameView.text = name
-        holder.letterView.visibility = if (showLetter) View.VISIBLE else View.INVISIBLE
-        holder.letterView.text = firstLetter
+        // If name is empty, use userId as name and force it being centered
+        if (name.isNullOrEmpty()) {
+            holder.userIdView.visibility = View.GONE
+            holder.nameView.text = userId
+        } else {
+            holder.userIdView.visibility = View.VISIBLE
+            holder.nameView.text = name
+            holder.userIdView.text = userId
+        }
         avatarRenderer.render(avatarUrl, userId, name, holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val letterView by bind<TextView>(R.id.createDirectRoomUserLetter)
+        val userIdView by bind<TextView>(R.id.createDirectRoomUserID)
         val nameView by bind<TextView>(R.id.createDirectRoomUserName)
         val avatarImageView by bind<ImageView>(R.id.createDirectRoomUserAvatar)
     }

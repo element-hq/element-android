@@ -23,6 +23,8 @@ import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.model.UserEntityFields
 import im.vector.matrix.android.internal.database.query.where
@@ -34,7 +36,7 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
 
     override fun getUser(userId: String): User? {
         val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }
-                ?: return null
+                         ?: return null
 
         return userEntity.asDomain()
     }
@@ -51,11 +53,13 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
     }
 
     override fun liveUsers(): LiveData<List<User>> {
-        val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
-            realm.where(UserEntity::class.java).sort(UserEntityFields.DISPLAY_NAME)
-        }
-        return Transformations.map(liveRealmData) { results ->
-            results.map { it.asDomain() }
-        }
+        return monarchy.findAllMappedWithChanges(
+                { realm ->
+                    realm.where(UserEntity::class.java)
+                            .isNotEmpty(UserEntityFields.USER_ID)
+                            .sort(UserEntityFields.DISPLAY_NAME)
+                },
+                { it.asDomain() }
+        )
     }
 }

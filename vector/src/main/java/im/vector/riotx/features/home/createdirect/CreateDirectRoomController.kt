@@ -45,13 +45,17 @@ class CreateDirectRoomController @Inject constructor(private val avatarRenderer:
         var lastFirstLetter: String? = null
         knownUsers.forEach { user ->
             val currentFirstLetter = user.displayName.firstLetterOfDisplayName()
-            val showLetter = lastFirstLetter != currentFirstLetter
+            val showLetter = currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
             lastFirstLetter = currentFirstLetter
+
+            CreateDirectRoomLetterHeaderItem_()
+                    .id(currentFirstLetter)
+                    .letter(currentFirstLetter)
+                    .addIf(showLetter, this)
+
             createDirectRoomUserItem {
                 id(user.userId)
                 userId(user.userId)
-                showLetter(showLetter)
-                firstLetter(currentFirstLetter)
                 name(user.displayName)
                 avatarUrl(user.avatarUrl)
                 avatarRenderer(avatarRenderer)

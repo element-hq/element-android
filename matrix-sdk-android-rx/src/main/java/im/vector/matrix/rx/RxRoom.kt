@@ -26,19 +26,19 @@ import io.reactivex.schedulers.Schedulers
 class RxRoom(private val room: Room) {
 
     fun liveRoomSummary(): Observable<RoomSummary> {
-        return room.liveRoomSummary().asObservable().observeOn(Schedulers.computation())
+        return room.liveRoomSummary().asObservable()
     }
 
     fun liveRoomMemberIds(): Observable<List<String>> {
-        return room.getRoomMemberIdsLive().asObservable().observeOn(Schedulers.computation())
+        return room.getRoomMemberIdsLive().asObservable()
     }
 
     fun liveAnnotationSummary(eventId: String): Observable<EventAnnotationsSummary> {
-        return room.getEventSummaryLive(eventId).asObservable().observeOn(Schedulers.computation())
+        return room.getEventSummaryLive(eventId).asObservable()
     }
 
     fun liveTimelineEvent(eventId: String): Observable<TimelineEvent> {
-        return room.liveTimeLineEvent(eventId).asObservable().observeOn(Schedulers.computation())
+        return room.liveTimeLineEvent(eventId).asObservable()
     }
 
 }
