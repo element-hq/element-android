@@ -70,7 +70,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 val bodyPreview = event.type
 
                 return SimpleNotifiableEvent(
-                        session.sessionParams.credentials.userId,
+                        session.myUserId,
                         eventId = event.eventId!!,
                         noisy = false,//will be updated
                         timestamp = event.originServerTs ?: System.currentTimeMillis(),
@@ -109,7 +109,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                     roomId = event.root.roomId!!,
                     roomName = roomName)
 
-            notifiableEvent.matrixID = session.sessionParams.credentials.userId
+            notifiableEvent.matrixID = session.myUserId
             return notifiableEvent
         } else {
             if (event.root.isEncrypted() && event.root.mxDecryptionResult == null) {
@@ -145,7 +145,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                     roomName = roomName,
                     roomIsDirect = room.roomSummary()?.isDirect ?: false)
 
-            notifiableEvent.matrixID = session.sessionParams.credentials.userId
+            notifiableEvent.matrixID = session.myUserId
             notifiableEvent.soundName = null
 
             // Get the avatars URL
@@ -175,7 +175,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             val body = noticeEventFormatter.format(event, dName)
                     ?: stringProvider.getString(R.string.notification_new_invitation)
             return InviteNotifiableEvent(
-                    session.sessionParams.credentials.userId,
+                    session.myUserId,
                     eventId = event.eventId!!,
                     roomId = roomId,
                     timestamp = event.originServerTs ?: 0,

@@ -16,6 +16,8 @@
 package im.vector.matrix.android.api.session.room.model.relation
 
 import androidx.lifecycle.LiveData
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
@@ -80,6 +82,25 @@ interface RelationService {
 
 
     /**
+     * Edit a reply. This is a special case because replies contains fallback text as a prefix.
+     * This method will take the new body (stripped from fallbacks) and re-add them before sending.
+     * @param replyToEdit The event to edit
+     * @param originalTimelineEvent the message that this reply (being edited) is relating to
+     * @param newBodyText The edited body (stripped from in reply to content)
+     * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
+     */
+    fun editReply(replyToEdit: TimelineEvent,
+                  originalTimelineEvent: TimelineEvent,
+                  newBodyText: String,
+                  compatibilityBodyText: String = "* $newBodyText"): Cancelable
+
+    /**
+     * Get's the edit history of the given event
+     */
+    fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>)
+
+
+    /**
      * Reply to an event in the timeline (must be in same room)
      * https://matrix.org/docs/spec/client_server/r0.4.0.html#id350
      * @param eventReplied the event referenced by the reply
@@ -91,4 +112,6 @@ interface RelationService {
                        autoMarkdown: Boolean = false): Cancelable?
 
     fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary>
+
+
 }

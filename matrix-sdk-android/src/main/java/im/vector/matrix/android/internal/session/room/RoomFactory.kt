@@ -30,8 +30,8 @@ import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRo
 import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.relation.DefaultRelationService
+import im.vector.matrix.android.internal.session.room.relation.FetchEditHistoryTask
 import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.state.DefaultStateService
@@ -56,7 +56,7 @@ internal class RoomFactory @Inject constructor(private val context: Context,
                                                private val setReadMarkersTask: SetReadMarkersTask,
                                                private val cryptoService: CryptoService,
                                                private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-                                               private val updateQuickReactionTask: UpdateQuickReactionTask,
+                                               private val fetchEditHistoryTask: FetchEditHistoryTask,
                                                private val joinRoomTask: JoinRoomTask,
                                                private val leaveRoomTask: LeaveRoomTask) {
 
@@ -67,7 +67,7 @@ internal class RoomFactory @Inject constructor(private val context: Context,
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
         val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, credentials)
         val relationService = DefaultRelationService(context,
-                credentials, roomId, eventFactory, cryptoService, findReactionEventForUndoTask, monarchy, taskExecutor)
+                credentials, roomId, eventFactory, cryptoService, findReactionEventForUndoTask, fetchEditHistoryTask, monarchy, taskExecutor)
 
         return DefaultRoom(
                 roomId,

@@ -35,7 +35,7 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
         activeSessionHolder = context.vectorComponent().activeSessionHolder()
         val session = activeSessionHolder.getActiveSession()
         if (SignOutViewModel.doYouNeedToBeDisplayed(session)) {
-            val signOutDialog = SignOutBottomSheetDialogFragment.newInstance(session.sessionParams.credentials.userId)
+            val signOutDialog = SignOutBottomSheetDialogFragment.newInstance(session.myUserId)
             signOutDialog.onSignOut = Runnable {
                 doSignOut()
             }

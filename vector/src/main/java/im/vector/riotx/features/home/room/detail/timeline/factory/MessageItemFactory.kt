@@ -27,12 +27,14 @@ import dagger.Lazy
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -83,7 +85,9 @@ class MessageItemFactory @Inject constructor(
                         ?: //Malformed content, we should echo something on screen
                         return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 
-        if (messageContent.relatesTo?.type == RelationType.REPLACE) {
+        if (messageContent.relatesTo?.type == RelationType.REPLACE
+                || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
+        ) {
             // ignore replace event, the targeted id is already edited
             return BlankItem_()
         }
@@ -117,6 +121,7 @@ class MessageItemFactory @Inject constructor(
                                       callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -144,6 +149,7 @@ class MessageItemFactory @Inject constructor(
                                      callback: TimelineEventController.Callback?): MessageFileItem? {
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -195,6 +201,7 @@ class MessageItemFactory @Inject constructor(
         )
         return MessageImageVideoItem_()
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .playable(messageContent.info?.mimeType == "image/gif")
@@ -226,7 +233,8 @@ class MessageItemFactory @Inject constructor(
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
-                url = messageContent.videoInfo?.thumbnailFile?.url ?: messageContent.videoInfo?.thumbnailUrl,
+                url = messageContent.videoInfo?.thumbnailFile?.url
+                        ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
@@ -246,6 +254,7 @@ class MessageItemFactory @Inject constructor(
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .playable(true)
                 .informationData(informationData)
                 .highlighted(highlight)
@@ -288,6 +297,7 @@ class MessageItemFactory @Inject constructor(
                 }
                 .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
+                .colorProvider(colorProvider)
                 .highlighted(highlight)
                 .avatarCallback(callback)
                 .urlClickCallback(callback)
@@ -353,6 +363,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .avatarRenderer(avatarRenderer)
                 .message(message)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -393,6 +404,7 @@ class MessageItemFactory @Inject constructor(
                     }
                 }
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -414,9 +426,18 @@ class MessageItemFactory @Inject constructor(
                                   callback: TimelineEventController.Callback?): RedactedMessageItem? {
         return RedactedMessageItem_()
                 .avatarRenderer(avatarRenderer)
+                .colorProvider(colorProvider)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
+                .cellClickListener(
+                        DebouncedClickListener(View.OnClickListener { view ->
+                            callback?.onEventCellClicked(informationData, null, view)
+                        }))
+                .longClickListener { view ->
+                    return@longClickListener callback?.onEventLongClicked(informationData, null, view)
+                            ?: false
+                }
     }
 
     private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {

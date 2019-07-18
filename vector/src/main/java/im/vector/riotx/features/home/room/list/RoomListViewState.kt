@@ -26,6 +26,7 @@ import im.vector.riotx.R
 data class RoomListViewState(
         val displayMode: RoomListFragment.DisplayMode,
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
+        val roomFilter: String = "",
         val asyncFilteredRooms: Async<RoomSummaries> = Uninitialized,
         // List of roomIds that the user wants to join
         val joiningRoomsIds: Set<String> = emptySet(),

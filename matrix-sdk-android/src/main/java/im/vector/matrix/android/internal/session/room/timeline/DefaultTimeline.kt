@@ -43,7 +43,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-private const val INITIAL_LOAD_SIZE = 10
+private const val INITIAL_LOAD_SIZE = 30
 private const val MIN_FETCHING_COUNT = 30
 private const val DISPLAY_INDEX_UNKNOWN = Int.MIN_VALUE
 

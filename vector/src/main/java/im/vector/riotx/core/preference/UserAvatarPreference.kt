@@ -58,10 +58,10 @@ open class UserAvatarPreference : Preference {
     open fun refreshAvatar() {
         val session = mSession ?: return
         val view = mAvatarView ?: return
-        session.getUser(session.sessionParams.credentials.userId)?.let {
+        session.getUser(session.myUserId)?.let {
             avatarRenderer.render(it, view)
         } ?: run {
-            avatarRenderer.render(null, session.sessionParams.credentials.userId, null, view)
+            avatarRenderer.render(null, session.myUserId, null, view)
         }
 
     }

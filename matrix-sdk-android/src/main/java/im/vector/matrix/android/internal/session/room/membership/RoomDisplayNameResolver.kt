@@ -25,13 +25,16 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
+import io.realm.RealmResults
 import javax.inject.Inject
 
 /**
@@ -39,7 +42,6 @@ import javax.inject.Inject
  */
 internal class RoomDisplayNameResolver @Inject constructor(private val context: Context,
                                                            private val monarchy: Monarchy,
-                                                           private val roomMemberDisplayNameResolver: RoomMemberDisplayNameResolver,
                                                            private val credentials: Credentials
 ) {
 
@@ -78,48 +80,61 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
             }
 
             val roomMembers = RoomMembers(realm, roomId)
-            val loadedMembers = roomMembers.getLoaded()
-            val otherRoomMembers = loadedMembers.filterKeys { it != credentials.userId }
+            val loadedMembers = roomMembers.queryRoomMembersEvent().findAll()
+            val otherMembersSubset = loadedMembers.where()
+                    .notEqualTo(EventEntityFields.STATE_KEY, credentials.userId)
+                    .limit(3)
+                    .findAll()
+
             if (roomEntity?.membership == Membership.INVITE) {
                 val inviteMeEvent = roomMembers.queryRoomMemberEvent(credentials.userId).findFirst()
                 val inviterId = inviteMeEvent?.sender
-                name = if (inviterId != null && otherRoomMembers.containsKey(inviterId)) {
-                    roomMemberDisplayNameResolver.resolve(inviterId, otherRoomMembers)
+                name = if (inviterId != null) {
+                    val inviterMemberEvent = loadedMembers.where()
+                            .equalTo(EventEntityFields.STATE_KEY, inviterId)
+                            .findFirst()
+                    inviterMemberEvent?.toRoomMember()?.displayName
                 } else {
                     context.getString(R.string.room_displayname_room_invite)
                 }
             } else {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                val memberIds = if (roomSummary?.heroes?.isNotEmpty() == true) {
+                val memberIds: List<String> = if (roomSummary?.heroes?.isNotEmpty() == true) {
                     roomSummary.heroes
                 } else {
-                    otherRoomMembers.keys.toList()
+                    otherMembersSubset.mapNotNull { it.stateKey }
                 }
-
-                val nbOfOtherMembers = memberIds.size
-
-                when (nbOfOtherMembers) {
-                    0    -> name = context.getString(R.string.room_displayname_empty_room)
-                    1    -> name = roomMemberDisplayNameResolver.resolve(memberIds[0], otherRoomMembers)
-                    2    -> {
-                        val member1 = memberIds[0]
-                        val member2 = memberIds[1]
-                        name = context.getString(R.string.room_displayname_two_members,
-                                                 roomMemberDisplayNameResolver.resolve(member1, otherRoomMembers),
-                                                 roomMemberDisplayNameResolver.resolve(member2, otherRoomMembers)
-                        )
-                    }
-                    else -> {
-                        val member = memberIds[0]
-                        name = context.resources.getQuantityString(R.plurals.room_displayname_three_and_more_members,
-                                                                   roomMembers.getNumberOfJoinedMembers() - 1,
-                                                                   roomMemberDisplayNameResolver.resolve(member, otherRoomMembers),
-                                                                   roomMembers.getNumberOfJoinedMembers() - 1)
-                    }
+                name = when (memberIds.size) {
+                    0    -> context.getString(R.string.room_displayname_empty_room)
+                    1    -> resolveRoomMember(otherMembersSubset[0], roomMembers)
+                    2    -> context.getString(R.string.room_displayname_two_members,
+                                              resolveRoomMember(otherMembersSubset[0], roomMembers),
+                                              resolveRoomMember(otherMembersSubset[1], roomMembers)
+                    )
+                    else -> context.resources.getQuantityString(R.plurals.room_displayname_three_and_more_members,
+                                                                roomMembers.getNumberOfJoinedMembers() - 1,
+                                                                resolveRoomMember(otherMembersSubset[0], roomMembers),
+                                                                roomMembers.getNumberOfJoinedMembers() - 1)
                 }
             }
             return@doWithRealm
         }
         return name ?: roomId
+    }
+
+    private fun resolveRoomMember(eventEntity: EventEntity?,
+                                  roomMembers: RoomMembers): String? {
+        if (eventEntity == null) return null
+        val roomMember = eventEntity.toRoomMember() ?: return null
+        val isUnique = roomMembers.isUniqueDisplayName(roomMember.displayName)
+        return if (isUnique) {
+            roomMember.displayName
+        } else {
+            "${roomMember.displayName} (${eventEntity.stateKey})"
+        }
+    }
+
+    private fun EventEntity?.toRoomMember(): RoomMember? {
+        return this?.asDomain()?.content?.toModel<RoomMember>()
     }
 }

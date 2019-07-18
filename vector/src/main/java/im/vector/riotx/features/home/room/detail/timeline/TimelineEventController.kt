@@ -18,7 +18,6 @@ package im.vector.riotx.features.home.room.detail.timeline
 
 import android.os.Handler
 import android.os.Looper
-import android.util.LongSparseArray
 import android.view.View
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
@@ -84,7 +83,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
     }
 
     private val collapsedEventIds = linkedSetOf<Long>()
-    private val mergeItemCollapseStates = HashMap<Long,Boolean>()
+    private val mergeItemCollapseStates = HashMap<Long, Boolean>()
     private val modelCache = arrayListOf<CacheItemData?>()
 
     private var currentSnapshot: List<TimelineEvent> = emptyList()
@@ -178,16 +177,19 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
     }
 
     override fun buildModels() {
-        LoadingItem_()
+        val loaderAdded = LoadingItem_()
                 .id("forward_loading_item")
                 .addWhen(Timeline.Direction.FORWARDS)
 
         val timelineModels = getModels()
         add(timelineModels)
 
-        LoadingItem_()
-                .id("backward_loading_item")
-                .addWhen(Timeline.Direction.BACKWARDS)
+        // Avoid displaying two loaders if there is no elements between them
+        if (!loaderAdded || timelineModels.isNotEmpty()) {
+            LoadingItem_()
+                    .id("backward_loading_item")
+                    .addWhen(Timeline.Direction.BACKWARDS)
+        }
     }
 
     // Timeline.LISTENER ***************************************************************************
@@ -310,9 +312,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
         }
     }
 
-    private fun LoadingItem_.addWhen(direction: Timeline.Direction) {
+    /**
+     * Return true if added
+     */
+    private fun LoadingItem_.addWhen(direction: Timeline.Direction): Boolean {
         val shouldAdd = timeline?.hasMoreToLoad(direction) ?: false
         addIf(shouldAdd, this@TimelineEventController)
+        return shouldAdd
     }
 
     fun searchPositionOfEvent(eventId: String): Int? {

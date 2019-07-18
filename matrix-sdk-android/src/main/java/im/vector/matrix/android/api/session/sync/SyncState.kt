@@ -18,7 +18,7 @@ package im.vector.matrix.android.api.session.sync
 
 sealed class SyncState {
     object IDLE : SyncState()
-    data class RUNNING(val catchingUp: Boolean) : SyncState()
+    data class RUNNING(val afterPause: Boolean) : SyncState()
     object PAUSED : SyncState()
     object KILLING : SyncState()
     object KILLED : SyncState()

@@ -42,7 +42,7 @@ object MatrixLinkify {
                 hasMatch = true
                 val startPos = match.range.first
                 if (startPos == 0 || text[startPos - 1] != '/') {
-                    val endPos = match.range.last
+                    val endPos = match.range.last + 1
                     val url = text.substring(match.range)
                     val span = MatrixPermalinkSpan(url, callback)
                     spannable.setSpan(span, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -51,5 +51,5 @@ object MatrixLinkify {
         }
         return hasMatch
     }
-    
+
 }

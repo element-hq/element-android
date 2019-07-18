@@ -2,4 +2,5 @@
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="notice_room_invite_no_invitee">%s\'의 초대</string>
+    <string name="verification_emoji_headphone">헤드폰</string>
 </resources>

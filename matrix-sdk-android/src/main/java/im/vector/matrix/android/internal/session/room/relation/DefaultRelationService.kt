@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
@@ -53,6 +54,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                                                           private val eventFactory: LocalEchoEventFactory,
                                                           private val cryptoService: CryptoService,
                                                           private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
+                                                          private val fetchEditHistoryTask: FetchEditHistoryTask,
                                                           private val monarchy: Monarchy,
                                                           private val taskExecutor: TaskExecutor)
     : RelationService {
@@ -125,10 +127,50 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 .also {
                     saveLocalEcho(it)
                 }
-        val workRequest = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-        return CancelableWork(context, workRequest.id)
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
+            return CancelableWork(context, encryptWork.id)
 
+        } else {
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+            return CancelableWork(context, workRequest.id)
+        }
+
+    }
+
+    override fun editReply(replyToEdit: TimelineEvent,
+                           originalEvent: TimelineEvent,
+                           newBodyText: String,
+                           compatibilityBodyText: String): Cancelable {
+        val event = eventFactory
+                .createReplaceTextOfReply(roomId,
+                        replyToEdit,
+                        originalEvent,
+                        newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
+                .also {
+                    saveLocalEcho(it)
+                }
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
+            return CancelableWork(context, encryptWork.id)
+
+        } else {
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+            return CancelableWork(context, workRequest.id)
+        }
+    }
+
+    override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
+        val params = FetchEditHistoryTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), eventId)
+        fetchEditHistoryTask.configureWith(params)
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
     }
 
     override fun replyToMessage(eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Cancelable? {
@@ -169,7 +211,8 @@ internal class DefaultRelationService @Inject constructor(private val context: C
             EventAnnotationsSummaryEntity.where(realm, eventId)
         }
         return Transformations.map(liveEntity) { realmResults ->
-            realmResults.firstOrNull()?.asDomain() ?: EventAnnotationsSummary(eventId, emptyList(), null)
+            realmResults.firstOrNull()?.asDomain()
+                    ?: EventAnnotationsSummary(eventId, emptyList(), null)
         }
     }
 

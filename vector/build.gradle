@@ -13,7 +13,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 1
+ext.versionMinor = 2
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -96,6 +96,9 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix ".debug"
+            resValue "string", "app_name", "RiotX dbg"
+
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
 
@@ -103,6 +106,8 @@ android {
         }
 
         release {
+            resValue "string", "app_name", "RiotX"
+
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
 
@@ -182,8 +187,9 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
-    // TODO RxBindings3 exists
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
+    // RXBinding
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2'
+    implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0-alpha2'
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
@@ -248,6 +254,8 @@ dependencies {
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
     }
+
+    implementation 'diff_match_patch:diff_match_patch:current'
 
     // TESTS
     testImplementation 'junit:junit:4.12'

@@ -22,10 +22,11 @@ import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
+import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
-import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
+import im.vector.matrix.android.internal.session.room.relation.RelationsResponse
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
@@ -194,6 +195,20 @@ internal interface RoomAPI {
                      @Path("eventType") eventType: String,
                      @Body content: Content?
     ): Call<SendResponse>
+
+
+    /**
+     * Paginate relations for event based in normal topological order
+     *
+     * @param relationType filter for this relation type
+     * @param eventType filter for this event type
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}/{eventType}")
+    fun getRelations(@Path("roomId") roomId: String,
+                     @Path("eventId") eventId: String,
+                     @Path("relationType") relationType: String,
+                     @Path("eventType") eventType: String
+    ): Call<RelationsResponse>
 
     /**
      * Join the given room.

@@ -126,51 +126,55 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 }
                 //TODO is downloading attachement?
 
-                if (event.canReact()) {
-                    this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, eventId))
-                }
-                if (canCopy(type)) {
-                    //TODO copy images? html? see ClipBoard
-                    this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent!!.body))
-                }
+                if (!event.root.isRedacted()) {
 
-                if (canReply(event, messageContent)) {
-                    this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, eventId))
-                }
-
-                if (canEdit(event, session.sessionParams.credentials.userId)) {
-                    this.add(SimpleAction(ACTION_EDIT, R.string.edit, R.drawable.ic_edit, eventId))
-                }
-
-                if (canRedact(event, session.sessionParams.credentials.userId)) {
-                    this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, eventId))
-                }
-
-                if (canQuote(event, messageContent)) {
-                    this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, eventId))
-                }
-
-                if (canViewReactions(event)) {
-                    this.add(SimpleAction(ACTION_VIEW_REACTIONS, R.string.message_view_reaction, R.drawable.ic_view_reactions, informationData))
-                }
-
-                if (canShare(type)) {
-                    if (messageContent is MessageImageContent) {
-                        this.add(
-                                SimpleAction(ACTION_SHARE,
-                                        R.string.share, R.drawable.ic_share,
-                                        session.contentUrlResolver().resolveFullSize(messageContent.url))
-                        )
+                    if (canReply(event, messageContent)) {
+                        this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, eventId))
                     }
-                    //TODO
-                }
+
+                    if (canEdit(event, session.myUserId)) {
+                        this.add(SimpleAction(ACTION_EDIT, R.string.edit, R.drawable.ic_edit, eventId))
+                    }
+
+                    if (canRedact(event, session.myUserId)) {
+                        this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, eventId))
+                    }
+
+                    if (canCopy(type)) {
+                        //TODO copy images? html? see ClipBoard
+                        this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent!!.body))
+                    }
+
+                    if (event.canReact()) {
+                        this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, eventId))
+                    }
+
+                    if (canQuote(event, messageContent)) {
+                        this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, eventId))
+                    }
+
+                    if (canViewReactions(event)) {
+                        this.add(SimpleAction(ACTION_VIEW_REACTIONS, R.string.message_view_reaction, R.drawable.ic_view_reactions, informationData))
+                    }
+
+                    if (canShare(type)) {
+                        if (messageContent is MessageImageContent) {
+                            this.add(
+                                    SimpleAction(ACTION_SHARE,
+                                            R.string.share, R.drawable.ic_share,
+                                            session.contentUrlResolver().resolveFullSize(messageContent.url))
+                            )
+                        }
+                        //TODO
+                    }
 
 
-                if (event.sendState == SendState.SENT) {
+                    if (event.sendState == SendState.SENT) {
 
-                    //TODO Can be redacted
+                        //TODO Can be redacted
 
-                    //TODO sent by me or sufficient power level
+                        //TODO sent by me or sufficient power level
+                    }
                 }
 
                 this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, event.root.toContentStringWithIndent()))
@@ -181,7 +185,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 }
                 this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, event.root.eventId))
 
-                if (session.sessionParams.credentials.userId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
+                if (session.myUserId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
                     //not sent by me
                     this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, event.root.eventId))
                 }
@@ -240,7 +244,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
         //TODO if user is admin or moderator
-        val messageContent = event.root.content.toModel<MessageContent>()
+        val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
                 messageContent?.type == MessageType.MSGTYPE_TEXT
                         || messageContent?.type == MessageType.MSGTYPE_EMOTE

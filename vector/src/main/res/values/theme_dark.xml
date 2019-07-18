@@ -65,7 +65,7 @@
 
         <!-- default background color -->
         <item name="vctr_bottom_nav_background_color">@color/primary_color_dark</item>
-        <item name="vctr_bottom_nav_background_border_color">#FFE9EDF1</item>
+        <item name="vctr_bottom_nav_background_border_color">#FF15171b</item>
 
         <!-- waiting view background -->
         <item name="vctr_waiting_background_color">#55555555</item>
@@ -93,7 +93,7 @@
         <item name="vctr_message_text_color">@android:color/white</item>
         <item name="vctr_notice_text_color">@color/riot_primary_text_color_dark</item>
         <item name="vctr_encrypting_message_text_color">@color/accent_color_dark</item>
-        <item name="vctr_sending_message_text_color">?android:textColorSecondary</item>
+        <item name="vctr_sending_message_text_color">@color/riotx_text_secondary_dark</item>
         <item name="vctr_highlighted_message_text_color">@color/vector_fuchsia_color</item>
         <item name="vctr_highlighted_searched_message_text_color">@color/primary_color_light</item>
         <item name="vctr_search_mode_room_name_text_color">#CCC3C3C3</item>

@@ -92,7 +92,7 @@ class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     interface Listener {
         fun createDirectChat()
-        fun openRoomDirectory()
+        fun openRoomDirectory(initialFilter: String = "")
     }
 
 }

@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -33,7 +32,7 @@ import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import kotlinx.android.synthetic.main.bottom_sheet_display_reactions.*
+import kotlinx.android.synthetic.main.bottom_sheet_epoxylist_with_title.*
 import javax.inject.Inject
 
 /**
@@ -49,14 +48,16 @@ class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @BindView(R.id.bottom_sheet_display_reactions_list)
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
 
-    private val epoxyController by lazy { ViewReactionsEpoxyController(emojiCompatFontProvider.typeface) }
+    private val epoxyController by lazy {
+        ViewReactionsEpoxyController(requireContext(), emojiCompatFontProvider.typeface)
+    }
 
     override fun injectWith(screenComponent: ScreenComponent) {
         screenComponent.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_display_reactions, container, false)
+        val view = inflater.inflate(R.layout.bottom_sheet_epoxylist_with_title, container, false)
         ButterKnife.bind(this, view)
         return view
     }
@@ -67,16 +68,11 @@ class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context,
                 LinearLayout.VERTICAL)
         epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
+        bottomSheetTitle.text = context?.getString(R.string.reactions)
     }
 
 
     override fun invalidate() = withState(viewModel) {
-        if (it.mapReactionKeyToMemberList() == null) {
-            bottomSheetViewReactionSpinner.isVisible = true
-            bottomSheetViewReactionSpinner.animate()
-        } else {
-            bottomSheetViewReactionSpinner.isVisible = false
-        }
         epoxyController.setData(it)
     }
 

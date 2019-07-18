@@ -29,11 +29,7 @@ import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsVie
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel_AssistedFactory
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotx.features.crypto.verification.SasVerificationViewModel
-import im.vector.riotx.features.home.HomeActivityViewModel
-import im.vector.riotx.features.home.HomeActivityViewModel_AssistedFactory
-import im.vector.riotx.features.home.HomeDetailViewModel
-import im.vector.riotx.features.home.HomeDetailViewModel_AssistedFactory
-import im.vector.riotx.features.home.HomeNavigationViewModel
+import im.vector.riotx.features.home.*
 import im.vector.riotx.features.home.group.GroupListViewModel
 import im.vector.riotx.features.home.group.GroupListViewModel_AssistedFactory
 import im.vector.riotx.features.home.room.detail.RoomDetailViewModel
@@ -59,11 +55,17 @@ import im.vector.riotx.features.workers.signout.SignOutViewModel
 
 @Module
 interface ViewModelModule {
-    
 
+
+    /**
+     * ViewModels with @IntoMap will be injected by this factory
+     */
     @Binds
     fun bindViewModelFactory(factory: VectorViewModelFactory): ViewModelProvider.Factory
 
+    /**
+     *  Below are bindings for the androidx view models (which extend ViewModel). Will be converted to MvRx ViewModel in the future.
+     */
     @Binds
     @IntoMap
     @ViewModelKey(SignOutViewModel::class)
@@ -114,6 +116,10 @@ interface ViewModelModule {
     @ViewModelKey(ConfigurationViewModel::class)
     fun bindConfigurationViewModel(viewModel: ConfigurationViewModel): ViewModel
 
+    /**
+     * Below are bindings for the MvRx view models (which extend VectorViewModel). Will be the only usage in the future.
+     */
+
     @Binds
     fun bindHomeActivityViewModelFactory(factory: HomeActivityViewModel_AssistedFactory): HomeActivityViewModel.Factory
 
@@ -155,6 +161,9 @@ interface ViewModelModule {
 
     @Binds
     fun bindViewReactionViewModelFactory(factory: ViewReactionViewModel_AssistedFactory): ViewReactionViewModel.Factory
+
+    @Binds
+    fun bindViewEditHistoryViewModelFactory(factory: ViewEditHistoryViewModel_AssistedFactory): ViewEditHistoryViewModel.Factory
 
     @Binds
     fun bindCreateRoomViewModelFactory(factory: CreateRoomViewModel_AssistedFactory): CreateRoomViewModel.Factory

@@ -18,18 +18,14 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.database.helper.addAll
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
-import im.vector.matrix.android.internal.database.helper.addStateEvents
-import im.vector.matrix.android.internal.database.helper.deleteOnCascade
-import im.vector.matrix.android.internal.database.helper.isUnlinked
-import im.vector.matrix.android.internal.database.helper.merge
+import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
 import timber.log.Timber
@@ -117,7 +113,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
 
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                                     ?: realm.createObject(roomId)
+                            ?: realm.createObject(roomId)
 
                     val nextToken: String?
                     val prevToken: String?
@@ -146,15 +142,21 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                     } else {
                         nextChunk?.apply { this.prevToken = prevToken }
                     }
-                                       ?: ChunkEntity.create(realm, prevToken, nextToken)
+                            ?: ChunkEntity.create(realm, prevToken, nextToken)
 
                     if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
                         Timber.v("Reach end of $roomId")
                         currentChunk.isLastBackward = true
                     } else {
                         Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
-                        currentChunk.addAll(roomId, receivedChunk.events, direction, isUnlinked = currentChunk.isUnlinked())
-
+                        val eventIds = ArrayList<String>(receivedChunk.events.size)
+                        for (event in receivedChunk.events) {
+                            event.eventId?.also { eventIds.add(it) }
+                            currentChunk.add(roomId, event, direction, isUnlinked = currentChunk.isUnlinked())
+                            UserEntityFactory.createOrNull(event)?.also {
+                                realm.insertOrUpdate(it)
+                            }
+                        }
                         // Then we merge chunks if needed
                         if (currentChunk != prevChunk && prevChunk != null) {
                             currentChunk = handleMerge(roomEntity, direction, currentChunk, prevChunk)
@@ -170,7 +172,13 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                                     }
                         }
                         roomEntity.addOrUpdate(currentChunk)
-                        roomEntity.addStateEvents(receivedChunk.stateEvents, isUnlinked = currentChunk.isUnlinked())
+                        for (stateEvent in receivedChunk.stateEvents) {
+                            roomEntity.addStateEvent(stateEvent, isUnlinked = currentChunk.isUnlinked())
+                            UserEntityFactory.createOrNull(stateEvent)?.also {
+                                realm.insertOrUpdate(it)
+                            }
+                        }
+                        currentChunk.updateSenderDataFor(eventIds)
                     }
                 }
                 .map {

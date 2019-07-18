@@ -13,9 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.internal.session.room.relation
 
-package im.vector.riotx.features.home.room
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.session.events.model.Event
 
-import im.vector.riotx.core.utils.RxStore
-
-class VisibleRoomStore : RxStore<String>()
+@JsonClass(generateAdapter = true)
+internal data class RelationsResponse(
+        @Json(name = "chunk") val chunks: List<Event>,
+        @Json(name = "original_event") val originalEvent: Event?,
+        @Json(name = "next_batch") val nextBatch: String?,
+        @Json(name = "prev_batch") val prevBatch: String?
+)

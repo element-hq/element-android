@@ -1,24 +1,34 @@
-Changes in RiotX 0.XX (2019-XX-XX)
+Changes in RiotX 0.2.0 (2019-07-18)
 ===================================================
 
 Features:
- - Contextual action menu for messages in room
+ - Message Editing: View edit history (#121)
+ - Rooms filtering (#304)
+ - Edit in encrypted room
 
 Improvements:
- -
+ - Handle click on redacted events: view source and create permalink
+ - Improve long tap menu: reply on top, more compact (#368)
+ - Quick reply in timeline with swipe gesture (#167)
+ - Improve edit of replies
+ - Improve performance on Room Members and Users management (#381)
 
 Other changes:
- -
+ - migrate from rxbinding 2 to rxbinding 3
 
 Bugfix:
- -
+ - Fix regression on permalink click
+ - Fix crash reported by the PlayStore (#341)
+ - Fix Chat composer separator color in dark/black theme
+ - Fix bad layout for room directory filter (#349)
+ - Fix Copying link from a message shouldn't open context menu (#364)
 
-Translations:
- -
+Changes in RiotX 0.1.0 (2019-07-11)
+===================================================
 
-Build:
- -
+First release!
 
+Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-android-b17952e8f771
 
 
 =======================================================

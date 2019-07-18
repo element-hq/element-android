@@ -28,6 +28,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import im.vector.riotx.R
@@ -81,11 +82,11 @@ fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?,
  * @param context the context
  * @param text    the text to copy
  */
-fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true) {
+fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage : Int = R.string.copied_to_clipboard) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboard.primaryClip = ClipData.newPlainText("", text)
     if (showToast) {
-        context.toast(R.string.copied_to_clipboard)
+        context.toast(toastMessage)
     }
 }
 

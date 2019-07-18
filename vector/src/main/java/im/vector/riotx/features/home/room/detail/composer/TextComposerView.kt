@@ -57,6 +57,7 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     var currentConstraintSetId: Int = -1
 
+    private val animationDuration = 100L
 
     init {
         inflate(context, R.layout.merge_composer_layout, this)
@@ -73,7 +74,7 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         currentConstraintSetId = R.layout.constraint_set_composer_layout_compact
         if (animate) {
             val transition = AutoTransition()
-//            transition.duration = 5000
+            transition.duration = animationDuration
             transition.addListener(object : Transition.TransitionListener {
 
                 override fun onTransitionEnd(transition: Transition) {
@@ -105,7 +106,7 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         currentConstraintSetId = R.layout.constraint_set_composer_layout_expanded
         if (animate) {
             val transition = AutoTransition()
-//            transition.duration = 5000
+            transition.duration = animationDuration
             transition.addListener(object : Transition.TransitionListener {
 
                 override fun onTransitionEnd(transition: Transition) {

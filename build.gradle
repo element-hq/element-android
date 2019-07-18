@@ -1,3 +1,5 @@
+import javax.tools.JavaCompiler
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -45,7 +47,26 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         google()
         jcenter()
+        maven {
+            url 'https://repo.adobe.com/nexus/content/repositories/public/'
+            content {
+                includeGroupByRegex "diff_match_patch"
+            }
+        }
     }
+
+    tasks.withType(JavaCompile).all {
+        options.compilerArgs += [
+                '-Adagger.gradle.incremental=enabled'
+        ]
+    }
+
+    afterEvaluate {
+        extensions.findByName("kapt")?.arguments {
+            arg("dagger.gradle.incremental", "enabled")
+        }
+    }
+
 }
 
 task clean(type: Delete) {

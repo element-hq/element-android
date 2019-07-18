@@ -94,19 +94,21 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     }
 
     override fun requireBackgroundSync() {
-        SyncWorker.requireBackgroundSync(context, sessionParams.credentials.userId)
+        SyncWorker.requireBackgroundSync(context, myUserId)
     }
 
     override fun startAutomaticBackgroundSync(repeatDelay: Long) {
-        SyncWorker.automaticallyBackgroundSync(context, sessionParams.credentials.userId, 0, repeatDelay)
+        SyncWorker.automaticallyBackgroundSync(context, myUserId, 0, repeatDelay)
     }
 
     override fun stopAnyBackgroundSync() {
         SyncWorker.stopAnyBackgroundSync(context)
     }
 
-    override fun startSync() {
+    override fun startSync(fromForeground : Boolean) {
+        Timber.i("Starting sync thread")
         assert(isOpen)
+        syncThread.setInitialForeground(fromForeground)
         if (!syncThread.isAlive) {
             syncThread.start()
         } else {

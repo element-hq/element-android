@@ -41,6 +41,7 @@ import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
+import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.workers.signout.SignOutViewModel
@@ -64,6 +65,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
     @Inject lateinit var homeNavigator: HomeNavigator
+    @Inject lateinit var navigator: Navigator
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
@@ -190,6 +192,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
             R.id.menu_home_report_bug -> {
                 bugReporter.openBugReportScreen(this, false)
+                return true
+            }
+            R.id.menu_home_filter -> {
+                navigator.openRoomsFiltering(this)
                 return true
             }
         }
