@@ -269,9 +269,8 @@ class RoomDetailFragment :
                 ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
         composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
-        composerLayout.expand {
-            focusComposerAndShowKeyboard()
-        }
+        composerLayout.expand()
+        focusComposerAndShowKeyboard()
     }
 
     override fun onResume() {
