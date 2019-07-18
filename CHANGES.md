@@ -1,4 +1,4 @@
-Changes in RiotX 0.2.1 (2019-XX-XX)
+Changes in RiotX 0.2.0 (2019-07-18)
 ===================================================
 
 Features:
@@ -22,14 +22,6 @@ Bugfix:
  - Fix Chat composer separator color in dark/black theme
  - Fix bad layout for room directory filter (#349)
  - Fix Copying link from a message shouldn't open context menu (#364)
-
-Translations:
- -
-
-Build:
- -
-
-
 
 Changes in RiotX 0.1.0 (2019-07-11)
 ===================================================

@@ -65,8 +65,8 @@ android {
         multiDexEnabled true
 
         // For release, use generateVersionCodeFromVersionName()
-        versionCode generateVersionCodeFromTimestamp()
-        // versionCode generateVersionCodeFromVersionName()
+        // versionCode generateVersionCodeFromTimestamp()
+        versionCode generateVersionCodeFromVersionName()
 
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
