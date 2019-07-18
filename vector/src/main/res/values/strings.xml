@@ -1522,7 +1522,7 @@ Why choose Riot.im?
     <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
 
     <string name="alpha_disclaimer_title">Welcome to the beta!</string>
-    <string name="alpha_disclaimer_content_line_1">"While Riot X is in early development, some features may be missing and you may experience bugs."</string>
+    <string name="alpha_disclaimer_content_line_1">"While RiotX is in early development, some features may be missing and you may experience bugs."</string>
     <!-- The parameter will be replaced by the value of string alpha_disclaimer_content_line_2_gplay_colored_part -->
     <string name="alpha_disclaimer_content_line_2_gplay">"The latest feature list is always in the %1$s, and if you find bugs please submit a report in the top left menu of Home, and we’ll fix them as quickly as we can."</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">"Play Store description"</string>

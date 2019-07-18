@@ -1523,7 +1523,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Errore bat gertatu da gakoen babes-kopiaren datuak jasotzean</string>
 
     <string name="alpha_disclaimer_title">Ongi etorri betara!</string>
-    <string name="alpha_disclaimer_content_line_1">Riot X oraindik garapenean dagoenez, ezaugarri batzuk faltan bota ditzakezu eta akatsen bat aurkitu dezakezu.</string>
+    <string name="alpha_disclaimer_content_line_1">RiotX oraindik garapenean dagoenez, ezaugarri batzuk faltan bota ditzakezu eta akatsen bat aurkitu dezakezu.</string>
     <string name="alpha_disclaimer_content_line_2_gplay">Azken ezaugarrien zerrenda hemen dago beti : %1$s, eta akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-ko deskripzioa</string>
     <string name="alpha_disclaimer_content_line_2_fdroid">Akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>

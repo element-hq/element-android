@@ -1571,7 +1571,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="keys_backup_unable_to_get_keys_backup_data">Si è verificato un errore nell\'ottenere i dati del backup chiavi</string>
 
     <string name="alpha_disclaimer_title">Benvenuti nella beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Mentre Riot X si trova nella fase iniziale dello sviluppo, potrebbero mancare alcune funzioni e potrebbero verificarsi errori.</string>
+    <string name="alpha_disclaimer_content_line_1">Mentre RiotX si trova nella fase iniziale dello sviluppo, potrebbero mancare alcune funzioni e potrebbero verificarsi errori.</string>
     <string name="alpha_disclaimer_content_line_2_gplay">L\'elenco di funzioni più recenti è sempre nel %1$s, se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descrizione nel Play Store</string>
     <string name="alpha_disclaimer_content_line_2_fdroid">Se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>

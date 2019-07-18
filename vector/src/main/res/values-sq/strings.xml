@@ -1485,7 +1485,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="keys_backup_unable_to_get_keys_backup_data">Ndodhi një gabim teksa merreshin të dhëna kopjeruajtjeje kyçesh</string>
 
     <string name="alpha_disclaimer_title">Mirë se vini në beta!</string>
-    <string name="alpha_disclaimer_content_line_1">Teksa Riot X është në fillimet e zhvillimit, disa veçori mund të mos jenë gati dhe mund të hasni të meta.</string>
+    <string name="alpha_disclaimer_content_line_1">Teksa RiotX është në fillimet e zhvillimit, disa veçori mund të mos jenë gati dhe mund të hasni të meta.</string>
     <string name="alpha_disclaimer_content_line_2_gplay">Lista e veçorive më të reja gjendet te %1$s, dhe nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Përshkrim në Play Store</string>
     <string name="alpha_disclaimer_content_line_2_fdroid">Nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>

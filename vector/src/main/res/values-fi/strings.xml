@@ -1526,7 +1526,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \nJos et kirjautunut toisella laitteella, voit jättää tämän pyynnön huomiotta.</string>
 
     <string name="alpha_disclaimer_title">Tervetuloa beetaan!</string>
-    <string name="alpha_disclaimer_content_line_1">Riot X on varhaisessa kehitysvaiheessa, mistä johtuen osa ominaisuuksista puuttuu ja saatat kohdata virheitä.</string>
+    <string name="alpha_disclaimer_content_line_1">RiotX on varhaisessa kehitysvaiheessa, mistä johtuen osa ominaisuuksista puuttuu ja saatat kohdata virheitä.</string>
     <string name="settings_sdk_version">Matrix SDK:n versio</string>
     <string name="settings_other_third_party_notices">Muut kolmansien osapuolten huomautukset</string>
     <string name="quick_reactions">Pikareaktiot</string>
