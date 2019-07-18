@@ -18,10 +18,6 @@ package im.vector.riotx.features.home
 
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.utils.RxStore
-import im.vector.riotx.features.home.room.list.RoomListDisplayModeFilter
-import im.vector.riotx.features.home.room.list.RoomListFragment
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 

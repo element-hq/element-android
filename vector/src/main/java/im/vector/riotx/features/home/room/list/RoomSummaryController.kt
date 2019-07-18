@@ -26,12 +26,11 @@ import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
-                                                private val roomSummaryItemFactory: RoomSummaryItemFactory
+                                                private val roomSummaryItemFactory: RoomSummaryItemFactory,
+                                                private val roomListNameFilter: RoomListNameFilter
 ) : TypedEpoxyController<RoomListViewState>() {
 
     var listener: Listener? = null
-
-    private val roomListNameFilter = RoomListNameFilter()
 
     override fun buildModels(viewState: RoomListViewState) {
         if (viewState.displayMode == RoomListFragment.DisplayMode.FILTERED) {
