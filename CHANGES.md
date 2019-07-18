@@ -1,3 +1,25 @@
+Changes in RiotX 0.3.0 (2019-XX-XX)
+===================================================
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
+
 Changes in RiotX 0.2.0 (2019-07-18)
 ===================================================
 
@@ -36,7 +58,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in RiotX 0.XX (2019-XX-XX)
+Changes in RiotX 0.0.0 (2019-XX-XX)
 ===================================================
 
 Features:
