@@ -37,7 +37,6 @@ import javax.inject.Inject
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
 private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
-private const val DEFAULT_LONG_POOL_DELAY = 0L
 
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
@@ -62,7 +61,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     fun restart() = synchronized(lock) {
         if (state is SyncState.PAUSED) {
             Timber.v("Resume sync...")
-            updateStateTo(SyncState.RUNNING(catchingUp = true))
+            updateStateTo(SyncState.RUNNING(afterPause = true))
             lock.notify()
         }
     }
@@ -98,7 +97,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 }
             } else {
                 if (state !is SyncState.RUNNING) {
-                    updateStateTo(SyncState.RUNNING(catchingUp = true))
+                    updateStateTo(SyncState.RUNNING(afterPause = true))
                 }
                 Timber.v("[$this] Execute sync request with timeout $DEFAULT_LONG_POOL_TIMEOUT")
                 val latch = CountDownLatch(1)
@@ -140,11 +139,9 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
                 latch.await()
                 if (state is SyncState.RUNNING) {
-                    updateStateTo(SyncState.RUNNING(catchingUp = false))
+                    updateStateTo(SyncState.RUNNING(afterPause = false))
                 }
 
-                Timber.v("Waiting for $DEFAULT_LONG_POOL_DELAY delay before new pool...")
-                if (DEFAULT_LONG_POOL_DELAY > 0) sleep(DEFAULT_LONG_POOL_DELAY)
                 Timber.v("...Continue")
             }
         }
