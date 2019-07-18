@@ -118,7 +118,8 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                                             forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                                     )
                                 } catch (e: MXCryptoError) {
-
+                                    Timber.w("Failed to decrypt e2e replace")
+                                    //TODO -> we should keep track of this and retry, or aggregation will be broken
                                 }
                             }
                             event.getClearContent().toModel<MessageContent>()?.let {

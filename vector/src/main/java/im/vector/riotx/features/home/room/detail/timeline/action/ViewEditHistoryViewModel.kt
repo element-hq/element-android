@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import timber.log.Timber
 import java.util.*
 
 
@@ -84,27 +85,27 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
             override fun onSuccess(data: List<Event>) {
                 var originalIsReply = false
 
-                val events = data.map {
-                    val timelineID = it.roomId + UUID.randomUUID().toString()
-                    it.apply {
+                val events = data.map { event ->
+                    val timelineID = event.roomId + UUID.randomUUID().toString()
+                    event.also {
                         //We need to check encryption
-                        if (isEncrypted() && mxDecryptionResult == null) {
+                        if (it.isEncrypted() && it.mxDecryptionResult == null) {
                             //for now decrypt sync
                             try {
-                                val result = session.decryptEvent(this, timelineID)
-                                mxDecryptionResult = OlmDecryptionResult(
+                                val result = session.decryptEvent(it, timelineID)
+                                it.mxDecryptionResult = OlmDecryptionResult(
                                         payload = result.clearEvent,
                                         senderKey = result.senderCurve25519Key,
                                         keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
                                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                                 )
                             } catch (e: MXCryptoError) {
-
+                                Timber.w("Failed to decrypt event in history")
                             }
                         }
 
-                        if (it.eventId == eventId) {
-                            originalIsReply = getClearContent().toModel<MessageContent>().isReply()
+                        if (event.eventId == it.eventId) {
+                            originalIsReply = it.getClearContent().toModel<MessageContent>().isReply()
                         }
                     }
 
