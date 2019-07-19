@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Edited message: link confusion when (edited) appears in body (#398)
 
 Translations:
  -
