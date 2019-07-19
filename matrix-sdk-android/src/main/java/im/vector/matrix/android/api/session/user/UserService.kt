@@ -17,7 +17,9 @@
 package im.vector.matrix.android.api.session.user
 
 import androidx.lifecycle.LiveData
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.Cancelable
 
 /**
  * This interface defines methods to get users. It's implemented at the session level.
@@ -30,6 +32,16 @@ interface UserService {
      * @return a user with userId or null
      */
     fun getUser(userId: String): User?
+
+    /**
+     * Search list of users on server directory.
+     * @param search the searched term
+     * @param limit the max number of users to return
+     * @param excludedUserIds the user ids to filter from the search
+     * @param callback the async callback
+     * @return Cancelable
+     */
+    fun searchUsersDirectory(search: String, limit: Int, excludedUserIds: Set<String>, callback: MatrixCallback<List<User>>): Cancelable
 
     /**
      * Observe a live user from a userId

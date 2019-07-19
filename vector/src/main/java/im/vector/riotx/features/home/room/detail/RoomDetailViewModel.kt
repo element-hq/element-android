@@ -43,6 +43,7 @@ import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.LiveEvent
+import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
@@ -94,7 +95,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeRoomSummary()
         observeEventDisplayedActions()
         observeInvitationState()
-        cancelableBag += room.loadRoomMembersIfNeeded()
+        room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
     }
@@ -235,12 +236,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         val messageContent: MessageContent? =
                                 state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                    ?: "", messageContent?.type
-                                    ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                                                 ?: "", messageContent?.type
+                                                        ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
@@ -255,7 +256,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                            ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)

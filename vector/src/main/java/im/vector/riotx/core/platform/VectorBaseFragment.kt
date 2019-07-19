@@ -65,7 +65,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed, HasScreen
 
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
-        navigator = vectorBaseActivity.getVectorComponent().navigator()
+        navigator = screenComponent.navigator()
         viewModelFactory = screenComponent.viewModelFactory()
         injectWith(injector())
         super.onAttach(context)

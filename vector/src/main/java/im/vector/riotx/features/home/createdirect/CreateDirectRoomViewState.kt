@@ -24,14 +24,15 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.user.model.User
 
 data class CreateDirectRoomViewState(
-        val displayMode: DisplayMode = DisplayMode.KNOWN_USERS,
         val knownUsers: Async<List<User>> = Uninitialized,
-        val filteredKnownUsers: Async<List<User>> = Uninitialized
+        val directoryUsers: Async<List<User>> = Uninitialized,
+        val selectedUsers: Set<User> = emptySet(),
+        val createAndInviteState: Async<String> = Uninitialized
 ) : MvRxState {
 
     enum class DisplayMode {
         KNOWN_USERS,
-        MATRIX_ID_USERS
+        DIRECTORY_USERS
     }
 
 }

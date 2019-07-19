@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.createdirect
+package im.vector.riotx.core.utils
 
-import im.vector.matrix.android.api.session.user.model.User
+import io.reactivex.Completable
+import io.reactivex.Single
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
+import io.reactivex.internal.functions.Functions
+import timber.log.Timber
 
-sealed class CreateDirectRoomActions {
+fun <T> Single<T>.subscribeLogError(): Disposable {
+    return subscribe(Functions.emptyConsumer(), Consumer { Timber.e(it) })
+}
 
-    object CreateRoomAndInviteSelectedUsers : CreateDirectRoomActions()
-    data class FilterKnownUsers(val value: String) : CreateDirectRoomActions()
-    data class SearchDirectoryUsers(val value: String) : CreateDirectRoomActions()
-    object ClearFilterKnownUsers : CreateDirectRoomActions()
-    data class SelectUser(val user: User) : CreateDirectRoomActions()
-    data class RemoveSelectedUser(val user: User) : CreateDirectRoomActions()
-
+fun Completable.subscribeLogError(): Disposable {
+    return subscribe({}, { Timber.e(it) })
 }

@@ -65,7 +65,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
     @Inject lateinit var homeNavigator: HomeNavigator
-    @Inject lateinit var navigator: Navigator
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
@@ -214,23 +213,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
     }
 
-    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        // if (fm.backStackEntryCount == 0)
-        //     return false
 
-        val reverseOrder = fm.fragments.filter { it is OnBackPressed }.reversed()
-        for (f in reverseOrder) {
-            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
-            if (handledByChildFragments) {
-                return true
-            }
-            val backPressable = f as OnBackPressed
-            if (backPressable.onBackPressed()) {
-                return true
-            }
-        }
-        return false
-    }
 
 
     companion object {

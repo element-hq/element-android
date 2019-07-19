@@ -20,14 +20,20 @@ package im.vector.riotx.features.home.createdirect
 
 import android.os.Bundle
 import android.view.MenuItem
-import com.airbnb.mvrx.fragmentViewModel
+import androidx.lifecycle.ViewModelProviders
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.activityViewModel
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import kotlinx.android.synthetic.main.fragment_create_direct_room.*
-import java.util.concurrent.TimeUnit
+import kotlinx.android.synthetic.main.fragment_public_rooms.*
 import javax.inject.Inject
 
 class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomController.Callback {
@@ -36,10 +42,10 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
 
     override fun getMenuRes() = R.menu.vector_create_direct_room
 
-    private val viewModel: CreateDirectRoomViewModel by fragmentViewModel()
+    private val viewModel: CreateDirectRoomViewModel by activityViewModel()
 
-    @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
     @Inject lateinit var directRoomController: CreateDirectRoomController
+    private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -47,19 +53,29 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        navigationViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
+        vectorBaseActivity.setSupportActionBar(createDirectRoomToolbar)
         setupRecyclerView()
         setupFilterView()
+        setupAddByMatrixIdView()
+        setupCloseView()
         viewModel.subscribe(this) { renderState(it) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_create_room -> {
+            R.id.action_create_direct_room -> {
                 viewModel.handle(CreateDirectRoomActions.CreateRoomAndInviteSelectedUsers)
                 true
             }
-            else                    ->
+            else                           ->
                 super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setupAddByMatrixIdView() {
+        addByMatrixId.setOnClickListener {
+            navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.UsersDirectory)
         }
     }
 
@@ -68,6 +84,7 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
         // Don't activate animation as we might have way to much item animation when filtering
         recyclerView.itemAnimator = null
         directRoomController.callback = this
+        directRoomController.displayMode = CreateDirectRoomViewState.DisplayMode.KNOWN_USERS
         recyclerView.setController(directRoomController)
     }
 
@@ -85,11 +102,18 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
                 .disposeOnDestroy()
     }
 
+    private fun setupCloseView() {
+        createDirectRoomClose.setOnClickListener {
+            requireActivity().finish()
+        }
+    }
+
     private fun renderState(state: CreateDirectRoomViewState) {
+
         directRoomController.setData(state)
     }
 
     override fun onItemClick(user: User) {
-        vectorBaseActivity.notImplemented("IMPLEMENT ON USER CLICKED")
+        viewModel.handle(CreateDirectRoomActions.SelectUser(user))
     }
 }

@@ -19,20 +19,25 @@ package im.vector.matrix.android.internal.session.user
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.model.UserEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.user.model.SearchUserTask
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.task.toConfigurableTask
 import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 
-internal class DefaultUserService @Inject constructor(private val monarchy: Monarchy) : UserService {
+internal class DefaultUserService @Inject constructor(private val monarchy: Monarchy,
+                                                      private val searchUserTask: SearchUserTask,
+                                                      private val taskExecutor: TaskExecutor) : UserService {
 
     override fun getUser(userId: String): User? {
         val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }
@@ -61,5 +66,16 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
                 },
                 { it.asDomain() }
         )
+    }
+
+    override fun searchUsersDirectory(search: String,
+                                      limit: Int,
+                                      excludedUserIds: Set<String>,
+                                      callback: MatrixCallback<List<User>>): Cancelable {
+        val params = SearchUserTask.Params(limit, search, excludedUserIds)
+        return searchUserTask
+                .configureWith(params)
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
     }
 }

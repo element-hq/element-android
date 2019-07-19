@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -51,6 +50,12 @@ class RxSession(private val session: Session) {
 
     fun createRoom(roomParams: CreateRoomParams): Single<String> = Single.create {
         session.createRoom(roomParams, MatrixCallbackSingle(it)).toSingle(it)
+    }
+
+    fun searchUsersDirectory(search: String,
+                             limit: Int,
+                             excludedUserIds: Set<String>): Single<List<User>> = Single.create {
+        session.searchUsersDirectory(search, limit, excludedUserIds, MatrixCallbackSingle(it)).toSingle(it)
     }
 
 }

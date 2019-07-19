@@ -7,18 +7,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?riotx_background"
+    android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/createDirectRoomUserAvatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <FrameLayout
+        android:id="@+id/createDirectRoomUserAvatarContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/createDirectRoomUserAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            tools:src="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/createDirectRoomUserAvatarChecked"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_material_done"
+            android:tint="@android:color/white"
+            android:visibility="visible" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/createDirectRoomUserName"
@@ -34,7 +49,7 @@
         app:layout_constraintBottom_toTopOf="@+id/createDirectRoomUserID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/createDirectRoomUserAvatar"
+        app:layout_constraintStart_toEndOf="@+id/createDirectRoomUserAvatarContainer"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/full_names" />
 

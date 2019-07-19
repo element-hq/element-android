@@ -20,19 +20,83 @@ package im.vector.riotx.features.home.createdirect
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import androidx.lifecycle.ViewModelProviders
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.viewModel
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
-import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.extensions.addFragmentToBackstack
+import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.platform.SimpleFragmentActivity
+import im.vector.riotx.core.platform.WaitingViewData
+import kotlinx.android.synthetic.main.activity.*
+import javax.inject.Inject
 
-class CreateDirectRoomActivity : VectorBaseActivity() {
+class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    sealed class Navigation {
+        object UsersDirectory : Navigation()
+        object Close : Navigation()
+        object Previous : Navigation()
+    }
 
-    override fun initUiAndData() {
+    private val viewModel: CreateDirectRoomViewModel by viewModel()
+    lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
+    @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
+
+
+    override fun injectWith(injector: ScreenComponent) {
+        super.injectWith(injector)
+        injector.inject(this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        toolbar.visibility = View.GONE
+        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
+        navigationViewModel.navigateTo.observeEvent(this) { navigation ->
+            when (navigation) {
+                is Navigation.UsersDirectory -> addFragmentToBackstack(CreateDirectRoomDirectoryUsersFragment(), R.id.container)
+                Navigation.Close             -> finish()
+                Navigation.Previous          -> onBackPressed()
+            }
+        }
         if (isFirstCreation()) {
-            addFragment(CreateDirectRoomFragment(), R.id.simpleFragmentContainer)
+            addFragment(CreateDirectRoomFragment(), R.id.container)
+        }
+        viewModel.subscribe(this) { renderState(it) }
+    }
+
+    private fun renderState(state: CreateDirectRoomViewState) {
+        when (state.createAndInviteState) {
+            is Loading -> renderCreationLoading()
+            is Success -> renderCreationSuccess(state.createAndInviteState())
+            is Fail    -> renderCreationFailure(state.createAndInviteState.error)
         }
     }
+
+    private fun renderCreationLoading() {
+        updateWaitingView(WaitingViewData(getString(R.string.room_recents_create_room)))
+    }
+
+    private fun renderCreationFailure(error: Throwable) {
+
+    }
+
+    private fun renderCreationSuccess(roomId: String?) {
+        // Navigate to freshly created room
+        if (roomId != null) {
+            navigator.openRoom(this, roomId)
+        }
+        finish()
+    }
+
 
     companion object {
         fun getIntent(context: Context): Intent {

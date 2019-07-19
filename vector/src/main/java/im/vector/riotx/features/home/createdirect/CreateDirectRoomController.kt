@@ -19,14 +19,27 @@
 package im.vector.riotx.features.home.createdirect
 
 import com.airbnb.epoxy.EpoxyController
+import com.airbnb.epoxy.VisibilityState
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
+import im.vector.riotx.core.epoxy.errorWithRetryItem
+import im.vector.riotx.core.epoxy.loadingItem
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class CreateDirectRoomController @Inject constructor(private val avatarRenderer: AvatarRenderer) : EpoxyController() {
+class CreateDirectRoomController @Inject constructor(private val avatarRenderer: AvatarRenderer,
+                                                     private val errorFormatter: ErrorFormatter) : EpoxyController() {
 
     private var state: CreateDirectRoomViewState? = null
+    var displayMode = CreateDirectRoomViewState.DisplayMode.KNOWN_USERS
+
     var callback: Callback? = null
 
     init {
@@ -40,10 +53,36 @@ class CreateDirectRoomController @Inject constructor(private val avatarRenderer:
 
     override fun buildModels() {
         val currentState = state ?: return
-        val knownUsers = currentState.knownUsers() ?: return
+        val asyncUsers = if (displayMode == CreateDirectRoomViewState.DisplayMode.DIRECTORY_USERS) {
+            currentState.directoryUsers
+        } else {
+            currentState.knownUsers
+        }
+        when (asyncUsers) {
+            is Incomplete -> renderLoading()
+            is Success    -> renderUsers(asyncUsers(), currentState.selectedUsers)
+            is Fail       -> renderFailure(asyncUsers.error)
+        }
+    }
 
+    private fun renderLoading() {
+        loadingItem {
+            id("loading")
+        }
+    }
+
+    private fun renderFailure(failure: Throwable) {
+        errorWithRetryItem {
+            id("error")
+            text(errorFormatter.toHumanReadable(failure))
+            listener { callback?.retryDirectoryUsersRequest() }
+        }
+    }
+
+    private fun renderUsers(users: List<User>, selectedUsers: Set<User>) {
         var lastFirstLetter: String? = null
-        knownUsers.forEach { user ->
+        users.forEach { user ->
+            val isSelected = selectedUsers.contains(user)
             val currentFirstLetter = user.displayName.firstLetterOfDisplayName()
             val showLetter = currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
             lastFirstLetter = currentFirstLetter
@@ -55,6 +94,7 @@ class CreateDirectRoomController @Inject constructor(private val avatarRenderer:
 
             createDirectRoomUserItem {
                 id(user.userId)
+                selected(isSelected)
                 userId(user.userId)
                 name(user.displayName)
                 avatarUrl(user.avatarUrl)
@@ -64,11 +104,13 @@ class CreateDirectRoomController @Inject constructor(private val avatarRenderer:
                 }
             }
         }
-
     }
 
     interface Callback {
         fun onItemClick(user: User)
+        fun retryDirectoryUsersRequest() {
+            // NO-OP
+        }
     }
 
 }

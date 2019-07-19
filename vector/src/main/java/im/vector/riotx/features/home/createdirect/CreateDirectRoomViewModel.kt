@@ -19,22 +19,23 @@
 package im.vector.riotx.features.home.createdirect
 
 import arrow.core.Option
-import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
 private typealias KnowUsersFilter = String
+private typealias DirectoryUsersSearch = String
 
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
@@ -47,35 +48,77 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private val knownUsersFilter = BehaviorRelay.createDefault<Option<KnowUsersFilter>>(Option.empty())
+    private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
 
     companion object : MvRxViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreateDirectRoomViewState): CreateDirectRoomViewModel? {
-            val fragment: CreateDirectRoomFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.createDirectRoomViewModelFactory.create(state)
+            val activity: CreateDirectRoomActivity = (viewModelContext as ActivityViewModelContext).activity()
+            return activity.createDirectRoomViewModelFactory.create(state)
         }
     }
 
     init {
         observeKnownUsers()
+        observeDirectoryUsers()
     }
 
-    fun handle(createDirectRoomActions: CreateDirectRoomActions) {
-        when (createDirectRoomActions) {
+    fun handle(action: CreateDirectRoomActions) {
+        when (action) {
             is CreateDirectRoomActions.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers()
-            is CreateDirectRoomActions.SelectAddByMatrixId              -> handleSelectAddByMatrixId()
-            is CreateDirectRoomActions.FilterKnownUsers                 -> knownUsersFilter.accept(Option.just(createDirectRoomActions.value))
+            is CreateDirectRoomActions.FilterKnownUsers                 -> knownUsersFilter.accept(Option.just(action.value))
             is CreateDirectRoomActions.ClearFilterKnownUsers            -> knownUsersFilter.accept(Option.empty())
+            is CreateDirectRoomActions.SearchDirectoryUsers             -> directoryUsersSearch.accept(action.value)
+            is CreateDirectRoomActions.SelectUser                       -> handleSelectUser(action)
+            is CreateDirectRoomActions.RemoveSelectedUser               -> handleRemoveSelectedUser(action)
         }
     }
 
-    private fun handleSelectAddByMatrixId() {
-        // TODO
+    private fun createRoomAndInviteSelectedUsers() = withState {
+        val isDirect = it.selectedUsers.size == 1
+        val roomParams = CreateRoomParams().apply {
+            invitedUserIds = ArrayList(it.selectedUsers.map { user -> user.userId })
+            if (isDirect) {
+                setDirectMessage()
+            }
+        }
+        session.rx()
+                .createRoom(roomParams)
+                .execute {
+                    copy(createAndInviteState = it)
+                }
+                .disposeOnClear()
     }
 
-    private fun createRoomAndInviteSelectedUsers() {
-        // TODO
+    private fun handleRemoveSelectedUser(action: CreateDirectRoomActions.RemoveSelectedUser) = withState {
+        val selectedUsers = it.selectedUsers.minusElement(action.user)
+        setState { copy(selectedUsers = selectedUsers) }
+    }
+
+    private fun handleSelectUser(action: CreateDirectRoomActions.SelectUser) = withState {
+        val selectedUsers = if (it.selectedUsers.contains(action.user)) {
+            it.selectedUsers.minusElement(action.user)
+        } else {
+            it.selectedUsers.plus(action.user)
+        }
+        setState { copy(selectedUsers = selectedUsers) }
+    }
+
+    private fun observeDirectoryUsers() {
+        directoryUsersSearch
+                .throttleLast(300, TimeUnit.MILLISECONDS)
+                .switchMapSingle { search ->
+                    session.rx()
+                            .searchUsersDirectory(search, 50, emptySet())
+                            .map { users ->
+                                users.sortedBy { it.displayName }
+                            }
+                }
+                .execute { async ->
+                    copy(directoryUsers = async)
+                }
+
     }
 
     private fun observeKnownUsers() {

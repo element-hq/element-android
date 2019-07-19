@@ -21,12 +21,16 @@ package im.vector.riotx.features.home.createdirect
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.amulyakhare.textdrawable.TextDrawable
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.getColorFromUserId
 
 @EpoxyModelClass(layout = R.layout.item_create_direct_room_user)
 abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserItem.Holder>() {
@@ -36,6 +40,7 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
     @EpoxyAttribute var userId: String = ""
     @EpoxyAttribute var avatarUrl: String? = null
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
+    @EpoxyAttribute var selected: Boolean = false
 
     override fun bind(holder: Holder) {
         holder.view.setOnClickListener(clickListener)
@@ -48,13 +53,22 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
             holder.nameView.text = name
             holder.userIdView.text = userId
         }
-        avatarRenderer.render(avatarUrl, userId, name, holder.avatarImageView)
+        if (selected) {
+            holder.avatarCheckedImageView.visibility = View.VISIBLE
+            val backgroundColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)
+            holder.avatarImageView.setImageDrawable(backgroundDrawable)
+        } else {
+            holder.avatarCheckedImageView.visibility = View.GONE
+            avatarRenderer.render(avatarUrl, userId, name, holder.avatarImageView)
+        }
     }
 
     class Holder : VectorEpoxyHolder() {
         val userIdView by bind<TextView>(R.id.createDirectRoomUserID)
         val nameView by bind<TextView>(R.id.createDirectRoomUserName)
         val avatarImageView by bind<ImageView>(R.id.createDirectRoomUserAvatar)
+        val avatarCheckedImageView by bind<ImageView>(R.id.createDirectRoomUserAvatarChecked)
     }
 
 }

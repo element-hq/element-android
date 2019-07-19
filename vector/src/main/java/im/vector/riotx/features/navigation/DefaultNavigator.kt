@@ -26,7 +26,6 @@ import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActiv
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
