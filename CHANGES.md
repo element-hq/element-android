@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix:
  - Edited message: link confusion when (edited) appears in body (#398)
+ - Close detail room screen when the room is left with another client (#256)
 
 Translations:
  -
