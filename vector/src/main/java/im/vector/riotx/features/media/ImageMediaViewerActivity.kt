@@ -125,7 +125,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
                 object : ViewTreeObserver.OnPreDrawListener {
                     override fun onPreDraw(): Boolean {
                         sharedElement.viewTreeObserver.removeOnPreDrawListener(this)
-                        supportStartPostponedEnterTransition()  
+                        supportStartPostponedEnterTransition()
                         return true
                     }
                 })
@@ -153,7 +153,10 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
                                     .load(mediaData)
                                     .dontAnimate()
                                     .listener(object : RequestListener<Drawable> {
-                                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                        override fun onLoadFailed(e: GlideException?,
+                                                                  model: Any?,
+                                                                  target: Target<Drawable>?,
+                                                                  isFirstResource: Boolean): Boolean {
                                             //TODO ?
                                             Timber.e("TRANSITION onLoadFailed")
                                             imageMediaViewerImageView.isVisible = false
@@ -161,7 +164,11 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
                                             return false
                                         }
 
-                                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                        override fun onResourceReady(resource: Drawable?,
+                                                                     model: Any?,
+                                                                     target: Target<Drawable>?,
+                                                                     dataSource: DataSource?,
+                                                                     isFirstResource: Boolean): Boolean {
                                             Timber.e("TRANSITION onResourceReady")
                                             imageTransitionView.isInvisible = true
                                             imageMediaViewerImageView.isVisible = false
@@ -201,7 +208,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
         fun newIntent(context: Context, mediaData: ImageContentRenderer.Data, shareTransitionName: String?): Intent {
             return Intent(context, ImageMediaViewerActivity::class.java).apply {
                 putExtra(EXTRA_MEDIA_DATA, mediaData)
-                shareTransitionName?.let { putExtra(EXTRA_SHARED_TRANSITION_NAME, it) }
+                putExtra(EXTRA_SHARED_TRANSITION_NAME, shareTransitionName)
             }
         }
     }

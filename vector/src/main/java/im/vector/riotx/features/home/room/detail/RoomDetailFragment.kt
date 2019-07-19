@@ -22,7 +22,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
@@ -623,11 +622,9 @@ class RoomDetailFragment :
         // TODO Use navigator
 
         val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData, ViewCompat.getTransitionName(view))
-        var bundle: Bundle? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view)
-                    ?: "").toBundle()
-        }
+        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                requireActivity(), view, ViewCompat.getTransitionName(view)
+                ?: "").toBundle()
         startActivity(intent, bundle)
     }
 
