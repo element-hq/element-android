@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
 import im.vector.matrix.android.internal.database.model.PusherEntityFields
@@ -82,8 +83,8 @@ internal class DefaultPushRuleService @Inject constructor(
         return contentRules + overrideRules + roomRules + senderRules + underrideRules
     }
 
-    override fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>) {
-        updatePushRuleEnableStatusTask
+    override fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable {
+        return updatePushRuleEnableStatusTask
                 .configureWith(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled))
                 // TODO Fetch the rules
                 .dispatchTo(callback)

@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Single
 
 class RxRoom(private val room: Room) {
 
@@ -39,6 +39,10 @@ class RxRoom(private val room: Room) {
 
     fun liveTimelineEvent(eventId: String): Observable<TimelineEvent> {
         return room.liveTimeLineEvent(eventId).asObservable()
+    }
+
+    fun loadRoomMembersIfNeeded(): Single<Boolean> = Single.create {
+        room.loadRoomMembersIfNeeded(MatrixCallbackSingle(it)).toSingle(it)
     }
 
 }
