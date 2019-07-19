@@ -127,32 +127,47 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 .also {
                     saveLocalEcho(it)
                 }
-        val workRequest = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-        return CancelableWork(context, workRequest.id)
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
+            return CancelableWork(context, encryptWork.id)
+
+        } else {
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+            return CancelableWork(context, workRequest.id)
+        }
 
     }
 
     override fun editReply(replyToEdit: TimelineEvent,
-                           originalSenderId: String?,
-                           originalEventId: String,
+                           originalEvent: TimelineEvent,
                            newBodyText: String,
                            compatibilityBodyText: String): Cancelable {
         val event = eventFactory
                 .createReplaceTextOfReply(roomId,
                         replyToEdit,
-                        originalSenderId, originalEventId,
+                        originalEvent,
                         newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
                 .also {
                     saveLocalEcho(it)
                 }
-        val workRequest = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-        return CancelableWork(context, workRequest.id)
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
+            return CancelableWork(context, encryptWork.id)
+
+        } else {
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+            return CancelableWork(context, workRequest.id)
+        }
     }
 
     override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
-        val params = FetchEditHistoryTask.Params(roomId, eventId)
+        val params = FetchEditHistoryTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), eventId)
         fetchEditHistoryTask.configureWith(params)
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)

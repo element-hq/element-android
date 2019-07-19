@@ -1522,7 +1522,7 @@ Why choose Riot.im?
     <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
 
     <string name="alpha_disclaimer_title">Welcome to the beta!</string>
-    <string name="alpha_disclaimer_content_line_1">"While Riot X is in early development, some features may be missing and you may experience bugs."</string>
+    <string name="alpha_disclaimer_content_line_1">"While RiotX is in early development, some features may be missing and you may experience bugs."</string>
     <!-- The parameter will be replaced by the value of string alpha_disclaimer_content_line_2_gplay_colored_part -->
     <string name="alpha_disclaimer_content_line_2_gplay">"The latest feature list is always in the %1$s, and if you find bugs please submit a report in the top left menu of Home, and we’ll fix them as quickly as we can."</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">"Play Store description"</string>
@@ -1534,6 +1534,7 @@ Why choose Riot.im?
     <string name="settings_other_third_party_notices">Other third party notices</string>
     <string name="navigate_to_room_when_already_in_the_room">You are already viewing this room!</string>
 
+    <string name="quick_reactions">Quick Reactions</string>
 
     <!-- Settings -->
     <string name="settings_general_title">General</string>
@@ -1592,5 +1593,39 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 • Calls
 • Widgets
 • …"</string>
+
+    <string name="bottom_action_people_x">Direct Messages</string>
+
+    <string name="send_file_step_idle">Waiting…</string>
+    <string name="send_file_step_encrypting_thumbnail">Encrypting thumbnail…</string>
+    <string name="send_file_step_sending_thumbnail">Sending thumbnail (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Encrypting file…</string>
+    <string name="send_file_step_sending_file">Sending file (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Downloading file %1$s…</string>
+    <string name="downloaded_file">File %1$s has been downloaded!</string>
+
+    <string name="edited_suffix">"(edited)"</string>
+
+    <!-- param will be replaced by the value of riotx_no_registration_notice_colored_part -->
+    <string name="riotx_no_registration_notice">%1$s to create an account.</string>
+    <string name="riotx_no_registration_notice_colored_part">Use the old app</string>
+
+
+    <string name="message_edits">Message Edits</string>
+    <string name="no_message_edits_found">No edits found</string>
+
+    <!-- Room filtering -->
+    <string name="room_filtering_filter_hint">Filter conversations…</string>
+    <string name="room_filtering_footer_title">Can’t find what you’re looking for?</string>
+    <string name="room_filtering_footer_create_new_room">Create a new room</string>
+    <string name="room_filtering_footer_create_new_direct_message">Send a new direct message</string>
+    <string name="room_filtering_footer_open_room_directory">View the room directory</string>
+
+    <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
+
+    <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
 </resources>

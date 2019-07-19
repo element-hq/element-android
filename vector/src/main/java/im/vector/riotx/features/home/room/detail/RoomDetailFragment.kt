@@ -270,8 +270,10 @@ class RoomDetailFragment :
 
         composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
         composerLayout.expand {
+            //need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
         }
+        focusComposerAndShowKeyboard()
     }
 
     override fun onResume() {
@@ -534,9 +536,14 @@ class RoomDetailFragment :
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let {
-            roomToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it, roomToolbarAvatarImageView)
-            roomToolbarSubtitleView.setTextOrHide(it.topic)
+            if (it.membership.isLeft()) {
+                Timber.w("The room has been left")
+                activity?.finish()
+            } else {
+                roomToolbarTitleView.text = it.displayName
+                avatarRenderer.render(it, roomToolbarAvatarImageView)
+                roomToolbarSubtitleView.setTextOrHide(it.topic)
+            }
         }
     }
 

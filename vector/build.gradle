@@ -13,7 +13,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 2
+ext.versionMinor = 3
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -66,9 +66,9 @@ android {
 
         // For release, use generateVersionCodeFromVersionName()
         versionCode generateVersionCodeFromTimestamp()
-        // versionCode generateVersionCodeFromVersionName()
+        //versionCode generateVersionCodeFromVersionName()
 
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}-dev"
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""

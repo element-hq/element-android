@@ -1,4 +1,4 @@
-This document aims to describe how Riot X android displays notifications to the end user. It also clarifies notifications and background settings in the app.
+This document aims to describe how RiotX android displays notifications to the end user. It also clarifies notifications and background settings in the app.
 
 # Table of Contents
 1. [Prerequisites Knowledge](#prerequisites-knowledge)
@@ -50,7 +50,7 @@ By default, this is 0, so the server will return immediately even if the respons
 
 **delay** is a client preference. When the server responds to a sync request, the client waits for `delay`before calling a new sync.
 
-When the Riot X Android app is open (i.e in foreground state), the default timeout is 30 seconds, and delay is 0.
+When the RiotX Android app is open (i.e in foreground state), the default timeout is 30 seconds, and delay is 0.
 
 ## How does a mobile app receives push notification
 
@@ -86,7 +86,7 @@ This need some disambiguation, because it is the source of common confusion:
 In order to send a push to a mobile, App developers need to have a server that will use the FCM APIs, and these APIs requires authentication!
 This server is called a **Push Gateway** in the matrix world
 
-That means that Riot X Android, a matrix client created by New Vector, is using a **Push Gateway** with the needed credentials (FCM API secret Key) in order to send push to the New Vector client.
+That means that RiotX Android, a matrix client created by New Vector, is using a **Push Gateway** with the needed credentials (FCM API secret Key) in order to send push to the New Vector client.
 
 If you create your own matrix client, you will also need to deploy an instance of a **Push Gateway** with the credentials needed to use FCM for your app.
 
@@ -223,7 +223,7 @@ Upon reception of the FCM push, RiotX will perform a sync call to the Home Serve
   * The sync generates additional notifications (e.g an encrypted message where the user is mentioned detected locally)
   * The sync takes too long and the process is killed before completion, or network is not reliable and the sync fails.
 
-Riot X implements several strategies in these cases (TODO document)
+RiotX implements several strategies in these cases (TODO document)
 
 ## FCM Fallback mode
 

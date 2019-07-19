@@ -244,7 +244,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
         //TODO if user is admin or moderator
-        val messageContent = event.root.content.toModel<MessageContent>()
+        val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
                 messageContent?.type == MessageType.MSGTYPE_TEXT
                         || messageContent?.type == MessageType.MSGTYPE_EMOTE

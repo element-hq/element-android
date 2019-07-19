@@ -17,6 +17,7 @@ package im.vector.matrix.android.internal.crypto.model.event
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 
 /**
  * Class representing an encrypted event content
@@ -52,5 +53,8 @@ data class EncryptedEventContent(
          * The session id
          */
         @Json(name = "session_id")
-        val sessionId: String? = null
+        val sessionId: String? = null,
+
+        //Relation context is in clear in encrypted message
+        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent? = null
 )

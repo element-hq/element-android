@@ -1,9 +1,34 @@
-Changes in RiotX 0.2.1 (2019-XX-XX)
+Changes in RiotX 0.3.0 (2019-XX-XX)
+===================================================
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ - Edited message: link confusion when (edited) appears in body (#398)
+ - Close detail room screen when the room is left with another client (#256)
+ - Clear notification for a room left on another client
+
+Translations:
+ -
+
+Build:
+ -
+
+
+Changes in RiotX 0.2.0 (2019-07-18)
 ===================================================
 
 Features:
  - Message Editing: View edit history (#121)
  - Rooms filtering (#304)
+ - Edit in encrypted room
 
 Improvements:
  - Handle click on redacted events: view source and create permalink
@@ -22,14 +47,6 @@ Bugfix:
  - Fix bad layout for room directory filter (#349)
  - Fix Copying link from a message shouldn't open context menu (#364)
 
-Translations:
- -
-
-Build:
- -
-
-
-
 Changes in RiotX 0.1.0 (2019-07-11)
 ===================================================
 
@@ -43,7 +60,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in RiotX 0.XX (2019-XX-XX)
+Changes in RiotX 0.0.0 (2019-XX-XX)
 ===================================================
 
 Features:

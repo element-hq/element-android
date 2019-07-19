@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.list
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
@@ -25,12 +26,11 @@ import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
-                                                private val roomSummaryItemFactory: RoomSummaryItemFactory
+                                                private val roomSummaryItemFactory: RoomSummaryItemFactory,
+                                                private val roomListNameFilter: RoomListNameFilter
 ) : TypedEpoxyController<RoomListViewState>() {
 
     var listener: Listener? = null
-
-    private val roomListNameFilter = RoomListNameFilter()
 
     override fun buildModels(viewState: RoomListViewState) {
         if (viewState.displayMode == RoomListFragment.DisplayMode.FILTERED) {
@@ -62,7 +62,8 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
 
         roomListNameFilter.filter = viewState.roomFilter
 
-        val filteredSummaries = summaries.filter { roomListNameFilter.test(it) }
+        val filteredSummaries = summaries
+                .filter { it.membership == Membership.JOIN && roomListNameFilter.test(it) }
 
         buildRoomModels(filteredSummaries,
                 viewState.joiningRoomsIds,

@@ -228,4 +228,14 @@
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_pin">Pin</string>
 
+    <!-- Strings for RiotX -->
+    <string name="initial_sync_start_importing_account">Initial Sync:\nImporting account…</string>
+    <string name="initial_sync_start_importing_account_crypto">Initial Sync:\nImporting crypto</string>
+    <string name="initial_sync_start_importing_account_rooms">Initial Sync:\nImporting Rooms</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Initial Sync:\nImporting Joined Rooms</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Initial Sync:\nImporting Invited Rooms</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Initial Sync:\nImporting Left Rooms</string>
+    <string name="initial_sync_start_importing_account_groups">Initial Sync:\nImporting Communities</string>
+    <string name="initial_sync_start_importing_account_data">Initial Sync:\nImporting Account Data</string>
+
 </resources>
