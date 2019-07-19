@@ -44,6 +44,10 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 
     override suspend fun execute(params: ProcessEventForPushTask.Params): Try<Unit> {
         return Try {
+            // Handle left rooms
+            params.syncResponse.leave.keys.forEach {
+                defaultPushRuleService.dispatchRoomLeft(it)
+            }
             val newJoinEvents = params.syncResponse.join
                     .map { entries ->
                         entries.value.timeline?.events?.map { it.copy(roomId = entries.key) }
