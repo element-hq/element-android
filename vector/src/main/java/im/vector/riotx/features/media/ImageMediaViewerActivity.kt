@@ -21,7 +21,6 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.RequiresApi
@@ -49,8 +48,6 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
 
     @Inject lateinit var imageContentRenderer: ImageContentRenderer
 
-    private val mHideHandler = Handler()
-
     lateinit var mediaData: ImageContentRenderer.Data
 
     override fun injectWith(injector: ScreenComponent) {
@@ -71,13 +68,15 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
 
         configureToolbar(imageMediaViewerToolbar, mediaData)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && addTransitionListener()) {
+        if (isFirstCreation() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && addTransitionListener()) {
             // Encrypted image
             imageTransitionView.isVisible = true
             imageMediaViewerImageView.isVisible = false
             encryptedImageView.isVisible = false
+            //Postpone transaction a bit until thumbnail is loaded
             supportPostponeEnterTransition()
             imageContentRenderer.renderFitTarget(mediaData, ImageContentRenderer.Mode.THUMBNAIL, imageTransitionView) {
+                //Proceed with transaction
                 scheduleStartPostponedTransition(imageTransitionView)
             }
 
@@ -126,13 +125,10 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
                 object : ViewTreeObserver.OnPreDrawListener {
                     override fun onPreDraw(): Boolean {
                         sharedElement.viewTreeObserver.removeOnPreDrawListener(this)
-                        supportStartPostponedEnterTransition()
+                        supportStartPostponedEnterTransition()  
                         return true
                     }
                 })
-
-        //Any how hide the transition image view after a delay
-        mHideHandler.postDelayed({ imageTransitionView.isInvisible = true }, 600)
     }
 
     /**
