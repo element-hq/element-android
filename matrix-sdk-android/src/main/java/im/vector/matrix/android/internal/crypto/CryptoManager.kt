@@ -689,8 +689,7 @@ internal class CryptoManager @Inject constructor(
     private fun onRoomEncryptionEvent(roomId: String, event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
             val params = LoadRoomMembersTask.Params(roomId)
-            loadRoomMembersTask
-                    .execute(params)
+            Try { loadRoomMembersTask.execute(params) }
                     .map { _ ->
                         val userIds = getRoomUserIds(roomId)
                         setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
@@ -770,7 +769,7 @@ internal class CryptoManager @Inject constructor(
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
         val uploadDeviceKeysParams = UploadKeysTask.Params(getMyDevice().toDeviceKeys(), null, getMyDevice().deviceId)
-        return uploadKeysTask.execute(uploadDeviceKeysParams)
+        return Try { uploadKeysTask.execute(uploadDeviceKeysParams) }
     }
 
     /**

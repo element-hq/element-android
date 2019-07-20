@@ -16,9 +16,6 @@
 
 package im.vector.matrix.android.internal.network
 
-import arrow.core.Try
-import arrow.core.failure
-import arrow.core.recoverWith
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.failure.Failure
@@ -36,8 +33,8 @@ internal class Request<DATA> {
     private val moshi: Moshi = MoshiProvider.providesMoshi()
     lateinit var apiCall: Call<DATA>
 
-    suspend fun execute(): Try<DATA> {
-        return Try {
+    suspend fun execute(): DATA {
+        return try {
             val response = apiCall.awaitResponse()
             if (response.isSuccessful) {
                 response.body()
@@ -45,13 +42,13 @@ internal class Request<DATA> {
             } else {
                 throw manageFailure(response.errorBody(), response.code())
             }
-        }.recoverWith {
-            when (it) {
+        } catch (it: Throwable) {
+            throw when (it) {
                 is IOException              -> Failure.NetworkConnection(it)
                 is Failure.ServerError,
                 is Failure.OtherServerError -> it
                 else                        -> Failure.Unknown(it)
-            }.failure()
+            }
         }
     }
 

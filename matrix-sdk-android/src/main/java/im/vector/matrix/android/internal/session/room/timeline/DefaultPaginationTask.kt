@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.filter.FilterRepository
@@ -41,14 +40,14 @@ internal class DefaultPaginationTask @Inject constructor(private val roomAPI: Ro
                                                          private val tokenChunkEventPersistor: TokenChunkEventPersistor
 ) : PaginationTask {
 
-    override suspend fun execute(params: PaginationTask.Params): Try<TokenChunkEventPersistor.Result> {
+    override suspend fun execute(params: PaginationTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
-        return executeRequest<PaginationResponse> {
+        val chunk = executeRequest<PaginationResponse> {
             apiCall = roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)
-        }.flatMap { chunk ->
-            tokenChunkEventPersistor
-                    .insertInDb(chunk, params.roomId, params.direction)
         }
+
+        return tokenChunkEventPersistor.insertInDb(chunk, params.roomId, params.direction)
+                .fold({ throw it }, { it })
     }
 
 }

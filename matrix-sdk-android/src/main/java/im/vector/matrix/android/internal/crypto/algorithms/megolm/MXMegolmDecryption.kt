@@ -351,7 +351,7 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
                                         sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
                                         Timber.v("## shareKeysWithDevice() : sending to $userId:$deviceId")
                                         val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-                                        sendToDeviceTask.execute(sendToDeviceParams)
+                                        Try { sendToDeviceTask.execute(sendToDeviceParams) }
                                     }
                         }
                     }

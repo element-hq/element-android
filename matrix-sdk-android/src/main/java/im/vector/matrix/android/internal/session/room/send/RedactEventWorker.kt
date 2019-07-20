@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.room.send
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import arrow.core.Try
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.network.executeRequest
@@ -54,13 +55,15 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
         sessionComponent.inject(this)
 
         val eventId = params.eventId
-        val result = executeRequest<SendResponse> {
-            apiCall = roomAPI.redactEvent(
-                    params.txID,
-                    params.roomId,
-                    eventId,
-                    if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
-            )
+        val result = Try {
+            executeRequest<SendResponse> {
+                apiCall = roomAPI.redactEvent(
+                        params.txID,
+                        params.roomId,
+                        eventId,
+                        if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
+                )
+            }
         }
         return result.fold({
             when (it) {

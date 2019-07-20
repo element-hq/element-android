@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.create
 
-import arrow.core.Try
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.internal.database.RealmQueryLatch
@@ -36,22 +35,22 @@ internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: Ro
                                                          @SessionDatabase private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
 
 
-    override suspend fun execute(params: CreateRoomParams): Try<String> {
-        return executeRequest<CreateRoomResponse> {
+    override suspend fun execute(params: CreateRoomParams): String {
+        val createRoomResponse = executeRequest<CreateRoomResponse> {
             apiCall = roomAPI.createRoom(params)
-        }.flatMap { createRoomResponse ->
-            val roomId = createRoomResponse.roomId!!
-
-            // TODO Maybe do the same code for join room request ?
-            // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
-            val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
-                realm.where(RoomEntity::class.java)
-                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
-            }
-
-            rql.await()
-
-            return Try.just(roomId)
         }
+
+        val roomId = createRoomResponse.roomId!!
+
+        // TODO Maybe do the same code for join room request ?
+        // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
+        val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
+            realm.where(RoomEntity::class.java)
+                    .equalTo(RoomEntityFields.ROOM_ID, roomId)
+        }
+
+        rql.await()
+
+        return roomId
     }
 }

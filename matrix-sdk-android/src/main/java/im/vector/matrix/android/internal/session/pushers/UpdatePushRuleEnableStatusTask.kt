@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
-import arrow.core.Try
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
@@ -31,8 +30,8 @@ internal interface UpdatePushRuleEnableStatusTask : Task<UpdatePushRuleEnableSta
 internal class DefaultUpdatePushRuleEnableStatusTask @Inject constructor(private val pushRulesApi: PushRulesApi)
     : UpdatePushRuleEnableStatusTask {
 
-    override suspend fun execute(params: UpdatePushRuleEnableStatusTask.Params): Try<Unit> {
-        return executeRequest {
+    override suspend fun execute(params: UpdatePushRuleEnableStatusTask.Params) {
+        executeRequest<Unit> {
             apiCall = pushRulesApi.updateEnableRuleStatus(params.kind, params.pushRule.ruleId, params.enabled)
         }
     }

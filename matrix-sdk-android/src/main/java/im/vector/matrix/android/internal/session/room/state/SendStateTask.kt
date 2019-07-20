@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.state
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -32,8 +31,8 @@ internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
 }
 
 internal class DefaultSendStateTask @Inject constructor(private val roomAPI: RoomAPI) : SendStateTask {
-    override suspend fun execute(params: SendStateTask.Params): Try<Unit> {
-        return executeRequest {
+    override suspend fun execute(params: SendStateTask.Params) {
+        executeRequest<Unit> {
             apiCall = roomAPI.sendStateEvent(params.roomId, params.eventType, params.body)
         }
     }

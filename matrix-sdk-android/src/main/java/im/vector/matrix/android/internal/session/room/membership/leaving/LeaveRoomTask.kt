@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.membership.leaving
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -31,8 +30,8 @@ internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
 
 internal class DefaultLeaveRoomTask @Inject constructor(private val roomAPI: RoomAPI) : LeaveRoomTask {
 
-    override suspend fun execute(params: LeaveRoomTask.Params): Try<Unit> {
-        return executeRequest {
+    override suspend fun execute(params: LeaveRoomTask.Params) {
+        executeRequest<Unit> {
             apiCall = roomAPI.leave(params.roomId, HashMap())
         }
     }

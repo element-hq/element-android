@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysBackupData
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.BackupKeysResult
@@ -35,7 +34,7 @@ internal interface StoreSessionsDataTask : Task<StoreSessionsDataTask.Params, Ba
 internal class DefaultStoreSessionsDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : StoreSessionsDataTask {
 
-    override suspend fun execute(params: StoreSessionsDataTask.Params): Try<BackupKeysResult> {
+    override suspend fun execute(params: StoreSessionsDataTask.Params): BackupKeysResult {
         return executeRequest {
             apiCall = roomKeysApi.storeSessionsData(
                     params.version,

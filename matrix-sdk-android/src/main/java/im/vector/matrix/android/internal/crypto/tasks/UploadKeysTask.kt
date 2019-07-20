@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
@@ -41,7 +40,7 @@ internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadRespon
 internal class DefaultUploadKeysTask @Inject constructor(private val cryptoApi: CryptoApi)
     : UploadKeysTask {
 
-    override suspend fun execute(params: UploadKeysTask.Params): Try<KeysUploadResponse> {
+    override suspend fun execute(params: UploadKeysTask.Params): KeysUploadResponse {
         val encodedDeviceId = convertToUTF8(params.deviceId)
 
         val body = KeysUploadBody()

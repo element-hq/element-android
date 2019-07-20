@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.task
 
-import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -41,7 +40,7 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
 ) : Task<PARAMS, RESULT> {
 
 
-    override suspend fun execute(params: PARAMS): Try<RESULT> {
+    override suspend fun execute(params: PARAMS): RESULT {
         return task.execute(params)
     }
 

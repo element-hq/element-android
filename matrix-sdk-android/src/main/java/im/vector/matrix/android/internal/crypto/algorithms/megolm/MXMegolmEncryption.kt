@@ -217,7 +217,7 @@ internal class MXMegolmEncryption(
                             }
                             Timber.v("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
                             //noinspection ArraysAsListWithZeroOrOneArgument,ArraysAsListWithZeroOrOneArgument
-                            contentMap.setObject(userId, deviceID, messageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.deviceInfo)))
+                            contentMap.setObject(userId, deviceID, messageEncrypter.encryptMessage(payload, listOf(sessionResult.deviceInfo)))
                             haveTargets = true
                         }
                     }
@@ -225,7 +225,7 @@ internal class MXMegolmEncryption(
                         t0 = System.currentTimeMillis()
                         Timber.v("## shareUserDevicesKey() : has target")
                         val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, contentMap)
-                        sendToDeviceTask.execute(sendToDeviceParams)
+                        Try { sendToDeviceTask.execute(sendToDeviceParams) }
                                 .map {
                                     Timber.v("## shareUserDevicesKey() : sendToDevice succeeds after "
                                             + (System.currentTimeMillis() - t0) + " ms")

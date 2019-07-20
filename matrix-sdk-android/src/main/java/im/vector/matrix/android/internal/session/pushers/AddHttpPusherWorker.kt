@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.pushers
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import arrow.core.Try
 import com.squareup.moshi.JsonClass
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.failure.Failure
@@ -56,8 +57,10 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
             return Result.failure()
         }
 
-        val result = executeRequest<Unit> {
-            apiCall = pushersAPI.setPusher(pusher)
+        val result = Try {
+            executeRequest<Unit> {
+                apiCall = pushersAPI.setPusher(pusher)
+            }
         }
         return result.fold({
             when (it) {

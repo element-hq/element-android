@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionScope
@@ -33,8 +32,8 @@ internal interface DeleteRoomSessionsDataTask : Task<DeleteRoomSessionsDataTask.
 internal class DefaultDeleteRoomSessionsDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : DeleteRoomSessionsDataTask {
 
-    override suspend fun execute(params: DeleteRoomSessionsDataTask.Params): Try<Unit> {
-        return executeRequest {
+    override suspend fun execute(params: DeleteRoomSessionsDataTask.Params) {
+        executeRequest<Unit> {
             apiCall = roomKeysApi.deleteRoomSessionsData(
                     params.roomId,
                     params.version)

@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.membership
 
-import arrow.core.Try
 import com.squareup.moshi.JsonReader
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -30,7 +29,6 @@ import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import okhttp3.ResponseBody
@@ -51,22 +49,22 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
                                                               private val roomSummaryUpdater: RoomSummaryUpdater
 ) : LoadRoomMembersTask {
 
-    override suspend fun execute(params: LoadRoomMembersTask.Params): Try<Boolean> {
+    override suspend fun execute(params: LoadRoomMembersTask.Params): Boolean {
         return if (areAllMembersAlreadyLoaded(params.roomId)) {
-            Try.just(true)
+            true
         } else {
             val lastToken = syncTokenStore.getLastToken()
-            executeRequest<RoomMembersResponse> {
+            val response = executeRequest<RoomMembersResponse> {
                 apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
-            }.flatMap { response ->
-                insertInDb(response, params.roomId)
-            }.map { true }
+            }
+            insertInDb(response, params.roomId)
+            true
         }
     }
 
-    private fun insertInDb(response: RoomMembersResponse, roomId: String): Try<Unit> {
+    private fun insertInDb(response: RoomMembersResponse, roomId: String) {
         return monarchy
-                .tryTransactionSync { realm ->
+                .runTransactionSync { realm ->
                     // We ignore all the already known members
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
                             ?: realm.createObject(roomId)

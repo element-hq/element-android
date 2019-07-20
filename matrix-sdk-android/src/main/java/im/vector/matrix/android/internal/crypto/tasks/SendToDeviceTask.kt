@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.SendToDeviceBody
@@ -40,7 +39,7 @@ internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
 internal class DefaultSendToDeviceTask @Inject constructor(private val cryptoApi: CryptoApi)
     : SendToDeviceTask {
 
-    override suspend fun execute(params: SendToDeviceTask.Params): Try<Unit> {
+    override suspend fun execute(params: SendToDeviceTask.Params) {
         val sendToDeviceBody = SendToDeviceBody()
         sendToDeviceBody.messages = params.contentMap.map
 

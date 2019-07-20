@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.directory
 
-import arrow.core.Try
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionScope
@@ -28,7 +27,7 @@ internal interface GetThirdPartyProtocolsTask : Task<Unit, Map<String, ThirdPart
 
 internal class DefaultGetThirdPartyProtocolsTask @Inject constructor (private val roomAPI: RoomAPI) : GetThirdPartyProtocolsTask {
 
-    override suspend fun execute(params: Unit): Try<Map<String, ThirdPartyProtocol>> {
+    override suspend fun execute(params: Unit): Map<String, ThirdPartyProtocol> {
         return executeRequest {
             apiCall = roomAPI.thirdPartyProtocols()
         }

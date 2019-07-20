@@ -355,10 +355,8 @@ internal class KeysBackup @Inject constructor(
                                     callback: MatrixCallback<KeysBackupVersionTrust>) {
         // TODO Validate with François that this is correct
         object : Task<KeysVersionResult, KeysBackupVersionTrust> {
-            override suspend fun execute(params: KeysVersionResult): Try<KeysBackupVersionTrust> {
-                return Try {
-                    getKeysBackupTrustBg(params)
-                }
+            override suspend fun execute(params: KeysVersionResult): KeysBackupVersionTrust {
+                return getKeysBackupTrustBg(params)
             }
         }
                 .configureWith(keysBackupVersion)

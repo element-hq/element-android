@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.session.room.relation
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -44,14 +43,12 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
 
 internal class DefaultFindReactionEventForUndoTask @Inject constructor(private val monarchy: Monarchy) : FindReactionEventForUndoTask {
 
-    override suspend fun execute(params: FindReactionEventForUndoTask.Params): Try<FindReactionEventForUndoTask.Result> {
-        return Try {
-            var eventId: String? = null
-            monarchy.doWithRealm { realm ->
-                eventId = getReactionToRedact(realm, params.reaction, params.eventId, params.myUserId)?.eventId
-            }
-            FindReactionEventForUndoTask.Result(eventId)
+    override suspend fun execute(params: FindReactionEventForUndoTask.Params): FindReactionEventForUndoTask.Result {
+        var eventId: String? = null
+        monarchy.doWithRealm { realm ->
+            eventId = getReactionToRedact(realm, params.reaction, params.eventId, params.myUserId)?.eventId
         }
+        return FindReactionEventForUndoTask.Result(eventId)
     }
 
     private fun getReactionToRedact(realm: Realm, reaction: String, eventId: String, userId: String): EventEntity? {

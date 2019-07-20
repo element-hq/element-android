@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import java.lang.Exception
 import javax.inject.Inject
 
 internal class SendRelationWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
@@ -67,16 +68,19 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
         val relationType = (relationContent.relatesTo as? ReactionInfo)?.type ?: params.relationType
         ?: return Result.failure()
 
-        val result = executeRequest<SendResponse> {
-            apiCall = roomAPI.sendRelation(
-                    roomId = params.roomId,
-                    parent_id = relatedEventId,
-                    relationType = relationType,
-                    eventType = localEvent.type,
-                    content = localEvent.content
-            )
-        }
-        return result.fold({
+        return try {
+            executeRequest<SendResponse> {
+                apiCall = roomAPI.sendRelation(
+                        roomId = params.roomId,
+                        parent_id = relatedEventId,
+                        relationType = relationType,
+                        eventType = localEvent.type,
+                        content = localEvent.content
+                )
+            }
+
+            Result.success()
+        } catch (it: Throwable) {
             when (it) {
                 is Failure.NetworkConnection -> Result.retry()
                 else                         -> {
@@ -85,7 +89,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
                     Result.success()
                 }
             }
-        }, { Result.success() })
+        }
     }
 
 }

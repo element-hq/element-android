@@ -16,10 +16,6 @@
 
 package im.vector.matrix.android.internal.session.group
 
-import arrow.core.Try
-import arrow.core.fix
-import arrow.instances.`try`.monad.monad
-import arrow.typeclasses.binding
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -28,7 +24,6 @@ import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
 import im.vector.matrix.android.internal.session.group.model.GroupUsers
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.kotlin.createObject
 import javax.inject.Inject
 
@@ -43,7 +38,7 @@ internal class DefaultGetGroupDataTask @Inject constructor(
         private val monarchy: Monarchy
 ) : GetGroupDataTask {
 
-    override suspend fun execute(params: GetGroupDataTask.Params): Try<Unit> {
+    override suspend fun execute(params: GetGroupDataTask.Params) {
         val groupId = params.groupId
         val groupSummary = executeRequest<GroupSummaryResponse> {
             apiCall = groupAPI.getSummary(groupId)
@@ -54,18 +49,16 @@ internal class DefaultGetGroupDataTask @Inject constructor(
         val groupUsers = executeRequest<GroupUsers> {
             apiCall = groupAPI.getUsers(groupId)
         }
-        return Try.monad().binding {
-            insertInDb(groupSummary.bind(), groupRooms.bind(), groupUsers.bind(), groupId).bind()
-        }.fix()
+        insertInDb(groupSummary, groupRooms, groupUsers, groupId)
     }
 
 
     private fun insertInDb(groupSummary: GroupSummaryResponse,
                            groupRooms: GroupRooms,
                            groupUsers: GroupUsers,
-                           groupId: String): Try<Unit> {
+                           groupId: String) {
         return monarchy
-                .tryTransactionSync { realm ->
+                .runTransactionSync { realm ->
                     val groupSummaryEntity = GroupSummaryEntity.where(realm, groupId).findFirst()
                             ?: realm.createObject(groupId)
 

@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.session.room.prune
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -30,7 +29,6 @@ import im.vector.matrix.android.internal.database.query.findWithSenderMembership
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
@@ -47,8 +45,8 @@ internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
 
 internal class DefaultPruneEventTask @Inject constructor(private val monarchy: Monarchy) : PruneEventTask {
 
-    override suspend fun execute(params: PruneEventTask.Params): Try<Unit> {
-        return monarchy.tryTransactionSync { realm ->
+    override suspend fun execute(params: PruneEventTask.Params) {
+        return monarchy.runTransactionSync { realm ->
             params.redactionEvents.forEach { event ->
                 pruneEvent(realm, event, params.userId)
             }

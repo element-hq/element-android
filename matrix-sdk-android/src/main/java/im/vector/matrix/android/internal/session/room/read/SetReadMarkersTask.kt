@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.read
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -53,7 +52,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
                                                              private val monarchy: Monarchy
 ) : SetReadMarkersTask {
 
-    override suspend fun execute(params: SetReadMarkersTask.Params): Try<Unit> {
+    override suspend fun execute(params: SetReadMarkersTask.Params) {
         val markers = HashMap<String, String>()
         if (params.fullyReadEventId != null) {
             if (LocalEchoEventFactory.isLocalEchoId(params.fullyReadEventId)) {
@@ -72,10 +71,8 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
                 markers[READ_RECEIPT] = params.readReceiptEventId
             }
         }
-        return if (markers.isEmpty()) {
-            Try.just(Unit)
-        } else {
-            executeRequest {
+        if (markers.isNotEmpty()) {
+            executeRequest<Unit> {
                 apiCall = roomAPI.sendReadMarker(params.roomId, markers)
             }
         }

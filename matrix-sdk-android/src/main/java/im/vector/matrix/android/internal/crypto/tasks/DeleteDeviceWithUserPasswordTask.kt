@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
@@ -38,8 +37,8 @@ internal class DefaultDeleteDeviceWithUserPasswordTask @Inject constructor(priva
                                                                            private val credentials: Credentials)
     : DeleteDeviceWithUserPasswordTask {
 
-    override suspend fun execute(params: DeleteDeviceWithUserPasswordTask.Params): Try<Unit> {
-        return executeRequest {
+    override suspend fun execute(params: DeleteDeviceWithUserPasswordTask.Params) {
+        executeRequest<Unit> {
             apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams()
                     .apply {
                         deleteDeviceAuth = DeleteDeviceAuth()

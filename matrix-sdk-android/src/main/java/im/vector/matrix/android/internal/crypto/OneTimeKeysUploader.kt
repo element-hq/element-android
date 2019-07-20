@@ -86,7 +86,7 @@ internal class OneTimeKeysUploader @Inject constructor(
         } else {
             // ask the server how many keys we have
             val uploadKeysParams = UploadKeysTask.Params(null, null, credentials.deviceId!!)
-            uploadKeysTask.execute(uploadKeysParams)
+            Try { uploadKeysTask.execute(uploadKeysParams) }
                     .flatMap {
                         // We need to keep a pool of one time public keys on the server so that
                         // other devices can start conversations with us. But we can only store
@@ -169,8 +169,7 @@ internal class OneTimeKeysUploader @Inject constructor(
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
         val uploadParams = UploadKeysTask.Params(null, oneTimeJson, credentials.deviceId!!)
-        return uploadKeysTask
-                .execute(uploadParams)
+        return Try { uploadKeysTask.execute(uploadParams) }
                 .map {
                     lastPublishedOneTimeKeys = oneTimeKeys
                     olmDevice.markKeysAsPublished()

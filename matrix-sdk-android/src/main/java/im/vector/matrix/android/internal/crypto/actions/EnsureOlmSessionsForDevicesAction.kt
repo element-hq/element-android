@@ -79,8 +79,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
         Timber.v("## claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
 
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim)
-        return oneTimeKeysForUsersDeviceTask
-                .execute(claimParams)
+        return Try { oneTimeKeysForUsersDeviceTask.execute(claimParams) }
                 .map {
                     Timber.v("## claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $it")
                     for (userId in userIds) {

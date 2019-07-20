@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.session.room.relation
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -44,14 +43,12 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
 }
 
 internal class DefaultUpdateQuickReactionTask @Inject constructor(private val monarchy: Monarchy) : UpdateQuickReactionTask {
-    override suspend fun execute(params: UpdateQuickReactionTask.Params): Try<UpdateQuickReactionTask.Result> {
-        return Try {
-            var res: Pair<String?, List<String>?>? = null
-            monarchy.doWithRealm { realm ->
-                res = updateQuickReaction(realm, params.reaction, params.oppositeReaction, params.eventId, params.myUserId)
-            }
-            UpdateQuickReactionTask.Result(res?.first, res?.second ?: emptyList())
+    override suspend fun execute(params: UpdateQuickReactionTask.Params): UpdateQuickReactionTask.Result {
+        var res: Pair<String?, List<String>?>? = null
+        monarchy.doWithRealm { realm ->
+            res = updateQuickReaction(realm, params.reaction, params.oppositeReaction, params.eventId, params.myUserId)
         }
+        return UpdateQuickReactionTask.Result(res?.first, res?.second ?: emptyList())
     }
 
 

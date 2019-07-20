@@ -65,16 +65,18 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
         }
 
         localEchoUpdater.updateSendState(event.eventId, SendState.SENDING)
-        val result = executeRequest<SendResponse> {
-            apiCall = roomAPI.send(
-                    event.eventId,
-                    params.roomId,
-                    event.type,
-                    event.content
-            )
-        }
-        return result.fold({
-            when (it) {
+        try {
+            executeRequest<SendResponse> {
+                apiCall = roomAPI.send(
+                        event.eventId,
+                        params.roomId,
+                        event.type,
+                        event.content
+                )
+            }
+            return Result.success()
+        } catch (it: Throwable) {
+            return when (it) {
                 is Failure.NetworkConnection -> Result.retry()
                 else                         -> {
                     localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
@@ -82,7 +84,7 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
                     Result.success()
                 }
             }
-        }, { Result.success() })
+        }
     }
 
 }

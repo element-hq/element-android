@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.membership.joining
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -31,8 +30,8 @@ internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
 
 internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: RoomAPI) : JoinRoomTask {
 
-    override suspend fun execute(params: JoinRoomTask.Params): Try<Unit> {
-        return executeRequest {
+    override suspend fun execute(params: JoinRoomTask.Params) {
+        executeRequest<Unit> {
             apiCall = roomAPI.join(params.roomId, HashMap())
         }
     }

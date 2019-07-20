@@ -295,7 +295,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
             return Try.just(MXUsersDevicesMap())
         }
         val params = DownloadKeysForUsersTask.Params(filteredUsers, syncTokenStore.getLastToken())
-        return downloadKeysForUsersTask.execute(params)
+        return Try { downloadKeysForUsersTask.execute(params) }
                 .map { response ->
                     Timber.v("## doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
                     for (userId in filteredUsers) {

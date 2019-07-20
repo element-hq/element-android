@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.directory
 
-import arrow.core.Try
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.internal.network.executeRequest
@@ -34,7 +33,7 @@ internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoom
 
 internal class DefaultGetPublicRoomTask @Inject constructor(private val roomAPI: RoomAPI) : GetPublicRoomTask {
 
-    override suspend fun execute(params: GetPublicRoomTask.Params): Try<PublicRoomsResponse> {
+    override suspend fun execute(params: GetPublicRoomTask.Params): PublicRoomsResponse {
         return executeRequest {
             apiCall = roomAPI.publicRooms(params.server, params.publicRoomsParams)
         }
