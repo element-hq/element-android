@@ -26,7 +26,6 @@ import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.security.MessageDigest
 import java.security.SecureRandom
-import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -59,8 +58,7 @@ object MXEncryptedAttachments {
         // Half of the IV is random, the lower order bits are zeroed
         // such that the counter never wraps.
         // See https://github.com/matrix-org/matrix-ios-kit/blob/3dc0d8e46b4deb6669ed44f72ad79be56471354c/MatrixKit/Models/Room/MXEncryptedAttachments.m#L75
-        val initVectorBytes = ByteArray(16)
-        Arrays.fill(initVectorBytes, 0.toByte())
+        val initVectorBytes = ByteArray(16) { 0.toByte() }
 
         val ivRandomPart = ByteArray(8)
         secureRandom.nextBytes(ivRandomPart)

@@ -22,7 +22,6 @@ import im.vector.matrix.android.internal.database.model.RoomTagEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
-import java.util.*
 import javax.inject.Inject
 
 internal class RoomTagHandler @Inject constructor() {

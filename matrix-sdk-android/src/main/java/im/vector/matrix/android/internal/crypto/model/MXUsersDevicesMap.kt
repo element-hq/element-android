@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.model
 
-import java.util.*
 
 class MXUsersDevicesMap<E> {
 

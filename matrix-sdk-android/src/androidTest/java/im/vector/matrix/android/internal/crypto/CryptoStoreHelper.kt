@@ -21,7 +21,7 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
 import io.realm.RealmConfiguration
-import java.util.*
+import kotlin.random.Random
 
 internal class CryptoStoreHelper {
 
@@ -35,7 +35,7 @@ internal class CryptoStoreHelper {
     }
 
     fun createCredential() = Credentials(
-            userId = "userId_" + Random().nextInt(),
+            userId = "userId_" + Random.nextInt(),
             homeServer = "http://matrix.org",
             accessToken = "access_token",
             refreshToken = null,

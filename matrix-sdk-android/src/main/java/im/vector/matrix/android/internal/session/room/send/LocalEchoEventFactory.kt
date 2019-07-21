@@ -39,7 +39,7 @@ import im.vector.matrix.android.internal.util.StringProvider
 import im.vector.matrix.android.internal.util.tryTransactionAsync
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 /**

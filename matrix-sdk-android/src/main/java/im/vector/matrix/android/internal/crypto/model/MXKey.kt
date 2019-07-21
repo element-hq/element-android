@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.crypto.model
 
 import im.vector.matrix.android.api.util.JsonDict
 import timber.log.Timber
-import java.util.*
 
 data class MXKey(
         /**

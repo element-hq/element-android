@@ -23,8 +23,8 @@ import im.vector.matrix.android.internal.crypto.model.rest.SendToDeviceBody
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
-import java.util.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
     data class Params(
@@ -47,7 +47,7 @@ internal class DefaultSendToDeviceTask @Inject constructor(private val cryptoApi
         return executeRequest {
             apiCall = cryptoApi.sendToDevice(
                     params.eventType,
-                    params.transactionId ?: Random().nextInt(Integer.MAX_VALUE).toString(),
+                    params.transactionId ?: Random.nextInt(Integer.MAX_VALUE).toString(),
                     sendToDeviceBody
             )
         }

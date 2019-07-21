@@ -30,9 +30,8 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
     private val listeners = mutableMapOf<String, MutableList<ContentUploadStateTracker.UpdateListener>>()
 
     override fun track(key: String, updateListener: ContentUploadStateTracker.UpdateListener) {
-        val listeners = listeners[key] ?: ArrayList()
+        val listeners = listeners.getOrPut(key) { ArrayList() }
         listeners.add(updateListener)
-        this.listeners[key] = listeners
         val currentState = states[key] ?: ContentUploadStateTracker.State.Idle
         mainHandler.post { updateListener.onUpdate(currentState) }
     }

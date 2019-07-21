@@ -33,7 +33,7 @@ import im.vector.matrix.android.internal.task.toConfigurableTask
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

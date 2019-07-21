@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResu
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
 import timber.log.Timber
-import java.util.*
 
 internal object EventMapper {
 
