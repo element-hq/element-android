@@ -115,7 +115,7 @@ object MXEncryptedAttachments {
                     encryptedByteArray = outStream.toByteArray()
             )
 
-            Timber.v("Encrypt in " + (System.currentTimeMillis() - t0) + " ms")
+            Timber.v("Encrypt in ${System.currentTimeMillis() - t0} ms")
             return Try.just(result)
         } catch (oom: OutOfMemoryError) {
             Timber.e(oom, "## encryptAttachment failed")
@@ -206,13 +206,13 @@ object MXEncryptedAttachments {
             val decryptedStream = ByteArrayInputStream(outStream.toByteArray())
             outStream.close()
 
-            Timber.v("Decrypt in " + (System.currentTimeMillis() - t0) + " ms")
+            Timber.v("Decrypt in ${System.currentTimeMillis() - t0} ms")
 
             return decryptedStream
         } catch (oom: OutOfMemoryError) {
-            Timber.e(oom, "## decryptAttachment() :  failed " + oom.message)
+            Timber.e(oom, "## decryptAttachment() :  failed ${oom.message}")
         } catch (e: Exception) {
-            Timber.e(e, "## decryptAttachment() :  failed " + e.message)
+            Timber.e(e, "## decryptAttachment() :  failed ${e.message}")
         }
 
         try {
@@ -228,34 +228,20 @@ object MXEncryptedAttachments {
      * Base64 URL conversion methods
      */
 
-    private fun base64UrlToBase64(base64Url: String?): String? {
-        var result = base64Url
-        if (null != result) {
-            result = result.replace("-".toRegex(), "+")
-            result = result.replace("_".toRegex(), "/")
-        }
-
-        return result
+    private fun base64UrlToBase64(base64Url: String): String {
+        return base64Url.replace('-', '+')
+                .replace('_', '/')
     }
 
-    private fun base64ToBase64Url(base64: String?): String? {
-        var result = base64
-        if (null != result) {
-            result = result.replace("\n".toRegex(), "")
-            result = result.replace("\\+".toRegex(), "-")
-            result = result.replace("/".toRegex(), "_")
-            result = result.replace("=".toRegex(), "")
-        }
-        return result
+    private fun base64ToBase64Url(base64: String): String {
+        return base64.replace("\n".toRegex(), "")
+                .replace("\\+".toRegex(), "-")
+                .replace('/', '_')
+                .replace("=", "")
     }
 
-    private fun base64ToUnpaddedBase64(base64: String?): String? {
-        var result = base64
-        if (null != result) {
-            result = result.replace("\n".toRegex(), "")
-            result = result.replace("=".toRegex(), "")
-        }
-
-        return result
+    private fun base64ToUnpaddedBase64(base64: String): String {
+        return base64.replace("\n".toRegex(), "")
+                .replace("=", "")
     }
 }

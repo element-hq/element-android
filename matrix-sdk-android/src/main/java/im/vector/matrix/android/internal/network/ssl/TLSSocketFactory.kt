@@ -101,25 +101,16 @@ constructor(trustPinned: Array<TrustManager>, acceptedTlsVersions: List<TlsVersi
     }
 
     private fun enableTLSOnSocket(socket: Socket?): Socket? {
-        if (socket != null && socket is SSLSocket) {
-            val sslSocket = socket as SSLSocket?
+        if (socket is SSLSocket) {
+            val supportedProtocols = socket.supportedProtocols.toSet()
+            val filteredEnabledProtocols = enabledProtocols.filter { it in supportedProtocols }
 
-            val supportedProtocols = Arrays.asList(*sslSocket!!.supportedProtocols)
-            val filteredEnabledProtocols = ArrayList<String>()
-
-            for (protocol in enabledProtocols) {
-                if (supportedProtocols.contains(protocol)) {
-                    filteredEnabledProtocols.add(protocol)
-                }
-            }
-
-            if (!filteredEnabledProtocols.isEmpty()) {
+            if (filteredEnabledProtocols.isNotEmpty()) {
                 try {
-                    sslSocket.enabledProtocols = filteredEnabledProtocols.toTypedArray()
+                    socket.enabledProtocols = filteredEnabledProtocols.toTypedArray()
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
-
             }
         }
         return socket

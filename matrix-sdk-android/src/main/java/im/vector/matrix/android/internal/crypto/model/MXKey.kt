@@ -46,11 +46,7 @@ data class MXKey(
      * @return the signed data map
      */
     fun signalableJSONDictionary(): Map<String, Any> {
-        val map = HashMap<String, Any>()
-
-        map["key"] = value
-
-        return map
+        return mapOf("key" to value)
     }
 
     /**

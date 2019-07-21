@@ -165,33 +165,14 @@ internal class MXOlmDecryption(
      * @return payload, if decrypted successfully.
      */
     private fun decryptMessage(message: JsonDict, theirDeviceIdentityKey: String): String? {
-        val sessionIdsSet = olmDevice.getSessionIds(theirDeviceIdentityKey)
+        val sessionIds = olmDevice.getSessionIds(theirDeviceIdentityKey) ?: emptySet()
 
-        val sessionIds: List<String>
-
-        if (null == sessionIdsSet) {
-            sessionIds = ArrayList()
-        } else {
-            sessionIds = ArrayList(sessionIdsSet)
-        }
-
-        val messageBody = message["body"] as? String
-        var messageType: Int? = null
-
-        val typeAsVoid = message["type"]
-
-        if (null != typeAsVoid) {
-            if (typeAsVoid is Double) {
-                messageType = typeAsVoid.toInt()
-            } else if (typeAsVoid is Int) {
-                messageType = typeAsVoid
-            } else if (typeAsVoid is Long) {
-                messageType = typeAsVoid.toInt()
-            }
-        }
-
-        if (null == messageBody || null == messageType) {
-            return null
+        val messageBody = message["body"] as? String ?: return null
+        val messageType = when (val typeAsVoid = message["type"]) {
+            is Double -> typeAsVoid.toInt()
+            is Int -> typeAsVoid
+            is Long -> typeAsVoid.toInt()
+            else -> return null
         }
 
         // Try each session in turn
