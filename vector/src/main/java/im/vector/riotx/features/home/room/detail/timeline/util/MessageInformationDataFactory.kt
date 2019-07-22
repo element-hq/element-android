@@ -74,7 +74,8 @@ class MessageInformationDataFactory @Inject constructor(private val timelineDate
                         ?.map {
                             ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
                         },
-                hasBeenEdited = hasBeenEdited
+                hasBeenEdited = hasBeenEdited,
+                hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false
         )
     }
 }
