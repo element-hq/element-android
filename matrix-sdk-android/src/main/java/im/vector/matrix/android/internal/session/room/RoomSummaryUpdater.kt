@@ -62,7 +62,9 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
                roomId: String,
                membership: Membership? = null,
                roomSummary: RoomSyncSummary? = null,
-               unreadNotifications: RoomSyncUnreadNotifications? = null) {
+               unreadNotifications: RoomSyncUnreadNotifications? = null,
+               isDirect: Boolean? = null,
+               directUserId: String? = null) {
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
                                 ?: realm.createObject(roomId)
 
@@ -85,7 +87,7 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
             roomSummaryEntity.membership = membership
         }
 
-        val latestEvent = TimelineEventEntity.latestEvent(realm, roomId, includedTypes = PREVIEWABLE_TYPES)
+        val latestEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, includedTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()?.asDomain()
 
         val otherRoomMembers = RoomMembers(realm, roomId)
@@ -95,6 +97,10 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
                 .asSequence()
                 .map { it.stateKey }
 
+        if (isDirect != null) {
+            roomSummaryEntity.isDirect = isDirect
+            roomSummaryEntity.directUserId = directUserId
+        }
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
         roomSummaryEntity.topic = lastTopicEvent?.content.toModel<RoomTopicContent>()?.topic

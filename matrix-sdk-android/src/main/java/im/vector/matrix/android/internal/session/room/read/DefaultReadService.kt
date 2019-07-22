@@ -22,14 +22,11 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 
 internal class DefaultReadService @Inject constructor(private val roomId: String,
@@ -39,9 +36,7 @@ internal class DefaultReadService @Inject constructor(private val roomId: String
                                                       private val credentials: Credentials) : ReadService {
 
     override fun markAllAsRead(callback: MatrixCallback<Unit>) {
-        //TODO shouldn't it be latest synced event?
-        val latestEvent = getLatestEvent()
-        val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = latestEvent?.eventId, readReceiptEventId = latestEvent?.eventId)
+        val params = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
         setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
     }
 
@@ -55,9 +50,6 @@ internal class DefaultReadService @Inject constructor(private val roomId: String
         setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
     }
 
-    private fun getLatestEvent(): TimelineEventEntity? {
-        return monarchy.fetchCopied { TimelineEventEntity.latestEvent(it, roomId) }
-    }
 
     override fun isEventRead(eventId: String): Boolean {
         var isEventRead = false
