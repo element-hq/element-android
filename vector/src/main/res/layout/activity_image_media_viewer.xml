@@ -12,18 +12,35 @@
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp" />
 
-    <com.github.piasy.biv.view.BigImageView
-        android:id="@+id/imageMediaViewerImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:failureImageInitScaleType="center"
-        app:optimizeDisplay="true" />
 
-    <ImageView
-        android:id="@+id/encryptedImageView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageTransitionView"
+            android:transitionName="imagePreview"
+            android:scaleType="fitCenter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="visible"
+            android:visibility="gone"
+            />
+
+        <com.github.piasy.biv.view.BigImageView
+            android:id="@+id/imageMediaViewerImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:failureImageInitScaleType="center"
+            app:optimizeDisplay="true" />
+
+        <ImageView
+            android:id="@+id/encryptedImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </FrameLayout>
 
 </LinearLayout>
