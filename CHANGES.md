@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - UI for pending edits (#193)
 
 Other changes:
  -

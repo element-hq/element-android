@@ -164,8 +164,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     protected fun renderSendState(root: View, textView: TextView?) {
         root.isClickable = informationData.sendState.isSent()
-        val state = SendState.UNSENT.takeIf { informationData.hasPendingEdits }
-                ?: informationData.sendState
+        val state = if (informationData.hasPendingEdits) SendState.UNSENT else informationData.sendState
         textView?.setTextColor(colorProvider.getMessageTextColor(state))
     }
 
