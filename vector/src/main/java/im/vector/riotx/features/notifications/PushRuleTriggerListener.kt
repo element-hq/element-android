@@ -56,6 +56,10 @@ class PushRuleTriggerListener @Inject constructor(
         }
     }
 
+    override fun onRoomLeft(roomId: String) {
+        notificationDrawerManager.clearMessageEventOfRoom(roomId)
+    }
+
     override fun batchFinish() {
         notificationDrawerManager.refreshNotificationDrawer()
     }

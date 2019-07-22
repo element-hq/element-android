@@ -35,7 +35,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -536,9 +538,14 @@ class RoomDetailFragment :
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let {
-            roomToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it, roomToolbarAvatarImageView)
-            roomToolbarSubtitleView.setTextOrHide(it.topic)
+            if (it.membership.isLeft()) {
+                Timber.w("The room has been left")
+                activity?.finish()
+            } else {
+                roomToolbarTitleView.text = it.displayName
+                avatarRenderer.render(it, roomToolbarAvatarImageView)
+                roomToolbarSubtitleView.setTextOrHide(it.topic)
+            }
         }
     }
 
@@ -618,8 +625,12 @@ class RoomDetailFragment :
 
     override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {
         // TODO Use navigator
-        val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
-        startActivity(intent)
+
+        val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData, ViewCompat.getTransitionName(view))
+        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                requireActivity(), view, ViewCompat.getTransitionName(view)
+                ?: "").toBundle()
+        startActivity(intent, bundle)
     }
 
     override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {

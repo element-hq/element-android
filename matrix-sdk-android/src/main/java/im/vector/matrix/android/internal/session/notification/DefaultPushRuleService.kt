@@ -20,12 +20,10 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.Action
 import im.vector.matrix.android.api.pushrules.PushRuleService
-import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
-import im.vector.matrix.android.internal.database.model.PusherEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
@@ -122,13 +120,23 @@ internal class DefaultPushRuleService @Inject constructor(
         }
     }
 
+    fun dispatchRoomLeft(roomid: String) {
+        try {
+            listeners.forEach {
+                it.onRoomLeft(roomid)
+            }
+        } catch (e: Throwable) {
+            Timber.e(e, "Error while dispatching room left")
+        }
+    }
+
     fun dispatchFinish() {
         try {
             listeners.forEach {
                 it.batchFinish()
             }
         } catch (e: Throwable) {
-
+            Timber.e(e, "Error while dispatching finish")
         }
     }
 }
