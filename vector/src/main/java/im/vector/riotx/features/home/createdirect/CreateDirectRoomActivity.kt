@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -30,6 +31,7 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.extensions.observeEvent
@@ -49,7 +51,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     private val viewModel: CreateDirectRoomViewModel by viewModel()
     lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
-
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
@@ -86,7 +88,11 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     }
 
     private fun renderCreationFailure(error: Throwable) {
-
+        hideWaitingView()
+        AlertDialog.Builder(this)
+                .setMessage(errorFormatter.toHumanReadable(error))
+                .setPositiveButton(R.string.ok) { dialog, id -> dialog.cancel() }
+                .show()
     }
 
     private fun renderCreationSuccess(roomId: String?) {
