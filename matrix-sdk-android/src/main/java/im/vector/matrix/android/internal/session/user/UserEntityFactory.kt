@@ -31,12 +31,12 @@ internal object UserEntityFactory {
         }
         val roomMember = event.content.toModel<RoomMember>() ?: return null
         // We only use JOIN and INVITED memberships to create User data
-        if (roomMember.membership != Membership.JOIN || roomMember.membership != Membership.INVITE) {
+        if (roomMember.membership != Membership.JOIN && roomMember.membership != Membership.INVITE) {
             return null
         }
         return UserEntity(event.stateKey ?: "",
-                          roomMember.displayName ?: "",
-                          roomMember.avatarUrl ?: ""
+                roomMember.displayName ?: "",
+                roomMember.avatarUrl ?: ""
         )
     }
 
