@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.home.HomeRoomListObservableStore
@@ -142,7 +143,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
+                _invitationAnswerErrorLiveData.postLiveEvent(failure)
 
                 setState {
                     copy(
@@ -178,7 +179,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
+                _invitationAnswerErrorLiveData.postLiveEvent(failure)
 
                 setState {
                     copy(

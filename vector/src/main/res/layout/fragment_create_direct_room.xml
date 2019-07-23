@@ -71,16 +71,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/createDirectRoomToolbar">
 
-            <androidx.appcompat.widget.SearchView
+            <EditText
                 android:id="@+id/createDirectRoomFilter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text|textMultiLine"
-                app:closeIcon="@drawable/ic_x_green"
-                app:iconifiedByDefault="false"
-                app:queryBackground="@android:color/transparent"
-                app:queryHint="@string/room_directory_search_hint"
-                app:searchIcon="@drawable/ic_filter" />
+                android:maxHeight="80dp"
+                android:importantForAutofill="no"
+                android:hint="@string/room_directory_search_hint"/>
 
         </androidx.cardview.widget.CardView>
 

@@ -19,21 +19,24 @@
 package im.vector.riotx.features.home.createdirect
 
 import android.os.Bundle
+import android.text.Spannable
 import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.activityViewModel
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
+import com.airbnb.mvrx.withState
+import com.jakewharton.rxbinding3.widget.beforeTextChangeEvents
+import com.jakewharton.rxbinding3.widget.textChanges
+import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.hideKeyboard
+import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
+import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.html.PillImageSpan
 import kotlinx.android.synthetic.main.fragment_create_direct_room.*
-import kotlinx.android.synthetic.main.fragment_public_rooms.*
 import javax.inject.Inject
 
 class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomController.Callback {
@@ -45,6 +48,7 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
 
     @Inject lateinit var directRoomController: CreateDirectRoomController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
     private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
 
     override fun injectWith(injector: ScreenComponent) {
@@ -59,6 +63,10 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
         setupFilterView()
         setupAddByMatrixIdView()
         setupCloseView()
+        viewModel.selectUserEvent.observeEvent(this) {
+            updateFilterViewWith(it)
+
+        }
         viewModel.subscribe(this) { renderState(it) }
     }
 
@@ -90,16 +98,43 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
 
     private fun setupFilterView() {
         createDirectRoomFilter
-                .queryTextChanges()
-                .subscribe {
-                    val action = if (it.isNullOrEmpty()) {
+                .textChanges()
+                .subscribe { text ->
+                    val userMatches = MatrixPatterns.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.findAll(text)
+                    val lastUserMatch = userMatches.lastOrNull()
+                    val filterValue = if (lastUserMatch == null) {
+                        text
+                    } else {
+                        text.substring(startIndex = lastUserMatch.range.endInclusive + 1)
+                    }.trim()
+
+                    val action = if (filterValue.isBlank()) {
                         CreateDirectRoomActions.ClearFilterKnownUsers
                     } else {
-                        CreateDirectRoomActions.FilterKnownUsers(it.toString())
+                        CreateDirectRoomActions.FilterKnownUsers(filterValue.toString())
                     }
                     viewModel.handle(action)
                 }
                 .disposeOnDestroy()
+
+        createDirectRoomFilter
+                .beforeTextChangeEvents()
+                .subscribe { event ->
+                    if (event.after == 0) {
+                        val sub = event.text.substring(0, event.start)
+                        val startIndexOfUser = sub.lastIndexOf(" ") + 1
+                        val user = sub.substring(startIndexOfUser)
+                        val selectedUser = withState(viewModel) { state ->
+                            state.selectedUsers.find { it.userId == user }
+                        }
+                        if (selectedUser != null) {
+                            viewModel.handle(CreateDirectRoomActions.RemoveSelectedUser(selectedUser))
+                        }
+                    }
+                }
+                .disposeOnDestroy()
+
+        createDirectRoomFilter.requestFocus()
     }
 
     private fun setupCloseView() {
@@ -109,11 +144,37 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
     }
 
     private fun renderState(state: CreateDirectRoomViewState) {
-
         directRoomController.setData(state)
     }
 
+    private fun updateFilterViewWith(data: SelectUserAction) = withState(viewModel) { state ->
+        if (state.selectedUsers.isEmpty()) {
+            createDirectRoomFilter.text = null
+        } else {
+            val editable = createDirectRoomFilter.editableText
+            val user = data.user
+            if (data.isAdded) {
+                val startIndex = editable.lastIndexOf(" ") + 1
+                val endIndex = editable.length
+                editable.replace(startIndex, endIndex, "${user.userId} ")
+                val span = PillImageSpan(GlideApp.with(this), avatarRenderer, requireContext(), user.userId, user)
+                span.bind(createDirectRoomFilter)
+                editable.setSpan(span, startIndex, startIndex + user.userId.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                val startIndex = editable.indexOf(user.userId)
+                if (startIndex != -1) {
+                    var endIndex = editable.indexOf(" ", startIndex) + 1
+                    if (endIndex == 0) {
+                        endIndex = editable.length
+                    }
+                    editable.replace(startIndex, endIndex, "")
+                }
+            }
+        }
+    }
+
     override fun onItemClick(user: User) {
+        view?.hideKeyboard()
         viewModel.handle(CreateDirectRoomActions.SelectUser(user))
     }
 }

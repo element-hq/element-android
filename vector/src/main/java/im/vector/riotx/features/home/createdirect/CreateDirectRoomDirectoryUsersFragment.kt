@@ -25,6 +25,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_create_direct_room_directory_users.*
 import javax.inject.Inject
@@ -82,6 +83,7 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), CreateDirec
     }
 
     override fun onItemClick(user: User) {
+        view?.hideKeyboard()
         viewModel.handle(CreateDirectRoomActions.SelectUser(user))
         navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.Previous)
     }

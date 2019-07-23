@@ -28,9 +28,7 @@ import com.amulyakhare.textdrawable.TextDrawable
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.getColorFromUserId
 
 @EpoxyModelClass(layout = R.layout.item_create_direct_room_user)
 abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserItem.Holder>() {

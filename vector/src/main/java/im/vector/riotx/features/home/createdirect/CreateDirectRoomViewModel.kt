@@ -18,10 +18,10 @@
 
 package im.vector.riotx.features.home.createdirect
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -29,13 +29,20 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import java.util.concurrent.TimeUnit
 
 private typealias KnowUsersFilter = String
 private typealias DirectoryUsersSearch = String
+
+data class SelectUserAction(
+        val user: User,
+        val isAdded: Boolean
+)
 
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
@@ -49,6 +56,10 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     private val knownUsersFilter = BehaviorRelay.createDefault<Option<KnowUsersFilter>>(Option.empty())
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
+
+    private val _selectUserEvent = MutableLiveData<LiveEvent<SelectUserAction>>()
+    val selectUserEvent: LiveData<LiveEvent<SelectUserAction>>
+        get() = _selectUserEvent
 
     companion object : MvRxViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
 
@@ -78,7 +89,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     private fun createRoomAndInviteSelectedUsers() = withState { currentState ->
         val isDirect = currentState.selectedUsers.size == 1
         val roomParams = CreateRoomParams().apply {
-            invitedUserIds = ArrayList(currentState.selectedUsers.map { user -> user.userId })
+            invitedUserIds = ArrayList(currentState.selectedUsers.map { it.userId })
             if (isDirect) {
                 setDirectMessage()
             }
@@ -92,33 +103,42 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun handleRemoveSelectedUser(action: CreateDirectRoomActions.RemoveSelectedUser) = withState {
-        val selectedUsers = it.selectedUsers.minusElement(action.user)
+        val selectedUsers = it.selectedUsers.minus(action.user)
         setState { copy(selectedUsers = selectedUsers) }
+        _selectUserEvent.postLiveEvent(SelectUserAction(action.user, false))
     }
 
     private fun handleSelectUser(action: CreateDirectRoomActions.SelectUser) = withState {
-        val selectedUsers = if (it.selectedUsers.contains(action.user)) {
-            it.selectedUsers.minusElement(action.user)
+        //Reset the filter asap
+        knownUsersFilter.accept(Option.empty())
+        directoryUsersSearch.accept("")
+
+        val isAddOperation: Boolean
+        val selectedUsers: Set<User>
+        if (it.selectedUsers.contains(action.user)) {
+            selectedUsers = it.selectedUsers.minus(action.user)
+            isAddOperation = false
         } else {
-            it.selectedUsers.plus(action.user)
+            selectedUsers = it.selectedUsers.plus(action.user)
+            isAddOperation = true
         }
         setState { copy(selectedUsers = selectedUsers) }
+        _selectUserEvent.postLiveEvent(SelectUserAction(action.user, isAddOperation))
     }
 
     private fun observeDirectoryUsers() {
         directoryUsersSearch
-                .throttleLast(300, TimeUnit.MILLISECONDS)
+                .throttleLast(500, TimeUnit.MILLISECONDS)
                 .switchMapSingle { search ->
                     session.rx()
                             .searchUsersDirectory(search, 50, emptySet())
                             .map { users ->
                                 users.sortedBy { it.displayName }
                             }
+                            .toAsync { copy(directoryUsers = it) }
                 }
-                .execute { async ->
-                    copy(directoryUsers = async)
-                }
-
+                .subscribe()
+                .disposeOnClear()
     }
 
     private fun observeKnownUsers() {
@@ -133,7 +153,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                             } else {
                                 users.filter {
                                     it.displayName?.contains(filterValue, ignoreCase = true) ?: false
-                                    || it.userId.contains(filterValue, ignoreCase = true)
+                                            || it.userId.contains(filterValue, ignoreCase = true)
                                 }
                             }
                         }

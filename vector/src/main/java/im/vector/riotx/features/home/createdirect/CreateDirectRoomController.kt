@@ -19,13 +19,9 @@
 package im.vector.riotx.features.home.createdirect
 
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
 import im.vector.riotx.core.epoxy.errorWithRetryItem
@@ -60,7 +56,7 @@ class CreateDirectRoomController @Inject constructor(private val avatarRenderer:
         }
         when (asyncUsers) {
             is Incomplete -> renderLoading()
-            is Success    -> renderUsers(asyncUsers(), currentState.selectedUsers)
+            is Success    -> renderUsers(asyncUsers(), currentState.selectedUsers.map { it.userId })
             is Fail       -> renderFailure(asyncUsers.error)
         }
     }
@@ -79,10 +75,10 @@ class CreateDirectRoomController @Inject constructor(private val avatarRenderer:
         }
     }
 
-    private fun renderUsers(users: List<User>, selectedUsers: Set<User>) {
+    private fun renderUsers(users: List<User>, selectedUsers: List<String>) {
         var lastFirstLetter: String? = null
         users.forEach { user ->
-            val isSelected = selectedUsers.contains(user)
+            val isSelected = selectedUsers.contains(user.userId)
             val currentFirstLetter = user.displayName.firstLetterOfDisplayName()
             val showLetter = currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
             lastFirstLetter = currentFirstLetter
