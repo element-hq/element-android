@@ -40,6 +40,7 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
     @EpoxyAttribute var selected: Boolean = false
 
+
     override fun bind(holder: Holder) {
         holder.view.setOnClickListener(clickListener)
         // If name is empty, use userId as name and force it being centered
@@ -51,7 +52,11 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
             holder.nameView.text = name
             holder.userIdView.text = userId
         }
-        if (selected) {
+        renderSelection(holder, selected)
+    }
+
+    private fun renderSelection(holder: Holder, isSelected: Boolean) {
+        if (isSelected) {
             holder.avatarCheckedImageView.visibility = View.VISIBLE
             val backgroundColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
             val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)

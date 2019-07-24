@@ -19,23 +19,25 @@
 package im.vector.riotx.features.home.createdirect
 
 import android.os.Bundle
-import android.text.Spannable
+import android.view.Menu
 import android.view.MenuItem
+import android.widget.ScrollView
+import androidx.core.view.size
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.beforeTextChangeEvents
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.jakewharton.rxbinding3.widget.textChanges
-import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
-import im.vector.riotx.core.glide.GlideApp
+import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.DimensionUtils
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.html.PillImageSpan
 import kotlinx.android.synthetic.main.fragment_create_direct_room.*
 import javax.inject.Inject
 
@@ -64,10 +66,21 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
         setupAddByMatrixIdView()
         setupCloseView()
         viewModel.selectUserEvent.observeEvent(this) {
-            updateFilterViewWith(it)
-
+            updateChipsView(it)
+        }
+        viewModel.selectSubscribe(this, CreateDirectRoomViewState::selectedUsers) {
+            renderSelectedUsers(it)
         }
         viewModel.subscribe(this) { renderState(it) }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        withState(viewModel) {
+            val createMenuItem = menu.findItem(R.id.action_create_direct_room)
+            val showMenuItem = it.selectedUsers.isNotEmpty()
+            createMenuItem.setVisible(showMenuItem)
+        }
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -100,14 +113,7 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
         createDirectRoomFilter
                 .textChanges()
                 .subscribe { text ->
-                    val userMatches = MatrixPatterns.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.findAll(text)
-                    val lastUserMatch = userMatches.lastOrNull()
-                    val filterValue = if (lastUserMatch == null) {
-                        text
-                    } else {
-                        text.substring(startIndex = lastUserMatch.range.endInclusive + 1)
-                    }.trim()
-
+                    val filterValue = text.trim()
                     val action = if (filterValue.isBlank()) {
                         CreateDirectRoomActions.ClearFilterKnownUsers
                     } else {
@@ -117,23 +123,7 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
                 }
                 .disposeOnDestroy()
 
-        createDirectRoomFilter
-                .beforeTextChangeEvents()
-                .subscribe { event ->
-                    if (event.after == 0) {
-                        val sub = event.text.substring(0, event.start)
-                        val startIndexOfUser = sub.lastIndexOf(" ") + 1
-                        val user = sub.substring(startIndexOfUser)
-                        val selectedUser = withState(viewModel) { state ->
-                            state.selectedUsers.find { it.userId == user }
-                        }
-                        if (selectedUser != null) {
-                            viewModel.handle(CreateDirectRoomActions.RemoveSelectedUser(selectedUser))
-                        }
-                    }
-                }
-                .disposeOnDestroy()
-
+        createDirectRoomFilter.setupAsSearch()
         createDirectRoomFilter.requestFocus()
     }
 
@@ -147,29 +137,37 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
         directRoomController.setData(state)
     }
 
-    private fun updateFilterViewWith(data: SelectUserAction) = withState(viewModel) { state ->
-        if (state.selectedUsers.isEmpty()) {
-            createDirectRoomFilter.text = null
+    private fun updateChipsView(data: SelectUserAction) {
+        if (data.isAdded) {
+            addChipToGroup(data.user, chipGroup)
         } else {
-            val editable = createDirectRoomFilter.editableText
-            val user = data.user
-            if (data.isAdded) {
-                val startIndex = editable.lastIndexOf(" ") + 1
-                val endIndex = editable.length
-                editable.replace(startIndex, endIndex, "${user.userId} ")
-                val span = PillImageSpan(GlideApp.with(this), avatarRenderer, requireContext(), user.userId, user)
-                span.bind(createDirectRoomFilter)
-                editable.setSpan(span, startIndex, startIndex + user.userId.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            } else {
-                val startIndex = editable.indexOf(user.userId)
-                if (startIndex != -1) {
-                    var endIndex = editable.indexOf(" ", startIndex) + 1
-                    if (endIndex == 0) {
-                        endIndex = editable.length
-                    }
-                    editable.replace(startIndex, endIndex, "")
-                }
+            if (chipGroup.size > data.index) {
+                chipGroup.removeViewAt(data.index)
             }
+        }
+    }
+
+    private fun renderSelectedUsers(selectedUsers: Set<User>) {
+        vectorBaseActivity.invalidateOptionsMenu()
+        if (selectedUsers.isNotEmpty() && chipGroup.size == 0) {
+            selectedUsers.forEach { addChipToGroup(it, chipGroup) }
+        }
+    }
+
+    private fun addChipToGroup(user: User, chipGroup: ChipGroup) {
+        val chip = Chip(requireContext())
+        chip.setChipBackgroundColorResource(android.R.color.transparent)
+        chip.chipStrokeWidth = DimensionUtils.dpToPx(1, requireContext()).toFloat()
+        chip.text = if (user.displayName.isNullOrBlank()) user.userId else user.displayName
+        chip.isClickable = true
+        chip.isCheckable = false
+        chip.isCloseIconVisible = true
+        chipGroup.addView(chip)
+        chip.setOnCloseIconClickListener {
+            viewModel.handle(CreateDirectRoomActions.RemoveSelectedUser(user))
+        }
+        chipGroupContainer.post {
+            chipGroupContainer.fullScroll(ScrollView.FOCUS_DOWN)
         }
     }
 

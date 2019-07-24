@@ -24,11 +24,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
@@ -72,14 +72,16 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         if (isFirstCreation()) {
             addFragment(CreateDirectRoomFragment(), R.id.container)
         }
-        viewModel.subscribe(this) { renderState(it) }
+        viewModel.selectSubscribe(this, CreateDirectRoomViewState::createAndInviteState) {
+            renderCreateAndInviteState(it)
+        }
     }
 
-    private fun renderState(state: CreateDirectRoomViewState) {
-        when (state.createAndInviteState) {
+    private fun renderCreateAndInviteState(state: Async<String>) {
+        when (state) {
             is Loading -> renderCreationLoading()
-            is Success -> renderCreationSuccess(state.createAndInviteState())
-            is Fail    -> renderCreationFailure(state.createAndInviteState.error)
+            is Success -> renderCreationSuccess(state())
+            is Fail    -> renderCreationFailure(state.error)
         }
     }
 

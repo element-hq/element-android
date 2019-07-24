@@ -41,7 +41,8 @@ private typealias DirectoryUsersSearch = String
 
 data class SelectUserAction(
         val user: User,
-        val isAdded: Boolean
+        val isAdded: Boolean,
+        val index: Int
 )
 
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
@@ -102,28 +103,31 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                 .disposeOnClear()
     }
 
-    private fun handleRemoveSelectedUser(action: CreateDirectRoomActions.RemoveSelectedUser) = withState {
-        val selectedUsers = it.selectedUsers.minus(action.user)
+    private fun handleRemoveSelectedUser(action: CreateDirectRoomActions.RemoveSelectedUser) = withState { state ->
+        val index = state.selectedUsers.indexOfFirst { it.userId == action.user.userId }
+        val selectedUsers = state.selectedUsers.minus(action.user)
         setState { copy(selectedUsers = selectedUsers) }
-        _selectUserEvent.postLiveEvent(SelectUserAction(action.user, false))
+        _selectUserEvent.postLiveEvent(SelectUserAction(action.user, false, index))
     }
 
-    private fun handleSelectUser(action: CreateDirectRoomActions.SelectUser) = withState {
+    private fun handleSelectUser(action: CreateDirectRoomActions.SelectUser) = withState { state ->
         //Reset the filter asap
-        knownUsersFilter.accept(Option.empty())
         directoryUsersSearch.accept("")
-
         val isAddOperation: Boolean
         val selectedUsers: Set<User>
-        if (it.selectedUsers.contains(action.user)) {
-            selectedUsers = it.selectedUsers.minus(action.user)
-            isAddOperation = false
-        } else {
-            selectedUsers = it.selectedUsers.plus(action.user)
+        val indexOfUser = state.selectedUsers.indexOfFirst { it.userId == action.user.userId }
+        val changeIndex: Int
+        if (indexOfUser == -1) {
+            changeIndex = state.selectedUsers.size
+            selectedUsers = state.selectedUsers.plus(action.user)
             isAddOperation = true
+        } else {
+            changeIndex = indexOfUser
+            selectedUsers = state.selectedUsers.minus(action.user)
+            isAddOperation = false
         }
         setState { copy(selectedUsers = selectedUsers) }
-        _selectUserEvent.postLiveEvent(SelectUserAction(action.user, isAddOperation))
+        _selectUserEvent.postLiveEvent(SelectUserAction(action.user, isAddOperation, changeIndex))
     }
 
     private fun observeDirectoryUsers() {
@@ -153,7 +157,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                             } else {
                                 users.filter {
                                     it.displayName?.contains(filterValue, ignoreCase = true) ?: false
-                                            || it.userId.contains(filterValue, ignoreCase = true)
+                                    || it.userId.contains(filterValue, ignoreCase = true)
                                 }
                             }
                         }

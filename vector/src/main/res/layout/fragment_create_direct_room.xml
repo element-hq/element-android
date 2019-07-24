@@ -58,28 +58,52 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/createDirectRoomFilterContainer"
+        <im.vector.riotx.core.platform.MaxHeightScrollView
+            android:id="@+id/chipGroupContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            app:cardElevation="4dp"
-            app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createDirectRoomToolbar">
+            app:layout_constraintTop_toBottomOf="@+id/createDirectRoomToolbar"
+            app:maxHeight="80dp">
 
-            <EditText
-                android:id="@+id/createDirectRoomFilter"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="80dp"
-                android:importantForAutofill="no"
-                android:hint="@string/room_directory_search_hint"/>
+                app:lineSpacing="4dp" />
 
-        </androidx.cardview.widget.CardView>
+        </im.vector.riotx.core.platform.MaxHeightScrollView>
+
+        <EditText
+            android:id="@+id/createDirectRoomFilter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/layout_horizontal_margin"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
+            android:background="@null"
+            android:hint="@string/room_directory_search_hint"
+            android:importantForAutofill="no"
+            android:maxHeight="80dp"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroupContainer" />
+
+        <View
+            android:id="@+id/createDirectRoomFilterDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/vctr_list_divider_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/createDirectRoomFilter" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addByMatrixId"
@@ -97,7 +121,7 @@
             app:iconPadding="13dp"
             app:iconTint="@color/riotx_accent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/createDirectRoomFilterContainer" />
+            app:layout_constraintTop_toBottomOf="@id/createDirectRoomFilterDivider" />
 
         <com.airbnb.epoxy.EpoxyRecyclerView
             android:id="@+id/recyclerView"
