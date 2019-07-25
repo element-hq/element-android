@@ -23,13 +23,16 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.annotation.DrawableRes
 import im.vector.riotx.R
 
-fun EditText.setupAsSearch() {
+fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_filter,
+                           @DrawableRes clearIconRes: Int = R.drawable.ic_x_green) {
+
     addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(editable: Editable?) {
-            val clearIcon = if (editable?.isNotEmpty() == true) R.drawable.ic_clear_white else 0
-            setCompoundDrawablesWithIntrinsicBounds(0, 0, clearIcon, 0)
+            val clearIcon = if (editable?.isNotEmpty() == true) clearIconRes else 0
+            setCompoundDrawablesWithIntrinsicBounds(searchIconRes, 0, clearIcon, 0)
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit

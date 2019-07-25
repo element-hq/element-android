@@ -44,7 +44,7 @@
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@string/direct_chats_header"
+                    android:text="@string/fab_menu_create_chat"
                     android:textColor="?riotx_text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -59,7 +59,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <im.vector.riotx.core.platform.MaxHeightScrollView
-            android:id="@+id/chipGroupContainer"
+            android:id="@+id/chipGroupScrollView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -68,13 +68,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/createDirectRoomToolbar"
-            app:maxHeight="80dp">
+            app:maxHeight="64dp">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:lineSpacing="4dp" />
+                app:lineSpacing="2dp" />
 
         </im.vector.riotx.core.platform.MaxHeightScrollView>
 
@@ -85,21 +85,23 @@
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:background="@null"
-            android:hint="@string/room_directory_search_hint"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:hint="@string/direct_room_filter_hint"
             android:importantForAutofill="no"
             android:maxHeight="80dp"
-            android:padding="8dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipGroupContainer" />
+            app:layout_constraintTop_toBottomOf="@+id/chipGroupScrollView" />
 
         <View
             android:id="@+id/createDirectRoomFilterDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="8dp"
             android:background="?attr/vctr_list_divider_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -71,7 +71,6 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
         viewModel.selectSubscribe(this, CreateDirectRoomViewState::selectedUsers) {
             renderSelectedUsers(it)
         }
-        viewModel.subscribe(this) { renderState(it) }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -133,8 +132,8 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
         }
     }
 
-    private fun renderState(state: CreateDirectRoomViewState) {
-        directRoomController.setData(state)
+    override fun invalidate() = withState(viewModel) {
+        directRoomController.setData(it)
     }
 
     private fun updateChipsView(data: SelectUserAction) {
@@ -166,8 +165,8 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
         chip.setOnCloseIconClickListener {
             viewModel.handle(CreateDirectRoomActions.RemoveSelectedUser(user))
         }
-        chipGroupContainer.post {
-            chipGroupContainer.fullScroll(ScrollView.FOCUS_DOWN)
+        chipGroupScrollView.post {
+            chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
         }
     }
 

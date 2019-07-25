@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.user.model.SearchUserTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.task.toConfigurableTask
 import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 

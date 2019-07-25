@@ -18,6 +18,7 @@
 
 package im.vector.riotx.features.home.createdirect
 
+import arrow.core.Option
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
@@ -27,7 +28,9 @@ data class CreateDirectRoomViewState(
         val knownUsers: Async<List<User>> = Uninitialized,
         val directoryUsers: Async<List<User>> = Uninitialized,
         val selectedUsers: Set<User> = emptySet(),
-        val createAndInviteState: Async<String> = Uninitialized
+        val createAndInviteState: Async<String> = Uninitialized,
+        val searchTerm: String = "",
+        val filterKnownUsersValue: Option<String> = Option.empty()
 ) : MvRxState {
 
     enum class DisplayMode {

@@ -86,7 +86,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     }
 
     private fun renderCreationLoading() {
-        updateWaitingView(WaitingViewData(getString(R.string.room_recents_create_room)))
+        updateWaitingView(WaitingViewData(getString(R.string.creating_direct_room)))
     }
 
     private fun renderCreationFailure(error: Throwable) {

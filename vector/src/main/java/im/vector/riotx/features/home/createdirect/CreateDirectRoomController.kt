@@ -18,19 +18,25 @@
 
 package im.vector.riotx.features.home.createdirect
 
+import arrow.core.Option
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.*
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
+import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.NoResultItem_
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
+import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class CreateDirectRoomController @Inject constructor(private val avatarRenderer: AvatarRenderer,
+class CreateDirectRoomController @Inject constructor(private val session: Session,
+                                                     private val avatarRenderer: AvatarRenderer,
+                                                     private val stringProvider: StringProvider,
                                                      private val errorFormatter: ErrorFormatter) : EpoxyController() {
 
     private var state: CreateDirectRoomViewState? = null
@@ -49,15 +55,17 @@ class CreateDirectRoomController @Inject constructor(private val avatarRenderer:
 
     override fun buildModels() {
         val currentState = state ?: return
+        val hasSearch = currentState.searchTerm.isNotBlank()
         val asyncUsers = if (displayMode == CreateDirectRoomViewState.DisplayMode.DIRECTORY_USERS) {
             currentState.directoryUsers
         } else {
             currentState.knownUsers
         }
         when (asyncUsers) {
-            is Incomplete -> renderLoading()
-            is Success    -> renderUsers(asyncUsers(), currentState.selectedUsers.map { it.userId })
-            is Fail       -> renderFailure(asyncUsers.error)
+            is Uninitialized -> renderEmptyState(false)
+            is Loading       -> renderLoading()
+            is Success       -> renderSuccess(asyncUsers(), currentState.selectedUsers.map { it.userId }, hasSearch)
+            is Fail          -> renderFailure(asyncUsers.error)
         }
     }
 
@@ -75,9 +83,22 @@ class CreateDirectRoomController @Inject constructor(private val avatarRenderer:
         }
     }
 
+    private fun renderSuccess(users: List<User>,
+                              selectedUsers: List<String>,
+                              hasSearch: Boolean) {
+        if (users.isEmpty()) {
+            renderEmptyState(hasSearch)
+        } else {
+            renderUsers(users, selectedUsers)
+        }
+    }
+
     private fun renderUsers(users: List<User>, selectedUsers: List<String>) {
         var lastFirstLetter: String? = null
-        users.forEach { user ->
+        for (user in users) {
+            if (user.userId == session.myUserId) {
+                continue
+            }
             val isSelected = selectedUsers.contains(user.userId)
             val currentFirstLetter = user.displayName.firstLetterOfDisplayName()
             val showLetter = currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
@@ -99,6 +120,22 @@ class CreateDirectRoomController @Inject constructor(private val avatarRenderer:
                     callback?.onItemClick(user)
                 }
             }
+        }
+    }
+
+    private fun renderEmptyState(hasSearch: Boolean) {
+        val noResultRes = if (displayMode == CreateDirectRoomViewState.DisplayMode.DIRECTORY_USERS) {
+            if (hasSearch) {
+                R.string.no_result_placeholder
+            } else {
+                R.string.direct_room_start_search
+            }
+        } else {
+            R.string.direct_room_no_known_users
+        }
+        noResultItem {
+            id("noResult")
+            text(stringProvider.getString(noResultRes))
         }
     }
 

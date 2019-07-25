@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
@@ -50,7 +51,6 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), CreateDirec
         setupRecyclerView()
         setupSearchByMatrixIdView()
         setupCloseView()
-        viewModel.subscribe(this) { renderState(it) }
     }
 
     private fun setupRecyclerView() {
@@ -61,7 +61,7 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), CreateDirec
     }
 
     private fun setupSearchByMatrixIdView() {
-        createDirectRoomSearchById.setupAsSearch()
+        createDirectRoomSearchById.setupAsSearch(searchIconRes = 0)
         createDirectRoomSearchById
                 .textChanges()
                 .subscribe {
@@ -80,8 +80,8 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), CreateDirec
         }
     }
 
-    private fun renderState(state: CreateDirectRoomViewState) {
-        directRoomController.setData(state)
+    override fun invalidate() = withState(viewModel) {
+        directRoomController.setData(it)
     }
 
     override fun onItemClick(user: User) {

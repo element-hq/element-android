@@ -28,11 +28,14 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import java.util.concurrent.TimeUnit
 
@@ -132,14 +135,20 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     private fun observeDirectoryUsers() {
         directoryUsersSearch
-                .throttleLast(500, TimeUnit.MILLISECONDS)
+                .debounce(300, TimeUnit.MILLISECONDS)
                 .switchMapSingle { search ->
-                    session.rx()
-                            .searchUsersDirectory(search, 50, emptySet())
-                            .map { users ->
-                                users.sortedBy { it.displayName }
-                            }
-                            .toAsync { copy(directoryUsers = it) }
+                    val stream = if (search.isBlank()) {
+                        Single.just(emptyList())
+                    } else {
+                        session.rx()
+                                .searchUsersDirectory(search, 50, emptySet())
+                                .map { users ->
+                                    users.sortedBy { it.displayName.firstLetterOfDisplayName() }
+                                }
+                    }
+                    stream.toAsync {
+                        copy(directoryUsers = it, searchTerm = search)
+                    }
                 }
                 .subscribe()
                 .disposeOnClear()
@@ -157,7 +166,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                             } else {
                                 users.filter {
                                     it.displayName?.contains(filterValue, ignoreCase = true) ?: false
-                                    || it.userId.contains(filterValue, ignoreCase = true)
+                                            || it.userId.contains(filterValue, ignoreCase = true)
                                 }
                             }
                         }
