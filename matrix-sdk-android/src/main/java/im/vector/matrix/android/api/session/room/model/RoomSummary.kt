@@ -34,5 +34,6 @@ data class RoomSummary(
         val notificationCount: Int = 0,
         val highlightCount: Int = 0,
         val tags: List<RoomTag> = emptyList(),
-        val membership: Membership = Membership.NONE
+        val membership: Membership = Membership.NONE,
+        val isVersioned: Boolean = false
 )

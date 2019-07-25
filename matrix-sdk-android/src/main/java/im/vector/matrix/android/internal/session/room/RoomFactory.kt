@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
@@ -40,11 +41,14 @@ import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineSe
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.task.TaskExecutor
+import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 internal class RoomFactory @Inject constructor(private val context: Context,
                                                private val credentials: Credentials,
                                                private val monarchy: Monarchy,
+                                               @SessionDatabase
+                                               private val realmConfiguration: RealmConfiguration,
                                                private val eventFactory: LocalEchoEventFactory,
                                                private val roomSummaryMapper: RoomSummaryMapper,
                                                private val taskExecutor: TaskExecutor,
@@ -63,7 +67,7 @@ internal class RoomFactory @Inject constructor(private val context: Context,
     fun create(roomId: String): Room {
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, contextOfEventTask, cryptoService, paginationTask)
         val sendService = DefaultSendService(context, credentials, roomId, eventFactory, cryptoService, monarchy)
-        val stateService = DefaultStateService(roomId, taskExecutor, sendStateTask)
+        val stateService = DefaultStateService(roomId, realmConfiguration, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
         val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, credentials)
         val relationService = DefaultRelationService(context,

@@ -35,7 +35,8 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                                       var otherMemberIds: RealmList<String> = RealmList(),
                                       var notificationCount: Int = 0,
                                       var highlightCount: Int = 0,
-                                      var tags: RealmList<RoomTagEntity> = RealmList()
+                                      var tags: RealmList<RoomTagEntity> = RealmList(),
+                                      var isVersioned: Boolean = false
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name

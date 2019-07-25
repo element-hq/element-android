@@ -37,6 +37,7 @@ import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
+import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventLiveObserver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
@@ -127,6 +128,11 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindEventRelationsAggregationUpdater(groupSummaryUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindRoomCreateEventLiveObserver(roomTombstoneEventLiveObserver: RoomTombstoneEventLiveObserver): LiveEntityObserver
+
 
     @Binds
     abstract fun bindInitialSyncProgressService(initialSyncProgressService: DefaultInitialSyncProgressService): InitialSyncProgressService

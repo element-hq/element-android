@@ -146,8 +146,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                     roomEntity,
                     roomSync.timeline.events,
                     roomSync.timeline.prevToken,
-                    roomSync.timeline.limited,
-                    0
+                    roomSync.timeline.limited
             )
             roomEntity.addOrUpdate(chunkEntity)
         }
@@ -195,14 +194,17 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                      roomEntity: RoomEntity,
                                      eventList: List<Event>,
                                      prevToken: String? = null,
-                                     isLimited: Boolean = true,
-                                     stateIndexOffset: Int = 0): ChunkEntity {
+                                     isLimited: Boolean = true): ChunkEntity {
 
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
+        var stateIndexOffset = 0
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
             realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
+        }
+        if (isLimited && lastChunk != null) {
+            stateIndexOffset = lastChunk.lastStateIndex(PaginationDirection.FORWARDS)
         }
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true

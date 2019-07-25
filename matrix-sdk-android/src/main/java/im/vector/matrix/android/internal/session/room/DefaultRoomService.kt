@@ -54,7 +54,11 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
 
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { realm -> RoomSummaryEntity.where(realm).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
+                { realm ->
+                    RoomSummaryEntity.where(realm)
+                            .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
+                            .notEqualTo(RoomSummaryEntityFields.IS_VERSIONED, true)
+                },
                 { roomSummaryMapper.map(it) }
         )
     }

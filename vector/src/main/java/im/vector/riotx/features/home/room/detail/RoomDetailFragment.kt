@@ -244,7 +244,8 @@ class RoomDetailFragment :
         composerLayout.collapse()
     }
 
-    private fun enterSpecialMode(event: TimelineEvent, @DrawableRes iconRes: Int, useText: Boolean) {
+    private fun enterSpecialMode(event: TimelineEvent, @DrawableRes
+    iconRes: Int, useText: Boolean) {
         commandAutocompletePolicy.enabled = false
         //switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
@@ -533,7 +534,13 @@ class RoomDetailFragment :
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
-        composerLayout.setRoomEncrypted(state.isEncrypted)
+        if (state.tombstoneContent == null) {
+            composerLayout.visibility = View.VISIBLE
+            composerLayout.setRoomEncrypted(state.isEncrypted)
+        } else {
+            composerLayout.visibility = View.GONE
+            showSnackWithMessage("TOMBSTONED", duration = Snackbar.LENGTH_INDEFINITE)
+        }
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {

@@ -30,12 +30,14 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
+import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
@@ -94,7 +96,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     init {
         observeRoomSummary()
         observeEventDisplayedActions()
-        observeInvitationState()
+        observeSummaryState()
         cancelableBag += room.loadRoomMembersIfNeeded()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
@@ -547,7 +549,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
     }
 
-    private fun observeInvitationState() {
+    private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
                 summary.latestEvent?.root?.senderId?.let { senderId ->
@@ -555,6 +557,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }
                 }
+            }
+            if (summary.isVersioned) {
+                room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)
+                        ?.getClearContent()
+                        ?.toModel<RoomTombstoneContent>()?.also {
+                            setState { copy(tombstoneContent = it) }
+                        }
             }
         }
     }
