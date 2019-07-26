@@ -18,7 +18,6 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
-import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
@@ -37,21 +36,16 @@ class RoomCreateItemFactory @Inject constructor(private val colorProvider: Color
 
     fun create(event: TimelineEvent, callback: TimelineEventController.Callback?): RoomCreateItem? {
         val createRoomContent = event.root.getClearContent().toModel<RoomCreateContent>()
-                ?: return null
+                                ?: return null
         val predecessor = createRoomContent.predecessor ?: return null
         val roomLink = PermalinkFactory.createPermalink(predecessor.roomId) ?: return null
-        val urlSpan = MatrixPermalinkSpan(roomLink, object : MatrixPermalinkSpan.Callback {
-            override fun onUrlClicked(url: String) {
-                callback?.onUrlClicked(roomLink)
-            }
-        })
-        val textColorInt = colorProvider.getColor(R.color.riot_primary_text_color_light)
         val text = span {
-            text = stringProvider.getString(R.string.room_tombstone_continuation_description)
-            append("\n")
-            append(
-                    stringProvider.getString(R.string.room_tombstone_predecessor_link)
-            )
+            +stringProvider.getString(R.string.room_tombstone_continuation_description)
+            +"\n"
+            span(stringProvider.getString(R.string.room_tombstone_predecessor_link)) {
+                textDecorationLine = "underline"
+                onClick = { callback?.onRoomCreateLinkClicked(roomLink) }
+            }
         }
         return RoomCreateItem_()
                 .text(text)

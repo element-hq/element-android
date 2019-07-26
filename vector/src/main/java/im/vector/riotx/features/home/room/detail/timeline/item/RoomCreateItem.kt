@@ -21,10 +21,10 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_create)
 abstract class RoomCreateItem : VectorEpoxyModel<RoomCreateItem.Holder>() {
@@ -32,6 +32,7 @@ abstract class RoomCreateItem : VectorEpoxyModel<RoomCreateItem.Holder>() {
     @EpoxyAttribute lateinit var text: CharSequence
 
     override fun bind(holder: Holder) {
+        holder.description.movementMethod = BetterLinkMovementMethod.getInstance()
         holder.description.text = text
     }
 
