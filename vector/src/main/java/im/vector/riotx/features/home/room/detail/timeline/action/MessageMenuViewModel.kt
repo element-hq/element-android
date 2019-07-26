@@ -20,6 +20,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
@@ -75,7 +76,9 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         const val ACTION_REPLY = "reply"
         const val ACTION_SHARE = "share"
         const val ACTION_RESEND = "resend"
+        const val ACTION_REMOVE = "remove"
         const val ACTION_DELETE = "delete"
+        const val ACTION_CANCEL = "cancel"
         const val VIEW_SOURCE = "VIEW_SOURCE"
         const val VIEW_DECRYPTED_SOURCE = "VIEW_DECRYPTED_SOURCE"
         const val ACTION_COPY_PERMALINK = "ACTION_COPY_PERMALINK"
@@ -110,56 +113,57 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 ?: event.root.getClearContent().toModel()
         val type = messageContent?.type
 
-        val actions = if (!event.sendState.isSent()) {
-            //Resend and Delete
-            listOf<SimpleAction>(
-//                                SimpleAction(ACTION_RESEND, R.string.resend, R.drawable.ic_send, event.root.eventId),
-//                                //TODO delete icon
-//                                SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, event.root.eventId)
-            )
+        return if (event.root.sendState.hasFailed()) {
+            arrayListOf<SimpleAction>().apply {
+                if (canRetry(event)) {
+                    this.add(SimpleAction(ACTION_RESEND, R.string.global_retry, R.drawable.ic_refresh_cw, eventId))
+                }
+                this.add(SimpleAction(ACTION_REMOVE, R.string.remove, R.drawable.ic_trash, eventId))
+            }
+        } else if (event.root.sendState.isSending()) {
+            //TODO is uploading attachment?
+            arrayListOf<SimpleAction>().apply {
+                if (canCancel(event)) {
+                    this.add(SimpleAction(ACTION_CANCEL, R.string.cancel, R.drawable.ic_close_round, eventId))
+                }
+            }
         } else {
             arrayListOf<SimpleAction>().apply {
-
-                if (event.sendState == SendState.SENDING) {
-                    //TODO add cancel?
-                    return@apply
-                }
-                //TODO is downloading attachement?
 
                 if (!event.root.isRedacted()) {
 
                     if (canReply(event, messageContent)) {
-                        this.add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, eventId))
+                        add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, eventId))
                     }
 
                     if (canEdit(event, session.myUserId)) {
-                        this.add(SimpleAction(ACTION_EDIT, R.string.edit, R.drawable.ic_edit, eventId))
+                        add(SimpleAction(ACTION_EDIT, R.string.edit, R.drawable.ic_edit, eventId))
                     }
 
                     if (canRedact(event, session.myUserId)) {
-                        this.add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, eventId))
+                        add(SimpleAction(ACTION_DELETE, R.string.delete, R.drawable.ic_delete, eventId))
                     }
 
                     if (canCopy(type)) {
                         //TODO copy images? html? see ClipBoard
-                        this.add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent!!.body))
+                        add(SimpleAction(ACTION_COPY, R.string.copy, R.drawable.ic_copy, messageContent!!.body))
                     }
 
                     if (event.canReact()) {
-                        this.add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, eventId))
+                        add(SimpleAction(ACTION_ADD_REACTION, R.string.message_add_reaction, R.drawable.ic_add_reaction, eventId))
                     }
 
                     if (canQuote(event, messageContent)) {
-                        this.add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, eventId))
+                        add(SimpleAction(ACTION_QUOTE, R.string.quote, R.drawable.ic_quote, eventId))
                     }
 
                     if (canViewReactions(event)) {
-                        this.add(SimpleAction(ACTION_VIEW_REACTIONS, R.string.message_view_reaction, R.drawable.ic_view_reactions, informationData))
+                        add(SimpleAction(ACTION_VIEW_REACTIONS, R.string.message_view_reaction, R.drawable.ic_view_reactions, informationData))
                     }
 
                     if (canShare(type)) {
                         if (messageContent is MessageImageContent) {
-                            this.add(
+                            add(
                                     SimpleAction(ACTION_SHARE,
                                             R.string.share, R.drawable.ic_share,
                                             session.contentUrlResolver().resolveFullSize(messageContent.url))
@@ -169,7 +173,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                     }
 
 
-                    if (event.sendState == SendState.SENT) {
+                    if (event.root.sendState == SendState.SENT) {
 
                         //TODO Can be redacted
 
@@ -177,23 +181,25 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                     }
                 }
 
-                this.add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, event.root.toContentStringWithIndent()))
+                add(SimpleAction(VIEW_SOURCE, R.string.view_source, R.drawable.ic_view_source, event.root.toContentStringWithIndent()))
                 if (event.isEncrypted()) {
                     val decryptedContent = event.root.toClearContentStringWithIndent()
                             ?: stringProvider.getString(R.string.encryption_information_decryption_error)
-                    this.add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, decryptedContent))
+                    add(SimpleAction(VIEW_DECRYPTED_SOURCE, R.string.view_decrypted_source, R.drawable.ic_view_source, decryptedContent))
                 }
-                this.add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, event.root.eventId))
+                add(SimpleAction(ACTION_COPY_PERMALINK, R.string.permalink, R.drawable.ic_permalink, event.root.eventId))
 
                 if (session.myUserId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
                     //not sent by me
-                    this.add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, event.root.eventId))
+                    add(SimpleAction(ACTION_FLAG, R.string.report_content, R.drawable.ic_flag, event.root.eventId))
                 }
             }
         }
-        return actions
     }
 
+    private fun canCancel(event: TimelineEvent): Boolean {
+        return false
+    }
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?): Boolean {
         //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
@@ -231,6 +237,11 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         //TODO if user is admin or moderator
         return event.root.senderId == myUserId
     }
+
+    private fun canRetry(event: TimelineEvent): Boolean {
+        return event.root.sendState.hasFailed() && event.root.isTextMessage()
+    }
+
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
         //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment

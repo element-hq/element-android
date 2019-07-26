@@ -51,9 +51,9 @@ internal object TimelineSendEventWorkCommon {
         }
     }
 
-    fun postWork(context: Context, roomId: String, workRequest: OneTimeWorkRequest) {
+    fun postWork(context: Context, roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND) {
         WorkManager.getInstance(context)
-                .beginUniqueWork(buildWorkIdentifier(roomId), ExistingWorkPolicy.APPEND, workRequest)
+                .beginUniqueWork(buildWorkIdentifier(roomId), policy, workRequest)
                 .enqueue()
     }
 
@@ -67,5 +67,9 @@ internal object TimelineSendEventWorkCommon {
 
     private fun buildWorkIdentifier(roomId: String): String {
         return "${roomId}_$SEND_WORK"
+    }
+
+    fun cancelAllWorks(context: Context, roomId: String) {
+        WorkManager.getInstance(context).cancelUniqueWork(buildWorkIdentifier(roomId))
     }
 }

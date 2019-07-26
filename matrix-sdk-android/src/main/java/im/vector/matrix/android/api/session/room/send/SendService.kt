@@ -19,6 +19,7 @@ package im.vector.matrix.android.api.session.room.send
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 
 
@@ -64,5 +65,32 @@ interface SendService {
      * @param reason Optional reason string
      */
     fun redactEvent(event: Event, reason: String?): Cancelable
+
+
+    /**
+     * Schedule this message to be resent
+     * @param localEcho the unsent local echo
+     */
+    fun resendTextMessage(localEcho: TimelineEvent): Cancelable?
+
+    /**
+     * Schedule this message to be resent
+     * @param localEcho the unsent local echo
+     */
+    fun resendMediaMessage(localEcho: TimelineEvent): Cancelable?
+
+
+    /**
+     * Remove this failed message from the timeline
+     * @param localEcho the unsent local echo
+     */
+    fun deleteFailedEcho(localEcho: TimelineEvent)
+
+    fun clearSendingQueue()
+
+    /**
+     * Resend all failed messages one by one (and keep order)
+     */
+    fun resendAllFailedMessages()
 
 }

@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findWithSenderMembershipEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.Realm
@@ -63,7 +64,7 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
         val redactionEventEntity = EventEntity.where(realm, eventId = redactionEvent.eventId
                 ?: "").findFirst()
                 ?: return
-        val isLocalEcho = redactionEventEntity.sendState == SendState.UNSENT
+        val isLocalEcho = LocalEchoEventFactory.isLocalEchoId(redactionEvent.eventId ?: "")
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
         val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()

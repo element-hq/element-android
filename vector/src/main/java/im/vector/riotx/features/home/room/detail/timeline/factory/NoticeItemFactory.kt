@@ -37,7 +37,7 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
         val informationData = MessageInformationData(
                 eventId = event.root.eventId ?: "?",
                 senderId = event.root.senderId ?: "",
-                sendState = event.sendState,
+                sendState = event.root.sendState,
                 avatarUrl = event.senderAvatar(),
                 memberName = event.senderName(),
                 showInformation = false

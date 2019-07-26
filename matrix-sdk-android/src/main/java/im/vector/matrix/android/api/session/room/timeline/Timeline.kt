@@ -56,6 +56,9 @@ interface Timeline {
      */
     fun paginate(direction: Direction, count: Int)
 
+    fun pendingEventCount() : Int
+
+    fun failedToDeliverEventCount() : Int
 
     interface Listener {
         /**

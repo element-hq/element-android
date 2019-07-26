@@ -20,6 +20,9 @@ import android.text.TextUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
@@ -81,6 +84,7 @@ data class Event(
 
     var mxDecryptionResult: OlmDecryptionResult? = null
     var mCryptoError: MXCryptoError.ErrorType? = null
+    var sendState: SendState = SendState.UNKNOWN
 
 
     /**
@@ -272,6 +276,7 @@ data class Event(
         if (redacts != other.redacts) return false
         if (mxDecryptionResult != other.mxDecryptionResult) return false
         if (mCryptoError != other.mCryptoError) return false
+        if (sendState != other.sendState) return false
 
         return true
     }
@@ -289,6 +294,39 @@ data class Event(
         result = 31 * result + (redacts?.hashCode() ?: 0)
         result = 31 * result + (mxDecryptionResult?.hashCode() ?: 0)
         result = 31 * result + (mCryptoError?.hashCode() ?: 0)
+        result = 31 * result + sendState.hashCode()
         return result
     }
+
+}
+
+
+fun Event.isTextMessage(): Boolean {
+    if (this.getClearType() == EventType.MESSAGE) {
+        return getClearContent()?.toModel<MessageContent>()?.let {
+            when (it.type) {
+                MessageType.MSGTYPE_TEXT,
+                MessageType.MSGTYPE_EMOTE,
+                MessageType.MSGTYPE_NOTICE -> {
+                    true
+                }
+                else                       -> false
+            }
+        } ?: false
+    }
+    return false
+}
+
+fun Event.isImageMessage(): Boolean {
+    if (this.getClearType() == EventType.MESSAGE) {
+        return getClearContent()?.toModel<MessageContent>()?.let {
+            when (it.type) {
+                MessageType.MSGTYPE_IMAGE -> {
+                    true
+                }
+                else                      -> false
+            }
+        } ?: false
+    }
+    return false
 }
