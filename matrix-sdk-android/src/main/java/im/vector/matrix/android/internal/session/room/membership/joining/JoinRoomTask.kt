@@ -25,7 +25,8 @@ import javax.inject.Inject
 
 internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     data class Params(
-            val roomId: String
+            val roomId: String,
+            val viaServers: List<String> = emptyList()
     )
 }
 
@@ -33,7 +34,7 @@ internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: Room
 
     override suspend fun execute(params: JoinRoomTask.Params): Try<Unit> {
         return executeRequest {
-            apiCall = roomAPI.join(params.roomId, HashMap())
+            apiCall = roomAPI.join(params.roomId, params.viaServers, HashMap())
         }
     }
 

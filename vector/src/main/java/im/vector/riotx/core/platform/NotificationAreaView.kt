@@ -29,17 +29,16 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.text.bold
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.matrix.android.api.failure.MatrixError
-import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ResourceLimitErrorFormatter
 import im.vector.riotx.features.themes.ThemeUtils
-import me.gujun.android.span.addSpan
 import me.gujun.android.span.span
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import timber.log.Timber
@@ -108,19 +107,14 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     private fun renderTombstone(state: State.Tombstone) {
-        val roomTombstoneContent = state.tombstoneContent
-        val roomLink = PermalinkFactory.createPermalink(roomTombstoneContent.replacementRoom)
-                       ?: return
-
         visibility = View.VISIBLE
         imageView.setImageResource(R.drawable.error)
-        val textColorInt = ThemeUtils.getColor(context, R.attr.vctr_message_text_color)
         val message = span {
             +resources.getString(R.string.room_tombstone_versioned_description)
             +"\n"
             span(resources.getString(R.string.room_tombstone_continuation_link)) {
                 textDecorationLine = "underline"
-                onClick = { delegate?.onUrlClicked(roomLink) }
+                onClick = { delegate?.onTombstoneEventClicked(state.tombstoneEvent) }
             }
         }
         messageView.movementMethod = BetterLinkMovementMethod.getInstance()
@@ -274,7 +268,7 @@ class NotificationAreaView @JvmOverloads constructor(
         object ConnectionError : State()
 
         // The room is dead
-        data class Tombstone(val tombstoneContent: RoomTombstoneContent) : State()
+        data class Tombstone(val tombstoneEvent: Event) : State()
 
         // Somebody is typing
         data class Typing(val message: String) : State()
@@ -293,7 +287,7 @@ class NotificationAreaView @JvmOverloads constructor(
      * An interface to delegate some actions to another object
      */
     interface Delegate {
-        fun onUrlClicked(url: String)
+        fun onTombstoneEventClicked(tombstoneEvent: Event)
         fun resendUnsentEvents()
         fun deleteUnsentEvents()
         fun closeScreen()

@@ -62,7 +62,7 @@ internal class RoomSummaryMapper @Inject constructor(
                 notificationCount = roomSummaryEntity.notificationCount,
                 tags = tags,
                 membership = roomSummaryEntity.membership,
-                isVersioned = roomSummaryEntity.isVersioned
+                versioningState = roomSummaryEntity.versioningState
         )
     }
 }

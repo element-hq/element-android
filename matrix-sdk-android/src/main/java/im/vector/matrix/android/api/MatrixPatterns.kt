@@ -123,9 +123,9 @@ object MatrixPatterns {
      */
     fun isEventId(str: String?): Boolean {
         return str != null
-                && (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER
-                || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3
-                || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4)
+               && (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER
+                   || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3
+                   || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4)
     }
 
     /**
@@ -136,5 +136,24 @@ object MatrixPatterns {
      */
     fun isGroupId(str: String?): Boolean {
         return str != null && str matches PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
+    }
+
+    /**
+     * Extract server name from a matrix id
+     *
+     * @param matrixId
+     * @return null if not found or if matrixId is null
+     */
+    fun extractServerNameFromId(matrixId: String?): String? {
+        if (matrixId == null) {
+            return null
+        }
+
+        val index = matrixId.lastIndexOf(":")
+
+        return if (index == -1) {
+            null
+        } else matrixId.substring(index + 1)
+
     }
 }

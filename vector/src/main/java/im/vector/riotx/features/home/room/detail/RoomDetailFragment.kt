@@ -45,6 +45,12 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyVisibilityTracker
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.DeliveryMode
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.github.piasy.biv.BigImageViewer
@@ -58,6 +64,7 @@ import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -73,6 +80,8 @@ import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.observeK
+import im.vector.riotx.core.extensions.observeNotNull
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
@@ -108,7 +117,9 @@ import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
+import kotlinx.android.synthetic.main.item_loading.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
@@ -222,6 +233,10 @@ class RoomDetailFragment :
             scrollOnHighlightedEventCallback.scheduleScrollTo(it)
         }
 
+        roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
+            renderTombstoneEventHandling(it)
+        }
+
         roomDetailViewModel.downloadedFileEvent.observeEvent(this) { downloadFileState ->
             if (downloadFileState.throwable != null) {
                 requireActivity().toast(errorFormatter.toHumanReadable(downloadFileState.throwable))
@@ -244,13 +259,8 @@ class RoomDetailFragment :
     private fun setupNotificationView() {
         notificationAreaView.delegate = object : NotificationAreaView.Delegate {
 
-            override fun onUrlClicked(url: String) {
-                permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
-                    override fun navToRoom(roomId: String, eventId: String?): Boolean {
-                        requireActivity().finish()
-                        return false
-                    }
-                })
+            override fun onTombstoneEventClicked(tombstoneEvent: Event) {
+                roomDetailViewModel.process(RoomDetailActions.HandleTombstoneEvent(tombstoneEvent))
             }
 
             override fun resendUnsentEvents() {
@@ -360,7 +370,7 @@ class RoomDetailFragment :
 
         recyclerView.addOnScrollListener(
                 EndlessRecyclerViewScrollListener(layoutManager, RoomDetailViewModel.PAGINATION_COUNT) { direction ->
-                    roomDetailViewModel.process(RoomDetailActions.LoadMore(direction))
+                    roomDetailViewModel.process(RoomDetailActions.LoadMoreTimelineEvents(direction))
                 })
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
@@ -552,7 +562,6 @@ class RoomDetailFragment :
         if (summary?.membership == Membership.JOIN) {
             timelineEventController.setTimeline(state.timeline, state.eventId)
             inviteView.visibility = View.GONE
-
             val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
             avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
@@ -566,14 +575,13 @@ class RoomDetailFragment :
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
-
-        if (state.tombstoneContent == null) {
+        if (state.tombstoneEvent == null) {
             composerLayout.visibility = View.VISIBLE
             composerLayout.setRoomEncrypted(state.isEncrypted)
             notificationAreaView.render(NotificationAreaView.State.Hidden)
         } else {
             composerLayout.visibility = View.GONE
-            notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneContent))
+            notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
         }
     }
 
@@ -593,6 +601,26 @@ class RoomDetailFragment :
     private fun renderTextComposerState(state: TextComposerViewState) {
         autocompleteUserPresenter.render(state.asyncUsers)
     }
+
+    private fun renderTombstoneEventHandling(async: Async<String>) {
+        when (async) {
+            is Loading -> {
+                // TODO Better handling progress
+                vectorBaseActivity.showWaitingView()
+                vectorBaseActivity.waiting_view_status_text.visibility = View.VISIBLE
+                vectorBaseActivity.waiting_view_status_text.text = getString(R.string.join)
+            }
+            is Success -> {
+                navigator.openRoom(vectorBaseActivity, async())
+                vectorBaseActivity.finish()
+            }
+            is Fail    -> {
+                vectorBaseActivity.hideWaitingView()
+                vectorBaseActivity.toast(errorFormatter.toHumanReadable(async.error))
+            }
+        }
+    }
+
 
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
@@ -627,7 +655,7 @@ class RoomDetailFragment :
                 .show()
     }
 
-    // TimelineEventController.Callback ************************************************************
+// TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String): Boolean {
         return permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
@@ -760,7 +788,7 @@ class RoomDetailFragment :
         })
     }
 
-    // AutocompleteUserPresenter.Callback
+// AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
@@ -862,13 +890,13 @@ class RoomDetailFragment :
         }
     }
 
-    //utils
+//utils
     /**
      * Insert an user displayname  in the message editor.
      *
      * @param text the text to insert.
      */
-    //TODO legacy, refactor
+//TODO legacy, refactor
     private fun insertUserDisplayNameInTextEditor(text: String?) {
         //TODO move logic outside of fragment
         if (null != text) {
@@ -919,7 +947,7 @@ class RoomDetailFragment :
         snack.show()
     }
 
-    // VectorInviteView.Callback
+// VectorInviteView.Callback
 
     override fun onAcceptInvite() {
         notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)

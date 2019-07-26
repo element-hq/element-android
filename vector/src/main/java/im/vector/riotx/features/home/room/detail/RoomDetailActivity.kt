@@ -24,6 +24,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 
 class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
 
@@ -33,6 +34,7 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        waitingView = waiting_view
         if (isFirstCreation()) {
             val roomDetailArgs: RoomDetailArgs = intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
                     ?: return

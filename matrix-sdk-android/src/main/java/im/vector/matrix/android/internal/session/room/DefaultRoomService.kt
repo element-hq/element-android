@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomEntity
@@ -29,6 +30,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
+import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchManaged
@@ -37,6 +39,7 @@ import javax.inject.Inject
 internal class DefaultRoomService @Inject constructor(private val monarchy: Monarchy,
                                                       private val roomSummaryMapper: RoomSummaryMapper,
                                                       private val createRoomTask: CreateRoomTask,
+                                                      private val joinRoomTask: JoinRoomTask,
                                                       private val roomFactory: RoomFactory,
                                                       private val taskExecutor: TaskExecutor) : RoomService {
 
@@ -57,9 +60,16 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                 { realm ->
                     RoomSummaryEntity.where(realm)
                             .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
-                            .notEqualTo(RoomSummaryEntityFields.IS_VERSIONED, true)
+                            .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
                 },
                 { roomSummaryMapper.map(it) }
         )
+    }
+
+    override fun joinRoom(roomId: String, viaServers: List<String>, callback: MatrixCallback<Unit>) {
+        joinRoomTask
+                .configureWith(JoinRoomTask.Params(roomId, viaServers))
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
     }
 }

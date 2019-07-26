@@ -22,6 +22,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -64,8 +65,10 @@ internal class RoomTombstoneEventLiveObserver @Inject constructor(@SessionDataba
                 if (createRoomContent?.replacementRoom == null) continue
 
                 val predecessorRoomSummary = RoomSummaryEntity.where(realm, event.roomId).findFirst()
-                        ?: RoomSummaryEntity(event.roomId)
-                predecessorRoomSummary.isVersioned = true
+                                             ?: RoomSummaryEntity(event.roomId)
+                if (predecessorRoomSummary.versioningState == VersioningState.NONE) {
+                    predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_NOT_JOINED
+                }
                 realm.insertOrUpdate(predecessorRoomSummary)
 
             }

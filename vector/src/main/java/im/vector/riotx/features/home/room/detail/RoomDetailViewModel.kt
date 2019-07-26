@@ -20,7 +20,11 @@ import android.net.Uri
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import arrow.core.success
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
@@ -28,6 +32,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -49,7 +54,11 @@ import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
+import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
@@ -107,7 +116,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.SendMessage            -> handleSendMessage(action)
             is RoomDetailActions.SendMedia              -> handleSendMedia(action)
             is RoomDetailActions.EventDisplayed         -> handleEventDisplayed(action)
-            is RoomDetailActions.LoadMore               -> handleLoadMore(action)
+            is RoomDetailActions.LoadMoreTimelineEvents -> handleLoadMore(action)
             is RoomDetailActions.SendReaction           -> handleSendReaction(action)
             is RoomDetailActions.AcceptInvite           -> handleAcceptInvite()
             is RoomDetailActions.RejectInvite           -> handleRejectInvite()
@@ -119,8 +128,40 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.EnterReplyMode         -> handleReplyAction(action)
             is RoomDetailActions.DownloadFile           -> handleDownloadFile(action)
             is RoomDetailActions.NavigateToEvent        -> handleNavigateToEvent(action)
+            is RoomDetailActions.HandleTombstoneEvent   -> handleTombstoneEvent(action)
             else                                        -> Timber.e("Unhandled Action: $action")
         }
+    }
+
+    private fun handleTombstoneEvent(action: RoomDetailActions.HandleTombstoneEvent) {
+        val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
+                               ?: return
+
+        val roomId = tombstoneContent.replacementRoom
+        // TODO replace with rx flux
+        if (session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN) {
+            setState { copy(tombstoneEventHandling = Success(roomId)) }
+        } else {
+            val viaServer = MatrixPatterns.extractServerNameFromId(action.event.senderId).let {
+                if (it.isNullOrBlank()) {
+                    emptyList()
+                } else {
+                    listOf(it)
+                }
+            }
+            setState { copy(tombstoneEventHandling = Loading()) }
+            session.joinRoom(roomId, viaServer, object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    setState { copy(tombstoneEventHandling = Success(roomId)) }
+
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    setState { copy(tombstoneEventHandling = Fail(failure)) }
+                }
+            })
+        }
+
     }
 
     private fun enterEditMode(event: TimelineEvent) {
@@ -142,7 +183,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val _nonBlockingPopAlert = MutableLiveData<LiveEvent<Pair<Int, List<Any>>>>()
     val nonBlockingPopAlert: LiveData<LiveEvent<Pair<Int, List<Any>>>>
         get() = _nonBlockingPopAlert
-
 
     private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
     val sendMessageResultLiveData: LiveData<LiveEvent<SendMessageResult>>
@@ -232,7 +272,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
                     //is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                                    ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
                     if (inReplyTo != null) {
                         //TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
@@ -241,12 +281,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         val messageContent: MessageContent? =
                                 state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                    ?: "", messageContent?.type
-                                    ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                                                 ?: "", messageContent?.type
+                                                        ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
@@ -261,7 +301,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                            ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)
@@ -401,7 +441,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleLoadMore(action: RoomDetailActions.LoadMore) {
+    private fun handleLoadMore(action: RoomDetailActions.LoadMoreTimelineEvents) {
         timeline.paginate(action.direction, PAGINATION_COUNT)
     }
 
@@ -410,7 +450,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleAcceptInvite() {
-        room.join(object : MatrixCallback<Unit> {})
+        room.join(callback = object : MatrixCallback<Unit> {})
     }
 
     private fun handleEditAction(action: RoomDetailActions.EnterEditMode) {
@@ -558,12 +598,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     setState { copy(asyncInviter = Success(it)) }
                 }
             }
-            if (summary.isVersioned) {
-                room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)
-                        ?.getClearContent()
-                        ?.toModel<RoomTombstoneContent>()?.also {
-                            setState { copy(tombstoneContent = it) }
-                        }
+            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
+                setState { copy(tombstoneEvent = it) }
             }
         }
     }
