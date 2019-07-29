@@ -18,14 +18,12 @@
 
 package im.vector.riotx.features.home.createdirect
 
-import arrow.core.Option
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
 import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.NoResultItem_
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.epoxy.noResultItem
@@ -55,7 +53,8 @@ class CreateDirectRoomController @Inject constructor(private val session: Sessio
 
     override fun buildModels() {
         val currentState = state ?: return
-        val hasSearch = currentState.searchTerm.isNotBlank()
+        val hasSearch = currentState.directorySearchTerm.isNotBlank()
+        val isFiltering = currentState.filterKnownUsersValue.nonEmpty()
         val asyncUsers = if (displayMode == CreateDirectRoomViewState.DisplayMode.DIRECTORY_USERS) {
             currentState.directoryUsers
         } else {
@@ -64,7 +63,7 @@ class CreateDirectRoomController @Inject constructor(private val session: Sessio
         when (asyncUsers) {
             is Uninitialized -> renderEmptyState(false)
             is Loading       -> renderLoading()
-            is Success       -> renderSuccess(asyncUsers(), currentState.selectedUsers.map { it.userId }, hasSearch)
+            is Success       -> renderSuccess(asyncUsers(), currentState.selectedUsers.map { it.userId }, hasSearch, isFiltering)
             is Fail          -> renderFailure(asyncUsers.error)
         }
     }
@@ -85,15 +84,16 @@ class CreateDirectRoomController @Inject constructor(private val session: Sessio
 
     private fun renderSuccess(users: List<User>,
                               selectedUsers: List<String>,
-                              hasSearch: Boolean) {
+                              hasSearch: Boolean,
+                              isFiltering: Boolean) {
         if (users.isEmpty()) {
             renderEmptyState(hasSearch)
         } else {
-            renderUsers(users, selectedUsers)
+            renderUsers(users, selectedUsers, isFiltering)
         }
     }
 
-    private fun renderUsers(users: List<User>, selectedUsers: List<String>) {
+    private fun renderUsers(users: List<User>, selectedUsers: List<String>, isFiltering: Boolean) {
         var lastFirstLetter: String? = null
         for (user in users) {
             if (user.userId == session.myUserId) {
@@ -101,7 +101,7 @@ class CreateDirectRoomController @Inject constructor(private val session: Sessio
             }
             val isSelected = selectedUsers.contains(user.userId)
             val currentFirstLetter = user.displayName.firstLetterOfDisplayName()
-            val showLetter = currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
+            val showLetter = !isFiltering && currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
             lastFirstLetter = currentFirstLetter
 
             CreateDirectRoomLetterHeaderItem_()

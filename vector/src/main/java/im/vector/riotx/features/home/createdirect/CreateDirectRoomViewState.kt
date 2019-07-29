@@ -29,7 +29,7 @@ data class CreateDirectRoomViewState(
         val directoryUsers: Async<List<User>> = Uninitialized,
         val selectedUsers: Set<User> = emptySet(),
         val createAndInviteState: Async<String> = Uninitialized,
-        val searchTerm: String = "",
+        val directorySearchTerm: String = "",
         val filterKnownUsersValue: Option<String> = Option.empty()
 ) : MvRxState {
 

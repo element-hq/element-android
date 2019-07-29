@@ -35,7 +35,6 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import java.util.concurrent.TimeUnit
 
@@ -147,7 +146,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                 }
                     }
                     stream.toAsync {
-                        copy(directoryUsers = it, searchTerm = search)
+                        copy(directoryUsers = it, directorySearchTerm = search)
                     }
                 }
                 .subscribe()
@@ -166,12 +165,15 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                             } else {
                                 users.filter {
                                     it.displayName?.contains(filterValue, ignoreCase = true) ?: false
-                                            || it.userId.contains(filterValue, ignoreCase = true)
+                                    || it.userId.contains(filterValue, ignoreCase = true)
                                 }
                             }
                         }
                 ).execute { async ->
-                    copy(knownUsers = async)
+                    copy(
+                            knownUsers = async,
+                            filterKnownUsersValue = knownUsersFilter.value ?: Option.empty()
+                    )
                 }
     }
 
