@@ -78,13 +78,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
     // If we get some direct chat invites, we synchronize the user account data including those.
     private fun synchronizeWithServerIfNeeded(realm: Realm, invites: Map<String, InvitedRoomSync>?) {
         if (invites.isNullOrEmpty()) return
-
         val directChats = directChatsHelper.getLocalUserAccount()
-        val directChatInvites = HashMap<String, MutableList<String>>().apply {
-            directChats.forEach { (inviterId, roomIds) ->
-                put(inviterId, ArrayList(roomIds))
-            }
-        }
         var hasUpdate = false
         invites.forEach { (roomId, _) ->
             val myUserStateEvent = RoomMembers(realm, roomId).getStateEvent(credentials.userId)
@@ -92,19 +86,21 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
             val myUserRoomMember: RoomMember? = myUserStateEvent?.let { it.asDomain().content?.toModel() }
             val isDirect = myUserRoomMember?.isDirect
             if (inviterId != null && inviterId != credentials.userId && isDirect == true) {
-                directChatInvites.getOrPut(inviterId, { arrayListOf() }).apply {
-                    if (contains(roomId)) {
-                        Timber.v("Direct chats already include room $roomId with user $inviterId")
-                    } else {
-                        this.add(roomId)
-                        hasUpdate = true
-                    }
-                }
+                directChats
+                        .getOrPut(inviterId, { arrayListOf() })
+                        .apply {
+                            if (contains(roomId)) {
+                                Timber.v("Direct chats already include room $roomId with user $inviterId")
+                            } else {
+                                add(roomId)
+                                hasUpdate = true
+                            }
+                        }
             }
         }
         if (hasUpdate) {
             val updateUserAccountParams = UpdateUserAccountDataTask.DirectChatParams(
-                    directMessages = directChatInvites
+                    directMessages = directChats
             )
             updateUserAccountDataTask.configureWith(updateUserAccountParams).executeBy(taskExecutor)
         }
