@@ -15,6 +15,7 @@ Bugfix:
  - Edited message: link confusion when (edited) appears in body (#398)
  - Close detail room screen when the room is left with another client (#256)
  - Clear notification for a room left on another client
+ - Fix messages with empty `in_reply_to` not rendering (#447)
 
 Translations:
  -
