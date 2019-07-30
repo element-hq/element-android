@@ -34,6 +34,7 @@ import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAcco
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.tryTransactionSync
 import io.realm.RealmConfiguration
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal interface CreateRoomTask : Task<CreateRoomParams, String>
@@ -56,8 +57,10 @@ internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: Ro
                 realm.where(RoomEntity::class.java)
                         .equalTo(RoomEntityFields.ROOM_ID, roomId)
             }
-            rql.await()
-            Try.just(roomId)
+            Try {
+                rql.await(timeout = 20L, timeUnit = TimeUnit.SECONDS)
+                roomId
+            }
         }.flatMap { roomId ->
             if (params.isDirect()) {
                 handleDirectChatCreation(params, roomId)

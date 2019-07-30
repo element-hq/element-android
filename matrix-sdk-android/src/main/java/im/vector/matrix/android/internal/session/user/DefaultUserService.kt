@@ -18,6 +18,9 @@ package im.vector.matrix.android.internal.session.user
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.user.UserService
@@ -37,6 +40,24 @@ import javax.inject.Inject
 internal class DefaultUserService @Inject constructor(private val monarchy: Monarchy,
                                                       private val searchUserTask: SearchUserTask,
                                                       private val taskExecutor: TaskExecutor) : UserService {
+
+    private val realmDataSourceFactory: Monarchy.RealmDataSourceFactory<UserEntity> by lazy {
+        monarchy.createDataSourceFactory { realm ->
+            realm.where(UserEntity::class.java)
+                    .isNotEmpty(UserEntityFields.USER_ID)
+                    .sort(UserEntityFields.DISPLAY_NAME)
+        }
+    }
+
+    private val domainDataSourceFactory: DataSource.Factory<Int, User> by lazy {
+        realmDataSourceFactory.map {
+            it.asDomain()
+        }
+    }
+
+    private val livePagedListBuilder: LivePagedListBuilder<Int, User> by lazy {
+        LivePagedListBuilder(domainDataSourceFactory, PagedList.Config.Builder().setPageSize(100).setEnablePlaceholders(false).build())
+    }
 
     override fun getUser(userId: String): User? {
         val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }
@@ -66,6 +87,25 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
                 { it.asDomain() }
         )
     }
+
+    override fun livePagedUsers(filter: String?): LiveData<PagedList<User>> {
+        realmDataSourceFactory.updateQuery { realm ->
+            val query = realm.where(UserEntity::class.java)
+            if (filter.isNullOrEmpty()) {
+                query.isNotEmpty(UserEntityFields.USER_ID)
+            } else {
+                query
+                        .beginGroup()
+                        .contains(UserEntityFields.DISPLAY_NAME, filter)
+                        .or()
+                        .contains(UserEntityFields.USER_ID, filter)
+                        .endGroup()
+            }
+            query.sort(UserEntityFields.DISPLAY_NAME)
+        }
+        return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
+    }
+
 
     override fun searchUsersDirectory(search: String,
                                       limit: Int,

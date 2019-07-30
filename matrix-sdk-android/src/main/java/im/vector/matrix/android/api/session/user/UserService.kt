@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.user
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.Cancelable
@@ -55,5 +56,12 @@ interface UserService {
      * @return a Livedata of users
      */
     fun liveUsers(): LiveData<List<User>>
+
+    /**
+     * Observe a live [PagedList] of users sorted alphabetically. You can filter the users.
+     * @param filter the filter. It will look into userId and displayName.
+     * @return a Livedata of users
+     */
+    fun livePagedUsers(filter: String? = null): LiveData<PagedList<User>>
 
 }

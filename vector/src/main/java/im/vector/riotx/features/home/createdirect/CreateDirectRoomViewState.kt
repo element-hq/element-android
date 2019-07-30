@@ -18,6 +18,7 @@
 
 package im.vector.riotx.features.home.createdirect
 
+import androidx.paging.PagedList
 import arrow.core.Option
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
@@ -25,7 +26,7 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.user.model.User
 
 data class CreateDirectRoomViewState(
-        val knownUsers: Async<List<User>> = Uninitialized,
+        val knownUsers: Async<PagedList<User>> = Uninitialized,
         val directoryUsers: Async<List<User>> = Uninitialized,
         val selectedUsers: Set<User> = emptySet(),
         val createAndInviteState: Async<String> = Uninitialized,

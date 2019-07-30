@@ -35,6 +35,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import java.util.concurrent.TimeUnit
 
@@ -154,22 +155,13 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun observeKnownUsers() {
-        Observable
-                .combineLatest<List<User>, Option<KnowUsersFilter>, List<User>>(
-                        session.rx().liveUsers(),
-                        knownUsersFilter.throttleLast(300, TimeUnit.MILLISECONDS),
-                        BiFunction { users, filter ->
-                            val filterValue = filter.orNull()
-                            if (filterValue.isNullOrEmpty()) {
-                                users
-                            } else {
-                                users.filter {
-                                    it.displayName?.contains(filterValue, ignoreCase = true) ?: false
-                                    || it.userId.contains(filterValue, ignoreCase = true)
-                                }
-                            }
-                        }
-                ).execute { async ->
+        knownUsersFilter
+                .throttleLast(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .switchMap {
+                    session.rx().livePagedUsers(it.orNull())
+                }
+                .execute { async ->
                     copy(
                             knownUsers = async,
                             filterKnownUsersValue = knownUsersFilter.value ?: Option.empty()

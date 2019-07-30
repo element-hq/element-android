@@ -41,7 +41,7 @@ import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.synthetic.main.fragment_create_direct_room.*
 import javax.inject.Inject
 
-class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomController.Callback {
+class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersController.Callback {
 
     override fun getLayoutResId() = R.layout.fragment_create_direct_room
 
@@ -49,7 +49,7 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
 
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
 
-    @Inject lateinit var directRoomController: CreateDirectRoomController
+    @Inject lateinit var directRoomController: KnownUsersController
     @Inject lateinit var avatarRenderer: AvatarRenderer
     private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
 
@@ -104,13 +104,13 @@ class CreateDirectRoomFragment : VectorBaseFragment(), CreateDirectRoomControlle
         // Don't activate animation as we might have way to much item animation when filtering
         recyclerView.itemAnimator = null
         directRoomController.callback = this
-        directRoomController.displayMode = CreateDirectRoomViewState.DisplayMode.KNOWN_USERS
         recyclerView.setController(directRoomController)
     }
 
     private fun setupFilterView() {
         createDirectRoomFilter
                 .textChanges()
+                .startWith(createDirectRoomFilter.text)
                 .subscribe { text ->
                     val filterValue = text.trim()
                     val action = if (filterValue.isBlank()) {

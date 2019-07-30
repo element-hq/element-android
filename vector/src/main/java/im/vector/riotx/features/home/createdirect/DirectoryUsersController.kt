@@ -32,13 +32,12 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class CreateDirectRoomController @Inject constructor(private val session: Session,
-                                                     private val avatarRenderer: AvatarRenderer,
-                                                     private val stringProvider: StringProvider,
-                                                     private val errorFormatter: ErrorFormatter) : EpoxyController() {
+class DirectoryUsersController @Inject constructor(private val session: Session,
+                                                   private val avatarRenderer: AvatarRenderer,
+                                                   private val stringProvider: StringProvider,
+                                                   private val errorFormatter: ErrorFormatter) : EpoxyController() {
 
     private var state: CreateDirectRoomViewState? = null
-    var displayMode = CreateDirectRoomViewState.DisplayMode.KNOWN_USERS
 
     var callback: Callback? = null
 
@@ -51,19 +50,15 @@ class CreateDirectRoomController @Inject constructor(private val session: Sessio
         requestModelBuild()
     }
 
+
     override fun buildModels() {
         val currentState = state ?: return
         val hasSearch = currentState.directorySearchTerm.isNotBlank()
-        val isFiltering = currentState.filterKnownUsersValue.nonEmpty()
-        val asyncUsers = if (displayMode == CreateDirectRoomViewState.DisplayMode.DIRECTORY_USERS) {
-            currentState.directoryUsers
-        } else {
-            currentState.knownUsers
-        }
+        val asyncUsers = currentState.directoryUsers
         when (asyncUsers) {
             is Uninitialized -> renderEmptyState(false)
             is Loading       -> renderLoading()
-            is Success       -> renderSuccess(asyncUsers(), currentState.selectedUsers.map { it.userId }, hasSearch, isFiltering)
+            is Success       -> renderSuccess(asyncUsers(), currentState.selectedUsers.map { it.userId }, hasSearch)
             is Fail          -> renderFailure(asyncUsers.error)
         }
     }
@@ -84,31 +79,20 @@ class CreateDirectRoomController @Inject constructor(private val session: Sessio
 
     private fun renderSuccess(users: List<User>,
                               selectedUsers: List<String>,
-                              hasSearch: Boolean,
-                              isFiltering: Boolean) {
+                              hasSearch: Boolean) {
         if (users.isEmpty()) {
             renderEmptyState(hasSearch)
         } else {
-            renderUsers(users, selectedUsers, isFiltering)
+            renderUsers(users, selectedUsers)
         }
     }
 
-    private fun renderUsers(users: List<User>, selectedUsers: List<String>, isFiltering: Boolean) {
-        var lastFirstLetter: String? = null
+    private fun renderUsers(users: List<User>, selectedUsers: List<String>) {
         for (user in users) {
             if (user.userId == session.myUserId) {
                 continue
             }
             val isSelected = selectedUsers.contains(user.userId)
-            val currentFirstLetter = user.displayName.firstLetterOfDisplayName()
-            val showLetter = !isFiltering && currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
-            lastFirstLetter = currentFirstLetter
-
-            CreateDirectRoomLetterHeaderItem_()
-                    .id(currentFirstLetter)
-                    .letter(currentFirstLetter)
-                    .addIf(showLetter, this)
-
             createDirectRoomUserItem {
                 id(user.userId)
                 selected(isSelected)
@@ -124,14 +108,10 @@ class CreateDirectRoomController @Inject constructor(private val session: Sessio
     }
 
     private fun renderEmptyState(hasSearch: Boolean) {
-        val noResultRes = if (displayMode == CreateDirectRoomViewState.DisplayMode.DIRECTORY_USERS) {
-            if (hasSearch) {
-                R.string.no_result_placeholder
-            } else {
-                R.string.direct_room_start_search
-            }
+        val noResultRes = if (hasSearch) {
+            R.string.no_result_placeholder
         } else {
-            R.string.direct_room_no_known_users
+            R.string.direct_room_start_search
         }
         noResultItem {
             id("noResult")
@@ -141,9 +121,7 @@ class CreateDirectRoomController @Inject constructor(private val session: Sessio
 
     interface Callback {
         fun onItemClick(user: User)
-        fun retryDirectoryUsersRequest() {
-            // NO-OP
-        }
+        fun retryDirectoryUsersRequest()
     }
 
 }

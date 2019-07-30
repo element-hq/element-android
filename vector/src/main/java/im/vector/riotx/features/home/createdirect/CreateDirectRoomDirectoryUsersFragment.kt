@@ -32,13 +32,13 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_create_direct_room_directory_users.*
 import javax.inject.Inject
 
-class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), CreateDirectRoomController.Callback {
+class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUsersController.Callback {
 
     override fun getLayoutResId() = R.layout.fragment_create_direct_room_directory_users
 
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
 
-    @Inject lateinit var directRoomController: CreateDirectRoomController
+    @Inject lateinit var directRoomController: DirectoryUsersController
     private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
 
     override fun injectWith(injector: ScreenComponent) {
@@ -56,7 +56,6 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), CreateDirec
     private fun setupRecyclerView() {
         recyclerView.setHasFixedSize(true)
         directRoomController.callback = this
-        directRoomController.displayMode = CreateDirectRoomViewState.DisplayMode.DIRECTORY_USERS
         recyclerView.setController(directRoomController)
     }
 
@@ -76,7 +75,7 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), CreateDirec
 
     private fun setupCloseView() {
         createDirectRoomClose.setOnClickListener {
-            navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.Close)
+            navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.Previous)
         }
     }
 

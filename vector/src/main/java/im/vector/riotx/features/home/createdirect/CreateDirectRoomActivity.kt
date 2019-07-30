@@ -70,7 +70,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
             }
         }
         if (isFirstCreation()) {
-            addFragment(CreateDirectRoomFragment(), R.id.container)
+            addFragment(CreateDirectRoomKnownUsersFragment(), R.id.container)
         }
         viewModel.selectSubscribe(this, CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)

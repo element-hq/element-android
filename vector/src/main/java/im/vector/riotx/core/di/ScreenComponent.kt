@@ -38,7 +38,7 @@ import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.HomeModule
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomDirectoryUsersFragment
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomFragment
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.timeline.action.*
@@ -159,7 +159,7 @@ interface ScreenComponent {
 
     fun inject(pushGatewaysFragment: PushGatewaysFragment)
 
-    fun inject(createDirectRoomKnownUsersFragment: CreateDirectRoomFragment)
+    fun inject(createDirectRoomKnownUsersFragment: CreateDirectRoomKnownUsersFragment)
 
     fun inject(createDirectRoomDirectoryUsersFragment: CreateDirectRoomDirectoryUsersFragment)
 

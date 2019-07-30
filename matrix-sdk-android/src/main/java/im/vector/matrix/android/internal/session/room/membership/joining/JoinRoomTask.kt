@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.task.Task
 import io.realm.RealmConfiguration
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
@@ -48,8 +49,10 @@ internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: Room
                 realm.where(RoomEntity::class.java)
                         .equalTo(RoomEntityFields.ROOM_ID, roomId)
             }
-            rql.await()
-            Try.just(roomId)
+            Try {
+                rql.await(20L, TimeUnit.SECONDS)
+                roomId
+            }
         }.flatMap { roomId ->
             setReadMarkers(roomId)
         }

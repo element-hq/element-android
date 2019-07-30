@@ -16,6 +16,7 @@
 
 package im.vector.matrix.rx
 
+import androidx.paging.PagedList
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.pushers.Pusher
@@ -46,6 +47,10 @@ class RxSession(private val session: Session) {
 
     fun liveUsers(): Observable<List<User>> {
         return session.liveUsers().asObservable()
+    }
+
+    fun livePagedUsers(filter: String? = null): Observable<PagedList<User>> {
+        return session.livePagedUsers(filter).asObservable()
     }
 
     fun createRoom(roomParams: CreateRoomParams): Single<String> = Single.create {
