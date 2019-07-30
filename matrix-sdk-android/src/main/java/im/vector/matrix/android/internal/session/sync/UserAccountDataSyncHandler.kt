@@ -17,28 +17,45 @@
 package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirectMessages
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataSync
+import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
+import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
+import io.realm.Realm
+import timber.log.Timber
 import javax.inject.Inject
 
-internal class UserAccountDataSyncHandler @Inject constructor(private val monarchy: Monarchy) {
+internal class UserAccountDataSyncHandler @Inject constructor(private val monarchy: Monarchy,
+                                                              private val credentials: Credentials,
+                                                              private val directChatsHelper: DirectChatsHelper,
+                                                              private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+                                                              private val taskExecutor: TaskExecutor) {
 
-    fun handle(accountData: UserAccountDataSync) {
-        accountData.list.forEach {
+    fun handle(accountData: UserAccountDataSync?, invites: Map<String, InvitedRoomSync>?) {
+        accountData?.list?.forEach {
             when (it) {
                 is UserAccountDataDirectMessages -> handleDirectChatRooms(it)
                 else                             -> return@forEach
             }
         }
+        monarchy.doWithRealm { realm ->
+            synchronizeWithServerIfNeeded(realm, invites)
+        }
     }
 
     private fun handleDirectChatRooms(directMessages: UserAccountDataDirectMessages) {
         monarchy.runTransactionSync { realm ->
-
             val oldDirectRooms = RoomSummaryEntity.getDirectRooms(realm)
             oldDirectRooms.forEach {
                 it.isDirect = false
@@ -55,6 +72,41 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
                     }
                 }
             }
+        }
+    }
+
+    // If we get some direct chat invites, we synchronize the user account data including those.
+    private fun synchronizeWithServerIfNeeded(realm: Realm, invites: Map<String, InvitedRoomSync>?) {
+        if (invites.isNullOrEmpty()) return
+
+        val directChats = directChatsHelper.getDirectChats()
+        val directChatInvites = HashMap<String, MutableList<String>>().apply {
+            directChats.forEach { (inviterId, roomIds) ->
+                put(inviterId, ArrayList(roomIds))
+            }
+        }
+        var hasUpdate = false
+        invites.forEach { (roomId, _) ->
+            val myUserStateEvent = RoomMembers(realm, roomId).getStateEvent(credentials.userId)
+            val inviterId = myUserStateEvent?.sender
+            val myUserRoomMember: RoomMember? = myUserStateEvent?.let { it.asDomain().content?.toModel() }
+            val isDirect = myUserRoomMember?.isDirect
+            if (inviterId != null && inviterId != credentials.userId && isDirect == true) {
+                directChatInvites.getOrPut(inviterId, { arrayListOf() }).apply {
+                    if (contains(roomId)) {
+                        Timber.v("Direct chats already include room $roomId with user $inviterId")
+                    } else {
+                        this.add(roomId)
+                        hasUpdate = true
+                    }
+                }
+            }
+        }
+        if (hasUpdate) {
+            val updateUserAccountParams = UpdateUserAccountDataTask.DirectChatParams(
+                    directMessages = directChatInvites
+            )
+            updateUserAccountDataTask.configureWith(updateUserAccountParams).executeBy(taskExecutor)
         }
     }
 }

@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 internal class DirectChatsHelper @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration) {
 
-    fun getDirectChats(include: Pair<String, String>? = null, filterRoomId: String? = null): Map<String, List<String>> {
+    fun getDirectChats(filterRoomId: String? = null): Map<String, List<String>> {
         return Realm.getInstance(realmConfiguration).use { realm ->
             val currentDirectRooms = RoomSummaryEntity.getDirectRooms(realm)
             val directChatsMap = mutableMapOf<String, MutableList<String>>()
@@ -35,15 +35,6 @@ internal class DirectChatsHelper @Inject constructor(@SessionDatabase private va
                 val directUserId = directRoom.directUserId ?: continue
                 directChatsMap.getOrPut(directUserId, { arrayListOf() }).apply {
                     add(directRoom.roomId)
-                }
-            }
-            if (include != null) {
-                directChatsMap.getOrPut(include.first, { arrayListOf() }).apply {
-                    if (contains(include.second)) {
-                        Timber.v("Direct chats already include room ${include.second} with user ${include.first}")
-                    } else {
-                        add(include.second)
-                    }
                 }
             }
             directChatsMap
