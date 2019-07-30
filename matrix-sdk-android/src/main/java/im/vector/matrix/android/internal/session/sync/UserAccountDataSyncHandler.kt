@@ -79,7 +79,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
     private fun synchronizeWithServerIfNeeded(realm: Realm, invites: Map<String, InvitedRoomSync>?) {
         if (invites.isNullOrEmpty()) return
 
-        val directChats = directChatsHelper.getDirectChats()
+        val directChats = directChatsHelper.getLocalUserAccount()
         val directChatInvites = HashMap<String, MutableList<String>>().apply {
             directChats.forEach { (inviterId, roomIds) ->
                 put(inviterId, ArrayList(roomIds))

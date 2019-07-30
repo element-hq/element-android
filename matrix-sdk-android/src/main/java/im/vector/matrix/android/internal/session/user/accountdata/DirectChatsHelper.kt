@@ -24,18 +24,24 @@ import io.realm.RealmConfiguration
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class DirectChatsHelper @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration) {
+internal class DirectChatsHelper @Inject constructor(@SessionDatabase
+                                                     private val realmConfiguration: RealmConfiguration) {
 
-    fun getDirectChats(filterRoomId: String? = null): Map<String, List<String>> {
+    /**
+     * @return a map of userId <-> list of roomId
+     */
+    fun getLocalUserAccount(filterRoomId: String? = null): Map<String, List<String>> {
         return Realm.getInstance(realmConfiguration).use { realm ->
             val currentDirectRooms = RoomSummaryEntity.getDirectRooms(realm)
             val directChatsMap = mutableMapOf<String, MutableList<String>>()
             for (directRoom in currentDirectRooms) {
                 if (directRoom.roomId == filterRoomId) continue
                 val directUserId = directRoom.directUserId ?: continue
-                directChatsMap.getOrPut(directUserId, { arrayListOf() }).apply {
-                    add(directRoom.roomId)
-                }
+                directChatsMap
+                        .getOrPut(directUserId, { arrayListOf() })
+                        .apply {
+                            add(directRoom.roomId)
+                        }
             }
             directChatsMap
         }

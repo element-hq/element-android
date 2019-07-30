@@ -82,7 +82,7 @@ internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: Ro
                 this.isDirect = true
             }
         }.flatMap {
-            val directChats = directChatsHelper.getDirectChats()
+            val directChats = directChatsHelper.getLocalUserAccount()
             updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
         }.flatMap {
             Try.just(roomId)
