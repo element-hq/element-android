@@ -18,18 +18,46 @@ package im.vector.matrix.android.internal.session.user
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.UserEntity
+import im.vector.matrix.android.internal.database.model.UserEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.user.model.SearchUserTask
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 
-internal class DefaultUserService @Inject constructor(private val monarchy: Monarchy) : UserService {
+internal class DefaultUserService @Inject constructor(private val monarchy: Monarchy,
+                                                      private val searchUserTask: SearchUserTask,
+                                                      private val taskExecutor: TaskExecutor) : UserService {
+
+    private val realmDataSourceFactory: Monarchy.RealmDataSourceFactory<UserEntity> by lazy {
+        monarchy.createDataSourceFactory { realm ->
+            realm.where(UserEntity::class.java)
+                    .isNotEmpty(UserEntityFields.USER_ID)
+                    .sort(UserEntityFields.DISPLAY_NAME)
+        }
+    }
+
+    private val domainDataSourceFactory: DataSource.Factory<Int, User> by lazy {
+        realmDataSourceFactory.map {
+            it.asDomain()
+        }
+    }
+
+    private val livePagedListBuilder: LivePagedListBuilder<Int, User> by lazy {
+        LivePagedListBuilder(domainDataSourceFactory, PagedList.Config.Builder().setPageSize(100).setEnablePlaceholders(false).build())
+    }
 
     override fun getUser(userId: String): User? {
         val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }
@@ -38,7 +66,7 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
         return userEntity.asDomain()
     }
 
-    override fun observeUser(userId: String): LiveData<User?> {
+    override fun liveUser(userId: String): LiveData<User?> {
         val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
             UserEntity.where(realm, userId)
         }
@@ -47,5 +75,46 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
                     .map { it.asDomain() }
                     .firstOrNull()
         }
+    }
+
+    override fun liveUsers(): LiveData<List<User>> {
+        return monarchy.findAllMappedWithChanges(
+                { realm ->
+                    realm.where(UserEntity::class.java)
+                            .isNotEmpty(UserEntityFields.USER_ID)
+                            .sort(UserEntityFields.DISPLAY_NAME)
+                },
+                { it.asDomain() }
+        )
+    }
+
+    override fun livePagedUsers(filter: String?): LiveData<PagedList<User>> {
+        realmDataSourceFactory.updateQuery { realm ->
+            val query = realm.where(UserEntity::class.java)
+            if (filter.isNullOrEmpty()) {
+                query.isNotEmpty(UserEntityFields.USER_ID)
+            } else {
+                query
+                        .beginGroup()
+                        .contains(UserEntityFields.DISPLAY_NAME, filter)
+                        .or()
+                        .contains(UserEntityFields.USER_ID, filter)
+                        .endGroup()
+            }
+            query.sort(UserEntityFields.DISPLAY_NAME)
+        }
+        return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
+    }
+
+
+    override fun searchUsersDirectory(search: String,
+                                      limit: Int,
+                                      excludedUserIds: Set<String>,
+                                      callback: MatrixCallback<List<User>>): Cancelable {
+        val params = SearchUserTask.Params(limit, search, excludedUserIds)
+        return searchUserTask
+                .configureWith(params)
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
     }
 }

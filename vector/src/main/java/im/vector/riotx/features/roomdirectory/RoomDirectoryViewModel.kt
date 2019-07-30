@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRooms
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import timber.log.Timber
@@ -207,7 +208,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _joinRoomErrorLiveData.postValue(LiveEvent(failure))
+                _joinRoomErrorLiveData.postLiveEvent(failure)
 
                 setState {
                     copy(

@@ -28,7 +28,7 @@ object MatrixPatterns {
     // regex pattern to find matrix user ids in a string.
     // See https://matrix.org/speculator/spec/HEAD/appendices.html#historical-user-ids
     private const val MATRIX_USER_IDENTIFIER_REGEX = "@[A-Z0-9\\x21-\\x39\\x3B-\\x7F]+$DOMAIN_REGEX"
-    private val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
+    val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find room ids in a string.
     private const val MATRIX_ROOM_IDENTIFIER_REGEX = "![A-Z0-9]+$DOMAIN_REGEX"

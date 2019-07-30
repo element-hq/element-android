@@ -42,12 +42,16 @@ internal class RoomMembers(private val realm: Realm,
         RoomSummaryEntity.where(realm, roomId).findFirst()
     }
 
-    fun get(userId: String): RoomMember? {
+    fun getStateEvent(userId: String): EventEntity? {
         return EventEntity
                 .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
                 .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
                 .equalTo(EventEntityFields.STATE_KEY, userId)
                 .findFirst()
+    }
+
+    fun get(userId: String): RoomMember? {
+        return getStateEvent(userId)
                 ?.let {
                     it.asDomain().content?.toModel<RoomMember>()
                 }

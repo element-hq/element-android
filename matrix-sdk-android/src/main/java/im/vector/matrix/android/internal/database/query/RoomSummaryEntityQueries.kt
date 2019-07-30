@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
+import io.realm.RealmResults
 import io.realm.kotlin.where
 
 internal fun RoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = null): RealmQuery<RoomSummaryEntity> {
@@ -29,3 +30,20 @@ internal fun RoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = n
     }
     return query
 }
+
+internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm): RealmResults<RoomSummaryEntity> {
+    return RoomSummaryEntity.where(realm)
+            .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            .findAll()
+}
+
+internal fun RoomSummaryEntity.Companion.isDirect(realm: Realm, roomId: String): Boolean {
+    return RoomSummaryEntity.where(realm)
+            .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
+            .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            .findAll()
+            .isNotEmpty()
+}
+
+
+

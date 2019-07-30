@@ -2,7 +2,7 @@ Changes in RiotX 0.3.0 (2019-XX-XX)
 ===================================================
 
 Features:
- -
+ - Create Direct Room flow
 
 Improvements:
  - UI for pending edits (#193)

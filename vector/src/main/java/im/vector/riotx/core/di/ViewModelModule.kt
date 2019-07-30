@@ -30,6 +30,9 @@ import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsVie
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotx.features.crypto.verification.SasVerificationViewModel
 import im.vector.riotx.features.home.*
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomNavigationViewModel
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomViewModel
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomViewModel_AssistedFactory
 import im.vector.riotx.features.home.group.GroupListViewModel
 import im.vector.riotx.features.home.group.GroupListViewModel_AssistedFactory
 import im.vector.riotx.features.home.room.detail.RoomDetailViewModel
@@ -116,6 +119,11 @@ interface ViewModelModule {
     @ViewModelKey(ConfigurationViewModel::class)
     fun bindConfigurationViewModel(viewModel: ConfigurationViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(CreateDirectRoomNavigationViewModel::class)
+    fun bindCreateDirectRoomNavigationViewModel(viewModel: CreateDirectRoomNavigationViewModel): ViewModel
+
     /**
      * Below are bindings for the MvRx view models (which extend VectorViewModel). Will be the only usage in the future.
      */
@@ -167,6 +175,9 @@ interface ViewModelModule {
 
     @Binds
     fun bindCreateRoomViewModelFactory(factory: CreateRoomViewModel_AssistedFactory): CreateRoomViewModel.Factory
+
+    @Binds
+    fun bindCreateDirectRoomViewModelFactory(factory: CreateDirectRoomViewModel_AssistedFactory): CreateDirectRoomViewModel.Factory
 
     @Binds
     fun bindPushGatewaysViewModelFactory(factory: PushGatewaysViewModel_AssistedFactory): PushGatewaysViewModel.Factory

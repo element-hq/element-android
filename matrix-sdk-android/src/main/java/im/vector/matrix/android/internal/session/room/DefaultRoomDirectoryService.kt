@@ -44,15 +44,15 @@ internal class DefaultRoomDirectoryService @Inject constructor(private val getPu
                 .executeBy(taskExecutor)
     }
 
-    override fun joinRoom(roomId: String, callback: MatrixCallback<Unit>) {
-        joinRoomTask
+    override fun joinRoom(roomId: String, callback: MatrixCallback<Unit>): Cancelable {
+        return joinRoomTask
                 .configureWith(JoinRoomTask.Params(roomId))
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }
 
-    override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>) {
-        getThirdPartyProtocolsTask
+    override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>): Cancelable {
+        return getThirdPartyProtocolsTask
                 .toConfigurableTask()
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)

@@ -19,6 +19,7 @@ package im.vector.riotx.core.mvrx
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.utils.LiveEvent
 
 abstract class NavigationViewModel<NavigationClass> : ViewModel() {
@@ -29,6 +30,6 @@ abstract class NavigationViewModel<NavigationClass> : ViewModel() {
 
 
     fun goTo(navigation: NavigationClass) {
-        _navigateTo.postValue(LiveEvent(navigation))
+        _navigateTo.postLiveEvent(navigation)
     }
 }
