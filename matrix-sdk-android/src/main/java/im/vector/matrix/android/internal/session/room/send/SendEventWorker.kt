@@ -82,7 +82,10 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
                     Result.success()
                 }
             }
-        }, { Result.success() })
+        }, {
+            localEchoUpdater.updateSendState(event.eventId, SendState.SENT)
+            Result.success()
+        })
     }
 
 }

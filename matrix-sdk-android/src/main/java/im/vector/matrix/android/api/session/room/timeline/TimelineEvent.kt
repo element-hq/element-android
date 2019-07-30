@@ -38,7 +38,6 @@ data class TimelineEvent(
         val senderName: String?,
         val isUniqueDisplayName: Boolean,
         val senderAvatar: String?,
-        val sendState: SendState,
         val annotations: EventAnnotationsSummary? = null
 ) {
 

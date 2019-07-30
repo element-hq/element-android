@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResul
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
@@ -49,10 +50,13 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater
 
     override fun doWork(): Result {
-
+        Timber.v("Start Encrypt work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success()
+                ?: return Result.success().also {
+                    Timber.v("Work cancelled due to input error from parent")
+                }
 
+        Timber.v("Start Encrypt work for event ${params.event.eventId}")
         if (params.lastFailureMessage != null) {
             // Transmit the error
             return Result.success(inputData)
@@ -97,7 +101,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         latch.await()
 
         if (result != null) {
-            var modifiedContent = HashMap(result?.eventContent)
+            val modifiedContent = HashMap(result?.eventContent)
             params.keepKeys?.forEach { toKeep ->
                 localEvent.content?.get(toKeep)?.let {
                     //put it back in the encrypted thing

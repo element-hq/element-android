@@ -138,6 +138,19 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
         quickReactBottomDivider.isVisible = it.canReact()
         bottom_sheet_quick_reaction_container.isVisible = it.canReact()
+        if (it.informationData.sendState.isSending()) {
+            messageStatusInfo.isVisible = true
+            messageStatusProgress.isVisible = true
+            messageStatusText.text = getString(R.string.event_status_sending_message)
+            messageStatusText.setCompoundDrawables(null, null, null, null)
+        } else if (it.informationData.sendState.hasFailed()) {
+            messageStatusInfo.isVisible = true
+            messageStatusProgress.isVisible = false
+            messageStatusText.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_warning_small, 0, 0, 0)
+            messageStatusText.text = getString(R.string.unable_to_send_message)
+        } else {
+            messageStatusInfo.isVisible = false
+        }
         return@withState
     }
 

@@ -57,9 +57,11 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
+        Timber.v("Starting upload media work with params $params")
 
         if (params.lastFailureMessage != null) {
             // Transmit the error
+            Timber.v("Stop upload media work due to input failure")
             return Result.success(inputData)
         }
 
@@ -121,7 +123,11 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
 
         val progressListener = object : ProgressRequestBody.Listener {
             override fun onProgress(current: Long, total: Long) {
-                contentUploadStateTracker.setProgress(eventId, current, total)
+                if (isStopped) {
+                    contentUploadStateTracker.setFailure(eventId, Throwable("Cancelled"))
+                } else {
+                    contentUploadStateTracker.setProgress(eventId, current, total)
+                }
             }
         }
 
@@ -166,6 +172,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                               encryptedFileInfo: EncryptedFileInfo?,
                               thumbnailUrl: String?,
                               thumbnailEncryptedFileInfo: EncryptedFileInfo?): Result {
+        Timber.v("handleSuccess $attachmentUrl, work is stopped $isStopped")
         contentUploadStateTracker.setSuccess(params.event.eventId!!)
         val event = updateEvent(params.event, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
         val sendParams = SendEventWorker.Params(params.userId, params.roomId, event)
@@ -209,6 +216,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                 )
         )
     }
+
 
     private fun MessageFileContent.update(url: String,
                                           encryptedFileInfo: EncryptedFileInfo?): MessageFileContent {

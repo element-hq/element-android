@@ -7,6 +7,7 @@ Features:
 Improvements:
  - UI for pending edits (#193)
  - UX image preview screen transition (#393)
+ - Basic support for resending failed messages (retry/remove)
 
 Other changes:
  -

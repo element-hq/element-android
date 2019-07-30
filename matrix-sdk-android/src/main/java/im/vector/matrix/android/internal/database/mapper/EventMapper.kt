@@ -73,6 +73,7 @@ internal object EventMapper {
                 unsignedData = ud,
                 redacts = eventEntity.redacts
         ).also {
+            it.sendState = eventEntity.sendState
             eventEntity.decryptionResultJson?.let { json ->
                 try {
                     it.mxDecryptionResult = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).fromJson(json)

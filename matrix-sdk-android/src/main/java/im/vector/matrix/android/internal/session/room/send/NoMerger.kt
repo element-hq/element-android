@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.internal.session.room.send
 
-package im.vector.riotx.core.extensions
+import androidx.work.Data
+import androidx.work.InputMerger
 
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-
-fun TimelineEvent.canReact(): Boolean {
-    // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-    return root.getClearType() == EventType.MESSAGE && root.sendState.isSent() && !root.isRedacted()
+class NoMerger : InputMerger() {
+    override fun merge(inputs: MutableList<Data>): Data {
+        return inputs.first()
+    }
 }
