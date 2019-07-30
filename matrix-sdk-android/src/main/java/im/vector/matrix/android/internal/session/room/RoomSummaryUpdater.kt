@@ -62,9 +62,7 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
                roomId: String,
                membership: Membership? = null,
                roomSummary: RoomSyncSummary? = null,
-               unreadNotifications: RoomSyncUnreadNotifications? = null,
-               isDirect: Boolean? = null,
-               directUserId: String? = null) {
+               unreadNotifications: RoomSyncUnreadNotifications? = null) {
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
                                 ?: realm.createObject(roomId)
 
@@ -97,10 +95,6 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
                 .asSequence()
                 .map { it.stateKey }
 
-        if (isDirect != null) {
-            roomSummaryEntity.isDirect = isDirect
-            roomSummaryEntity.directUserId = directUserId
-        }
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
         roomSummaryEntity.topic = lastTopicEvent?.content.toModel<RoomTopicContent>()?.topic
