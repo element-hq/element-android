@@ -65,11 +65,12 @@ internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: 
 
 internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
                                                        roomId: String,
+                                                       includesSending: Boolean,
                                                        includedTypes: List<String> = emptyList(),
                                                        excludedTypes: List<String> = emptyList()): TimelineEventEntity? {
 
     val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
-    val eventList = if (roomEntity.sendingTimelineEvents.isNotEmpty()) {
+    val eventList = if (includesSending && roomEntity.sendingTimelineEvents.isNotEmpty()) {
         roomEntity.sendingTimelineEvents
     } else {
         ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.timelineEvents

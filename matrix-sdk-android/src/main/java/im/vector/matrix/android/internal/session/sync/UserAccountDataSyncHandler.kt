@@ -19,8 +19,8 @@ package im.vector.matrix.android.internal.session.sync
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
+import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirectMessages
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataSync
 import javax.inject.Inject
@@ -37,19 +37,22 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
     }
 
     private fun handleDirectChatRooms(directMessages: UserAccountDataDirectMessages) {
-        val newDirectRoomIds = directMessages.content.values.flatten()
         monarchy.runTransactionSync { realm ->
 
-            val oldDirectRooms = RoomSummaryEntity.where(realm)
-                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                    .findAll()
-            oldDirectRooms.forEach { it.isDirect = false }
-
-            newDirectRoomIds.forEach { roomId ->
-                val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                if (roomSummaryEntity != null) {
-                    roomSummaryEntity.isDirect = true
-                    realm.insertOrUpdate(roomSummaryEntity)
+            val oldDirectRooms = RoomSummaryEntity.getDirectRooms(realm)
+            oldDirectRooms.forEach {
+                it.isDirect = false
+                it.directUserId = null
+            }
+            directMessages.content.forEach {
+                val userId = it.key
+                it.value.forEach { roomId ->
+                    val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
+                    if (roomSummaryEntity != null) {
+                        roomSummaryEntity.isDirect = true
+                        roomSummaryEntity.directUserId = userId
+                        realm.insertOrUpdate(roomSummaryEntity)
+                    }
                 }
             }
         }

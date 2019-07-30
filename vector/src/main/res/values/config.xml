@@ -4,26 +4,16 @@
     <!-- "app_name" is now defined in build.gradle -->
 
     <!-- server urls -->
-    <string name="vector_im_server_url" translatable="false">https://vector.im</string>
     <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
     <string name="default_hs_server_url" translatable="false">https://matrix.org</string>
-    <string name="default_identity_server_url" translatable="false">https://vector.im</string>
     <string name="piwik_server_url" translatable="false">https://piwik.riot.im</string>
     <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
-
-    <!-- Widget urls -->
-    <string name="integrations_ui_url" translatable="false">"https://scalar-staging.riot.im/scalar-web/"</string>
-    <string name="integrations_rest_url" translatable="false">"https://scalar-staging.riot.im/scalar/api"</string>
-
-    <string-array name="integrations_widgets_urls" translatable="false">
-        <item>https://scalar-staging.riot.im/scalar/api</item>
-        <item>https://scalar.vector.im/api</item>
-    </string-array>
 
     <!--
         Pusher config for the application
         https://matrix.org/docs/spec/client_server/r0.4.0#id128
      -->
+
     <string name="pusher_http_url" translatable="false">https://matrix.org/_matrix/push/v1/notify</string>
     <string name="pusher_app_id" translatable="false">im.vector.app.android</string>
 

@@ -17,7 +17,10 @@
 package im.vector.matrix.android.api.session.user
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.Cancelable
 
 /**
  * This interface defines methods to get users. It's implemented at the session level.
@@ -32,10 +35,33 @@ interface UserService {
     fun getUser(userId: String): User?
 
     /**
+     * Search list of users on server directory.
+     * @param search the searched term
+     * @param limit the max number of users to return
+     * @param excludedUserIds the user ids to filter from the search
+     * @param callback the async callback
+     * @return Cancelable
+     */
+    fun searchUsersDirectory(search: String, limit: Int, excludedUserIds: Set<String>, callback: MatrixCallback<List<User>>): Cancelable
+
+    /**
      * Observe a live user from a userId
      * @param userId the userId to look for.
      * @return a Livedata of user with userId
      */
-    fun observeUser(userId: String): LiveData<User?>
+    fun liveUser(userId: String): LiveData<User?>
+
+    /**
+     * Observe a live list of users sorted alphabetically
+     * @return a Livedata of users
+     */
+    fun liveUsers(): LiveData<List<User>>
+
+    /**
+     * Observe a live [PagedList] of users sorted alphabetically. You can filter the users.
+     * @param filter the filter. It will look into userId and displayName.
+     * @return a Livedata of users
+     */
+    fun livePagedUsers(filter: String? = null): LiveData<PagedList<User>>
 
 }

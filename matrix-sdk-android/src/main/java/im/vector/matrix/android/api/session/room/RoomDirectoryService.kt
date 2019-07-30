@@ -30,15 +30,17 @@ interface RoomDirectoryService {
     /**
      * Get rooms from directory
      */
-    fun getPublicRooms(server: String?,
-                       publicRoomsParams: PublicRoomsParams,
-                       callback: MatrixCallback<PublicRoomsResponse>): Cancelable
+    fun getPublicRooms(server: String?, publicRoomsParams: PublicRoomsParams, callback: MatrixCallback<PublicRoomsResponse>): Cancelable
 
+    /**
+     * Join a room by id
+     */
+    fun joinRoom(roomId: String, callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Fetches the overall metadata about protocols supported by the homeserver.
      * Includes both the available protocols and all fields required for queries against each protocol.
      */
-    fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>)
+    fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>): Cancelable
 
 }

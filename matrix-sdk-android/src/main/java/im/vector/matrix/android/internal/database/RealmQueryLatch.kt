@@ -19,14 +19,17 @@ package im.vector.matrix.android.internal.database
 import android.os.Handler
 import android.os.HandlerThread
 import io.realm.*
+import timber.log.Timber
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 private const val THREAD_NAME = "REALM_QUERY_LATCH"
 
 class RealmQueryLatch<E : RealmObject>(private val realmConfiguration: RealmConfiguration,
                                        private val realmQueryBuilder: (Realm) -> RealmQuery<E>) {
 
-    fun await() {
+    @Throws(InterruptedException::class)
+    fun await(timeout: Long = Long.MAX_VALUE, timeUnit: TimeUnit = TimeUnit.MILLISECONDS) {
         val latch = CountDownLatch(1)
         val handlerThread = HandlerThread(THREAD_NAME + hashCode())
         handlerThread.start()
@@ -46,8 +49,13 @@ class RealmQueryLatch<E : RealmObject>(private val realmConfiguration: RealmConf
             })
         }
         handler.post(runnable)
-        latch.await()
-        handlerThread.quit()
+        try {
+            latch.await(timeout, timeUnit)
+        } catch (exception: InterruptedException) {
+            throw exception
+        } finally {
+            handlerThread.quit()
+        }
     }
 
 

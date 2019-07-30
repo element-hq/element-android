@@ -26,10 +26,10 @@ import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
-import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
@@ -41,7 +41,7 @@ import javax.inject.Inject
  * This helper centralise ways to retrieve avatar into ImageView or even generic Target<Drawable>
  */
 
-class AvatarRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder){
+class AvatarRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
 
     companion object {
         private const val THUMBNAIL_SIZE = 250
@@ -92,9 +92,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
         return if (text.isEmpty()) {
             TextDrawable.builder().buildRound("", avatarColor)
         } else {
-            val isUserId = MatrixPatterns.isUserId(text)
-            val firstLetterIndex = if (isUserId) 1 else 0
-            val firstLetter = text[firstLetterIndex].toString().toUpperCase()
+            val firstLetter = text.firstLetterOfDisplayName()
             TextDrawable.builder()
                     .beginConfig()
                     .bold()

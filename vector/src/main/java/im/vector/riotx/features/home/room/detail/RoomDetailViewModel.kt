@@ -47,10 +47,12 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.LiveEvent
+import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
@@ -106,7 +108,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeRoomSummary()
         observeEventDisplayedActions()
         observeSummaryState()
-        cancelableBag += room.loadRoomMembersIfNeeded()
+        room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
     }
@@ -209,62 +211,62 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
                             room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
                         }
                         is ParsedCommand.ErrorSyntax              -> {
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command)))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command))
                         }
                         is ParsedCommand.ErrorEmptySlashCommand   -> {
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown("/")))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandUnknown("/"))
                         }
                         is ParsedCommand.ErrorUnknownSlashCommand -> {
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand)))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand))
                         }
                         is ParsedCommand.Invite                   -> {
                             handleInviteSlashCommand(slashCommandResult)
                         }
                         is ParsedCommand.SetUserPowerLevel        -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.ClearScalarToken         -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SetMarkdown              -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.UnbanUser                -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.BanUser                  -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.KickUser                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.JoinRoom                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.PartRoom                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SendEmote                -> {
                             room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled)
                         }
                         is ParsedCommand.ChangeTopic              -> {
                             handleChangeTopicSlashCommand(slashCommandResult)
                         }
                         is ParsedCommand.ChangeDisplayName        -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                     }
                 }
@@ -296,7 +298,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                 sendMode = SendMode.REGULAR
                         )
                     }
-                    _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+                    _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
                 }
                 is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
@@ -321,7 +323,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                 sendMode = SendMode.REGULAR
                         )
                     }
-                    _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+                    _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
                 }
                 is SendMode.REPLY -> {
                     state.sendMode.timelineEvent.let {
@@ -331,7 +333,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                     sendMode = SendMode.REGULAR
                             )
                         }
-                        _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+                        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
                     }
 
                 }
@@ -360,29 +362,29 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled)
 
         room.updateTopic(changeTopic.topic, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultOk))
+                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
             }
 
             override fun onFailure(failure: Throwable) {
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultError(failure)))
+                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultError(failure))
             }
         })
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled)
 
         room.invite(invite.userId, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultOk))
+                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
             }
 
             override fun onFailure(failure: Throwable) {
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultError(failure)))
+                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultError(failure))
             }
         })
     }
@@ -494,19 +496,19 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
                 object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
-                        _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
+                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 data,
                                 null
-                        )))
+                        ))
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
+                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 null,
                                 failure
-                        )))
+                        ))
                     }
                 })
 
@@ -535,7 +537,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
             }
 
-            _navigateToEvent.postValue(LiveEvent(targetEventId))
+            _navigateToEvent.postLiveEvent(targetEventId)
         } else {
             // change timeline
             timeline.dispose()
@@ -560,7 +562,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
             }
 
-            _navigateToEvent.postValue(LiveEvent(targetEventId))
+            _navigateToEvent.postLiveEvent(targetEventId)
         }
     }
 

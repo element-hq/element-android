@@ -42,9 +42,11 @@ internal class DefaultMembershipService @Inject constructor(private val roomId: 
                                                             private val leaveRoomTask: LeaveRoomTask
 ) : MembershipService {
 
-    override fun loadRoomMembersIfNeeded(): Cancelable {
+    override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Boolean>): Cancelable {
         val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
-        return loadRoomMembersTask.configureWith(params).executeBy(taskExecutor)
+        return loadRoomMembersTask.configureWith(params)
+                .dispatchTo(matrixCallback)
+                .executeBy(taskExecutor)
     }
 
     override fun getRoomMember(userId: String): RoomMember? {
@@ -73,23 +75,23 @@ internal class DefaultMembershipService @Inject constructor(private val roomId: 
         return result
     }
 
-    override fun invite(userId: String, callback: MatrixCallback<Unit>) {
+    override fun invite(userId: String, callback: MatrixCallback<Unit>): Cancelable {
         val params = InviteTask.Params(roomId, userId)
-        inviteTask.configureWith(params)
+        return inviteTask.configureWith(params)
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }
 
-    override fun join(viaServers: List<String>, callback: MatrixCallback<Unit>) {
+    override fun join(viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
         val params = JoinRoomTask.Params(roomId, viaServers)
-        joinTask.configureWith(params)
+        return joinTask.configureWith(params)
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }
 
-    override fun leave(callback: MatrixCallback<Unit>) {
+    override fun leave(callback: MatrixCallback<Unit>): Cancelable {
         val params = LeaveRoomTask.Params(roomId)
-        leaveRoomTask.configureWith(params)
+        return leaveRoomTask.configureWith(params)
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }

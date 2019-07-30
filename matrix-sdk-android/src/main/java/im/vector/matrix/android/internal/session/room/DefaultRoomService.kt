@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -43,8 +44,8 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                                                       private val roomFactory: RoomFactory,
                                                       private val taskExecutor: TaskExecutor) : RoomService {
 
-    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>) {
-        createRoomTask
+    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
+        return createRoomTask
                 .configureWith(createRoomParams)
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)

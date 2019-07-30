@@ -73,21 +73,21 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 .subscribe { list ->
                     list.let { summaries ->
                         val peopleNotifications = summaries
-                                                          .filter { it.isDirect }
-                                                          .map { it.notificationCount }
-                                                          .takeIf { it.isNotEmpty() }
-                                                          ?.sumBy { i -> i }
-                                                  ?: 0
+                                .filter { it.isDirect }
+                                .map { it.notificationCount }
+                                .takeIf { it.isNotEmpty() }
+                                ?.sumBy { i -> i }
+                                ?: 0
                         val peopleHasHighlight = summaries
                                 .filter { it.isDirect }
                                 .any { it.highlightCount > 0 }
 
                         val roomsNotifications = summaries
-                                                         .filter { !it.isDirect }
-                                                         .map { it.notificationCount }
-                                                         .takeIf { it.isNotEmpty() }
-                                                         ?.sumBy { i -> i }
-                                                 ?: 0
+                                .filter { !it.isDirect }
+                                .map { it.notificationCount }
+                                .takeIf { it.isNotEmpty() }
+                                ?.sumBy { i -> i }
+                                ?: 0
                         val roomsHasHighlight = summaries
                                 .filter { !it.isDirect }
                                 .any { it.highlightCount > 0 }

@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.task.toConfigurableTask
 import javax.inject.Inject
 
 internal class DefaultRoomDirectoryService @Inject constructor(private val getPublicRoomTask: GetPublicRoomTask,
+                                                               private val joinRoomTask: JoinRoomTask,
                                                                private val getThirdPartyProtocolsTask: GetThirdPartyProtocolsTask,
                                                                private val taskExecutor: TaskExecutor) : RoomDirectoryService {
 
@@ -43,8 +44,15 @@ internal class DefaultRoomDirectoryService @Inject constructor(private val getPu
                 .executeBy(taskExecutor)
     }
 
-    override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>) {
-        getThirdPartyProtocolsTask
+    override fun joinRoom(roomId: String, callback: MatrixCallback<Unit>): Cancelable {
+        return joinRoomTask
+                .configureWith(JoinRoomTask.Params(roomId))
+                .dispatchTo(callback)
+                .executeBy(taskExecutor)
+    }
+
+    override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>): Cancelable {
+        return getThirdPartyProtocolsTask
                 .toConfigurableTask()
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)

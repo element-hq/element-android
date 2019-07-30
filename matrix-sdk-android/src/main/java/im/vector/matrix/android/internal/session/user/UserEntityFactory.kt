@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.user
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.internal.database.model.UserEntity
 
@@ -29,9 +30,13 @@ internal object UserEntityFactory {
             return null
         }
         val roomMember = event.content.toModel<RoomMember>() ?: return null
+        // We only use JOIN and INVITED memberships to create User data
+        if (roomMember.membership != Membership.JOIN && roomMember.membership != Membership.INVITE) {
+            return null
+        }
         return UserEntity(event.stateKey ?: "",
-                          roomMember.displayName ?: "",
-                          roomMember.avatarUrl ?: ""
+                roomMember.displayName ?: "",
+                roomMember.avatarUrl ?: ""
         )
     }
 

@@ -30,7 +30,7 @@ interface MembershipService {
      * This methods load all room members if it was done yet.
      * @return a [Cancelable]
      */
-    fun loadRoomMembersIfNeeded(): Cancelable
+    fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Boolean>): Cancelable
 
     /**
      * Return the roomMember with userId or null.
@@ -52,16 +52,17 @@ interface MembershipService {
     /**
      * Invite a user in the room
      */
-    fun invite(userId: String, callback: MatrixCallback<Unit>)
+    fun invite(userId: String, callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Join the room, or accept an invitation.
      */
-    fun join(viaServers: List<String> = emptyList(), callback: MatrixCallback<Unit>)
+
+    fun join(viaServers: List<String> = emptyList(), callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Leave the room, or reject an invitation.
      */
-    fun leave(callback: MatrixCallback<Unit>)
+    fun leave(callback: MatrixCallback<Unit>): Cancelable
 
 }

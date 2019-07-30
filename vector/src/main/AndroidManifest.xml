@@ -64,6 +64,7 @@
         <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />
         <activity android:name=".features.home.room.detail.RoomDetailActivity" />
         <activity android:name=".features.debug.DebugMenuActivity" />
+        <activity android:name=".features.home.createdirect.CreateDirectRoomActivity" />
 
         <!-- Services -->
 

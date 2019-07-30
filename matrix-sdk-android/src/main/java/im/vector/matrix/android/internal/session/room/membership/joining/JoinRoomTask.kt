@@ -17,10 +17,16 @@
 package im.vector.matrix.android.internal.session.room.membership.joining
 
 import arrow.core.Try
+import im.vector.matrix.android.internal.database.RealmQueryLatch
+import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.RoomEntityFields
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
+import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.task.Task
+import io.realm.RealmConfiguration
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
@@ -30,12 +36,32 @@ internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     )
 }
 
-internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: RoomAPI) : JoinRoomTask {
+internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: RoomAPI,
+                                                       private val readMarkersTask: SetReadMarkersTask,
+                                                       @SessionDatabase private val realmConfiguration: RealmConfiguration) : JoinRoomTask {
 
     override suspend fun execute(params: JoinRoomTask.Params): Try<Unit> {
-        return executeRequest {
+        return executeRequest<Unit> {
             apiCall = roomAPI.join(params.roomId, params.viaServers, HashMap())
+        }.flatMap {
+            val roomId = params.roomId
+            // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
+            val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
+                realm.where(RoomEntity::class.java)
+                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
+            }
+            Try {
+                rql.await(20L, TimeUnit.SECONDS)
+                roomId
+            }
+        }.flatMap { roomId ->
+            setReadMarkers(roomId)
         }
+    }
+
+    private suspend fun setReadMarkers(roomId: String): Try<Unit> {
+        val setReadMarkerParams = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
+        return readMarkersTask.execute(setReadMarkerParams)
     }
 
 }

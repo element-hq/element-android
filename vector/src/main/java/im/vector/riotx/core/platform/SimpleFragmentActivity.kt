@@ -18,6 +18,7 @@ package im.vector.riotx.core.platform
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.annotation.CallSuper
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import butterknife.BindView
@@ -46,6 +47,7 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
 
     @Inject lateinit var session: Session
 
+    @CallSuper
     override fun injectWith(injector: ScreenComponent) {
         session = injector.session()
     }
