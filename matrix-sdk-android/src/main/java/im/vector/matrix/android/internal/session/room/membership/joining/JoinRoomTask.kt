@@ -17,6 +17,8 @@
 package im.vector.matrix.android.internal.session.room.membership.joining
 
 import arrow.core.Try
+import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
+import im.vector.matrix.android.api.session.room.failure.JoinRoomFailure
 import im.vector.matrix.android.internal.database.RealmQueryLatch
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -50,9 +52,11 @@ internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: Room
                 realm.where(RoomEntity::class.java)
                         .equalTo(RoomEntityFields.ROOM_ID, roomId)
             }
-            Try {
-                rql.await(20L, TimeUnit.SECONDS)
-                roomId
+            try {
+                rql.await(timeout = 1L, timeUnit = TimeUnit.MINUTES)
+                Try.just(roomId)
+            } catch (exception: Exception) {
+                Try.raise<String>(JoinRoomFailure.JoinedWithTimeout)
             }
         }.flatMap { roomId ->
             setReadMarkers(roomId)

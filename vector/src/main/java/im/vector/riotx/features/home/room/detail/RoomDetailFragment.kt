@@ -65,6 +65,7 @@ import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.failure.JoinRoomFailure
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -608,7 +609,7 @@ class RoomDetailFragment :
                 // TODO Better handling progress
                 vectorBaseActivity.showWaitingView()
                 vectorBaseActivity.waiting_view_status_text.visibility = View.VISIBLE
-                vectorBaseActivity.waiting_view_status_text.text = getString(R.string.join)
+                vectorBaseActivity.waiting_view_status_text.text = getString(R.string.joining_room)
             }
             is Success -> {
                 navigator.openRoom(vectorBaseActivity, async())

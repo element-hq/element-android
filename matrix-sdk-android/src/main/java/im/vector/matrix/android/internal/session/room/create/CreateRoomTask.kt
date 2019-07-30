@@ -17,7 +17,9 @@
 package im.vector.matrix.android.internal.session.room.create
 
 import arrow.core.Try
+import arrow.core.recoverWith
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.internal.database.RealmQueryLatch
@@ -57,9 +59,11 @@ internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: Ro
                 realm.where(RoomEntity::class.java)
                         .equalTo(RoomEntityFields.ROOM_ID, roomId)
             }
-            Try {
-                rql.await(timeout = 20L, timeUnit = TimeUnit.SECONDS)
-                roomId
+            try {
+                rql.await(timeout = 1L, timeUnit = TimeUnit.MINUTES)
+                Try.just(roomId)
+            } catch (exception: Exception) {
+                Try.raise<String>(CreateRoomFailure.CreatedWithTimeout)
             }
         }.flatMap { roomId ->
             if (params.isDirect()) {

@@ -140,8 +140,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                ?: return
 
         val roomId = tombstoneContent.replacementRoom
-        // TODO replace with rx flux
-        if (session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN) {
+        val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
+        if (isRoomJoined) {
             setState { copy(tombstoneEventHandling = Success(roomId)) }
         } else {
             val viaServer = MatrixPatterns.extractServerNameFromId(action.event.senderId).let {
@@ -151,17 +151,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     listOf(it)
                 }
             }
-            setState { copy(tombstoneEventHandling = Loading()) }
-            session.joinRoom(roomId, viaServer, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    setState { copy(tombstoneEventHandling = Success(roomId)) }
-
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    setState { copy(tombstoneEventHandling = Fail(failure)) }
-                }
-            })
+            session.rx()
+                    .joinRoom(roomId, viaServer)
+                    .map { roomId }
+                    .execute {
+                        copy(tombstoneEventHandling = it)
+                    }
         }
 
     }

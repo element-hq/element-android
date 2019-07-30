@@ -63,6 +63,10 @@ class RxSession(private val session: Session) {
         session.searchUsersDirectory(search, limit, excludedUserIds, MatrixCallbackSingle(it)).toSingle(it)
     }
 
+    fun joinRoom(roomId: String, viaServers: List<String> = emptyList()): Single<Unit> = Single.create {
+        session.joinRoom(roomId, viaServers, MatrixCallbackSingle(it)).toSingle(it)
+    }
+
 }
 
 fun Session.rx(): RxSession {

@@ -39,7 +39,7 @@ interface RoomService {
      */
     fun joinRoom(roomId: String,
                  viaServers: List<String> = emptyList(),
-                 callback: MatrixCallback<Unit>)
+                 callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Get a room from a roomId
