@@ -20,11 +20,7 @@ import android.net.Uri
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import arrow.core.success
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
@@ -56,11 +52,7 @@ import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
-import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
@@ -137,9 +129,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleTombstoneEvent(action: RoomDetailActions.HandleTombstoneEvent) {
         val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
-                               ?: return
+                ?: return
 
-        val roomId = tombstoneContent.replacementRoom
+        val roomId = tombstoneContent.replacementRoom ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
         if (isRoomJoined) {
             setState { copy(tombstoneEventHandling = Success(roomId)) }
@@ -269,7 +261,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
                     //is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-                                    ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
                     if (inReplyTo != null) {
                         //TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
@@ -278,12 +270,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         val messageContent: MessageContent? =
                                 state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                                 ?: "", messageContent?.type
-                                                        ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                                    ?: "", messageContent?.type
+                                    ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
@@ -298,7 +290,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                            ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)

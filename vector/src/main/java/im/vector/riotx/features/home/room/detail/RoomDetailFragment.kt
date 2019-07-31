@@ -45,14 +45,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyVisibilityTracker
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.DeliveryMode
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.*
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
@@ -65,7 +58,6 @@ import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.failure.JoinRoomFailure
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -81,8 +73,6 @@ import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
-import im.vector.riotx.core.extensions.observeK
-import im.vector.riotx.core.extensions.observeNotNull
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
@@ -118,7 +108,6 @@ import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
-import kotlinx.android.synthetic.main.item_loading.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.commonmark.parser.Parser
@@ -265,19 +254,19 @@ class RoomDetailFragment :
             }
 
             override fun resendUnsentEvents() {
-                TODO("not implemented")
+                vectorBaseActivity.notImplemented()
             }
 
             override fun deleteUnsentEvents() {
-                TODO("not implemented")
+                vectorBaseActivity.notImplemented()
             }
 
             override fun closeScreen() {
-                TODO("not implemented")
+                vectorBaseActivity.notImplemented()
             }
 
             override fun jumpToBottom() {
-                TODO("not implemented")
+                vectorBaseActivity.notImplemented()
             }
         }
     }

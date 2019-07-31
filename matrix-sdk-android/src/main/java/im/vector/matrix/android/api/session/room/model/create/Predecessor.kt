@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.api.session.room.model.tombstone
+package im.vector.matrix.android.api.session.room.model.create
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class to contains Tombstone information
+ * A link to an old room in case of room versioning
  */
 @JsonClass(generateAdapter = true)
-data class RoomTombstoneContent(
-        @Json(name = "body") val body: String? = null,
-        @Json(name = "replacement_room") val replacementRoom: String?
+data class Predecessor(
+        @Json(name = "room_id") val roomId: String? = null,
+        @Json(name = "event_id") val eventId: String? = null
 )
