@@ -17,11 +17,23 @@
 package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
+import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.database.query.isDirect
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.reportSubtask
+import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
+import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
+import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
@@ -88,9 +100,7 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
                 measureTimeMillis {
                     reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
                         Timber.v("Handle accountData")
-                        if (syncResponse.accountData != null) {
-                            userAccountDataSyncHandler.handle(syncResponse.accountData)
-                        }
+                        userAccountDataSyncHandler.handle(syncResponse.accountData, syncResponse.rooms?.invite)
                     }
                 }.also {
                     Timber.v("Finish handling accountData in $it ms")
@@ -98,7 +108,6 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
 
                 Timber.v("On sync completed")
                 cryptoSyncHandler.onSyncCompleted(syncResponse)
-
             }
             Timber.v("Finish handling sync in $measure ms")
             syncResponse

@@ -97,7 +97,7 @@ class MessageItemFactory @Inject constructor(
                 val informationData = MessageInformationData(
                         eventId = event.root.eventId ?: "?",
                         senderId = event.root.senderId ?: "",
-                        sendState = event.sendState,
+                        sendState = event.root.sendState,
                         time = "",
                         avatarUrl = event.senderAvatar(),
                         memberName = "",
@@ -121,7 +121,7 @@ class MessageItemFactory @Inject constructor(
                     event.annotations?.editSummary,
                     highlight,
                     callback)
-            is MessageTextContent   -> buildTextMessageItem(event.sendState,
+            is MessageTextContent   -> buildTextMessageItem(event.root.sendState,
                     messageContent,
                     informationData,
                     event.annotations?.editSummary,

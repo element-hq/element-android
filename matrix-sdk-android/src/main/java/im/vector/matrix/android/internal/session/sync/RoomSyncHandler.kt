@@ -35,14 +35,10 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.isDirect
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
-import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
-import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
@@ -70,9 +66,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                                    private val tokenStore: SyncTokenStore,
                                                    private val pushRuleService: DefaultPushRuleService,
                                                    private val processForPushTask: ProcessEventForPushTask,
-                                                   private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                    private val credentials: Credentials,
-                                                   private val directChatsHelper: DirectChatsHelper,
                                                    private val taskExecutor: TaskExecutor) {
 
     sealed class HandlingStrategy {
@@ -192,21 +186,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events)
             roomEntity.addOrUpdate(chunkEntity)
         }
-        val myUserStateEvent = RoomMembers(realm, roomId).getStateEvent(credentials.userId)
-        val inviterId = myUserStateEvent?.sender
-        val myUserRoomMember: RoomMember? = myUserStateEvent?.let { it.asDomain().content?.toModel() }
-        val isDirect = myUserRoomMember?.isDirect
-        if (isDirect == true && inviterId != null) {
-            val isAlreadyDirect = RoomSummaryEntity.isDirect(realm, roomId)
-            if (!isAlreadyDirect) {
-                val directChatsMap = directChatsHelper.getDirectChats(include = Pair(inviterId, roomId))
-                val updateUserAccountParams = UpdateUserAccountDataTask.DirectChatParams(
-                        directMessages = directChatsMap
-                )
-                updateUserAccountDataTask.configureWith(updateUserAccountParams).executeBy(taskExecutor)
-            }
-        }
-        roomSummaryUpdater.update(realm, roomId, Membership.INVITE, isDirect = isDirect, directUserId = inviterId)
+        roomSummaryUpdater.update(realm, roomId, Membership.INVITE)
         return roomEntity
     }
 

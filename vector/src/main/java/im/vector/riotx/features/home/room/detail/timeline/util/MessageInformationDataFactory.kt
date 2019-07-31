@@ -64,7 +64,7 @@ class MessageInformationDataFactory @Inject constructor(private val timelineDate
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
-                sendState = event.sendState,
+                sendState = event.root.sendState,
                 time = time,
                 avatarUrl = avatarUrl,
                 memberName = formattedMemberName,

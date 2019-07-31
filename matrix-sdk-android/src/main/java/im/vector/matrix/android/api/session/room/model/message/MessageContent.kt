@@ -29,5 +29,5 @@ interface MessageContent {
 
 
 fun MessageContent?.isReply(): Boolean {
-    return this?.relatesTo?.inReplyTo != null
+    return this?.relatesTo?.inReplyTo?.eventId != null
 }

@@ -206,6 +206,23 @@ internal class DefaultTimeline(
         }
     }
 
+    override fun pendingEventCount(): Int {
+        var count = 0
+        Realm.getInstance(realmConfiguration).use {
+            count = RoomEntity.where(it,roomId).findFirst()?.sendingTimelineEvents?.count() ?: 0
+        }
+        return count
+    }
+
+    override fun failedToDeliverEventCount(): Int {
+        var count = 0
+        Realm.getInstance(realmConfiguration).use {
+            count = RoomEntity.where(it,roomId).findFirst()?.sendingTimelineEvents?.filter {
+                it.root?.sendState?.hasFailed() ?: false
+            }?.count() ?: 0
+        }
+        return count
+    }
 
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {

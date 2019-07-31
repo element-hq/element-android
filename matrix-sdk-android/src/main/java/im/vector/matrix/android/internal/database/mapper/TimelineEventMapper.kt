@@ -33,8 +33,7 @@ internal object TimelineEventMapper {
                 displayIndex = timelineEventEntity.root?.displayIndex ?: 0,
                 senderName = timelineEventEntity.senderName,
                 isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
-                senderAvatar = timelineEventEntity.senderAvatar,
-                sendState = timelineEventEntity.root?.sendState ?: SendState.UNKNOWN
+                senderAvatar = timelineEventEntity.senderAvatar
         )
     }
 

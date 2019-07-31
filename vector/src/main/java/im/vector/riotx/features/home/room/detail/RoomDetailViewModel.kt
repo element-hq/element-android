@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail
 
 import android.net.Uri
 import android.text.TextUtils
+import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -32,6 +33,8 @@ import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.isImageMessage
+import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -43,6 +46,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
+import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorViewModel
@@ -123,6 +127,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.DownloadFile           -> handleDownloadFile(action)
             is RoomDetailActions.NavigateToEvent        -> handleNavigateToEvent(action)
             is RoomDetailActions.HandleTombstoneEvent   -> handleTombstoneEvent(action)
+            is RoomDetailActions.ResendMessage          -> handleResendEvent(action)
+            is RoomDetailActions.RemoveFailedEcho       -> handleRemove(action)
+            is RoomDetailActions.ClearSendQueue         -> handleClearSendQueue()
+            is RoomDetailActions.ResendAll              -> handleResendAll()
             else                                        -> Timber.e("Unhandled Action: $action")
         }
     }
@@ -185,6 +193,20 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     val downloadedFileEvent: LiveData<LiveEvent<DownloadFileState>>
         get() = _downloadedFileEvent
 
+
+    fun isMenuItemVisible(@IdRes itemId: Int): Boolean {
+        if (itemId == R.id.clear_message_queue) {
+            //For now always disable, woker cancellation is not working properly
+            return false//timeline.pendingEventCount() > 0
+        }
+        if (itemId == R.id.resend_all) {
+            return timeline.failedToDeliverEventCount() > 0
+        }
+        if (itemId == R.id.clear_all) {
+            return timeline.failedToDeliverEventCount() > 0
+        }
+        return false
+    }
 
     // PRIVATE METHODS *****************************************************************************
 
@@ -419,7 +441,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
-        if (action.event.sendState.isSent()) { //ignore pending/local events
+        if (action.event.root.sendState.isSent()) { //ignore pending/local events
             displayedEventsObservable.accept(action)
         }
         //We need to update this with the related m.replace also (to move read receipt)
@@ -552,6 +574,46 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             _navigateToEvent.postLiveEvent(targetEventId)
         }
     }
+
+    private fun handleResendEvent(action: RoomDetailActions.ResendMessage) {
+        val targetEventId = action.eventId
+        room.getTimeLineEvent(targetEventId)?.let {
+            //State must be UNDELIVERED or Failed
+            if (!it.root.sendState.hasFailed()) {
+                Timber.e("Cannot resend message, it is not failed, Cancel first")
+                return
+            }
+            if (it.root.isTextMessage()) {
+                room.resendTextMessage(it)
+            } else if (it.root.isImageMessage()) {
+                room.resendMediaMessage(it)
+            } else {
+                //TODO
+            }
+        }
+
+    }
+
+    private fun handleRemove(action: RoomDetailActions.RemoveFailedEcho) {
+        val targetEventId = action.eventId
+        room.getTimeLineEvent(targetEventId)?.let {
+            //State must be UNDELIVERED or Failed
+            if (!it.root.sendState.hasFailed()) {
+                Timber.e("Cannot resend message, it is not failed, Cancel first")
+                return
+            }
+            room.deleteFailedEcho(it)
+        }
+    }
+
+    private fun handleClearSendQueue() {
+        room.clearSendingQueue()
+    }
+
+    private fun handleResendAll() {
+        room.resendAllFailedMessages()
+    }
+
 
     private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second

@@ -15,7 +15,19 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_height="300dp" />
+        tools:layout_height="300dp"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <ImageView
+        android:id="@+id/messageFailToSendIndicator"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/ic_warning_small"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/messageThumbnailView"
+        app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/messageMediaPlayView"

@@ -41,4 +41,8 @@ enum class SendState {
         return this == UNDELIVERED || this == FAILED_UNKNOWN_DEVICES
     }
 
+    fun isSending(): Boolean {
+        return this == UNSENT || this == ENCRYPTING || this == SENDING
+    }
+
 }

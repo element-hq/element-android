@@ -76,7 +76,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     val informationData = MessageInformationData(
                             eventId = event.root.eventId ?: "?",
                             senderId = event.root.senderId ?: "",
-                            sendState = event.sendState,
+                            sendState = event.root.sendState,
                             time = "",
                             avatarUrl = event.senderAvatar(),
                             memberName = "",

@@ -27,9 +27,7 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
 import android.text.TextUtils
-import android.view.HapticFeedbackConstants
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
@@ -38,6 +36,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.forEach
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -188,6 +187,8 @@ class RoomDetailFragment :
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
 
+    override fun getMenuRes() = R.menu.menu_timeline
+
     private lateinit var actionViewModel: ActionsHandler
 
     @BindView(R.id.composerLayout)
@@ -269,6 +270,27 @@ class RoomDetailFragment :
                 vectorBaseActivity.notImplemented()
             }
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.forEach {
+            it.isVisible = roomDetailViewModel.isMenuItemVisible(it.itemId)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.clear_message_queue) {
+            //This a temporary option during dev as it is not super stable
+            //Cancel all pending actions in room queue and post a dummy
+            //Then mark all sending events as undelivered
+            roomDetailViewModel.process(RoomDetailActions.ClearSendQueue)
+            return true
+        }
+        if (item.itemId == R.id.resend_all) {
+            roomDetailViewModel.process(RoomDetailActions.ResendAll)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun exitSpecialMode() {
@@ -873,6 +895,14 @@ class RoomDetailFragment :
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
 
+            }
+            MessageMenuViewModel.ACTION_RESEND         -> {
+                val eventId = actionData.data.toString()
+                roomDetailViewModel.process(RoomDetailActions.ResendMessage(eventId))
+            }
+            MessageMenuViewModel.ACTION_REMOVE         -> {
+                val eventId = actionData.data.toString()
+                roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(eventId))
             }
             else                                       -> {
                 Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()

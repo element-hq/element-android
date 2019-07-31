@@ -130,8 +130,7 @@ class RoomMessageTouchHelperCallback(private val context: Context,
 
 
     private fun drawReplyButton(canvas: Canvas, itemView: View) {
-
-        Timber.v("drawReplyButton")
+        //Timber.v("drawReplyButton")
         val translationX = Math.abs(itemView.translationX)
         val newTime = System.currentTimeMillis()
         val dt = Math.min(17, newTime - lastReplyButtonAnimationTime)
