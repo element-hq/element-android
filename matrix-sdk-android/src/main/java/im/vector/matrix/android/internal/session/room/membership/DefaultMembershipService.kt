@@ -82,8 +82,8 @@ internal class DefaultMembershipService @Inject constructor(private val roomId: 
                 .executeBy(taskExecutor)
     }
 
-    override fun join(callback: MatrixCallback<Unit>): Cancelable {
-        val params = JoinRoomTask.Params(roomId)
+    override fun join(viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+        val params = JoinRoomTask.Params(roomId, viaServers)
         return joinTask.configureWith(params)
                 .dispatchTo(callback)
                 .executeBy(taskExecutor)

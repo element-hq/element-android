@@ -44,8 +44,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyVisibilityTracker
-import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.*
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
@@ -57,6 +56,7 @@ import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -75,6 +75,7 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
+import im.vector.riotx.core.platform.NotificationAreaView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
@@ -107,6 +108,7 @@ import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
@@ -204,6 +206,7 @@ class RoomDetailFragment :
         setupComposer()
         setupAttachmentButton()
         setupInviteView()
+        setupNotificationView()
         roomDetailViewModel.subscribe { renderState(it) }
         textComposerViewModel.subscribe { renderTextComposerState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
@@ -221,6 +224,10 @@ class RoomDetailFragment :
             scrollOnHighlightedEventCallback.scheduleScrollTo(it)
         }
 
+        roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
+            renderTombstoneEventHandling(it)
+        }
+
         roomDetailViewModel.downloadedFileEvent.observeEvent(this) { downloadFileState ->
             if (downloadFileState.throwable != null) {
                 requireActivity().toast(errorFormatter.toHumanReadable(downloadFileState.throwable))
@@ -236,6 +243,31 @@ class RoomDetailFragment :
                 is SendMode.EDIT  -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_edit, true)
                 is SendMode.QUOTE -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_quote, false)
                 is SendMode.REPLY -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_reply, false)
+            }
+        }
+    }
+
+    private fun setupNotificationView() {
+        notificationAreaView.delegate = object : NotificationAreaView.Delegate {
+
+            override fun onTombstoneEventClicked(tombstoneEvent: Event) {
+                roomDetailViewModel.process(RoomDetailActions.HandleTombstoneEvent(tombstoneEvent))
+            }
+
+            override fun resendUnsentEvents() {
+                vectorBaseActivity.notImplemented()
+            }
+
+            override fun deleteUnsentEvents() {
+                vectorBaseActivity.notImplemented()
+            }
+
+            override fun closeScreen() {
+                vectorBaseActivity.notImplemented()
+            }
+
+            override fun jumpToBottom() {
+                vectorBaseActivity.notImplemented()
             }
         }
     }
@@ -266,7 +298,8 @@ class RoomDetailFragment :
         composerLayout.collapse()
     }
 
-    private fun enterSpecialMode(event: TimelineEvent, @DrawableRes iconRes: Int, useText: Boolean) {
+    private fun enterSpecialMode(event: TimelineEvent, @DrawableRes
+    iconRes: Int, useText: Boolean) {
         commandAutocompletePolicy.enabled = false
         //switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
@@ -280,17 +313,17 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                    ?: messageContent.body)
+                                        ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                ?: nonFormattedBody
+                                                            ?: nonFormattedBody
 
         composerLayout.composerEditText.setText(if (useText) event.getTextEditableContent() else "")
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
         composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
         composerLayout.expand {
@@ -319,9 +352,9 @@ class RoomDetailFragment :
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                            ?: return
+                                  ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                            ?: return
+                                   ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -349,33 +382,33 @@ class RoomDetailFragment :
 
         recyclerView.addOnScrollListener(
                 EndlessRecyclerViewScrollListener(layoutManager, RoomDetailViewModel.PAGINATION_COUNT) { direction ->
-                    roomDetailViewModel.process(RoomDetailActions.LoadMore(direction))
+                    roomDetailViewModel.process(RoomDetailActions.LoadMoreTimelineEvents(direction))
                 })
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
 
         if (VectorPreferences.swipeToReplyIsEnabled(requireContext())) {
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
-                    R.drawable.ic_reply,
-                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
-                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
-                            (model as? AbsMessageItem)?.informationData?.let {
-                                val eventId = it.eventId
-                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
-                            }
-                        }
+                                                               R.drawable.ic_reply,
+                                                               object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                                                                   override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                                                                       (model as? AbsMessageItem)?.informationData?.let {
+                                                                           val eventId = it.eventId
+                                                                           roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                                                                       }
+                                                                   }
 
-                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                            return when (model) {
-                                is MessageFileItem,
-                                is MessageImageVideoItem,
-                                is MessageTextItem -> {
-                                    return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
-                                }
-                                else               -> false
-                            }
-                        }
-                    })
+                                                                   override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                                                                       return when (model) {
+                                                                           is MessageFileItem,
+                                                                           is MessageImageVideoItem,
+                                                                           is MessageTextItem -> {
+                                                                               return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
+                                                                           }
+                                                                           else               -> false
+                                                                       }
+                                                                   }
+                                                               })
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }
@@ -541,7 +574,6 @@ class RoomDetailFragment :
         if (summary?.membership == Membership.JOIN) {
             timelineEventController.setTimeline(state.timeline, state.eventId)
             inviteView.visibility = View.GONE
-
             val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
             avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
@@ -555,7 +587,14 @@ class RoomDetailFragment :
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
-        composerLayout.setRoomEncrypted(state.isEncrypted)
+        if (state.tombstoneEvent == null) {
+            composerLayout.visibility = View.VISIBLE
+            composerLayout.setRoomEncrypted(state.isEncrypted)
+            notificationAreaView.render(NotificationAreaView.State.Hidden)
+        } else {
+            composerLayout.visibility = View.GONE
+            notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
+        }
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
@@ -574,6 +613,26 @@ class RoomDetailFragment :
     private fun renderTextComposerState(state: TextComposerViewState) {
         autocompleteUserPresenter.render(state.asyncUsers)
     }
+
+    private fun renderTombstoneEventHandling(async: Async<String>) {
+        when (async) {
+            is Loading -> {
+                // TODO Better handling progress
+                vectorBaseActivity.showWaitingView()
+                vectorBaseActivity.waiting_view_status_text.visibility = View.VISIBLE
+                vectorBaseActivity.waiting_view_status_text.text = getString(R.string.joining_room)
+            }
+            is Success -> {
+                navigator.openRoom(vectorBaseActivity, async())
+                vectorBaseActivity.finish()
+            }
+            is Fail    -> {
+                vectorBaseActivity.hideWaitingView()
+                vectorBaseActivity.toast(errorFormatter.toHumanReadable(async.error))
+            }
+        }
+    }
+
 
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
@@ -608,7 +667,7 @@ class RoomDetailFragment :
                 .show()
     }
 
-    // TimelineEventController.Callback ************************************************************
+// TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String): Boolean {
         return permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
@@ -651,7 +710,7 @@ class RoomDetailFragment :
         val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData, ViewCompat.getTransitionName(view))
         val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 requireActivity(), view, ViewCompat.getTransitionName(view)
-                ?: "").toBundle()
+                                         ?: "").toBundle()
         startActivity(intent, bundle)
     }
 
@@ -731,6 +790,16 @@ class RoomDetailFragment :
         ViewEditHistoryBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "DISPLAY_EDITS")
     }
+
+    override fun onRoomCreateLinkClicked(url: String) {
+        permalinkHandler.launch(requireContext(), url, object : NavigateToRoomInterceptor {
+            override fun navToRoom(roomId: String, eventId: String?): Boolean {
+                requireActivity().finish()
+                return false
+            }
+        })
+    }
+
 // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
@@ -745,7 +814,7 @@ class RoomDetailFragment :
             }
             MessageMenuViewModel.ACTION_VIEW_REACTIONS -> {
                 val messageInformationData = actionData.data as? MessageInformationData
-                        ?: return
+                                             ?: return
                 ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, messageInformationData)
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
@@ -841,13 +910,13 @@ class RoomDetailFragment :
         }
     }
 
-    //utils
+//utils
     /**
      * Insert an user displayname  in the message editor.
      *
      * @param text the text to insert.
      */
-    //TODO legacy, refactor
+//TODO legacy, refactor
     private fun insertUserDisplayNameInTextEditor(text: String?) {
         //TODO move logic outside of fragment
         if (null != text) {
@@ -898,7 +967,7 @@ class RoomDetailFragment :
         snack.show()
     }
 
-    // VectorInviteView.Callback
+// VectorInviteView.Callback
 
     override fun onAcceptInvite() {
         notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)

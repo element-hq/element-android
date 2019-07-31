@@ -17,6 +17,8 @@
 package im.vector.matrix.android.internal.session.room.membership.joining
 
 import arrow.core.Try
+import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
+import im.vector.matrix.android.api.session.room.failure.JoinRoomFailure
 import im.vector.matrix.android.internal.database.RealmQueryLatch
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -31,7 +33,8 @@ import javax.inject.Inject
 
 internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     data class Params(
-            val roomId: String
+            val roomId: String,
+            val viaServers: List<String> = emptyList()
     )
 }
 
@@ -41,7 +44,7 @@ internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: Room
 
     override suspend fun execute(params: JoinRoomTask.Params): Try<Unit> {
         return executeRequest<Unit> {
-            apiCall = roomAPI.join(params.roomId, HashMap())
+            apiCall = roomAPI.join(params.roomId, params.viaServers, HashMap())
         }.flatMap {
             val roomId = params.roomId
             // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
@@ -49,9 +52,11 @@ internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: Room
                 realm.where(RoomEntity::class.java)
                         .equalTo(RoomEntityFields.ROOM_ID, roomId)
             }
-            Try {
-                rql.await(20L, TimeUnit.SECONDS)
-                roomId
+            try {
+                rql.await(timeout = 1L, timeUnit = TimeUnit.MINUTES)
+                Try.just(roomId)
+            } catch (exception: Exception) {
+                Try.raise<String>(JoinRoomFailure.JoinedWithTimeout)
             }
         }.flatMap { roomId ->
             setReadMarkers(roomId)

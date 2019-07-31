@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.state
+package im.vector.matrix.android.api.session.room.model
 
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.events.model.Event
-
-interface StateService {
-
-    /**
-     * Update the topic of the room
-     */
-    fun updateTopic(topic: String, callback: MatrixCallback<Unit>)
-
-    fun getStateEvent(eventType: String): Event?
-
+enum class VersioningState {
+    NONE,
+    UPGRADED_ROOM_NOT_JOINED,
+    UPGRADED_ROOM_JOINED
 }

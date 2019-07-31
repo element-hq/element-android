@@ -26,8 +26,13 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class MatrixError(
         @Json(name = "errcode") val code: String,
-        @Json(name = "error") val message: String
-) {
+        @Json(name = "error") val message: String,
+
+        @Json(name = "consent_uri") val consentUri: String? = null,
+        // RESOURCE_LIMIT_EXCEEDED data
+        @Json(name = "limit_type") val limitType: String? = null,
+        @Json(name = "admin_contact") val adminUri: String? = null) {
+
 
     companion object {
         const val FORBIDDEN = "M_FORBIDDEN"
@@ -55,5 +60,8 @@ data class MatrixError(
         const val M_CONSENT_NOT_GIVEN = "M_CONSENT_NOT_GIVEN"
         const val RESOURCE_LIMIT_EXCEEDED = "M_RESOURCE_LIMIT_EXCEEDED"
         const val WRONG_ROOM_KEYS_VERSION = "M_WRONG_ROOM_KEYS_VERSION"
+
+        // Possible value for "limit_type"
+        const val LIMIT_TYPE_MAU = "monthly_active_user"
     }
 }

@@ -75,7 +75,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     private fun handleJoinRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             session.getRoom(roomId)
-                    ?.join(object : MatrixCallback<Unit> {})
+                    ?.join(emptyList(), object : MatrixCallback<Unit> {})
         }
     }
 

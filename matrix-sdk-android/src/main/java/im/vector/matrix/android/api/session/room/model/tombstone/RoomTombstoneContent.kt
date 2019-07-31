@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.api.session.room.model.tombstone
 
-package im.vector.matrix.android.api.session.room.state
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.events.model.Event
-
-interface StateService {
-
-    /**
-     * Update the topic of the room
-     */
-    fun updateTopic(topic: String, callback: MatrixCallback<Unit>)
-
-    fun getStateEvent(eventType: String): Event?
-
-}
+/**
+ * Class to contains Tombstone information
+ */
+@JsonClass(generateAdapter = true)
+data class RoomTombstoneContent(
+        @Json(name = "body") val body: String? = null,
+        @Json(name = "replacement_room") val replacementRoom: String?
+)

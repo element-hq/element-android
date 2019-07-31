@@ -29,8 +29,10 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -39,6 +41,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
+import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
@@ -100,7 +103,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     init {
         observeRoomSummary()
         observeEventDisplayedActions()
-        observeInvitationState()
+        observeSummaryState()
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
@@ -111,7 +114,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.SendMessage            -> handleSendMessage(action)
             is RoomDetailActions.SendMedia              -> handleSendMedia(action)
             is RoomDetailActions.EventDisplayed         -> handleEventDisplayed(action)
-            is RoomDetailActions.LoadMore               -> handleLoadMore(action)
+            is RoomDetailActions.LoadMoreTimelineEvents -> handleLoadMore(action)
             is RoomDetailActions.SendReaction           -> handleSendReaction(action)
             is RoomDetailActions.AcceptInvite           -> handleAcceptInvite()
             is RoomDetailActions.RejectInvite           -> handleRejectInvite()
@@ -123,12 +126,39 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.EnterReplyMode         -> handleReplyAction(action)
             is RoomDetailActions.DownloadFile           -> handleDownloadFile(action)
             is RoomDetailActions.NavigateToEvent        -> handleNavigateToEvent(action)
+            is RoomDetailActions.HandleTombstoneEvent   -> handleTombstoneEvent(action)
             is RoomDetailActions.ResendMessage          -> handleResendEvent(action)
             is RoomDetailActions.RemoveFailedEcho       -> handleRemove(action)
             is RoomDetailActions.ClearSendQueue         -> handleClearSendQueue()
             is RoomDetailActions.ResendAll              -> handleResendAll()
             else                                        -> Timber.e("Unhandled Action: $action")
         }
+    }
+
+    private fun handleTombstoneEvent(action: RoomDetailActions.HandleTombstoneEvent) {
+        val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
+                ?: return
+
+        val roomId = tombstoneContent.replacementRoom ?: ""
+        val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
+        if (isRoomJoined) {
+            setState { copy(tombstoneEventHandling = Success(roomId)) }
+        } else {
+            val viaServer = MatrixPatterns.extractServerNameFromId(action.event.senderId).let {
+                if (it.isNullOrBlank()) {
+                    emptyList()
+                } else {
+                    listOf(it)
+                }
+            }
+            session.rx()
+                    .joinRoom(roomId, viaServer)
+                    .map { roomId }
+                    .execute {
+                        copy(tombstoneEventHandling = it)
+                    }
+        }
+
     }
 
     private fun enterEditMode(event: TimelineEvent) {
@@ -150,7 +180,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val _nonBlockingPopAlert = MutableLiveData<LiveEvent<Pair<Int, List<Any>>>>()
     val nonBlockingPopAlert: LiveData<LiveEvent<Pair<Int, List<Any>>>>
         get() = _nonBlockingPopAlert
-
 
     private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
     val sendMessageResultLiveData: LiveData<LiveEvent<SendMessageResult>>
@@ -263,12 +292,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         val messageContent: MessageContent? =
                                 state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                                 ?: "", messageContent?.type
-                                                        ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                                    ?: "", messageContent?.type
+                                    ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
@@ -283,7 +312,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                            ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)
@@ -423,7 +452,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleLoadMore(action: RoomDetailActions.LoadMore) {
+    private fun handleLoadMore(action: RoomDetailActions.LoadMoreTimelineEvents) {
         timeline.paginate(action.direction, PAGINATION_COUNT)
     }
 
@@ -432,7 +461,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleAcceptInvite() {
-        room.join(object : MatrixCallback<Unit> {})
+        room.join(callback = object : MatrixCallback<Unit> {})
     }
 
     private fun handleEditAction(action: RoomDetailActions.EnterEditMode) {
@@ -611,7 +640,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
     }
 
-    private fun observeInvitationState() {
+    private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
                 summary.latestEvent?.root?.senderId?.let { senderId ->
@@ -619,6 +648,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }
                 }
+            }
+            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
+                setState { copy(tombstoneEvent = it) }
             }
         }
     }

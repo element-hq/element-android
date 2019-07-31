@@ -33,6 +33,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val encryptedItemFactory: EncryptedItemFactory,
                                               private val noticeItemFactory: NoticeItemFactory,
                                               private val defaultItemFactory: DefaultItemFactory,
+                                              private val roomCreateItemFactory: RoomCreateItemFactory,
                                               private val avatarRenderer: AvatarRenderer) {
 
     fun create(event: TimelineEvent,
@@ -45,6 +46,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             when (event.root.getClearType()) {
                 EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, highlight, callback)
                 // State and call
+                EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
                 EventType.STATE_ROOM_MEMBER,
@@ -52,7 +54,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER       -> noticeItemFactory.create(event, highlight, callback)
-
+                // State room create
+                EventType.STATE_ROOM_CREATE -> roomCreateItemFactory.create(event, callback)
                 // Crypto
                 EventType.ENCRYPTION        -> encryptionItemFactory.create(event, highlight, callback)
                 EventType.ENCRYPTED         -> {
@@ -66,8 +69,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
 
                 // Unhandled event types (yet)
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                EventType.STICKER,
-                EventType.STATE_ROOM_CREATE -> defaultItemFactory.create(event, highlight)
+                EventType.STICKER           -> defaultItemFactory.create(event, highlight)
 
                 else                        -> {
                     //These are just for debug to display hidden event, they should be filtered out in normal mode

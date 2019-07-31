@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.state
+package im.vector.matrix.android.api.session.room.model.create
 
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.events.model.Event
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-interface StateService {
+/**
+ * Content of a m.room.create type event
+ */
+@JsonClass(generateAdapter = true)
+data class RoomCreateContent(
+        @Json(name = "creator") val creator: String? = null,
+        @Json(name = "room_version") val roomVersion: String? = null,
+        @Json(name = "predecessor") val predecessor: Predecessor? = null
+)
 
-    /**
-     * Update the topic of the room
-     */
-    fun updateTopic(topic: String, callback: MatrixCallback<Unit>)
 
-    fun getStateEvent(eventType: String): Event?
-
-}

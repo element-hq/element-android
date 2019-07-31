@@ -144,7 +144,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-
         if (intent?.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION) == true) {
             notificationDrawerManager.clearAllEvents()
             intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
@@ -193,7 +192,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 bugReporter.openBugReportScreen(this, false)
                 return true
             }
-            R.id.menu_home_filter -> {
+            R.id.menu_home_filter     -> {
                 navigator.openRoomsFiltering(this)
                 return true
             }

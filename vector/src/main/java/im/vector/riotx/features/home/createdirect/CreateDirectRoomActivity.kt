@@ -29,6 +29,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
+import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
@@ -38,6 +39,7 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
 import kotlinx.android.synthetic.main.activity.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
@@ -91,10 +93,13 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private fun renderCreationFailure(error: Throwable) {
         hideWaitingView()
-        AlertDialog.Builder(this)
-                .setMessage(errorFormatter.toHumanReadable(error))
-                .setPositiveButton(R.string.ok) { dialog, id -> dialog.cancel() }
-                .show()
+        if (error is CreateRoomFailure.CreatedWithTimeout) {
+            finish()
+        } else
+            AlertDialog.Builder(this)
+                    .setMessage(errorFormatter.toHumanReadable(error))
+                    .setPositiveButton(R.string.ok) { dialog, id -> dialog.cancel() }
+                    .show()
     }
 
     private fun renderCreationSuccess(roomId: String?) {
