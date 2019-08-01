@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
@@ -710,11 +711,17 @@ class RoomDetailFragment :
 
         val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData, ViewCompat.getTransitionName(view))
         val pairs = ArrayList<Pair<View, String>>()
-        requireActivity().window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
-            pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            requireActivity().window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
+                pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
+            }
+            requireActivity().window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
+                pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
+            }
         }
         pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
         pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
+        pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
 
         val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 requireActivity(), *pairs.toTypedArray()).toBundle()
