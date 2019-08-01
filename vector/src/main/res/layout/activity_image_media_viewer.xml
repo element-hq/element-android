@@ -10,6 +10,7 @@
         android:id="@+id/imageMediaViewerToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:transitionName="toolbar"
         android:elevation="4dp" />
 
 
