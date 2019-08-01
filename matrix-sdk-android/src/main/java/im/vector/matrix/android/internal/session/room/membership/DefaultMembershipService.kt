@@ -42,7 +42,7 @@ internal class DefaultMembershipService @Inject constructor(private val roomId: 
                                                             private val leaveRoomTask: LeaveRoomTask
 ) : MembershipService {
 
-    override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Boolean>): Cancelable {
+    override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Unit>): Cancelable {
         val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
         return loadRoomMembersTask.configureWith(params)
                 .dispatchTo(matrixCallback)

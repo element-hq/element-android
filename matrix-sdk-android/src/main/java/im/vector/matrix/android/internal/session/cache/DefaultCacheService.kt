@@ -23,10 +23,12 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.toConfigurableTask
 import javax.inject.Inject
 
-internal class DefaultCacheService @Inject constructor(@SessionDatabase private val clearCacheTask: ClearCacheTask,
+internal class DefaultCacheService @Inject constructor(@SessionDatabase
+                                                       private val clearCacheTask: ClearCacheTask,
                                                        private val taskExecutor: TaskExecutor) : CacheService {
 
     override fun clearCache(callback: MatrixCallback<Unit>) {
+        taskExecutor.cancelAll()
         clearCacheTask
                 .toConfigurableTask()
                 .dispatchTo(callback)

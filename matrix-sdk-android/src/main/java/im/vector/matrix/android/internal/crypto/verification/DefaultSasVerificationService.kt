@@ -219,17 +219,20 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                                                startReq: KeyVerificationStart,
                                                success: (MXUsersDevicesMap<MXDeviceInfo>) -> Unit,
                                                error: () -> Unit) {
-        deviceListManager.downloadKeys(listOf(otherUserId), true)
-                .fold(
-                        { error() },
-                        {
-                            if (it.getUserDeviceIds(otherUserId)?.contains(startReq.fromDevice) == true) {
-                                success(it)
-                            } else {
-                                error()
-                            }
-                        }
-                )
+        runCatching {
+            deviceListManager.downloadKeys(listOf(otherUserId), true)
+        }.fold(
+                {
+                    if (it.getUserDeviceIds(otherUserId)?.contains(startReq.fromDevice) == true) {
+                        success(it)
+                    } else {
+                        error()
+                    }
+                },
+                {
+                    error()
+                }
+        )
     }
 
     private suspend fun onCancelReceived(event: Event) {

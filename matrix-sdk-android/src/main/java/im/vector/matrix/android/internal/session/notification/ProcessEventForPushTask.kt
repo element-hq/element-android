@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.notification
 
-import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
@@ -41,48 +40,45 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         private val sessionParams: SessionParams
 ) : ProcessEventForPushTask {
 
-
-    override suspend fun execute(params: ProcessEventForPushTask.Params): Try<Unit> {
-        return Try {
-            // Handle left rooms
-            params.syncResponse.leave.keys.forEach {
-                defaultPushRuleService.dispatchRoomLeft(it)
-            }
-            val newJoinEvents = params.syncResponse.join
-                    .map { entries ->
-                        entries.value.timeline?.events?.map { it.copy(roomId = entries.key) }
-                    }
-                    .fold(emptyList<Event>(), { acc, next ->
-                        acc + (next ?: emptyList())
-                    })
-            val inviteEvents = params.syncResponse.invite
-                    .map { entries ->
-                        entries.value.inviteState?.events?.map { it.copy(roomId = entries.key) }
-                    }
-                    .fold(emptyList<Event>(), { acc, next ->
-                        acc + (next ?: emptyList())
-                    })
-            val allEvents = (newJoinEvents + inviteEvents).filter { event ->
-                when (event.type) {
-                    EventType.MESSAGE,
-                    EventType.REDACTION,
-                    EventType.ENCRYPTED,
-                    EventType.STATE_ROOM_MEMBER -> true
-                    else                        -> false
-                }
-            }.filter {
-                it.senderId != sessionParams.credentials.userId
-            }
-            Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
-                    " to check for push rules with ${params.rules.size} rules")
-            allEvents.forEach { event ->
-                fulfilledBingRule(event, params.rules)?.let {
-                    Timber.v("[PushRules] Rule $it match for event ${event.eventId}")
-                    defaultPushRuleService.dispatchBing(event, it)
-                }
-            }
-            defaultPushRuleService.dispatchFinish()
+    override suspend fun execute(params: ProcessEventForPushTask.Params) {
+        // Handle left rooms
+        params.syncResponse.leave.keys.forEach {
+            defaultPushRuleService.dispatchRoomLeft(it)
         }
+        val newJoinEvents = params.syncResponse.join
+                .map { entries ->
+                    entries.value.timeline?.events?.map { it.copy(roomId = entries.key) }
+                }
+                .fold(emptyList<Event>(), { acc, next ->
+                    acc + (next ?: emptyList())
+                })
+        val inviteEvents = params.syncResponse.invite
+                .map { entries ->
+                    entries.value.inviteState?.events?.map { it.copy(roomId = entries.key) }
+                }
+                .fold(emptyList<Event>(), { acc, next ->
+                    acc + (next ?: emptyList())
+                })
+        val allEvents = (newJoinEvents + inviteEvents).filter { event ->
+            when (event.type) {
+                EventType.MESSAGE,
+                EventType.REDACTION,
+                EventType.ENCRYPTED,
+                EventType.STATE_ROOM_MEMBER -> true
+                else                        -> false
+            }
+        }.filter {
+            it.senderId != sessionParams.credentials.userId
+        }
+        Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
+                " to check for push rules with ${params.rules.size} rules")
+        allEvents.forEach { event ->
+            fulfilledBingRule(event, params.rules)?.let {
+                Timber.v("[PushRules] Rule $it match for event ${event.eventId}")
+                defaultPushRuleService.dispatchBing(event, it)
+            }
+        }
+        defaultPushRuleService.dispatchFinish()
     }
 
     private fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule? {

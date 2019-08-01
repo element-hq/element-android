@@ -47,6 +47,7 @@ import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Provider
 
 @SessionScope
 internal class DefaultSession @Inject constructor(override val sessionParams: SessionParams,
@@ -64,7 +65,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val pushersService: Lazy<PushersService>,
                                                   private val cryptoService: Lazy<CryptoManager>,
                                                   private val fileService: Lazy<FileService>,
-                                                  private val syncThread: SyncThread,
+                                                  private val syncThreadProvider: Provider<SyncThread>,
                                                   private val contentUrlResolver: ContentUrlResolver,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker,
                                                   private val initialSyncProgressService: Lazy<InitialSyncProgressService>)
@@ -84,6 +85,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
 
     private var isOpen = false
 
+    private var syncThread: SyncThread? = null
 
     @MainThread
     override fun open() {
@@ -105,21 +107,23 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         SyncWorker.stopAnyBackgroundSync(context)
     }
 
-    override fun startSync(fromForeground : Boolean) {
+    override fun startSync(fromForeground: Boolean) {
         Timber.i("Starting sync thread")
         assert(isOpen)
-        syncThread.setInitialForeground(fromForeground)
-        if (!syncThread.isAlive) {
-            syncThread.start()
+        val localSyncThread = getSyncThread()
+        localSyncThread.setInitialForeground(fromForeground)
+        if (!localSyncThread.isAlive) {
+            localSyncThread.start()
         } else {
-            syncThread.restart()
+            localSyncThread.restart()
             Timber.w("Attempt to start an already started thread")
         }
     }
 
     override fun stopSync() {
         assert(isOpen)
-        syncThread.kill()
+        syncThread?.kill()
+        syncThread = null
     }
 
     override fun close() {
@@ -131,7 +135,13 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     }
 
     override fun syncState(): LiveData<SyncState> {
-        return syncThread.liveState()
+        return getSyncThread().liveState()
+    }
+
+    private fun getSyncThread(): SyncThread {
+        return syncThread ?: syncThreadProvider.get().also {
+            syncThread = it
+        }
     }
 
     @MainThread
@@ -168,6 +178,22 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                 // Ignore failure
                 Timber.e("SIGN_OUT: call webservice -> ERROR: ignoring")
                 onSuccess(Unit)
+            }
+        })
+    }
+
+    override fun clearCache(callback: MatrixCallback<Unit>) {
+        stopSync()
+        stopAnyBackgroundSync()
+        cacheService.get().clearCache(object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                startSync(true)
+                callback.onSuccess(data)
+            }
+
+            override fun onFailure(failure: Throwable) {
+                startSync(true)
+                callback.onFailure(failure)
             }
         })
     }

@@ -52,10 +52,6 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.*
-import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
-import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
@@ -355,10 +351,8 @@ internal class KeysBackup @Inject constructor(
                                     callback: MatrixCallback<KeysBackupVersionTrust>) {
         // TODO Validate with François that this is correct
         object : Task<KeysVersionResult, KeysBackupVersionTrust> {
-            override suspend fun execute(params: KeysVersionResult): Try<KeysBackupVersionTrust> {
-                return Try {
-                    getKeysBackupTrustBg(params)
-                }
+            override suspend fun execute(params: KeysVersionResult): KeysBackupVersionTrust {
+                return getKeysBackupTrustBg(params)
             }
         }
                 .configureWith(keysBackupVersion)
@@ -454,7 +448,8 @@ internal class KeysBackup @Inject constructor(
                     val myUserId = credentials.userId
 
                     // Get current signatures, or create an empty set
-                    val myUserSignatures = authData.signatures?.get(myUserId)?.toMutableMap() ?: HashMap()
+                    val myUserSignatures = authData.signatures?.get(myUserId)?.toMutableMap()
+                            ?: HashMap()
 
                     if (trust) {
                         // Add current device signature

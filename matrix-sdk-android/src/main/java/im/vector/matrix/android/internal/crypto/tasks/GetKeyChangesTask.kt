@@ -16,11 +16,9 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.KeyChangesResponse
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
@@ -36,10 +34,9 @@ internal interface GetKeyChangesTask : Task<GetKeyChangesTask.Params, KeyChanges
 internal class DefaultGetKeyChangesTask @Inject constructor(private val cryptoApi: CryptoApi)
     : GetKeyChangesTask {
 
-    override suspend fun execute(params: GetKeyChangesTask.Params): Try<KeyChangesResponse> {
+    override suspend fun execute(params: GetKeyChangesTask.Params): KeyChangesResponse {
         return executeRequest {
-            apiCall = cryptoApi.getKeyChanges(params.from,
-                    params.to)
+            apiCall = cryptoApi.getKeyChanges(params.from, params.to)
         }
     }
 }

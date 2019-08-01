@@ -17,7 +17,7 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.MatrixCallback
@@ -34,7 +34,7 @@ import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
 internal class EncryptEventWorker(context: Context, params: WorkerParameters)
-    : Worker(context, params) {
+    : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -49,7 +49,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     @Inject lateinit var crypto: CryptoService
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         Timber.v("Start Encrypt work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success().also {

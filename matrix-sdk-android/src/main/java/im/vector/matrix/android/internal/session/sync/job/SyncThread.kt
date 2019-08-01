@@ -134,9 +134,12 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                 latch.countDown()
                             }
 
+                            override fun onCanceled() {
+                                latch.countDown()
+                            }
+
                         })
                         .executeBy(taskExecutor)
-
                 latch.await()
                 if (state is SyncState.RUNNING) {
                     updateStateTo(SyncState.RUNNING(afterPause = false))

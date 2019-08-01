@@ -43,7 +43,6 @@ import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import javax.inject.Inject
@@ -223,9 +222,9 @@ internal class DefaultRelationService @Inject constructor(private val context: C
      * the same transaction id is received (in unsigned data)
      */
     private fun saveLocalEcho(event: Event) {
-        monarchy.tryTransactionAsync { realm ->
+        monarchy.writeAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                    ?: return@tryTransactionAsync
+                    ?: return@writeAsync
             roomEntity.addSendingEvent(event)
         }
     }

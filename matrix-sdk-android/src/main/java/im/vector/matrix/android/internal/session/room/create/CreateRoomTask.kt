@@ -16,8 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.create
 
-import arrow.core.Try
-import arrow.core.recoverWith
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
@@ -34,7 +32,7 @@ import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionSync
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.RealmConfiguration
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -46,60 +44,49 @@ internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: Ro
                                                          private val directChatsHelper: DirectChatsHelper,
                                                          private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                          private val readMarkersTask: SetReadMarkersTask,
-                                                         @SessionDatabase private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
+                                                         @SessionDatabase
+                                                         private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
 
 
-    override suspend fun execute(params: CreateRoomParams): Try<String> {
-        return executeRequest<CreateRoomResponse> {
+    override suspend fun execute(params: CreateRoomParams): String {
+        val createRoomResponse = executeRequest<CreateRoomResponse> {
             apiCall = roomAPI.createRoom(params)
-        }.flatMap { createRoomResponse ->
-            val roomId = createRoomResponse.roomId!!
-            // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
-            val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
-                realm.where(RoomEntity::class.java)
-                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
-            }
-            try {
-                rql.await(timeout = 1L, timeUnit = TimeUnit.MINUTES)
-                Try.just(roomId)
-            } catch (exception: Exception) {
-                Try.raise<String>(CreateRoomFailure.CreatedWithTimeout)
-            }
-        }.flatMap { roomId ->
-            if (params.isDirect()) {
-                handleDirectChatCreation(params, roomId)
-            } else {
-                Try.just(roomId)
-            }
-        }.flatMap { roomId ->
-            setReadMarkers(roomId)
         }
+        val roomId = createRoomResponse.roomId!!
+        // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
+        val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
+            realm.where(RoomEntity::class.java)
+                    .equalTo(RoomEntityFields.ROOM_ID, roomId)
+        }
+        try {
+            rql.await(timeout = 1L, timeUnit = TimeUnit.MINUTES)
+        } catch (exception: Exception) {
+            throw CreateRoomFailure.CreatedWithTimeout
+        }
+        if (params.isDirect()) {
+            handleDirectChatCreation(params, roomId)
+        }
+        setReadMarkers(roomId)
+        return roomId
     }
 
-    private suspend fun handleDirectChatCreation(params: CreateRoomParams, roomId: String): Try<String> {
+    private suspend fun handleDirectChatCreation(params: CreateRoomParams, roomId: String) {
         val otherUserId = params.getFirstInvitedUserId()
-                          ?: return Try.raise(IllegalStateException("You can't create a direct room without an invitedUser"))
+                ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
 
-        return monarchy.tryTransactionSync { realm ->
+        monarchy.awaitTransaction { realm ->
             RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                 this.directUserId = otherUserId
                 this.isDirect = true
             }
-        }.flatMap {
-            val directChats = directChatsHelper.getLocalUserAccount()
-            updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
-        }.flatMap {
-            Try.just(roomId)
         }
+        val directChats = directChatsHelper.getLocalUserAccount()
+        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
     }
 
-    private suspend fun setReadMarkers(roomId: String): Try<String> {
+    private suspend fun setReadMarkers(roomId: String) {
         val setReadMarkerParams = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
-        return readMarkersTask
-                .execute(setReadMarkerParams)
-                .flatMap {
-                    Try.just(roomId)
-                }
+        return readMarkersTask.execute(setReadMarkerParams)
     }
 
 }

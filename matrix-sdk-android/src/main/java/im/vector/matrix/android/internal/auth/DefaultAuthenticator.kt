@@ -68,10 +68,12 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
                               callback: MatrixCallback<Session>): Cancelable {
 
         val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val sessionOrFailure = authenticate(homeServerConnectionConfig, login, password)
+            val sessionOrFailure = runCatching {
+                authenticate(homeServerConnectionConfig, login, password)
+            }
             sessionOrFailure.foldToCallback(callback)
         }
-        return CancelableCoroutine(job)
+        return CancelableCoroutine(job, callback)
 
     }
 
@@ -85,16 +87,12 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
         } else {
             PasswordLoginParams.userIdentifier(login, password, "Mobile")
         }
-        executeRequest<Credentials> {
+        val credentials = executeRequest<Credentials> {
             apiCall = authAPI.login(loginParams)
-        }.map {
-            val sessionParams = SessionParams(it, homeServerConnectionConfig)
-            sessionParamsStore.save(sessionParams)
-            sessionParams
-        }.map {
-            sessionManager.getOrCreateSession(it)
         }
-
+        val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
+        sessionParamsStore.save(sessionParams)
+        sessionManager.getOrCreateSession(sessionParams)
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

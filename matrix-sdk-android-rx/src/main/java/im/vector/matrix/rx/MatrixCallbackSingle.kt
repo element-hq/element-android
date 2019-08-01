@@ -27,7 +27,7 @@ internal class MatrixCallbackSingle<T>(private val singleEmitter: SingleEmitter<
     }
 
     override fun onFailure(failure: Throwable) {
-        singleEmitter.onError(failure)
+        singleEmitter.tryOnError(failure)
     }
 }
 

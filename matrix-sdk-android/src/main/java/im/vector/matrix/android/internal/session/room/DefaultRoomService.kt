@@ -34,7 +34,7 @@ import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.fetchManaged
+import io.realm.Realm
 import javax.inject.Inject
 
 internal class DefaultRoomService @Inject constructor(private val monarchy: Monarchy,
@@ -52,8 +52,13 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
     }
 
     override fun getRoom(roomId: String): Room? {
-        monarchy.fetchManaged { RoomEntity.where(it, roomId).findFirst() } ?: return null
-        return roomFactory.create(roomId)
+        return Realm.getInstance(monarchy.realmConfiguration).use {
+            if (RoomEntity.where(it, roomId).findFirst() != null) {
+                roomFactory.create(roomId)
+            } else {
+                null
+            }
+        }
     }
 
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {

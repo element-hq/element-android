@@ -21,6 +21,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.network.executeRequest
@@ -59,22 +60,14 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
 
         if (params.lastFailureMessage != null) {
             localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
-
             // Transmit the error
             return Result.success(inputData)
         }
-
-        localEchoUpdater.updateSendState(event.eventId, SendState.SENDING)
-        val result = executeRequest<SendResponse> {
-            apiCall = roomAPI.send(
-                    event.eventId,
-                    params.roomId,
-                    event.type,
-                    event.content
-            )
-        }
-        return result.fold({
-            when (it) {
+        return try {
+            sendEvent(event.eventId, event.type, event.content, params.roomId)
+            Result.success()
+        } catch (exception: Throwable) {
+            when (exception) {
                 is Failure.NetworkConnection -> Result.retry()
                 else                         -> {
                     localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
@@ -82,10 +75,20 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
                     Result.success()
                 }
             }
-        }, {
-            localEchoUpdater.updateSendState(event.eventId, SendState.SENT)
-            Result.success()
-        })
+        }
+    }
+
+    private suspend fun sendEvent(eventId: String, eventType: String, content: Content?, roomId: String) {
+        localEchoUpdater.updateSendState(eventId, SendState.SENDING)
+        executeRequest<SendResponse> {
+            apiCall = roomAPI.send(
+                    eventId,
+                    roomId,
+                    eventType,
+                    content
+            )
+        }
+        localEchoUpdater.updateSendState(eventId, SendState.SENT)
     }
 
 }

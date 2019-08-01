@@ -28,7 +28,7 @@ internal class MatrixCallbackCompletable<T>(private val completableEmitter: Comp
     }
 
     override fun onFailure(failure: Throwable) {
-        completableEmitter.onError(failure)
+        completableEmitter.tryOnError(failure)
     }
 }
 

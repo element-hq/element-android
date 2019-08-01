@@ -16,11 +16,9 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysBackupData
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
@@ -33,10 +31,9 @@ internal interface GetSessionsDataTask : Task<GetSessionsDataTask.Params, KeysBa
 internal class DefaultGetSessionsDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : GetSessionsDataTask {
 
-    override suspend fun execute(params: GetSessionsDataTask.Params): Try<KeysBackupData> {
+    override suspend fun execute(params: GetSessionsDataTask.Params): KeysBackupData {
         return executeRequest {
-            apiCall = roomKeysApi.getSessionsData(
-                    params.version)
+            apiCall = roomKeysApi.getSessionsData(params.version)
         }
     }
 }

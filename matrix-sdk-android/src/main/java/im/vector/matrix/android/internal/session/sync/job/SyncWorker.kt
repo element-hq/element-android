@@ -18,18 +18,15 @@ package im.vector.matrix.android.internal.session.sync.job
 import android.content.Context
 import androidx.work.*
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
-import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -47,44 +44,25 @@ internal class SyncWorker(context: Context,
             val automaticallyRetry: Boolean = false
     )
 
-    @Inject
-    lateinit var syncTask: SyncTask
-    @Inject
-    lateinit var taskExecutor: TaskExecutor
+    @Inject lateinit var syncTask: SyncTask
+    @Inject lateinit var taskExecutor: TaskExecutor
+    @Inject lateinit var coroutineDispatchers: MatrixCoroutineDispatchers
 
     override suspend fun doWork(): Result {
         Timber.i("Sync work starting")
         val params = WorkerParamsFactory.fromData<Params>(inputData) ?: return Result.success()
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)
-
-
-        val latch = CountDownLatch(1)
-        val taskParams = SyncTask.Params(0)
-        cancelableTask = syncTask.configureWith(taskParams)
-                .callbackOn(TaskThread.SYNC)
-                .executeOn(TaskThread.SYNC)
-                .dispatchTo(object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        latch.countDown()
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure)
-                        latch.countDown()
-                    }
-
-                })
-                .executeBy(taskExecutor)
-
-        latch.await()
+        runCatching {
+            withContext(coroutineDispatchers.sync) {
+                val taskParams = SyncTask.Params(0)
+                syncTask.execute(taskParams)
+            }
+        }
         return Result.success()
     }
 
     companion object {
-
-
-        private var cancelableTask: Cancelable? = null
 
         fun requireBackgroundSync(context: Context, userId: String, serverTimeout: Long = 0) {
             val data = WorkerParamsFactory.toData(Params(userId, serverTimeout, false))
@@ -107,7 +85,6 @@ internal class SyncWorker(context: Context,
         }
 
         fun stopAnyBackgroundSync(context: Context) {
-            cancelableTask?.cancel()
             WorkManager.getInstance(context).cancelUniqueWork("BG_SYNCP")
         }
     }
