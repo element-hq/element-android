@@ -21,6 +21,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -67,15 +68,19 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
             sendEvent(event.eventId, event.type, event.content, params.roomId)
             Result.success()
         } catch (exception: Throwable) {
-            when (exception) {
-                is Failure.NetworkConnection -> Result.retry()
-                else                         -> {
-                    localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
-                    //always return success, or the chain will be stuck for ever!
-                    Result.success()
-                }
+            if (exception.shouldBeRetried()) {
+                Result.retry()
+            } else {
+                localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
+                //always return success, or the chain will be stuck for ever!
+                Result.success()
             }
         }
+    }
+
+    private fun Throwable.shouldBeRetried(): Boolean {
+        return this is Failure.NetworkConnection
+                || (this is Failure.ServerError && this.error.code == MatrixError.LIMIT_EXCEEDED)
     }
 
     private suspend fun sendEvent(eventId: String, eventType: String, content: Content?, roomId: String) {
