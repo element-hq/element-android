@@ -53,7 +53,7 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
                     }
                     .foldToCallback(task.callback)
         }
-        return CancelableCoroutine(job, task.callback).also {
+        return CancelableCoroutine(job).also {
             cancelableBag += it
         }
     }

@@ -149,21 +149,20 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         Timber.w("SIGN_OUT: start")
 
         assert(isOpen)
-        //Timber.w("SIGN_OUT: kill sync thread")
-        //syncThread.kill()
 
         Timber.w("SIGN_OUT: call webservice")
         return signOutService.get().signOut(object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 Timber.w("SIGN_OUT: call webservice -> SUCCESS: clear cache")
-
+                stopSync()
+                stopAnyBackgroundSync()
                 // Clear the cache
                 cacheService.get().clearCache(object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         Timber.w("SIGN_OUT: clear cache -> SUCCESS: clear crypto cache")
                         cryptoService.get().clearCryptoCache(MatrixCallbackDelegate(callback))
-
                         WorkManagerUtil.cancelAllWorks(context)
+                        callback.onSuccess(Unit)
                     }
 
                     override fun onFailure(failure: Throwable) {

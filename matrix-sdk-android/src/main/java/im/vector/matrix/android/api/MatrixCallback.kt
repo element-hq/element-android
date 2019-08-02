@@ -38,8 +38,4 @@ interface MatrixCallback<in T> {
         //no-op
     }
 
-    fun onCanceled() {
-        //no-op
-    }
-
 }

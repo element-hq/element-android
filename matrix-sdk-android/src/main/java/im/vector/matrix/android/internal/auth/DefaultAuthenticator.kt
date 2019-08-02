@@ -73,7 +73,7 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
             }
             sessionOrFailure.foldToCallback(callback)
         }
-        return CancelableCoroutine(job, callback)
+        return CancelableCoroutine(job)
 
     }
 
