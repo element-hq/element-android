@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
@@ -35,6 +36,7 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.lifecycle.ViewModelProviders
@@ -313,17 +315,17 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                                        ?: messageContent.body)
+                    ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                                                            ?: nonFormattedBody
+                ?: nonFormattedBody
 
         composerLayout.composerEditText.setText(if (useText) event.getTextEditableContent() else "")
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
         composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
         composerLayout.expand {
@@ -352,9 +354,9 @@ class RoomDetailFragment :
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                                  ?: return
+                            ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                                   ?: return
+                            ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -389,26 +391,26 @@ class RoomDetailFragment :
 
         if (VectorPreferences.swipeToReplyIsEnabled(requireContext())) {
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
-                                                               R.drawable.ic_reply,
-                                                               object : RoomMessageTouchHelperCallback.QuickReplayHandler {
-                                                                   override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
-                                                                       (model as? AbsMessageItem)?.informationData?.let {
-                                                                           val eventId = it.eventId
-                                                                           roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
-                                                                       }
-                                                                   }
+                    R.drawable.ic_reply,
+                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                            (model as? AbsMessageItem)?.informationData?.let {
+                                val eventId = it.eventId
+                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                            }
+                        }
 
-                                                                   override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                                                                       return when (model) {
-                                                                           is MessageFileItem,
-                                                                           is MessageImageVideoItem,
-                                                                           is MessageTextItem -> {
-                                                                               return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
-                                                                           }
-                                                                           else               -> false
-                                                                       }
-                                                                   }
-                                                               })
+                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                            return when (model) {
+                                is MessageFileItem,
+                                is MessageImageVideoItem,
+                                is MessageTextItem -> {
+                                    return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
+                                }
+                                else               -> false
+                            }
+                        }
+                    })
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }
@@ -708,9 +710,21 @@ class RoomDetailFragment :
         // TODO Use navigator
 
         val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData, ViewCompat.getTransitionName(view))
+        val pairs = ArrayList<Pair<View, String>>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            requireActivity().window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
+                pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
+            }
+            requireActivity().window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
+                pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
+            }
+        }
+        pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
+        pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
+        pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
+
         val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                requireActivity(), view, ViewCompat.getTransitionName(view)
-                                         ?: "").toBundle()
+                requireActivity(), *pairs.toTypedArray()).toBundle()
         startActivity(intent, bundle)
     }
 
@@ -814,7 +828,7 @@ class RoomDetailFragment :
             }
             MessageMenuViewModel.ACTION_VIEW_REACTIONS -> {
                 val messageInformationData = actionData.data as? MessageInformationData
-                                             ?: return
+                        ?: return
                 ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, messageInformationData)
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
