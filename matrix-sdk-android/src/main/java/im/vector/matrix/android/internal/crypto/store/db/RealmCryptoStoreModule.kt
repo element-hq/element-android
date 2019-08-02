@@ -16,8 +16,8 @@
 
 package im.vector.matrix.android.internal.crypto.store.db
 
-import io.realm.annotations.RealmModule
 import im.vector.matrix.android.internal.crypto.store.db.model.*
+import io.realm.annotations.RealmModule
 
 /**
  * Realm module for Crypto store classes

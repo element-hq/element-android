@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.crypto.actions
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 

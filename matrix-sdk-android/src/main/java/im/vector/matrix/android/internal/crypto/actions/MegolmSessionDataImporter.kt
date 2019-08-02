@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.crypto.RoomDecryptorProvider
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 

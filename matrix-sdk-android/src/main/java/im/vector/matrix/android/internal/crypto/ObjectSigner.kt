@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.crypto
 
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.internal.session.SessionScope
 import java.util.*
 import javax.inject.Inject
 

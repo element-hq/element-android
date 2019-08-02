@@ -18,12 +18,7 @@ package im.vector.matrix.android.internal.database
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.util.createBackgroundHandler
-import io.realm.OrderedCollectionChangeSet
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmObject
-import io.realm.RealmResults
+import io.realm.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 

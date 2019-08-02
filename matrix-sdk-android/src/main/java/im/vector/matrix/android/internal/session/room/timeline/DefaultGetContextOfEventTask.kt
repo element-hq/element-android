@@ -16,9 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task

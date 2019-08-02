@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.CryptoModule
 import im.vector.matrix.android.internal.di.MatrixComponent
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
-import im.vector.matrix.android.internal.session.user.accountdata.AccountDataModule
 import im.vector.matrix.android.internal.session.cache.CacheModule
 import im.vector.matrix.android.internal.session.content.ContentModule
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
@@ -43,6 +42,7 @@ import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.session.user.UserModule
+import im.vector.matrix.android.internal.session.user.accountdata.AccountDataModule
 import im.vector.matrix.android.internal.task.TaskExecutor
 
 @Component(dependencies = [MatrixComponent::class],
