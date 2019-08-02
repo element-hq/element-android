@@ -19,35 +19,45 @@ package im.vector.matrix.android.internal.network
 import android.content.Context
 import com.novoda.merlin.Merlin
 import com.novoda.merlin.MerlinsBeard
-import com.novoda.merlin.registerable.connection.Connectable
 import im.vector.matrix.android.internal.di.MatrixScope
+import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @MatrixScope
 internal class NetworkConnectivityChecker @Inject constructor(context: Context) {
 
-    private val merlin = Merlin.Builder().withConnectableCallbacks().build(context)
-    private val merlinsBeard = MerlinsBeard.from(context)
+    private val merlin = Merlin.Builder()
+            .withConnectableCallbacks()
+            .withDisconnectableCallbacks()
+            .build(context)
 
-    private val listeners = ArrayList<Listener>()
+    private val merlinsBeard = MerlinsBeard.Builder().build(context)
+    private val listeners = Collections.synchronizedList(ArrayList<Listener>())
 
-    fun register(listener: Listener) {
-        if (listeners.isEmpty()) {
-            merlin.bind()
-        }
-        listeners.add(listener)
-        val connectable = Connectable {
-            if (listeners.contains(listener)) {
-                listener.onConnect()
+    init {
+        merlin.bind()
+        merlin.registerDisconnectable {
+            Timber.v("On Disconnect")
+            listeners.forEach {
+                it.onDisconnect()
             }
         }
-        merlin.registerConnectable(connectable)
+        merlin.registerConnectable {
+            Timber.v("On Connect")
+            listeners.forEach {
+                it.onConnect()
+            }
+        }
+    }
+
+    fun register(listener: Listener) {
+        listeners.add(listener)
     }
 
     fun unregister(listener: Listener) {
-        if (listeners.remove(listener) && listeners.isEmpty()) {
-            merlin.unbind()
-        }
+        listeners.remove(listener)
     }
 
     fun isConnected(): Boolean {
@@ -55,7 +65,13 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
     }
 
     interface Listener {
-        fun onConnect()
+        fun onConnect() {
+
+        }
+
+        fun onDisconnect() {
+
+        }
     }
 
 
