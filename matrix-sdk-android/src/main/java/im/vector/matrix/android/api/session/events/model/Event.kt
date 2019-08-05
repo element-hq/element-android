@@ -82,8 +82,13 @@ data class Event(
 ) {
 
 
+    @Transient
     var mxDecryptionResult: OlmDecryptionResult? = null
+
+    @Transient
     var mCryptoError: MXCryptoError.ErrorType? = null
+
+    @Transient
     var sendState: SendState = SendState.UNKNOWN
 
 
@@ -99,42 +104,6 @@ data class Event(
     // Crypto
     //==============================================================================================================
 
-//    /**
-//     * For encrypted events, the plaintext payload for the event.
-//     * This is a small MXEvent instance with typically value for `type` and 'content' fields.
-//     */
-//    @Transient
-//    var mClearEvent: Event? = null
-//        private set
-//
-//    /**
-//     * Curve25519 key which we believe belongs to the sender of the event.
-//     * See `senderKey` property.
-//     */
-//    @Transient
-//    private var mSenderCurve25519Key: String? = null
-//
-//    /**
-//     * Ed25519 key which the sender of this event (for olm) or the creator of the megolm session (for megolm) claims to own.
-//     * See `claimedEd25519Key` property.
-//     */
-//    @Transient
-//    private var mClaimedEd25519Key: String? = null
-//
-//    /**
-//     * Curve25519 keys of devices involved in telling us about the senderCurve25519Key and claimedEd25519Key.
-//     * See `forwardingCurve25519KeyChain` property.
-//     */
-//    @Transient
-//    private var mForwardingCurve25519KeyChain: List<String> = ArrayList()
-//
-//    /**
-//     * Decryption error
-//     */
-//    @Transient
-//    var mCryptoError: MXCryptoError? = null
-//        private set
-
     /**
      * @return true if this event is encrypted.
      */
@@ -143,50 +112,10 @@ data class Event(
     }
 
     /**
-     * Update the clear data on this event.
-     * This is used after decrypting an event; it should not be used by applications.
-     *
-     * @param decryptionResult the decryption result, including the plaintext and some key info.
-     */
-//    internal fun setClearData(decryptionResult: MXEventDecryptionResult?) {
-//        mClearEvent = null
-//        if (decryptionResult != null) {
-//            if (decryptionResult.clearEvent != null) {
-//                val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
-//                mClearEvent = adapter.fromJsonValue(decryptionResult.clearEvent)
-//
-//                if (mClearEvent != null) {
-//                    mSenderCurve25519Key = decryptionResult.senderCurve25519Key
-//                    mClaimedEd25519Key = decryptionResult.claimedEd25519Key
-//                    mForwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain
-//
-//                    // For encrypted events with relation, the m.relates_to is kept in clear, so we need to put it back
-//                    // in the clear event
-//                    try {
-//                        content?.get("m.relates_to")?.let { clearRelates ->
-//                            mClearEvent = mClearEvent?.copy(
-//                                    content = HashMap(mClearEvent!!.content).apply {
-//                                        this["m.relates_to"] = clearRelates
-//                                    }
-//                            )
-//                        }
-//                    } catch (e: Exception) {
-//                        Timber.e(e, "Unable to restore 'm.relates_to' the clear event")
-//                    }
-//                }
-//
-//
-//            }
-//        }
-//        mCryptoError = null
-//    }
-
-    /**
      * @return The curve25519 key that sent this event.
      */
     fun getSenderKey(): String? {
         return mxDecryptionResult?.senderKey
-        // return mClearEvent?.mSenderCurve25519Key ?: mSenderCurve25519Key
     }
 
     /**
@@ -194,23 +123,13 @@ data class Event(
      */
     fun getKeysClaimed(): Map<String, String> {
         return mxDecryptionResult?.keysClaimed ?: HashMap()
-//        val res = HashMap<String, String>()
-//
-//        val claimedEd25519Key = if (null != mClearEvent) mClearEvent!!.mClaimedEd25519Key else mClaimedEd25519Key
-//
-//        if (null != claimedEd25519Key) {
-//            res["ed25519"] = claimedEd25519Key
-//        }
-//
-//        return res
     }
-//
+
     /**
      * @return the event type
      */
     fun getClearType(): String {
-        return mxDecryptionResult?.payload?.get("type")?.toString()
-                ?: type//get("type")?.toString() ?: type
+        return mxDecryptionResult?.payload?.get("type")?.toString() ?: type
     }
 
     /**
@@ -220,30 +139,8 @@ data class Event(
         return mxDecryptionResult?.payload?.get("content") as? Content ?: content
     }
 
-//    /**
-//     * @return the linked crypto error
-//     */
-//    fun getCryptoError(): MXCryptoError? {
-//        return mCryptoError
-//    }
-//
-//    /**
-//     * Update the linked crypto error
-//     *
-//     * @param error the new crypto error.
-//     */
-//    fun setCryptoError(error: MXCryptoError?) {
-//        mCryptoError = error
-//        if (null != error) {
-//            mClearEvent = null
-//        }
-//    }
-
-
     fun toContentStringWithIndent(): String {
-        val contentMap = this.toContent()?.toMutableMap() ?: HashMap()
-        contentMap.remove("mxDecryptionResult")
-        contentMap.remove("mCryptoError")
+        val contentMap = toContent()?.toMutableMap() ?: HashMap()
         return JSONObject(contentMap).toString(4)
     }
 
