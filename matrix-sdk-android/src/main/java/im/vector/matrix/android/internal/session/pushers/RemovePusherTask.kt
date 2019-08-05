@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.pushers
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.pushers.PusherState
-import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -40,12 +39,13 @@ internal class DefaultRemovePusherTask @Inject constructor(
 ) : RemovePusherTask {
 
     override suspend fun execute(params: RemovePusherTask.Params) {
-        val existing = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+        monarchy.awaitTransaction { realm ->
             val existingEntity = PusherEntity.where(realm, params.userId, params.pushKey).findFirst()
-            realm.awaitTransaction {
-                existingEntity?.state = PusherState.UNREGISTERING
-            }
-            existingEntity?.asDomain()
+            existingEntity?.state = PusherState.UNREGISTERING
+        }
+
+        val existing = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            PusherEntity.where(realm, params.userId, params.pushKey).findFirst()?.asDomain()
         } ?: throw Exception("No existing pusher")
 
         val deleteBody = JsonPusher(

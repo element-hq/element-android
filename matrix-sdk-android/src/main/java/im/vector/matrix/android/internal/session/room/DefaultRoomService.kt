@@ -46,8 +46,9 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
 
     override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
         return createRoomTask
-                .configureWith(createRoomParams)
-                .dispatchTo(callback)
+                .configureWith(createRoomParams) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
@@ -74,8 +75,9 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
 
     override fun joinRoom(roomId: String, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
         return joinRoomTask
-                .configureWith(JoinRoomTask.Params(roomId, viaServers))
-                .dispatchTo(callback)
+                .configureWith(JoinRoomTask.Params(roomId, viaServers)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 }

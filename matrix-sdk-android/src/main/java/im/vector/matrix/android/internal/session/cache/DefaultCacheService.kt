@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.toConfigurableTask
+import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultCacheService @Inject constructor(@SessionDatabase
@@ -30,8 +30,9 @@ internal class DefaultCacheService @Inject constructor(@SessionDatabase
     override fun clearCache(callback: MatrixCallback<Unit>) {
         taskExecutor.cancelAll()
         clearCacheTask
-                .toConfigurableTask()
-                .dispatchTo(callback)
+                .configureWith {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 }

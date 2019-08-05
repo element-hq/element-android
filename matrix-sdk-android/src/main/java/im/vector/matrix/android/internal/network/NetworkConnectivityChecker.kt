@@ -24,6 +24,8 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @MatrixScope
 internal class NetworkConnectivityChecker @Inject constructor(context: Context) {
@@ -34,20 +36,37 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
             .build(context)
 
     private val merlinsBeard = MerlinsBeard.Builder().build(context)
-    private val listeners = Collections.synchronizedList(ArrayList<Listener>())
+    private val listeners = ArrayList<Listener>()
 
     init {
         merlin.bind()
         merlin.registerDisconnectable {
             Timber.v("On Disconnect")
-            listeners.forEach {
+            val localListeners = Collections.synchronizedList(listeners)
+            localListeners.forEach {
                 it.onDisconnect()
             }
         }
         merlin.registerConnectable {
             Timber.v("On Connect")
-            listeners.forEach {
+            val localListeners = Collections.synchronizedList(listeners)
+            localListeners.forEach {
                 it.onConnect()
+            }
+        }
+    }
+
+    suspend fun waitUntilConnected() {
+        if (isConnected()) {
+            return
+        } else {
+            suspendCoroutine<Unit> { continuation ->
+                register(object : Listener {
+                    override fun onConnect() {
+                        unregister(this)
+                        continuation.resume(Unit)
+                    }
+                })
             }
         }
     }

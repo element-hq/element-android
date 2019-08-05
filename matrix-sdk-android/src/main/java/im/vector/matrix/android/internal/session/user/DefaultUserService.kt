@@ -61,7 +61,7 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
 
     override fun getUser(userId: String): User? {
         val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }
-                         ?: return null
+                ?: return null
 
         return userEntity.asDomain()
     }
@@ -113,8 +113,9 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
                                       callback: MatrixCallback<List<User>>): Cancelable {
         val params = SearchUserTask.Params(limit, search, excludedUserIds)
         return searchUserTask
-                .configureWith(params)
-                .dispatchTo(callback)
+                .configureWith(params) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 }

@@ -83,9 +83,10 @@ internal class DefaultPushRuleService @Inject constructor(
 
     override fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable {
         return updatePushRuleEnableStatusTask
-                .configureWith(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled))
+                .configureWith(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled)) {
+                    this.callback = callback
+                }
                 // TODO Fetch the rules
-                .dispatchTo(callback)
                 .executeBy(taskExecutor)
     }
 

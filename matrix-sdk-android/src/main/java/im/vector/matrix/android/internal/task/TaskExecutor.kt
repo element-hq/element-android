@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.extensions.foldToCallback
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
@@ -32,7 +33,8 @@ import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
 @MatrixScope
-internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers) {
+internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                private val networkConnectivityChecker: NetworkConnectivityChecker) {
 
     private val cancelableBag = CancelableBag()
 
@@ -41,8 +43,13 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
         val job = GlobalScope.launch(task.callbackThread.toDispatcher()) {
             val resultOrFailure = runCatching {
                 withContext(task.executionThread.toDispatcher()) {
-                    Timber.v("Executing $task on ${Thread.currentThread().name}")
+                    Timber.v("Enqueue task $task")
                     retry(task.retryCount) {
+                        if (task.constraints.connectedToNetwork) {
+                            Timber.v("Waiting network for $task")
+                            networkConnectivityChecker.waitUntilConnected()
+                        }
+                        Timber.v("Execute task $task on ${Thread.currentThread().name}")
                         task.execute(task.params)
                     }
                 }
@@ -74,6 +81,7 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
             try {
                 return block()
             } catch (e: Exception) {
+                Timber.v("Retry task after $currentDelay ms")
                 delay(currentDelay)
                 currentDelay = (currentDelay * factor).toLong().coerceAtMost(maxDelay)
             }

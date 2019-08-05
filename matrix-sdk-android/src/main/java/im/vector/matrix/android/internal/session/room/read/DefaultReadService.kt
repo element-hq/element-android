@@ -37,17 +37,29 @@ internal class DefaultReadService @Inject constructor(private val roomId: String
 
     override fun markAllAsRead(callback: MatrixCallback<Unit>) {
         val params = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        setReadMarkersTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = null, readReceiptEventId = eventId)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        setReadMarkersTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = fullyReadEventId, readReceiptEventId = null)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        setReadMarkersTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
 
@@ -55,13 +67,13 @@ internal class DefaultReadService @Inject constructor(private val roomId: String
         var isEventRead = false
         monarchy.doWithRealm {
             val readReceipt = ReadReceiptEntity.where(it, roomId, credentials.userId).findFirst()
-                              ?: return@doWithRealm
+                    ?: return@doWithRealm
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(it, roomId)
-                            ?: return@doWithRealm
+                    ?: return@doWithRealm
             val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex
-                                   ?: Int.MIN_VALUE
+                    ?: Int.MIN_VALUE
             val eventToCheckIndex = liveChunk.timelineEvents.find(eventId)?.root?.displayIndex
-                                    ?: Int.MAX_VALUE
+                    ?: Int.MAX_VALUE
             isEventRead = eventToCheckIndex <= readReceiptIndex
         }
         return isEventRead

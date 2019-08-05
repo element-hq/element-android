@@ -37,6 +37,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -415,16 +416,18 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         val contentMap = MXUsersDevicesMap<Any>()
         contentMap.setObject(userId, userDevice, cancelMessage)
 
-        sendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId))
-                .dispatchTo(object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
-                    }
+        sendToDeviceTask
+                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId)) {
+                    this.callback = object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
+                        }
 
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## SAS verification [$transactionId] failed to cancel.")
+                        override fun onFailure(failure: Throwable) {
+                            Timber.e(failure, "## SAS verification [$transactionId] failed to cancel.")
+                        }
                     }
-                })
+                }
                 .executeBy(taskExecutor)
     }
 }

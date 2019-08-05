@@ -80,28 +80,30 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 reaction,
                 myUserId
         )
-        findReactionEventForUndoTask.configureWith(params)
-                .enableRetry()
-                .dispatchTo(object : MatrixCallback<FindReactionEventForUndoTask.Result> {
-                    override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
-                        if (data.redactEventId == null) {
-                            Timber.w("Cannot find reaction to undo (not yet synced?)")
-                            //TODO?
-                        }
-                        data.redactEventId?.let { toRedact ->
+        val callback = object : MatrixCallback<FindReactionEventForUndoTask.Result> {
+            override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
+                if (data.redactEventId == null) {
+                    Timber.w("Cannot find reaction to undo (not yet synced?)")
+                    //TODO?
+                }
+                data.redactEventId?.let { toRedact ->
 
-                            val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null).also {
-                                saveLocalEcho(it)
-                            }
-                            val redactWork = createRedactEventWork(redactEvent, toRedact, null)
-
-                            TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
-
-                        }
+                    val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null).also {
+                        saveLocalEcho(it)
                     }
-                })
-                .executeBy(taskExecutor)
+                    val redactWork = createRedactEventWork(redactEvent, toRedact, null)
 
+                    TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
+
+                }
+            }
+        }
+        findReactionEventForUndoTask
+                .configureWith(params) {
+                    this.retryCount = Int.MAX_VALUE
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     //TODO duplicate with send service?
@@ -167,8 +169,10 @@ internal class DefaultRelationService @Inject constructor(private val context: C
 
     override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
         val params = FetchEditHistoryTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), eventId)
-        fetchEditHistoryTask.configureWith(params)
-                .dispatchTo(callback)
+        fetchEditHistoryTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 

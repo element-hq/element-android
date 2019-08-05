@@ -72,7 +72,6 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.task.toConfigurableTask
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -167,22 +166,25 @@ internal class CryptoManager @Inject constructor(
 
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
-                .configureWith(SetDeviceNameTask.Params(deviceId, deviceName))
-                .dispatchTo(callback)
+                .configureWith(SetDeviceNameTask.Params(deviceId, deviceName)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
     override fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
-                .configureWith(DeleteDeviceTask.Params(deviceId))
-                .dispatchTo(callback)
+                .configureWith(DeleteDeviceTask.Params(deviceId)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
     override fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>) {
         deleteDeviceWithUserPasswordTask
-                .configureWith(DeleteDeviceWithUserPasswordTask.Params(deviceId, authSession, password))
-                .dispatchTo(callback)
+                .configureWith(DeleteDeviceWithUserPasswordTask.Params(deviceId, authSession, password)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
@@ -196,8 +198,9 @@ internal class CryptoManager @Inject constructor(
 
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
-                .toConfigurableTask()
-                .dispatchTo(callback)
+                .configureWith {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
@@ -283,7 +286,7 @@ internal class CryptoManager @Inject constructor(
     /**
      * Close the crypto
      */
-    fun close() = runBlocking(coroutineDispatchers.crypto){
+    fun close() = runBlocking(coroutineDispatchers.crypto) {
         olmDevice.release()
         cryptoStore.close()
         outgoingRoomKeyRequestManager.stop()
@@ -1046,8 +1049,9 @@ internal class CryptoManager @Inject constructor(
 
     override fun clearCryptoCache(callback: MatrixCallback<Unit>) {
         clearCryptoDataTask
-                .toConfigurableTask()
-                .dispatchTo(callback)
+                .configureWith {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
