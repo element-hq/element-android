@@ -84,7 +84,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectRoom(action: RoomListActions.SelectRoom) {
-        _openRoomLiveData.postValue(LiveEvent(action.roomSummary.roomId))
+        _openRoomLiveData.postLiveEvent(action.roomSummary.roomId)
     }
 
     private fun handleToggleCategory(action: RoomListActions.ToggleCategory) = setState {

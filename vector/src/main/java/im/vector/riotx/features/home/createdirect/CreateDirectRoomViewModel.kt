@@ -21,7 +21,9 @@ package im.vector.riotx.features.home.createdirect
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -33,10 +35,8 @@ import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.BiFunction
 import java.util.concurrent.TimeUnit
 
 private typealias KnowUsersFilter = String
@@ -103,7 +103,6 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                 .execute {
                     copy(createAndInviteState = it)
                 }
-                .disposeOnClear()
     }
 
     private fun handleRemoveSelectedUser(action: CreateDirectRoomActions.RemoveSelectedUser) = withState { state ->

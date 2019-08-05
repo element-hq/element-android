@@ -300,8 +300,9 @@ class RoomDetailFragment :
         composerLayout.collapse()
     }
 
-    private fun enterSpecialMode(event: TimelineEvent, @DrawableRes
-    iconRes: Int, useText: Boolean) {
+    private fun enterSpecialMode(event: TimelineEvent,
+                                 @DrawableRes iconRes: Int,
+                                 useText: Boolean) {
         commandAutocompletePolicy.enabled = false
         //switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
