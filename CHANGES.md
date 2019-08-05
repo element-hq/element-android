@@ -8,6 +8,8 @@ Improvements:
  - UI for pending edits (#193)
  - UX image preview screen transition (#393)
  - Basic support for resending failed messages (retry/remove)
+ - Enable proper cancellation of suspending functions (including db transaction)
+ - Enhances network connectivity checks in SDK
 
 Other changes:
  -
@@ -17,6 +19,7 @@ Bugfix:
  - Close detail room screen when the room is left with another client (#256)
  - Clear notification for a room left on another client
  - Fix messages with empty `in_reply_to` not rendering (#447)
+ - Fix clear cache (#408) and Logout (#205 )
 
 Translations:
  -

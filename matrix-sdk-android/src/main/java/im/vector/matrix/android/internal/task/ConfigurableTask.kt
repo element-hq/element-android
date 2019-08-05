@@ -20,7 +20,9 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import java.util.*
 
-internal fun <PARAMS, RESULT> Task<PARAMS, RESULT>.configureWith(params: PARAMS, init: (ConfigurableTask.Builder<PARAMS, RESULT>.() -> Unit) = {}): ConfigurableTask<PARAMS, RESULT> {
+internal fun <PARAMS, RESULT> Task<PARAMS, RESULT>.configureWith(params: PARAMS,
+                                                                 init: (ConfigurableTask.Builder<PARAMS, RESULT>.() -> Unit) = {}
+): ConfigurableTask<PARAMS, RESULT> {
     return ConfigurableTask.Builder(this, params).apply(init).build()
 }
 
