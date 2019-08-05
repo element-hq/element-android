@@ -161,15 +161,16 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
 
     override fun clearSendingQueue() {
         TimelineSendEventWorkCommon.cancelAllWorks(context, roomId)
-        WorkManager.getInstance(context).cancelUniqueWork(buildWorkIdentifier(UPLOAD_WORK))
+        WorkManager.getInstance(context).cancelUniqueWork(buildWorkName(UPLOAD_WORK))
 
+        // TODO Valere: what is the aim of this code ? Cancellation above is not enough?
         matrixOneTimeWorkRequestBuilder<FakeSendWorker>()
                 .build().let {
                     TimelineSendEventWorkCommon.postWork(context, roomId, it, ExistingWorkPolicy.REPLACE)
 
                     //need to clear also image sending queue
                     WorkManager.getInstance(context)
-                            .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.REPLACE, it)
+                            .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.REPLACE, it)
                             .enqueue()
                 }
 
@@ -249,20 +250,20 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
             val encryptWork = createEncryptEventWork(localEcho, false /*not start of chain, take input error*/)
 
             val op: Operation = WorkManager.getInstance(context)
-                    .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
                     .then(encryptWork)
                     .then(sendWork)
                     .enqueue()
             op.result.addListener(Runnable {
                 if (op.result.isCancelled) {
-                    Timber.e("CHAINE WAS CANCELLED")
+                    Timber.e("CHAIN WAS CANCELLED")
                 } else if (op.state.value is Operation.State.FAILURE) {
-                    Timber.e("CHAINE DID FAIL")
+                    Timber.e("CHAIN DID FAIL")
                 }
             }, workerFutureListenerExecutor)
         } else {
             WorkManager.getInstance(context)
-                    .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
                     .then(sendWork)
                     .enqueue()
         }
@@ -274,7 +275,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         localEchoEventFactory.saveLocalEcho(monarchy, event)
     }
 
-    private fun buildWorkIdentifier(identifier: String): String {
+    private fun buildWorkName(identifier: String): String {
         return "${roomId}_$identifier"
     }
 
