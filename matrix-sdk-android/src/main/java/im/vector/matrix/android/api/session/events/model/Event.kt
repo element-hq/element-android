@@ -302,31 +302,19 @@ data class Event(
 
 
 fun Event.isTextMessage(): Boolean {
-    if (this.getClearType() == EventType.MESSAGE) {
-        return getClearContent()?.toModel<MessageContent>()?.let {
-            when (it.type) {
-                MessageType.MSGTYPE_TEXT,
-                MessageType.MSGTYPE_EMOTE,
-                MessageType.MSGTYPE_NOTICE -> {
-                    true
-                }
-                else                       -> false
-            }
-        } ?: false
+    return getClearType() == EventType.MESSAGE
+            && when (getClearContent()?.toModel<MessageContent>()?.type) {
+        MessageType.MSGTYPE_TEXT,
+        MessageType.MSGTYPE_EMOTE,
+        MessageType.MSGTYPE_NOTICE -> true
+        else                       -> false
     }
-    return false
 }
 
 fun Event.isImageMessage(): Boolean {
-    if (this.getClearType() == EventType.MESSAGE) {
-        return getClearContent()?.toModel<MessageContent>()?.let {
-            when (it.type) {
-                MessageType.MSGTYPE_IMAGE -> {
-                    true
-                }
-                else                      -> false
-            }
-        } ?: false
+    return getClearType() == EventType.MESSAGE
+            && when (getClearContent()?.toModel<MessageContent>()?.type) {
+        MessageType.MSGTYPE_IMAGE -> true
+        else                      -> false
     }
-    return false
 }
