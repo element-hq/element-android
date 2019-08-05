@@ -149,7 +149,7 @@ object MatrixPatterns {
             return null
         }
 
-        val index = matrixId.lastIndexOf(":")
+        val index = matrixId.indexOf(":")
 
         return if (index == -1) {
             null
