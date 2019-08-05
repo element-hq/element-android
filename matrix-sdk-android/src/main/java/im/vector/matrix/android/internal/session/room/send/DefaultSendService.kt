@@ -22,10 +22,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.isTextMessage
-import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendService
@@ -106,7 +103,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     }
 
     override fun resendTextMessage(localEcho: TimelineEvent): Cancelable? {
-        if (localEcho.root.isTextMessage()) {
+        if (localEcho.root.isTextMessage() && localEcho.root.sendState.hasFailed()) {
             return sendEvent(localEcho.root)
         }
         return null
@@ -114,7 +111,8 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     }
 
     override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable? {
-        //TODO this need a refactoring of attachement sending
+        if (localEcho.root.isImageMessage() && localEcho.root.sendState.hasFailed()) {
+            //TODO this need a refactoring of attachement sending
 //        val clearContent = localEcho.root.getClearContent()
 //        val messageContent = clearContent?.toModel<MessageContent>() ?: return null
 //        when (messageContent.type) {
@@ -143,8 +141,9 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
 //                }
 //            }
 //        }
+            return null
+        }
         return null
-
     }
 
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
