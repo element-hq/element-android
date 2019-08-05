@@ -18,7 +18,10 @@ package im.vector.matrix.android.internal.session.room.send
 import androidx.work.Data
 import androidx.work.InputMerger
 
-class NoMerger : InputMerger() {
+/**
+ * InputMerger which takes only the first input, to ensure an appended work with only have the specified parameters
+ */
+internal class NoMerger : InputMerger() {
     override fun merge(inputs: MutableList<Data>): Data {
         return inputs.first()
     }

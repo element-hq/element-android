@@ -278,7 +278,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         return "${roomId}_$identifier"
     }
 
-    private fun createEncryptEventWork(event: Event, startChain: Boolean = false): OneTimeWorkRequest {
+    private fun createEncryptEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
         // Same parameter
         val params = EncryptEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(params)
@@ -314,7 +314,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     private fun createUploadMediaWork(event: Event,
                                       attachment: ContentAttachmentData,
                                       isRoomEncrypted: Boolean,
-                                      startChain: Boolean = false): OneTimeWorkRequest {
+                                      startChain: Boolean): OneTimeWorkRequest {
         val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment, isRoomEncrypted)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
