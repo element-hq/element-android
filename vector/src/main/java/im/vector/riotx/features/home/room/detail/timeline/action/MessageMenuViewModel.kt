@@ -99,39 +99,32 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
     private fun observeEvent() {
         RxRoom(room)
                 .liveTimelineEvent(eventId)
-                ?.map {
+                .map {
                     actionsForEvent(it)
                 }
-                ?.execute {
+                .execute {
                     copy(actions = it)
                 }
     }
 
     private fun actionsForEvent(event: TimelineEvent): List<SimpleAction> {
-
         val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent.toModel()
                 ?: event.root.getClearContent().toModel()
         val type = messageContent?.type
 
-        return if (event.root.sendState.hasFailed()) {
-            arrayListOf<SimpleAction>().apply {
+        return arrayListOf<SimpleAction>().apply {
+            if (event.root.sendState.hasFailed()) {
                 if (canRetry(event)) {
-                    this.add(SimpleAction(ACTION_RESEND, R.string.global_retry, R.drawable.ic_refresh_cw, eventId))
+                    add(SimpleAction(ACTION_RESEND, R.string.global_retry, R.drawable.ic_refresh_cw, eventId))
                 }
-                this.add(SimpleAction(ACTION_REMOVE, R.string.remove, R.drawable.ic_trash, eventId))
-            }
-        } else if (event.root.sendState.isSending()) {
-            //TODO is uploading attachment?
-            arrayListOf<SimpleAction>().apply {
+                add(SimpleAction(ACTION_REMOVE, R.string.remove, R.drawable.ic_trash, eventId))
+            } else if (event.root.sendState.isSending()) {
+                //TODO is uploading attachment?
                 if (canCancel(event)) {
-                    this.add(SimpleAction(ACTION_CANCEL, R.string.cancel, R.drawable.ic_close_round, eventId))
+                    add(SimpleAction(ACTION_CANCEL, R.string.cancel, R.drawable.ic_close_round, eventId))
                 }
-            }
-        } else {
-            arrayListOf<SimpleAction>().apply {
-
+            } else {
                 if (!event.root.isRedacted()) {
-
                     if (canReply(event, messageContent)) {
                         add(SimpleAction(ACTION_REPLY, R.string.reply, R.drawable.ic_reply, eventId))
                     }
