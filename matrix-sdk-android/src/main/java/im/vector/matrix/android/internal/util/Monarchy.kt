@@ -23,9 +23,7 @@ import io.realm.RealmModel
 import java.util.concurrent.atomic.AtomicReference
 
 internal suspend fun Monarchy.awaitTransaction(transaction: (realm: Realm) -> Unit) {
-    Realm.getInstance(realmConfiguration).use {
-        it.awaitTransaction(transaction)
-    }
+    awaitTransaction(realmConfiguration, transaction)
 }
 
 fun <T : RealmModel> Monarchy.fetchCopied(query: (Realm) -> T?): T? {

@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.cache
 
 import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.task.Task
-import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
@@ -27,10 +26,8 @@ internal interface ClearCacheTask : Task<Unit, Unit>
 internal class RealmClearCacheTask @Inject constructor(private val realmConfiguration: RealmConfiguration) : ClearCacheTask {
 
     override suspend fun execute(params: Unit) {
-        val realm = Realm.getInstance(realmConfiguration)
-        realm.awaitTransaction {
+        awaitTransaction(realmConfiguration) {
             it.deleteAll()
         }
-        realm.close()
     }
 }
