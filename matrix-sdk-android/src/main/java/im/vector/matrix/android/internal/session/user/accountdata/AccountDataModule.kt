@@ -36,6 +36,6 @@ internal abstract class AccountDataModule {
     }
 
     @Binds
-    abstract fun bindUpdateUserAccountDataTask(updateUserAccountDataTask: DefaultUpdateUserAcountDataTask): UpdateUserAccountDataTask
+    abstract fun bindUpdateUserAccountDataTask(updateUserAccountDataTask: DefaultUpdateUserAccountDataTask): UpdateUserAccountDataTask
 
 }
