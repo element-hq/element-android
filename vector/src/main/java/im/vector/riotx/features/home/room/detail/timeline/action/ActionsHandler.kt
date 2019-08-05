@@ -17,6 +17,7 @@ package im.vector.riotx.features.home.room.detail.timeline.action
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.utils.LiveEvent
 import javax.inject.Inject
 
@@ -25,15 +26,10 @@ import javax.inject.Inject
  */
 class ActionsHandler @Inject constructor() : ViewModel() {
 
-    data class ActionData(
-            val actionId: String,
-            val data: Any?
-    )
+    val actionCommandEvent = MutableLiveData<LiveEvent<SimpleAction>>()
 
-    val actionCommandEvent = MutableLiveData<LiveEvent<ActionData>>()
-
-    fun fireAction(actionId: String, data: Any? = null) {
-        actionCommandEvent.value = LiveEvent(ActionData(actionId,data))
+    fun fireAction(action: SimpleAction) {
+        actionCommandEvent.postLiveEvent(action)
     }
 
 }

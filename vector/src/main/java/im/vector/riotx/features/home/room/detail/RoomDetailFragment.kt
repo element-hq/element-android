@@ -821,106 +821,101 @@ class RoomDetailFragment :
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
     }
 
-    private fun handleActions(actionData: ActionsHandler.ActionData) {
-        when (actionData.actionId) {
-            MessageMenuViewModel.ACTION_ADD_REACTION   -> {
-                val eventId = actionData.data?.toString() ?: return
-                startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), eventId), REACTION_SELECT_REQUEST_CODE)
+    private fun handleActions(action: SimpleAction) {
+        when (action) {
+            is SimpleAction.AddReaction         -> {
+                startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
             }
-            MessageMenuViewModel.ACTION_VIEW_REACTIONS -> {
-                val messageInformationData = actionData.data as? MessageInformationData
-                        ?: return
-                ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, messageInformationData)
+            is SimpleAction.ViewReactions       -> {
+                ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
-            MessageMenuViewModel.ACTION_COPY           -> {
+            is SimpleAction.Copy                -> {
                 //I need info about the current selected message :/
-                copyToClipboard(requireContext(), actionData.data?.toString() ?: "", false)
+                copyToClipboard(requireContext(), action.content, false)
                 val msg = requireContext().getString(R.string.copied_to_clipboard)
                 showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
             }
-            MessageMenuViewModel.ACTION_DELETE         -> {
-                val eventId = actionData.data?.toString() ?: return
-                roomDetailViewModel.process(RoomDetailActions.RedactAction(eventId, context?.getString(R.string.event_redacted_by_user_reason)))
+            is SimpleAction.Delete              -> {
+                roomDetailViewModel.process(RoomDetailActions.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
             }
-            MessageMenuViewModel.ACTION_SHARE          -> {
+            is SimpleAction.Share               -> {
                 //TODO current data communication is too limited
                 //Need to now the media type
-                actionData.data?.toString()?.let {
-                    //TODO bad, just POC
-                    BigImageViewer.imageLoader().loadImage(
-                            actionData.hashCode(),
-                            Uri.parse(it),
-                            object : ImageLoader.Callback {
-                                override fun onFinish() {}
+                //TODO bad, just POC
+                BigImageViewer.imageLoader().loadImage(
+                        action.hashCode(),
+                        Uri.parse(action.imageUrl),
+                        object : ImageLoader.Callback {
+                            override fun onFinish() {}
 
-                                override fun onSuccess(image: File?) {
-                                    if (image != null)
-                                        shareMedia(requireContext(), image, "image/*")
-                                }
-
-                                override fun onFail(error: Exception?) {}
-
-                                override fun onCacheHit(imageType: Int, image: File?) {}
-
-                                override fun onCacheMiss(imageType: Int, image: File?) {}
-
-                                override fun onProgress(progress: Int) {}
-
-                                override fun onStart() {}
-
+                            override fun onSuccess(image: File?) {
+                                if (image != null)
+                                    shareMedia(requireContext(), image, "image/*")
                             }
 
-                    )
-                }
+                            override fun onFail(error: Exception?) {}
+
+                            override fun onCacheHit(imageType: Int, image: File?) {}
+
+                            override fun onCacheMiss(imageType: Int, image: File?) {}
+
+                            override fun onProgress(progress: Int) {}
+
+                            override fun onStart() {}
+
+                        }
+                )
             }
-            MessageMenuViewModel.VIEW_SOURCE,
-            MessageMenuViewModel.VIEW_DECRYPTED_SOURCE -> {
+            is SimpleAction.ViewSource          -> {
                 val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
                 view.findViewById<TextView>(R.id.event_content_text_view)?.let {
-                    it.text = actionData.data?.toString() ?: ""
+                    it.text = action.content
                 }
 
                 AlertDialog.Builder(requireActivity())
                         .setView(view)
-                        .setPositiveButton(R.string.ok) { dialog, id -> dialog.cancel() }
+                        .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            MessageMenuViewModel.ACTION_QUICK_REACT    -> {
-                //eventId,ClickedOn,Add
-                (actionData.data as? Triple<String, String, Boolean>)?.let { (eventId, clickedOn, add) ->
-                    roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(eventId, clickedOn, add))
+            is SimpleAction.ViewDecryptedSource -> {
+                val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
+                view.findViewById<TextView>(R.id.event_content_text_view)?.let {
+                    it.text = action.content
                 }
+
+                AlertDialog.Builder(requireActivity())
+                        .setView(view)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
             }
-            MessageMenuViewModel.ACTION_EDIT           -> {
-                val eventId = actionData.data.toString()
-                roomDetailViewModel.process(RoomDetailActions.EnterEditMode(eventId))
+            is SimpleAction.QuickReact          -> {
+                //eventId,ClickedOn,Add
+                roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
-            MessageMenuViewModel.ACTION_QUOTE          -> {
-                val eventId = actionData.data.toString()
-                roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(eventId))
+            is SimpleAction.Edit                -> {
+                roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId))
             }
-            MessageMenuViewModel.ACTION_REPLY          -> {
-                val eventId = actionData.data.toString()
-                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+            is SimpleAction.Quote               -> {
+                roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId))
             }
-            MessageMenuViewModel.ACTION_COPY_PERMALINK -> {
-                val eventId = actionData.data.toString()
-                val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, eventId)
+            is SimpleAction.Reply               -> {
+                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId))
+            }
+            is SimpleAction.CopyPermalink       -> {
+                val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
 
             }
-            MessageMenuViewModel.ACTION_RESEND         -> {
-                val eventId = actionData.data.toString()
-                roomDetailViewModel.process(RoomDetailActions.ResendMessage(eventId))
+            is SimpleAction.Resend              -> {
+                roomDetailViewModel.process(RoomDetailActions.ResendMessage(action.eventId))
             }
-            MessageMenuViewModel.ACTION_REMOVE         -> {
-                val eventId = actionData.data.toString()
-                roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(eventId))
+            is SimpleAction.Remove              -> {
+                roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(action.eventId))
             }
-            else                                       -> {
-                Toast.makeText(context, "Action ${actionData.actionId} not implemented", Toast.LENGTH_LONG).show()
+            else                                -> {
+                Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
             }
         }
     }
