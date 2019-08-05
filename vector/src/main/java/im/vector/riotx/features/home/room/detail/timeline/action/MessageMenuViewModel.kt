@@ -259,9 +259,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
             MessageType.MSGTYPE_NOTICE,
             MessageType.MSGTYPE_EMOTE,
             MessageType.FORMAT_MATRIX_HTML,
-            MessageType.MSGTYPE_LOCATION -> {
-                true
-            }
+            MessageType.MSGTYPE_LOCATION -> true
             else                         -> false
         }
     }
@@ -271,9 +269,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         return when (type) {
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_VIDEO -> {
-                true
-            }
+            MessageType.MSGTYPE_VIDEO -> true
             else                      -> false
         }
     }
