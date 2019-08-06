@@ -19,9 +19,7 @@ package im.vector.matrix.android.internal.database.model
 import im.vector.matrix.android.api.session.room.model.Membership
 import io.realm.RealmList
 import io.realm.RealmObject
-import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
-import kotlin.properties.Delegates
 
 internal open class RoomEntity(@PrimaryKey var roomId: String = "",
                                var chunks: RealmList<ChunkEntity> = RealmList(),
@@ -31,11 +29,13 @@ internal open class RoomEntity(@PrimaryKey var roomId: String = "",
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
-
-    @delegate:Ignore
-    var membership: Membership by Delegates.observable(Membership.valueOf(membershipStr)) { _, _, newValue ->
-        membershipStr = newValue.name
-    }
+    var membership: Membership
+        get() {
+            return Membership.valueOf(membershipStr)
+        }
+        set(value) {
+            membershipStr = value.name
+        }
 
     companion object
 }
