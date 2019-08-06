@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.extensions
+package im.vector.matrix.android.internal.worker
 
-import arrow.core.*
-import im.vector.matrix.android.api.MatrixCallback
-
-inline fun <A> TryOf<A>.onError(f: (Throwable) -> Unit): Try<A> = fix()
-        .fold(
-                {
-                    f(it)
-                    Failure(it)
-                },
-                { Success(it) }
-        )
-
-fun <A> Try<A>.foldToCallback(callback: MatrixCallback<A>): Unit = fold(
-        { callback.onFailure(it) },
-        { callback.onSuccess(it) })
+import androidx.work.OneTimeWorkRequest
+import im.vector.matrix.android.internal.session.room.send.NoMerger
 
 /**
- * Same as doOnNext for Observables
+ * If startChain parameter is true, the builder will have a inputMerger set to [NoMerger]
  */
-inline fun <A> Try<A>.alsoDo(f: (A) -> Unit) = map {
-    f(it)
-    it
+internal fun OneTimeWorkRequest.Builder.startChain(startChain: Boolean): OneTimeWorkRequest.Builder {
+    if (startChain) {
+        setInputMerger(NoMerger::class.java)
+    }
+    return this
 }

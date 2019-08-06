@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
+import im.vector.riotx.core.glide.GlideRequest
 import im.vector.riotx.core.utils.DimensionUtils.dpToPx
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
@@ -67,27 +68,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         imageView.layoutParams.height = height
         imageView.layoutParams.width = width
 
-        val glideRequest = if (data.elementToDecrypt != null) {
-            // Encrypted image
-            GlideApp
-                    .with(imageView)
-                    .load(data)
-        } else {
-            // Clear image
-            val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
-            val resolvedUrl = when (mode) {
-                Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
-                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-            }
-            //Fallback to base url
-                    ?: data.url
-
-            GlideApp
-                    .with(imageView)
-                    .load(resolvedUrl)
-        }
-
-        glideRequest
+        createGlideRequest(data, mode, imageView, width, height)
                 .dontAnimate()
                 .transform(RoundedCorners(dpToPx(8, imageView.context)))
                 .thumbnail(0.3f)
@@ -95,31 +76,11 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     }
 
-    fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback :((Boolean) -> Unit)? = null) {
+    fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
         val (width, height) = processSize(data, mode)
 
-        val glideRequest = if (data.elementToDecrypt != null) {
-            // Encrypted image
-            GlideApp
-                    .with(imageView)
-                    .load(data)
-        } else {
-            // Clear image
-            val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
-            val resolvedUrl = when (mode) {
-                Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
-                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
-            }
-            //Fallback to base url
-                    ?: data.url
-
-            GlideApp
-                    .with(imageView)
-                    .load(resolvedUrl)
-        }
-
-        glideRequest
-                .listener(object: RequestListener<Drawable> {
+        createGlideRequest(data, mode, imageView, width, height)
+                .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?,
                                               model: Any?,
                                               target: Target<Drawable>?,
@@ -140,7 +101,28 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 })
                 .fitCenter()
                 .into(imageView)
+    }
 
+    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, width: Int, height: Int): GlideRequest<Drawable> {
+        return if (data.elementToDecrypt != null) {
+            // Encrypted image
+            GlideApp
+                    .with(imageView)
+                    .load(data)
+        } else {
+            // Clear image
+            val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+            val resolvedUrl = when (mode) {
+                Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
+                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+            }
+            //Fallback to base url
+                    ?: data.url
+
+            GlideApp
+                    .with(imageView)
+                    .load(resolvedUrl)
+        }
     }
 
     fun render(data: Data, imageView: BigImageView) {

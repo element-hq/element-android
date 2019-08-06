@@ -89,7 +89,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
         menuActionFragment.interactionListener = object : MessageMenuFragment.InteractionListener {
             override fun didSelectMenuAction(simpleAction: SimpleAction) {
-                actionHandlerModel.fireAction(simpleAction.uid, simpleAction.data)
+                actionHandlerModel.fireAction(simpleAction)
                 dismiss()
             }
         }
@@ -105,7 +105,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         quickReactionFragment.interactionListener = object : QuickReactionFragment.InteractionListener {
 
             override fun didQuickReactWith(clickedOn: String, add: Boolean, eventId: String) {
-                actionHandlerModel.fireAction(MessageMenuViewModel.ACTION_QUICK_REACT, Triple(eventId, clickedOn, add))
+                actionHandlerModel.fireAction(SimpleAction.QuickReact(eventId, clickedOn, add))
                 dismiss()
             }
         }

@@ -31,15 +31,14 @@ class ErrorFormatter @Inject constructor(val stringProvider: StringProvider) {
 
     fun toHumanReadable(throwable: Throwable?): String {
         return when (throwable) {
-            null                         -> ""
+            null                         -> null
             is Failure.NetworkConnection -> stringProvider.getString(R.string.error_no_network)
             is Failure.ServerError       -> {
                 throwable.error.message.takeIf { it.isNotEmpty() }
-                ?: throwable.error.code.takeIf { it.isNotEmpty() }
-                ?: stringProvider.getString(R.string.unknown_error)
+                        ?: throwable.error.code.takeIf { it.isNotEmpty() }
             }
             else                         -> throwable.localizedMessage
-                                            ?: stringProvider.getString(R.string.unknown_error)
         }
+                ?: stringProvider.getString(R.string.unknown_error)
     }
 }

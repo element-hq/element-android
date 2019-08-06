@@ -22,10 +22,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.isTextMessage
-import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendService
@@ -41,9 +38,11 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.util.CancelableWork
+import im.vector.matrix.android.internal.worker.AlwaysSuccessfulWorker
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.startChain
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -82,11 +81,11 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         return if (cryptoService.isRoomEncrypted(roomId)) {
             Timber.v("Send event in encrypted room")
             val encryptWork = createEncryptEventWork(event, true)
-            val sendWork = createSendEventWork(event)
+            val sendWork = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, sendWork)
             CancelableWork(context, encryptWork.id)
         } else {
-            val sendWork = createSendEventWork(event)
+            val sendWork = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, sendWork)
             CancelableWork(context, sendWork.id)
         }
@@ -106,7 +105,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     }
 
     override fun resendTextMessage(localEcho: TimelineEvent): Cancelable? {
-        if (localEcho.root.isTextMessage()) {
+        if (localEcho.root.isTextMessage() && localEcho.root.sendState.hasFailed()) {
             return sendEvent(localEcho.root)
         }
         return null
@@ -114,7 +113,8 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     }
 
     override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable? {
-        //TODO this need a refactoring of attachement sending
+        if (localEcho.root.isImageMessage() && localEcho.root.sendState.hasFailed()) {
+            //TODO this need a refactoring of attachement sending
 //        val clearContent = localEcho.root.getClearContent()
 //        val messageContent = clearContent?.toModel<MessageContent>() ?: return null
 //        when (messageContent.type) {
@@ -143,8 +143,9 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
 //                }
 //            }
 //        }
+            return null
+        }
         return null
-
     }
 
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
@@ -162,15 +163,16 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
 
     override fun clearSendingQueue() {
         TimelineSendEventWorkCommon.cancelAllWorks(context, roomId)
-        WorkManager.getInstance(context).cancelUniqueWork(buildWorkIdentifier(UPLOAD_WORK))
+        WorkManager.getInstance(context).cancelUniqueWork(buildWorkName(UPLOAD_WORK))
 
-        matrixOneTimeWorkRequestBuilder<FakeSendWorker>()
+        // Replace the worker chains with a AlwaysSuccessfulWorker, to ensure the queues are well emptied
+        matrixOneTimeWorkRequestBuilder<AlwaysSuccessfulWorker>()
                 .build().let {
                     TimelineSendEventWorkCommon.postWork(context, roomId, it, ExistingWorkPolicy.REPLACE)
 
                     //need to clear also image sending queue
                     WorkManager.getInstance(context)
-                            .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.REPLACE, it)
+                            .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.REPLACE, it)
                             .enqueue()
                 }
 
@@ -244,26 +246,26 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val isRoomEncrypted = cryptoService.isRoomEncrypted(roomId)
 
         val uploadWork = createUploadMediaWork(localEcho, attachment, isRoomEncrypted, startChain = true)
-        val sendWork = createSendEventWork(localEcho)
+        val sendWork = createSendEventWork(localEcho, false)
 
         if (isRoomEncrypted) {
             val encryptWork = createEncryptEventWork(localEcho, false /*not start of chain, take input error*/)
 
             val op: Operation = WorkManager.getInstance(context)
-                    .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
                     .then(encryptWork)
                     .then(sendWork)
                     .enqueue()
             op.result.addListener(Runnable {
                 if (op.result.isCancelled) {
-                    Timber.e("CHAINE WAS CANCELLED")
+                    Timber.e("CHAIN WAS CANCELLED")
                 } else if (op.state.value is Operation.State.FAILURE) {
-                    Timber.e("CHAINE DID FAIL")
+                    Timber.e("CHAIN DID FAIL")
                 }
             }, workerFutureListenerExecutor)
         } else {
             WorkManager.getInstance(context)
-                    .beginUniqueWork(buildWorkIdentifier(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
                     .then(sendWork)
                     .enqueue()
         }
@@ -275,11 +277,11 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         localEchoEventFactory.saveLocalEcho(monarchy, event)
     }
 
-    private fun buildWorkIdentifier(identifier: String): String {
+    private fun buildWorkName(identifier: String): String {
         return "${roomId}_$identifier"
     }
 
-    private fun createEncryptEventWork(event: Event, startChain: Boolean = false): OneTimeWorkRequest {
+    private fun createEncryptEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
         // Same parameter
         val params = EncryptEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(params)
@@ -287,20 +289,16 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         return matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
                 .setConstraints(WorkManagerUtil.workConstraints)
                 .setInputData(sendWorkData)
-                .apply {
-                    if (startChain) {
-                        setInputMerger(NoMerger::class.java)
-                    }
-                }
+                .startChain(startChain)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()
     }
 
-    private fun createSendEventWork(event: Event): OneTimeWorkRequest {
+    private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
         val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
-        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
+        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
 
     private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
@@ -309,23 +307,19 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         }
         val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId, redactEvent.eventId!!, roomId, event.eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
+        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData, true)
     }
 
     private fun createUploadMediaWork(event: Event,
                                       attachment: ContentAttachmentData,
                                       isRoomEncrypted: Boolean,
-                                      startChain: Boolean = false): OneTimeWorkRequest {
+                                      startChain: Boolean): OneTimeWorkRequest {
         val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment, isRoomEncrypted)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
                 .setConstraints(WorkManagerUtil.workConstraints)
-                .apply {
-                    if (startChain) {
-                        setInputMerger(NoMerger::class.java)
-                    }
-                }
+                .startChain(startChain)
                 .setInputData(uploadWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()

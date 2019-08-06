@@ -166,11 +166,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         root.isClickable = informationData.sendState.isSent()
         val state = if (informationData.hasPendingEdits) SendState.UNSENT else informationData.sendState
         textView?.setTextColor(colorProvider.getMessageTextColor(state))
-        failureIndicator?.isVisible = when (informationData.sendState) {
-            SendState.UNDELIVERED,
-            SendState.FAILED_UNKNOWN_DEVICES -> true
-            else                             -> false
-        }
+        failureIndicator?.isVisible = informationData.sendState.hasFailed()
     }
 
     abstract class Holder(@IdRes stubId: Int) : BaseHolder(stubId) {
