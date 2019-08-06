@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
@@ -26,10 +25,9 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
-import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.createBackgroundHandler
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -37,8 +35,7 @@ import javax.inject.Inject
 @SessionScope
 internal class OutgoingRoomKeyRequestManager @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
-        private val sendToDeviceTask: SendToDeviceTask,
-        private val taskExecutor: TaskExecutor) {
+        private val sendToDeviceTask: SendToDeviceTask) {
 
     // running
     private var isClientRunning: Boolean = false
@@ -215,29 +212,27 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         requestMessage.requestId = request.requestId
         requestMessage.body = request.requestBody
 
-        sendMessageToDevices(requestMessage, request.recipients, request.requestId, object : MatrixCallback<Unit> {
-            private fun onDone(state: OutgoingRoomKeyRequest.RequestState) {
-                if (request.state !== OutgoingRoomKeyRequest.RequestState.UNSENT) {
-                    Timber.v("## sendOutgoingRoomKeyRequest() : Cannot update room key request from UNSENT as it was already updated to " + request.state)
-                } else {
-                    request.state = state
-                    cryptoStore.updateOutgoingRoomKeyRequest(request)
-                }
+        GlobalScope.launch {
+            val state = try {
+                sendMessageToDevices(requestMessage, request.recipients, request.requestId)
 
-                sendOutgoingRoomKeyRequestsRunning.set(false)
-                startTimer()
-            }
-
-            override fun onSuccess(data: Unit) {
                 Timber.v("## sendOutgoingRoomKeyRequest succeed")
-                onDone(OutgoingRoomKeyRequest.RequestState.SENT)
+                OutgoingRoomKeyRequest.RequestState.SENT
+            } catch (_: Throwable) {
+                Timber.e("## sendOutgoingRoomKeyRequest failed")
+                OutgoingRoomKeyRequest.RequestState.FAILED
             }
 
-            override fun onFailure(failure: Throwable) {
-                Timber.e("## sendOutgoingRoomKeyRequest failed")
-                onDone(OutgoingRoomKeyRequest.RequestState.FAILED)
+            if (request.state !== OutgoingRoomKeyRequest.RequestState.UNSENT) {
+                Timber.v("## sendOutgoingRoomKeyRequest() : Cannot update room key request from UNSENT as it was already updated to " + request.state)
+            } else {
+                request.state = state
+                cryptoStore.updateOutgoingRoomKeyRequest(request)
             }
-        })
+
+            sendOutgoingRoomKeyRequestsRunning.set(false)
+            startTimer()
+        }
     }
 
     /**
@@ -254,15 +249,16 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         roomKeyShareCancellation.requestingDeviceId = cryptoStore.getDeviceId()
         roomKeyShareCancellation.requestId = request.cancellationTxnId
 
-        sendMessageToDevices(roomKeyShareCancellation, request.recipients, request.cancellationTxnId, object : MatrixCallback<Unit> {
-            private fun onDone() {
+        GlobalScope.launch {
+            fun onDone() {
                 cryptoStore.deleteOutgoingRoomKeyRequest(request.requestId)
                 sendOutgoingRoomKeyRequestsRunning.set(false)
                 startTimer()
             }
 
+            try {
+                sendMessageToDevices(roomKeyShareCancellation, request.recipients, request.cancellationTxnId)
 
-            override fun onSuccess(data: Unit) {
                 Timber.v("## sendOutgoingRoomKeyRequestCancellation() : done")
                 val resend = request.state === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
 
@@ -272,13 +268,11 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
                 if (resend) {
                     sendRoomKeyRequest(request.requestBody, request.recipients)
                 }
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (e: Throwable) {
                 Timber.e("## sendOutgoingRoomKeyRequestCancellation failed")
                 onDone()
             }
-        })
+        }
     }
 
     /**
@@ -287,25 +281,18 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      * @param message       the message
      * @param recipients    the recipients.
      * @param transactionId the transaction id
-     * @param callback      the asynchronous callback.
      */
-    private fun sendMessageToDevices(message: Any,
+    private suspend fun sendMessageToDevices(message: Any,
                                      recipients: List<Map<String, String>>,
-                                     transactionId: String?,
-                                     callback: MatrixCallback<Unit>) {
+                                     transactionId: String?) {
         val contentMap = MXUsersDevicesMap<Any>()
 
         for (recipient in recipients) {
             // TODO Change this two hard coded key to something better
             contentMap.setObject(recipient["userId"], recipient["deviceId"], message)
         }
-        sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(EventType.ROOM_KEY_REQUEST, contentMap, transactionId)) {
-                    this.callback = callback
-                    this.callbackThread = TaskThread.CALLER
-                    this.executionThread = TaskThread.CALLER
-                }
-                .executeBy(taskExecutor)
+        val param = SendToDeviceTask.Params(EventType.ROOM_KEY_REQUEST, contentMap, transactionId)
+        sendToDeviceTask.execute(param)
     }
 
     companion object {

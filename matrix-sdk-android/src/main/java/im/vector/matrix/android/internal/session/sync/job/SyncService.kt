@@ -29,9 +29,13 @@ import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.CancelableCoroutine
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Can execute periodic sync task.
@@ -42,11 +46,11 @@ import java.util.*
 open class SyncService : Service() {
 
     private var mIsSelfDestroyed: Boolean = false
-    private var cancelableTask: Cancelable? = null
+    private var cancelableTask: Job? = null
 
     private lateinit var syncTask: SyncTask
     private lateinit var networkConnectivityChecker: NetworkConnectivityChecker
-    private lateinit var taskExecutor: TaskExecutor
+    private lateinit var dispatchers: MatrixCoroutineDispatchers
 
 
     var timer = Timer()
@@ -59,7 +63,8 @@ open class SyncService : Service() {
                     ?: return@let
             syncTask = sessionComponent.syncTask()
             networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
-            taskExecutor = sessionComponent.taskExecutor()
+            dispatchers = sessionComponent.dispatchers()
+
             if (cancelableTask == null) {
                 timer.cancel()
                 timer = Timer()
@@ -103,58 +108,53 @@ open class SyncService : Service() {
             }, NO_NETWORK_DELAY)
         } else {
             Timber.v("Execute sync request with timeout 0")
-            val params = SyncTask.Params(TIME_OUT)
-            cancelableTask = syncTask
-                    .configureWith(params) {
-                        callbackThread = TaskThread.SYNC
-                        executionThread = TaskThread.SYNC
-                        callback = object : MatrixCallback<Unit> {
-                            override fun onSuccess(data: Unit) {
-                                cancelableTask = null
-                                if (!once) {
-                                    timer.schedule(object : TimerTask() {
-                                        override fun run() {
-                                            doSync()
-                                        }
-                                    }, NEXT_BATCH_DELAY)
-                                } else {
-                                    //stop
-                                    stopMe()
-                                }
+
+            cancelableTask = GlobalScope.launch(dispatchers.sync) {
+                val params = SyncTask.Params(TIME_OUT)
+                try {
+                    syncTask.execute(params)
+
+                    cancelableTask = null
+                    if (!once) {
+                        timer.schedule(object : TimerTask() {
+                            override fun run() {
+                                doSync()
                             }
-
-                            override fun onFailure(failure: Throwable) {
-                                Timber.e(failure)
-                                cancelableTask = null
-                                if (failure is Failure.NetworkConnection
-                                        && failure.cause is SocketTimeoutException) {
-                                    // Timeout are not critical
-                                    timer.schedule(object : TimerTask() {
-                                        override fun run() {
-                                            doSync()
-                                        }
-                                    }, 5_000L)
-                                }
-
-                                if (failure !is Failure.NetworkConnection
-                                        || failure.cause is JsonEncodingException) {
-                                    // Wait 10s before retrying
-                                    timer.schedule(object : TimerTask() {
-                                        override fun run() {
-                                            doSync()
-                                        }
-                                    }, 5_000L)
-                                }
-
-                                if (failure is Failure.ServerError
-                                        && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
-                                    // No token or invalid token, stop the thread
-                                    stopSelf()
-                                }
-                            }
-                        }
+                        }, NEXT_BATCH_DELAY)
+                    } else {
+                        //stop
+                        stopMe()
                     }
-                    .executeBy(taskExecutor)
+                } catch (failure: Throwable) {
+                    Timber.e(failure)
+                    cancelableTask = null
+                    if (failure is Failure.NetworkConnection
+                            && failure.cause is SocketTimeoutException) {
+                        // Timeout are not critical
+                        timer.schedule(object : TimerTask() {
+                            override fun run() {
+                                doSync()
+                            }
+                        }, 5_000L)
+                    }
+
+                    if (failure !is Failure.NetworkConnection
+                            || failure.cause is JsonEncodingException) {
+                        // Wait 10s before retrying
+                        timer.schedule(object : TimerTask() {
+                            override fun run() {
+                                doSync()
+                            }
+                        }, 5_000L)
+                    }
+
+                    if (failure is Failure.ServerError
+                            && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                        // No token or invalid token, stop the thread
+                        stopSelf()
+                    }
+                }
+            }
         }
     }
 

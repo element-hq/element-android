@@ -44,6 +44,7 @@ import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.session.user.UserModule
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataModule
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 
 @Component(dependencies = [MatrixComponent::class],
            modules = [
@@ -74,6 +75,8 @@ internal interface SessionComponent {
     fun networkConnectivityChecker(): NetworkConnectivityChecker
 
     fun taskExecutor(): TaskExecutor
+
+    fun dispatchers(): MatrixCoroutineDispatchers
 
     fun inject(sendEventWorker: SendEventWorker)
 

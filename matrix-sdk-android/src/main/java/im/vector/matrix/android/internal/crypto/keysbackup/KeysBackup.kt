@@ -51,9 +51,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEnt
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -356,16 +354,14 @@ internal class KeysBackup @Inject constructor(
     override fun getKeysBackupTrust(keysBackupVersion: KeysVersionResult,
                                     callback: MatrixCallback<KeysBackupVersionTrust>) {
         // TODO Validate with François that this is correct
-        object : Task<KeysVersionResult, KeysBackupVersionTrust> {
-            override suspend fun execute(params: KeysVersionResult): KeysBackupVersionTrust {
-                return getKeysBackupTrustBg(params)
+        GlobalScope.launch(coroutineDispatchers.computation) {
+            val result = runCatching {
+                getKeysBackupTrustBg(keysBackupVersion)
+            }
+            withContext(coroutineDispatchers.main) {
+                result.foldToCallback(callback)
             }
         }
-                .configureWith(keysBackupVersion) {
-                    this.callback = callback
-                    this.executionThread = TaskThread.COMPUTATION
-                }
-                .executeBy(taskExecutor)
     }
 
     /**

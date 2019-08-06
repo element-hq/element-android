@@ -19,20 +19,19 @@ package im.vector.matrix.android.internal.session.sync.job
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.squareup.moshi.JsonEncodingException
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.extensions.onError
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
-import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.net.SocketTimeoutException
-import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
@@ -41,7 +40,7 @@ private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
                                               private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                                              private val taskExecutor: TaskExecutor
+                                              private val dispatchers: MatrixCoroutineDispatchers
 ) : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.IDLE
@@ -100,45 +99,34 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                     updateStateTo(SyncState.RUNNING(afterPause = true))
                 }
                 Timber.v("[$this] Execute sync request with timeout $DEFAULT_LONG_POOL_TIMEOUT")
-                val latch = CountDownLatch(1)
+
                 val params = SyncTask.Params(DEFAULT_LONG_POOL_TIMEOUT)
-
-                cancelableTask = syncTask.configureWith(params) {
-                    this.callbackThread = TaskThread.SYNC
-                    this.executionThread = TaskThread.SYNC
-                    this.callback = object : MatrixCallback<Unit> {
-
-                        override fun onSuccess(data: Unit) {
-                            latch.countDown()
+                runBlocking(dispatchers.sync) {
+                    try {
+                        syncTask.execute(params)
+                    } catch (failure: Throwable) {
+                        if (failure is Failure.NetworkConnection
+                                && failure.cause is SocketTimeoutException) {
+                            // Timeout are not critical
+                            Timber.v("Timeout")
+                        } else {
+                            Timber.e(failure)
                         }
 
-                        override fun onFailure(failure: Throwable) {
-                            if (failure is Failure.NetworkConnection
-                                    && failure.cause is SocketTimeoutException) {
-                                // Timeout are not critical
-                                Timber.v("Timeout")
-                            } else {
-                                Timber.e(failure)
-                            }
+                        if (failure !is Failure.NetworkConnection
+                                || failure.cause is JsonEncodingException) {
+                            // Wait 10s before retrying
+                            delay(RETRY_WAIT_TIME_MS)
+                        }
 
-                            if (failure !is Failure.NetworkConnection
-                                    || failure.cause is JsonEncodingException) {
-                                // Wait 10s before retrying
-                                sleep(RETRY_WAIT_TIME_MS)
-                            }
-
-                            if (failure is Failure.ServerError
-                                    && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
-                                // No token or invalid token, stop the thread
-                                updateStateTo(SyncState.KILLING)
-                            }
-                            latch.countDown()
+                        if (failure is Failure.ServerError
+                                && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                            // No token or invalid token, stop the thread
+                            updateStateTo(SyncState.KILLING)
                         }
                     }
                 }
-                        .executeBy(taskExecutor)
 
-                latch.await()
                 if (state is SyncState.RUNNING) {
                     updateStateTo(SyncState.RUNNING(afterPause = false))
                 }
