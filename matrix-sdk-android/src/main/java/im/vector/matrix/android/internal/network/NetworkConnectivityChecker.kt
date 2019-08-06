@@ -36,20 +36,20 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
             .build(context)
 
     private val merlinsBeard = MerlinsBeard.Builder().build(context)
-    private val listeners = ArrayList<Listener>()
+    private val listeners = Collections.synchronizedList(ArrayList<Listener>())
 
     init {
         merlin.bind()
         merlin.registerDisconnectable {
             Timber.v("On Disconnect")
-            val localListeners = Collections.synchronizedList(listeners)
+            val localListeners = listeners.toList()
             localListeners.forEach {
                 it.onDisconnect()
             }
         }
         merlin.registerConnectable {
             Timber.v("On Connect")
-            val localListeners = Collections.synchronizedList(listeners)
+            val localListeners = listeners.toList()
             localListeners.forEach {
                 it.onConnect()
             }

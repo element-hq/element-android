@@ -17,74 +17,23 @@ package im.vector.matrix.android.internal.database
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.internal.OsSharedRealm
-import kotlinx.coroutines.CancellableContinuation
-import kotlinx.coroutines.suspendCancellableCoroutine
-import timber.log.Timber
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 
-private object AsyncTransactionThreadHolder {
 
-    val EXECUTOR: ExecutorService by lazy {
-        Executors.newSingleThreadExecutor()
-    }
-
-}
-
-private class AsyncTransactionRunnable(private val continuation: CancellableContinuation<Unit>,
-                                       private val realmConfiguration: RealmConfiguration,
-                                       private val transaction: (realm: Realm) -> Unit) : Runnable {
-
-    override fun run() {
-        if (Thread.currentThread().isInterrupted) {
-            return
-        }
-        var versionID: OsSharedRealm.VersionID? = null
-        var exception: Throwable? = null
-
-        val bgRealm = Realm.getInstance(realmConfiguration)
+suspend fun awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> Unit) = withContext(Dispatchers.IO) {
+    Realm.getInstance(config).use { bgRealm ->
         bgRealm.beginTransaction()
         try {
             transaction(bgRealm)
-            if (Thread.currentThread().isInterrupted) {
-                return
+            if (isActive) {
+                bgRealm.commitTransaction()
             }
-            bgRealm.commitTransaction()
-            versionID = bgRealm.sharedRealm.versionID
-        } catch (e: Throwable) {
-            exception = e
         } finally {
-            try {
-                if (bgRealm.isInTransaction) {
-                    bgRealm.cancelTransaction()
-                }
-            } finally {
-                bgRealm.close()
+            if (bgRealm.isInTransaction) {
+                bgRealm.cancelTransaction()
             }
         }
-        val backgroundException = exception
-        val backgroundVersionID = versionID
-        when {
-            backgroundVersionID != null -> continuation.resume(Unit)
-            backgroundException != null -> continuation.resumeWithException(backgroundException)
-        }
     }
-
-}
-
-suspend fun awaitTransaction(realmConfiguration: RealmConfiguration, transaction: (realm: Realm) -> Unit) {
-    return suspendCancellableCoroutine { continuation ->
-        var futureTask: Future<*>? = null
-        continuation.invokeOnCancellation {
-            Timber.v("Cancel database transaction")
-            futureTask?.cancel(true)
-        }
-        val runnable = AsyncTransactionRunnable(continuation, realmConfiguration, transaction)
-        futureTask = AsyncTransactionThreadHolder.EXECUTOR.submit(runnable)
-    }
-
 }

@@ -18,16 +18,12 @@ package im.vector.matrix.android.internal.task
 
 
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
@@ -36,11 +32,11 @@ import kotlin.coroutines.EmptyCoroutineContext
 internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                 private val networkConnectivityChecker: NetworkConnectivityChecker) {
 
-    private val cancelableBag = CancelableBag()
+    private val executorScope = CoroutineScope(SupervisorJob())
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
 
-        val job = GlobalScope.launch(task.callbackThread.toDispatcher()) {
+        val job = executorScope.launch(task.callbackThread.toDispatcher()) {
             val resultOrFailure = runCatching {
                 withContext(task.executionThread.toDispatcher()) {
                     Timber.v("Enqueue task $task")
@@ -60,14 +56,11 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
                     }
                     .foldToCallback(task.callback)
         }
-        return CancelableCoroutine(job).also {
-            cancelableBag += it
-        }
+        return CancelableCoroutine(job)
     }
 
-    fun cancelAll() = synchronized(this) {
-        cancelableBag.cancel()
-    }
+    fun cancelAll() = executorScope.coroutineContext.cancelChildren()
+
 
     private suspend fun <T> retry(
             times: Int = Int.MAX_VALUE,

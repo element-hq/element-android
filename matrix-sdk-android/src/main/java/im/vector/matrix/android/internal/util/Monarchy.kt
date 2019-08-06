@@ -22,7 +22,7 @@ import io.realm.Realm
 import io.realm.RealmModel
 import java.util.concurrent.atomic.AtomicReference
 
-internal suspend fun Monarchy.awaitTransaction(transaction: (realm: Realm) -> Unit) {
+internal suspend fun Monarchy.awaitTransaction(transaction: suspend (realm: Realm) -> Unit) {
     awaitTransaction(realmConfiguration, transaction)
 }
 

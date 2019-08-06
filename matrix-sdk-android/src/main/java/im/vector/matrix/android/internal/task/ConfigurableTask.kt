@@ -40,7 +40,7 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
         val retryCount: Int,
         val callback: MatrixCallback<RESULT>
 
-) : Task<PARAMS, RESULT> {
+) : Task<PARAMS, RESULT> by task {
 
 
     class Builder<PARAMS, RESULT>(
@@ -64,11 +64,6 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
                 retryCount = retryCount,
                 callback = callback
         )
-    }
-
-
-    override suspend fun execute(params: PARAMS): RESULT {
-        return task.execute(params)
     }
 
     fun executeBy(taskExecutor: TaskExecutor): Cancelable {
