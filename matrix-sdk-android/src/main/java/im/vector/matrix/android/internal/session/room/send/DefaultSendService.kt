@@ -38,6 +38,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.util.CancelableWork
+import im.vector.matrix.android.internal.worker.AlwaysSuccessfulWorker
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -163,8 +164,8 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         TimelineSendEventWorkCommon.cancelAllWorks(context, roomId)
         WorkManager.getInstance(context).cancelUniqueWork(buildWorkName(UPLOAD_WORK))
 
-        // TODO Valere: what is the aim of this code ? Cancellation above is not enough?
-        matrixOneTimeWorkRequestBuilder<FakeSendWorker>()
+        // Replace the worker chains with a AlwaysSuccessfulWorker, to ensure the queues are well emptied
+        matrixOneTimeWorkRequestBuilder<AlwaysSuccessfulWorker>()
                 .build().let {
                     TimelineSendEventWorkCommon.postWork(context, roomId, it, ExistingWorkPolicy.REPLACE)
 

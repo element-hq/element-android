@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.session.room.send
+package im.vector.matrix.android.internal.worker
 
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 
-internal class FakeSendWorker(context: Context, params: WorkerParameters)
+internal class AlwaysSuccessfulWorker(context: Context, params: WorkerParameters)
     : Worker(context, params) {
 
     override fun doWork(): Result {
