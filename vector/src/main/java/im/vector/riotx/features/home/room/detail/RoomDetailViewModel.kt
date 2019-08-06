@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail
 
 import android.net.Uri
 import android.text.TextUtils
+import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -28,22 +29,30 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.isImageMessage
+import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
+import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.LiveEvent
+import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
@@ -52,8 +61,6 @@ import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -96,8 +103,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     init {
         observeRoomSummary()
         observeEventDisplayedActions()
-        observeInvitationState()
-        room.loadRoomMembersIfNeeded()
+        observeSummaryState()
+        room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
     }
@@ -107,7 +114,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.SendMessage            -> handleSendMessage(action)
             is RoomDetailActions.SendMedia              -> handleSendMedia(action)
             is RoomDetailActions.EventDisplayed         -> handleEventDisplayed(action)
-            is RoomDetailActions.LoadMore               -> handleLoadMore(action)
+            is RoomDetailActions.LoadMoreTimelineEvents -> handleLoadMore(action)
             is RoomDetailActions.SendReaction           -> handleSendReaction(action)
             is RoomDetailActions.AcceptInvite           -> handleAcceptInvite()
             is RoomDetailActions.RejectInvite           -> handleRejectInvite()
@@ -119,8 +126,39 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.EnterReplyMode         -> handleReplyAction(action)
             is RoomDetailActions.DownloadFile           -> handleDownloadFile(action)
             is RoomDetailActions.NavigateToEvent        -> handleNavigateToEvent(action)
+            is RoomDetailActions.HandleTombstoneEvent   -> handleTombstoneEvent(action)
+            is RoomDetailActions.ResendMessage          -> handleResendEvent(action)
+            is RoomDetailActions.RemoveFailedEcho       -> handleRemove(action)
+            is RoomDetailActions.ClearSendQueue         -> handleClearSendQueue()
+            is RoomDetailActions.ResendAll              -> handleResendAll()
             else                                        -> Timber.e("Unhandled Action: $action")
         }
+    }
+
+    private fun handleTombstoneEvent(action: RoomDetailActions.HandleTombstoneEvent) {
+        val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
+                ?: return
+
+        val roomId = tombstoneContent.replacementRoom ?: ""
+        val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
+        if (isRoomJoined) {
+            setState { copy(tombstoneEventHandling = Success(roomId)) }
+        } else {
+            val viaServer = MatrixPatterns.extractServerNameFromId(action.event.senderId).let {
+                if (it.isNullOrBlank()) {
+                    emptyList()
+                } else {
+                    listOf(it)
+                }
+            }
+            session.rx()
+                    .joinRoom(roomId, viaServer)
+                    .map { roomId }
+                    .execute {
+                        copy(tombstoneEventHandling = it)
+                    }
+        }
+
     }
 
     private fun enterEditMode(event: TimelineEvent) {
@@ -143,7 +181,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     val nonBlockingPopAlert: LiveData<LiveEvent<Pair<Int, List<Any>>>>
         get() = _nonBlockingPopAlert
 
-
     private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
     val sendMessageResultLiveData: LiveData<LiveEvent<SendMessageResult>>
         get() = _sendMessageResultLiveData
@@ -157,6 +194,20 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         get() = _downloadedFileEvent
 
 
+    fun isMenuItemVisible(@IdRes itemId: Int): Boolean {
+        if (itemId == R.id.clear_message_queue) {
+            //For now always disable, woker cancellation is not working properly
+            return false//timeline.pendingEventCount() > 0
+        }
+        if (itemId == R.id.resend_all) {
+            return timeline.failedToDeliverEventCount() > 0
+        }
+        if (itemId == R.id.clear_all) {
+            return timeline.failedToDeliverEventCount() > 0
+        }
+        return false
+    }
+
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSendMessage(action: RoomDetailActions.SendMessage) {
@@ -169,83 +220,94 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
                             room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
                         }
                         is ParsedCommand.ErrorSyntax              -> {
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command)))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command))
                         }
                         is ParsedCommand.ErrorEmptySlashCommand   -> {
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown("/")))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandUnknown("/"))
                         }
                         is ParsedCommand.ErrorUnknownSlashCommand -> {
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand)))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand))
                         }
                         is ParsedCommand.Invite                   -> {
                             handleInviteSlashCommand(slashCommandResult)
                         }
                         is ParsedCommand.SetUserPowerLevel        -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.ClearScalarToken         -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SetMarkdown              -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.UnbanUser                -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.BanUser                  -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.KickUser                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.JoinRoom                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.PartRoom                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SendEmote                -> {
                             room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled)
                         }
                         is ParsedCommand.ChangeTopic              -> {
                             handleChangeTopicSlashCommand(slashCommandResult)
                         }
                         is ParsedCommand.ChangeDisplayName        -> {
                             // TODO
-                            _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandNotImplemented))
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                     }
                 }
                 is SendMode.EDIT  -> {
-                    val messageContent: MessageContent? =
-                            state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
-                    val nonFormattedBody = messageContent?.body ?: ""
 
-                    if (nonFormattedBody != action.text) {
-                        room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                ?: "", messageContent?.type ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                    //is original event a reply?
+                    val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
+                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                    if (inReplyTo != null) {
+                        //TODO check if same content?
+                        room.getTimeLineEvent(inReplyTo)?.let {
+                            room.editReply(state.sendMode.timelineEvent, it, action.text)
+                        }
                     } else {
-                        Timber.w("Same message content, do not send edition")
+                        val messageContent: MessageContent? =
+                                state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
+                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                        val existingBody = messageContent?.body ?: ""
+                        if (existingBody != action.text) {
+                            room.editTextMessage(state.sendMode.timelineEvent.root.eventId
+                                    ?: "", messageContent?.type
+                                    ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                        } else {
+                            Timber.w("Same message content, do not send edition")
+                        }
                     }
                     setState {
                         copy(
                                 sendMode = SendMode.REGULAR
                         )
                     }
-                    _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+                    _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
                 }
                 is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
@@ -270,7 +332,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                 sendMode = SendMode.REGULAR
                         )
                     }
-                    _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+                    _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
                 }
                 is SendMode.REPLY -> {
                     state.sendMode.timelineEvent.let {
@@ -280,7 +342,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                     sendMode = SendMode.REGULAR
                             )
                         }
-                        _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.MessageSent))
+                        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
                     }
 
                 }
@@ -309,29 +371,29 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled)
 
         room.updateTopic(changeTopic.topic, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultOk))
+                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
             }
 
             override fun onFailure(failure: Throwable) {
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultError(failure)))
+                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultError(failure))
             }
         })
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandHandled))
+        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled)
 
         room.invite(invite.userId, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultOk))
+                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
             }
 
             override fun onFailure(failure: Throwable) {
-                _sendMessageResultLiveData.postValue(LiveEvent(SendMessageResult.SlashCommandResultError(failure)))
+                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultError(failure))
             }
         })
     }
@@ -347,7 +409,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleUndoReact(action: RoomDetailActions.UndoReaction) {
-        room.undoReaction(action.key, action.targetEventId, session.sessionParams.credentials.userId)
+        room.undoReaction(action.key, action.targetEventId, session.myUserId)
     }
 
 
@@ -355,7 +417,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (action.add) {
             room.sendReaction(action.selectedReaction, action.targetEventId)
         } else {
-            room.undoReaction(action.selectedReaction, action.targetEventId, session.sessionParams.credentials.userId)
+            room.undoReaction(action.selectedReaction, action.targetEventId, session.myUserId)
         }
     }
 
@@ -379,7 +441,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
-        if (action.event.sendState.isSent()) { //ignore pending/local events
+        if (action.event.root.sendState.isSent()) { //ignore pending/local events
             displayedEventsObservable.accept(action)
         }
         //We need to update this with the related m.replace also (to move read receipt)
@@ -390,7 +452,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleLoadMore(action: RoomDetailActions.LoadMore) {
+    private fun handleLoadMore(action: RoomDetailActions.LoadMoreTimelineEvents) {
         timeline.paginate(action.direction, PAGINATION_COUNT)
     }
 
@@ -399,7 +461,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleAcceptInvite() {
-        room.join(object : MatrixCallback<Unit> {})
+        room.join(callback = object : MatrixCallback<Unit> {})
     }
 
     private fun handleEditAction(action: RoomDetailActions.EnterEditMode) {
@@ -443,19 +505,19 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
                 object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
-                        _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
+                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 data,
                                 null
-                        )))
+                        ))
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        _downloadedFileEvent.postValue(LiveEvent(DownloadFileState(
+                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 null,
                                 failure
-                        )))
+                        ))
                     }
                 })
 
@@ -484,7 +546,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
             }
 
-            _navigateToEvent.postValue(LiveEvent(targetEventId))
+            _navigateToEvent.postLiveEvent(targetEventId)
         } else {
             // change timeline
             timeline.dispose()
@@ -509,9 +571,49 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
             }
 
-            _navigateToEvent.postValue(LiveEvent(targetEventId))
+            _navigateToEvent.postLiveEvent(targetEventId)
         }
     }
+
+    private fun handleResendEvent(action: RoomDetailActions.ResendMessage) {
+        val targetEventId = action.eventId
+        room.getTimeLineEvent(targetEventId)?.let {
+            //State must be UNDELIVERED or Failed
+            if (!it.root.sendState.hasFailed()) {
+                Timber.e("Cannot resend message, it is not failed, Cancel first")
+                return
+            }
+            if (it.root.isTextMessage()) {
+                room.resendTextMessage(it)
+            } else if (it.root.isImageMessage()) {
+                room.resendMediaMessage(it)
+            } else {
+                //TODO
+            }
+        }
+
+    }
+
+    private fun handleRemove(action: RoomDetailActions.RemoveFailedEcho) {
+        val targetEventId = action.eventId
+        room.getTimeLineEvent(targetEventId)?.let {
+            //State must be UNDELIVERED or Failed
+            if (!it.root.sendState.hasFailed()) {
+                Timber.e("Cannot resend message, it is not failed, Cancel first")
+                return
+            }
+            room.deleteFailedEcho(it)
+        }
+    }
+
+    private fun handleClearSendQueue() {
+        room.clearSendingQueue()
+    }
+
+    private fun handleResendAll() {
+        room.resendAllFailedMessages()
+    }
+
 
     private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second
@@ -538,7 +640,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
     }
 
-    private fun observeInvitationState() {
+    private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
                 summary.latestEvent?.root?.senderId?.let { senderId ->
@@ -546,6 +648,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }
                 }
+            }
+            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
+                setState { copy(tombstoneEvent = it) }
             }
         }
     }

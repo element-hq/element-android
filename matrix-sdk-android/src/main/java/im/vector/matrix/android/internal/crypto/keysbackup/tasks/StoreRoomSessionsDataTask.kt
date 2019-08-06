@@ -16,12 +16,10 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
-import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.BackupKeysResult
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
@@ -36,7 +34,7 @@ internal interface StoreRoomSessionsDataTask : Task<StoreRoomSessionsDataTask.Pa
 internal class DefaultStoreRoomSessionsDataTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : StoreRoomSessionsDataTask {
 
-    override suspend fun execute(params: StoreRoomSessionsDataTask.Params): Try<BackupKeysResult> {
+    override suspend fun execute(params: StoreRoomSessionsDataTask.Params): BackupKeysResult {
         return executeRequest {
             apiCall = roomKeysApi.storeRoomSessionsData(
                     params.roomId,

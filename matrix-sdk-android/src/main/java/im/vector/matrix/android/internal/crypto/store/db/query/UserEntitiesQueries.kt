@@ -16,10 +16,10 @@
 
 package im.vector.matrix.android.internal.crypto.store.db.query
 
-import io.realm.Realm
-import io.realm.kotlin.where
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
+import io.realm.Realm
+import io.realm.kotlin.where
 
 /**
  * Get or create a user

@@ -17,15 +17,31 @@
 package im.vector.matrix.android.internal.session.room.state
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.state.StateService
+import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.query.prev
+import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 internal class DefaultStateService @Inject constructor(private val roomId: String,
+                                                       @SessionDatabase
+                                                       private val realmConfiguration: RealmConfiguration,
                                                        private val taskExecutor: TaskExecutor,
                                                        private val sendStateTask: SendStateTask) : StateService {
+
+    override fun getStateEvent(eventType: String): Event? {
+        return Realm.getInstance(realmConfiguration).use { realm ->
+            EventEntity.where(realm, roomId, eventType).prev()?.asDomain()
+        }
+    }
 
     override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
         val params = SendStateTask.Params(roomId,
@@ -35,8 +51,12 @@ internal class DefaultStateService @Inject constructor(private val roomId: Strin
                 ))
 
 
-        sendStateTask.configureWith(params)
-                .dispatchTo(callback)
+        sendStateTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
+
+
 }

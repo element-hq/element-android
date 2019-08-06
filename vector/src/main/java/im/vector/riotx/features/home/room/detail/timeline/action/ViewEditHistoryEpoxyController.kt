@@ -26,6 +26,7 @@ import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.ui.list.genericFooterItem
@@ -60,13 +61,13 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 }
             }
             is Success    -> {
-                state.editList()?.let { renderEvents(it) }
+                state.editList()?.let { renderEvents(it, state.isOriginalAReply) }
             }
 
         }
     }
 
-    private fun renderEvents(sourceEvents: List<Event>) {
+    private fun renderEvents(sourceEvents: List<Event>, isOriginalReply: Boolean) {
         if (sourceEvents.isEmpty()) {
             genericItem {
                 id("footer")
@@ -74,9 +75,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
             }
         } else {
             var lastDate: Calendar? = null
-            sourceEvents.sortedByDescending {
-                it.originServerTs ?: 0
-            }.forEachIndexed { index, timelineEvent ->
+            sourceEvents.forEachIndexed { index, timelineEvent ->
 
                 val evDate = Calendar.getInstance().apply {
                     timeInMillis = timelineEvent.originServerTs
@@ -92,7 +91,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                     }
                 }
                 lastDate = evDate
-                val cContent = getCorrectContent(timelineEvent)
+                val cContent = getCorrectContent(timelineEvent, isOriginalReply)
                 val body = cContent.second?.let { eventHtmlRenderer.render(it) }
                         ?: cContent.first
 
@@ -101,7 +100,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 var spannedDiff: Spannable? = null
                 if (nextEvent != null && cContent.second == null /*No diff for html*/) {
                     //compares the body
-                    val nContent = getCorrectContent(nextEvent)
+                    val nContent = getCorrectContent(nextEvent, isOriginalReply)
                     val nextBody = nContent.second?.let { eventHtmlRenderer.render(it) }
                             ?: nContent.first
                     val dmp = diff_match_patch()
@@ -144,11 +143,14 @@ class ViewEditHistoryEpoxyController(private val context: Context,
         }
     }
 
-    private fun getCorrectContent(event: Event): Pair<String, String?> {
+    private fun getCorrectContent(event: Event, isOriginalReply: Boolean): Pair<String, String?> {
         val clearContent = event.getClearContent().toModel<MessageTextContent>()
         val newContent = clearContent
                 ?.newContent
                 ?.toModel<MessageTextContent>()
+        if (isOriginalReply) {
+            return extractUsefulTextFromReply(newContent?.body ?: clearContent?.body ?: "") to null
+        }
         return (newContent?.body ?: clearContent?.body ?: "") to (newContent?.formattedBody
                 ?: clearContent?.formattedBody)
     }

@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.database.model
 
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.VersioningState
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
@@ -32,6 +33,7 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                                       var joinedMembersCount: Int? = 0,
                                       var invitedMembersCount: Int? = 0,
                                       var isDirect: Boolean = false,
+                                      var directUserId: String? = null,
                                       var otherMemberIds: RealmList<String> = RealmList(),
                                       var notificationCount: Int = 0,
                                       var highlightCount: Int = 0,
@@ -39,10 +41,17 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
+    private var versioningStateStr: String = VersioningState.NONE.name
+
 
     @delegate:Ignore
     var membership: Membership by Delegates.observable(Membership.valueOf(membershipStr)) { _, _, newValue ->
         membershipStr = newValue.name
+    }
+
+    @delegate:Ignore
+    var versioningState: VersioningState by Delegates.observable(VersioningState.valueOf(versioningStateStr)) { _, _, newValue ->
+        versioningStateStr = newValue.name
     }
 
     companion object

@@ -75,7 +75,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     private fun handleJoinRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             session.getRoom(roomId)
-                    ?.join(object : MatrixCallback<Unit> {})
+                    ?.join(emptyList(), object : MatrixCallback<Unit> {})
         }
     }
 
@@ -121,9 +121,9 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 UUID.randomUUID().toString(),
                 false,
                 System.currentTimeMillis(),
-                session.getUser(session.sessionParams.credentials.userId)?.displayName
+                session.getUser(session.myUserId)?.displayName
                         ?: context?.getString(R.string.notification_sender_me),
-                session.sessionParams.credentials.userId,
+                session.myUserId,
                 message,
                 room.roomId,
                 room.roomSummary()?.displayName ?: room.roomId,

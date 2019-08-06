@@ -20,7 +20,6 @@ import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.internal.di.MatrixScope
 import javax.inject.Inject
 
 internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {

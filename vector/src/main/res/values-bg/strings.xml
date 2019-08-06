@@ -1515,4 +1515,57 @@
     <string name="keys_backup_unable_to_get_trust_info">Случи се грешка при извличане на информацията за довереността</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Случи се грешка при извличане на резервните данни за ключовете</string>
 
+    <string name="alpha_disclaimer_title">Добре дошли в beta версията!</string>
+    <string name="alpha_disclaimer_content_line_1">Докато RiotX е в ранен стадий на разработка някои функции може да липсват или да има бъгове.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store описание</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Ако намерите бъгове, моля докладвайте ги от най-горното ляво меню на началния екран и ще ги разрешим възможно най-бързо.</string>
+
+    <string name="import_e2e_keys_from_file">Импортирай e2e ключове от файл \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Matrix SDK версия</string>
+    <string name="navigate_to_room_when_already_in_the_room">Вече гледате тази стая!</string>
+
+    <string name="quick_reactions">Бързи реакции</string>
+
+    <string name="settings_general_title">Основни</string>
+    <string name="settings_preferences">Настройки</string>
+    <string name="settings_security_and_privacy">Сигурност и поверителност</string>
+    <string name="settings_expert">Експертни</string>
+    <string name="settings_push_rules">Правила за уведомление</string>
+    <string name="settings_push_rules_no_rules">Не са дефинирани правила за уведомление</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Списъкът с последни функции винаги е в %1$s. Ако намерите бъг, изпратете доклад за грешка от менюто горе в ляво, и ще го поправим възможно най-скоро.</string>
+    <string name="settings_other_third_party_notices">Други известия</string>
+    <string name="settings_push_gateway_no_pushers">Не са регистрирани адреси за push уведомления</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_url">Адрес:</string>
+    <string name="push_gateway_item_format">Формат:</string>
+
+    <string name="preference_voice_and_video">Глас и Видео</string>
+    <string name="preference_root_help_about">Помощ и Относно</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Регистрирай токен</string>
+
+    <string name="send_suggestion">Направи предложение</string>
+    <string name="send_suggestion_content">Напишете предложението си долу.</string>
+    <string name="send_suggestion_report_placeholder">Опишете предложението тук</string>
+    <string name="send_suggestion_sent">Благодаря! Предложението ви беше изпратено</string>
+    <string name="send_suggestion_failed">Предложението не беше изпратено (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Показвай скрити събития в чата</string>
+
+    <string name="store_riotx_title">RiotX - следващо поколение Matrix клиент</string>
+    <string name="store_riotx_short_description">По-бърз и по-лек Matrix клиент, използващ последните Android технологии</string>
+    <string name="store_riotx_full_description">RiotX в нов клиент за Matrix протокола (Matrix.org): отворена мрежа за сигурна, децентрализирана комуникация. RiotX е изцяло пренаписан Riot Android клиент, базиран на изцяло пренаписан Matrix Android SDK.
+\n
+\nЗабележка: Това е бета версия. RiotX в момента се разработва активно и все още има ограничения и (надяваме се не прекалено много) бъгове. Всякаква обратна връзка е добре дошла!
+\n
+\nRiotX поддържа: • Вход в съществуващ акаунт • Създаване на стая и влизане в публични стаи • Приемане и отхвърляне на покани • Показване на списък със стаите • Преглеждане на информация за стая • Изпращане на текстови съобщения • Изпращане на прикачени файлове • Четене и писане на съобщения в шифровани стаи • Шифроване: резервни копия на E2E ключове, потвърждение на устройства, заявяване и отговаряне на заявки за споделяне на ключове • Уведомления • Светла, Тъмна и Черна тема
+\n
+\nЗасега не всички функции на Riot са налични в RiotX. Основни липсващи (и скоро пристигащи!) функции са: • Създаване на нов профил • Настройки на стаи (показване на членове и т.н.) • Създаване на директни чатове • Обаждания • Приспособления • …</string>
+
 </resources>

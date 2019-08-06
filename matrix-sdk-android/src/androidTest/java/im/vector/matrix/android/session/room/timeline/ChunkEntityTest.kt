@@ -19,11 +19,7 @@ package im.vector.matrix.android.session.room.timeline
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
-import im.vector.matrix.android.internal.database.helper.add
-import im.vector.matrix.android.internal.database.helper.addAll
-import im.vector.matrix.android.internal.database.helper.isUnlinked
-import im.vector.matrix.android.internal.database.helper.lastStateIndex
-import im.vector.matrix.android.internal.database.helper.merge
+import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeListOfEvents

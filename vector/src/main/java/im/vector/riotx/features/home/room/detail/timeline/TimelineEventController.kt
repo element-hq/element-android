@@ -18,7 +18,6 @@ package im.vector.riotx.features.home.room.detail.timeline
 
 import android.os.Handler
 import android.os.Looper
-import android.util.LongSparseArray
 import android.view.View
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
@@ -55,6 +54,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
 
     interface Callback : ReactionPillCallback, AvatarCallback, BaseCallback, UrlClickCallback {
         fun onEventVisible(event: TimelineEvent)
+        fun onRoomCreateLinkClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
         fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
@@ -84,7 +84,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
     }
 
     private val collapsedEventIds = linkedSetOf<Long>()
-    private val mergeItemCollapseStates = HashMap<Long,Boolean>()
+    private val mergeItemCollapseStates = HashMap<Long, Boolean>()
     private val modelCache = arrayListOf<CacheItemData?>()
 
     private var currentSnapshot: List<TimelineEvent> = emptyList()
@@ -159,7 +159,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == eventIdToHighlight
-                            || modelCache[i]?.eventId == this.eventIdToHighlight) {
+                        || modelCache[i]?.eventId == this.eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
@@ -178,16 +178,19 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
     }
 
     override fun buildModels() {
-        LoadingItem_()
+        val loaderAdded = LoadingItem_()
                 .id("forward_loading_item")
                 .addWhen(Timeline.Direction.FORWARDS)
 
         val timelineModels = getModels()
         add(timelineModels)
 
-        LoadingItem_()
-                .id("backward_loading_item")
-                .addWhen(Timeline.Direction.BACKWARDS)
+        // Avoid displaying two loaders if there is no elements between them
+        if (!loaderAdded || timelineModels.isNotEmpty()) {
+            LoadingItem_()
+                    .id("backward_loading_item")
+                    .addWhen(Timeline.Direction.BACKWARDS)
+        }
     }
 
     // Timeline.LISTENER ***************************************************************************
@@ -217,8 +220,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                        || modelCache[position]?.mergedHeaderModel != null
-                        || modelCache[position]?.formattedDayModel != null) {
+                    || modelCache[position]?.mergedHeaderModel != null
+                    || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }
@@ -292,7 +295,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                 // => handle case where paginating from mergeable events and we get more
                 val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
                 val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
-                        ?: true
+                                           ?: true
                 val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
                 if (isCollapsed) {
                     collapsedEventIds.addAll(mergedEventIds)
@@ -310,9 +313,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
         }
     }
 
-    private fun LoadingItem_.addWhen(direction: Timeline.Direction) {
+    /**
+     * Return true if added
+     */
+    private fun LoadingItem_.addWhen(direction: Timeline.Direction): Boolean {
         val shouldAdd = timeline?.hasMoreToLoad(direction) ?: false
         addIf(shouldAdd, this@TimelineEventController)
+        return shouldAdd
     }
 
     fun searchPositionOfEvent(eventId: String): Int? {

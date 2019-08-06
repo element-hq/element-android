@@ -54,28 +54,32 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
         sessionComponent.inject(this)
 
         val eventId = params.eventId
-        val result = executeRequest<SendResponse> {
-            apiCall = roomAPI.redactEvent(
-                    params.txID,
-                    params.roomId,
-                    eventId,
-                    if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
-            )
-        }
-        return result.fold({
-            when (it) {
-                is Failure.NetworkConnection -> Result.retry()
-                else                         -> {
-                    //TODO mark as failed to send?
-                    //always return success, or the chain will be stuck for ever!
-                    Result.success(WorkerParamsFactory.toData(params.copy(
-                            lastFailureMessage = it.localizedMessage
-                    )))
-                }
+        return runCatching {
+            executeRequest<SendResponse> {
+                apiCall = roomAPI.redactEvent(
+                        params.txID,
+                        params.roomId,
+                        eventId,
+                        if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
+                )
             }
-        }, {
-            Result.success()
-        })
+        }.fold(
+                {
+                    Result.success()
+                },
+                {
+                    when (it) {
+                        is Failure.NetworkConnection -> Result.retry()
+                        else                         -> {
+                            //TODO mark as failed to send?
+                            //always return success, or the chain will be stuck for ever!
+                            Result.success(WorkerParamsFactory.toData(params.copy(
+                                    lastFailureMessage = it.localizedMessage
+                            )))
+                        }
+                    }
+                }
+        )
     }
 
 }

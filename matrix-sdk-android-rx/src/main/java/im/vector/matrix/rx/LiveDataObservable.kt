@@ -20,6 +20,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import io.reactivex.Observable
 import io.reactivex.android.MainThreadDisposable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 private class LiveDataObservable<T>(
         private val liveData: LiveData<T>,
@@ -57,5 +59,5 @@ private class LiveDataObservable<T>(
 }
 
 fun <T> LiveData<T>.asObservable(): Observable<T> {
-    return LiveDataObservable(this)
+    return LiveDataObservable(this).observeOn(Schedulers.computation())
 }

@@ -22,7 +22,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.view.isVisible
 import arrow.core.Try
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
@@ -37,6 +37,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.home.HomeActivity
+import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -44,9 +45,6 @@ import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
-private const val DEFAULT_HOME_SERVER_URI = "https://matrix.org"
-private const val DEFAULT_IDENTITY_SERVER_URI = "https://vector.im"
-private const val DEFAULT_ANTIVIRUS_SERVER_URI = "https://matrix.org"
 
 class LoginActivity : VectorBaseActivity() {
 
@@ -66,7 +64,7 @@ class LoginActivity : VectorBaseActivity() {
         setupNotice()
         setupAuthButton()
         setupPasswordReveal()
-        homeServerField.setText(DEFAULT_HOME_SERVER_URI)
+        homeServerField.setText(ServerUrlsRepository.getDefaultHomeServerUrl(this))
     }
 
     private fun setupNotice() {
@@ -118,8 +116,6 @@ class LoginActivity : VectorBaseActivity() {
             val homeServerUri = homeServerField.text?.trim().toString()
             HomeServerConnectionConfig.Builder()
                     .withHomeServerUri(homeServerUri)
-                    .withIdentityServerUri(DEFAULT_IDENTITY_SERVER_URI)
-                    .withAntiVirusServerUri(DEFAULT_ANTIVIRUS_SERVER_URI)
                     .build()
         }
     }
@@ -127,9 +123,9 @@ class LoginActivity : VectorBaseActivity() {
     private fun setupAuthButton() {
         Observable
                 .combineLatest(
-                        RxTextView.textChanges(loginField).map { it.trim().isNotEmpty() },
-                        RxTextView.textChanges(passwordField).map { it.trim().isNotEmpty() },
-                        RxTextView.textChanges(homeServerField).map { it.trim().isNotEmpty() },
+                        loginField.textChanges().map { it.trim().isNotEmpty() },
+                        passwordField.textChanges().map { it.trim().isNotEmpty() },
+                        homeServerField.textChanges().map { it.trim().isNotEmpty() },
                         Function3<Boolean, Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty, isHomeServerNotEmpty ->
                             isLoginNotEmpty && isPasswordNotEmpty && isHomeServerNotEmpty
                         }

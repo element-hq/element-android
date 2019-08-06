@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.LiveEvent
@@ -67,7 +68,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
     private fun observeSelectionState() {
         selectSubscribe(GroupListViewState::selectedGroup) {
             if (it != null) {
-                _openGroupLiveData.postValue(LiveEvent(it))
+                _openGroupLiveData.postLiveEvent(it)
                 val optionGroup = Option.fromNullable(it)
                 selectedGroupHolder.post(optionGroup)
             }
@@ -93,7 +94,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                 .rx()
                 .liveGroupSummaries()
                 .map {
-                    val myUser = session.getUser(session.sessionParams.credentials.userId)
+                    val myUser = session.getUser(session.myUserId)
                     val allCommunityGroup = GroupSummary(
                             groupId = ALL_COMMUNITIES_GROUP_ID,
                             displayName = stringProvider.getString(R.string.group_all_communities),

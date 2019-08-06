@@ -57,6 +57,9 @@ interface Session :
      */
     val sessionParams: SessionParams
 
+    /**
+     * Useful shortcut to get access to the userId
+     */
     val myUserId: String
         get() = sessionParams.credentials.userId
 
@@ -84,7 +87,7 @@ interface Session :
     /**
      * This method start the sync thread.
      */
-    fun startSync()
+    fun startSync(fromForeground : Boolean)
 
     /**
      * This method stop the sync thread.

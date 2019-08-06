@@ -31,3 +31,11 @@ inline fun <A> TryOf<A>.onError(f: (Throwable) -> Unit): Try<A> = fix()
 fun <A> Try<A>.foldToCallback(callback: MatrixCallback<A>): Unit = fold(
         { callback.onFailure(it) },
         { callback.onSuccess(it) })
+
+/**
+ * Same as doOnNext for Observables
+ */
+inline fun <A> Try<A>.alsoDo(f: (A) -> Unit) = map {
+    f(it)
+    it
+}

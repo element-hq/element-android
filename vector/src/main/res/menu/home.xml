@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_home_suggestion"
@@ -10,5 +11,11 @@
         android:id="@+id/menu_home_report_bug"
         android:icon="@drawable/ic_material_bug_report"
         android:title="@string/send_bug_report" />
+
+    <item
+        android:id="@+id/menu_home_filter"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/home_filter_placeholder_home"
+        app:showAsAction="always" />
 
 </menu>

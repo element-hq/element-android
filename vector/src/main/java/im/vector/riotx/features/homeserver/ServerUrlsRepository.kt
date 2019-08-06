@@ -69,21 +69,10 @@ object ServerUrlsRepository {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         return prefs.getString(HOME_SERVER_URL_PREF,
-                prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
-                        getDefaultHomeServerUrl(context)))
+                               prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
+                                               getDefaultHomeServerUrl(context)))
     }
 
-
-    /**
-     * Return last used identity server url, or the default one from referrer or the default one from resources
-     */
-    fun getLastIdentityServerUrl(context: Context): String {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-        return prefs.getString(IDENTITY_SERVER_URL_PREF,
-                prefs.getString(DEFAULT_REFERRER_IDENTITY_SERVER_URL_PREF,
-                        getDefaultIdentityServerUrl(context)))
-    }
 
     /**
      * Return true if url is the default home server url form resources
@@ -91,17 +80,8 @@ object ServerUrlsRepository {
     fun isDefaultHomeServerUrl(context: Context, url: String) = url == getDefaultHomeServerUrl(context)
 
     /**
-     * Return true if url is the default identity server url form resources
-     */
-    fun isDefaultIdentityServerUrl(context: Context, url: String) = url == getDefaultIdentityServerUrl(context)
-
-    /**
      * Return default home server url from resources
      */
     fun getDefaultHomeServerUrl(context: Context): String = context.getString(R.string.default_hs_server_url)
 
-    /**
-     * Return default identity server url from resources
-     */
-    fun getDefaultIdentityServerUrl(context: Context): String = context.getString(R.string.default_identity_server_url)
 }

@@ -1527,4 +1527,57 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="keys_backup_unable_to_get_trust_info">Une erreur est survenue lors de la récupération des informations de confiance</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Une erreur est survenue lors de la récupération des données de sauvegarde de clés</string>
 
+    <string name="alpha_disclaimer_title">Bienvenue à la bêta !</string>
+    <string name="alpha_disclaimer_content_line_1">Comme RiotX est au début de son développement, il se peut que certaines fonctionnalités soient manquantes et que vous rencontriez quelques anomalies.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">La dernière liste de fonctionnalités est toujours dans la %1$s, et si vous rencontrez des anomalies, envoyez un rapport dans le menu en haut à gauche de l’accueil et nous les règlerons aussi vite que possible.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">description du Play Store</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Si vous rencontrez des anomalies, envoyez un rapport dans le menu en haut à gauche de l’accueil et nous les règlerons aussi vite que possible.</string>
+
+    <string name="import_e2e_keys_from_file">Importer les clés de chiffrement depuis le fichier « %1$s ».</string>
+
+    <string name="settings_sdk_version">Version du SDK de Matrix</string>
+    <string name="settings_other_third_party_notices">Licences tierces</string>
+    <string name="navigate_to_room_when_already_in_the_room">Vous êtes déjà en train de visualiser ce salon !</string>
+
+    <string name="quick_reactions">Réactions rapides</string>
+
+    <string name="settings_general_title">Général</string>
+    <string name="settings_preferences">Préférences</string>
+    <string name="settings_security_and_privacy">Sécurité &amp; vie privée</string>
+    <string name="settings_expert">Expert</string>
+    <string name="settings_push_rules">Règles de notification</string>
+    <string name="settings_push_rules_no_rules">Aucune règle de notification définie</string>
+    <string name="settings_push_gateway_no_pushers">Aucune passerelle de notification enregistrée</string>
+
+    <string name="push_gateway_item_app_id">app_id :</string>
+    <string name="push_gateway_item_push_key">push_key :</string>
+    <string name="push_gateway_item_app_display_name">app_display_name :</string>
+    <string name="push_gateway_item_device_name">device_name :</string>
+    <string name="push_gateway_item_url">URL :</string>
+    <string name="push_gateway_item_format">Format :</string>
+
+    <string name="preference_voice_and_video">Voix &amp; vidéo</string>
+    <string name="preference_root_help_about">Aide &amp; à propos</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Inscrire le jeton</string>
+
+    <string name="send_suggestion">Faire une suggestion</string>
+    <string name="send_suggestion_content">Saisissez votre suggestion ci-dessous.</string>
+    <string name="send_suggestion_report_placeholder">Décrivez votre suggestion ici</string>
+    <string name="send_suggestion_sent">Merci, la suggestion a bien été envoyée</string>
+    <string name="send_suggestion_failed">Échec d’envoi de la suggestion (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans l’historique</string>
+
+    <string name="store_riotx_title">RiotX − Client Matrix nouvelle génération</string>
+    <string name="store_riotx_short_description">Un client pour Matrix plus rapide et plus léger utilisant les derniers frameworks Android</string>
+    <string name="store_riotx_full_description">RiotX est un nouveau client pour le protocole Matrix (Matrix.org) : un réseau ouvert pour des communications sécurisées et décentralisées. RiotX est une réécriture complète du client Android Riot, basée sur une réécriture complète du SDK Android de Matrix.
+\n
+\nMise en garde : Ceci est une version bêta. RiotX est actuellement en plein développement et a des limites et (peu, nous l’espérons) des anomalies. Tout commentaire est le bienvenu !
+\n
+\nRiotX prend en charge : • Se connecter à un compte existant • Créer de salons et rejoindre des salons publics • Accepter et refuser des invitations • Lister les salons des utilisateurs • Voir les informations des salons • Envoyer des messages texte • Envoyer des pièces jointes • Lire et écrire des messages dans les salons chiffrés • Chiffrement : sauvegarde des clés de chiffrement, vérification avancée des appareils, demande et réponse de partage de clé • Notifications • Thèmes clair, sombre et noir
+\n
+\nToutes les fonctionnalités de Riot ne sont pas encore implémentées dans RiotX. Principales fonctionnalités manquantes (et qui arrivent bientôt !) : • Création de compte • Réglages des salons (lister les membres du salon etc.) • Création de salons de discussion directe • Appels • Widgets • …</string>
+
 </resources>

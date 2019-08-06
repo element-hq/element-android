@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.util.awaitTransaction
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import javax.inject.Inject
@@ -55,15 +56,14 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
         if (pusher.pushKey.isBlank()) {
             return Result.failure()
         }
-
-        val result = executeRequest<Unit> {
-            apiCall = pushersAPI.setPusher(pusher)
-        }
-        return result.fold({
-            when (it) {
+        return try {
+            setPusher(pusher, params.userId)
+            Result.success()
+        } catch (exception: Throwable) {
+            when (exception) {
                 is Failure.NetworkConnection -> Result.retry()
                 else                         -> {
-                    monarchy.runTransactionSync { realm ->
+                    monarchy.awaitTransaction { realm ->
                         PusherEntity.where(realm, params.userId, pusher.pushKey).findFirst()?.let {
                             //update it
                             it.state = PusherState.FAILED_TO_REGISTER
@@ -73,28 +73,31 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
                     Result.failure()
                 }
             }
-        }, {
-            monarchy.runTransactionSync { realm ->
-                val echo = PusherEntity.where(realm, params.userId, pusher.pushKey).findFirst()
-                if (echo != null) {
-                    //update it
-                    echo.appDisplayName = pusher.appDisplayName
-                    echo.appId = pusher.appId
-                    echo.kind = pusher.kind
-                    echo.lang = pusher.lang
-                    echo.profileTag = pusher.profileTag
-                    echo.data?.format = pusher.data?.format
-                    echo.data?.url = pusher.data?.url
-                    echo.state = PusherState.REGISTERED
-                } else {
-                    pusher.toEntity(params.userId).also {
-                        it.state = PusherState.REGISTERED
-                        realm.insertOrUpdate(it)
-                    }
+        }
+    }
+
+    private suspend fun setPusher(pusher: JsonPusher, userId: String) {
+        executeRequest<Unit> {
+            apiCall = pushersAPI.setPusher(pusher)
+        }
+        monarchy.awaitTransaction { realm ->
+            val echo = PusherEntity.where(realm, userId, pusher.pushKey).findFirst()
+            if (echo != null) {
+                //update it
+                echo.appDisplayName = pusher.appDisplayName
+                echo.appId = pusher.appId
+                echo.kind = pusher.kind
+                echo.lang = pusher.lang
+                echo.profileTag = pusher.profileTag
+                echo.data?.format = pusher.data?.format
+                echo.data?.url = pusher.data?.url
+                echo.state = PusherState.REGISTERED
+            } else {
+                pusher.toEntity(userId).also {
+                    it.state = PusherState.REGISTERED
+                    realm.insertOrUpdate(it)
                 }
             }
-            Result.success()
-
-        })
+        }
     }
 }

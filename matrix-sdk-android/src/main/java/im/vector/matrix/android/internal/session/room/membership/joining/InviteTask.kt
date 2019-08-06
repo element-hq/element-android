@@ -16,9 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.membership.joining
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
@@ -33,7 +31,7 @@ internal interface InviteTask : Task<InviteTask.Params, Unit> {
 
 internal class DefaultInviteTask @Inject constructor(private val roomAPI: RoomAPI) : InviteTask {
 
-    override suspend fun execute(params: InviteTask.Params): Try<Unit> {
+    override suspend fun execute(params: InviteTask.Params) {
         return executeRequest {
             val body = InviteBody(params.userId)
             apiCall = roomAPI.invite(params.roomId, body)

@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
@@ -42,7 +43,6 @@ import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import javax.inject.Inject
@@ -80,28 +80,30 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 reaction,
                 myUserId
         )
-        findReactionEventForUndoTask.configureWith(params)
-                .enableRetry()
-                .dispatchTo(object : MatrixCallback<FindReactionEventForUndoTask.Result> {
-                    override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
-                        if (data.redactEventId == null) {
-                            Timber.w("Cannot find reaction to undo (not yet synced?)")
-                            //TODO?
-                        }
-                        data.redactEventId?.let { toRedact ->
+        val callback = object : MatrixCallback<FindReactionEventForUndoTask.Result> {
+            override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
+                if (data.redactEventId == null) {
+                    Timber.w("Cannot find reaction to undo (not yet synced?)")
+                    //TODO?
+                }
+                data.redactEventId?.let { toRedact ->
 
-                            val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null).also {
-                                saveLocalEcho(it)
-                            }
-                            val redactWork = createRedactEventWork(redactEvent, toRedact, null)
-
-                            TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
-
-                        }
+                    val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null).also {
+                        saveLocalEcho(it)
                     }
-                })
-                .executeBy(taskExecutor)
+                    val redactWork = createRedactEventWork(redactEvent, toRedact, null)
 
+                    TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
+
+                }
+            }
+        }
+        findReactionEventForUndoTask
+                .configureWith(params) {
+                    this.retryCount = Int.MAX_VALUE
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     //TODO duplicate with send service?
@@ -113,7 +115,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 eventId,
                 reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
+        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData, true)
     }
 
     override fun editTextMessage(targetEventId: String,
@@ -126,16 +128,51 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 .also {
                     saveLocalEcho(it)
                 }
-        val workRequest = createSendEventWork(event)
-        TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-        return CancelableWork(context, workRequest.id)
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
+            return CancelableWork(context, encryptWork.id)
+
+        } else {
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+            return CancelableWork(context, workRequest.id)
+        }
 
     }
 
+    override fun editReply(replyToEdit: TimelineEvent,
+                           originalEvent: TimelineEvent,
+                           newBodyText: String,
+                           compatibilityBodyText: String): Cancelable {
+        val event = eventFactory
+                .createReplaceTextOfReply(roomId,
+                        replyToEdit,
+                        originalEvent,
+                        newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
+                .also {
+                    saveLocalEcho(it)
+                }
+        if (cryptoService.isRoomEncrypted(roomId)) {
+            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
+            return CancelableWork(context, encryptWork.id)
+
+        } else {
+            val workRequest = createSendEventWork(event)
+            TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
+            return CancelableWork(context, workRequest.id)
+        }
+    }
+
     override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
-        val params = FetchEditHistoryTask.Params(roomId, eventId)
-        fetchEditHistoryTask.configureWith(params)
-                .dispatchTo(callback)
+        val params = FetchEditHistoryTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), eventId)
+        fetchEditHistoryTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
@@ -162,14 +199,13 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         // Same parameter
         val params = EncryptEventWorker.Params(credentials.userId, roomId, event, keepKeys)
         val sendWorkData = WorkerParamsFactory.toData(params)
-        return TimelineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData)
+        return TimelineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData, true)
     }
 
     private fun createSendEventWork(event: Event): OneTimeWorkRequest {
         val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
-        return workRequest
+        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, true)
     }
 
     override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {
@@ -189,9 +225,9 @@ internal class DefaultRelationService @Inject constructor(private val context: C
      * the same transaction id is received (in unsigned data)
      */
     private fun saveLocalEcho(event: Event) {
-        monarchy.tryTransactionAsync { realm ->
+        monarchy.writeAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                    ?: return@tryTransactionAsync
+                    ?: return@writeAsync
             roomEntity.addSendingEvent(event)
         }
     }

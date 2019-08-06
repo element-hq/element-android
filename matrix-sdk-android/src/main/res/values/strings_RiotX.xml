@@ -1,10 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="initial_sync_start_importing_account">Initial Sync:\nImporting account…</string>
-    <string name="initial_sync_start_importing_account_crypto">Initial Sync:\nImporting crypto</string>
-    <string name="initial_sync_start_importing_account_rooms">Initial Sync:\nImporting Rooms</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Initial Sync:\nImporting Joined Rooms</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Initial Sync:\nImporting Invited Rooms</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Initial Sync:\nImporting Left Rooms</string>
-    <string name="initial_sync_start_importing_account_groups">Initial Sync:\nImporting Communities</string>
-    <string name="initial_sync_start_importing_account_data">Initial Sync:\nImporting Account Data</string>
+    <string name="event_status_sending_message">Sending message…</string>
+    <string name="clear_timeline_send_queue">Clear sending queue</string>
 </resources>

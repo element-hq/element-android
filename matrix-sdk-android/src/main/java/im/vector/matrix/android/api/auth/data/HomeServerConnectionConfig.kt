@@ -31,7 +31,7 @@ import okhttp3.TlsVersion
 @JsonClass(generateAdapter = true)
 data class HomeServerConnectionConfig(
         val homeServerUri: Uri,
-        val identityServerUri: Uri,
+        val identityServerUri: Uri? = null,
         val antiVirusServerUri: Uri? = null,
         val allowedFingerprints: MutableList<Fingerprint> = ArrayList(),
         val shouldPin: Boolean = false,
@@ -48,7 +48,7 @@ data class HomeServerConnectionConfig(
     class Builder {
 
         private lateinit var homeServerUri: Uri
-        private lateinit var identityServerUri: Uri
+        private var identityServerUri: Uri? = null
         private var antiVirusServerUri: Uri? = null
         private val allowedFingerprints: MutableList<Fingerprint> = ArrayList()
         private var shouldPin: Boolean = false

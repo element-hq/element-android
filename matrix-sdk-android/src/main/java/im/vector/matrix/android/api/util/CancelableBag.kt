@@ -19,5 +19,6 @@ package im.vector.matrix.android.api.util
 class CancelableBag : Cancelable, MutableList<Cancelable> by ArrayList() {
     override fun cancel() {
         forEach { it.cancel() }
+        clear()
     }
 }

@@ -37,7 +37,6 @@ import javax.inject.Inject
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
 private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
-private const val DEFAULT_LONG_POOL_DELAY = 0L
 
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
@@ -54,10 +53,15 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         updateStateTo(SyncState.IDLE)
     }
 
+    fun setInitialForeground(initialForeground: Boolean) {
+        val newState = if (initialForeground) SyncState.IDLE else SyncState.PAUSED
+        updateStateTo(newState)
+    }
+
     fun restart() = synchronized(lock) {
         if (state is SyncState.PAUSED) {
             Timber.v("Resume sync...")
-            updateStateTo(SyncState.RUNNING(catchingUp = true))
+            updateStateTo(SyncState.RUNNING(afterPause = true))
             lock.notify()
         }
     }
@@ -84,7 +88,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         Timber.v("Start syncing...")
         networkConnectivityChecker.register(this)
         backgroundDetectionObserver.register(this)
-        updateStateTo(SyncState.RUNNING(catchingUp = true))
 
         while (state != SyncState.KILLING) {
             if (!networkConnectivityChecker.isConnected() || state == SyncState.PAUSED) {
@@ -93,51 +96,53 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                     lock.wait()
                 }
             } else {
-                Timber.v("Execute sync request with timeout $DEFAULT_LONG_POOL_TIMEOUT")
+                if (state !is SyncState.RUNNING) {
+                    updateStateTo(SyncState.RUNNING(afterPause = true))
+                }
+                Timber.v("[$this] Execute sync request with timeout $DEFAULT_LONG_POOL_TIMEOUT")
                 val latch = CountDownLatch(1)
                 val params = SyncTask.Params(DEFAULT_LONG_POOL_TIMEOUT)
-                cancelableTask = syncTask.configureWith(params)
-                        .callbackOn(TaskThread.SYNC)
-                        .executeOn(TaskThread.SYNC)
-                        .dispatchTo(object : MatrixCallback<Unit> {
-                            override fun onSuccess(data: Unit) {
-                                latch.countDown()
+
+                cancelableTask = syncTask.configureWith(params) {
+                    this.callbackThread = TaskThread.SYNC
+                    this.executionThread = TaskThread.SYNC
+                    this.callback = object : MatrixCallback<Unit> {
+
+                        override fun onSuccess(data: Unit) {
+                            latch.countDown()
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            if (failure is Failure.NetworkConnection
+                                    && failure.cause is SocketTimeoutException) {
+                                // Timeout are not critical
+                                Timber.v("Timeout")
+                            } else {
+                                Timber.e(failure)
                             }
 
-                            override fun onFailure(failure: Throwable) {
-                                if (failure is Failure.NetworkConnection
-                                        && failure.cause is SocketTimeoutException) {
-                                    // Timeout are not critical
-                                    Timber.v("Timeout")
-                                } else {
-                                    Timber.e(failure)
-                                }
-
-                                if (failure !is Failure.NetworkConnection
-                                        || failure.cause is JsonEncodingException) {
-                                    // Wait 10s before retrying
-                                    sleep(RETRY_WAIT_TIME_MS)
-                                }
-
-                                if (failure is Failure.ServerError
-                                        && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
-                                    // No token or invalid token, stop the thread
-                                    updateStateTo(SyncState.KILLING)
-                                }
-
-                                latch.countDown()
+                            if (failure !is Failure.NetworkConnection
+                                    || failure.cause is JsonEncodingException) {
+                                // Wait 10s before retrying
+                                sleep(RETRY_WAIT_TIME_MS)
                             }
 
-                        })
+                            if (failure is Failure.ServerError
+                                    && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                                // No token or invalid token, stop the thread
+                                updateStateTo(SyncState.KILLING)
+                            }
+                            latch.countDown()
+                        }
+                    }
+                }
                         .executeBy(taskExecutor)
 
                 latch.await()
                 if (state is SyncState.RUNNING) {
-                    updateStateTo(SyncState.RUNNING(catchingUp = false))
+                    updateStateTo(SyncState.RUNNING(afterPause = false))
                 }
 
-                Timber.v("Waiting for $DEFAULT_LONG_POOL_DELAY delay before new pool...")
-                if (DEFAULT_LONG_POOL_DELAY > 0) sleep(DEFAULT_LONG_POOL_DELAY)
                 Timber.v("...Continue")
             }
         }
@@ -148,6 +153,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     }
 
     private fun updateStateTo(newState: SyncState) {
+        Timber.v("Update state to $newState")
         state = newState
         liveState.postValue(newState)
     }

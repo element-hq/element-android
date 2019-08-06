@@ -4,11 +4,15 @@
     <!-- ************************ Common items ************************ -->
 
     <!-- toolbar styles-->
-    <style name="VectorToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
+    <style name="VectorToolbarStyleWithPadding" parent="Widget.MaterialComponents.Toolbar">
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextAppearance">@style/Vector.Toolbar.SubTitle</item>
         <item name="android:background">?riotx_background</item>
+    </style>
+
+    <style name="VectorToolbarStyle" parent="VectorToolbarStyleWithPadding">
+        <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 
     <style name="VectorToolbarStyle.Group">
@@ -158,6 +162,12 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
         <item name="colorControlHighlight">@android:color/white</item>
+    </style>
+
+    <style name="VectorSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="searchIcon">@drawable/ic_search</item>
+        <item name="closeIcon">@drawable/ic_x_green</item>
+        <item name="iconifiedByDefault">false</item>
     </style>
 
     <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">

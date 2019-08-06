@@ -19,11 +19,17 @@ package im.vector.riotx.features.home.room.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import com.airbnb.mvrx.activityViewModel
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 
 class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
 
@@ -33,9 +39,10 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        waitingView = waiting_view
         if (isFirstCreation()) {
             val roomDetailArgs: RoomDetailArgs = intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
-                                                 ?: return
+                    ?: return
             val roomDetailFragment = RoomDetailFragment.newInstance(roomDetailArgs)
             replaceFragment(roomDetailFragment, R.id.roomDetailContainer)
         }

@@ -18,8 +18,6 @@ package im.vector.matrix.android.internal.crypto.api
 
 
 import im.vector.matrix.android.internal.crypto.model.rest.*
-import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadBody
-import im.vector.matrix.android.internal.crypto.model.rest.SendToDeviceBody
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.*

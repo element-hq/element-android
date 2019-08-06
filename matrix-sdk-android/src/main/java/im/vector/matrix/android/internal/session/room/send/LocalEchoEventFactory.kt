@@ -36,7 +36,6 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.util.StringProvider
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import java.util.*
@@ -100,6 +99,45 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                         relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
                         newContent = createTextContent(newBodyText, newBodyAutoMarkdown)
                                 .toMessageTextContent(msgType)
+                                .toContent()
+                ))
+    }
+
+    fun createReplaceTextOfReply(roomId: String, eventReplaced: TimelineEvent,
+                                 originalEvent: TimelineEvent,
+                                 newBodyText: String,
+                                 newBodyAutoMarkdown: Boolean,
+                                 msgType: String,
+                                 compatibilityText: String): Event {
+        val permalink = PermalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "")
+        val userLink = originalEvent.root.senderId?.let { PermalinkFactory.createPermalink(it) }
+                ?: ""
+
+        val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.root.getClearContent().toModel())
+        val replyFormatted = REPLY_PATTERN.format(
+                permalink,
+                stringProvider.getString(R.string.message_reply_to_prefix),
+                userLink,
+                originalEvent.senderName ?: originalEvent.root.senderId,
+                body.takeFormatted(),
+                createTextContent(newBodyText, newBodyAutoMarkdown).takeFormatted()
+        )
+        //
+        // > <@alice:example.org> This is the original body
+        //
+        val replyFallback = buildReplyFallback(body, originalEvent.root.senderId ?: "", newBodyText)
+
+        return createEvent(roomId,
+                MessageTextContent(
+                        type = msgType,
+                        body = compatibilityText,
+                        relatesTo = RelationDefaultContent(RelationType.REPLACE, eventReplaced.root.eventId),
+                        newContent = MessageTextContent(
+                                type = msgType,
+                                format = MessageType.FORMAT_MATRIX_HTML,
+                                body = replyFallback,
+                                formattedBody = replyFormatted
+                        )
                                 .toContent()
                 ))
     }
@@ -239,16 +277,8 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         val permalink = PermalinkFactory.createPermalink(eventReplied.root) ?: return null
         val userId = eventReplied.root.senderId ?: return null
         val userLink = PermalinkFactory.createPermalink(userId) ?: return null
-        // <mx-reply>
-        //     <blockquote>
-        //         <a href="https://matrix.to/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
-        //         <a href="https://matrix.to/#/@alice:example.org">@alice:example.org</a>
-        //         <br />
-        //         <!-- This is where the related event's HTML would be. -->
-        //     </blockquote>
-        // </mx-reply>
-        // This is where the reply goes.
-        val body = bodyForReply(eventReplied.getLastMessageContent())
+
+        val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.root.getClearContent().toModel())
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 stringProvider.getString(R.string.message_reply_to_prefix),
@@ -260,32 +290,39 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         //
         // > <@alice:example.org> This is the original body
         //
-        val lines = body.text.split("\n")
-        val replyFallback = StringBuffer("><$userId>")
-        lines.forEachIndexed { index, s ->
-            if (index == 0) {
-                replyFallback.append(" $s")
-            } else {
-                replyFallback.append("\n>$s")
-            }
-        }
-        replyFallback.append("\n\n").append(replyText)
+        val replyFallback = buildReplyFallback(body, userId, replyText)
 
         val eventId = eventReplied.root.eventId ?: return null
         val content = MessageTextContent(
                 type = MessageType.MSGTYPE_TEXT,
                 format = MessageType.FORMAT_MATRIX_HTML,
-                body = replyFallback.toString(),
+                body = replyFallback,
                 formattedBody = replyFormatted,
                 relatesTo = RelationDefaultContent(null, null, ReplyToContent(eventId))
         )
         return createEvent(roomId, content)
     }
 
+    private fun buildReplyFallback(body: TextContent, originalSenderId: String?, newBodyText: String): String {
+        val lines = body.text.split("\n")
+        val replyFallback = StringBuffer("> <$originalSenderId>")
+        lines.forEachIndexed { index, s ->
+            if (index == 0) {
+                replyFallback.append(" $s")
+            } else {
+                replyFallback.append("\n> $s")
+            }
+        }
+        replyFallback.append("\n\n").append(newBodyText)
+        return replyFallback.toString()
+    }
+
     /**
      * Returns a TextContent used for the fallback event representation in a reply message.
+     * We also pass the original content, because in case of an edit of a reply the last content is not
+     * himself a reply, but it will contain the fallbacks, so we have to trim them.
      */
-    private fun bodyForReply(content: MessageContent?): TextContent {
+    private fun bodyForReply(content: MessageContent?, originalContent: MessageContent?): TextContent {
         when (content?.type) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
@@ -296,7 +333,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
                         formattedText = content.formattedBody
                     }
                 }
-                val isReply = content.relatesTo?.inReplyTo?.eventId != null
+                val isReply = content.isReply() || originalContent.isReply()
                 return if (isReply)
                     TextContent(content.body, formattedText).removeInReplyFallbacks()
                 else
@@ -342,9 +379,9 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
 
     fun saveLocalEcho(monarchy: Monarchy, event: Event) {
         if (event.roomId == null) throw IllegalStateException("Your event should have a roomId")
-        monarchy.tryTransactionAsync { realm ->
+        monarchy.writeAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = event.roomId).findFirst()
-                    ?: return@tryTransactionAsync
+                    ?: return@writeAsync
             roomEntity.addSendingEvent(event)
             roomSummaryUpdater.update(realm, event.roomId)
         }
@@ -353,7 +390,16 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
     companion object {
         const val LOCAL_ID_PREFIX = "local."
 
-        // No whitespace
+
+        // <mx-reply>
+        //     <blockquote>
+        //         <a href="https://matrix.to/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
+        //         <a href="https://matrix.to/#/@alice:example.org">@alice:example.org</a>
+        //         <br />
+        //         <!-- This is where the related event's HTML would be. -->
+        //     </blockquote>
+        // </mx-reply>
+        // No whitespace because currently breaks temporary formatted text to Span
         const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">%s</a><a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
 
         fun isLocalEchoId(eventId: String): Boolean = eventId.startsWith(LOCAL_ID_PREFIX)

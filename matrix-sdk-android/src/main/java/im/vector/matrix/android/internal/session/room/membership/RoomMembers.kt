@@ -33,6 +33,7 @@ import io.realm.Sort
  * This class is an helper around STATE_ROOM_MEMBER events.
  * It allows to get the live membership of a user.
  */
+
 internal class RoomMembers(private val realm: Realm,
                            private val roomId: String
 ) {
@@ -41,12 +42,16 @@ internal class RoomMembers(private val realm: Realm,
         RoomSummaryEntity.where(realm, roomId).findFirst()
     }
 
-    fun get(userId: String): RoomMember? {
+    fun getStateEvent(userId: String): EventEntity? {
         return EventEntity
                 .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
                 .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
                 .equalTo(EventEntityFields.STATE_KEY, userId)
                 .findFirst()
+    }
+
+    fun get(userId: String): RoomMember? {
+        return getStateEvent(userId)
                 ?.let {
                     it.asDomain().content?.toModel<RoomMember>()
                 }
@@ -72,27 +77,27 @@ internal class RoomMembers(private val realm: Realm,
                 .isNotNull(EventEntityFields.CONTENT)
     }
 
+    fun queryJoinedRoomMembersEvent(): RealmQuery<EventEntity> {
+        return queryRoomMembersEvent().contains(EventEntityFields.CONTENT, "\"membership\":\"join\"")
+    }
+
+    fun queryInvitedRoomMembersEvent(): RealmQuery<EventEntity> {
+        return queryRoomMembersEvent().contains(EventEntityFields.CONTENT, "\"membership\":\"invite\"")
+    }
+
     fun queryRoomMemberEvent(userId: String): RealmQuery<EventEntity> {
         return queryRoomMembersEvent()
                 .equalTo(EventEntityFields.STATE_KEY, userId)
     }
 
-    fun getLoaded(): Map<String, RoomMember> {
-        return queryRoomMembersEvent()
-                .findAll()
-                .map { it.asDomain() }
-                .associateBy { it.stateKey!! }
-                .mapValues { it.value.content.toModel<RoomMember>()!! }
-    }
-
     fun getNumberOfJoinedMembers(): Int {
         return roomSummary?.joinedMembersCount
-                ?: getLoaded().filterValues { it.membership == Membership.JOIN }.size
+               ?: queryJoinedRoomMembersEvent().findAll().size
     }
 
     fun getNumberOfInvitedMembers(): Int {
         return roomSummary?.invitedMembersCount
-                ?: getLoaded().filterValues { it.membership == Membership.INVITE }.size
+               ?: queryInvitedRoomMembersEvent().findAll().size
     }
 
     fun getNumberOfMembers(): Int {

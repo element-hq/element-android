@@ -13,7 +13,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 2
+ext.versionMinor = 3
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -66,9 +66,9 @@ android {
 
         // For release, use generateVersionCodeFromVersionName()
         versionCode generateVersionCodeFromTimestamp()
-        // versionCode generateVersionCodeFromVersionName()
+        //versionCode generateVersionCodeFromVersionName()
 
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}-dev"
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""
@@ -148,7 +148,7 @@ android {
 
 dependencies {
 
-    def epoxy_version = "3.3.0"
+    def epoxy_version = "3.7.0"
     def arrow_version = "0.8.2"
     def coroutines_version = "1.0.1"
     def markwon_version = '3.0.0'
@@ -187,15 +187,20 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
-    // TODO RxBindings3 exists
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
+    // RXBinding
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2'
+    implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0-alpha2'
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
+    implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
     implementation 'com.airbnb.android:mvrx:1.0.1'
 
     // Work
     implementation "androidx.work:work-runtime-ktx:2.1.0-rc01"
+
+    // Paging
+    implementation "androidx.paging:paging-runtime-ktx:2.1.0"
 
     // Functional Programming
     implementation "io.arrow-kt:arrow-core:$arrow_version"
@@ -205,7 +210,7 @@ dependencies {
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.material:material:1.1.0-alpha07'
+    implementation 'com.google.android.material:material:1.1.0-alpha08'
     implementation 'me.gujun.android:span:1.7'
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"

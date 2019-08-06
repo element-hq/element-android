@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.home.HomeRoomListObservableStore
@@ -76,23 +77,35 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             is RoomListActions.ToggleCategory   -> handleToggleCategory(action)
             is RoomListActions.AcceptInvitation -> handleAcceptInvitation(action)
             is RoomListActions.RejectInvitation -> handleRejectInvitation(action)
+            is RoomListActions.FilterWith       -> handleFilter(action)
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectRoom(action: RoomListActions.SelectRoom) {
-        _openRoomLiveData.postValue(LiveEvent(action.roomSummary.roomId))
+        _openRoomLiveData.postLiveEvent(action.roomSummary.roomId)
     }
 
     private fun handleToggleCategory(action: RoomListActions.ToggleCategory) = setState {
         this.toggle(action.category)
     }
 
+    private fun handleFilter(action: RoomListActions.FilterWith) {
+        setState {
+            copy(
+                    roomFilter = action.filter
+            )
+        }
+    }
 
     private fun observeRoomSummaries() {
         homeRoomListObservableSource
                 .observe()
+                .observeOn(Schedulers.computation())
+                .map {
+                    it.sortedWith(chronologicalRoomComparator)
+                }
                 .execute { asyncRooms ->
                     copy(asyncRooms = asyncRooms)
                 }
@@ -122,7 +135,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             )
         }
 
-        session.getRoom(roomId)?.join(object : MatrixCallback<Unit> {
+        session.getRoom(roomId)?.join(emptyList(), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
@@ -130,7 +143,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
+                _invitationAnswerErrorLiveData.postLiveEvent(failure)
 
                 setState {
                     copy(
@@ -166,7 +179,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _invitationAnswerErrorLiveData.postValue(LiveEvent(failure))
+                _invitationAnswerErrorLiveData.postLiveEvent(failure)
 
                 setState {
                     copy(
@@ -201,9 +214,10 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                 }
 
         val roomComparator = when (displayMode) {
-            RoomListFragment.DisplayMode.HOME   -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.PEOPLE -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.ROOMS  -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.HOME     -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.PEOPLE   -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.ROOMS    -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.FILTERED -> chronologicalRoomComparator
         }
 
         return RoomSummaries().apply {

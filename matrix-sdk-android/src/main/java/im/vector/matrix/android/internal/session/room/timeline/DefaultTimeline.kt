@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.database.query.whereInRoom
+import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
@@ -45,7 +46,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-private const val INITIAL_LOAD_SIZE = 10
+private const val INITIAL_LOAD_SIZE = 30
 private const val MIN_FETCHING_COUNT = 30
 private const val DISPLAY_INDEX_UNKNOWN = Int.MIN_VALUE
 
@@ -135,7 +136,7 @@ internal class DefaultTimeline(
                     builtEventsIdMap[eventId]?.let { builtIndex ->
                         //Update the relation of existing event
                         builtEvents[builtIndex]?.let { te ->
-                            builtEvents[builtIndex]  = eventEntity.asDomain()
+                            builtEvents[builtIndex] = eventEntity.asDomain()
                             hasChanged = true
                         }
                     }
@@ -208,6 +209,23 @@ internal class DefaultTimeline(
         }
     }
 
+    override fun pendingEventCount(): Int {
+        var count = 0
+        Realm.getInstance(realmConfiguration).use {
+            count = RoomEntity.where(it, roomId).findFirst()?.sendingTimelineEvents?.count() ?: 0
+        }
+        return count
+    }
+
+    override fun failedToDeliverEventCount(): Int {
+        var count = 0
+        Realm.getInstance(realmConfiguration).use {
+            count = RoomEntity.where(it, roomId).findFirst()?.sendingTimelineEvents?.filter {
+                it.root?.sendState?.hasFailed() ?: false
+            }?.count() ?: 0
+        }
+        return count
+    }
 
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
@@ -390,24 +408,27 @@ internal class DefaultTimeline(
                 limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
-        cancelableBag += paginationTask.configureWith(params)
-                .enableRetry()
-                .dispatchTo(object : MatrixCallback<TokenChunkEventPersistor.Result> {
-                    override fun onSuccess(data: TokenChunkEventPersistor.Result) {
-                        if (data == TokenChunkEventPersistor.Result.SUCCESS) {
-                            Timber.v("Success fetching $limit items $direction from pagination request")
-                        } else {
-                            // Database won't be updated, so we force pagination request
-                            GlobalScope.launch(BACKGROUND_CONTEXT) {
-                                executePaginationTask(direction, limit)
+        cancelableBag += paginationTask
+                .configureWith(params) {
+                    this.retryCount = Int.MAX_VALUE
+                    this.constraints = TaskConstraints(connectedToNetwork = true)
+                    this.callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
+                        override fun onSuccess(data: TokenChunkEventPersistor.Result) {
+                            if (data == TokenChunkEventPersistor.Result.SUCCESS) {
+                                Timber.v("Success fetching $limit items $direction from pagination request")
+                            } else {
+                                // Database won't be updated, so we force pagination request
+                                GlobalScope.launch(BACKGROUND_CONTEXT) {
+                                    executePaginationTask(direction, limit)
+                                }
                             }
                         }
-                    }
 
-                    override fun onFailure(failure: Throwable) {
-                        Timber.v("Failure fetching $limit items $direction from pagination request")
+                        override fun onFailure(failure: Throwable) {
+                            Timber.v("Failure fetching $limit items $direction from pagination request")
+                        }
                     }
-                })
+                }
                 .executeBy(taskExecutor)
     }
 

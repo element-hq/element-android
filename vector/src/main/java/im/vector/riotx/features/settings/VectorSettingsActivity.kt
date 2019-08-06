@@ -17,7 +17,6 @@ package im.vector.riotx.features.settings
 
 import android.content.Context
 import android.content.Intent
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -75,32 +74,30 @@ class VectorSettingsActivity : VectorBaseActivity(),
         }
     }
 
-    override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat?, pref: Preference?): Boolean {
-        var oFragment: Fragment? = null
-
-        if (VectorPreferences.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref?.key) {
-            oFragment = VectorSettingsNotificationsTroubleshootFragment.newInstance(session.sessionParams.credentials.userId)
-        } else if (VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref?.key) {
-            oFragment = VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.sessionParams.credentials.userId)
-        } else {
-            try {
-                pref?.fragment?.let {
-                    oFragment = supportFragmentManager.fragmentFactory
-                            .instantiate(classLoader, it)
+    override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
+        val oFragment = when {
+            VectorPreferences.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref.key ->
+                VectorSettingsNotificationsTroubleshootFragment.newInstance(session.myUserId)
+            VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref.key     ->
+                VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.myUserId)
+            else                                                                            ->
+                try {
+                    pref.fragment?.let {
+                        supportFragmentManager.fragmentFactory.instantiate(classLoader, it)
+                    }
+                } catch (e: Throwable) {
+                    showSnackbar(getString(R.string.not_implemented))
+                    Timber.e(e)
+                    null
                 }
-            } catch (e: Throwable) {
-                showSnackbar(getString(R.string.not_implemented))
-                Timber.e(e)
-            }
         }
 
         if (oFragment != null) {
-            oFragment!!.setTargetFragment(caller, 0)
+            oFragment.setTargetFragment(caller, 0)
             // Replace the existing Fragment with the new Fragment
             supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.right_in, R.anim.fade_out,
-                            R.anim.fade_in, R.anim.right_out)
-                    .replace(R.id.vector_settings_page, oFragment!!, pref?.title.toString())
+                    .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
+                    .replace(R.id.vector_settings_page, oFragment, pref.title.toString())
                     .addToBackStack(null)
                     .commit()
             return true

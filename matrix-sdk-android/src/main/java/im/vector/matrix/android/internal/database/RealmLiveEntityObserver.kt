@@ -17,14 +17,10 @@
 package im.vector.matrix.android.internal.database
 
 import com.zhuinden.monarchy.Monarchy
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmObject
-import io.realm.RealmResults
-import kotlinx.coroutines.*
+import io.realm.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
+import kotlinx.coroutines.*
 
 internal interface LiveEntityObserver {
     fun start()

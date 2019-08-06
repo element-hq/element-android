@@ -16,25 +16,52 @@
 
 package im.vector.matrix.android.internal.session.room.membership.joining
 
-import arrow.core.Try
+import im.vector.matrix.android.api.session.room.failure.JoinRoomFailure
+import im.vector.matrix.android.internal.database.RealmQueryLatch
+import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.RoomEntityFields
+import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomAPI
+import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.task.Task
+import io.realm.RealmConfiguration
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     data class Params(
-            val roomId: String
+            val roomId: String,
+            val viaServers: List<String> = emptyList()
     )
 }
 
-internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: RoomAPI) : JoinRoomTask {
+internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: RoomAPI,
+                                                       private val readMarkersTask: SetReadMarkersTask,
+                                                       @SessionDatabase
+                                                       private val realmConfiguration: RealmConfiguration) : JoinRoomTask {
 
-    override suspend fun execute(params: JoinRoomTask.Params): Try<Unit> {
-        return executeRequest {
-            apiCall = roomAPI.join(params.roomId, HashMap())
+    override suspend fun execute(params: JoinRoomTask.Params) {
+        executeRequest<Unit> {
+            apiCall = roomAPI.join(params.roomId, params.viaServers, HashMap())
         }
+        val roomId = params.roomId
+        // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
+        val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
+            realm.where(RoomEntity::class.java)
+                    .equalTo(RoomEntityFields.ROOM_ID, roomId)
+        }
+        try {
+            rql.await(timeout = 1L, timeUnit = TimeUnit.MINUTES)
+        } catch (exception: Exception) {
+            throw JoinRoomFailure.JoinedWithTimeout
+        }
+        setReadMarkers(roomId)
+    }
+
+    private suspend fun setReadMarkers(roomId: String) {
+        val setReadMarkerParams = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
+        readMarkersTask.execute(setReadMarkerParams)
     }
 
 }

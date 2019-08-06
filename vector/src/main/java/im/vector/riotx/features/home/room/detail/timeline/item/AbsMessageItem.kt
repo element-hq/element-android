@@ -29,6 +29,7 @@ import androidx.core.view.children
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
@@ -161,9 +162,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         return true
     }
 
-    protected fun renderSendState(root: View, textView: TextView?) {
+    protected open fun renderSendState(root: View, textView: TextView?, failureIndicator: ImageView? = null) {
         root.isClickable = informationData.sendState.isSent()
-        textView?.setTextColor(colorProvider.getMessageTextColor(informationData.sendState))
+        val state = if (informationData.hasPendingEdits) SendState.UNSENT else informationData.sendState
+        textView?.setTextColor(colorProvider.getMessageTextColor(state))
+        failureIndicator?.isVisible = informationData.sendState.hasFailed()
     }
 
     abstract class Holder(@IdRes stubId: Int) : BaseHolder(stubId) {

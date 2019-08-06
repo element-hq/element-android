@@ -128,8 +128,8 @@ class CreateRoomParams {
             contentMap["algorithm"] = algorithm
 
             val algoEvent = Event(type = EventType.ENCRYPTION,
-                    stateKey = "",
-                    content = contentMap.toContent()
+                                  stateKey = "",
+                                  content = contentMap.toContent()
             )
 
             if (null == initialStates) {
@@ -162,8 +162,8 @@ class CreateRoomParams {
             contentMap["history_visibility"] = historyVisibility
 
             val historyVisibilityEvent = Event(type = EventType.STATE_HISTORY_VISIBILITY,
-                    stateKey = "",
-                    content = contentMap.toContent())
+                                               stateKey = "",
+                                               content = contentMap.toContent())
 
             if (null == initialStates) {
                 initialStates = Arrays.asList<Event>(historyVisibilityEvent)
@@ -202,8 +202,8 @@ class CreateRoomParams {
      */
     fun isDirect(): Boolean {
         return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
-                && isDirect == true
-                && (1 == getInviteCount() || 1 == getInvite3PidCount())
+               && isDirect == true
+               && (1 == getInviteCount() || 1 == getInvite3PidCount())
     }
 
     /**
@@ -223,14 +223,13 @@ class CreateRoomParams {
                           credentials: Credentials,
                           ids: List<String>) {
         for (id in ids) {
-            if (Patterns.EMAIL_ADDRESS.matcher(id).matches()) {
+            if (Patterns.EMAIL_ADDRESS.matcher(id).matches() && hsConfig.identityServerUri != null) {
                 if (null == invite3pids) {
                     invite3pids = ArrayList()
                 }
-
                 val pid = Invite3Pid(idServer = hsConfig.identityServerUri.host!!,
-                        medium = ThreePidMedium.EMAIL,
-                        address = id)
+                                     medium = ThreePidMedium.EMAIL,
+                                     address = id)
 
                 invite3pids!!.add(pid)
             } else if (isUserId(id)) {

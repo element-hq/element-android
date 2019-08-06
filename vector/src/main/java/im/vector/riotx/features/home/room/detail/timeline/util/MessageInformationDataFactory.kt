@@ -64,7 +64,7 @@ class MessageInformationDataFactory @Inject constructor(private val timelineDate
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
-                sendState = event.sendState,
+                sendState = event.root.sendState,
                 time = time,
                 avatarUrl = avatarUrl,
                 memberName = formattedMemberName,
@@ -74,7 +74,8 @@ class MessageInformationDataFactory @Inject constructor(private val timelineDate
                         ?.map {
                             ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
                         },
-                hasBeenEdited = hasBeenEdited
+                hasBeenEdited = hasBeenEdited,
+                hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false
         )
     }
 }

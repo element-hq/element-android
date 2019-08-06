@@ -25,9 +25,12 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.riotx.features.debug.DebugMenuActivity
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
+import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
+import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import timber.log.Timber
@@ -56,8 +59,23 @@ class DefaultNavigator @Inject constructor() : Navigator {
         context.startActivity(intent)
     }
 
-    override fun openRoomDirectory(context: Context) {
-        val intent = Intent(context, RoomDirectoryActivity::class.java)
+    override fun openRoomDirectory(context: Context, initialFilter: String) {
+        val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
+        context.startActivity(intent)
+    }
+
+    override fun openCreateRoom(context: Context, initialName: String) {
+        val intent = CreateRoomActivity.getIntent(context, initialName)
+        context.startActivity(intent)
+    }
+
+    override fun openCreateDirectRoom(context: Context) {
+        val intent = CreateDirectRoomActivity.getIntent(context)
+        context.startActivity(intent)
+    }
+
+    override fun openRoomsFiltering(context: Context) {
+        val intent = FilteredRoomsActivity.newIntent(context)
         context.startActivity(intent)
     }
 

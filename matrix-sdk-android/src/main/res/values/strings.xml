@@ -31,6 +31,7 @@
     <string name="notice_room_visibility_world_readable">anyone.</string>
     <string name="notice_room_visibility_unknown">unknown (%s).</string>
     <string name="notice_end_to_end">%1$s turned on end-to-end encryption (%2$s)</string>
+    <string name="notice_room_update">%s upgraded this room.</string>
 
     <string name="notice_requested_voip_conference">%1$s requested a VoIP conference</string>
     <string name="notice_voip_started">VoIP conference started</string>
@@ -227,5 +228,15 @@
     <string name="verification_emoji_folder">Folder</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_pin">Pin</string>
+
+    <!-- Strings for RiotX -->
+    <string name="initial_sync_start_importing_account">Initial Sync:\nImporting account…</string>
+    <string name="initial_sync_start_importing_account_crypto">Initial Sync:\nImporting crypto</string>
+    <string name="initial_sync_start_importing_account_rooms">Initial Sync:\nImporting Rooms</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Initial Sync:\nImporting Joined Rooms</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Initial Sync:\nImporting Invited Rooms</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Initial Sync:\nImporting Left Rooms</string>
+    <string name="initial_sync_start_importing_account_groups">Initial Sync:\nImporting Communities</string>
+    <string name="initial_sync_start_importing_account_data">Initial Sync:\nImporting Account Data</string>
 
 </resources>

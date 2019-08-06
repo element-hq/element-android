@@ -26,11 +26,8 @@ import java.io.InputStream
  */
 @WorkerThread
 fun writeToFile(inputStream: InputStream, outputFile: File) {
-    val source = Okio.buffer(Okio.source(inputStream))
-    val sink = Okio.buffer(Okio.sink(outputFile))
-
-    source.use { input ->
-        sink.use { output ->
+    Okio.buffer(Okio.source(inputStream)).use { input ->
+        Okio.buffer(Okio.sink(outputFile)).use { output ->
             output.writeAll(input)
         }
     }

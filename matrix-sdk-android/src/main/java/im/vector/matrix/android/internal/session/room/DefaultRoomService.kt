@@ -22,40 +22,62 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
+import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.fetchManaged
+import io.realm.Realm
 import javax.inject.Inject
 
 internal class DefaultRoomService @Inject constructor(private val monarchy: Monarchy,
                                                       private val roomSummaryMapper: RoomSummaryMapper,
                                                       private val createRoomTask: CreateRoomTask,
+                                                      private val joinRoomTask: JoinRoomTask,
                                                       private val roomFactory: RoomFactory,
                                                       private val taskExecutor: TaskExecutor) : RoomService {
 
-    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>) {
-        createRoomTask
-                .configureWith(createRoomParams)
-                .dispatchTo(callback)
+    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
+        return createRoomTask
+                .configureWith(createRoomParams) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
     override fun getRoom(roomId: String): Room? {
-        monarchy.fetchManaged { RoomEntity.where(it, roomId).findFirst() } ?: return null
-        return roomFactory.create(roomId)
+        return Realm.getInstance(monarchy.realmConfiguration).use {
+            if (RoomEntity.where(it, roomId).findFirst() != null) {
+                roomFactory.create(roomId)
+            } else {
+                null
+            }
+        }
     }
 
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { realm -> RoomSummaryEntity.where(realm).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
+                { realm ->
+                    RoomSummaryEntity.where(realm)
+                            .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
+                            .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+                },
                 { roomSummaryMapper.map(it) }
         )
+    }
+
+    override fun joinRoom(roomId: String, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+        return joinRoomTask
+                .configureWith(JoinRoomTask.Params(roomId, viaServers)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 }

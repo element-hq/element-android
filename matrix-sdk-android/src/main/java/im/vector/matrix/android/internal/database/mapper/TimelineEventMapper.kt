@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 
@@ -33,8 +32,7 @@ internal object TimelineEventMapper {
                 displayIndex = timelineEventEntity.root?.displayIndex ?: 0,
                 senderName = timelineEventEntity.senderName,
                 isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
-                senderAvatar = timelineEventEntity.senderAvatar,
-                sendState = timelineEventEntity.root?.sendState ?: SendState.UNKNOWN
+                senderAvatar = timelineEventEntity.senderAvatar
         )
     }
 

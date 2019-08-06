@@ -18,34 +18,67 @@ package im.vector.riotx.features.home.room.list
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
+import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
-                                                private val roomSummaryItemFactory: RoomSummaryItemFactory
+                                                private val roomSummaryItemFactory: RoomSummaryItemFactory,
+                                                private val roomListNameFilter: RoomListNameFilter
 ) : TypedEpoxyController<RoomListViewState>() {
 
     var listener: Listener? = null
 
     override fun buildModels(viewState: RoomListViewState) {
-        val roomSummaries = viewState.asyncFilteredRooms()
-        roomSummaries?.forEach { (category, summaries) ->
-            if (summaries.isEmpty()) {
-                return@forEach
-            } else {
-                val isExpanded = viewState.isCategoryExpanded(category)
-                buildRoomCategory(viewState, summaries, category.titleRes, viewState.isCategoryExpanded(category)) {
-                    listener?.onToggleRoomCategory(category)
-                }
-                if (isExpanded) {
-                    buildRoomModels(summaries,
-                            viewState.joiningRoomsIds,
-                            viewState.joiningErrorRoomsIds,
-                            viewState.rejectingRoomsIds,
-                            viewState.rejectingErrorRoomsIds)
+        if (viewState.displayMode == RoomListFragment.DisplayMode.FILTERED) {
+            buildFilteredRooms(viewState)
+        } else {
+            val roomSummaries = viewState.asyncFilteredRooms()
+            roomSummaries?.forEach { (category, summaries) ->
+                if (summaries.isEmpty()) {
+                    return@forEach
+                } else {
+                    val isExpanded = viewState.isCategoryExpanded(category)
+                    buildRoomCategory(viewState, summaries, category.titleRes, viewState.isCategoryExpanded(category)) {
+                        listener?.onToggleRoomCategory(category)
+                    }
+                    if (isExpanded) {
+                        buildRoomModels(summaries,
+                                viewState.joiningRoomsIds,
+                                viewState.joiningErrorRoomsIds,
+                                viewState.rejectingRoomsIds,
+                                viewState.rejectingErrorRoomsIds)
+                    }
                 }
             }
+        }
+    }
+
+    private fun buildFilteredRooms(viewState: RoomListViewState) {
+        val summaries = viewState.asyncRooms() ?: return
+
+        roomListNameFilter.filter = viewState.roomFilter
+
+        val filteredSummaries = summaries
+                .filter { it.membership == Membership.JOIN && roomListNameFilter.test(it) }
+
+        buildRoomModels(filteredSummaries,
+                viewState.joiningRoomsIds,
+                viewState.joiningErrorRoomsIds,
+                viewState.rejectingRoomsIds,
+                viewState.rejectingErrorRoomsIds)
+
+        addFilterFooter(viewState)
+    }
+
+    private fun addFilterFooter(viewState: RoomListViewState) {
+        filteredRoomFooterItem {
+            id("filter_footer")
+            listener(listener)
+            currentFilter(viewState.roomFilter)
         }
     }
 
@@ -89,7 +122,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         }
     }
 
-    interface Listener {
+    interface Listener : FilteredRoomFooterItem.FilteredRoomFooterItemListener {
         fun onToggleRoomCategory(roomCategory: RoomCategory)
         fun onRoomSelected(room: RoomSummary)
         fun onRejectRoomInvitation(room: RoomSummary)

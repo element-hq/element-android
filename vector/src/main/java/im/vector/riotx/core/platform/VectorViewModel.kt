@@ -16,9 +16,36 @@
 
 package im.vector.riotx.core.platform
 
-import com.airbnb.mvrx.BaseMvRxViewModel
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.*
+import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.riotx.BuildConfig
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 
 abstract class VectorViewModel<S : MvRxState>(initialState: S)
-    : BaseMvRxViewModel<S>(initialState, false)
+    : BaseMvRxViewModel<S>(initialState, false) {
+
+    /**
+     * This method does the same thing as the execute function, but it doesn't subscribe to the stream
+     * so you can use this in a switchMap or a flatMap
+     */
+    fun <T> Single<T>.toAsync(stateReducer: S.(Async<T>) -> S): Single<Async<T>> {
+        setState { stateReducer(Loading()) }
+        return this.map { Success(it) as Async<T> }
+                .onErrorReturn { Fail(it) }
+                .doOnSuccess { setState { stateReducer(it) } }
+    }
+
+    /**
+     * This method does the same thing as the execute function, but it doesn't subscribe to the stream
+     * so you can use this in a switchMap or a flatMap
+     */
+    fun <T> Observable<T>.toAsync(stateReducer: S.(Async<T>) -> S): Observable<Async<T>> {
+        setState { stateReducer(Loading()) }
+        return this.map { Success(it) as Async<T> }
+                .onErrorReturn { Fail(it) }
+                .doOnNext { setState { stateReducer(it) } }
+    }
+
+}
