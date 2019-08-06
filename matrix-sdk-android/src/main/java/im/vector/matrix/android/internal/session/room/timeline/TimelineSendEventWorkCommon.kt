@@ -17,9 +17,9 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import android.content.Context
 import androidx.work.*
-import im.vector.matrix.android.internal.session.room.send.NoMerger
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
+import im.vector.matrix.android.internal.worker.startChain
 import java.util.concurrent.TimeUnit
 
 
@@ -61,11 +61,7 @@ internal object TimelineSendEventWorkCommon {
     inline fun <reified W : ListenableWorker> createWork(data: Data, startChain: Boolean): OneTimeWorkRequest {
         return matrixOneTimeWorkRequestBuilder<W>()
                 .setConstraints(WorkManagerUtil.workConstraints)
-                .apply {
-                    if (startChain) {
-                        setInputMerger(NoMerger::class.java)
-                    }
-                }
+                .startChain(startChain)
                 .setInputData(data)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()

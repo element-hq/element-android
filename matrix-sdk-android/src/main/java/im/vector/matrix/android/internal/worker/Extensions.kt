@@ -16,3 +16,15 @@
 
 package im.vector.matrix.android.internal.worker
 
+import androidx.work.OneTimeWorkRequest
+import im.vector.matrix.android.internal.session.room.send.NoMerger
+
+/**
+ * If startChain parameter is true, the builder will have a inputMerger set to [NoMerger]
+ */
+internal fun OneTimeWorkRequest.Builder.startChain(startChain: Boolean): OneTimeWorkRequest.Builder {
+    if (startChain) {
+        setInputMerger(NoMerger::class.java)
+    }
+    return this
+}

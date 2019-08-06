@@ -42,6 +42,7 @@ import im.vector.matrix.android.internal.worker.AlwaysSuccessfulWorker
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import im.vector.matrix.android.internal.worker.startChain
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -288,11 +289,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         return matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
                 .setConstraints(WorkManagerUtil.workConstraints)
                 .setInputData(sendWorkData)
-                .apply {
-                    if (startChain) {
-                        setInputMerger(NoMerger::class.java)
-                    }
-                }
+                .startChain(startChain)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()
     }
@@ -322,11 +319,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
 
         return matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
                 .setConstraints(WorkManagerUtil.workConstraints)
-                .apply {
-                    if (startChain) {
-                        setInputMerger(NoMerger::class.java)
-                    }
-                }
+                .startChain(startChain)
                 .setInputData(uploadWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()
