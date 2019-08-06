@@ -115,7 +115,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 eventId,
                 reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
+        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData, true)
     }
 
     override fun editTextMessage(targetEventId: String,
@@ -199,14 +199,13 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         // Same parameter
         val params = EncryptEventWorker.Params(credentials.userId, roomId, event, keepKeys)
         val sendWorkData = WorkerParamsFactory.toData(params)
-        return TimelineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData)
+        return TimelineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData, true)
     }
 
     private fun createSendEventWork(event: Event): OneTimeWorkRequest {
         val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        val workRequest = TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
-        return workRequest
+        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, true)
     }
 
     override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {

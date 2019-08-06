@@ -80,11 +80,11 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         return if (cryptoService.isRoomEncrypted(roomId)) {
             Timber.v("Send event in encrypted room")
             val encryptWork = createEncryptEventWork(event, true)
-            val sendWork = createSendEventWork(event)
+            val sendWork = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, sendWork)
             CancelableWork(context, encryptWork.id)
         } else {
-            val sendWork = createSendEventWork(event)
+            val sendWork = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, sendWork)
             CancelableWork(context, sendWork.id)
         }
@@ -245,7 +245,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         val isRoomEncrypted = cryptoService.isRoomEncrypted(roomId)
 
         val uploadWork = createUploadMediaWork(localEcho, attachment, isRoomEncrypted, startChain = true)
-        val sendWork = createSendEventWork(localEcho)
+        val sendWork = createSendEventWork(localEcho, false)
 
         if (isRoomEncrypted) {
             val encryptWork = createEncryptEventWork(localEcho, false /*not start of chain, take input error*/)
@@ -297,11 +297,11 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
                 .build()
     }
 
-    private fun createSendEventWork(event: Event): OneTimeWorkRequest {
+    private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
         val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
-        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData)
+        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
 
     private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
@@ -310,7 +310,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
         }
         val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId, redactEvent.eventId!!, roomId, event.eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData)
+        return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData, true)
     }
 
     private fun createUploadMediaWork(event: Event,
